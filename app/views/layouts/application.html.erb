@@ -5,6 +5,8 @@
     <%= active_scaffold_includes %>
   </head>
   <body>
+    <p>Calagator: <%= link_to "Home", root_path %> | <%= link_to "Events", events_path %> | <%= link_to "Venues", venues_path %></p>
+
     <%= yield %>
   </body>
 </html>

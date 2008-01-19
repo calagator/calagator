@@ -1,15 +1,8 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  title: MyString
-  description: MyString
+calagator_codesprint:
+  title: Calagator CodeSprint
+  description: Join us to work on Calagator, yay!
   start_time: 2008-01-19 12:16:10
-  location: MyString
-  url: MyString
-
-two:
-  title: MyString
-  description: MyString
-  start_time: 2008-01-19 12:16:10
-  location: MyString
-  url: MyString
+  venue: cubespace
+  url: http://groups.google.com/group/pdx-tech-calendar
