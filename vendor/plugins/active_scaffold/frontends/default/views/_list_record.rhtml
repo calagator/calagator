@@ -1,0 +1,34 @@
+<% record = list_record if list_record # compat with render :partial :collection -%>
+<% classAttr = cycle("", "even-record") -%>
+<% url_options = params_for(:action => :list, :id => record.id) -%>
+
+<tr class="record <%= classAttr %>" id="<%= element_row_id(:action => :list, :id => record.id) %>" class="record">
+  <% active_scaffold_config.list.columns.each do |column| %>
+    <% column_value = render_column(record, column) -%>
+    <% column_value << "&nbsp;" if column_value.empty? # For IE6 -%>
+
+    <td class="<%= column_class(column, column_value) %>" >
+      <% if column.link -%>
+        <% column.link.label = column_value %>
+        <%= record.authorized_for?(:action => column.link.crud_type) ? render_action_link(column.link, url_options) : "<a class='disabled'>#{column.link.label}</a>" -%>
+      <% else -%>
+        <%= column_value %>
+      <% end -%>
+    </td>
+  <% end -%>
+  <% if active_scaffold_config.action_links.any? {|link| link.type == :record } -%>
+  <td class="actions">
+    <%= render :partial => 'list_actions', :locals => {:record => record, :url_options => url_options} %>
+  </td>
+  <% end -%>
+</tr>
+
+<% target_id = element_row_id(:action => :list, :id => record.id) -%>
+<script type="text/javascript">
+actions = new ActiveScaffold.Actions.Record(
+  $$('#<%= target_id -%> a.action'),
+  $('<%= target_id -%>'),
+  $('<%= loading_indicator_id(:action => :record, :id => record.id) -%>'),
+  {refresh_url: '<%= url_for params_for(:action => :row, :id => record.id, :_method => :get, :escape => false) -%>'}
+);
+</script>
