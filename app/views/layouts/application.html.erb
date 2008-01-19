@@ -1,0 +1,10 @@
+<html>
+  <head>
+    <title>Calagator<%= @page_title ? " - #{@page_title}" : "" %></title>
+    <%= javascript_include_tag :defaults %>
+    <%= active_scaffold_includes %>
+  </head>
+  <body>
+    <%= yield %>
+  </body>
+</html>
