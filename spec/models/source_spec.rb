@@ -19,7 +19,7 @@ describe Source do
     hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/", :format_type => "hcal")
     SourceParser::Hcal.should_receive(:read_url).and_return(hcal_content)
 
-    events = hcal_source.parse(:preview => true)
+    events = hcal_source.parse
     events.size.should == 1
     for key, value in {
       :title => "Calendar event",

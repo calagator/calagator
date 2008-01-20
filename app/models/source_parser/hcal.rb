@@ -1,13 +1,14 @@
 class SourceParser
+  # == SourceParser::Hcal
+  #
+  # Reads hCalendar events.
   class Hcal < Base
+    # Returns a set of hCalendar events.
+    #
+    # Options:
+    # * :url => URL String to read events from.
     def self.parse(opts={})
-      _parse_wrapper(opts) do
-        returning([]) do |events|
-          for result in [hCalendar.find(:text => read_url(opts[:source].url))].flatten
-            events << Event.new(:title => result.summary, :description => result.description, :start_time => result.dtstart, :url => result.url)
-          end
-        end
-      end
+      return [hCalendar.find(:text => read_url(opts[:url]))].flatten
     end
   end
 end
