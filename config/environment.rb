@@ -58,10 +58,18 @@ Rails::Initializer.run do |config|
   # config.active_record.default_timezone = :utc
 end
 
-def blog_path
-  "/blog"
+#===[ Extra gems ]======================================================
+
+def add_gem_to_load_path(*names)
+  for name in names
+    $LOAD_PATH.unshift(File.expand_path(File.join(RAILS_ROOT, "vendor", "gems", name, "lib")))
+  end
 end
 
-def community_path
-  "http://groups.google.com/group/pdx-tech-calendar"
-end
+add_gem_to_load_path 'htmlentities-4.0.0'
+
+#===[ Convenience paths ]===============================================
+
+def blog_path; "calagator.wordpress.com"; end
+def community_path; "http://groups.google.com/group/pdx-tech-calendar"; end
+

@@ -33,3 +33,26 @@ body
     :color gray
     :padding = !exterior_padding
     :font-size 70%
+
+  #flash
+    .flash_success, .flash_failure
+      :margin-top 0.25em
+      :margin-bottom 0.25em
+      :padding 0.15em
+
+    .flash_success
+      :border 2px solid green
+      :background #DDF5DC
+
+    .flash_failure
+      :border 2px solid red
+      :background #F5DBD7
+
+  td.desc
+    :text-align right
+    :font-style italic
+    :white-space nowrap
+    :vertical-align top
+
+  .active-scaffold td
+    :vertical-align top

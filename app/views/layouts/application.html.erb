@@ -9,6 +9,7 @@
     <div id="top_menu">
       Calagator:
       <%= link_to "Home", root_path %>
+      | <%= link_to "Import", sources_path %>
       | <%= link_to "Events", events_path %>
       | <%= link_to "Venues", venues_path %>
       <!-- | <%= link_to "Blog", blog_path %> -->
@@ -16,6 +17,8 @@
     </div>
 
     <div id="top_content">
+      <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
+      <%= render_flash %>
       <%= yield %>
     </div>
 

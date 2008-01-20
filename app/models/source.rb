@@ -17,10 +17,10 @@
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
 class Source < ActiveRecord::Base
   # Returns an Array of Event objects that were read from this source.
-  def parse(opts={})
+  def to_events(opts={})
     opts[:url] ||= url
     events = []
-    for hcal in SourceParser.parse(format_type, opts)
+    for hcal in SourceParser.to_hcals(format_type, opts)
       events << Event.from_hcal(hcal)
     end
     return events

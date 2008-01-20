@@ -1,5 +1,6 @@
 require 'mofo'
 require 'open-uri'
+require 'set'
 
 # == SourceParser
 #
@@ -9,9 +10,9 @@ class SourceParser
   #
   # Example:
   #
-  #   hcal_entries = SourceParser.parse(:hcal, :url => "http://my.hcal/feed/")
-  def self.parse(format_type, opts)
-    parser_for(format_type).parse(opts)
+  #   hcal_entries = SourceParser.to_hcals(:hcal, :url => "http://my.hcal/feed/")
+  def self.to_hcals(format_type, opts)
+    parser_for(format_type).to_hcals(opts)
   end
 
   # Return a format-specitic parser for +format_type+
@@ -19,19 +20,40 @@ class SourceParser
     const_get(format_type.to_s.humanize)
   end
 
+  # Returns a Hash of format types to human-readable labels
+  def self.formats_to_labels
+    # TODO How to dynamically generate a list of parsers? The trouble is that Rails reloading throws away class variables, so simply populating an array when a class inherits from another will only work for the first request, but will be cleared afterwards.
+    result = {}
+    for parser in [Hcal]
+      result[parser.to_s.split('::').last.to_sym] = parser.label
+    end
+    return result
+  end
+
+  # Returns an Array of strings for all the known format types
+  def self.known_format_types
+    constants.reject{|t| t == "Base"}
+  end
+
   # == SourceParser::Base
   #
   # The base class for all format-specific parsers. Do not use this class
   # directly, use a subclass of Base to do the parsing instead.
   class Base
+    # Gets or sets the human-readable label for this parser
+    def self.label(value=nil)
+      @@label = value.to_sym if value
+      @@label
+    end
+
     # Returns content read from a URL. Easier to stub.
     def self.read_url(url)
       open(url){|h| h.read}
     end
 
     # Stub which makes sure that subclasses of Base implement the #parse method.
-    def self.parse(opts={})
-      raise NotImplementedError, "Do not use #{self.class}.parse method directly"
+    def self.to_hcals(opts={})
+      raise NotImplementedError, "Do not use #{self.class}.to_hcals method directly"
     end
   end
 end

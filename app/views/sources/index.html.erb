@@ -1,0 +1,36 @@
+<% form_for(Source.new) do |f| %>
+<fieldset>
+  <legend>Import a source</legend>
+  <table>
+    <tr>
+      <td class="desc">
+        <%= f.label :url, "URL" %>
+      </td>
+      <td>
+        <%= f.text_field :url, :size => 60 %>
+        <br />
+        E.g., http://upcoming.yahoo.com/event/390164/
+      </td>
+    </tr>
+    <tr>
+      <td class="desc">
+        <%= f.label :format_type, "Format type" %>
+      </td>
+      <td>
+        <% is_first = true %>
+        <% for format_type, format_label in SourceParser.formats_to_labels %>
+          <%= f.radio_button "format_type", format_type, :checked => is_first %>
+          <%= f.label "format_type[#{format_type}]", format_label %>
+          <% is_first = false  %>
+        <% end %>
+      </td>
+    </tr>
+    <tr>
+      <td>&nbsp;</td>
+      <td>
+        <%= f.submit %>
+      </td>
+    </tr>
+  </table>
+</fieldset>
+<% end %> 

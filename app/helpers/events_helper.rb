@@ -1,5 +1,5 @@
 module EventsHelper
   def url_column(record)
-    link_to "Link", record.url
+    record.url.blank? ? nil : link_to("Link", record.url)
   end
 end
