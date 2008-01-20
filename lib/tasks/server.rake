@@ -46,11 +46,14 @@ namespace :server do
   task :restart => :clear do
     sh "mongrel_rails cluster::restart"
   end
+
+  desc "Status"
+  task :status do
+    sh "mongrel_rails cluster::status"
+  end
 end
 
-task :config => 'server:config'
-task :deploy => 'server:deploy'
-task :stop => 'server:stop'
-task :start=> 'server:start'
-task :restart => 'server:restart'
-
+# Create aliases for common tasks
+for name in %w(config deploy start stop restart status)
+  task name.to_sym => "server:#{name}"
+end
