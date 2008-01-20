@@ -12,9 +12,6 @@
 #  updated_at  :datetime
 #
 
-require 'mofo'
-require 'open-uri'
-
 class Source < ActiveRecord::Base
   # Returns an Array of Event objects that were imported into this queue.
   def parse(opts={})
