@@ -1,4 +1,9 @@
 namespace :server do
+  desc "Deploy"
+  task :deploy do
+    sh "ssh calagator@calagator.org 'cd app; svn update; rake RAILS_ENV=production restart'"
+  end
+
   desc "Config"
   task :config => ["tmp:create"] do
     target = "config/mongrel_cluster.yml"
@@ -54,6 +59,6 @@ namespace :server do
 end
 
 # Create aliases for common tasks
-for name in %w(config deploy start stop restart status)
+for name in %w(deploy config deploy start stop restart status)
   task name.to_sym => "server:#{name}"
 end
