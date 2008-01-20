@@ -1,7 +1,7 @@
 --- 
 cwd: <%= File.expand_path(Dir.pwd) %> 
 address: <%= RAILS_ENV == "production" ? "localhost" : "0.0.0.0" %>
-user: igal
+user: <%= require 'etc'; Etc.getpwuid(Process.euid).name %>
 log_file: log/mongrel.log
 port: "20010"
 environment: <%= RAILS_ENV %>
