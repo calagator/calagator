@@ -1,0 +1,35 @@
+// HAML/SASS documentation: http://haml.hamptoncatlin.com/
+
+!exterior_padding = 0.25em
+!new_link_color = green
+!visited_link_color = green - #222222
+
+body
+
+  a
+    :color = !new_link_color
+    :text-decoration none
+    :border-bottom = 1px dotted !new_link_color
+
+    &:visited
+      :color = !visited_link_color
+
+  #top_menu
+    :background black
+    :color white
+    :padding = !exterior_padding
+
+    a
+      :color = !new_link_color + #555555
+
+      &:visited
+        :color = !visited_link_color + #555555
+
+  #top_content
+    :padding = !exterior_padding
+
+  #top_footer
+    :background black
+    :color white
+    :padding = !exterior_padding
+    :font-size 70%

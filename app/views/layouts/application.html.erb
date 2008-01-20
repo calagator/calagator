@@ -1,12 +1,27 @@
 <html>
   <head>
     <title>Calagator<%= @page_title ? " - #{@page_title}" : "" %></title>
+    <%= stylesheet_link_tag :application %>
     <%= javascript_include_tag :defaults %>
     <%= active_scaffold_includes %>
   </head>
   <body>
-    <p>Calagator: <%= link_to "Home", root_path %> | <%= link_to "Events", events_path %> | <%= link_to "Venues", venues_path %></p>
+    <div id="top_menu">
+      Calagator:
+      <%= link_to "Home", root_path %>
+      | <%= link_to "Events", events_path %>
+      | <%= link_to "Venues", venues_path %>
+      <!-- | <%= link_to "Blog", blog_path %> -->
+      | <%= link_to "Community", community_path %>
+    </div>
 
-    <%= yield %>
+    <div id="top_content">
+      <%= yield %>
+    </div>
+
+    <div id="top_footer">
+      <%# SVN keyword substitution: http://svnbook.red-bean.com/en/1.4/svn.advanced.props.special.keywords.html %>
+      $Date$ $Revision$ 
+    </div>
   </body>
 </html>

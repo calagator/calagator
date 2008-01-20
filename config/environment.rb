@@ -57,3 +57,11 @@ Rails::Initializer.run do |config|
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
 end
+
+def blog_path
+  "/blog"
+end
+
+def community_path
+  "http://groups.google.com/group/pdx-tech-calendar"
+end
