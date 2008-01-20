@@ -21,30 +21,18 @@ namespace :server do
     for file in ['public/stylesheets/all.css', 'public/javascripts/all.js']
       rm file if File.exist?(file)
     end
-
-    pid_dir = 'tmp/pids'
-    if File.exist? pid_dir
-      for pid_file in FileList["#{pid_dir}/*.pid"]
-        pid = File.read(pid_file)
-        begin
-          Process.kill(0, pid.to_i)
-        rescue Errno::ESRCH => e
-          rm pid_file, :verbose => true
-        end
-      end
-    end
       
     Rake::Task['tmp:cache:clear'].invoke
   end
 
   desc "Stop"
-  task :stop => :clear do
+  task :stop do
     sh "mongrel_rails cluster::stop"
   end
 
   desc "Start"
   task :start => :clear do
-    sh "mongrel_rails cluster::start"
+    sh "mongrel_rails cluster::start --clean"
   end
 
   desc "Restart"
