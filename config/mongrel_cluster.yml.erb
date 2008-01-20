@@ -1,0 +1,10 @@
+--- 
+cwd: <%= File.expand_path(Dir.pwd) %> 
+address: <%= RAILS_ENV == "production" ? "localhost" : "0.0.0.0" %>
+user: igal
+log_file: log/mongrel.log
+port: "20010"
+environment: <%= RAILS_ENV %>
+group: igal
+pid_file: tmp/pids/mongrel.pid
+servers: 3
