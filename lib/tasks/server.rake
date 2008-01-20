@@ -1,7 +1,7 @@
 namespace :server do
   desc "Deploy"
   task :deploy do
-    sh "ssh calagator@calagator.org 'cd app; svn update; rake RAILS_ENV=production restart'"
+    sh "ssh calagator@calagator.org 'cd app; svn update; rake restart'"
   end
 
   desc "Config"
