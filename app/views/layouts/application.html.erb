@@ -2,18 +2,24 @@
   <head>
     <title>Calagator<%= @page_title ? " - #{@page_title}" : "" %></title>
     <%= stylesheet_link_tag "application" %>
-    <%= javascript_include_tag :defaults %>
+    <%= javascript_include_tag :all, :cache => true %>
     <%= active_scaffold_includes %>
   </head>
   <body>
     <div id="top_menu">
+      <span style="float: left">
       Calagator:
       <%= link_to "Home", root_path %>
       | <%= link_to "Import", sources_path %>
       | <%= link_to "Events", events_path %>
       | <%= link_to "Venues", venues_path %>
-      <!-- | <%= link_to "Blog", blog_path %> -->
-      | <%= link_to "Community", community_path %>
+    </span>
+      <span style="float: right">
+      <%= link_to "Blog", blog_path %>
+      | <%= link_to "Forum", community_path %>
+      | <%= link_to "Bugs", bug_path %>
+      </span>
+      <span style="clear: both">&nbsp;</span>
     </div>
 
     <div id="top_content">

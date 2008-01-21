@@ -70,6 +70,7 @@ add_gem_to_load_path 'htmlentities-4.0.0'
 
 #===[ Convenience paths ]===============================================
 
-def blog_path; "calagator.wordpress.com"; end
-def community_path; "http://groups.google.com/group/pdx-tech-calendar"; end
+def blog_path; "http://calagator.wordpress.com/"; end
+def community_path; "http://groups.google.com/group/pdx-tech-calendar/"; end
+def bug_path; "http://code.google.com/p/calagator/issues/list"; end
 
