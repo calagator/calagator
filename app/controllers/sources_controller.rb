@@ -11,7 +11,10 @@ class SourcesController < ApplicationController
       event.save!
       imported << event
     end
-    flash[:success] = "Imported #{imported.size} entries"
+    imported.size == 0 ? 
+        flash[:success] = "No items found to import. Please see [URL] for more information on what pages Calagator can read." : 
+        flash[:error] = "Imported #{imported.size} entries"
+#    flash[:success] = "Imported #{imported.size} entries"
     redirect_to events_path
   end
 end
