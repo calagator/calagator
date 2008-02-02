@@ -9,8 +9,6 @@ class CreateVenues < ActiveRecord::Migration
       t.timestamps
     end
 
-    add_column :events, :venue_id, :integer
-    remove_column :events, :location
   end
 
   def self.down
