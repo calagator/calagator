@@ -43,4 +43,15 @@ class Event < ActiveRecord::Base
     end
     return event
   end
+  
+  def to_hcal
+    <<-EOF
+<div class="vevent">
+<a class="url" href="#{url}">#{url}</a>
+<span class="summary">#{title}</span>: 
+<abbr class="dtstart" title="#{start_time.to_s(:yyyymmdd)}">#{start_time.to_s(:long_date).gsub(/\b[0](\d)/, '\1')}</abbr>,
+at the <span class="location">#{venue.title}</span>
+</div>
+EOF
+  end
 end

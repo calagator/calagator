@@ -61,5 +61,4 @@ describe Source do
     second[:start_time].should == Time.parse('2008-2-2')
   end
 
-
 end

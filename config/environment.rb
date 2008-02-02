@@ -74,3 +74,13 @@ def blog_path; "http://calagator.wordpress.com/"; end
 def community_path; "http://groups.google.com/group/pdx-tech-calendar/"; end
 def bug_path; "http://code.google.com/p/calagator/issues/list"; end
 
+#===[ Date formats ]===============================================
+
+
+my_formats = {
+  :yyyymmdd => '%Y-%m-%d',
+  :long_date => '%A, %B %d, %Y',
+}
+
+ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(my_formats)
+ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS.merge!(my_formats)
