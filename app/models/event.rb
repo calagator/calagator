@@ -50,7 +50,7 @@ class Event < ActiveRecord::Base
 <a class="url" href="#{url}">#{url}</a>
 <span class="summary">#{title}</span>: 
 <abbr class="dtstart" title="#{start_time.to_s(:yyyymmdd)}">#{start_time.to_s(:long_date).gsub(/\b[0](\d)/, '\1')}</abbr>,
-at the <span class="location">#{venue.title}</span>
+at the <span class="location">#{venue && venue.title}</span>
 </div>
 EOF
   end
