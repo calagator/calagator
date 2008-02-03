@@ -14,6 +14,9 @@ class SourceParser
   def self.to_hcals(format_type, opts)
     parser_for(format_type).to_hcals(opts)
   end
+  def self.to_abstract_events(format_type, opts)
+    parser_for(format_type).to_abstract_events(opts)
+  end
 
   # Return a format-specitic parser for +format_type+
   def self.parser_for(format_type)
@@ -55,7 +58,17 @@ class SourceParser
     def self.to_hcals(opts={})
       raise NotImplementedError, "Do not use #{self.class}.to_hcals method directly"
     end
+
+    # Stub which makes sure that subclasses of Base implement the #parse method.
+    def self.to_abstract_events(opts={})
+      raise NotImplementedError, "Do not use #{self.class}.to_abstract_events method directly"
+    end
   end
+  
+  
+  AbstractEvent = Struct.new(:title, :description, :start_time, :url) do
+  end
+  
 end
 
 # Load all the format-specific drivers in the "source_parser" directory

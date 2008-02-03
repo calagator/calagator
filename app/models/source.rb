@@ -20,8 +20,8 @@ class Source < ActiveRecord::Base
   def to_events(opts={})
     opts[:url] ||= url
     events = []
-    for hcal in SourceParser.to_hcals(format_type, opts)
-      events << Event.from_hcal(hcal)
+    SourceParser.to_abstract_events(format_type, opts).each do |e|
+      events << Event.from_abstract_event(e)
     end
     return events
   end
