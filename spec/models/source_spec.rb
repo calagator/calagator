@@ -16,6 +16,7 @@ describe Source do
   <div class="description">Check it out!</div>
 </div>
     HERE
+    
     hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/", :format_type => "hcal")
     SourceParser::Hcal.should_receive(:read_url).and_return(hcal_content)
 
@@ -51,6 +52,7 @@ describe Source do
   <div class="description">Check it out!</div>
 </div>
     HERE
+    
     hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/", :format_type => "hcal")
     SourceParser::Hcal.should_receive(:read_url).and_return(hcal_content)
 
@@ -60,5 +62,5 @@ describe Source do
     first[:start_time ].should == Time.parse('2008-1-19')
     second[:start_time].should == Time.parse('2008-2-2')
   end
-
+  
 end

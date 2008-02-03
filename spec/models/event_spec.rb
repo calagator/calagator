@@ -3,14 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe Event do
   before(:each) do
     @event = Event.new
-  end
-
-  it "should be valid" do
-    @event.should be_valid
-  end
-  
-  it "should emit valid hCalendar" do
-    expected_hcal = <<-EOF
+    @hcal = <<-EOF
 <div class="vevent">
 <a class="url" href="http://www.web2con.com/">http://www.web2con.com/</a>
 <span class="summary">Web 2.0 Conference</span>: 
@@ -18,14 +11,29 @@ describe Event do
 at the <span class="location">Argent Hotel, San Francisco, CA</span>
 </div>
 EOF
+    
+  end
+
+  it "should be valid" do
+    @event.should be_valid
+  end
+  
+  it "should parse an abstract_event into an instance of Event" do
+    Event.should_receive(:new).and_return(mock_model(Event, :title= => true, :description= => true, :start_time= => true, 
+        :url= => true))
+    abstract_event = SourceParser::AbstractEvent.new('title', 'description', 'start_time', 'url')
+
+    Event.from_abstract_event(abstract_event).should be_a_kind_of(Event)
+  end
+
+  it "should emit valid hCalendar" do
     @event.url = 'http://www.web2con.com/'
     @event.title = 'Web 2.0 Conference'
     @event.start_time = Time.parse('2007-10-05')
-    @location = mock('Venue')
-    @location.stub!(:title).and_return('Argent Hotel, San Francisco, CA')
-    @event.stub!(:venue).and_return(@location)
+    @event.venue = mock_model(Venue, :title => 'Argent Hotel, San Francisco, CA')
     
     actual_hcal = @event.to_hcal
-    actual_hcal.should == expected_hcal
+    actual_hcal.should == @hcal
   end
+  
 end

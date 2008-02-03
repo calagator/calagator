@@ -18,7 +18,7 @@ class SourceParser
     parser_for(format_type).to_abstract_events(opts)
   end
 
-  # Return a format-specitic parser for +format_type+
+  # Return a format-specific parser for +format_type+
   def self.parser_for(format_type)
     const_get(format_type.to_s.humanize)
   end
