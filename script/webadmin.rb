@@ -6,6 +6,7 @@ require 'rubygems'
 require 'ramaze'
 require 'optparse'
 
+PROG = File.basename(__FILE__)
 OWN_FILE = File.expand_path(__FILE__)
 PID_FILE = OWN_FILE+".pid"
 SOCK_FILE = OWN_FILE+".sock"
@@ -36,7 +37,16 @@ end
 
 options = {}
 opts = OptionParser.new do |opts|
-  opts.banner = "Usage: example.rb [options]"
+  opts.banner = <<-HERE
+Usage: #{PROG} [options]
+
+Examples:
+  #{PROG} start  # Starts daemon
+  #{PROG} attach # Attaches to daemon
+  #{PROG} stop   # Stops daemon
+
+Options, meant for internal use:
+  HERE
   opts.on("-d", "--daemonize", "Daemonize script") do |v|
     options[:daemonize] = v
   end
