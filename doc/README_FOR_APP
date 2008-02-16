@@ -1,6 +1,5 @@
 GEMS
 
-  gem install haml
   gem install sqlite3-ruby
   gem install hpricot
   gem install rspec
