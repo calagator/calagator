@@ -28,6 +28,7 @@ class SourceParser
         :description => :description,
         :start_time => :dtstart,
         :url => :url,
+        :location => :location
       }
       hcals = to_hcals(opts)
       hcals.map do |hcal|

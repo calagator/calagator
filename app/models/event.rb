@@ -21,11 +21,13 @@ class Event < ActiveRecord::Base
 
   # Returns a new Event created from an AbstractEvent.
   def self.from_abstract_event(abstract_event)
+    venue = Venue.create(:title => abstract_event.location, :description => abstract_event.location)
     returning Event.new do |event|
       event.title        = abstract_event.title
       event.description  = abstract_event.description
       event.start_time   = abstract_event.start_time 
-      event.url          = abstract_event.url        
+      event.url          = abstract_event.url
+      event.venue_id     = venue.id
     end
   end
     

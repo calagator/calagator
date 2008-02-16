@@ -6,7 +6,8 @@ require 'set'
 #
 # A hierarchy of classes that provide a way to parse different source formats and return hCalendar events.
 class SourceParser
-  # Return Array of hCalendar objects by reading them from the +format_type+ parser and passing it a set of +opts+. Please see the parsers that subclass Base for arguments.
+  # Return Array of hCalendar objects by reading them from the +format_type+ parser and passing it a set of +opts+. 
+  # Please see the parsers that subclass Base for arguments.
   #
   # Example:
   #
@@ -14,6 +15,7 @@ class SourceParser
   def self.to_hcals(format_type, opts)
     parser_for(format_type).to_hcals(opts)
   end
+
   def self.to_abstract_events(format_type, opts)
     parser_for(format_type).to_abstract_events(opts)
   end
@@ -25,7 +27,9 @@ class SourceParser
 
   # Returns a Hash of format types to human-readable labels
   def self.formats_to_labels
-    # TODO How to dynamically generate a list of parsers? The trouble is that Rails reloading throws away class variables, so simply populating an array when a class inherits from another will only work for the first request, but will be cleared afterwards.
+    # TODO How to dynamically generate a list of parsers? The trouble is that Rails reloading throws away class variables, 
+    # so simply populating an array when a class inherits from another will only work for the first request, but will be 
+    # cleared afterwards.
     result = {}
     for parser in [Hcal]
       result[parser.to_s.split('::').last.to_sym] = parser.label
@@ -66,7 +70,7 @@ class SourceParser
   end
   
   
-  AbstractEvent = Struct.new(:title, :description, :start_time, :url) do
+  AbstractEvent = Struct.new(:title, :description, :start_time, :url, :location) do
   end
   
 end

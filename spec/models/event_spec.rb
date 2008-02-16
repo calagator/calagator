@@ -19,11 +19,11 @@ EOF
   end
   
   it "should parse an abstract_event into an instance of Event" do
-    Event.should_receive(:new).and_return(mock_model(Event, :title= => true, :description= => true, :start_time= => true, 
-        :url= => true))
+    Event.should_receive(:new).and_return(event = mock_model(Event, :title= => true, :description= => true, :start_time= => true, 
+        :url= => true, :venue_id= => true))
     abstract_event = SourceParser::AbstractEvent.new('title', 'description', 'start_time', 'url')
 
-    Event.from_abstract_event(abstract_event).should be_a_kind_of(Event)
+    Event.from_abstract_event(abstract_event).should == event
   end
 
   it "should emit valid hCalendar" do
