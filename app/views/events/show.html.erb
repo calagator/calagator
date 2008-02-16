@@ -1,28 +1,29 @@
 <div class="vevent">
+	<h1 class="summary"><%= @record.title %></h1>
 
-<h1><%= @record.title %></h1>
+	<div class='date'>
+		<abbr class="dtstart" title="<%=@record.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+		 <span class="day"><%= @record.start_time.day %></span>
+		 <span class="month"><%= @record.start_time.strftime("%B") %></span>
+		 <span class="time"><%= @record.start_time.strftime("%H:%M") %></span>
+		</abbr>
+	</div>
 
-<div 
-  class="dtstart" 
-  title="<%=@record.start_time.strftime('%Y-%m-%d %H:%M:%S')%>"
->
- <span class="day"><%= @record.start_time.day %></span>
- <span class="month"><%= @record.start_time.strftime("%B") %></span>
- <span class="time"><%= @record.start_time.strftime("%H:%M") %></span>
-</div>
+	<div class="location">
+		<%= @record.venue %>
+	</div>
 
-<div class="location">
-<%= @record.venue %>
-</div>
+	<a class='url' href='<%= @record.url %>'>
+		<%= @record.url %>
+	</a>
 
-<div class="description">
-<%= @record.description %>
-</div>
+	<div class="description">
+		<%= @record.description %>
+	</div>
 
-<div class="metadata">
-Created <%= @record.created_at %>
-Modified <%= @record.updated_at %>
-</div>
-
+	<div class="metadata">
+		Created <%= @record.created_at %>
+		Modified <%= @record.updated_at %>
+	</div>
 </div>
 
