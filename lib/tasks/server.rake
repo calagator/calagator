@@ -52,6 +52,6 @@ namespace :server do
 end
 
 # Create aliases for common tasks
-for name in %w(deploy config deploy start stop restart status)
+for name in %w(deploy deploy_and_migrate config deploy start stop restart status)
   task name.to_sym => "server:#{name}"
 end
