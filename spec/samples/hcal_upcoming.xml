@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>February BarCamp Portland Informal Tech Meetup at Jive Software Office (Thursday, February 28, 2008) - Upcoming</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-Language" content="en-us" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/reset-fonts-grids/reset-fonts-grids.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/calendar/assets/calendar.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/container/assets/container.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/container/assets/skins/sam/container.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/calendar/assets/skins/sam/calendar.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/autocomplete/assets/skins/sam/autocomplete.css" />
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.3.1/build/menu/assets/skins/sam/menu.css" />
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/utilities/utilities.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/container/container-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/calendar/calendar-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/autocomplete/autocomplete-min.js"></script>
+<script type="text/javascript" src="http://yui.yahooapis.com/2.3.1/build/menu/menu-min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://l.yimg.com/ycs.upcoming.yahoo.com/css/default_3386bb892387df5429a8f1f09cf63e47.css" />
+        <link rel="stylesheet" type="text/css" href="http://l.yimg.com/ycs.upcoming.yahoo.com/css/base_d325632afbe941a6aea4b5506f36597c.css" />
+    </head>
+<body>
+<div id="doc2" class="wrapper yui-t7">
+  <div id="hd">
+    <div class="header-logo"><a href="/"><img src="http://l.yimg.com/ycs.upcoming.yahoo.com/images/logo_c1e7e61d4b270328ac1c07c895ae47a3.gif" border="0" alt="Upcoming"></a></div>
+    <div id="nav">
+      <p>
+                  <a href="https://login.yahoo.com/config/login_verify2?.pd=c%3d7VX_qHOp2e4WEc1FoX0E7L8-&.intl=us&.src=upcm&.done=http%3A%2F%2Fupcoming.yahoo.com%2Fdetect%2F%3Fr%3Dhttp%253A%252F%252Fupcoming.yahoo.com%252Fevent%252F428964%252F">Sign in</a> or <a href="https://login.yahoo.com/config/eval_register?.intl=us&.done=http%3A%2F%2Fupcoming.yahoo.com%2Fdetect%2F%3Fr%3Dhttp%253A%252F%252Fupcoming.yahoo.com%252Fevent%252F428964%252F&.src=upcm">join now</a>
+                <strong><a href="/help/">Help?</a></strong>
+      </p>
+      <div id="nav-list">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/event/">Events</a></li>
+          <li><a href="/place/">Places</a></li>
+          <li><a href="/friend/">Friends</a></li>
+          <li><a href="/group/">Groups</a></li>
+          <li><a href="/popular/">Popular</a></li>
+          <li><a href="/event/add/" style="background: none">Add New Event &raquo;</a></li>
+        </ul>
+      </div>
+      <a href="http://www.yahoo.com/" class="brand"><img src="http://l.yimg.com/ycs.upcoming.yahoo.com/images/logo/yahoo_service_41b1f50dadc4f7111705b35ca98c7203.png" alt="A Yahoo! Service"></a>
+    </div><!-- /#nav -->
+    <div id="nav-sub">
+      <ul>
+        <li><a href="/myevents/">My Events</a></li>
+        <li><a href="/history/myevents/">My Scrapbook</a></li>
+        <li><a href="/friend/event/">My Friends' Events</a></li>
+      </ul>
+    </div>      
+  </div><!-- /#hd -->
+
+  <div id="bd">
+    <div id="bd-top" class="yui-g">
+      <div id="location" class="yui-u first">
+        <h1><a href="http://upcoming.yahoo.com/place/RlEYPWubBZtlFXkb">Portland</a></h1>
+        <div class="breadcrumb">
+        <a href="http://upcoming.yahoo.com/place/AHzl7sWYA5mP8oDGHg">Multnomah County</a> / <a href="http://upcoming.yahoo.com/place/4vvLDQabApjbhCKB">Oregon</a> / <a href="http://upcoming.yahoo.com/place/4KO02SibApitvSBieQ">United States</a>&nbsp;        </div>
+      </div>
+      <div id="search" class="yui-u">
+        <div class="searchForm" id="searchwidget_form">
+          <form method="get" id="searchwidget_actualform" action="/search/">
+            <input type="hidden" name="type" id="form_searchtype" value="Events" />
+
+            <h4>Find <span id="searchtype">events</span> <a href="javascript:void(0);"><img  id="searchwidget_type_toggle" src="http://l.yimg.com/ycs.upcoming.yahoo.com/images/sort_dn_1_a866c8c373a9909aac88d6572277750d.gif" width="12" height="11" /></a></h4>
+            <p><label for="search_what">What? <em>(e.g. jazz, U2, Lakers)</em></label>
+            <input type="text" name="q" id="searchwidget_q" value="" /></p>
+            <input id="search_rt" type="hidden" name="rt" value="1" />
+            <p id="psearchloc"><label for="search_where">Where?</label>
+            <input type="text" name="loc" id="search_loc" value="Portland, Oregon, United States"  /><p id="psearchgo"><label for="Search">&nbsp;</label><input id="searchgo" type="submit" name="Search" class="submit" value="GO" /></p> 
+          </form>
+        </div>
+      </div>
+    </div><!-- /#bd-top -->
+    <div id="yui-main" class="content">
+
+
+
+<div id="calendarContainer" class="vcalendar"> <!-- Begin vCalendar -->
+
+
+
+
+<div id="event" class="vevent">
+  <h1>
+    <span class="name summary">
+      February BarCamp Portland Informal Tech Meetup    </span>
+
+    
+    
+    </h1>
+
+  <div id="eventMain">
+
+    <div id="eventMetadata">
+
+<div class="map">
+  <div id="mapContainer" style="height: 160px; width:180px;"></div>
+  <form style="display:none;">
+    <input type="hidden" id="mapLat" value="45.5191" />
+    <input type="hidden" id="mapLon" value="-122.675" />
+  </form>
+
+  <div class="directions">
+    <a href="http://maps.yahoo.com/dd?taddr=317+SW+Alder+St+Ste+500&tcsz=portland%2Cor%2C97204&tcountry=us">Driving directions</a> / <a href="http://maps.yahoo.com/maps_result.php?addr=317+SW+Alder+St+Ste+500&csz=portland%2Cor%2C97204&country=us&mag=5">Larger Map</a>
+  </div>
+</div>
+
+
+      <div class="date">
+        <abbr class="dtstart" title="20080228T173000">
+          Thursday, February 28, 2008        </abbr>
+              </div> <!-- /.date -->
+              <div class="time">
+                                    5:30 PM - <abbr class="dtend" title="20080228T193000">7:30 PM</abbr>
+                              </div> <!-- /.time -->
+      
+<br />
+<div class="venue location vcard">
+  <span class="fn org"><a href="/venue/40384/">Jive Software Office</a></span><br />
+  <div class="address adr">
+    <span class="street-address">317 SW Alder St Ste 500</span><br />
+    <span class="locality">portland</span>, <span class="region"></span> <span class="postal-code">97204</span>
+  </div>
+    <span class="geo" style="display: none">
+    <span class="latitude">45.5191</span>, 
+    <span class="longitude">-122.675</span>
+  </span>
+  
+    </div> <!-- /.venue -->
+
+      <div class="small">Category</div>
+      <div class="category">
+        Social      </div>
+
+          <div class="small">Description</div>
+      <div class="description">
+        The intent is to get a group of cool people interested in technology together to chat over drinks on the fourth Thursday of every month. Anyone working in high-tech is welcome to attend. Conversations usually range from wikis to open source to blogs to who knows what!<br /><br />
+Please RSVP here as attending to help us get a count for the event. You might also want to join the Google Group to get notifications of any changes to this event and get reminders for future events! <a rel="nofollow" href="http://groups.google.com/group/barcampportland">http://groups.google.com/group/barcampportland</a><br /><br />
+You can visit <a rel="nofollow" href="http://barcamp.org/BarCampPortlandMeetups">http://barcamp.org/BarCampPortlandMeetups</a> for more information.<br />
+      </div>
+        
+    
+                  <div class="small">Homepage</div> 
+          <div class="homepage">
+            <a href="http://barcamp.org/BarCampPortlandMeetups" class="url">http://barcamp.org/BarCampPortlandMeetups</a>
+          </div>
+        
+      
+            &nbsp;
+    </div> <!-- /#eventMetadata -->
+	
+      <div class="byline">
+                  Added by 
+                
+                  <a href="/user/92824/"><img src="http://static.flickr.com/20/buddyicons/52257913@N00.jpg" height="12" width="12" border="0" /></a>
+          <span><a class="" title="" href="http://upcoming.yahoo.com/user/92824/">GeekyGirlDawn</a></span>                
+        on February 10, 2008    </div>
+
+    <div id="eventComments">
+      <div id="eventPhotos">
+        <div class="heading">Photos 
+		<span class="small" id="photos_loading_msg">(<a href="http://flickr.com/photos/tags/upcoming:event=428964" id="photos_see_all_link">loading...</a>)</span>
+        </div> 
+        <div id="photo_container"></div>
+        <div id="add_photo_button_container"><a id="add_photo_link" href="javascript:void(0);">Add your own...</a></div>
+        <div id="add_photo_container" class="clicker_menu">
+          <div class="hd"></div>
+          <div class="bd"></div>
+          <b>Add Photos from <a href="http://flickr.com">Flickr</a>!</b> (<a href="" id="add_photo_close_link">close</a>)
+          <hr />
+          <ul>
+          <li><b>Tag</b> a public <a href="http://flickr.com/">Flickr</a> photo with: <input style="display: inline;" type="text" onFocus="this.select();" value="upcoming:event=428964" /></li>
+          <li>Your photos <b>will appear</b> on this event page automagically in a little while!</li>
+          </ul>
+          <div class="ft"></div>
+        </div>
+
+    </div> <!-- /#eventPhotos -->
+
+	  <div class="heading">Comments</div>
+      			<br /><br />
+          <div id="addcomments" class="info">
+          <a href="https://login.yahoo.com/config/eval_register?.intl=us&.done=http%3A%2F%2Fupcoming.yahoo.com%2Fdetect%2F%3Fr%3D%252Fevent%252F428964%252F&.src=upcm">Sign Up</a> or <a href="https://login.yahoo.com/config/login_verify2?.pd=c%3d7VX_qHOp2e4WEc1FoX0E7L8-&.intl=us&.src=upcm&.done=http%3A%2F%2Fupcoming.yahoo.com%2Fdetect%2F%3Fr%3D%252Fevent%252F428964%252F">Sign In</a> to comment on this event!
+          </div>
+            
+    </div> <!-- /#eventComments -->
+  </div> <!-- /#eventMain -->
+
+  <div id="eventSidebar">
+    
+
+          <div id="eventAttendance">
+        <form method="get" id="watch_form" action="/add/watchlist/">
+		  <input type="hidden" name="_ucrumb" value="" />
+          
+          <div class="attend">
+                          <input type="radio" name="status" value="attend" id="status_attend" onClick="document.getElementById('watch_form').submit();" /> <label for="status_attend" onClick="document.getElementById('status_attend').checked = true;document.getElementById('watch_form').submit();">
+                                  I'm Attending
+                              </label><br />
+            
+          </div> <!-- /.attend -->
+         
+          <div class="watch">
+                          <input type="radio" name="status" value="watch" id="status_watch" onClick="document.getElementById('watch_form').submit();" /> <label for="status_watch" onClick="document.getElementById('status_watch').checked = true;document.getElementById('watch_form').submit();">                                  I'm Watching
+                              </label><br />
+            
+          </div> <!-- /.watch -->
+            
+
+          
+      
+                      <input type="hidden" name="action" value="add" />
+          
+          		  	          <input type="hidden" name="event_id" value="428964" />
+          <noscript>
+            <input type="submit" name="submit" value="Do it!"/>
+          </noscript>
+        </form>	
+
+      </div>
+	<br />
+    
+          <div class="userlist">
+
+              <div class="userlistAttend">
+          <div class="title">
+            12 
+                          Attending
+                      </div>
+
+          <a href="/user/92824/"><img src="http://static.flickr.com/20/buddyicons/52257913@N00.jpg" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 10, 2008 10:18 AM" href="http://upcoming.yahoo.com/user/92824/">GeekyGirlDawn</a></span><br />
+<a href="/user/89306/"><img src="http://static.flickr.com/1/buddyicons/46661228@N00.jpg" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 10, 2008 10:53 AM" href="http://upcoming.yahoo.com/user/89306/">spinnerin</a></span><br />
+<a href="/user/122240/"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/sch/gr/48x48_photomissing_icon.gif" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 10, 2008 10:55 AM" href="http://upcoming.yahoo.com/user/122240/">igal</a></span><br />
+<a href="/user/197377/"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/sch/gr/48x48_photomissing_icon.gif" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 10, 2008 11:56 AM" href="http://upcoming.yahoo.com/user/197377/">ahockley</a></span><br />
+<a href="/user/197382/"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/sch/gr/48x48_photomissing_icon.gif" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 10, 2008 01:16 PM" href="http://upcoming.yahoo.com/user/197382/">Bart Massey</a></span><br />
+<a href="/user/88776/"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/sch/gr/48x48_photomissing_icon.gif" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 11, 2008 07:12 AM" href="http://upcoming.yahoo.com/user/88776/">samkeen</a></span><br />
+<a href="/user/147796/"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/sch/gr/48x48_photomissing_icon.gif" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 11, 2008 08:49 AM" href="http://upcoming.yahoo.com/user/147796/">Paul Bingman</a></span><br />
+<a href="/user/138844/"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/sch/gr/48x48_photomissing_icon.gif" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 11, 2008 01:19 PM" href="http://upcoming.yahoo.com/user/138844/">chris.faulkner</a></span><br />
+<a href="/user/20440/"><img src="http://static.flickr.com/3/buddyicons/97525854@N00.jpg" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 12, 2008 09:42 AM" href="http://upcoming.yahoo.com/user/20440/">dieselboi</a></span><br />
+<a href="/user/214824/"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/sch/gr/48x48_photomissing_icon.gif" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Attending since Feb 13, 2008 10:15 PM" href="http://upcoming.yahoo.com/user/214824/">nathanpbell</a></span><div id="attendees_hidden" style="display:none;"></div>        </div> <!-- /.userlistAttend -->
+      
+              <div class="userlistWatch">
+          <div class="title">
+            4 
+                          Watching
+                      </div>
+          <a href="/user/198761/"><img src="http://static.flickr.com/2134/buddyicons/22254860@N03.jpg" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Watching since Feb 10, 2008 01:23 PM" href="http://upcoming.yahoo.com/user/198761/">mototom</a></span><br />
+<a href="/user/119942/"><img src="http://us.i1.yimg.com/us.yimg.com/i/us/sch/gr/48x48_photomissing_icon.gif" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Watching since Feb 10, 2008 08:24 PM" href="http://upcoming.yahoo.com/user/119942/">multimodal</a></span><br />
+<a href="/user/134047/"><img src="http://static.flickr.com/1023/buddyicons/25244539@N00.jpg" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Watching since Feb 10, 2008 11:45 PM" href="http://upcoming.yahoo.com/user/134047/">turoczy</a></span><br />
+<a href="/user/206379/"><img src="http://static.flickr.com/27/buddyicons/71572571@N00.jpg" class="avatar" height="12" width="12" border="0"  /></a><span><a class="" title="Watching since Feb 12, 2008 04:13 AM" href="http://upcoming.yahoo.com/user/206379/">amycgx</a></span><div id="watchers_hidden" style="display:none;"></div>        </div> <!-- /.userlistWatch -->
+      
+              <div id="userlistExpand">
+          <a id="hide_attendees" href="javascript:void(0);" style="display:none;" class="tab">Hide...</a>
+          
+          <a id="expand_attendees" href="javascript:void(0);" style="display:none;" class="tab">Show all 16...</a>
+          <a id="placeholder_attendees" href="javascript:void(0);" class="tab">Page loading...</a>
+        </div>
+            </div> <!-- /.userlist -->
+    
+    
+        <div class="eventRelated">
+          <div class="inset" id="insetContent">
+            <div class="insetTitle">
+              We're also going to...
+            </div>
+            <div class="insetBody">
+              <table>
+                <tr>
+                  <td width="70" valign="top">Wed, Feb 27</td>
+                  <td><b><a href="/event/174640/">Portland Open Coffee</a></b></td>
+                </tr>
+                <tr>
+                  <td width="70" valign="top">Thu, Mar 27</td>
+                  <td><b><a href="/event/428967/">March BarCamp Portland Informal Tech Meetup</a></b></td>
+                </tr>
+                <tr>
+                  <td width="70" valign="top">Sat, Mar 29</td>
+                  <td><b><a href="/event/349225/">Startupalooza</a></b></td>
+                </tr>
+                <tr>
+                  <td width="70" valign="top">Thu, Apr 24</td>
+                  <td><b><a href="/event/428968/">April BarCamp Portland Informal Tech Meetup</a></b></td>
+                </tr>
+                <tr>
+                  <td width="70" valign="top">Fri, May  2</td>
+                  <td><b><a href="/event/421147/">BarCampPortland</a></b></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+<!-- Cached recommendations as of 2008-02-16 10:37:58 -->
+            <div class="venueRelated">
+          <div class="inset" id="insetContent">
+            <div class="insetTitle">
+              Also at this venue
+            </div><!-- end insetTitle -->
+            <div class="insetBody">
+            <table>
+                          <tr>
+                <td width="70" valign="top">Thu, Mar 27</td>
+                <td><b><a href="/event/428967/">March BarCamp Portland Informal Tech Meetup</a></b></td>
+              </tr>
+                            <tr>
+                <td width="70" valign="top">Thu, Apr 24</td>
+                <td><b><a href="/event/428968/">April BarCamp Portland Informal Tech Meetup</a></b></td>
+              </tr>
+                          </table>
+                        </div><!-- end insetBody -->
+          </div><!-- end insetContent -->
+        </div> <!-- end insetContainer -->
+        
+        <div id="eventTags">
+			<div class="insetTitle">
+				Tags
+			</div><!-- end insetTitle -->
+			<div class="insetBody categories">
+				<div id="tag_list">
+													<a href="/tag/technology/" rel="tag" class="category">technology</a>
+											<br />
+										<a href="/tag/portland/" rel="tag" class="category">portland</a>
+											<br />
+										<a href="/tag/software/" rel="tag" class="category">software</a>
+											<br />
+										<a href="/tag/legionoftech/" rel="tag" class="category">Legion of Tech</a>
+											<br />
+										<a href="/tag/jivesoftware/" rel="tag" class="category">Jive Software</a>
+											<br />
+										<a href="/tag/oregon/" rel="tag" class="category">oregon</a>
+											<br />
+											</div>
+				<div id="add_tag">
+														</div>
+			</div><!-- /.insetBody -->
+    </div> <!-- /#eventTags -->
+    
+          <div id="eventGroups">
+        <div class="insetTitle">Groups</div>
+        <div class="insetBody">
+          <div><ul id="group_list"><a href="/group/4025/">Legion Of Tech</a></li><li><a href="/group/4070/">Silicon Florist</a></ul></div>            <div id="send_to_group">
+                      
+          </div>
+                  </div> <!-- /.insetBody -->
+      </div> <!-- /#eventGroups -->
+    
+          
+  </div> <!-- /#eventSidebar -->
+  <div id="hidden_event_id" style="visibility:hidden;">428964</div>
+</div> <!-- /#event -->
+
+<br style="clear: both">
+
+<script language="JavaScript">
+<!--
+ctxt_ad_partner = '6872253410';
+ctxt_ad_section = '6984';
+ctxt_ad_bg = '';
+ctxt_ad_width = 468;
+ctxt_ad_height = 60;
+ctxt_ad_bc = 'FBFBFB';
+ctxt_ad_cc = 'FBFBFB';
+ctxt_ad_lc = '002CD9';
+ctxt_ad_tc = '333333';
+ctxt_ad_uc = 'C80D00';
+// -->
+</script>
+<script language="JavaScript" src="http://ypn-js.overture.com/partner/js/ypn.js">
+</script><br />
+  
+
+</div> <!-- End vCalendar -->
+		</div>  <!-- /#yui-main -->
+	</div>  <!-- /#bd -->
+  <input type="hidden" id="_cmb" name="_cmb" value="" />
+  
+  <div id="footer">
+    <div id="footer-nav">
+            
+      <p>
+        <strong>Tools</strong>  
+        <a href="/badge/">Upcoming Badges for Your Blog/Website</a>
+        | <a href="/site_invite/">Invite Friends</a>
+        | <a href="/group/">Groups</a>
+        | <a href="/services/api/">Developers API</a>
+      </p>
+      
+      <p>
+        <strong>Help</strong>
+        <a href="/news/">News Blog</a>
+        | <a href="/help/guidelines/">Community Guidelines</a>
+        | <a href="/help/faq/">FAQ</a>
+        | <a href="/contact/">Contact Us</a>
+        | <a href="http://suggestions.yahoo.com/?prop=upcoming">Suggestion Board</a>
+      </p>
+    </div>
+
+    <div id="footer-legal">
+      Copyright &copy; 2008 Yahoo! Inc. All rights reserved. -
+      <a href="http://docs.yahoo.com/info/copyright/copyright.html">Copyright/IP Policy</a> - 
+      <a href="http://docs.yahoo.com/info/terms/">Terms of Service</a> - 
+      <a href="http://privacy.yahoo.com/privacy/us/upcoming/">Privacy Policy</a>
+    </div>
+  </div><!-- /#footer -->
+</div> <!-- end 'wrapper' -->
+<!-- spaceId: 97348559 -->
+<script type="text/javascript" src="http://l.yimg.com/ycs.upcoming.yahoo.com/js/minimega_d5cca161a178fa5163dfb97cdb86947b.js"></script></script>
+<script type="text/javascript" src="http://l.yimg.com/ycs.upcoming.yahoo.com/js/event_page_3769988cc5d17697b99021096a1641c7.js"></script><script type="text/javascript" src="/js/ajaxymaphack"></script><script type="text/javascript" src="http://l.yimg.com/ycs.upcoming.yahoo.com/js/venue_widget_1f85a919e0951c433e80ac053ced08f8.js"></script></body>
+</html>
+<!-- web4.up.sp1.yahoo.com uncompressed/chunked Sat Feb 16 17:09:07 PST 2008 -->

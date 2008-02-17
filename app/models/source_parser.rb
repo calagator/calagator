@@ -1,4 +1,3 @@
-require 'mofo'
 require 'open-uri'
 require 'set'
 
@@ -68,11 +67,6 @@ class SourceParser
       raise NotImplementedError, "Do not use #{self.class}.to_abstract_events method directly"
     end
   end
-  
-  
-  AbstractEvent = Struct.new(:title, :description, :start_time, :url, :location) do
-  end
-  
 end
 
 # Load all the format-specific drivers in the "source_parser" directory

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 3
+# Schema version: 4
 #
 # Table name: events
 #
@@ -7,10 +7,10 @@
 #  title       :string(255)     
 #  description :text            
 #  start_time  :datetime        
+#  venue_id    :integer         
 #  url         :string(255)     
 #  created_at  :datetime        
 #  updated_at  :datetime        
-#  venue_id    :integer         
 #
 
 # == Event
@@ -21,13 +21,12 @@ class Event < ActiveRecord::Base
 
   # Returns a new Event created from an AbstractEvent.
   def self.from_abstract_event(abstract_event)
-    venue = Venue.create(:title => abstract_event.location, :description => abstract_event.location)
     returning Event.new do |event|
       event.title        = abstract_event.title
       event.description  = abstract_event.description
       event.start_time   = abstract_event.start_time 
       event.url          = abstract_event.url
-      event.venue_id     = venue.id
+      event.venue        = Venue.from_abstract_location(abstract_event.location)
     end
   end
     
