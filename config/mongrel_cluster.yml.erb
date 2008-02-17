@@ -8,4 +8,4 @@ port: "20010"
 environment: <%= RAILS_ENV %>
 group: <%= Etc.getgrgid(Etc.getpwuid(Process.euid).gid).name %>
 pid_file: tmp/pids/mongrel.pid
-servers: 3
+servers: 2
