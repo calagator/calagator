@@ -41,9 +41,10 @@ opts = OptionParser.new do |opts|
 Usage: #{PROG} [options]
 
 Examples:
-  #{PROG} start  # Starts daemon
-  #{PROG} attach # Attaches to daemon
-  #{PROG} stop   # Stops daemon
+  #{PROG} attach  # Attaches to daemon
+  #{PROG} start   # Starts daemon
+  #{PROG} stop    # Stops daemon
+  #{PROG} restart # Restarts daemon
 
 Options, meant for internal use:
   HERE
@@ -59,6 +60,10 @@ Options, meant for internal use:
   if args.include? "start"
     puts "Starting"
     exec "dtach -n #{SOCK_FILE} #{OWN_FILE} --daemonize"
+  elsif args.include? "restart"
+    puts "Restarting"
+    system "#{__FILE__} stop; sleep 3; #{__FILE__} start"
+    exit 0
   elsif args.include? "stop"
     if pid = running?
       Process.kill("TERM", pid)
@@ -95,8 +100,8 @@ class MainController < Ramaze::Controller
 
   def index
     case request["action"]
-    when "deploy", "deploy_and_migrate"
-      @message = `(cd #{RAILS_ROOT} && svn cleanup && svn update -r #{request["revision"].match(/(\w+)/)[1]} && rake restart) 2>&1`
+    when "deploy"
+      @message = `(cd #{RAILS_ROOT} && svn cleanup && svn update -r #{request["revision"].match(/(\w+)/)[1]} && rake db:migrate restart) 2>&1`
     when "restart", "start", "stop", "status"
       @message = `(cd #{RAILS_ROOT} && rake #{request["action"]}) 2>&1`
     end
@@ -115,13 +120,8 @@ class MainController < Ramaze::Controller
           status
         %br
         %label
-          %input{:type=>"radio", :name=>"action", :value=>"deploy_and_migrate"}
-          deploy and migrate revision
-          %input{:type=>"text", :name=>"revision", :value=>"HEAD"}
-        %br
-        %label
           %input{:type=>"radio", :name=>"action", :value=>"deploy"}
-          deploy revision
+          deploy and migrate revision
           %input{:type=>"text", :name=>"revision", :value=>"HEAD"}
         %br
         %label
