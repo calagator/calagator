@@ -1,25 +1,41 @@
 <html>
   <head>
     <title>Calagator<%= @page_title ? " - #{@page_title}" : "" %></title>
+	<%= stylesheet_link_tag "blueprint/screen" %>
+	<%= stylesheet_link_tag "blueprint/print", :media => 'print' %>
+	<!--[if IE]><%= stylesheet_link_tag "blueprint/lib/ie" %><![endif]-->
     <%= stylesheet_link_tag "application" %>
     <%= javascript_include_tag :all, :cache => true %>
     <%= active_scaffold_includes %>
   </head>
   <body>
     <div id="top_menu">
-      <span style="float: left">
-      Calagator:
-      <%= link_to "Home", root_path %>
-      | <%= link_to "Import", sources_path %>
-      | <%= link_to "Events", events_path %>
-      | <%= link_to "Venues", venues_path %>
-    </span>
-      <span style="float: right">
-      <%= link_to "Blog", blog_path %>
-      | <%= link_to "Forum", community_path %>
-      | <%= link_to "Bugs", bug_path %>
-      </span>
-      <span style="clear: both">&nbsp;</span>
+	
+	  <%
+		link_class = {
+			:home =>   current_page?(:controller => 'home') ? 'active first' : 'first',
+			:import => !current_page?(:controller => 'sources') || 'active',
+			:events => !current_page?(:controller => 'events') || 'active',
+			:venues => !current_page?(:controller => 'venues') || 'active',
+		}
+	  %>
+	
+     <div id='app_menu'>
+	    <span id='project-title'>Calagator</span>
+		<ul>
+	      	<li><%= link_to "Home", root_path, {:class => link_class[:home] } %></li>
+		    <li><%= link_to "Import", sources_path, {:class => link_class[:import] } %></li>
+		    <li><%= link_to "Events", events_path, {:class => link_class[:events] } %></li>
+		    <li><%= link_to "Venues", venues_path, {:class => link_class[:venues] } %></li>
+		</ul>
+    </div>
+      <div id='project_menu'>
+		<ul>
+      		<li><%= link_to "Blog", blog_path, {:class => 'first'} %></li>
+      		<li><%= link_to "Forum", community_path %></li>
+      		<li><%= link_to "Bugs", bug_path %></li>
+		</ul>
+      </div>
     </div>
 
     <div id="top_content">

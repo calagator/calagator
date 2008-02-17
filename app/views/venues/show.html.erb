@@ -1,0 +1,44 @@
+<div class="vcard">
+	<h1 class="fn org"><%= @record.title %></h1>
+	
+	<% if !@record.address.blank? %>
+		<div class='address'><%= @record.address %></div>
+	<% end %>
+	
+	<% if !@record.street_address.blank? or !@record.locality.blank? or !@record.region.blank or !@record.postal_code.blank? or !@record.country.blank? ?%>
+		<div class="adr">
+			<% if !@record.street_address.blank? %>
+				<div class="street-address"><%= @record.street_address %></div>
+			<% end %>
+			<% if !@record.locality.blank? %>
+				<span class="locality"><%= @record.locality %></span>
+			<% end %>
+			<% if !@record.region.blank? %>
+				, <span class="region"><%= @record.region %></span> 
+			<% end %>
+			<% if !@record.postal_code.blank? %>
+				<span class="postal-code"><%= @record.postal_code %></span>
+			<% end %>
+			<% if !@record.country.blank? %>
+				<div class='country-name'><%= @record.country %><div>
+			<% end %>
+		</div>
+	<% end %>
+	
+	<% if !@record.url.blank? %>
+		<div><a href='<%= @record.url %>' class='url'><%= @record.url %></a></div>
+	<% end %>
+
+	<% if !@record.email.blank? %>
+	<div><a href='mailto:<%= @record.email %>' class='email'><%= @record.email %></a></div>
+	<% end %>
+		
+	<% if !@record.telephone.blank? %>
+	<div class='tel'><%= @record.telephone %></div>
+	<% end %>
+
+	<div class="metadata">
+		Created <%= @record.created_at %>
+		Modified <%= @record.updated_at %>
+	</div>
+</div>
