@@ -1,8 +1,16 @@
+require 'uri'
+
 module EventsHelper
   def url_column(record)
-    record.url.blank? ? nil : link_to("Link", record.url)
+    begin
+      link = URI.parse(record.url)
+      raise "Invalid url" unless link.scheme =~ /^https?$/
+      link_to("Link", link.to_s)
+    rescue
+      nil
+    end
   end
-  
+
   def to_hcal_column(record)
     record.to_hcal
   end
