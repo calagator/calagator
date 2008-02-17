@@ -95,7 +95,7 @@ class MainController < Ramaze::Controller
 
   def index
     case request["action"]
-    when "deploy"
+    when "deploy", "deploy_and_migrate"
       @message = `(cd #{RAILS_ROOT} && svn cleanup && svn update -r #{request["revision"].match(/(\w+)/)[1]} && rake restart) 2>&1`
     when "restart", "start", "stop", "status"
       @message = `(cd #{RAILS_ROOT} && rake #{request["action"]}) 2>&1`
@@ -113,6 +113,11 @@ class MainController < Ramaze::Controller
         %label
           %input{:type=>"radio", :name=>"action", :value=>"status", :checked=>"checked"}
           status
+        %br
+        %label
+          %input{:type=>"radio", :name=>"action", :value=>"deploy_and_migrate"}
+          deploy and migrate revision
+          %input{:type=>"text", :name=>"revision", :value=>"HEAD"}
         %br
         %label
           %input{:type=>"radio", :name=>"action", :value=>"deploy"}
