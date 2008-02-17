@@ -5,7 +5,7 @@
 		<div class='address'><%= @record.address %></div>
 	<% end %>
 	
-	<% if !@record.street_address.blank? or !@record.locality.blank? or !@record.region.blank or !@record.postal_code.blank? or !@record.country.blank? %>
+	<% if !@record.street_address.blank? or !@record.locality.blank? or !@record.region.blank? or !@record.postal_code.blank? or !@record.country.blank? %>
 		<div class="adr">
 			<% if !@record.street_address.blank? %>
 				<div class="street-address"><%= @record.street_address %></div>
