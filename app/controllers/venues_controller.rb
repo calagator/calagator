@@ -21,5 +21,6 @@ class VenuesController < ApplicationController
       :created_at, 
       :updated_at,
     ]
+    config.update.link.inline = false
   end
 end

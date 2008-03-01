@@ -1,0 +1,40 @@
+<div id="edit_event">
+	<h1><%= @record.title %></h1>
+	<p>You can edit the details of your event below.  The more information we have about your event, the easier it will be for people 
+		to find it.</p>
+	<% form_for :event, @record, :url => { :action => "edit" } do |f| %>
+		<div>
+			<label for="event_title">Event Name</label><br />
+			<%= f.text_field :title %>
+		</div>
+		<div>
+			<label for="event_venue">Location</label><br />
+			<%= f.text_field :venue %>
+		</div>
+		<div id="event_times">
+			<div id="start_time">
+				<label for="event_start_time">Start Time</label><br />
+				<p><input type="text" name="event_start_date" value="<%= @record.start_time.strftime("%m %d, %Y") %>" id="event_start_date"></p>
+				<p><input type="text" name="event_start_time" value="<%= @record.start_time.strftime("%H:%M") %>" id="event_start_time"></p>
+			</div>
+			<div id="end_time">
+				<label for="event_start_date">End Time</label><br />
+				<p><input type="text" name="event_end_date" value="<%= @record.end_time.nil? ? '' : @record.end_time.strftime("%m %d, %Y") %>" id="event_start_date"></p>
+				<p><input type="text" name="event_end_time" value="<%= @record.end_time.nil? ? '' : @record.end_time.strftime("%H:%M")  %>" id="event_end_time"></p>
+			</div>	
+		</div>
+		<div>
+			<label for="event_url">Web Link</label><br />
+			<%= f.text_field :url %>
+		</div>
+		<div>
+			<label for="event_description">Description<span class="note">(HTML formatting allowed)</span></label><br />
+			<%= f.text_area :description %>
+		</div>
+		<div>
+			<label for="event_tags">Tags<span class="note">(comma separated keywords)</span></label><br />
+			<input type="text" name="event_tags" value="" id="event_tags">
+		</div>
+		<p><input type="submit" value="save"></p>
+	<% end %>
+</div>
