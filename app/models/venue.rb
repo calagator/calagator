@@ -23,6 +23,8 @@
 
 class Venue < ActiveRecord::Base
   has_many :events
+  
+  validates_presence_of :title
 
   # Returns a new Venue created from an AbstractLocation
   def self.from_abstract_location(abstract_location)

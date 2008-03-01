@@ -92,8 +92,7 @@ class SourceParser
             end
           end
 
-        else
-          raise ArgumentError, "Unknown location type in hCalendar: #{mofo_field.class}"
+          # FIXME: should attempt to fill in fields based on whatever input is available, such as hcard org
         end
       end
     end

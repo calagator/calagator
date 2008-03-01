@@ -6,7 +6,11 @@ describe Venue do
   end
 
   before(:each) do
-    @venue = Venue.new
+    @venue = Venue.new(:title => 'CubeSpace')
+  end
+  
+  it "should be valid" do
+    @venue.should be_valid
   end
 
   it "should extract an AbstractEvent from an hCalendar text" do
