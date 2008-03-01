@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 4
+# Schema version: 6
 #
 # Table name: events
 #
@@ -7,8 +7,10 @@
 #  title       :string(255)     
 #  description :text            
 #  start_time  :datetime        
+#  end_time    :datetime        
 #  venue_id    :integer         
 #  url         :string(255)     
+#  source_id   :integer         
 #  created_at  :datetime        
 #  updated_at  :datetime        
 #
@@ -18,6 +20,7 @@
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
   belongs_to :venue
+  belongs_to :source
 
   # Returns a new Event created from an AbstractEvent.
   def self.from_abstract_event(abstract_event)

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 4
+# Schema version: 6
 #
 # Table name: sources
 #
@@ -16,6 +16,9 @@
 #
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
 class Source < ActiveRecord::Base
+  
+  has_one :event
+
   # Returns an Array of Event objects that were read from this source.
   def to_events(opts={})
     opts[:url] ||= url

@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 4
+# Schema version: 6
 #
 # Table name: venues
 #

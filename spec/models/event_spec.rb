@@ -10,6 +10,10 @@ describe Event do
     @event = Event.new
   end
 
+  it "should have a source" do
+    @event.source.should be_nil
+  end
+
   it "should parse an AbstractEvent into an Event" do
     event = Event.new(:title => true, :description => true, :start_time => true, :url => true)
     Event.should_receive(:new).and_return(event)

@@ -35,5 +35,5 @@ describe Source do
     first[:start_time ].should == Time.parse('2008-1-19')
     second[:start_time].should == Time.parse('2008-2-2')
   end
-  
+    
 end
