@@ -22,6 +22,7 @@
 			<% if !@record.country.blank? %>
 				<div class='country-name'><%= @record.country %><div>
 			<% end %>
+			(<a href='<%=@record.google_maps_url%>'>map</a>)
 		</div>
 	<% end %>
 	

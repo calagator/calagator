@@ -32,26 +32,61 @@
 	</div>
 
   <% unless @record.venue.blank? %>
-    <div class="location">
-      VENUE: <%= h @record.venue.title %> (<%= link_to "link", venue_path(@record.venue) %>)
+    <div class="location vcard">
+		<a href='<%= url_for venue_path(@record.venue) %>' class='url'>
+		    <span class='fn org'><%= h @record.venue.title %></span>
+		</a>
+		<div class="adr">
+			<% if !@record.venue.street_address.blank? %>
+				<div class="street-address"><%= @record.venue.street_address %></div>
+			<% end %>
+			<% if !@record.venue.locality.blank? %>
+				<span class="locality"><%= @record.venue.locality %></span>
+			<% end %>
+			<% if !@record.venue.region.blank? %>
+				, <span class="region"><%= @record.venue.region %></span> 
+			<% end %>
+			<% if !@record.venue.postal_code.blank? %>
+				<span class="postal-code"><%= @record.venue.postal_code %></span>
+			<% end %>
+			<% if !@record.venue.country.blank? %>
+				<div class='country-name'><%= @record.venue.country %><div>
+			<% end %>
+			(<a href='<%=@record.venue.google_maps_url%>'>map</a>)
+		</div>
     </div>
   <% end %>
 
-
+  <% unless @record.url.blank? %>
 	<div class="description">
-    DESCRIPTION: 
     <%= @record.description %>
 	</div>
-
-  <% unless @record.url.blank? %>
-    URL: <%= link_to "link", @record.url, :class => "url" %>
   <% end %>
 
+  <% unless @record.url.blank? %>
+	<h3>Links</h3>
+	<ul>   	
+		<li><%= link_to "Website", @record.url, :class => "url" %></li>
+	</ul>
+  <% end %>
 
-
-	<div class="metadata">
-		Created <%= @record.created_at %>
-		Modified <%= @record.updated_at %>
+	<div class='single_view_right'>
+		<div id='edit_link'>
+			<h4>Something not right?</h4>
+			<p>You can <%= link_to "edit this event", edit_event_url %>.</p>
+		</div>
+		<div id='metadata'>
+			This event was 
+			<% if @record.source.nil? %>
+			added directly to Calagator
+			<% else %>
+			imported from <%= link_to @record.source.name, event_url(@record.source.id) %>
+			<% end %>
+			on <strong><%= @record.created_at.strftime('%a. %d, %Y') %></strong>
+			<% unless @record.created_at == @record.updated_at %>
+			and last updated on <strong><%= @record.created_at.strftime('%a. %d, %Y') %></strong>
+			<% end %>.
+		</div>
 	</div>
 </div>
 

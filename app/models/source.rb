@@ -28,4 +28,8 @@ class Source < ActiveRecord::Base
     end
     return events
   end
+  
+  def name
+    title || url
+  end
 end
