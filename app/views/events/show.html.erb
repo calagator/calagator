@@ -1,12 +1,34 @@
 <div class="vevent">
 	<h1 class="summary"><%= @record.title %></h1>
-
+	
+	<% 
+	unless @record.end_time.nil?
+		if @record.start_time.strftime('%Y:%j') != @record.end_time.strftime('%Y:%j')
+			span_days = true
+		end
+		end_format = @record.end_time.min ? '%I:%M%p' : '%I%p'
+	end
+	start_format = @record.start_time.min ? '%I:%M%p' : '%I%p'
+	%>
+	
 	<div class='date'>
-		START: <abbr class="dtstart" title="<%=@record.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-		 	<span class="day"><%= @record.start_time.day %></span>
-			 <span class="month"><%= @record.start_time.strftime("%B") %></span>
-			 <span class="time"><%= @record.start_time.strftime("%H:%M") %></span>
+		<abbr class="dtstart" title="<%=@record.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+			<span class='weekday'><%= @record.start_time.strftime('%A') %></span>,
+			<span class="month"><%= @record.start_time.strftime("%B") %></span>
+			<span class="day"><%= @record.start_time.day %></span>; 
+			<span class="time"><%= @record.start_time.strftime(start_format).downcase %></span>
 		</abbr>
+		<% unless @record.end_time.nil? %>
+		&ndash;
+		<abbr class="dtend" title="<%=@record.end_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+			<% if span_days %>
+				<span class='weekday'><%= @record.end_time.strftime('%A') %></span>,
+				<span class="month"><%= @record.end_time.strftime("%B") %></span>
+				<span class="day"><%= @record.end_time.day %></span>; 
+			<% end %>
+			<span class="time"><%= @record.end_time.strftime(end_format).downcase %></span>
+		</abbr>
+		<% end %>
 	</div>
 
   <% unless @record.venue.blank? %>
@@ -15,14 +37,17 @@
     </div>
   <% end %>
 
+
+	<div class="description">
+    DESCRIPTION: 
+    <%= @record.description %>
+	</div>
+
   <% unless @record.url.blank? %>
     URL: <%= link_to "link", @record.url, :class => "url" %>
   <% end %>
 
-	<div class="description">
-    DESCRIPTION: 
-    <%= textilize h @record.description %>
-	</div>
+
 
 	<div class="metadata">
 		Created <%= @record.created_at %>
