@@ -27,9 +27,9 @@ describe Event do
     @event.title = 'Web 2.0 Conference'
     @event.start_time = Time.parse('2007-10-05')
     @event.venue = mock_model(Venue, :title => 'Argent Hotel, San Francisco, CA')
-    
+
     actual_hcal = @event.to_hcal
-    actual_hcal.should == @hcal_basic
+    actual_hcal.should =~ Regexp.new(@hcal_basic.gsub(/\s+/, '\s+')) # Ignore spacing changes
   end
-  
+
 end
