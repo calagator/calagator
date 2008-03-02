@@ -58,7 +58,11 @@ Rails::Initializer.run do |config|
   # config.active_record.default_timezone = :utc
 end
 
-#===[ Extra gems ]======================================================
+#===[ Local libraries ]=================================================
+
+require 'metaclass'
+
+#===[ Vendor gems ]=====================================================
 
 def add_gem_to_load_path(*names)
   for name in names
@@ -67,6 +71,7 @@ def add_gem_to_load_path(*names)
 end
 
 add_gem_to_load_path 'htmlentities-4.0.0'
+add_gem_to_load_path 'vpim-0.360'
 
 #===[ Convenience paths ]===============================================
 
