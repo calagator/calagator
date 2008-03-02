@@ -37,6 +37,10 @@ class Venue < ActiveRecord::Base
     end
   end
   
+  def has_full_address?
+    !"#{street_address}#{locality}#{region}#{postal_code}#{country}".blank?
+  end
+
   def full_address()
     "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
   end 

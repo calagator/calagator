@@ -1,10 +1,10 @@
 <div id="venues_index">
 	<h1>Venues</h1>
   <ul>
-    <% for venue in @venues.sort_by{|t| t.title} %>
+    <% for venue in @venues %>
       <li>
         <%= link_to(venue.title, venue_url(venue)) %>
-        <% unless venue.full_address.blank? %>
+        <% if venue.has_full_address? %>
           at <%= venue.full_address %>
         <% end %>
       </li>
