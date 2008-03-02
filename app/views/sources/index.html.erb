@@ -8,8 +8,11 @@
       </td>
       <td>
         <%= f.text_field :url, :size => 60 %>
-        <br />
-        E.g., http://upcoming.yahoo.com/event/390164/
+        <% if false %>
+        For example:<br>
+        hCalendar at http://upcoming.yahoo.com/event/390164/<br>
+        iCalendar at http://appendix.23ae.com/calendars/AlternateHolidays.ics
+        <% end %>
       </td>
     </tr>
     <tr>
@@ -20,7 +23,7 @@
         <% is_first = true %>
         <% for format_type, format_label in SourceParser.formats_to_labels %>
           <%= f.radio_button "format_type", format_type, :checked => is_first %>
-          <%= f.label "format_type[#{format_type}]", format_label %>
+          <%= f.label "format_type_#{format_type.to_s.downcase}", format_label %>
           <% is_first = false  %>
         <% end %>
       </td>
