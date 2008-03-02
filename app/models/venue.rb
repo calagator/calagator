@@ -26,9 +26,24 @@ class Venue < ActiveRecord::Base
 
   validates_presence_of :title
 
-  # Return an Array of all valid Venues, sorted by the title.
-  def self.find_all_valid
-    Venue.find(:all, :order => "title ASC").reject{|venue| venue.title.blank?}
+  # Return an Array of all sensible Venues, sorted by the title.
+  def self.find_all_sensible
+    Venue.find(:all, :order => "title ASC").select{|venue| venue.sensible?}
+  end
+
+  def self.find_all_sensible_with_current(current)
+    results = find_all_sensible
+    results.unshift(current) if current && !current.sensible?
+    return results
+  end
+
+  def sensible?
+    !read_attribute(:title).blank?
+  end
+
+  def title_or_filler
+    value = read_attribute(:title)
+    value.blank? ? "Venue ##{id}" : value
   end
 
   # Returns a new Venue created from an AbstractLocation

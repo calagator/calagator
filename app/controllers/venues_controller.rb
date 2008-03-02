@@ -3,7 +3,7 @@ class VenuesController < ApplicationController
   # GET /venues.xml
   def index
     # TODO We have a bunch of venues with blank titles, what should be done with them?
-    @venues = Venue.find_all_valid
+    @venues = Venue.find_all_sensible
 
     respond_to do |format|
       format.html # index.html.erb

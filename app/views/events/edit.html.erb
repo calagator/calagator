@@ -8,14 +8,11 @@
 			<br />
 			<%= f.text_field :title %>
 		</div>
-    <% if false %>
-    <%# FIXME location is NOT a string, how to edit/select it? %>
 		<div>
       <%= f.label :venue %>
       <br />
-			<%= f.text_field :venue %>
+      <%= collection_select(:event, :venue_id, Venue.find_all_sensible_with_current(@event.venue), :id, :title_or_filler, :include_blank => true) %>
 		</div>
-    <% end %>
     <div>
     </div>
 		<div id="event_times">
