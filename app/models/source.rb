@@ -17,8 +17,8 @@
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
 class Source < ActiveRecord::Base
   
-  has_one :event
-
+  has_many :events
+  
   # Returns an Array of Event objects that were read from this source.
   def to_events(opts={})
     opts[:url] ||= url
