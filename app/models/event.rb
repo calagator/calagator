@@ -27,17 +27,17 @@ class Event < ActiveRecord::Base
     returning Event.new do |event|
       event.title        = abstract_event.title
       event.description  = abstract_event.description
-      event.start_time   = abstract_event.start_time 
+      event.start_time   = abstract_event.start_time
       event.url          = abstract_event.url
-      event.venue        = Venue.from_abstract_location(abstract_event.location)
+      event.venue        = Venue.from_abstract_location(abstract_event.location) if abstract_event.location
     end
   end
-    
+
   def to_hcal
     <<-EOF
 <div class="vevent">
 <a class="url" href="#{url}">#{url}</a>
-<span class="summary">#{title}</span>: 
+<span class="summary">#{title}</span>:
 <abbr class="dtstart" title="#{start_time.to_s(:yyyymmdd)}">#{start_time.to_s(:long_date).gsub(/\b[0](\d)/, '\1')}</abbr>,
 at the <span class="location">#{venue && venue.title}</span>
 </div>
