@@ -6,6 +6,7 @@ require 'rubygems'
 require 'ramaze'
 require 'optparse'
 
+# {{{
 PROG = File.basename(__FILE__)
 OWN_FILE = File.expand_path(__FILE__)
 PID_FILE = OWN_FILE+".pid"
@@ -90,13 +91,16 @@ Options, meant for internal use:
     exit 1
   end
 end
+# }}}
 
 class MainController < Ramaze::Controller
   engine :Haml
 
+# {{{
   if production?
     def error() 'An error occurred. Contact one of the developers.' end
   end
+# }}}
 
   def index
     case request["action"]
