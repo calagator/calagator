@@ -1,45 +1,52 @@
 <div class="vcard">
-	<h1 class="fn org"><%= @record.title %></h1>
+	<h1 class="fn org"><%= @venue.title %></h1>
 	
-	<% if !@record.address.blank? %>
-		<div class='address'><%= @record.address %></div>
+	<% if !@venue.address.blank? %>
+		<div class='address'><%= @venue.address %></div>
 	<% end %>
 	
-	<% if !@record.street_address.blank? or !@record.locality.blank? or !@record.region.blank? or !@record.postal_code.blank? or !@record.country.blank? %>
+	<% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
 		<div class="adr">
-			<% if !@record.street_address.blank? %>
-				<div class="street-address"><%= @record.street_address %></div>
+			<% if !@venue.street_address.blank? %>
+				<div class="street-address"><%= @venue.street_address %></div>
 			<% end %>
-			<% if !@record.locality.blank? %>
-				<span class="locality"><%= @record.locality %></span>
+			<% if !@venue.locality.blank? %>
+				<span class="locality"><%= @venue.locality %></span>
 			<% end %>
-			<% if !@record.region.blank? %>
-				, <span class="region"><%= @record.region %></span> 
+			<% if !@venue.region.blank? %>
+				, <span class="region"><%= @venue.region %></span> 
 			<% end %>
-			<% if !@record.postal_code.blank? %>
-				<span class="postal-code"><%= @record.postal_code %></span>
+			<% if !@venue.postal_code.blank? %>
+				<span class="postal-code"><%= @venue.postal_code %></span>
 			<% end %>
-			<% if !@record.country.blank? %>
-				<div class='country-name'><%= @record.country %><div>
+			<% if !@venue.country.blank? %>
+				<div class='country-name'><%= @venue.country %><div>
 			<% end %>
-			(<a href='<%=@record.google_maps_url%>'>map</a>)
+			(<a href='<%=@venue.google_maps_url%>'>map</a>)
 		</div>
 	<% end %>
 	
-	<% if !@record.url.blank? %>
-		<div><a href='<%= @record.url %>' class='url'><%= @record.url %></a></div>
+	<% if !@venue.url.blank? %>
+		<div><a href='<%= @venue.url %>' class='url'><%= @venue.url %></a></div>
 	<% end %>
 
-	<% if !@record.email.blank? %>
-	<div><a href='mailto:<%= @record.email %>' class='email'><%= @record.email %></a></div>
+	<% if !@venue.email.blank? %>
+	<div><a href='mailto:<%= @venue.email %>' class='email'><%= @venue.email %></a></div>
 	<% end %>
 		
-	<% if !@record.telephone.blank? %>
-	<div class='tel'><%= @record.telephone %></div>
+	<% if !@venue.telephone.blank? %>
+	<div class='tel'><%= @venue.telephone %></div>
 	<% end %>
 
-	<div class="metadata">
-		Created <%= @record.created_at %>
-		Modified <%= @record.updated_at %>
+
+	<div class='single_view_right'>
+		<div id='edit_link'>
+			<h4>Something not right?</h4>
+			<p>You can <%= link_to "edit this venue", edit_venue_url %>.</p>
+		</div>
+    <div class="metadata">
+      Created <%= @venue.created_at %>
+      Modified <%= @venue.updated_at %>
+    </div>
 	</div>
 </div>

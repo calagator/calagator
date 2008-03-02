@@ -4,45 +4,50 @@
 		to find it.</p>
 	<% form_for(@event) do |f| %>
 		<div>
-			<label for="event_title">Event Name</label><br />
+      <%= f.label :title, "Event Name" %>
+			<br />
 			<%= f.text_field :title %>
 		</div>
     <% if false %>
-    <%# FIXME location is NOT a string, how to edit/select it?  %>
+    <%# FIXME location is NOT a string, how to edit/select it? %>
 		<div>
-			<label for="event_venue">Location</label><br />
+      <%= f.label :venue %>
+      <br />
 			<%= f.text_field :venue %>
 		</div>
     <% end %>
+    <div>
+    </div>
 		<div id="event_times">
 			<div id="start_time">
-				<label for="event_start_time">Start Time</label><br />
-        <p>
+        <%= f.label :start_time %>
+				<br />
         <input type="text" name="event_start_date" value="<%= @event.start_time.strftime("%Y/%m/%d") %>" id="event_start_date">
         <%# FIXME how to ignore events without a time of day? ignore midnight? %>
         <input type="text" name="event_start_time" value="<%= @event.start_time.strftime("%H:%M") %>" id="event_start_time">
-        </p>
 			</div>
 			<div id="end_time">
-				<label for="event_start_date">End Time</label><br />
-        <p>
+        <%= f.label :end_time %>
+				<br />
         <input type="text" name="event_end_date" value="<%= @event.end_time.nil? ? '' : @event.end_time.strftime("%Y/%m/%d") %>" id="event_start_date">
         <input type="text" name="event_end_time" value="<%= @event.end_time.nil? ? '' : @event.end_time.strftime("%H:%M")  %>" id="event_end_time">
-        </p>
 			</div>	
 		</div>
 		<div>
-			<label for="event_url">Web Link</label><br />
+      <%= f.label :url, "Web Link" %>
+			<br />
 			<%= f.text_field :url %>
 		</div>
 		<div>
-			<label for="event_description">Description<span class="note">(HTML formatting allowed)</span></label><br />
+      <%= f.label :description %>
+			<span class="note">(HTML formatting allowed)</span><br />
 			<%= f.text_area :description %>
 		</div>
     <% if false %>
     <%# TODO implement tags %>
 		<div>
-			<label for="event_tags">Tags<span class="note">(comma separated keywords)</span></label><br />
+      <%= f.label :tags %>
+			<span class="note">(comma separated keywords)</span><br />
 			<input type="text" name="event_tags" value="" id="event_tags">
 		</div>
     <% end %>
