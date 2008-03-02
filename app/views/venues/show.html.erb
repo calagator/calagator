@@ -1,10 +1,10 @@
 <div class="vcard">
 	<h1 class="fn org"><%= @venue.title %></h1>
-	
+
 	<% if !@venue.address.blank? %>
 		<div class='address'><%= @venue.address %></div>
 	<% end %>
-	
+
 	<% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
 		<div class="adr">
 			<% if !@venue.street_address.blank? %>
@@ -14,7 +14,7 @@
 				<span class="locality"><%= @venue.locality %></span>
 			<% end %>
 			<% if !@venue.region.blank? %>
-				, <span class="region"><%= @venue.region %></span> 
+				, <span class="region"><%= @venue.region %></span>
 			<% end %>
 			<% if !@venue.postal_code.blank? %>
 				<span class="postal-code"><%= @venue.postal_code %></span>
@@ -27,7 +27,7 @@
       <% end %>
 		</div>
 	<% end %>
-	
+
 	<% if !@venue.url.blank? %>
 		<div><a href='<%= @venue.url %>' class='url'><%= @venue.url %></a></div>
 	<% end %>
@@ -35,7 +35,7 @@
 	<% if !@venue.email.blank? %>
 	<div><a href='mailto:<%= @venue.email %>' class='email'><%= @venue.email %></a></div>
 	<% end %>
-		
+
 	<% if !@venue.telephone.blank? %>
 	<div class='tel'><%= @venue.telephone %></div>
 	<% end %>
@@ -44,7 +44,8 @@
 	<div class='single_view_right'>
 		<div id='edit_link'>
 			<h4>Something not right?</h4>
-			<p>You can <%= link_to "edit this venue", edit_venue_url %>.</p>
+      <p>You can <%= link_to "edit this venue", edit_venue_url %>
+      or <%= link_to "delete it", venue_url, :method => :delete, :confirm => "Are you sure?" %>.</p>
 		</div>
     <div class="metadata">
       Created <%= @venue.created_at %>
