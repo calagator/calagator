@@ -1,6 +1,6 @@
 <div id="edit_event">
 	<h1><%= @event.title %></h1>
-	<p>You can edit the details of your event below.  The more information we have about your event, the easier it will be for people 
+	<p>You can edit the details of your event below.  The more information we have about your event, the easier it will be for people
 		to find it.</p>
 	<% form_for(@event) do |f| %>
 		<div>
@@ -11,7 +11,7 @@
 		<div>
       <%= f.label :venue %>
       <br />
-      <%= collection_select(:event, :venue_id, Venue.find_all_sensible_with_current(@event.venue), :id, :title_or_filler, :include_blank => true) %>
+      <%= collection_select(:event, :venue_id, Venue.find_all_ordered, :id, :title, :include_blank => true) %>
 		</div>
     <div>
     </div>
@@ -28,7 +28,7 @@
 				<br />
         <input type="text" name="event_end_date" value="<%= @event.end_time.nil? ? '' : @event.end_time.strftime("%Y/%m/%d") %>" id="event_start_date">
         <input type="text" name="event_end_time" value="<%= @event.end_time.nil? ? '' : @event.end_time.strftime("%H:%M")  %>" id="event_end_time">
-			</div>	
+			</div>
 		</div>
 		<div>
       <%= f.label :url, "Web Link" %>
