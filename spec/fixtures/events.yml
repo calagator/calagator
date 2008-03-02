@@ -6,3 +6,18 @@ calagator_codesprint:
   start_time: 2008-01-19 12:16:10
   venue: cubespace
   url: http://groups.google.com/group/pdx-tech-calendar
+
+tomorrow:
+  title: Tomorrow
+  description: It's only a day away.
+  start_time: <%= Time.now+1.days %>
+  venue: cubespace
+  url: http://www.allmusicals.com/lyrics/annie/tomorrow.htm
+  
+day_after_tomorrow:
+  title: The Day After Tomorrow
+  description: It's probably going to rain. Enjoy the weather while it's nice.
+  start_time: <%= Time.now+2.days %>
+  venue: cubespace
+  url: http://www.imdb.com/title/tt0319262/
+  
