@@ -78,5 +78,4 @@ describe Source, "with iCalendar events" do
     event.venue.latitude.should == 45.5121
     event.venue.longitude.should == -122.626
   end
->>>>>>> Added iCalendar parser and specs.:spec/models/source_spec.rb
 end
