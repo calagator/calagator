@@ -21,6 +21,7 @@
 class Event < ActiveRecord::Base
   belongs_to :venue
   belongs_to :source
+  validates_presence_of :title, :start_time
 
   # Returns a new Event created from an AbstractEvent.
   def self.from_abstract_event(abstract_event)
