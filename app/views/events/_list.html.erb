@@ -1,0 +1,17 @@
+<% 
+opts ||= {} 
+previous_start_time = nil
+%>
+<ul class='event_list'>
+	<% unless events.size==0 %>
+    	<% for event in events do %>
+	      	<% new_day = previous_start_time.nil? || previous_start_time && previous_start_time.to_date != event.start_time.to_date %>
+			<%= render :partial => 'events/list_item', :locals => { :event => event, :new_day => new_day, :opts => opts } %>
+			<% previous_start_time = event.start_time %>
+		<% end %>
+	<% else %>
+		<li class='blank_list'>
+			No events.
+		</li>
+	<% end %>
+</ul>

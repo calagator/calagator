@@ -39,6 +39,9 @@
 	<% if !@venue.telephone.blank? %>
 	<div class='tel'><%= @venue.telephone %></div>
 	<% end %>
+	
+	<h2>Events Happening Here</h2>
+	<%= render :partial => 'events/list', :locals => { :events => @venue.events } %>
 
 
 	<div class='single_view_right'>

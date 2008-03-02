@@ -14,6 +14,6 @@ module ApplicationHelper
   
   def datetime_format(time,format)
     format.gsub!(/(%[dHImU])/,'*\1')
-    time.strftime(format).gsub!(/\*0/,'')
+    time.strftime(format).gsub(/\*0*/,'')
   end
 end

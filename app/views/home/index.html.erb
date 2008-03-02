@@ -1,5 +1,28 @@
+<%
+#<div id='home_actions'>
+#	<ul id='actions_subnav'>
+#		<li><a href='#' id='subnav_about'>About</a></li>
+#		<li><a href='/events/new' id='subnav_add'>Add Event</a></li>
+#		<li><a href='/sources' id='subnav_import'>Import Events <span>from outsize calendars</span></a></li>
+#	</ul>
+#</div>
+%>
 <p>Hello, I'm Calagator.</p>
 <p>I hope to one day grow up to be a community calendar aggregation tool.</p>
 <p>
 	The Calagator team has several ways for you to find out more or get involved. Please see our <%= link_to 'blog', blog_path %> and our <%= link_to 'discussion list', community_path %> for the latest news. We're always looking for new people to join us in making the best calendar aggregator possible. If you'd like to see what we've done so far, browse this site, or check out the <%= link_to 'code', 'http://code.google.com/p/calagator/' %>.
 </p>
+
+<div id='coming_events'>
+	<h2>What's happening?</h2>
+	<h3>Today</h3>
+	<%= render :partial => 'events/list', :locals => { :events => @events_today, :opts => {:dates => false} } %>
+	<h3>Tomorrow</h3>
+	<%= render :partial => 'events/list', :locals => { :events => @events_today, :opts => {:dates => false} } %>
+	<h3>Later</h3>
+	<%= render :partial => 'events/list', :locals => { :events => @events_later } %>
+</div>
+<div id='recently_added_events'>
+	<h2>Recently Added</h2>
+	<%= render :partial => 'events/list', :locals => { :events => @recently_added_events } %>
+</div>

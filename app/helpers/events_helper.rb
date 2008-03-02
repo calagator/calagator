@@ -25,7 +25,8 @@ module EventsHelper
     end
   end
   
-  def normalize_minutes()
+  def normalize_time(time)
+    datetime_format(time,time.min == 0 ? '%I%p' : '%I:%M%p').downcase
   end
   
 

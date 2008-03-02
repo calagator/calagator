@@ -21,34 +21,5 @@
 	-->
 </div>
 <div id='list_items'>
-  <table>
-    <% previous_start_time = nil %>
-    <% for event in @events do %>
-      <% new_day = previous_start_time && previous_start_time.to_date != event.start_time.to_date %>
-
-      <tr>
-        <td>
-          <% if new_day || !previous_start_time %>
-            <div class='list_date'>
-              <abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-                <div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
-                <%= event.start_time.strftime('%b %d')%>
-              </abbr>
-            </div>
-          <% end %>
-        </td>
-        <td>
-        <div class='list_content'>
-          <%= link_to event.title, event_url(event) %>
-            <%= datetime_format(event.start_time,event.start_time.min == 0 ? '%I:%M%p' : '%I%p') %>
-            <% if event.venue && !event.venue.title.blank? %>
-              at <%= link_to event.venue.title, venue_url(event.venue) %>
-            <% end %>
-        </div>
-        </td>
-      </tr>
-
-      <% previous_start_time = event.start_time %>
-    <% end %>
-  </table>
+	<%= render :partial => 'events/list', :locals => { :events => @events } %>
 </div>

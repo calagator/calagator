@@ -10,7 +10,7 @@ calagator_codesprint:
 
 tomorrow:
   id: 2
-  title: Tomorrow
+  title: Calagator Ski Trip
   description: It's only a day away.
   start_time: <%= Date.today %> 10:00:00
   venue: cubespace
@@ -18,9 +18,9 @@ tomorrow:
   
 day_after_tomorrow:
   id: 3
-  title: The Day After Tomorrow
+  title: Rain
   description: It's probably going to rain. Enjoy the weather while it's nice.
   start_time: <%= Date.today.tomorrow %> 10:00:00
   venue: cubespace
   url: http://www.imdb.com/title/tt0319262/
-  
+

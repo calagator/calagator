@@ -1,4 +1,7 @@
-/* @override http://0.0.0.0:3000/stylesheets/application.css?1203192047 */
+/* @override 
+	http://0.0.0.0:3000/stylesheets/application.css?1203192047
+	http://0.0.0.0:3000/stylesheets/application.css?1204210435
+*/
 
 abbr {
 	border-bottom: none;
@@ -74,6 +77,8 @@ a:visited {
 	color: #247712;
 	padding: 0.25em;
 	font-size: 70%;
+	padding-left: 2em;
+	clear: both;
 }
 
 #flash .flash_success, body #flash .flash_failure {
@@ -101,4 +106,29 @@ td.desc {
 
 .active-scaffold td {
 	vertical-align: top;
+}
+
+ul.event_list {
+	list-style: none;
+	margin: 0;
+}
+
+ul.event_list li {
+	position: relative;
+	padding-left: 7em;
+	margin-bottom: 1em;
+}
+
+ul.event_list .list_date {
+	position: absolute;
+	left: 0;
+}
+
+#coming_events {
+	float: left;
+	margin-right: 5em;
+} 
+
+#recently_added_events {
+	float: left;
 }
