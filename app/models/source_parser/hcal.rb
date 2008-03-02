@@ -93,6 +93,8 @@ class SourceParser
           end
 
           # FIXME: should attempt to fill in fields based on whatever input is available, such as hcard org
+        else
+          raise ArgumentError, "Unknown location type in hCalendar: #{raw.class}"
         end
       end
     end
