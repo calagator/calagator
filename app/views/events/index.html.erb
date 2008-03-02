@@ -1,7 +1,9 @@
 <%= link_to "Add new event", new_event_url %>
 
 <div id='list_description'>
-	Viewing all <strong><%= @events.size %></strong> future events.
+	Viewing all <strong><%= @events.size %></strong> future events. 
+	<span class='right'>
+		<strong><a href='<%= url_for :action => 'index' %>.ics'>iCal</a></strong> 
 </div>
 <div id='list_filters'>
 	<!--

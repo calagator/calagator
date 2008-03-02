@@ -13,6 +13,10 @@ a {
 	border-bottom: 1px dotted #008000;
 }
 
+.right {
+	float:  right;
+}
+
 a:visited {
 	color: #009100;
 }
