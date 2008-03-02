@@ -24,9 +24,17 @@ ActionController::Routing::Routes.draw do |map|
   #     admin.resources :products
   #   end
 
-  map.resources :events, :active_scaffold => true 
-  map.resources :sources, :active_scaffold => true 
-  map.resources :venues, :active_scaffold => true 
+  # Admin controllers
+  map.namespace :admin do |admin|
+    admin.resources :products, :active_scaffold => true
+    admin.resources :sources,  :active_scaffold => true
+    admin.resources :venues,   :active_scaffold => true
+  end
+
+  # Normal controllers
+  map.resources :events
+  map.resources :sources
+  map.resources :venues
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
   # map.root :controller => "welcome"

@@ -1,72 +1,72 @@
 <div class="vevent">
-	<h1 class="summary"><%= @record.title %></h1>
+	<h1 class="summary"><%= @event.title %></h1>
 	
 	<% 
-	unless @record.end_time.nil?
-		if @record.start_time.strftime('%Y:%j') != @record.end_time.strftime('%Y:%j')
+	unless @event.end_time.nil?
+		if @event.start_time.strftime('%Y:%j') != @event.end_time.strftime('%Y:%j')
 			span_days = true
 		end
-		end_format = @record.end_time.min ? '%I:%M%p' : '%I%p'
+		end_format = @event.end_time.min ? '%I:%M%p' : '%I%p'
 	end
-	start_format = @record.start_time.min ? '%I:%M%p' : '%I%p'
+	start_format = @event.start_time.min ? '%I:%M%p' : '%I%p'
 	%>
 	
 	<div class='date'>
-		<abbr class="dtstart" title="<%=@record.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-			<span class='weekday'><%= @record.start_time.strftime('%A') %></span>,
-			<span class="month"><%= @record.start_time.strftime("%B") %></span>
-			<span class="day"><%= @record.start_time.day %></span>; 
-			<span class="time"><%= @record.start_time.strftime(start_format).downcase %></span>
+		<abbr class="dtstart" title="<%=@event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+			<span class='weekday'><%= @event.start_time.strftime('%A') %></span>,
+			<span class="month"><%= @event.start_time.strftime("%B") %></span>
+			<span class="day"><%= @event.start_time.day %></span>; 
+			<span class="time"><%= @event.start_time.strftime(start_format).downcase %></span>
 		</abbr>
-		<% unless @record.end_time.nil? %>
+		<% unless @event.end_time.nil? %>
 		&ndash;
-		<abbr class="dtend" title="<%=@record.end_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+		<abbr class="dtend" title="<%=@event.end_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
 			<% if span_days %>
-				<span class='weekday'><%= @record.end_time.strftime('%A') %></span>,
-				<span class="month"><%= @record.end_time.strftime("%B") %></span>
-				<span class="day"><%= @record.end_time.day %></span>; 
+				<span class='weekday'><%= @event.end_time.strftime('%A') %></span>,
+				<span class="month"><%= @event.end_time.strftime("%B") %></span>
+				<span class="day"><%= @event.end_time.day %></span>; 
 			<% end %>
-			<span class="time"><%= @record.end_time.strftime(end_format).downcase %></span>
+			<span class="time"><%= @event.end_time.strftime(end_format).downcase %></span>
 		</abbr>
 		<% end %>
 	</div>
 
-  <% unless @record.venue.blank? %>
+  <% unless @event.venue.blank? %>
     <div class="location vcard">
-		<a href='<%= url_for venue_path(@record.venue) %>' class='url'>
-		    <span class='fn org'><%= h @record.venue.title %></span>
+		<a href='<%= url_for venue_path(@event.venue) %>' class='url'>
+		    <span class='fn org'><%= h @event.venue.title %></span>
 		</a>
 		<div class="adr">
-			<% if !@record.venue.street_address.blank? %>
-				<div class="street-address"><%= @record.venue.street_address %></div>
+			<% if !@event.venue.street_address.blank? %>
+				<div class="street-address"><%= @event.venue.street_address %></div>
 			<% end %>
-			<% if !@record.venue.locality.blank? %>
-				<span class="locality"><%= @record.venue.locality %></span>
+			<% if !@event.venue.locality.blank? %>
+				<span class="locality"><%= @event.venue.locality %></span>
 			<% end %>
-			<% if !@record.venue.region.blank? %>
-				, <span class="region"><%= @record.venue.region %></span> 
+			<% if !@event.venue.region.blank? %>
+				, <span class="region"><%= @event.venue.region %></span> 
 			<% end %>
-			<% if !@record.venue.postal_code.blank? %>
-				<span class="postal-code"><%= @record.venue.postal_code %></span>
+			<% if !@event.venue.postal_code.blank? %>
+				<span class="postal-code"><%= @event.venue.postal_code %></span>
 			<% end %>
-			<% if !@record.venue.country.blank? %>
-				<div class='country-name'><%= @record.venue.country %><div>
+			<% if !@event.venue.country.blank? %>
+				<div class='country-name'><%= @event.venue.country %><div>
 			<% end %>
-			(<a href='<%=@record.venue.google_maps_url%>'>map</a>)
+			(<a href='<%=@event.venue.google_maps_url%>'>map</a>)
 		</div>
     </div>
   <% end %>
 
-  <% unless @record.url.blank? %>
+  <% unless @event.url.blank? %>
 	<div class="description">
-    <%= @record.description %>
+    <%= @event.description %>
 	</div>
   <% end %>
 
-  <% unless @record.url.blank? %>
+  <% unless @event.url.blank? %>
 	<h3>Links</h3>
 	<ul>   	
-		<li><%= link_to "Website", @record.url, :class => "url" %></li>
+		<li><%= link_to "Website", @event.url, :class => "url" %></li>
 	</ul>
   <% end %>
 
@@ -77,14 +77,14 @@
 		</div>
 		<div id='metadata'>
 			This event was 
-			<% if @record.source.nil? %>
+			<% if @event.source.nil? %>
 			added directly to Calagator
 			<% else %>
-			imported from <%= link_to @record.source.name, source_url(@record.source.id) %>
+			imported from <%= link_to @event.source.name, source_url(@event.source.id) %>
 			<% end %>
-			on <strong><%= @record.created_at.strftime('%a. %d, %Y') %></strong>
-			<% unless @record.created_at == @record.updated_at %>
-			and last updated on <strong><%= @record.created_at.strftime('%a. %d, %Y') %></strong>
+			on <strong><%= @event.created_at.strftime('%a. %d, %Y') %></strong>
+			<% unless @event.created_at == @event.updated_at %>
+			and last updated on <strong><%= @event.created_at.strftime('%a. %d, %Y') %></strong>
 			<% end %>.
 		</div>
 	</div>
