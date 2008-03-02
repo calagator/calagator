@@ -1,6 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 calagator_codesprint:
+  id: 1
   title: Calagator CodeSprint
   description: Join us to work on Calagator, yay!
   start_time: 2008-01-19 12:16:10
@@ -8,16 +9,18 @@ calagator_codesprint:
   url: http://groups.google.com/group/pdx-tech-calendar
 
 tomorrow:
+  id: 2
   title: Tomorrow
   description: It's only a day away.
-  start_time: <%= Time.now+1.days %>
+  start_time: <%= Date.today %> 10:00:00
   venue: cubespace
   url: http://www.allmusicals.com/lyrics/annie/tomorrow.htm
   
 day_after_tomorrow:
+  id: 3
   title: The Day After Tomorrow
   description: It's probably going to rain. Enjoy the weather while it's nice.
-  start_time: <%= Time.now+2.days %>
+  start_time: <%= Date.today.tomorrow %> 10:00:00
   venue: cubespace
   url: http://www.imdb.com/title/tt0319262/
   
