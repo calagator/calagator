@@ -1,12 +1,17 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Calagator<%= @page_title ? " - #{@page_title}" : "" %></title>
 	<%= stylesheet_link_tag "blueprint/screen" %>
 	<%= stylesheet_link_tag "blueprint/print", :media => 'print' %>
 	<!--[if IE]><%= stylesheet_link_tag "blueprint/lib/ie" %><![endif]-->
     <%= stylesheet_link_tag "application" %>
-    <%= javascript_include_tag :all, :cache => true %>
+    <%= javascript_include_tag :defaults, :cache => true %>
     <%= active_scaffold_includes %>
+		<%= calendar_date_select_includes %>
   </head>
   <body>
     <div id="top_menu">
@@ -23,7 +28,7 @@
      <div id='app_menu'>
 	    <span id='project-title'>Calagator</span>
 		<ul>
-	      	<li><%= link_to "Home", root_path, {:class => link_class[:home] } %></li>
+	      <li><%= link_to "Home", root_path, {:class => link_class[:home] } %></li>
 		    <li><%= link_to "Import", sources_path, {:class => link_class[:import] } %></li>
 		    <li><%= link_to "Events", events_path, {:class => link_class[:events] } %></li>
 		    <li><%= link_to "Venues", venues_path, {:class => link_class[:venues] } %></li>

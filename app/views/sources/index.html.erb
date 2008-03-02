@@ -1,44 +1,26 @@
 <% form_for(Source.new) do |f| %>
 <fieldset>
   <legend>Import a source</legend>
-  <table>
-    <tr>
-      <td class="desc">
-        <%= f.label :url, "URL" %>
-      </td>
-      <td>
-        <%= f.text_field :url, :size => 60 %>
-      </td>
-    </tr>
-    <tr>
-      <td class="desc">
-        <%= f.label :format_type, "Format type" %>
-      </td>
-      <td>
-        <% is_first = true %>
-        <% for format_type, format_label in SourceParser.formats_to_labels %>
-          <%= f.radio_button "format_type", format_type, :checked => is_first %>
-          <%= f.label "format_type_#{format_type.to_s.downcase}", format_label %>
-          <% is_first = false  %>
-        <% end %>
-      </td>
-    </tr>
-    <tr>
-      <td>&nbsp;</td>
-      <td>
+  <div>
+		<%= f.label :url, "URL" %>
+	  <%= f.text_field :url, :size => 60 %>
+	</div>
+  <div>
+	  <%= f.label :format_type, "Format type" %>
+    <% is_first = true %>
+    <% for format_type, format_label in SourceParser.formats_to_labels %>
+      <%= f.radio_button "format_type", format_type, :checked => is_first %>
+      <%= f.label "format_type_#{format_type.to_s.downcase}", format_label, :class => 'checkbox' %>
+      <% is_first = false  %>
+    <% end %>
+	</div>
+	<div class='no_label'>
         <%= f.submit %>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        &nbsp;
-      </td>
-      <td>
-        Example URLS:<br>
-        hCalendar at http://upcoming.yahoo.com/event/349225/<br>
+	</div>
+	<div class='help'>
+        Example URLS:<br />
+        hCalendar at http://upcoming.yahoo.com/event/349225/<br />
         iCalendar at webcal://upcoming.yahoo.com/calendar/v2/event/349225
-      </td>
-    </tr>
-  </table>
+	</div>
 </fieldset>
 <% end %>

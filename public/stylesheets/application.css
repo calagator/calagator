@@ -102,6 +102,10 @@ td.desc {
 	font-style: italic;
 	white-space: nowrap;
 	vertical-align: top;
+	width: 7em;
+	display: block;
+	float: left;
+	clear: both;
 }
 
 .active-scaffold td {
@@ -131,4 +135,49 @@ ul.event_list .list_date {
 
 #recently_added_events {
 	float: left;
+}
+
+fieldset label {
+	display: block;
+	float: left;
+	width: 7em;
+	text-align: right;
+	margin-right: 1em;
+	clear: left;
+}
+
+fieldset > div {
+	clear: both;
+	padding-top: 1em;
+	
+}
+
+label.checkbox {
+	clear: none;
+	text-align: left;
+}
+
+fieldset input {
+	float: left;
+}
+
+fieldset .date_picker {
+	float: left;
+	margin-right: 2em;
+}
+
+fieldset .calendar_date_select {
+	border: 0;
+}
+
+fieldset .date_picker label {
+	text-align: left;
+}
+
+fieldset .no_label, fieldset .help {
+	padding-left: 8em;
+}
+
+fieldset .help {
+	color: #999;
 }
