@@ -78,7 +78,8 @@ class SourceParser # :nodoc:
           a.latitude, a.longitude = vcard['geo'].split(/;/).map(&:to_f)
 
           return a
-        rescue Vpim::InvalidEncodingError, ArgumentError
+        rescue Vpim::InvalidEncodingError, ArgumentError, RuntimeError
+          a.title = opts[:fallback]
           return fallback_or_nil.call
         end
       else
