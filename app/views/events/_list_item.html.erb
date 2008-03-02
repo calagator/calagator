@@ -17,7 +17,7 @@ opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
 			<%= event.title %>
 		</a>
 		<div>
-			<%= normalize_time(event.start_time) %><% unless event.venue.title.blank? %>, 
+			<%= normalize_time(event.start_time) %><% unless event.venue.nil? || event.venue.title.blank? %>, 
 			<a href='<%= url_for venue_url(event.venue)%>' class='location'>
 				<%= event.venue.title %>
 			</a>
