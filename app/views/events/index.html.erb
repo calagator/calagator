@@ -1,0 +1,43 @@
+<div id='list_description'>
+	Viewing all <strong><%= @events.size %></strong> events.
+</div>
+<div id='list_filters'>
+	<h3>Order events by</h3>
+	<ul>
+		<li><%= link_to "Date", '#', :class => 'active' %></li>
+		<li><%= link_to "Event Name", '#' %></li>
+		<li><%= link_to "Location", '#' %></li>
+	</ul>
+	
+	<h3>Filter by date</h3>
+	<div id='start_calendar'>
+		Pretty calendar widget for start date.
+	</div>
+	<div id='end_calendar'>
+		Pretty calendar widget for end date.
+	</div>
+</div>
+<div id='list_items'>
+	<ul>
+	<% for event in @events do %>
+		<li class='vevent'>
+			<div class='list_date'>
+				<abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+					<div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
+					<%= event.start_time.strftime('%b %d')%>
+				</abbr>
+			</div>
+			<div class='list_content'>
+				<a href='<%= url_for event_url(event) %>'>
+					<%= event.title %>
+				</a>
+				<div>
+					<%= event.start_time.strftime(event.start_time.min == 0 ? '%I:%M%p' : '%I%p')%>, 
+					<a href='<%= url_for venue_url(event.venue)%>'>
+						<%= event.venue.title %>
+					</a>
+			</div>
+		</li>
+	<% end %>
+	</ul>
+</div>

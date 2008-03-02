@@ -80,7 +80,7 @@
 			<% if @record.source.nil? %>
 			added directly to Calagator
 			<% else %>
-			imported from <%= link_to @record.source.name, event_url(@record.source.id) %>
+			imported from <%= link_to @record.source.name, source_url(@record.source.id) %>
 			<% end %>
 			on <strong><%= @record.created_at.strftime('%a. %d, %Y') %></strong>
 			<% unless @record.created_at == @record.updated_at %>
