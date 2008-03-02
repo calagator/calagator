@@ -17,6 +17,11 @@ class SourceParser # :nodoc:
   class Ical < Base
     label :iCalendar
 
+    # Override Base::read_url to handle "webcal" scheme addresses.
+    def self.read_url(url)
+      super(url.gsub(/^webcal:/, 'http:'))
+    end
+
     # Return an Array of AbstractEvent instances extracted from an iCalendar input.
     #
     # Options:
