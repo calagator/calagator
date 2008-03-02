@@ -24,4 +24,9 @@ module EventsHelper
       record.start_time.strftime('%A')
     end
   end
+  
+  def normalize_minutes()
+  end
+  
+
 end
