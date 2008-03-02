@@ -19,12 +19,6 @@ describe SourcesController do
     post :create, :source => { :url => 'http://upcoming.yahoo.com/event/390164/' }
   end
   
-  it "should change urls without http, https, or ftp prefixes to http for import" do
-    pending "fix in controller"
-    @event.should_receive(:save!).and_return(true)
-    post :create, :source => { :url => 'webcal://upcoming.yahoo.com/event/390164/' }
-  end
-  
   it "should add the http prefix to urls without one"
   
 end

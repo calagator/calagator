@@ -78,4 +78,11 @@ describe Source, "with iCalendar events" do
     event.venue.latitude.should == 45.5121
     event.venue.longitude.should == -122.626
   end
+  
+  it "should parse iCalendar feeds with multiple events" do
+    events = events_from_ical_at('ical_google.ics')
+    
+    events.size.should > 1
+  end
+  
 end

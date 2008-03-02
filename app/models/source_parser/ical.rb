@@ -29,11 +29,10 @@ class SourceParser # :nodoc:
     def self.to_abstract_events(opts={})
       content = read_url(opts[:url])
 
-      content_calendars = content.scan(/^BEGIN:VCALENDAR$.*^END:VCALENDAR$/m)
-      content_calendars.map do |content_calendar|
-        returning(AbstractEvent.new) do |event|
-          ical = Vpim::Icalendar.decode(content_calendar).first
-          component = ical.components.first
+      content_calendars = content.scan(/^BEGIN:VCALENDAR.*^END:VCALENDAR/m)
+      event_results = content_calendars.map do |content_calendar|
+        events = Vpim::Icalendar.decode(content_calendar).first.components.map do |component|
+          event = AbstractEvent.new
 
           event.title = component.summary
           event.description = component.description
@@ -43,6 +42,7 @@ class SourceParser # :nodoc:
           event
         end
       end
+      return event_results.flatten
     end
 
     # Return an AbstractLocation extracted from an iCalendar input.
@@ -51,7 +51,7 @@ class SourceParser # :nodoc:
     # * value - String with iCalendar data to parse which contains a Vvenue item.
     #
     # Options:
-    # * :fallback - String to use as the title for the event if the +value+ doesn't contain a Vvenue.
+    # * :fallback - String to use as the title for the location if the +value+ doesn't contain a Vvenue.
     def self.to_abstract_location(value, opts={})
       a = AbstractLocation.new
       fallback_or_nil = lambda{opts[:fallback].blank? ? nil : (a.title = opts[:fallback] && a)}
