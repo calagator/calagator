@@ -29,7 +29,9 @@ textarea            { border:1px solid #bbb; background:#eee; padding:5px; }
 textarea:focus      { border:1px solid #999; background:#fff; }
 
 /* Select fields */
-select              { border:1px solid #ccc; background:#f6f6f6; width:200px; }
+/* FIXME igal: should this really go about messing with widths?! */
+/* select              { border:1px solid #ccc; background:#f6f6f6; width:200px; } */
+select              { border:1px solid #ccc; background:#f6f6f6; }
 select:focus        { border:1px solid #999; background:#fff; }
 
 
