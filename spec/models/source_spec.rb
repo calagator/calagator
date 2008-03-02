@@ -81,8 +81,12 @@ describe Source, "with iCalendar events" do
   
   it "should parse iCalendar feeds with multiple events" do
     events = events_from_ical_at('ical_google.ics')
-    
     events.size.should > 1
+  end
+  
+  it "should parse non-Vcard locations" do
+    events = events_from_ical_at('ical_google.ics')
+    events.first.venue.title.should == 'CubeSpace'
   end
   
 end
