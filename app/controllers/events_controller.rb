@@ -7,7 +7,7 @@ class EventsController < ApplicationController
   end
   
   def index
-    @events = Event.find(:all, :conditions => [ 'start_time > ?', Time.now ], :order => 'start_time ASC')
+    @events = Event.find(:all, :conditions => [ 'start_time > ?', Date.today ], :order => 'start_time ASC')
   end
   
 end
