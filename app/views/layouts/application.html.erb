@@ -47,9 +47,9 @@
     <div id="top_footer">
       Calagator.org
       <% if File.directory?(File.join(RAILS_ROOT, ".svn")) %>
-        - Version <%= $svn_revision ||= `svn info`.match(/^Revision: (\d+)/s)[1] %>
+        - SVN Version: <%= $svn_revision ||= `svn info`.match(/^Revision: (\d+)/s)[1] %>
       <% elsif File.directory?(File.join(RAILS_ROOT, ".git")) %>
-        - Version <%= $svn_revision ||= `git log -1`.match(/^\s*git-svn-id: [^\@]+@(\d+)\s+/s)[1] %>
+        - Git Timestamp: <%= $git_date ||= `git log -1`.match(/^Date: (.+?)$/s)[1] %>
       <% end %>
     </div>
   </body>
