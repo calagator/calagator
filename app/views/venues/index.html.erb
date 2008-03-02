@@ -1,5 +1,8 @@
 <div id="venues_index">
 	<h1>Venues</h1>
+
+  <%= link_to "Add new venue", new_venue_url %>
+
   <ul>
     <% for venue in @venues %>
       <li>

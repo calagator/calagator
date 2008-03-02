@@ -1,5 +1,8 @@
   <h1><%= @event.new_record? ? "New event" : "Edit event" %></h1>
   <p>You can <%= @event.new_record? ? "enter" : "edit" %> the details of your event below.  The more information we have about your event, the easier it will be for people to find it.</p>
+
+  <%= error_messages_for :event %>
+
 	<% form_for(@event) do |f| %>
 		<div>
       <%= f.label :title, "Event Name" %>
