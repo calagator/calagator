@@ -10,7 +10,7 @@
   </head>
   <body>
     <div id="top_menu">
-	
+
 	  <%
 		link_class = {
 			:home =>   current_page?(:controller => 'home') ? 'active first' : 'first',
@@ -19,7 +19,7 @@
 			:venues => !current_page?(:controller => 'venues') || 'active',
 		}
 	  %>
-	
+
      <div id='app_menu'>
 	    <span id='project-title'>Calagator</span>
 		<ul>
@@ -45,7 +45,12 @@
     </div>
 
     <div id="top_footer">
-		Calagator.org
+      Calagator.org
+      <% if File.directory?(File.join(RAILS_ROOT, ".svn")) %>
+        - Version <%= $svn_revision ||= `svn info`.match(/^Revision: (\d+)/s)[1] %>
+      <% elsif File.directory?(File.join(RAILS_ROOT, ".git")) %>
+        - Version <%= $svn_revision ||= `git log -1`.match(/^\s*git-svn-id: [^\@]+@(\d+)\s+/s)[1] %>
+      <% end %>
     </div>
   </body>
 </html>
