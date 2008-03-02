@@ -19,26 +19,34 @@
 	-->
 </div>
 <div id='list_items'>
-	<ul>
-	<% for event in @events do %>
-		<li class='vevent'>
-			<div class='list_date'>
-				<abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-					<div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
-					<%= datetime_format(event.start_time,'%b %d')%>
-				</abbr>
-			</div>
-			<div class='list_content'>
-				<a href='<%= url_for event_url(event) %>'>
-					<%= event.title %>
-				</a>
-				<div>
-					<%= datetime_format(event.start_time,event.start_time.min == 0 ? '%I:%M%p' : '%I%p') %>, 
-					<a href='<%= url_for venue_url(event.venue)%>'>
-						<%= event.venue.title %>
-					</a>
-			</div>
-		</li>
-	<% end %>
-	</ul>
+  <table>
+    <% previous_start_time = nil %>
+    <% for event in @events do %>
+      <% new_day = previous_start_time && previous_start_time.to_date != event.start_time.to_date %>
+
+      <tr>
+        <td>
+          <% if new_day || !previous_start_time %>
+          <div class='list_date'>
+            <abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+              <div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
+              <%= datetime_format(event.start_time,'%b %d')%>
+            </abbr>
+          </div>
+          <% end %>
+        </td>
+        <td>
+        <div class='list_content'>
+          <%= link_to event.title, event_url(event) %>
+            <%= datetime_format(event.start_time,event.start_time.min == 0 ? '%I:%M%p' : '%I%p') %>
+            <% if event.venue %>
+              at <%= link_to event.venue.title, venue_url(event.venue) %>
+            <% end %>
+        </div>
+        </td>
+      </tr>
+
+      <% previous_start_time = event.start_time %>
+    <% end %>
+  </table>
 </div>
