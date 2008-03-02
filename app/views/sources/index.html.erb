@@ -8,11 +8,6 @@
       </td>
       <td>
         <%= f.text_field :url, :size => 60 %>
-        <% if false %>
-        For example:<br>
-        hCalendar at http://upcoming.yahoo.com/event/390164/<br>
-        iCalendar at http://appendix.23ae.com/calendars/AlternateHolidays.ics
-        <% end %>
       </td>
     </tr>
     <tr>
@@ -32,6 +27,16 @@
       <td>&nbsp;</td>
       <td>
         <%= f.submit %>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        &nbsp;
+      </td>
+      <td>
+        Example URLS:<br>
+        hCalendar at http://upcoming.yahoo.com/event/390164/<br>
+        iCalendar at webcal://upcoming.yahoo.com/calendar/v2/event/349225
       </td>
     </tr>
   </table>
