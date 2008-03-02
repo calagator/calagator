@@ -39,7 +39,7 @@
         <div class='list_content'>
           <%= link_to event.title, event_url(event) %>
             <%= datetime_format(event.start_time,event.start_time.min == 0 ? '%I:%M%p' : '%I%p') %>
-            <% if event.venue %>
+            <% if event.venue && !event.venue.title.blank? %>
               at <%= link_to event.venue.title, venue_url(event.venue) %>
             <% end %>
         </div>
