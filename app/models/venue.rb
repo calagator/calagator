@@ -26,6 +26,11 @@ class Venue < ActiveRecord::Base
 
   validates_presence_of :title
 
+  # Return an Array of all valid Venues, sorted by the title.
+  def self.find_all_valid
+    Venue.find(:all, :order => "title ASC").reject{|venue| venue.title.blank?}
+  end
+
   # Returns a new Venue created from an AbstractLocation
   def self.from_abstract_location(abstract_location)
     returning Venue.new do |venue|
