@@ -1,20 +1,6 @@
 require 'uri'
 
 module EventsHelper
-  def url_column(record)
-    begin
-      link = URI.parse(record.url)
-      raise "Invalid url" unless link.scheme =~ /^https?$/
-      link_to("Link", link.to_s)
-    rescue
-      nil
-    end
-  end
-
-  def to_hcal_column(record)
-    record.to_hcal
-  end
-  
   def today_tomorrow_or_weekday(record)
     if record.start_time.strftime('%Y:%j') == Time.today.strftime('%Y:%j')
       'Today'
@@ -24,10 +10,8 @@ module EventsHelper
       record.start_time.strftime('%A')
     end
   end
-  
+
   def normalize_time(time)
     datetime_format(time,time.min == 0 ? '%I%p' : '%I:%M%p').downcase
   end
-  
-
 end
