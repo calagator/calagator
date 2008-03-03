@@ -57,4 +57,10 @@ describe Event do
     #abstract_event.location.title.should == @basic_event.venue.title
     abstract_event.location.should be_nil
   end
+  
+  it "should find all events within a given date range" do
+    Event.should_receive(:find).with(:all, :conditions => ['start_time > ? AND start_time < ?', Date.today, Date.tomorrow], 
+        :order => 'start_time ASC')
+    Event.find_by_dates(Date.today, Date.tomorrow)
+  end
 end

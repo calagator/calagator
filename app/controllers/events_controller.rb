@@ -2,7 +2,11 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.xml
   def index
-    @events = Event.find_all_future_events
+    @start_date = params[:date] ? Date.parse(params[:date][:start]) : Date.today
+    @end_date = params[:date] ? Date.parse(params[:date][:end]) : Date.today + 6.months
+    @events = params[:date] ? 
+        Event.find_by_dates(@start_date, @end_date) : 
+        Event.find_all_future_events
 
     respond_to do |format|
       format.html # index.html.erb

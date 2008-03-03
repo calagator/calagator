@@ -40,6 +40,12 @@ class Event < ActiveRecord::Base
   def self.find_all_future_events
     return find(:all, :conditions => [ 'start_time > ?', Date.today ], :order => 'start_time ASC')
   end
+  
+  # Returns an Array of Event instances within a given date range
+  def self.find_by_dates(start_date, end_date)
+    find(:all, :conditions => ['start_time > ? AND start_time < ?', start_date, end_date], 
+        :order => 'start_time ASC')
+  end
 
   #---[ Transformations ]-------------------------------------------------
 
@@ -101,14 +107,19 @@ EOF
         c.created       event.created_at if event.created_at
         c.lastmod       event.updated_at if event.updated_at
 
-        # TODO Come up with a generalized way to generate URLs for events that don't have them. The reason for this messy URL helper business is that models can't access the route helpers, and even if they could, they'd need to access the request object so they know what the server's name is and such.
+        # TODO Come up with a generalized way to generate URLs for events that don't have them. 
+        # The reason for this messy URL helper business is that models can't access the route helpers, 
+        # and even if they could, they'd need to access the request object so they know what the server's name is and such.
         if event.url.blank?
           c.url         opts[:url_helper].call(event) if opts[:url_helper]
         else
           c.url         event.url
         end
 
-        # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't recognize location, priority, and a couple of other things that are included as modules in the Vevent class itself. This seems like a bug in Vpim.
+        # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to 
+        # go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't 
+        # recognize location, priority, and a couple of other things that are included as modules in the Vevent class itself. 
+        # This seems like a bug in Vpim.
         #c.location     !event.venue.nil? ? event.venue.title : ''
       end
     end

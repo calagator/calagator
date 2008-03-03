@@ -1,9 +1,10 @@
 
 <div id='list_description'>
-  <h2>Viewing all <strong><%= @events.size %></strong> future events.</h2>
+  <h2>Viewing all <strong><%= @events.size %></strong> <%= 'future' unless params[:date] %> events.</h2>
 
   ( <%= link_to "Add new event", new_event_url %> )
-  ( iCal: <a href="<%= url_for :action => 'index' %>.ics">download</a> | <a href="<%= url_for(:action => 'index', :protocol => 'webcal', :only_path => false) %>.ics">subscribe</a> )
+  ( iCal: <a href="<%= url_for :action => 'index' %>.ics">download</a> | 
+		<a href="<%= url_for(:action => 'index', :protocol => 'webcal', :only_path => false) %>.ics">subscribe</a> )
 </div>
 <div id='list_filters'>
 	<!--
@@ -13,14 +14,20 @@
 		<li><%= link_to "Event Name", '#' %></li>
 		<li><%= link_to "Location", '#' %></li>
 	</ul>
+	-->
+	
 	<h3>Filter by date</h3>
+	<% form_tag events_url, :method => 'get' do  -%>
 	<div id='start_calendar'>
-		Pretty calendar widget for start date.
+		Start
+		<%= calendar_date_select_tag 'date[start]', @start_date.to_formatted_s(:long) %>
 	</div>
 	<div id='end_calendar'>
-		Pretty calendar widget for end date.
+		End
+		<%= calendar_date_select_tag 'date[end]', @end_date.to_formatted_s(:long) %>
 	</div>
-	-->
+	<%= submit_tag 'Filter' %> <%= link_to 'Clear Filter', events_url %>
+	<% end %>
 </div>
 <div id='list_items'>
 	<%= render :partial => 'events/list', :locals => { :events => @events } %>
