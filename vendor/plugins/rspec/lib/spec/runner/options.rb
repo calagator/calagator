@@ -29,6 +29,7 @@ module Spec
       }
 
       attr_accessor(
+        :filename_pattern,
         :backtrace_tweaker,
         :context_lines,
         :diff_format,
@@ -53,6 +54,7 @@ module Spec
       def initialize(error_stream, output_stream)
         @error_stream = error_stream
         @output_stream = output_stream
+        @filename_pattern = "**/*_spec.rb"
         @backtrace_tweaker = QuietBacktraceTweaker.new
         @examples = []
         @colour = false
@@ -84,6 +86,7 @@ module Spec
         if example_groups.empty?
           true
         else
+          set_spec_from_line_number if line_number
           success = runner.run
           @examples_run = true
           heckle if heckle_runner
@@ -101,10 +104,14 @@ module Spec
 
       def colour=(colour)
         @colour = colour
-        begin; \
-          require 'Win32/Console/ANSI' if @colour && PLATFORM =~ /win32/; \
-        rescue LoadError ; \
-          raise "You must gem install win32console to use colour on Windows" ; \
+        if @colour && RUBY_PLATFORM =~ /win32/ ;\
+          begin ;\
+            require 'rubygems' ;\
+            require 'Win32/Console/ANSI' ;\
+          rescue LoadError ;\
+            warn "You must 'gem install win32console' to use colour on Windows" ;\
+            @colour = false ;\
+          end
         end
       end
 
@@ -175,6 +182,22 @@ module Spec
         end
       end
 
+      def files_to_load
+        result = []
+        sorted_files.each do |file|
+          if File.directory?(file)
+            filename_pattern.split(",").each do |pattern|
+              result += Dir[File.expand_path("#{file}/#{pattern.strip}")]
+            end
+          elsif File.file?(file)
+            result << file
+          else
+            raise "File or directory not found: #{file}"
+          end
+        end
+        result
+      end
+      
       protected
       def examples_should_be_run?
         return @examples_should_be_run unless @examples_should_be_run.nil?
@@ -205,20 +228,6 @@ module Spec
         end
       end
       
-      def files_to_load
-        result = []
-        sorted_files.each do |file|
-          if test ?d, file
-            result += Dir[File.expand_path("#{file}/**/*.rb")]
-          elsif test ?f, file
-            result << file
-          else
-            raise "File or directory not found: #{file}"
-          end
-        end
-        result
-      end
-      
       def custom_runner
         return nil unless custom_runner?
         klass_name, arg = ClassAndArgumentsParser.parse(user_input_for_runner)
@@ -247,6 +256,30 @@ module Spec
       def default_differ
         require 'spec/expectations/differs/default'
         self.differ_class = Spec::Expectations::Differs::Default
+      end
+
+      def set_spec_from_line_number
+        if examples.empty?
+          if files.length == 1
+            if File.directory?(files[0])
+              error_stream.puts "You must specify one file, not a directory when using the --line option"
+              exit(1) if stderr?
+            else
+              example = SpecParser.new.spec_name_for(files[0], line_number)
+              @examples = [example]
+            end
+          else
+            error_stream.puts "Only one file can be specified when using the --line option: #{files.inspect}"
+            exit(3) if stderr?
+          end
+        else
+          error_stream.puts "You cannot use both --line and --example"
+          exit(4) if stderr?
+        end
+      end
+
+      def stderr?
+        @error_stream == $stderr
       end
     end
   end

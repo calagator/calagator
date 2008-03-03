@@ -1,3 +1,20 @@
+== Version 1.1.3
+
+Maintenance release.
+
+* Tightened up exceptions list in autotest/rails_spec. Closes #264.
+* Applied patch from Ryan Davis for ZenTest-3.9.0 compatibility
+* Applied patch from Kero to add step_upcoming to story listeners. Closes #253.
+* Fixed bug where the wrong named error was not always caught by "should raise_error"
+* Applied patch from Luis Lavena: No coloured output on Windows due missing RUBYOPT. Closes #244.
+* Applied patch from Craig Demyanovich to add support for "should_not render_template" to rspec_on_rails. Closes #241.
+* Added --pattern (-p for short) option to control what files get loaded. Defaults to '**/*_spec.rb'
+* Exit with non-0 exit code if examples *or tests* (in test/unit interop mode) fail. Closes #203.
+* Moved at_exit hook to a method in Spec::Runner which only runs if specs get loaded. Closes #242.
+* Applied patch from kakutani ensuring that base_view_path gets cleared after each view example. Closes #235.
+* More tweaks to regexp step names
+* Fixed focused specs in nested ExampleGroups. Closes #225.
+
 == Version 1.1.2
 
 Minor bug fixes/enhancements.

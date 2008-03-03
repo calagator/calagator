@@ -11,13 +11,14 @@ module Spec
         end
       end
 
-      attr_reader :description_text, :description_args, :description_options, :spec_path
+      attr_reader :description_text, :description_args, :description_options, :spec_path, :registration_binding_block
 
       def inherited(klass)
         super
-        klass.register
+        klass.register {}
+        Spec::Runner.register_at_exit_hook
       end
-
+      
       # Makes the describe/it syntax available from a class. For example:
       #
       #   class StackSpec < Spec::ExampleGroup
@@ -236,12 +237,17 @@ module Spec
         @after_each_parts = nil
       end
 
-      def register
+      def register(&registration_binding_block)
+        @registration_binding_block = registration_binding_block
         rspec_options.add_example_group self
       end
 
       def unregister #:nodoc:
         rspec_options.remove_example_group self
+      end
+
+      def registration_backtrace
+        eval("caller", registration_binding_block.binding)
       end
 
       def run_before_each(example)

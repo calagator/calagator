@@ -7,7 +7,7 @@ require 'rake/rdoctask'
 require 'rake/testtask'
 require 'spec/version'
 dir = File.dirname(__FILE__)
-$LOAD_PATH.unshift(File.expand_path("#{dir}/../pre_commit/lib"))
+$LOAD_PATH.unshift(File.expand_path("#{dir}/pre_commit/lib"))
 require "pre_commit"
 
 # Some of the tasks are in separate files since they are also part of the website documentation
@@ -22,10 +22,13 @@ PKG_FILE_NAME = "#{PKG_NAME}-#{PKG_VERSION}"
 PKG_FILES = FileList[
   '[A-Z]*',
   'lib/**/*.rb', 
-  'spec/**/*.rb', 
+  'spec/**/*',
   'examples/**/*',
+  'failing_examples/**/*',
   'plugins/**/*',
-  'stories/**/*'
+  'stories/**/*',
+  'pre_commit/**/*',
+  'rake_tasks/**/*'
 ]
 
 task :default => [:verify_rcov]
@@ -34,7 +37,7 @@ task :verify_rcov => [:spec, :stories]
 desc "Run all specs"
 Spec::Rake::SpecTask.new do |t|
   t.spec_files = FileList['spec/**/*_spec.rb']
-  t.spec_opts = ['--options', 'spec.opts']
+  t.spec_opts = ['--options', 'spec/spec.opts']
   unless ENV['NO_RCOV']
     t.rcov = true
     t.rcov_dir = '../doc/output/coverage'
