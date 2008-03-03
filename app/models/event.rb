@@ -25,6 +25,15 @@ class Event < ActiveRecord::Base
   belongs_to :source
   validates_presence_of :title, :start_time
 
+  #---[ Overrides ]-------------------------------------------------------
+
+  # Return the title but strip out any whitespace.
+  def title
+    # TODO Generalize this code so we can use it on other attributes in the different model classes. The solution should use an #alias_method_chain to make sure it's not breaking any explicit overrides for an attribute.
+    s = read_attribute(:title)
+    s.blank? ? nil : s.strip
+  end
+
   #---[ Queries ]---------------------------------------------------------
 
   # Returns an Array of future Event instances.
