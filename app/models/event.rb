@@ -23,6 +23,10 @@ class Event < ActiveRecord::Base
   belongs_to :source
   validates_presence_of :title, :start_time
 
+  def self.find_all_future_events
+    return find(:all, :conditions => [ 'start_time > ?', Date.today ], :order => 'start_time ASC')
+  end
+
   # Returns a new Event created from an AbstractEvent.
   def self.from_abstract_event(abstract_event)
     returning Event.new do |event|

@@ -1,9 +1,10 @@
+require 'vpim/icalendar'
+
 class EventsController < ApplicationController
-  require 'vpim/icalendar'
   # GET /events
   # GET /events.xml
   def index
-    @events = Event.find(:all, :conditions => [ 'start_time > ?', Date.today ], :order => 'start_time ASC')
+    @events = Event.find_all_future_events
 
     respond_to do |format|
       format.html # index.html.erb
