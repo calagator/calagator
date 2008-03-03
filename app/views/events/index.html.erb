@@ -2,8 +2,8 @@
 <div id='list_description'>
   <h2>Viewing all <strong><%= @events.size %></strong> future events.</h2>
 
-  (<%= link_to "Add new event", new_event_url %>)
-  (<a href="<%= url_for :action => 'index' %>.ics">Export events as iCal</a>)
+  ( <%= link_to "Add new event", new_event_url %> )
+  ( iCal: <a href="<%= url_for :action => 'index' %>.ics">download</a> | <a href="<%= url_for(:action => 'index', :protocol => 'webcal', :only_path => false) %>.ics">subscribe</a> )
 </div>
 <div id='list_filters'>
 	<!--
