@@ -62,7 +62,7 @@ describe Source, "with iCalendar events" do
     event.venue.should be_nil
   end
 
-  it "should parse Upcoming iCalendar format" do
+  it "should parse Upcoming iCalendar format and associate the event with a venue" do
     events = events_from_ical_at('ical_upcoming.ics')
 
     events.size.should == 1
