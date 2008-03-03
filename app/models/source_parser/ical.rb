@@ -54,7 +54,17 @@ class SourceParser # :nodoc:
     # * :fallback - String to use as the title for the location if the +value+ doesn't contain a Vvenue.
     def self.to_abstract_location(value, opts={})
       a = AbstractLocation.new
-      fallback_or_nil = lambda { opts[:fallback].blank? ? nil : a }
+
+      # Function returns an AbstractLocation with the fallback string as its
+      # title, or a nil if no fallback string was given.
+      fallback_or_nil = lambda {
+        if opts[:fallback].blank?
+          nil
+        else
+          a.title = opts[:fallback]
+          a
+        end
+      }
 
       # The Vpim libary doesn't understand that Vvenue entries are just Vcards,
       # so transform the content to trick it into treating them as such.
@@ -79,11 +89,9 @@ class SourceParser # :nodoc:
 
           return a
         rescue Vpim::InvalidEncodingError, ArgumentError, RuntimeError
-          a.title = opts[:fallback]
           return fallback_or_nil.call
         end
       else
-        a.title = opts[:fallback]
         return fallback_or_nil.call
       end
     end
