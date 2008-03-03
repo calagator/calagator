@@ -34,10 +34,11 @@ class SourceParser
 
   # Returns a Hash of format types to human-readable labels
   def self.formats_to_labels
-    $SourceParserImplementations.inject(::ActiveSupport::OrderedHash.new) do |hash, parser|
-      hash[parser.to_s.demodulize.to_sym] = parser.label
-      hash
+    result = ::ActiveSupport::OrderedHash.new
+    for parser in $SourceParserImplementations.sort_by{|t| t.label.to_s}
+      result[parser.to_s.demodulize.to_sym] = parser.label
     end
+    return result
   end
 
   # Returns an Array of strings for all the known format types
