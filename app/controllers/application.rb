@@ -10,3 +10,13 @@ class ApplicationController < ActionController::Base
 
   layout "application"
 end
+
+# Make it possible to use helpers in controllers
+# http://www.johnyerhot.com/2008/01/10/rails-using-helpers-in-you-controller/
+class Helper
+  include Singleton
+  include ActionView::Helpers::UrlHelper # Provide: #link_to
+end
+def help
+  Helper.instance
+end
