@@ -5,7 +5,7 @@ require 'set'
 #
 # A hierarchy of classes that provide a way to parse different source formats and return hCalendar events.
 class SourceParser
-  # Return Array of hCalendar objects by reading them from the +format_type+ parser and passing it a set of +opts+. 
+  # Return Array of hCalendar objects by reading them from the +format_type+ parser and passing it a set of +opts+.
   # Please see the parsers that subclass Base for arguments.
   #
   # Example:
@@ -34,7 +34,7 @@ class SourceParser
 
   # Returns a Hash of format types to human-readable labels
   def self.formats_to_labels
-    $SourceParserImplementations.inject({}) do |hash, parser|
+    $SourceParserImplementations.inject(::ActiveSupport::OrderedHash.new) do |hash, parser|
       hash[parser.to_s.demodulize.to_sym] = parser.label
       hash
     end
@@ -42,7 +42,7 @@ class SourceParser
 
   # Returns an Array of strings for all the known format types
   def self.known_format_types
-    $SourceParserImplementations.map{|parser| parser.to_s.demodulize}
+    $SourceParserImplementations.map{|parser| parser.to_s.demodulize}.sort
   end
 
   # == SourceParser::Base
