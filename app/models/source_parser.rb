@@ -15,6 +15,14 @@ class SourceParser
     parser_for(format_type).to_hcals(opts)
   end
 
+  # Return an Array of AbstractEvent instances.
+  #
+  # Arguments:
+  # * :format_type - String name of format that corresponds to a specific parser, e.g., "Hcal"
+  #
+  # Options: (these vary between specific parsers)
+  # * :url - URL string to read as parser input.
+  # * :content - String to read as parser input.
   def self.to_abstract_events(format_type, opts)
     parser_for(format_type).to_abstract_events(opts)
   end

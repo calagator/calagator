@@ -26,8 +26,9 @@ class SourceParser # :nodoc:
     #
     # Options:
     # * :url -- URL of iCalendar data to import
+    # * :content -- String of iCalendar data to import
     def self.to_abstract_events(opts={})
-      content = read_url(opts[:url])
+      content = opts[:content] || read_url(opts[:url])
 
       content_calendars = content.scan(/^BEGIN:VCALENDAR.*^END:VCALENDAR/m)
       event_results = content_calendars.map do |content_calendar|

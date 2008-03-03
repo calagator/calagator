@@ -58,30 +58,18 @@ EOF
   end
 
   # Returns an iCalendar string representing this Event.
-  #
-  # Options:
-  #
-  # Options:
-  # * :url_helper - A lambda that's called with an Event object to construct
-  #   the URL. If no helper is given, no URL is set on the iCalendar event.
-  #
-  # Example:
-  #   ics = myevent.to_ical(:url_helper => lambda{|event| event_url(event)})
-  def to_ical(opts={})
-    self.class.to_icals(self, opts)
+  def to_ical()
+    self.class.to_ical(self)
   end
 
   # Return an iCalendar string representing an Array of Event instances.
   #
   # Arguments:
-  # * :events - Array of Event instances
-  #
-  # Options:
-  # * :url_helper - A lambda that's called with an Event object to construct
-  #   the URL. If no helper is given, no URL is set on the iCalendar event.
+  # * :events - Event instance or array of them.
   #
   # Example:
-  #   ics = Event.to_ical(myevent, :url_helper => lambda{|event| event_url(event)})
+  #   ics1 = Event.to_ical(myevent)
+  #   ics2 = Event.to_ical(myevents)
   def self.to_ical(events, opts={})
     events = [events].flatten
     icalendar = Vpim::Icalendar.create2
@@ -93,12 +81,11 @@ EOF
         c.dtend         event.end_time || event.start_time+1.hour
         c.summary       event.title || 'Untitled Event'
         c.description   event.description if event.description
-        if opts[:url_helper]
-          c.url           opts[:url_helper].call(event)
-        end
-        c.created       event.created_at
-        c.lastmod       event.updated_at
-        # TODO figure out how to encode a venue
+        c.created       event.created_at if event.created_at
+        c.lastmod       event.updated_at if event.updated_at
+        c.url           event.url if event.url
+
+        # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to go through many hoops to extract venues from the source data.
         #c.location     !event.venue.nil? ? event.venue.title : ''
       end
     end

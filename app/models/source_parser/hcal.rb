@@ -14,8 +14,10 @@ class SourceParser
     #
     # Options:
     # * :url => URL String to read events from.
+    # * :content => String of data to read events from 
     def self.to_hcals(opts={})
-      something = hCalendar.find(:text => read_url(opts[:url]))
+      content = opts[:content] || read_url(opts[:url])
+      something = hCalendar.find(:text => content)
       return(something.is_a?(hCalendar) ? [something] : something)
     end
 
