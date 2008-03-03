@@ -1,5 +1,3 @@
-require 'vpim/icalendar'
-
 class EventsController < ApplicationController
   # GET /events
   # GET /events.xml
@@ -86,28 +84,14 @@ class EventsController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
+protected
+
   # export events to an iCalendar file
   def ical_export(events=nil)
     events = events || Event.find(:all)
-    cal = Vpim::Icalendar.create2
-    
-    for event in events
-      next if event.start_time.nil?
-      cal.add_event do |e|
-        e.dtstart       event.start_time
-        e.dtend         event.end_time || event.start_time+1.hour
-        e.summary       event.title || 'Untitled Event'
-        e.description   event.description
-        e.url           event_url(event)
-        e.created       event.created_at
-        e.lastmod       event.updated_at
-        #e.location     !event.venue.nil? ? event.venue.title : ''
-      end
-    end
-    
-    ics = cal.encode
+    ics = Event.to_ical(events, :url_helper => lambda{|event| event_url(event)})
     render :text => ics, :mime_type => 'text/calendar'
   end
-  
+
 end
