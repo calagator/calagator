@@ -40,4 +40,21 @@ describe Event do
     #abstract_event.location.title.should == @basic_event.venue.title
     abstract_event.location.should be_nil
   end
+
+  it "should parse an Event into an iCalendar without a URL and generate it" do
+    generated_url = "http://foo.bar/"
+    @basic_event.url = nil
+    actual_ical = @basic_event.to_ical(:url_helper => lambda{|event| generated_url})
+
+    abstract_events = SourceParser.to_abstract_events("Ical", :content => actual_ical)
+
+    abstract_events.size.should == 1
+    abstract_event = abstract_events.first
+    abstract_event.title.should == @basic_event.title
+    abstract_event.url.should == generated_url
+
+    # TODO implement venue generation
+    #abstract_event.location.title.should == @basic_event.venue.title
+    abstract_event.location.should be_nil
+  end
 end

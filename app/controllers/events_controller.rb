@@ -90,7 +90,7 @@ protected
   # export events to an iCalendar file
   def ical_export(events=nil)
     events = events || Event.find(:all)
-    render :text => Event.to_ical(events), :mime_type => 'text/calendar'
+    render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
   end
 
 end

@@ -58,8 +58,12 @@ EOF
   end
 
   # Returns an iCalendar string representing this Event.
-  def to_ical()
-    self.class.to_ical(self)
+  #
+  # Options:
+  # * :url_helper - Lambda that accepts an Event instance and generates a URL
+  #   for it if it doesn't have a URL already. (See Event::to_ical for example)
+  def to_ical(opts={})
+    self.class.to_ical(self, opts)
   end
 
   # Return an iCalendar string representing an Array of Event instances.
@@ -67,9 +71,13 @@ EOF
   # Arguments:
   # * :events - Event instance or array of them.
   #
+  # Options:
+  # * :url_helper - Lambda that accepts an Event instance and generates a URL
+  #   for it if it doesn't have a URL already.
+  #
   # Example:
   #   ics1 = Event.to_ical(myevent)
-  #   ics2 = Event.to_ical(myevents)
+  #   ics2 = Event.to_ical(myevents, :url_helper => lambda{|event| event_url(event)})
   def self.to_ical(events, opts={})
     events = [events].flatten
     icalendar = Vpim::Icalendar.create2
@@ -83,7 +91,13 @@ EOF
         c.description   event.description if event.description
         c.created       event.created_at if event.created_at
         c.lastmod       event.updated_at if event.updated_at
-        c.url           event.url.blank? ? event_url(event) : event.url
+
+        # TODO Come up with a generalized way to generate URLs for events that don't have them. The reason for this messy URL helper business is that models can't access the route helpers, and even if they could, they'd need to access the request object so they know what the server's name is and such.
+        if event.url.blank?
+          c.url         opts[:url_helper].call(event) if opts[:url_helper]
+        else
+          c.url         event.url
+        end
 
         # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't recognize location, priority, and a couple of other things that are included as modules in the Vevent class itself. This seems like a bug in Vpim.
         #c.location     !event.venue.nil? ? event.venue.title : ''
