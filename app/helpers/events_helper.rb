@@ -14,4 +14,8 @@ module EventsHelper
   def normalize_time(time)
     datetime_format(time,time.min == 0 ? '%I%p' : '%I:%M%p').downcase
   end
+  
+  def google_maps_url(address)
+    return "http://maps.google.com/maps?q=#{CGI::escape(address)}"
+  end
 end

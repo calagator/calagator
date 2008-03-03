@@ -23,7 +23,7 @@
 				<div class='country-name'><%= @venue.country %><div>
 			<% end %>
       <% if @venue && @venue.has_full_address? %>
-        (<a href='<%=@venue.google_maps_url%>'>map</a>)
+        (<a href='<%=google_maps_url(@venue.full_address)%>'>map</a>)
       <% end %>
 		</div>
 	<% end %>

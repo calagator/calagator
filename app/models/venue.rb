@@ -50,7 +50,4 @@ class Venue < ActiveRecord::Base
     "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
   end
 
-  def google_maps_url()
-    return "http://maps.google.com/maps?q=#{CGI::escape(full_address)}"
-  end
 end
