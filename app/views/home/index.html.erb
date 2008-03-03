@@ -18,7 +18,7 @@
 	<h3>Today</h3>
 	<%= render :partial => 'events/list', :locals => { :events => @events_today, :opts => {:dates => false} } %>
 	<h3>Tomorrow</h3>
-	<%= render :partial => 'events/list', :locals => { :events => @events_today, :opts => {:dates => false} } %>
+	<%= render :partial => 'events/list', :locals => { :events => @events_tomorrow, :opts => {:dates => false} } %>
 	<h3>Later</h3>
 	<%= render :partial => 'events/list', :locals => { :events => @events_later } %>
 </div>
