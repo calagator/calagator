@@ -78,15 +78,30 @@ describe Source, "with iCalendar events" do
     event.venue.latitude.should == 45.5121
     event.venue.longitude.should == -122.626
   end
-  
-  it "should parse iCalendar feeds with multiple events" do
+
+  it "should parse Google iCalendar feed with multiple events" do
     events = events_from_ical_at('ical_google.ics')
-    events.size.should > 1
+
+    events.size.should == 47
+
+    event = events.first
+    event.title.should == "XPDX (eXtreme Programming) at CubeSpace"
+    event.description.should be_blank
+    event.start_time.should == Time.parse("2007-10-24 18:30:00")
+
+    event = events[17]
+    event.title.should == "Code Sprint/Coding Dojo at CubeSpace"
+    event.description.should be_blank
+    event.start_time.should == Time.parse("2007-10-17 19:00:00")
+
+    event = events.last
+    event.title.should == "Adobe Developer User Group"
+    event.description.should == "http://pdxria.com/"
+    event.start_time.should == Time.parse("2007-01-16 17:30:00")
   end
-  
+
   it "should parse non-Vcard locations" do
     events = events_from_ical_at('ical_google.ics')
     events.first.venue.title.should == 'CubeSpace'
   end
-  
 end
