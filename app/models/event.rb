@@ -83,9 +83,9 @@ EOF
         c.description   event.description if event.description
         c.created       event.created_at if event.created_at
         c.lastmod       event.updated_at if event.updated_at
-        c.url           event.url if event.url
+        c.url           event.url.blank? ? event_url(event) : event.url
 
-        # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to go through many hoops to extract venues from the source data.
+        # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't recognize location, priority, and a couple of other things that are included as modules in the Vevent class itself. This seems like a bug in Vpim.
         #c.location     !event.venue.nil? ? event.venue.title : ''
       end
     end
