@@ -38,12 +38,15 @@ class Event < ActiveRecord::Base
 
   # Returns an Array of future Event instances.
   def self.find_all_future_events(order)
-    return find(:all, :conditions => [ 'start_time > ?', Date.today ], :order => order)
+    return find(:all, :conditions => [ 'start_time > ?', Date.today ], 
+              :include => :venue, 
+              :order => order)
   end
   
   # Returns an Array of Event instances within a given date range
   def self.find_by_dates(start_date, end_date, order)
     find(:all, :conditions => ['start_time > ? AND start_time < ?', start_date, end_date], 
+        :include => :venue,
         :order => order)
   end
 
