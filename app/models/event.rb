@@ -44,7 +44,7 @@ class Event < ActiveRecord::Base
   end
   
   # Returns an Array of Event instances within a given date range
-  def self.find_by_dates(start_date, end_date, order)
+  def self.find_by_dates(start_date, end_date, order='start_time')
     find(:all, :conditions => ['start_time > ? AND start_time < ?', start_date, end_date], 
         :include => :venue,
         :order => order)
