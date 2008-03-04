@@ -32,7 +32,7 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   # Normal controllers
-  map.resources :events
+  map.resources :events, :collection => {'duplicates' => :get}
   map.resources :sources
   map.resources :venues, :collection => {'duplicates' => :get}
 

@@ -64,4 +64,14 @@ describe Event do
         :include => :venue)
     Event.find_by_dates(Date.today, Date.tomorrow)
   end
+  
+  it "should find all events with duplicate titles" do
+    Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
+    Event.find_duplicates_by(:title)
+  end
+  
+  it "should find all events with duplicate titles and urls" do
+    Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
+    Event.find_duplicates_by([:title,:url])
+  end
 end

@@ -49,6 +49,29 @@ class Event < ActiveRecord::Base
         :include => :venue,
         :order => order)
   end
+  
+  # Return an array of events with duplicate values for a given set of fields
+  def self.find_duplicates_by(fields)
+    query = "SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ("
+    attributes = Event.new.attributes.keys
+    
+    if fields == :all || fields == :any
+      attributes.each do |attr|
+        next if ['created_at','updated_at'].include?(attr)
+        if fields == :all
+          query += " a.#{attr} = b.#{attr} AND"
+        else
+          query += " (a.#{attr} = b.#{attr} AND (a.#{attr} != '' AND a.#{attr} != 0 AND a.#{attr} NOT NULL)) OR "
+        end
+      end
+    else
+      [fields].flatten.each do |attr|
+          query += " a.#{attr} = b.#{attr} AND" if attributes.include?(attr.to_s)
+      end
+    end
+    query = query[0..-4] + ")"
+    Event.find_by_sql(query)
+  end
 
   #---[ Transformations ]-------------------------------------------------
 

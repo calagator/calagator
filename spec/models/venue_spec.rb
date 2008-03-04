@@ -26,12 +26,12 @@ describe Venue do
     abstract_location.longitude.should_not be_nil
   end
   
-  it "should find all events with duplicate titles" do
+  it "should find all venues with duplicate titles" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title )")
     Venue.find_duplicates_by(:title)
   end
   
-  it "should find all events with duplicate titles and urls" do
+  it "should find all venues with duplicate titles and urls" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
     Venue.find_duplicates_by([:title,:url])
   end
