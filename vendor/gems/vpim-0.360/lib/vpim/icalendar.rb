@@ -13,6 +13,7 @@ require 'vpim/vevent'
 require 'vpim/vtodo'
 require 'vpim/vjournal'
 require 'vpim/vpim'
+require 'vpim/vvenue'
 
 module Vpim
   # An iCalendar.
@@ -74,6 +75,7 @@ module Vpim
         'VEVENT' => Vevent,
         'VTODO' => Vtodo,
         'VJOURNAL' => Vjournal,
+        'VVENUE' => Vvenue,
       }
 
       inner.each do |component|

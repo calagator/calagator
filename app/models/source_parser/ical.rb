@@ -29,7 +29,7 @@ class SourceParser # :nodoc:
     # * :content -- String of iCalendar data to import
     def self.to_abstract_events(opts={})
       content = opts[:content] || read_url(opts[:url])
-
+      breakpoint
       content_calendars = content.scan(/^BEGIN:VCALENDAR.*^END:VCALENDAR/m)
       event_results = content_calendars.map do |content_calendar|
         events = Vpim::Icalendar.decode(content_calendar).first.components.map do |component|
