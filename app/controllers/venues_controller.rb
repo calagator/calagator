@@ -82,4 +82,18 @@ class VenuesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+  
+  # GET /venues/duplicates
+  def duplicates
+    type = params[:type] || 'any'
+    type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
+    
+    @venues = Venue.find_duplicates_by(type)
+    
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @venues }
+    end
+  end
+    
 end

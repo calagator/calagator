@@ -1,18 +1,18 @@
 # == Schema Information
-# Schema version: 6
+# Schema version: 7
 #
 # Table name: events
 #
 #  id          :integer         not null, primary key
-#  title       :string(255)
-#  description :text
-#  start_time  :datetime
-#  end_time    :datetime
-#  venue_id    :integer
-#  url         :string(255)
-#  source_id   :integer
-#  created_at  :datetime
-#  updated_at  :datetime
+#  title       :string(255)     
+#  description :text            
+#  start_time  :datetime        
+#  venue_id    :integer         
+#  url         :string(255)     
+#  created_at  :datetime        
+#  updated_at  :datetime        
+#  end_time    :datetime        
+#  source_id   :integer         
 #
 
 require 'vpim/icalendar'
