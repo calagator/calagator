@@ -2,11 +2,21 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.xml
   def index
+    order = params[:order] || 'date'
+    order = case order
+            when 'date'
+              'start_time'
+            when 'name'
+              'title, start_time'
+            when 'venue'
+              'venue_id, start_time'
+            end
+    
     @start_date = params[:date] ? Date.parse(params[:date][:start]) : Date.today
     @end_date = params[:date] ? Date.parse(params[:date][:end]) : Date.today + 6.months
     @events = params[:date] ? 
-        Event.find_by_dates(@start_date, @end_date) : 
-        Event.find_all_future_events
+        Event.find_by_dates(@start_date, @end_date, order) : 
+        Event.find_all_future_events(order)
 
     respond_to do |format|
       format.html # index.html.erb
