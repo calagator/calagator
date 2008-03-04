@@ -13,8 +13,7 @@ module Vpim
         # Physical location information relevant to the component, or nil if
         # there is no LOCATION property.
         def location
-          location = @properties.field('LOCATION')
-          return location['VENUE-UID'] || proptext 'LOCATION'
+          proptext 'LOCATION'
         end
 
         # Array of Float, +[ latitude, longitude]+.
