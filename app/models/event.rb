@@ -65,11 +65,14 @@ class Event < ActiveRecord::Base
         end
       end
     else
-      [fields].flatten.each do |attr|
+      fields = [fields].flatten
+      fields.each do |attr|
           query += " a.#{attr} = b.#{attr} AND" if attributes.include?(attr.to_s)
       end
+      order = fields.join(',a.')
     end
-    query = query[0..-4] + ")"
+    order ||= 'id'
+    query = query[0..-4] + ") ORDER BY a.#{order}"
     Event.find_by_sql(query)
   end
 
