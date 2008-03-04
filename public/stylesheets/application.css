@@ -1,7 +1,4 @@
-/* @override 
-	http://0.0.0.0:3000/stylesheets/application.css?1203192047
-	http://0.0.0.0:3000/stylesheets/application.css?1204210435
-*/
+/* @override http://localhost:3000/stylesheets/application.css?1204562855 */
 
 abbr {
 	border-bottom: none;
@@ -184,4 +181,19 @@ fieldset .no_label, fieldset .help {
 
 fieldset .help {
 	color: #999;
+}
+
+#list_filters {
+	padding: 1em;
+	float: left;
+	width: 17em;
+	background: #e3fdcd;
+	margin-right: 1em;
+	margin-left: -1em;
+	margin-top: 1em;
+}
+
+#list_items {
+	float: left;
+	padding: 1em;
 }
