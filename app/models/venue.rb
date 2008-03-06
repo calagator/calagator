@@ -38,7 +38,7 @@ class Venue < ActiveRecord::Base
     
     if fields == :all || fields == :any
       attributes.each do |attr|
-        next if ['created_at','updated_at'].include?(attr)
+        next if ['id', 'created_at','updated_at'].include?(attr)
         if fields == :all
           query += " a.#{attr} = b.#{attr} AND"
         else
