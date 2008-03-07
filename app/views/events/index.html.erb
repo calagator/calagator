@@ -18,13 +18,15 @@
 	<% form_tag events_url, :method => 'get' do  -%>
 	<div id='start_calendar'>
 		Start
-		<%= calendar_date_select_tag 'date[start]', @start_date.to_formatted_s(:long) %>
+		<%= calendar_date_select_tag 'date[start]', @start_date.to_formatted_s(:long), :id => 'date_start' %>
 	</div>
 	<div id='end_calendar'>
 		End
-		<%= calendar_date_select_tag 'date[end]', @end_date.to_formatted_s(:long) %>
+		<%= calendar_date_select_tag 'date[end]', @end_date.to_formatted_s(:long), :id => 'date_end' %>
 	</div>
+	<div>
 	<%= submit_tag 'Filter' %> <%= link_to 'Clear Filter', events_url %>
+	</div>
 	<% end %>
 </div>
 <div id='list_items'>

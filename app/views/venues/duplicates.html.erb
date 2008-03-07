@@ -19,6 +19,7 @@
 	</div>
 
 <div id='list_items'>
+	<%= form_tag :action => "delete", :method => :post %>
   <ul>
     <% for venue in @venues %>
       <li>
@@ -29,6 +30,7 @@
       </li>
     <% end %>
   </ul>
+	<%= end  %>
 </div>
 </div>
    
