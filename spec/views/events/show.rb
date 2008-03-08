@@ -14,7 +14,7 @@ describe "/events/show" do
   end
   
   it "should render valid XHTML" do
-    render "/events/show", :layout => 'application'
-    response.should be_valid_xhtml
+    render "/events/show"
+    response.should be_valid_xhtml_fragment
   end
 end

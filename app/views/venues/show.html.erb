@@ -47,8 +47,8 @@
 	<div class='single_view_right'>
 		<div id='edit_link'>
 			<h4>Something not right?</h4>
-      <p>You can <%= link_to "edit this venue", edit_venue_url %>
-      or <%= link_to "delete it", venue_url, :method => :delete, :confirm => "Are you sure?" %>.</p>
+      <p>You can <%= link_to "edit this venue", edit_venue_url(@venue) %>
+      or <%= link_to "delete it", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>.</p>
 		</div>
     <div class="metadata">
       Created <%= @venue.created_at %>

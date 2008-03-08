@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe "/events" do
+describe "/events/duplicates" do
   fixtures :events
   
   before(:each) do
@@ -8,12 +8,10 @@ describe "/events" do
     @tomorrow = events(:tomorrow)
     @day_after_tomorrow = events(:day_after_tomorrow)
     assigns[:events] = [@codesprint, @tomorrow, @day_after_tomorrow]
-    assigns[:start_date] = Time.now
-    assigns[:end_date] = Time.now
   end
   
   it "should render valid XHTML" do
-    render "/events/index"
+    render "/events/duplicates"
     response.should be_valid_xhtml_fragment
   end
 end
