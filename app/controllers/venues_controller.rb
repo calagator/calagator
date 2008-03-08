@@ -89,11 +89,30 @@ class VenuesController < ApplicationController
     type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
     
     @venues = Venue.find_duplicates_by(type)
+    @type = type
     
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @venues }
     end
+  end
+  
+  # POST /venues/squash_multiple_duplicates
+  def squash_many_duplicates
+    params[:del_dupe].each do |set, to_delete|
+      merge_id = params[:merge_dupe][set]
+      if merge_id
+        to_delete.each do |item_id|
+          next if item_id == merge_id
+          v = Venue.find(item_id, :include => :events)
+          v.events.each do |event|
+            event.venue_id = merge_id.to_i
+            event.save
+          end
+          v.destroy
+        end
+      end
+    end 
   end
     
 end
