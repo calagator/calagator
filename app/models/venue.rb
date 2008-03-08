@@ -22,6 +22,7 @@
 #
 
 class Venue < ActiveRecord::Base
+  include DuplicateChecking
   has_many :events, :dependent => :nullify
 
   validates_presence_of :title
@@ -31,32 +32,6 @@ class Venue < ActiveRecord::Base
     Venue.find(:all, :order => "title ASC")
   end
   
-  # Return an array of venues with duplicate values for a given set of fields
-  def self.find_duplicates_by(fields)
-    query = "SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ("
-    attributes = Venue.new.attributes.keys
-    
-    if fields == :all || fields == :any
-      attributes.each do |attr|
-        next if ['id', 'created_at','updated_at'].include?(attr)
-        if fields == :all
-          query += " a.#{attr} = b.#{attr} AND"
-        else
-          query += " (a.#{attr} = b.#{attr} AND (a.#{attr} != '' AND a.#{attr} != 0 AND a.#{attr} NOT NULL)) OR "
-        end
-      end
-    else
-      fields = [fields].flatten
-      fields.each do |attr|
-          query += " a.#{attr} = b.#{attr} AND" if attributes.include?(attr.to_s)
-      end
-      order = fields.join(',a.')
-    end
-    order ||= 'id'
-    query = query[0..-4] + ") ORDER BY a.#{order}"
-    Venue.find_by_sql(query)
-  end
-
   # Returns a new Venue created from an AbstractLocation.
   def self.from_abstract_location(abstract_location)
     returning Venue.new do |venue|
