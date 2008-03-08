@@ -40,9 +40,7 @@ describe SourcesController do
     post :create, :source => { :url => 'webcal://upcoming.yahoo.com/event/390164/' }
   end
   
-  it "should add the http prefix to urls without one" do
-    pending "setting the scheme using URI resutls in http:upcoming without the //"
-    
+  it "should add the http prefix to urls without one" do    
     Source.should_receive(:new).with({ 'url' => 'http://upcoming.yahoo.com/event/390164/' }).and_return(@source)
     post :create, :source => { :url => 'upcoming.yahoo.com/event/390164/' }
   end

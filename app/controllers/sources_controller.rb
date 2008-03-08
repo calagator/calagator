@@ -6,8 +6,8 @@ class SourcesController < ApplicationController
 
   def create
     url = URI.parse(params[:source][:url])
-    url.scheme = 'http' unless ['http','ftp'].include?(url.scheme)
-    params[:source][:url] = url.to_s
+    url.scheme = 'http' unless ['http','ftp'].include?(url.scheme) or url.scheme.nil?
+    params[:source][:url] = url.scheme.nil? ? 'http://'+params[:source][:url].strip : url.to_s
     
     source = Source.new(params[:source])
     events = source.to_events
