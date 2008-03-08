@@ -17,9 +17,8 @@
 			<li><%= link_to_unless_current "All Fields", url_for(:action => 'duplicates', :type => 'all') %></li>
 		</ul>
 	</div>
-
+<%= form_tag :action => "squash_many_duplicates", :method => :post %>
 <div id='list_items'>
-	<%= form_tag :action => "squash_many_duplicates", :method => :post %>
   <ul>
 		<% last = {}; first_cycle = true; dupe_set = 1
 	    for venue in @venues
@@ -57,7 +56,7 @@
 	
 	<%= submit_tag "Squash Duplicates" %>
 	<% end %>
-	</form>
 </div>
+</form>
 </div>
    

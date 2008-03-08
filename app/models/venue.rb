@@ -24,6 +24,7 @@
 class Venue < ActiveRecord::Base
   include DuplicateChecking
   has_many :events, :dependent => :nullify
+  belongs_to :source
 
   validates_presence_of :title
 
