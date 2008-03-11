@@ -14,3 +14,8 @@ public/javascripts/active_scaffold
 public/javascripts/record_select
 public/stylesheets/active_scaffold
 public/stylesheets/record_select
+tmp/*
+tmp/cache/*
+tmp/pids/*
+tmp/sessions/*
+tmp/sockets/*
