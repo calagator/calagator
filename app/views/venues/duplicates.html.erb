@@ -1,46 +1,44 @@
 <div id="venues_index">
-	<h1>Duplicate Venues</h1>
+  <h1>Duplicate Venues</h1>
 
-	<div id='list_filters'>
-		<h3>Show venues with a duplicate</h3>
-		<ul>
-			<li><%= link_to_unless_current "Title", url_for(:action => 'duplicates', :type => 'title') %></li>
-			<li><%= link_to_unless_current "Address", url_for(:action => 'duplicates', :type => 'address') %></li>
-			<li><%= link_to_unless_current "Street Address", url_for(:action => 'duplicates', :type => 'street_address') %></li>
-			<li><%= link_to_unless_current "URL", url_for(:action => 'duplicates', :type => 'url') %></li>
-			<li><%= link_to_unless_current "Description", url_for(:action => 'duplicates', :type => 'description') %></li>
-			<li><%= link_to_unless_current "Geo. Coords", url_for(:action => 'duplicates', :type => 'latitude,longitude') %></li>
-			<li><%= link_to_unless_current "Email", url_for(:action => 'duplicates', :type => 'email') %></li>
-			<li><%= link_to_unless_current "Telephone", url_for(:action => 'duplicates', :type => 'telephone') %></li>
-			<li>-----</li>
-			<li><%= link_to_unless_current "Any Field", url_for(:action => 'duplicates', :type => 'any') %></li>
-			<li><%= link_to_unless_current "All Fields", url_for(:action => 'duplicates', :type => 'all') %></li>
-		</ul>
-	</div>
+  <div id='list_filters'>
+    <h3>Show venues with a duplicate</h3>
+    <ul>
+      <li><%= link_to_unless_current "Title", url_for(:action => 'duplicates', :type => 'title') %></li>
+      <li><%= link_to_unless_current "Address", url_for(:action => 'duplicates', :type => 'address') %></li>
+      <li><%= link_to_unless_current "Street Address", url_for(:action => 'duplicates', :type => 'street_address') %></li>
+      <li><%= link_to_unless_current "URL", url_for(:action => 'duplicates', :type => 'url') %></li>
+      <li><%= link_to_unless_current "Description", url_for(:action => 'duplicates', :type => 'description') %></li>
+      <li><%= link_to_unless_current "Geo. Coords", url_for(:action => 'duplicates', :type => 'latitude,longitude') %></li>
+      <li><%= link_to_unless_current "Email", url_for(:action => 'duplicates', :type => 'email') %></li>
+      <li><%= link_to_unless_current "Telephone", url_for(:action => 'duplicates', :type => 'telephone') %></li>
+      <li>-----</li>
+      <li><%= link_to_unless_current "Any Field", url_for(:action => 'duplicates', :type => 'any') %></li>
+      <li><%= link_to_unless_current "All Fields", url_for(:action => 'duplicates', :type => 'all') %></li>
+    </ul>
+  </div>
 <%= form_tag :action => "squash_many_duplicates", :method => :post %>
 <div id='list_items'>
   <ul>
-		<% last = {}; first_cycle = true; dupe_set = 1
-	    for venue in @venues
-				if @type != :any && @type != :all
-					changed = false
-					[@type].flatten.each do |t|
-						changed = true if venue.read_attribute(t) != last[t]
-						last[t] = venue.read_attribute(t)
-					end
-					if changed && !first_cycle %>
-						</ul><ul>
-			 <%		dupe_set += 1 
-				end
-				first_cycle = false 
-				end %>
-
-				
+    <% last = {}; first_cycle = true; dupe_set = 1
+      for venue in @venues
+        if @type != :any && @type != :all
+          changed = false
+          [@type].flatten.each do |t|
+            changed = true if venue.read_attribute(t) != last[t]
+            last[t] = venue.read_attribute(t)
+          end
+          if changed && !first_cycle %>
+            </ul><ul>
+          <% dupe_set += 1
+          end
+          first_cycle = false
+        end %>
       <li>
-				<% if @type != :any && @type != :all %>
-				<input type='radio' id="rad_merge_dupe_<%=venue.id%>" name="merge_dupe[<%=dupe_set%>]" value="<%=venue.id%>" />
-				<input type='checkbox' id="chk_del_dupe_<%=venue.id%>" name="del_dupe[<%=dupe_set%>][]" value='<%=venue.id%>' />
-				<% end %>
+        <% if @type != :any && @type != :all %>
+        <input type='radio' id="rad_merge_dupe_<%=venue.id%>" name="merge_dupe[<%=dupe_set%>]" value="<%=venue.id%>" />
+        <input type='checkbox' id="chk_del_dupe_<%=venue.id%>" name="del_dupe[<%=dupe_set%>][]" value='<%=venue.id%>' />
+        <% end %>
         <%= link_to(venue.title, venue_url(venue)) %>
         <% if venue.has_full_address? %>
           at <%= venue.full_address %>
@@ -50,13 +48,13 @@
   </ul>
 <% if @type != :any && @type != :all %>
 <ul>
-	<li>Checked items will be deleted.</li>
-	<li>Events associated with deleted venues will be replaced with the venues selected using radio buttons.</li>
+  <li>Checked items will be deleted.</li>
+  <li>Events associated with deleted venues will be replaced with the venues selected using radio buttons.</li>
 </ul>
-	
-	<%= submit_tag "Squash Duplicates" %>
-	<% end %>
+
+  <%= submit_tag "Squash Duplicates" %>
+  <% end %>
 </div>
 </form>
 </div>
-   
+
