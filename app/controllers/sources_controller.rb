@@ -2,6 +2,10 @@ require 'uri'
 
 class SourcesController < ApplicationController
   def index
+    redirect_to new_source_path
+  end
+
+  def new
   end
 
   def create
@@ -36,7 +40,7 @@ class SourcesController < ApplicationController
         #flash[:failure] = "No items found to import. Please see [URL] for more information on what pages Calagator can read."
         flash[:failure] = "No items found to import: #{@source.errors.full_messages.to_sentence}"
 
-        format.html { render :action => "index" }
+        format.html { render :action => "new" }
         format.xml  { render :xml => @source.errors, :status => :unprocessable_entity }
       end
     end
