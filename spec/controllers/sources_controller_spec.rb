@@ -4,7 +4,9 @@ describe SourcesController do
   
   before(:each) do
     Source.stub!(:new).and_return(@source = mock_model(Source))
-    @source.stub!(:to_events).and_return([@event = mock_model(Event, :title => 'Super Event', :source= => true, :save! => true, :venue => @venue = mock_model(Venue, :source => nil, :source= => true, :save! =>true))])
+    @venue = mock_model(Venue, :source => nil, :source= => true, :save! =>true)
+    @event = mock_model(Event, :title => 'Super Event', :source= => true, :save! => true, :venue => @venue)
+    @source.stub!(:to_events).and_return([@event])
     @source.stub!(:save!)
   end
 
