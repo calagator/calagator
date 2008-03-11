@@ -38,12 +38,12 @@ describe SourcesController do
   end  
   
   it "should substitute http for unsupported url schemes" do
-    Source.should_receive(:new).with({ 'url' => 'http://upcoming.yahoo.com/event/390164/' }).and_return(@source)
+    Source.should_receive(:new).with('url' => 'http://upcoming.yahoo.com/event/390164/').and_return(@source)
     post :create, :source => { :url => 'webcal://upcoming.yahoo.com/event/390164/' }
   end
   
   it "should add the http prefix to urls without one" do    
-    Source.should_receive(:new).with({ 'url' => 'http://upcoming.yahoo.com/event/390164/' }).and_return(@source)
+    Source.should_receive(:new).with('url' => 'http://upcoming.yahoo.com/event/390164/').and_return(@source)
     post :create, :source => { :url => 'upcoming.yahoo.com/event/390164/' }
   end
 end
