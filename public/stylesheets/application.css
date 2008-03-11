@@ -197,3 +197,11 @@ fieldset .help {
 	float: left;
 	padding: 1em;
 }
+
+#list_items .odd {
+  background: #E9E9E9;
+}
+
+#list_items .even {
+  background: #F7F7F7;
+}

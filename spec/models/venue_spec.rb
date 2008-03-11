@@ -79,3 +79,62 @@ describe Venue, "with duplicate finder (integration)" do
     post.size.should == pre.size
   end
 end
+
+describe Venue, "when squashing duplicates" do
+  before(:each) do
+    Venue.destroy_all
+
+    @master_venue    = Venue.create(:title => "Master")
+    @submaster_venue = Venue.create(:title => "Submaster")
+    @child_venue     = Venue.create(:title => "Child", :duplicate_of => @submaster_venue)
+
+    @event_at_child_venue = Event.create(:title => "Event at child venue", :venue => @child_venue)
+    @event_at_submaster_venue = Event.create(:title => "Event at submaster venue", :venue => @submaster_venue)
+  end
+
+  it "should squash a single duplicate" do
+    Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
+
+    @submaster_venue.duplicate_of.should == @master_venue
+  end
+
+  it "should squash multiple duplicates" do
+    Venue.squash(:master => @master_venue, :duplicates => [@submaster_venue, @child_venue])
+
+    @submaster_venue.duplicate_of.should == @master_venue
+    @child_venue.duplicate_of.should == @master_venue
+  end
+
+  it "should squash duplicates recursively" do
+    Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
+
+    @submaster_venue.duplicate_of.should == @master_venue
+    @child_venue.reload # Needed because child was queried through DB, not object graph
+    @child_venue.duplicate_of.should == @master_venue
+  end
+
+  it "should transfer events of duplicates" do
+    Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
+
+    for event in @submaster_venue.events
+      event.venue.should == @master_venue
+    end
+  end
+
+  it "should transfer events of duplicates recursively" do
+    Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
+
+    for event in [@submaster_venue.events, @child_venue.events].flatten
+      event.reload
+      event.venue.should == @master_venue
+    end
+  end
+
+  it "should squash duplicates by ID" do
+    Venue.squash(:master => @master_venue.id, :duplicates => @submaster_venue.id)
+
+    @submaster_venue.reload
+    @master_venue.reload
+    @submaster_venue.duplicate_of.should == @master_venue
+  end
+end

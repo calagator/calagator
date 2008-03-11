@@ -2,7 +2,7 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
-    @venues = Venue.find_all_ordered
+    @venues = Venue.find_non_duplicates
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,6 +14,8 @@ class VenuesController < ApplicationController
   # GET /venues/1.xml
   def show
     @venue = Venue.find(params[:id])
+
+    return redirect_to venue_url(@venue.duplicate_of) if @venue.duplicate_of
 
     respond_to do |format|
       format.html # show.html.erb
@@ -82,39 +84,29 @@ class VenuesController < ApplicationController
       format.xml  { head :ok }
     end
   end
-  
+
   # GET /venues/duplicates
   def duplicates
     type = params[:type] || 'any'
     type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
-    
+
     @venues = Venue.find_duplicates_by(type)
     @type = type
-    
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @venues }
     end
   end
-  
+
   # POST /venues/squash_multiple_duplicates
   def squash_many_duplicates
-    # TODO Move model alteration logic to Venue class
-    # TODO Do not use Venue#destroy or Venue#delete to eliminate duplicate Venue records. Instead mark them as duplicates of another Venue so that links to them will still work, make VenuesController#show redirect to the replacement record, make VenuesController#index hide the duplicates.
-    params[:del_dupe].each do |set, to_delete|
-      merge_id = params[:merge_dupe][set]
-      if merge_id
-        to_delete.each do |item_id|
-          next if item_id == merge_id
-          v = Venue.find(item_id, :include => :events)
-          v.events.each do |event|
-            event.venue_id = merge_id.to_i
-            event.save
-          end
-          v.destroy
-        end
-      end
-    end 
+    master_venue_id = params[:master_venue_id].to_i
+    duplicate_venue_ids = params.keys.grep(/^duplicate_venue_id_\d+$/){|t| params[t].to_i}
+
+    Venue.squash(:master => master_venue_id, :duplicates => duplicate_venue_ids)
+
+    flash[:success] = "Squashed duplicates #{duplicate_venue_ids.inspect} into master #{master_venue_id}"
+    redirect_to :action => "duplicates"
   end
-    
 end

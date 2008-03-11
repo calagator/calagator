@@ -4,16 +4,16 @@ module DuplicateChecking
       extend ClassMethods
     end
   end
-  
+
   module ClassMethods
     # Return an array of events with duplicate values for a given set of fields
     def find_duplicates_by(fields)
       query = "SELECT DISTINCT a.* from #{table_name} a, #{table_name} b WHERE a.id <> b.id AND ("
       attributes = new.attribute_names
-    
+
       if fields == :all || fields == :any
         attributes.each do |attr|
-          next if ['id','created_at','updated_at'].include?(attr)
+          next if ['id','created_at','updated_at', 'duplicate_of_id'].include?(attr)
           if fields == :all
             query += " a.#{attr} = b.#{attr} AND"
           else
@@ -29,7 +29,18 @@ module DuplicateChecking
       end
       order ||= 'id'
       query = query[0..-4] + ") ORDER BY a.#{order}"
-      find_by_sql(query)
+
+      RAILS_DEFAULT_LOGGER.debug("find_duplicates_by: SQL -- #{query}")
+
+      # TODO Refactor SQL generator to reject known duplicates
+      records = find_by_sql(query)
+      if records.nil?
+        []
+      elsif records.first.respond_to?(:duplicate_of_id)
+        records.reject{|t| t.duplicate_of_id}
+      else
+        records
+      end
     end
   end
 end

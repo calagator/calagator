@@ -32,17 +32,23 @@
             </ul><ul>
           <% dupe_set += 1
           end
+
+          if first_cycle || changed %>
+          <b>Master? | Duplicate? | Events count | Venue title</b>
+          <% end
           first_cycle = false
         end %>
-      <li>
+      <li class="<%= cycle('odd', 'even') %>">
         <% if @type != :any && @type != :all %>
-        <input type='radio' id="rad_merge_dupe_<%=venue.id%>" name="merge_dupe[<%=dupe_set%>]" value="<%=venue.id%>" />
-        <input type='checkbox' id="chk_del_dupe_<%=venue.id%>" name="del_dupe[<%=dupe_set%>][]" value='<%=venue.id%>' />
+          <%= radio_button_tag("master_venue_id", venue.id) %>
+          <%= check_box_tag("duplicate_venue_id_#{venue.id}", venue.id) %>
+          (<%= venue.events.count %>)
         <% end %>
         <%= link_to(venue.title, venue_url(venue)) %>
         <% if venue.has_full_address? %>
           at <%= venue.full_address %>
         <% end %>
+        <%= "[DUPLICATE OF #{venue.duplicate_of_id}]" if venue.duplicate_of %>
       </li>
     <% end %>
   </ul>
@@ -57,4 +63,3 @@
 </div>
 </form>
 </div>
-
