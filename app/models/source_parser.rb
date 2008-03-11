@@ -43,7 +43,7 @@ class SourceParser
 
   # Returns an Array of strings for all the known format types
   def self.known_format_types
-    $SourceParserImplementations.map{|parser| parser.to_s.demodulize}.sort
+    $SourceParserImplementations.map{|parser| parser.to_s.demodulize}.uniq.sort
   end
 
   # == SourceParser::Base

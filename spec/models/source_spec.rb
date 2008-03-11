@@ -1,5 +1,35 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+describe Source, "when parsing URLs" do
+  before(:all) do
+    @http_url = 'http://upcoming.yahoo.com/event/390164/'
+    @ical_url = 'webcal://upcoming.yahoo.com/event/390164/'
+    @base_url = 'upcoming.yahoo.com/event/390164/'
+  end
+
+  before(:each) do
+    @source = Source.new
+  end
+
+  it "should not modify supported url schemes" do
+    @source.url = @http_url
+
+    @source.url.should == @http_url
+  end
+
+  it "should substitute http for unsupported url schemes" do
+    @source.url = @ical_url
+
+    @source.url.should == @http_url
+  end
+
+  it "should add the http prefix to urls without one" do
+    @source.url = @base_url
+
+    @source.url.should == @http_url
+  end
+end
+
 describe Source, "with hCalendar events" do
   it "should parse hcal" do
     hcal_content = read_sample('hcal_single.xml')
