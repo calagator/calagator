@@ -1,0 +1,23 @@
+syntax: glob
+
+tags
+*.diff
+*.sql
+*.swp
+*.tmp
+.dtach
+db/schema.rb
+db/*.sqlite3
+index/*
+log/*
+public/images/active_scaffold
+public/images/record_select
+public/javascripts/active_scaffold
+public/javascripts/record_select
+public/stylesheets/active_scaffold
+public/stylesheets/record_select
+tmp/*
+tmp/cache/*
+tmp/pids/*
+tmp/sessions/*
+tmp/sockets/*
