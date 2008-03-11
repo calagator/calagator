@@ -3,20 +3,13 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SourcesController do
   
   before(:each) do
-    Source.stub!(:new).and_return(@source = mock_model(Source))
     @venue = mock_model(Venue, :source => nil, :source= => true, :save! =>true)
     @event = mock_model(Event, :title => 'Super Event', :source= => true, :save! => true, :venue => @venue)
-    @source.stub!(:to_events).and_return([@event])
-    @source.stub!(:save!)
+    @source = mock_model(Source, :to_events => [@event], :save! => true)
+    Source.stub!(:new).and_return(@source)
   end
 
   it "should create events from a source" do
-    @source.should_receive(:to_events).and_return(
-      [mock_model(event = Event, 
-        :title => 'Super Event', 
-        :source= => true, 
-        :save! => true, 
-        :venue => mock_model(Venue, :source => nil, :source= => true, :save! =>true))])
     post :create, :source => { :url => 'http://upcoming.yahoo.com/event/390164/' }
   end
   
