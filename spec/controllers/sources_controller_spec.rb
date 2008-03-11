@@ -9,25 +9,21 @@ describe SourcesController do
   end
 
   it "should create events from a source" do
-    Source.stub!(:new).and_return(@source)
     post :create, :source => { :url => 'http://upcoming.yahoo.com/event/390164/' }
   end
 
   it "should save the source object after creating events" do
-    Source.stub!(:new).and_return(@source)
     @source.should_receive(:save!).and_return(true)
     post :create, :source => { :url => 'http://upcoming.yahoo.com/event/390164/' }
   end
 
   it "should assign newly created events to the source" do
-    Source.stub!(:new).and_return(@source)
     @event.should_receive(:source=).and_return(true)
     @event.should_receive(:save!).and_return(true)
     post :create, :source => { :url => 'http://upcoming.yahoo.com/event/390164/' }
   end
 
   it "should assign newly created venues to the source" do
-    Source.stub!(:new).and_return(@source)
     @venue.should_receive(:source=).and_return(true)
     @venue.should_receive(:save!).and_return(true)
     post :create, :source => { :url => 'http://upcoming.yahoo.com/event/390164/' }
