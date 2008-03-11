@@ -24,12 +24,14 @@ describe SourcesController do
   end
   
   it "should assign newly created events to the source" do
+    # TODO doesn't actually provide example that an object was set
     @event.should_receive(:source=).and_return(true)
     @event.should_receive(:save!).and_return(true)
     post :create, :source => { :url => 'http://upcoming.yahoo.com/event/390164/' }
   end
   
   it "should assign newly created venues to the source" do
+    # TODO doesn't actually provide example that an object was set
     @venue.should_receive(:source=).and_return(true)
     @venue.should_receive(:save!).and_return(true)
     post :create, :source => { :url => 'http://upcoming.yahoo.com/event/390164/' }

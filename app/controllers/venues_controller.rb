@@ -99,6 +99,8 @@ class VenuesController < ApplicationController
   
   # POST /venues/squash_multiple_duplicates
   def squash_many_duplicates
+    # TODO Move model alteration logic to Venue class
+    # TODO Do not use Venue#destroy or Venue#delete to eliminate duplicate Venue records. Instead mark them as duplicates of another Venue so that links to them will still work, make VenuesController#show redirect to the replacement record, make VenuesController#index hide the duplicates.
     params[:del_dupe].each do |set, to_delete|
       merge_id = params[:merge_dupe][set]
       if merge_id

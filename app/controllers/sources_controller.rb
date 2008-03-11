@@ -5,6 +5,8 @@ class SourcesController < ApplicationController
   end
 
   def create
+    # TODO Move URL handling logic into model
+    # TODO Add conditionals to check for nil params[:source] hash before trying params[:source][:url]
     url = URI.parse(params[:source][:url])
     url.scheme = 'http' unless ['http','ftp'].include?(url.scheme) or url.scheme.nil?
     params[:source][:url] = url.scheme.nil? ? 'http://'+params[:source][:url].strip : url.to_s
