@@ -47,7 +47,7 @@
         <% if venue.has_full_address? %>
           at <%= venue.full_address %>
         <% end %>
-        <%= "[DUPLICATE OF #{venue.duplicate_of_id}]" if venue.duplicate_of %>
+        <%= "[DUPLICATE OF #{venue.duplicate_of_id}]" if venue.duplicate_of_id %>
       </li>
     <% end %>
   </ul>

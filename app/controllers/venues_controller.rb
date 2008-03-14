@@ -2,7 +2,7 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
-    @venues = Venue.find_non_duplicates
+    @venues = Venue.find(:non_duplicates)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -15,7 +15,7 @@ class VenuesController < ApplicationController
   def show
     @venue = Venue.find(params[:id])
 
-    return redirect_to venue_url(@venue.duplicate_of) if @venue.duplicate_of
+    return redirect_to venue_url(@venue.duplicate_of) if @venue.duplicate_of_id
 
     respond_to do |format|
       format.html # show.html.erb

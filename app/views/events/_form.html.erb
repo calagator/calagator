@@ -11,7 +11,7 @@
 	</div>
 	<div>
 		<%= f.label :venue_id, "Venue" %>
-		<%= collection_select(:event, :venue_id, Venue.find_non_duplicates, :id, :title, :include_blank => true) %>
+		<%= collection_select(:event, :venue_id, Venue.find(:non_duplicates), :id, :title, :include_blank => true) %>
 	</div>
 	<div>
 		<%= link_to 'Add a new venue', new_venue_url %>

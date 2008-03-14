@@ -20,12 +20,22 @@ end
 describe Venue, "with duplicate finder" do
   it "should find all venues with duplicate titles" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
-    Venue.find_duplicates_by(:title)
+    Venue.find(:duplicates, :by => :title )
   end
 
   it "should find all venues with duplicate titles and urls" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url ) ORDER BY a.title,a.url")
-    Venue.find_duplicates_by([:title,:url])
+    Venue.find(:duplicates, :by => [:title,:url])
+  end
+  
+  it "should find all venues that have not been marked as duplicate" do
+    Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NULL")
+    Venue.find(:non_duplicates)
+  end
+  
+  it "should find all venues that have been marked as duplicate" do
+    Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NOT NULL")
+    Venue.find(:marked_duplicates)
   end
 end
 
@@ -37,9 +47,9 @@ describe Venue, "with duplicate finder (integration)" do
   end
 
   def compare_duplicates(find_duplicates_arguments, create_venue_attributes)
-    before_results = Venue.find_duplicates_by(find_duplicates_arguments)
+    before_results = Venue.find(:duplicates, :by => find_duplicates_arguments)
     same_title = Venue.create!(create_venue_attributes)
-    after_results = Venue.find_duplicates_by(find_duplicates_arguments)
+    after_results = Venue.find(:duplicates, :by => find_duplicates_arguments)
     return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
   end
 
@@ -83,6 +93,7 @@ end
 describe Venue, "when squashing duplicates" do
   before(:each) do
     Venue.destroy_all
+    Event.destroy_all
 
     @master_venue    = Venue.create(:title => "Master")
     @submaster_venue = Venue.create(:title => "Submaster")
