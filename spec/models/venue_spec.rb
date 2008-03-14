@@ -95,12 +95,16 @@ describe Venue, "when squashing duplicates" do
     Venue.destroy_all
     Event.destroy_all
 
-    @master_venue    = Venue.create(:title => "Master")
-    @submaster_venue = Venue.create(:title => "Submaster")
-    @child_venue     = Venue.create(:title => "Child", :duplicate_of => @submaster_venue)
+    @master_venue    = Venue.create!(:title => "Master")
+    @submaster_venue = Venue.create!(:title => "Submaster")
+    @child_venue     = Venue.create!(:title => "Child", :duplicate_of => @submaster_venue)
+    @venues          = [@master_venue, @submaster_venue, @child_venue]
 
-    @event_at_child_venue = Event.create(:title => "Event at child venue", :venue => @child_venue)
-    @event_at_submaster_venue = Event.create(:title => "Event at submaster venue", :venue => @submaster_venue)
+    @event_at_child_venue = Event.create!(:title => "Event at child venue", :venue => @child_venue, :start_time => Time.now)
+    @event_at_submaster_venue = Event.create!(:title => "Event at submaster venue", :venue => @submaster_venue, :start_time => Time.now)
+    @events          = [@event_at_child_venue, @event_at_submaster_venue]
+
+    @venues.map(&:reload) # Make venues recognize changes to associated events
   end
 
   it "should squash a single duplicate" do
@@ -125,18 +129,16 @@ describe Venue, "when squashing duplicates" do
   end
 
   it "should transfer events of duplicates" do
-    Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
-    pending "@submaster_venue.events returns [] at the moment."
-    for event in @submaster_venue.events
-      event.venue.should == @master_venue
-    end
-  end
+    @venues.map{|venue| venue.events.count}.should == [0, 1, 1]
 
-  it "should transfer events of duplicates recursively" do
     Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
-    pending "@submaster_venue.events and @child_venue.events return [] at the moment."
-    for event in [@submaster_venue.events, @child_venue.events].flatten
-      event.reload
+
+    @venues.map(&:reload)
+    @venues.map{|venue| venue.events.count}.should == [2, 0, 0]
+
+    events = @venues.map(&:events).flatten
+    events.size.should > 0
+    for event in events
       event.venue.should == @master_venue
     end
   end
