@@ -90,6 +90,15 @@ module DuplicateChecking
         records
       end
     end
+
+    # Returns an ActiveRecord object associated with the +value+, which can be either a record or an ID
+    def _record_for(value)
+      case value
+      when self then value # Expected class already, do nothing
+      when String, Fixnum then self.find(value.to_i)
+      else raise TypeError, "Unknown type: #{value.class}"
+      end
+    end
     
     # Squash duplicates. Options accept Venue instances or IDs.
     #
@@ -103,20 +112,12 @@ module DuplicateChecking
       raise(ArgumentError, ":master not specified")     if master.blank?
       raise(ArgumentError, ":duplicates not specified") if duplicates.blank?
       
-      case master
-      when self # Expected class, do nothing
-      when String, Fixnum then master = self.find(master.to_i)
-      else raise TypeError, "Unknown :master type: #{master.class}"
-      end
+      master = _record_for(master)
 
       for duplicate in duplicates
-        case duplicate
-        when self # Expected class, do nothing
-        when String, Fixnum then duplicate = self.find(duplicate.to_i)
-        else raise TypeError, "Unknown :duplicate type: #{duplicate.class}"
-        end
+        duplicate = _record_for(duplicate)
         
-        next if duplicate.id == master.id
+        next if !master.new_record? && !duplicate.new_record? && duplicate.id == master.id
 
         # Transfer any venues that use this now duplicate venue as a master
         unless duplicate.duplicates.blank?
