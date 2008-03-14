@@ -15,7 +15,7 @@ class VenuesController < ApplicationController
   def show
     @venue = Venue.find(params[:id])
 
-    return redirect_to venue_url(@venue.duplicate_of) if @venue.duplicate_of_id
+    return redirect_to(venue_url(@venue.duplicate_of)) if @venue.duplicate_of_id
 
     respond_to do |format|
       format.html # show.html.erb
