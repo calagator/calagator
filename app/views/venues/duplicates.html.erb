@@ -19,6 +19,7 @@
   </div>
 <%= form_tag :action => "squash_many_duplicates", :method => :post %>
 <div id='list_items'>
+	<b>Master? | Duplicate? | Events count | Venue title</b>
   <ul>
     <% last = {}; first_cycle = true; dupe_set = 1
       for venue in @venues
@@ -29,13 +30,11 @@
             last[t] = venue.read_attribute(t)
           end
           if changed && !first_cycle %>
-            </ul><ul>
+            </ul>
+						<b>Master? | Duplicate? | Events count | Venue title</b>
+						<ul>
           <% dupe_set += 1
           end
-
-          if first_cycle || changed %>
-          <b>Master? | Duplicate? | Events count | Venue title</b>
-          <% end
           first_cycle = false
         end %>
       <li class="<%= cycle('odd', 'even') %>">

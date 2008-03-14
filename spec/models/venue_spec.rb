@@ -115,7 +115,7 @@ describe Venue, "when squashing duplicates" do
 
   it "should transfer events of duplicates" do
     Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
-
+    pending "@submaster_venue.events returns [] at the moment."
     for event in @submaster_venue.events
       event.venue.should == @master_venue
     end
@@ -123,7 +123,7 @@ describe Venue, "when squashing duplicates" do
 
   it "should transfer events of duplicates recursively" do
     Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
-
+    pending "@submaster_venue.events and @child_venue.events return [] at the moment."
     for event in [@submaster_venue.events, @child_venue.events].flatten
       event.reload
       event.venue.should == @master_venue
