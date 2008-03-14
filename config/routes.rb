@@ -26,7 +26,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Admin controllers
   map.namespace :admin do |admin|
-    admin.resources :products, :active_scaffold => true
+    admin.resources :events, :active_scaffold => true
     admin.resources :sources,  :active_scaffold => true
     admin.resources :venues,   :active_scaffold => true
   end

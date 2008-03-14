@@ -1,4 +1,5 @@
 class Admin::VenuesController < ApplicationController
+  layout "admin"
   active_scaffold :venues do |config|
     config.list.columns = [:title, :url]
     config.show.link.inline = false
@@ -21,6 +22,6 @@ class Admin::VenuesController < ApplicationController
       :created_at, 
       :updated_at,
     ]
-    config.update.link.inline = false
+    #config.update.link.inline = false
   end
 end

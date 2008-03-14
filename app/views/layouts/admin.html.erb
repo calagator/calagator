@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Calagator<%= @page_title ? " - #{@page_title}" : "" %></title>
+	<%= stylesheet_link_tag "blueprint/screen" %>
+	<%= stylesheet_link_tag "blueprint/print", :media => 'print' %>
+	<!--[if IE]><%= stylesheet_link_tag "blueprint/lib/ie" %><![endif]-->
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag :all, :cache => true %>
+    <%= active_scaffold_includes %>
+  </head>
+  <body>
+    <div id="top_menu">
+
+	  <%
+		link_class = {
+			:home =>   current_page?(:controller => 'home') ? 'active first' : 'first',
+			:sources => !current_page?(:controller => 'sources') || 'active',
+			:events => !current_page?(:controller => 'events') || 'active',
+			:venues => !current_page?(:controller => 'venues') || 'active',
+		}
+	  %>
+
+     <div id='app_menu'>
+	    <span id='project-title'>Calagator Admin</span>
+		<ul>
+	      <li><%= link_to "Home", root_path, {:class => link_class[:home] } %></li>
+		    <li><%= link_to "Events", admin_events_path, {:class => link_class[:events] } %></li>
+		    <li><%= link_to "Venues", admin_venues_path, {:class => link_class[:venues] } %></li>
+				<li><%= link_to "Sources", admin_sources_path, {:class => link_class[:sources] } %></li>
+		</ul>
+    </div>
+      <div id='project_menu'>
+		<ul>
+      		<li><%= link_to "Blog", blog_path, {:class => 'first'} %></li>
+      		<li><%= link_to "Forum", community_path %></li>
+      		<li><%= link_to "Bugs", bug_path %></li>
+		</ul>
+      </div>
+    </div>
+
+    <div id="top_content">
+      <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
+      <%= render_flash %>
+      <%= yield %>
+    </div>
+
+    <div id="top_footer">
+      Calagator.org
+      <% if File.directory?(File.join(RAILS_ROOT, ".svn")) %>
+        - SVN Version: <%= $svn_revision ||= `svn info`.match(/^Revision: (\d+)/s)[1] %>
+      <% elsif File.directory?(File.join(RAILS_ROOT, ".git")) %>
+        - Git Timestamp: <%= $git_date ||= `git log -1`.match(/^Date: (.+?)$/s)[1] %>
+      <% end %>
+    </div>
+  </body>
+</html>
