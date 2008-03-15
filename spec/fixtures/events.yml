@@ -40,6 +40,7 @@ future_<%= id %>:
   start_time: <%= (id-99-rand(2)).days.from_now.to_date %> <%=rand(24)%>:<%=rand(60)%>:00
   venue_id: <%= rand(20)+100 %>
   url: http://calagator.org
+  updated_at: <%= (id-99-rand(2)).days.from_now.to_date %> <%=rand(24)%>:<%=rand(60)%>:00
   <% 
   id += 1
   end 

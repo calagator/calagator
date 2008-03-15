@@ -1,4 +1,4 @@
-<% form_for(Source.new) do |f| %>
+<% form_for(@source) do |f| %>
 <fieldset>
   <legend>Import a source</legend>
   <div>
@@ -20,7 +20,8 @@
 	<div class='help'>
         Example URLS:<br />
         hCalendar at http://upcoming.yahoo.com/event/349225/<br />
-        iCalendar at webcal://upcoming.yahoo.com/calendar/v2/event/349225
+        iCalendar at webcal://upcoming.yahoo.com/calendar/v2/event/349225<br/>
+		For more information on import formats, see <%= link_to "this page", "http://code.google.com/p/calagator/wiki/IncomingEventDataFormats" %>
 	</div>
 </fieldset>
 <% end %>

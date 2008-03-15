@@ -13,23 +13,29 @@ class SourcesController < ApplicationController
     @events = nil
     events_added_counter = 0
 
-    if @source.valid?
-      @events = @source.to_events
-      for event in @events
-        next if event.title.blank? && event.description.blank? && event.url.blank?
-        event.source = @source
-        event.save!
-        events_added_counter += 1
-        if event.venue && event.venue.source.blank?
-          event.venue.source = @source
-          event.venue.save!
+    valid = @source.valid?
+    if valid
+      begin
+        @events = @source.to_events
+      rescue OpenURI::HTTPError
+        @source.errors.add_to_base("that URL doesn't seem to be working")
+      else
+        for event in @events
+          next if event.title.blank? && event.description.blank? && event.url.blank?
+          event.source = @source
+          event.save!
+          events_added_counter += 1
+          if event.venue && event.venue.source.blank?
+            event.venue.source = @source
+            event.venue.save!
+          end
         end
+        @source.save! if events_added_counter > 0
       end
-      @source.save! if events_added_counter > 0
     end
 
     respond_to do |format|
-      if @source.valid? && events_added_counter > 0
+      if valid && events_added_counter > 0
         s = "<p>Imported #{@events.size} entries:</p><ul>"
         for event in @events
           s << "<li>#{help.link_to event.title, event_url(event)}</li>"
@@ -40,8 +46,8 @@ class SourcesController < ApplicationController
         format.html { redirect_to events_path }
         format.xml  { render :xml => @source, :events => @events }
       else
-        #flash[:failure] = "No items found to import. Please see [URL] for more information on what pages Calagator can read."
-        flash[:failure] = "No items found to import: #{@source.errors.full_messages.to_sentence}"
+        flash[:failure] = (@events.nil? ? "Unable to import: " : "No items found to import: ") +
+                          @source.errors.full_messages.to_sentence
 
         format.html { render :action => "new" }
         format.xml  { render :xml => @source.errors, :status => :unprocessable_entity }
