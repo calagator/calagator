@@ -1,0 +1,21 @@
+<div class='vevent'>
+	<div class='list_date'>
+			<div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
+			<abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+			<%= datetime_format(event.start_time,'%b %d')%>
+			</abbr>
+	</div>
+	
+	<div class='list_content'>
+		<a href='<%= url_for event_url(event) %>' class='summary'>
+			<%= event.title %>
+		</a>
+		<div>
+			<%= normalize_time(event.start_time) %><% unless event.venue.nil? || event.venue.title.blank? %>, 
+			<a href='<%= url_for venue_url(event.venue)%>' class='location'>
+				<%= event.venue.title %>
+			</a>
+			<% end %>
+		</div>
+	</div>
+</div>
