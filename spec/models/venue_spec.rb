@@ -27,12 +27,12 @@ describe Venue, "with duplicate finder" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url ) ORDER BY a.title,a.url")
     Venue.find(:duplicates, :by => [:title,:url])
   end
-  
+
   it "should find all venues that have not been marked as duplicate" do
     Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NULL")
     Venue.find(:non_duplicates)
   end
-  
+
   it "should find all venues that have been marked as duplicate" do
     Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NOT NULL")
     Venue.find(:marked_duplicates)
