@@ -11,22 +11,25 @@ class SourcesController < ApplicationController
   def create
     @source = Source.new(params[:source])
     @events = nil
+    events_added_counter = 0
+
     if @source.valid?
       @events = @source.to_events
       for event in @events
         next if event.title.blank? && event.description.blank? && event.url.blank?
         event.source = @source
         event.save!
+        events_added_counter += 1
         if event.venue && event.venue.source.blank?
           event.venue.source = @source
           event.venue.save!
         end
       end
-      @source.save!
+      @source.save! if events_added_counter > 0
     end
 
     respond_to do |format|
-      if @source.valid? && @events.size > 0
+      if @source.valid? && events_added_counter > 0
         s = "<p>Imported #{@events.size} entries:</p><ul>"
         for event in @events
           s << "<li>#{help.link_to event.title, event_url(event)}</li>"
