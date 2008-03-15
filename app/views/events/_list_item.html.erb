@@ -1,5 +1,5 @@
-<% 
-new_day ||= nil 
+<%
+new_day ||= nil
 opts ||= {}
 opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
 %>
@@ -17,10 +17,9 @@ opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
 			<%= event.title %>
 		</a>
 		<div>
-			<%= normalize_time(event.start_time) %><% unless event.venue.nil? || event.venue.title.blank? %>, 
-			<a href='<%= url_for venue_url(event.venue)%>' class='location'>
-				<%= event.venue.title %>
-			</a>
+      <%= normalize_time(event.start_time) -%>
+      <%- if event.venue && !event.venue.title.blank? -%>
+, <%= link_to event.venue.title, event.venue, :class => "location" %>
 			<% end %>
 		</div>
 	</div>
