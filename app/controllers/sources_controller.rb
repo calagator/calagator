@@ -6,6 +6,7 @@ class SourcesController < ApplicationController
   end
 
   def new
+    @source = Source.new
   end
 
   def create
