@@ -4,7 +4,7 @@
 
   ( <%= link_to "Add new event", new_event_url %> )
   ( iCal: <a href="<%= url_for :action => 'index' %>.ics">download</a> | 
-		<a href="<%= url_for(:action => 'index', :protocol => 'webcal', :only_path => false) %>.ics">subscribe</a> ) (<a href="http://www.google.com/calendar/render?cid=<%= url_for(:action => 'index', :only_path => false) %>.ics">Add to Google Calendar</a>)
+		<a href="<%= url_for(:action => 'index', :protocol => 'webcal', :only_path => false) %>.ics">subscribe</a> ) (<a href="http://www.google.com/calendar/render?cid=<%= url_for(:action => 'index', :only_path => false) %>.ics">Add to Google Calendar</a>) (<%= link_to 'Atom Feed', formatted_events_url('atom') %>)
 </div>
 <div id='list_filters'>
 	<h3>Order events by</h3>

@@ -12,6 +12,8 @@
     <%= javascript_include_tag :defaults, :cache => true %>
     <%= active_scaffold_includes %>
 		<%= calendar_date_select_includes %>
+		
+		<%= auto_discovery_link_tag(:atom, formatted_events_url('atom'), :title => 'Atom: All Events' )%>
   </head>
   <body>
     <div id="top_menu">
