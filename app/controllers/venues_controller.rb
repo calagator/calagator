@@ -2,7 +2,7 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
-    @venues = Venue.find(:non_duplicates)
+    @venues = Venue.find(:non_duplicates, :order => :title)
 
     respond_to do |format|
       format.html # index.html.erb
