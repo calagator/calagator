@@ -50,8 +50,9 @@ class Source < ActiveRecord::Base
     if valid?
       opts[:url] ||= url
       returning([]) do |events|
-        SourceParser.to_abstract_events(format_type, opts).each do |event|
-          events << Event.from_abstract_event(event)
+        SourceParser.to_abstract_events(format_type, opts).each do |abstract_event|
+          event = Event.from_abstract_event(abstract_event, self)
+          events << event
         end
       end
     else

@@ -10,7 +10,7 @@ class SourcesController < ApplicationController
   end
 
   def create
-    @source = Source.new(params[:source])
+    @source = Source.find(:first, :conditions => params[:source]) || Source.new(params[:source])
     @events = nil
     events_added_counter = 0
 
@@ -23,13 +23,9 @@ class SourcesController < ApplicationController
       else
         for event in @events
           next if event.title.blank? && event.description.blank? && event.url.blank?
-          event.source = @source
           event.save!
           events_added_counter += 1
-          if event.venue && event.venue.source.blank?
-            event.venue.source = @source
-            event.venue.save!
-          end
+          event.venue.save! if event.venue
         end
         @source.save! if events_added_counter > 0
       end
@@ -37,9 +33,15 @@ class SourcesController < ApplicationController
 
     respond_to do |format|
       if valid && events_added_counter > 0
+        # TODO move this to a view, it currently causes a CGI::Session::CookieStore::CookieOverflow if the flash gets too big when too many events are imported at once
         s = "<p>Imported #{@events.size} entries:</p><ul>"
-        for event in @events
-          s << "<li>#{help.link_to event.title, event_url(event)}</li>"
+        @events.each_with_index do |event, i|
+          if i >= 5
+            s << "<li>And #{@events.size - i} more events.</li>"
+            break 
+          else
+            s << "<li>#{help.link_to event.title, event_url(event)}</li>"
+          end
         end
         s << "</ul>"
         flash[:success] = s

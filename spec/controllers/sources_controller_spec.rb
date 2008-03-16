@@ -19,13 +19,11 @@ describe SourcesController do
   end
 
   it "should assign newly created events to the source" do
-    @event.should_receive(:source=).and_return(true)
     @event.should_receive(:save!).and_return(true)
     post :create
   end
 
   it "should assign newly created venues to the source" do
-    @venue.should_receive(:source=).and_return(true)
     @venue.should_receive(:save!).and_return(true)
     post :create
   end

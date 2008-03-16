@@ -29,14 +29,18 @@ class Venue < ActiveRecord::Base
   validates_presence_of :title
 
   # Returns a new Venue created from an AbstractLocation.
-  def self.from_abstract_location(abstract_location)
-    returning Venue.new do |venue|
-      unless abstract_location.blank?
-        abstract_location.each_pair do |key, value|
-          venue[key] = value unless value.blank?
-        end
+  def self.from_abstract_location(abstract_location, source=nil)
+    venue = Venue.new
+
+    unless abstract_location.blank?
+      venue.source = source
+      abstract_location.each_pair do |key, value|
+        venue[key] = value unless value.blank?
       end
     end
+
+    duplicates = venue.find_exact_duplicates
+    duplicates ? duplicates.first : venue
   end
 
   # Does this venue have any address information?

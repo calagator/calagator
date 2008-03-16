@@ -54,14 +54,18 @@ class Event < ActiveRecord::Base
   #---[ Transformations ]-------------------------------------------------
 
   # Returns a new Event created from an AbstractEvent.
-  def self.from_abstract_event(abstract_event)
-    returning Event.new do |event|
-      event.title        = abstract_event.title
-      event.description  = abstract_event.description
-      event.start_time   = abstract_event.start_time
-      event.url          = abstract_event.url
-      event.venue        = Venue.from_abstract_location(abstract_event.location) if abstract_event.location
-    end
+  def self.from_abstract_event(abstract_event, source=nil)
+    event = Event.new
+
+    event.source       = source
+    event.title        = abstract_event.title
+    event.description  = abstract_event.description
+    event.start_time   = abstract_event.start_time
+    event.url          = abstract_event.url
+    event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
+
+    duplicates = event.find_exact_duplicates
+    duplicates ? duplicates.first : event
   end
 
   # Returns an hCalendar string representing this Event.
