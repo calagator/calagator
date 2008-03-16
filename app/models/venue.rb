@@ -23,6 +23,7 @@
 
 class Venue < ActiveRecord::Base
   include DuplicateChecking
+  before_save :geocode
   has_many :events, :dependent => :nullify
   belongs_to :source
 
@@ -49,7 +50,7 @@ class Venue < ActiveRecord::Base
   end
 
   # Display a single line address.
-  def full_address()
+  def full_address
     if has_full_address?
       "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
     else
@@ -57,4 +58,22 @@ class Venue < ActiveRecord::Base
     end
   end
 
+  # Get an address we can use for geocoding
+  def geocode_address
+    full_address or address
+  end
+
+  # Does this venue have a location already?
+  def has_location?
+    not (latitude.blank? or longitude.blank?)
+  end
+  
+  # Try to geocode (if we haven't already), but don't complain if we can't.
+  def geocode
+    unless has_location? or geocode_address.blank?
+      geo = GeoKit::Geocoders::MultiGeocoder.geocode(geocode_address)
+      self.latitude, self.longitude = geo.lat, geo.lng if geo.success
+    end
+    true
+  end
 end

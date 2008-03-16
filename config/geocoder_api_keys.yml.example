@@ -1,0 +1,32 @@
+# Geocoding and mapping use API keys from this file.
+#
+# For geocoding during development, you can copy this example file 
+# to config/geocoder_api_keys.yml, and sign up for your own key:
+#
+# - Sign into Google as yourself, and go to
+#   http://code.google.com/apis/maps/signup.html
+# 
+# - Read the terms, check the box, then enter the URL at which you
+#   access your development instance: probably 
+#   "http://localhost:3000/" or "http://127.0.0.1:3000/".
+#   If you're entering a real domain name, you probably want to 
+#   enter something like "http://foo.com/", *without* the "www" 
+#   or any trailing path, just because that makes the key most 
+#   useful to you -- see this FAQ for details:
+#   http://code.google.com/support/bin/answer.py?answer=55146&topic=10945
+#
+# - Enter your key in both places below, and keep a copy of your key
+#   in a safe place; don't share it (though I don't expect anyone to 
+#   exceed Google's limit of 50,000 geocodings per day!). You won't 
+#   check in your own geocoder_api_keys.yml; Subversion has already 
+#   been told to ignore yours :-)
+
+development:
+  google: "YOUR_KEY_GOES_HERE"
+
+production:
+  google: "YOUR_KEY_GOES_HERE"
+
+# (No test key needed: the tests stub out geocoding so that we test our
+# own code without calling Google.)
+

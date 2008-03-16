@@ -48,7 +48,9 @@ describe Venue, "with duplicate finder (integration)" do
 
   def compare_duplicates(find_duplicates_arguments, create_venue_attributes)
     before_results = Venue.find(:duplicates, :by => find_duplicates_arguments)
-    same_title = Venue.create!(create_venue_attributes)
+    same_title = Venue.new(create_venue_attributes)
+    same_title.stub!(:geocode)
+    same_title.save
     after_results = Venue.find(:duplicates, :by => find_duplicates_arguments)
     return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
   end
@@ -150,4 +152,68 @@ describe Venue, "when squashing duplicates" do
     @master_venue.reload
     @submaster_venue.duplicate_of.should == @master_venue
   end
+end
+
+describe "Venue geocoding" do
+  before do
+    @venue = Venue.new(:title => "title", :address => "test")
+    @geo_success = mock("geo", :success => true, :lat => 0.0, :lng => 0.0)
+    @geo_failure = mock("geo", :success => false, :lat => nil, :lng => nil)
+  end
+
+  it "should be valid even if not yet geocoded" do
+    @venue.valid?.should == true
+  end
+  
+  it "should properly report whether it has a location already" do
+    lambda {
+      @venue.latitude = @venue.longitude = 0.0
+    }.should change { @venue.has_location? }.from(false).to(true)
+  end
+
+  it "should geocode automatically" do
+    GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
+    @venue.save
+  end
+  
+  it "shouldn't geocode unless there's an address" do
+    @venue.address = ""
+    GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
+    @venue.save
+  end
+    
+  it "shouldn't geocode if already geocoded" do
+    @venue.latitude = @venue.longitude = 0.0
+    GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
+    @venue.save
+  end
+    
+  it "shouldn't fail if the address is completely bogus" do
+    @venue.address = "lsdfjsdfxouisodfglkjwerid"
+    GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_failure)
+    @venue.save
+  end    
+end
+
+describe "Venue geocode addressing" do
+  before do
+    @venue = Venue.new(:title => "title")
+  end
+
+  it "should use the street address fields if they're present" do
+    @venue.attributes = {
+      :street_address => "street_address", 
+      :locality => "locality", 
+      :region => "region", 
+      :postal_code => "postal_code", 
+      :country => "country", 
+      :address => "address"
+    }
+    @venue.geocode_address.should == "street_address, locality region postal_code country"
+  end
+
+  it "should fall back to 'address' field if street address fields are blank" do
+    @venue.attributes = {:street_address => "", :address => "address"}
+    @venue.geocode_address.should == "address"
+  end  
 end
