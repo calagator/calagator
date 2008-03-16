@@ -37,7 +37,7 @@ class SourcesController < ApplicationController
         s = "<p>Imported #{@events.size} entries:</p><ul>"
         @events.each_with_index do |event, i|
           if i >= 5
-            s << "<li>And #{@events.size - i} more events.</li>"
+            s << "<li>And #{@events.size - i} other events.</li>"
             break 
           else
             s << "<li>#{help.link_to event.title, event_url(event)}</li>"
