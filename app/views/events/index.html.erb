@@ -3,15 +3,17 @@
   <h2>Viewing all <strong><%= @events.size %></strong> <%= 'future' unless params[:date] %> events.</h2>
 
   ( <%= link_to "Add new event", new_event_url %> )
-  ( iCal: <a href="<%= url_for :action => 'index' %>.ics">download</a> | 
-		<a href="<%= url_for(:action => 'index', :protocol => 'webcal', :only_path => false) %>.ics">subscribe</a> ) (<a href="http://www.google.com/calendar/render?cid=<%= url_for(:action => 'index', :only_path => false) %>.ics">Add to Google Calendar</a>) (<%= link_to 'Atom Feed', formatted_events_url('atom') %>)
+  ( iCal: <%= link_to 'download', formatted_events_url('ics') %> | 
+		<%= link_to "subscribe", url_for(:action => 'index', :protocol => 'webcal', :only_path => false)+".ics" %> ) 
+	( <%= link_to "Add to Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_events_url('ics') %> )
+	(<%= link_to 'Atom Feed', formatted_events_url('atom') %>)
 </div>
 <div id='list_filters'>
 	<h3>Order events by</h3>
 	<ul>
-		<li><%= link_to_unless_current "Date", events_url(:order => 'date') %></li>
-		<li><%= link_to_unless_current "Event Name", events_url(:order => 'name') %></li>
-		<li><%= link_to_unless_current "Location", events_url(:order => 'venue') %></li>
+		<li><%= link_to_unless_current "Date", events_url(params.merge(:order => 'date')) %></li>
+		<li><%= link_to_unless_current "Event Name", events_url(params.merge(:order => 'name')) %></li>
+		<li><%= link_to_unless_current "Location", events_url(params.merge(:order => 'venue')) %></li>
 	</ul>
 	
 	<h3>Filter by date</h3>
