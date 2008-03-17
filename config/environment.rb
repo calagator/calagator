@@ -58,37 +58,6 @@ Rails::Initializer.run do |config|
   # config.active_record.default_timezone = :utc
   
   config.load_paths += %W( #{RAILS_ROOT}/app/mixins )
-  
 end
 
-#===[ Local libraries ]=================================================
-
-require 'metaclass'
-
-#===[ Vendor gems ]=====================================================
-
-def add_gem_to_load_path(*names)
-  for name in names
-    $LOAD_PATH.unshift(File.expand_path(File.join(RAILS_ROOT, "vendor", "gems", name, "lib")))
-  end
-end
-
-add_gem_to_load_path 'htmlentities-4.0.0'
-add_gem_to_load_path 'vpim-0.360'
-
-#===[ Convenience paths ]===============================================
-
-def blog_path; "http://calagator.wordpress.com/"; end
-def community_path; "http://groups.google.com/group/pdx-tech-calendar/"; end
-def bug_path; "http://code.google.com/p/calagator/issues/list"; end
-
-#===[ Date formats ]===============================================
-
-
-my_formats = {
-  :yyyymmdd => '%Y-%m-%d',
-  :long_date => '%A, %B %d, %Y',
-}
-
-ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(my_formats)
-ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS.merge!(my_formats)
+# NOTE: See config/initializers/ directory for additional code loaded at start-up
