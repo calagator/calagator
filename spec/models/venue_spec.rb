@@ -48,9 +48,9 @@ describe Venue, "with duplicate finder (integration)" do
 
   def compare_duplicates(find_duplicates_arguments, create_venue_attributes)
     before_results = Venue.find(:duplicates, :by => find_duplicates_arguments)
-    same_title = Venue.new(create_venue_attributes)
-    same_title.stub!(:geocode)
-    same_title.save
+    venue = Venue.new(create_venue_attributes)
+    venue.stub!(:geocode)
+    venue.save!
     after_results = Venue.find(:duplicates, :by => find_duplicates_arguments)
     return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
   end
