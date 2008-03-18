@@ -70,7 +70,7 @@ class Venue < ActiveRecord::Base
   
   # Try to geocode (if we haven't already), but don't complain if we can't.
   def geocode
-    unless has_location? or geocode_address.blank?
+    unless geocode_address.blank? or duplicate_of
       geo = GeoKit::Geocoders::MultiGeocoder.geocode(geocode_address)
       self.latitude, self.longitude = geo.lat, geo.lng if geo.success
     end
