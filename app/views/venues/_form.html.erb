@@ -59,6 +59,19 @@
 			(comma separated keywords)
 		</div>
     <% end %>
+    <% unless @venue.new_record? %>
+		<div>
+		  <%= f.label :force_geocoding, @venue.location ? "Re-geocode?" : "Geocode?" %>
+      <%= f.check_box :force_geocoding %>
+		</div>
+		<div class='help'>
+		  <% if @venue.location %>
+			([<%= @venue.latitude %>, <%= @venue.longitude %>] currently; if checked, we'll try again.)
+		  <% else %>
+			(if checked, we'll try to determine a map position for this venue.)
+      <% end %>
+		</div>
+    <% end %>
 		<div class='no_label'>
 	    <%= f.submit(@venue.new_record? ? "Create" : "Update") %>
 		</div>

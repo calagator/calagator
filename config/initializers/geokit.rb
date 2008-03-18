@@ -29,13 +29,17 @@ GeoKit::Geocoders::yahoo = 'REPLACE_WITH_YOUR_YAHOO_KEY'
 # and http://www.google.com/apis/maps/documentation/#Geocoding_Examples
 #
 # CALAGATOR: was GeoKit::Geocoders::google = 'REPLACE_WITH_YOUR_GOOGLE_KEY',
-# but since each developer needs their own, get it from an (optional)
+# but since each developer needs their own, we get it from an (optional)
 # separate file.
+#
+# CALAGATOR: We also assign the key to GOOGLE_APPLICATION_ID to make
+# the gmaps_on_rails plugin happy.
 #
 keys_path = "#{RAILS_ROOT}/config/geocoder_api_keys.yml"
 if File.exist? keys_path
   geocoder_api_keys = YAML.load_file(keys_path)
-  GeoKit::Geocoders::google = geocoder_api_keys.fetch(RAILS_ENV,{})['google']
+  GeoKit::Geocoders::google = GOOGLE_APPLICATION_ID = \
+    geocoder_api_keys.fetch(RAILS_ENV,{})['google']
 end
 
 # This is your username and password for geocoder.us.

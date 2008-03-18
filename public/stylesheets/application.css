@@ -205,3 +205,11 @@ fieldset .help {
 #list_items .even {
   background: #F7F7F7;
 }
+
+#google_map {
+  padding: 8px;
+  margin-bottom: 20px;
+  float: right;
+  width: 400px;
+  height: 300px;
+}

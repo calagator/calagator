@@ -1,0 +1,47 @@
+GoogleMaps
+=========
+
+To Use:
+
+1 - Set your Google Maps API Key in environment.rb (or somewhere else if you'd prefer)
+
+  # This key is good for localhost:3000, signup for more at http://www.google.com/apis/maps/signup.html
+  GOOGLE_APPLICATION_ID = "ABQIAAAA3HdfrnxFAPWyY-aiJUxmqRTJQa0g3IQ9GZqIMmInSLzwtGDKaBQ0KYLwBEKSM7F9gCevcsIf6WPuIQ"
+
+
+2 - Do something like this in a view.
+
+  <%
+  map = GoogleMap.new
+  map.markers << GoogleMapMarker.new(:map => map, 
+                                     :lat => 47.6597, 
+                                     :lng => -122.318,
+                                     :html => 'My House')
+  %>
+  <%= map.to_html %>
+  <div style="width: 500px; height: 500px;">
+    <%= map.div %>
+  </div>
+
+
+Advanced Usage
+=========
+
+1 - Use included icon classes
+
+  # Available icon classes:
+  # GoogleMapLetterIcon.new('A')
+  # GoogleMapSmallIcon.new('yellow')
+  <%
+  map = GoogleMap.new
+  icon = GoogleMapSmallIcon.new('blue')
+  map.markers << GoogleMapMarker.new(:map => map, 
+                                     :icon => icon,
+                                     :lat => 47.6597, 
+                                     :lng => -122.318,
+                                     :html => 'My House')
+  %>
+  <%= map.to_html %>
+  <div style="width: 500px; height: 500px;">
+    <%= map.div %>
+  </div>

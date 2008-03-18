@@ -63,16 +63,36 @@ class Venue < ActiveRecord::Base
     full_address or address
   end
 
-  # Does this venue have a location already?
-  def has_location?
-    not (latitude.blank? or longitude.blank?)
+  # Return this venue's latitude/longitude location, 
+  # or nil if it doesn't have one.
+  def location
+    [latitude, longitude] unless latitude.blank? or longitude.blank?
+  end
+
+  # Should we default to forcing geocoding when the user edits this venue?
+  def force_geocoding
+    location.nil? # Yes, if it has no location.
   end
   
-  # Try to geocode (if we haven't already), but don't complain if we can't.
+  # Maybe trigger geocoding when we save
+  def force_geocoding=(force_it)
+    self.latitude = self.longitude = nil if force_it
+  end
+  
+  # Try to geocode, but don't complain if we can't.
   def geocode
-    unless geocode_address.blank? or duplicate_of
+    unless location or geocode_address.blank? or duplicate_of
       geo = GeoKit::Geocoders::MultiGeocoder.geocode(geocode_address)
-      self.latitude, self.longitude = geo.lat, geo.lng if geo.success
+      if geo.success
+        self.latitude = geo.lat
+        self.longitude = geo.lng
+        self.street_address = geo.street_address if self.street_address.blank?
+        self.locality = geo.city if self.locality.blank?
+        self.region = geo.state if self.region.blank?
+        self.postal_code = geo.zip if self.postal_code.blank?
+        self.country = geo.country_code if self.country.blank?
+      end
+      # puts "Geocoding #{geo.success ? "successful" : "failed" }: #{geo.inspect}"
     end
     true
   end

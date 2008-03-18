@@ -135,4 +135,8 @@ EOF
     # TODO Add calendar title support to vpim or find a prettier way to do this.
     return icalendar.encode.sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:Calagator")
   end
+  
+  def location
+    venue && venue.location
+  end
 end

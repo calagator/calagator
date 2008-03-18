@@ -5,6 +5,8 @@ cubespace:
   description: CubeSpace is an innovative workspace community in Portland, Oregon. We provide work stations, meeting rooms, and big office amenities to people who would otherwise be working from their homes, coffee shops, or wherever they can set up their laptops or use their cell phones. Our services are available on a monthly membership basis, or at hourly or daily rates. 
   address: 622 SE Grand Ave., in Portland, Oregon.
   url: http://www.cubespacepdx.com/
+  latitude: 45.518493
+  longitude: -122.660737
   
   # many venues
   <%
