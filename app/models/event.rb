@@ -140,3 +140,4 @@ EOF
     venue && venue.location
   end
 end
+
