@@ -102,7 +102,6 @@ class EventsController < ApplicationController
   
   # GET /venues/duplicates
   def duplicates
-    # TODO Make the duplicate squasher code mark duplicates as such so that they stay in the database and get redirected rather than actually deleting them
     type = params[:type] || 'any'
     type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
     

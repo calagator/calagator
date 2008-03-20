@@ -1,6 +1,7 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
 cubespace:
+  id: 1
   title: CubeSpace
   description: CubeSpace is an innovative workspace community in Portland, Oregon. We provide work stations, meeting rooms, and big office amenities to people who would otherwise be working from their homes, coffee shops, or wherever they can set up their laptops or use their cell phones. Our services are available on a monthly membership basis, or at hourly or daily rates. 
   address: 622 SE Grand Ave., in Portland, Oregon.
