@@ -105,8 +105,8 @@ describe Source, "with iCalendar events" do
     event.venue.locality.should =~ /Portland/
     event.venue.country.should =~ /United States/
     event.venue.postal_code.should =~ /97214/
-    event.venue.latitude.should == 45.5121
-    event.venue.longitude.should == -122.626
+    event.venue.latitude.should == BigDecimal.new("45.5121")
+    event.venue.longitude.should == BigDecimal.new("-122.626")
   end
 
   it "should parse Google iCalendar feed with multiple events" do

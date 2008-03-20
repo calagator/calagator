@@ -5,7 +5,7 @@ calagator_codesprint:
   title: Calagator CodeSprint
   description: Join us to work on Calagator, yay!
   start_time: 2008-01-19 12:16:10
-  venue: cubespace
+  venue_id: 1
   url: http://groups.google.com/group/pdx-tech-calendar
 
 tomorrow:
@@ -13,7 +13,7 @@ tomorrow:
   title: Calagator Ski Trip
   description: It's only a day away.
   start_time: <%= Date.today %> 10:00:00
-  venue: cubespace
+  venue_id: 1
   url: http://www.allmusicals.com/lyrics/annie/tomorrow.htm
   
 day_after_tomorrow:
@@ -21,7 +21,7 @@ day_after_tomorrow:
   title: Rain
   description: It's probably going to rain. Enjoy the weather while it's nice.
   start_time: <%= Date.today.tomorrow %> 10:00:00
-  venue: cubespace
+  venue_id: 1
   url: http://www.imdb.com/title/tt0319262/
 
   # many future events
