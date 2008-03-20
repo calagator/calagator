@@ -61,7 +61,7 @@
 
   <% unless event.description.blank? %>
 	<div class="description">
-    <%= event.description %>
+    <%= auto_link(event.description) %>
 	</div>
   <% end %>
 
