@@ -16,7 +16,8 @@
 		<abbr class="dtstart" title="<%=@event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
 			<span class='weekday'><%= @event.start_time.strftime('%A') %></span>,
 			<span class="month"><%= @event.start_time.strftime("%B") %></span>
-			<span class="day"><%= @event.start_time.day %></span>;
+			<span class="day"><%= @event.start_time.day %></span>, 
+        <span class="year"><%= @event.start_time.year %></span>;
 			<span class="time"><%= @event.start_time.strftime(start_format).downcase %></span>
 		</abbr>
 		<% unless @event.end_time.nil? %>
@@ -25,7 +26,8 @@
 			<% if span_days %>
 				<span class='weekday'><%= @event.end_time.strftime('%A') %></span>,
 				<span class="month"><%= @event.end_time.strftime("%B") %></span>
-				<span class="day"><%= @event.end_time.day %></span>;
+				<span class="day"><%= @event.end_time.day %></span>, 
+          <span class="year"><%= @event.end_time.year %></span>; 
 			<% end %>
 			<span class="time"><%= @event.end_time.strftime(end_format).downcase %></span>
 		</abbr>
@@ -87,9 +89,9 @@
 			<% else %>
 			imported from <%= link_to @event.source.name, source_url(@event.source.id) %>
 			<% end %>
-			on <strong><%= @event.created_at.strftime('%a. %d, %Y') %> at <%= normalize_time(@event.created_at) %></strong>
+			on <strong><%= @event.created_at.strftime('%a. %b. %d, %Y') %> at <%= normalize_time(@event.created_at) %></strong>
 			<% unless @event.created_at == @event.updated_at %>
-			and last updated on <strong><%= @event.updated_at.strftime('%a. %d, %Y') %> at <%= normalize_time(@event.updated_at) %></strong>
+			and last updated on <strong><%= @event.updated_at.strftime('%a. %b. %d, %Y') %> at <%= normalize_time(@event.updated_at) %></strong>
 			<% end %>.
 		</div>
 	</div>
