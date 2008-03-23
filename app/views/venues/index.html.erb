@@ -1,6 +1,6 @@
 <div id="venues_index">
 	<h1>Venues</h1>
-  <%= google_map @venues %>
+  <%= google_map @venues, :zoom => 12, :center => [45.518493, -122.660737] %>
   <%= link_to "Add new venue", new_venue_url %>
 
   <ul>

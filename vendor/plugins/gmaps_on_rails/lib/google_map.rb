@@ -5,6 +5,7 @@ class GoogleMap
   attr_accessor :dom_id,
                 :markers,
                 :controls,
+                :center, # CALAGATOR: added.
                 :inject_on_load,
                 :zoom
   
@@ -136,13 +137,16 @@ class GoogleMap
   
   # Creates a JS function that centers the map on its markers.
   def center_on_markers_function_js
-    return "#{dom_id}.setCenter(new GLatLng(0, 0), 0);" if markers.size == 0
-
-    for marker in markers
-      min_lat = marker.lat if !min_lat or marker.lat < min_lat
-      max_lat = marker.lat if !max_lat or marker.lat > max_lat
-      min_lng = marker.lng if !min_lng or marker.lng < min_lng
-      max_lng = marker.lng if !max_lng or marker.lng > max_lng
+    # CALAGATOR: Added support for external :center option
+    unless self.zoom and self.center
+      return "#{dom_id}.setCenter(new GLatLng(0, 0), 0);" if markers.size == 0
+      
+      for marker in markers
+        min_lat = marker.lat if !min_lat or marker.lat < min_lat
+        max_lat = marker.lat if !max_lat or marker.lat > max_lat
+        min_lng = marker.lng if !min_lng or marker.lng < min_lng
+        max_lng = marker.lng if !max_lng or marker.lng > max_lng
+      end
     end
 
     if self.zoom
@@ -152,7 +156,12 @@ class GoogleMap
       zoom_js = "#{dom_id}.getBoundsZoomLevel(#{bounds_js})"
     end
     
-    center_js = "new GLatLng(#{(min_lat + max_lat) / 2}, #{(min_lng + max_lng) / 2})"
+    # CALAGATOR: More :center support
+    if self.center
+      center_js = "new GLatLng(#{self.center[0]}, #{self.center[1]})"
+    else
+      center_js = "new GLatLng(#{(min_lat + max_lat) / 2}, #{(min_lng + max_lng) / 2})"
+    end
     set_center_js = "#{dom_id}.setCenter(#{center_js}, #{zoom_js});"
     
     return "function center_#{dom_id}() {\n  #{check_resize_js}\n  #{set_center_js}\n}"
