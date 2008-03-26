@@ -43,4 +43,19 @@ module ApplicationHelper
     end
     map.to_html + map.div(nil) unless map.markers.empty?
   end
+
+  # Retrun a string describing the source code version being used, or false/nil if it can't figure out how to find the version.
+  def source_code_version
+    if File.directory?(File.join(RAILS_ROOT, ".svn"))
+      $svn_revision ||= \
+        if m = `svn info`.match(/^Revision: (\d+)/s)
+          "SVN Version: #{m[1]}"
+        end
+    elsif File.directory?(File.join(RAILS_ROOT, ".git"))
+      $git_date ||= \
+        if m = `git log -1`.match(/^Date: (.+?)$/s)
+          "Git Timestamp: #{m[1]}"
+        end
+    end
+  end
 end
