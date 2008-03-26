@@ -1,23 +1,28 @@
 namespace :db do
   desc "Download a copy of the remote production database and replace the loca development database"
   task :fetch do
+    def bn(v); File.basename(v); end
+
     require 'lib/database_yml_reader'
     d = DatabaseYmlReader.read
+    source = "http://calagator.org/export.sqlite3"
+    current = d.database
+    backup = current + ".bak"
+    replacement = current + ".replacement"
 
-    puts "Backing up..."
-    cp d.database, d.database + ".bak"
+    puts "Backing up '#{bn current}' to '#{bn backup}'..."
+    cp current, backup
 
-    puts "Downloading..."
-    new = d.database + ".new"
-    open(new, "w+") do |writer|
+    puts "Downloading '#{source}' to '#{bn replacement}'..."
+    open(replacement, "w+") do |writer|
       require 'open-uri'
-      open("http://calagator.org/export.sqlite3") do |reader|
+      open(source) do |reader|
         writer.write(reader.read)
       end
     end
 
-    puts "Swapping..."
-    mv new, d.database
+    puts "Swapping '#{bn replacement}' to '#{bn current}'..."
+    mv replacement, current
 
     puts "Done"
   end
