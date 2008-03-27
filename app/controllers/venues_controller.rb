@@ -7,6 +7,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @venues }
+      format.json  { render :json => @venues }
       format.kml  # index.kml.erb
     end
   end
@@ -21,6 +22,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @venue }
+      format.json  { render :json => @venue }
     end
   end
 
