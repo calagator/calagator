@@ -87,7 +87,7 @@
 			<% if @event.source.nil? %>
 			added directly to Calagator
 			<% else %>
-			imported from <%= link_to @event.source.name, source_url(@event.source.id) %>
+			 imported from <%= link_to @event.source.name, @event.source.name %>
 			<% end %>
 			on <strong><%= @event.created_at.strftime('%a. %b. %d, %Y') %> at <%= normalize_time(@event.created_at) %></strong>
 			<% unless @event.created_at == @event.updated_at %>
