@@ -7,16 +7,14 @@ Calendar Aggregation With Teeth</p>
 
 <p>You can also read our project news <%= link_to 'blog', blog_path %>, participate in <%= link_to 'discussions', forum_path %>, and report <%= link_to 'issues', issues_path %>. This site's <%= link_to 'software', code_path %> is all open-source and we're always looking for new people to join us in making the best calendar aggregator possible.</p>
 
+<h2>What's happening?</h2>
 <div id='coming_events'>
-	<h2>What's happening?</h2>
 	<h3>Today</h3>
   <%= render :partial => 'events/list', :locals => {:leaf => @events[:today], :dates => false} %>
 	<h3>Tomorrow</h3>
 	<%= render :partial => 'events/list', :locals => {:leaf => @events[:tomorrow], :dates => false} %>
-	<h3>Later</h3>
-  <%= render :partial => 'events/list', :locals => {:leaf => @events[:later]} %>
 </div>
 <div id='recently_added_events'>
-	<h2>Other Recent Additions</h2>
-	<%= render :partial => 'events/list', :locals => {:leaf => @events[:recent]} %>
+	<h3>Next two weeks</h3>
+  <%= render :partial => 'events/list', :locals => {:leaf => @events[:later]} %>
 </div>
