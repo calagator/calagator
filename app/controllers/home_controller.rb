@@ -1,21 +1,29 @@
 class HomeController < ApplicationController
   def index
-    @events_today = Event.find(:all,
-      :conditions => { :start_time => Time.today..(Time.today + 1.days) },
-      :order => 'start_time ASC',
-      :limit => 6)
-    @events_tomorrow = Event.find(:all,
-      :conditions => { :start_time => (Time.today + 1.days)..(Time.today + 2.days) },
-      :order => 'start_time ASC',
-      :limit => 5)
-    @events_later = Event.find(:all,
-      :conditions => { :start_time => (Time.today + 2.days)..(Time.today + 7.days) },
-      :order => 'start_time ASC',
-      :limit => 5)
-    @recently_added_events = Event.find(:all,
-      :conditions => ['start_time >= ? AND id NOT IN (?)', Time.today, (@events_today+@events_tomorrow+@events_later).map(&:id)],
-      :order => 'start_time ASC',
-      :limit => 8)
+    # TODO Refactor this for clarity
+    @events = {}
+    @max_events_per_normal_section = 6
+    populate = lambda do |section, opts|
+      leaf = {
+        :count => Event.count(:conditions => opts[:conditions]),
+        :results => Event.find(:all,
+          :conditions => opts[:conditions],
+          :limit => (opts[:count] || @max_events_per_normal_section),
+          :order => (opts[:order] || 'start_time ASC')),
+      }
+      leaf[:skipped] = leaf[:count] - (leaf[:results].size || 0)
+      @events[section] = leaf
+    end
+    populate[:today, {
+      :conditions => {:start_time => Time.today..(Time.today + 1.days)}}]
+    populate[:tomorrow, {
+      :conditions => {:start_time => (Time.today + 1.days)..(Time.today + 2.days)}}]
+    populate[:later, {
+      :conditions => {:start_time => (Time.today + 2.days)..(Time.today + 7.days)}}]
+    populate[:recent, {
+      :conditions => ['start_time >= ? AND id NOT IN (?)',
+        Time.today, @events.values.map{|t| t[:results]}.map(&:id)],
+      :limit => 10}]
   end
 
   # Used by #export
