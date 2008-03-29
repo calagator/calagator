@@ -22,7 +22,7 @@ class HomeController < ApplicationController
       :conditions => {:start_time => (Time.today + 2.days)..(Time.today + 7.days)}}]
     populate[:recent, {
       :conditions => ['start_time >= ? AND id NOT IN (?)',
-        Time.today, @events.values.map{|t| t[:results]}.map(&:id)],
+        Time.today, @events.values.map{|t| t[:results]}.flatten.map(&:id)],
       :limit => 10}]
   end
 
