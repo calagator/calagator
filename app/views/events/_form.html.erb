@@ -1,51 +1,51 @@
 <% form_for(@event) do |f| %>
 <fieldset>
-	<legend><%= @event.new_record? ? "New event" : "Edit event" %></legend>
-	<p>You can <%= @event.new_record? ? "enter" : "edit" %> the details of your event below.  The more information we have about your event, the easier it will be for people to find it.</p>
+  <legend><%= @event.new_record? ? "New event" : "Edit event" %></legend>
+  <p>You can <%= @event.new_record? ? "enter" : "edit" %> the details of your event below.  The more information we have about your event, the easier it will be for people to find it.</p>
 
-	<%= error_messages_for :event %>
+  <%= error_messages_for :event %>
 
-	<div>
-		<%= f.label :title, "Event Name" %>
-		<%= f.text_field :title %>
-	</div>
-	<div>
-		<%= f.label :venue_id, "Venue" %>
+  <div>
+    <%= f.label :title, "Event Name" %>
+    <%= f.text_field :title %>
+  </div>
+  <div>
+    <%= f.label :venue_id, "Venue" %>
     <%= collection_select(:event, :venue_id, Venue.find(:non_duplicates, :order => :title), :id, :title, :include_blank => true) %>
-	</div>
-	<div>
-		<%= link_to 'Add a new venue', new_venue_url %>
-	</div>
+  </div>
+  <div>
+    <%= link_to 'Add a new venue', new_venue_url %>
+  </div>
 
-	<div id="event_times" class='no_label'>
-		<div id="start_time" class='date_picker'>
-			<%= f.label :start_time %>
-			<%= calendar_date_select :event, :start_time, :embedded => true, :popup => 'force', :minute_interval => 15, :year_range => [Time.now, 1.year.from_now] %>
-		</div>
-		<div id="end_time" class='date_picker'>
-			<%= f.label :end_time %>
-			<%= calendar_date_select :event, :end_time, :embedded => true, :popup => 'force', :minute_interval => 15, :year_range => [Time.now, 1.year.from_now] %>
-		</div>
-	</div>
-	<div>
-		<%= f.label :url, "Web Link" %>
-		<%= f.text_field :url %>
-	</div>
-	<div>
-		<%= f.label :description %>
-		<%= f.text_area :description %>
-	</div>
-	<div class='help'>
-		(HTML formatting allowed)
-	</div>
-	<% if false %>
-	<%# TODO implement tags %>
-	<div>
-		<%= f.label :tags %>
-		<span class="note">(comma separated keywords)</span><br />
-		<input type="text" name="event_tags" value="" id="event_tags">
-	</div>
-	<% end %>
-	<div class='no_label'><%= f.submit(@event.new_record? ? "Create" : "Update") %></div>
+  <div id="event_times" class='no_label'>
+    <div id="start_time" class='date_picker'>
+      <%= f.label :start_time %>
+      <%= calendar_date_select :event, :start_time, :embedded => true, :popup => 'force', :minute_interval => 15, :year_range => [Time.now, 1.year.from_now] %>
+    </div>
+    <div id="end_time" class='date_picker'>
+      <%= f.label :end_time %>
+      <%= calendar_date_select :event, :end_time, :embedded => true, :popup => 'force', :minute_interval => 15, :year_range => [Time.now, 1.year.from_now] %>
+    </div>
+  </div>
+  <div>
+    <%= f.label :url, "Web Link" %>
+    <%= f.text_field :url %>
+  </div>
+  <div>
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+  <div class='help'>
+    (HTML formatting allowed)
+  </div>
+  <% if false %>
+  <%# TODO implement tags %>
+  <div>
+    <%= f.label :tags %>
+    <span class="note">(comma separated keywords)</span><br />
+    <input type="text" name="event_tags" value="" id="event_tags">
+  </div>
+  <% end %>
+  <div class='no_label'><%= f.submit(@event.new_record? ? "Create" : "Update") %></div>
 </fieldset>
 <% end %>
