@@ -34,16 +34,16 @@
 	<% end %>
 
 	<% if !@venue.email.blank? %>
-	<div><a href='mailto:<%= @venue.email %>' class='email'><%= @venue.email %></a></div>
+	  <div><a href='mailto:<%= @venue.email %>' class='email'><%= @venue.email %></a></div>
 	<% end %>
 
 	<% if !@venue.telephone.blank? %>
-	<div class='tel'><%= @venue.telephone %></div>
+    <div class='tel'><%= @venue.telephone %></div>
 	<% end %>
 	
 	<h2>Events Happening Here</h2>
-	<%= render :partial => 'events/list', :locals => { :events => @venue.events } %>
-
+  
+	<%= render :partial => 'events/list', :locals => { :events => @venue.events.sort_by{|event| event.start_time } } %>
 
 	<div class='single_view_right'>
 		<div id='edit_link'>
