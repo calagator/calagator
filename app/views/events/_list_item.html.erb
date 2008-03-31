@@ -2,14 +2,18 @@
 new_day ||= nil
 opts ||= {}
 opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
+show_year ||= false
 %>
 <li class='vevent'>
 	<% if new_day && opts[:dates] %>
 	<div class='list_date'>
-			<div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
-			<abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-			<%= datetime_format(event.start_time,'%b %d')%>
-			</abbr>
+    <div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
+    <abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+      <%= datetime_format(event.start_time,'%b %d')%>
+      <% if show_year %>
+        <%= datetime_format(event.start_time,'%Y')%>
+      <% end %>
+    </abbr>
 	</div>
 	<% end %>
 	<div class='list_content'>
