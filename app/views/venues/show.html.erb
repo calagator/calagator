@@ -43,8 +43,7 @@
 	
 	<h2>Events Happening Here</h2>
   
-	<%= render :partial => 'events/list', :locals => { :events => @venue.events.sort_by{|event| event.start_time } } %>
-
+	<%= render :partial => 'events/list', :locals => { :events => Event.find_all_by_venue_id(@venue, :order => :start_time ) } %>
 	<div class='single_view_right'>
 		<div id='edit_link'>
 			<h4>Something not right?</h4>
