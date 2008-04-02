@@ -14,6 +14,10 @@
       <% is_first = false  %>
     <% end %>
 	</div>
+  <div>
+		<%= f.label :reimport, "Re-import?" %>
+	  <%= f.check_box :reimport %>
+	</div>
 	<div class='no_label'>
         <%= f.submit %>
 	</div>
@@ -27,7 +31,11 @@
 				<p>
 				<em>New!</em> Import pages faster with our bookmarklet:
 				<a href="javascript:d=document;q=(d.location.href);w=window;location.href='http://www.calagator.org/sources/new?url='+escape(q);">Add to Calagator</a>
-				<p>
+				</p>
+        <p>
+        Check the re-import box and we'll periodically visit this source
+        to get new events (coming soon).
+        </p>
 	</div>
 </fieldset>
 <% end %>
