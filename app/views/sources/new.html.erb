@@ -3,7 +3,7 @@
   <legend>Import a source</legend>
   <div>
 		<%= f.label :url, "URL" %>
-	  <%= f.text_field :url, :size => 60 %>
+	  <%= f.text_field :url, :size => 60, :value => params[:url] %>
 	</div>
   <div>
 	  <%= f.label :format_type, "Format type" %>
@@ -18,10 +18,16 @@
         <%= f.submit %>
 	</div>
 	<div class='help'>
+				<p>
         Example URLS:<br />
         hCalendar at http://upcoming.yahoo.com/event/349225/<br />
         iCalendar at webcal://upcoming.yahoo.com/calendar/v2/event/349225<br/>
 		For more information on import formats, see <%= link_to "this page", "http://code.google.com/p/calagator/wiki/IncomingEventDataFormats" %>
+				</p>
+				<p>
+				<em>New!</em> Import pages faster with our bookmarklet:
+				<a href='javascript:d=document;q=(d.location.href);w=window;location.href='http://www.calagator.org/sources/new?url='+escape(q);'>Add to Calagator</a>
+				<p>
 	</div>
 </fieldset>
 <% end %>
