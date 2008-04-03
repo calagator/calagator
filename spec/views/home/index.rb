@@ -16,10 +16,11 @@ describe "/home/index" do
     assigns[:recently_added_events] = @events
   end
   
-  it "should render valid XHTML (Pending until Reid finishes the front-page rewrite)" #do 
-#    render "/home/index"
-#    response.should be_valid_xhtml_fragment
-#  end
+  it "should render valid XHTML" do 
+    pending "Complex object structure used on this page is being revised."
+    render "/home/index"
+    response.should be_valid_xhtml_fragment
+  end
 
 end
 
