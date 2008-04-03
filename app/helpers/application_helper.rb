@@ -40,7 +40,7 @@ module ApplicationHelper
       if location
         map.markers << GoogleMapMarker.new(:map => map,
           :lat => location[0], :lng => location[1],
-          :html => h(locatable_item.title))
+          :html => link_to(locatable_item.title, locatable_item))
       end
     end
     map.to_html + map.div(nil) unless map.markers.empty?
