@@ -105,7 +105,7 @@ class MainController < Ramaze::Controller
   def index
     case request["action"]
     when "deploy"
-      @message = `(cd #{RAILS_ROOT} && svn cleanup && svn update -r #{request["revision"].match(/(\w+)/)[1]} && rake db:migrate restart) 2>&1`
+      @message = `(cd #{RAILS_ROOT} && svn cleanup && svn update -r #{request["revision"].match(/(\w+)/)[1]} && rake RAILS_ENV=production db:migrate restart) 2>&1`
     when "restart", "start", "stop", "status"
       @message = `(cd #{RAILS_ROOT} && rake #{request["action"]}) 2>&1`
     end
