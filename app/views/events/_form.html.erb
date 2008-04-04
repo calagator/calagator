@@ -26,10 +26,24 @@
       <%= f.label :end_time %>
       <%= calendar_date_select :event, :end_time, :embedded => true, :popup => 'force', :minute_interval => 15, :time => true, :year_range => [Time.now, 1.year.from_now] %>
     </div>
+    <% javascript_tag do %>
+    /* If we start with no end date, but have a start date, display (but don't select) the start's date & time */    
+    var end_element = $('event_end_time');
+    if (!end_element.value) {
+      var end_calendar = end_element.calendar_date_select;
+      var start_date = $('event_start_time').calendar_date_select.date;
+      end_calendar.navTo(start_date);
+      var h = start_date.getHours(), m = start_date.getMinutes();
+      end_calendar.selected_date.setHours(h);
+      end_calendar.selected_date.setMinutes(m);
+      end_calendar.hour_select.setValue(h); 
+      end_calendar.minute_select.setValue(m);
+    }
+    <% end %>
   </div>
   <div>
     <%= f.label :url, "Web Link" %>
-    <%= f.text_field :url %>
+    <%= f.text_field :url, :size => 80 %>
   </div>
   <div>
     <%= f.label :description %>

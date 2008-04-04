@@ -169,6 +169,7 @@ fieldset .date_picker {
 
 fieldset .calendar_date_select {
 	border: 0;
+	width: 25em;
 }
 
 fieldset .date_picker label {
