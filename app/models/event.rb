@@ -43,6 +43,7 @@ class Event < ActiveRecord::Base
   def end_time=(value)
     value = Time.parse(value) if value.is_a?(String)
     self.duration = (value - self.start_time) / 1.minute
+    value
   end 
 
   #---[ Queries ]---------------------------------------------------------
