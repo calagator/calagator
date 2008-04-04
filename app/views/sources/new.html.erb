@@ -6,15 +6,6 @@
 	  <%= f.text_field :url, :size => 60, :value => params[:url] %>
 	</div>
   <div>
-	  <%= f.label :format_type, "Format type" %>
-    <% is_first = true %>
-    <% for format_type, format_label in SourceParser.formats_to_labels %>
-      <%= f.radio_button "format_type", format_type, :checked => is_first %>
-      <%= f.label "format_type_#{format_type.to_s.downcase}", format_label, :class => 'checkbox' %>
-      <% is_first = false  %>
-    <% end %>
-	</div>
-  <div>
 		<%= f.label :reimport, "Re-import?" %>
 	  <%= f.check_box :reimport %>
 	</div>

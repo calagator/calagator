@@ -6,7 +6,6 @@
 #  id          :integer         not null, primary key
 #  title       :string(255)
 #  url         :string(255)
-#  format_type :string(255)
 #  imported_at :datetime
 #  created_at  :datetime
 #  updated_at  :datetime
@@ -21,12 +20,7 @@ class Source < ActiveRecord::Base
 
   has_many :events
 
-  # Ensure that #url and #format_type are valid.
   def validate
-    if SourceParser.known_format_types.grep(/#{format_type}/i).size != 1
-      errors.add("format_type", "has invalid format")
-    end
-
     begin
       URI.parse(url)
     rescue URI::InvalidURIError => e
@@ -50,7 +44,7 @@ class Source < ActiveRecord::Base
     if valid?
       opts[:url] ||= url
       returning([]) do |events|
-        SourceParser.to_abstract_events(format_type, opts).each do |abstract_event|
+        SourceParser.to_abstract_events(opts).each do |abstract_event|
           event = Event.from_abstract_event(abstract_event, self)
           events << event
         end

@@ -33,8 +33,8 @@ end
 describe Source, "with hCalendar events" do
   it "should parse hcal" do
     hcal_content = read_sample('hcal_single.xml')
-    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/", :format_type => "hcal")
-    SourceParser::Hcal.should_receive(:read_url).and_return(hcal_content)
+    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+    SourceParser::Base.should_receive(:read_url).and_return(hcal_content)
 
     events = hcal_source.to_events
     events.size.should == 1
@@ -52,8 +52,8 @@ describe Source, "with hCalendar events" do
   it "should parse a page with more than one hcal item in it" do
     hcal_content = read_sample('hcal_multiple.xml')
 
-    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/", :format_type => "hcal")
-    SourceParser::Hcal.should_receive(:read_url).and_return(hcal_content)
+    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+    SourceParser::Base.should_receive(:read_url).and_return(hcal_content)
 
     events = hcal_source.to_events
     events.size.should == 2
@@ -66,9 +66,8 @@ end
 describe Source, "with iCalendar events" do
   def events_from_ical_at(filename)
     url = "http://foo.bar/"
-    content = read_sample(filename)
-    source = Source.new(:title => "Calendar event feed", :url => url, :format_type => "ical")
-    SourceParser::Ical.should_receive(:read_url).and_return(content)
+    source = Source.new(:title => "Calendar event feed", :url => url)
+    SourceParser::Base.should_receive(:read_url).and_return(read_sample(filename))
     return source.to_events
   end
 
@@ -94,7 +93,6 @@ describe Source, "with iCalendar events" do
 
   it "should parse Upcoming iCalendar format and associate the event with a venue" do
     events = events_from_ical_at('ical_upcoming.ics')
-
     events.size.should == 1
     event = events.first
     event.title.should =~ /Ignite Portland/

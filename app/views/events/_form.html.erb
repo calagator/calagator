@@ -20,11 +20,11 @@
   <div id="event_times" class='no_label'>
     <div id="start_time" class='date_picker'>
       <%= f.label :start_time %>
-      <%= calendar_date_select :event, :start_time, :embedded => true, :popup => 'force', :minute_interval => 15, :year_range => [Time.now, 1.year.from_now] %>
+      <%= calendar_date_select :event, :start_time, :embedded => true, :popup => 'force', :minute_interval => 15, :time => true, :year_range => [Time.now, 1.year.from_now] %>
     </div>
     <div id="end_time" class='date_picker'>
       <%= f.label :end_time %>
-      <%= calendar_date_select :event, :end_time, :embedded => true, :popup => 'force', :minute_interval => 15, :year_range => [Time.now, 1.year.from_now] %>
+      <%= calendar_date_select :event, :end_time, :embedded => true, :popup => 'force', :minute_interval => 15, :time => true, :year_range => [Time.now, 1.year.from_now] %>
     </div>
   </div>
   <div>

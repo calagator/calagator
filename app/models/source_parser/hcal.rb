@@ -16,8 +16,7 @@ class SourceParser
     # * :url => URL String to read events from.
     # * :content => String of data to read events from 
     def self.to_hcals(opts={})
-      content = opts[:content] || read_url(opts[:url])
-      something = hCalendar.find(:text => content)
+      something = hCalendar.find(:text => content_for(opts))
       return(something.is_a?(hCalendar) ? [something] : something)
     end
 
@@ -41,6 +40,7 @@ class SourceParser
             mofo_field = abstract_field if mofo_field == true
             next unless hcal.respond_to?(mofo_field)
             raw_field = hcal.send(mofo_field)
+            next unless raw_field
 
             decoded_field = \
               case mofo_field

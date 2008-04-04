@@ -1,35 +1,31 @@
 require 'open-uri'
+require 'uri'
 require 'set'
 
 # == SourceParser
 #
 # A hierarchy of classes that provide a way to parse different source formats and return hCalendar events.
 class SourceParser
-  # Return Array of hCalendar objects by reading them from the +format_type+ parser and passing it a set of +opts+.
-  # Please see the parsers that subclass Base for arguments.
-  #
-  # Example:
-  #
-  #   hcal_entries = SourceParser.to_hcals(:hcal, :url => "http://my.hcal/feed/")
-  def self.to_hcals(format_type, opts)
-    parser_for(format_type).to_hcals(opts)
-  end
-
   # Return an Array of AbstractEvent instances.
-  #
-  # Arguments:
-  # * :format_type - String name of format that corresponds to a specific parser, e.g., "Hcal"
   #
   # Options: (these vary between specific parsers)
   # * :url - URL string to read as parser input.
   # * :content - String to read as parser input.
-  def self.to_abstract_events(format_type, opts)
-    parser_for(format_type).to_abstract_events(opts)
-  end
+  def self.to_abstract_events(opts)
+    events = []
 
-  # Return a format-specific parser for +format_type+
-  def self.parser_for(format_type)
-    const_get(format_type.to_s.humanize)
+    # TODO where does content_for belong?
+    content = Base.content_for(opts)
+         
+    for parser in parsers
+      begin
+        events += parser.to_abstract_events(opts.merge(:content => content))
+      rescue Exception => e
+        # Ignore
+      end
+    end
+
+    return events
   end
 
   # Returns a Hash of format types to human-readable labels
@@ -41,9 +37,9 @@ class SourceParser
     return result
   end
 
-  # Returns an Array of strings for all the known format types
-  def self.known_format_types
-    $SourceParserImplementations.map{|parser| parser.to_s.demodulize}.uniq.sort
+  # Returns an Array of parser classes for the various formats
+  def self.parsers
+    $SourceParserImplementations.map{|parser| parser}.uniq
   end
 
   # == SourceParser::Base
@@ -66,9 +62,14 @@ class SourceParser
       return _label
     end
 
+    # Returns content from either the :content option or by reading a :url.
+    def self.content_for(opts)
+      opts[:content] || read_url(opts[:url])
+    end
+
     # Returns content read from a URL. Easier to stub.
     def self.read_url(url)
-      open(url){|h| h.read}
+      URI.parse(url).read
     end
 
     # Stub which makes sure that subclasses of Base implement the #parse method.

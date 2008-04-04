@@ -29,7 +29,7 @@ describe Event do
   it "should parse an Event into an iCalendar" do
     actual_ical = @basic_event.to_ical
 
-    abstract_events = SourceParser.to_abstract_events("Ical", :content => actual_ical)
+    abstract_events = SourceParser.to_abstract_events(:content => actual_ical)
 
     abstract_events.size.should == 1
     abstract_event = abstract_events.first
@@ -46,7 +46,7 @@ describe Event do
     @basic_event.url = nil
     actual_ical = @basic_event.to_ical(:url_helper => lambda{|event| generated_url})
 
-    abstract_events = SourceParser.to_abstract_events("Ical", :content => actual_ical)
+    abstract_events = SourceParser.to_abstract_events(:content => actual_ical)
 
     abstract_events.size.should == 1
     abstract_event = abstract_events.first
