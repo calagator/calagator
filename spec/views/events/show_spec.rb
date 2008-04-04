@@ -19,11 +19,13 @@ describe "/events/show" do
   end
 
   it "should display a map if the event's venue has a location" do
+    pending "no Geocoder API key found" if defined?(GoogleMap::GOOGLE_APPLICATION_ID).nil?
     render "/events/show"
     response.should have_tag('div#google_map')
   end
   
   it "should not display a map if the event's venue has no location" do
+    pending "no Geocoder API key found" if defined?(GoogleMap::GOOGLE_APPLICATION_ID).nil?
     @event.venue.latitude = nil
     render "/events/show"
     response.should_not have_tag('div#google_map')
