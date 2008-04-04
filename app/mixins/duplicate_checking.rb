@@ -18,30 +18,24 @@ module DuplicateChecking
   #
   # Note that this method requires that all associations are set before this method is called.
   def find_exact_duplicates
-    find_duplicates(:include_association_ids => true)
+    matchable_attributes = self.attributes.reject{|key, value| %w(created_at updated_at id).include?(key)}
+    duplicates = self.class.find(:all, :conditions => matchable_attributes).reject{|t| t.id == self.id}
+    duplicates.blank? ? nil : duplicates
   end
 
   # Return either an Array of likely duplicates for this record, or nil if no likely duplicates were found.
   #
   # Note that this method ignores all the associations attributes, so it's not necessarily an exact match.
   def find_likely_duplicates
-    find_duplicates
-  end
-  
-  def find_duplicates(options = {})
-    attrs = matchable_attributes(options)
-    duplicates = self.class.find(:all, :conditions => attrs).reject{|t| t.id == self.id}
+    matchable_attributes = self.attributes.reject do |key, value| 
+        (self.class.reflect_on_all_associations(:belongs_to).map(&:primary_key_name) \
+          + %w(created_at updated_at id)) \
+        .include?(key)
+    end
+    duplicates = self.class.find(:all, :conditions => matchable_attributes) \
+      .reject{|t| t.id == self.id}
     duplicates.blank? ? nil : duplicates
   end
-  
-  def matchable_attributes(options = {})
-    skip_attrs = %w(created_at updated_at id)
-    unless options[:include_association_ids]
-      skip_attrs += self.class.reflect_on_all_associations(:belongs_to).map(&:primary_key_name)
-    end
-    skip_attrs
-  end
-  protected :matchable_attributes
 
   module ClassMethods
 
