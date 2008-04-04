@@ -6,6 +6,7 @@ tags
 *.swp
 *.tmp
 .dtach
+coverage/*
 db/schema.rb
 db/*.sqlite3
 db/*.sqlite3.*
