@@ -46,48 +46,49 @@ describe Venue, "with duplicate finder (integration)" do
     @venue = venues(:cubespace)
   end
 
-  def compare_duplicates(find_duplicates_arguments, create_venue_attributes)
-    before_results = Venue.find(:duplicates, :by => find_duplicates_arguments)
-    venue = Venue.new(create_venue_attributes)
-    venue.stub!(:geocode)
-    venue.save!
+  # Find duplicates, create another venue with the given attributes, and find duplicates again
+  def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes, create_class = Venue)
+    before_results = create_class.find(:duplicates, :by => find_duplicates_arguments)
+    clone = create_class.new(clone_attributes)
+    clone.stub!(:geocode)
+    clone.save!
     after_results = Venue.find(:duplicates, :by => find_duplicates_arguments)
     return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
   end
 
   it "should find duplicate title by title" do
-    pre, post = compare_duplicates(:title, :title => @venue.title)
+    pre, post = find_duplicates_create_a_clone_and_find_again(:title, :title => @venue.title)
     post.size.should == pre.size + 2
   end
 
   it "should find duplicate title by any" do
-    pre, post = compare_duplicates(:any, :title => @venue.title)
+    pre, post = find_duplicates_create_a_clone_and_find_again(:any, :title => @venue.title)
     post.size.should == pre.size + 2
   end
 
   it "should not find duplicate title by address" do
-    pre, post = compare_duplicates(:address, :title => @venue.title)
+    pre, post = find_duplicates_create_a_clone_and_find_again(:address, :title => @venue.title)
     post.size.should == pre.size
   end
 
   it "should find complete duplicates by all" do
-    pre, post = compare_duplicates(:all, @venue.attributes)
+    pre, post = find_duplicates_create_a_clone_and_find_again(:all, @venue.attributes)
     pending "find_duplicates_by(:all) seems to be failing because of null handling"
     post.size.should == pre.size + 2
   end
 
   it "should not find incomplete duplicates by all" do
-    pre, post = compare_duplicates(:all, @venue.attributes.merge(:title => "SpaceCube"))
+    pre, post = find_duplicates_create_a_clone_and_find_again(:all, @venue.attributes.merge(:title => "SpaceCube"))
     post.size.should == pre.size
   end
 
   it "should find duplicate for matching multiple fields" do
-    pre, post = compare_duplicates([:title, :address], {:title => @venue.title, :address => @venue.address})
+    pre, post = find_duplicates_create_a_clone_and_find_again([:title, :address], {:title => @venue.title, :address => @venue.address})
     post.size.should == pre.size + 2
   end
 
   it "should not find duplicates for mismatching multiple fields" do
-    pre, post = compare_duplicates([:title, :address], {:title => "SpaceCube", :address => @venue.address})
+    pre, post = find_duplicates_create_a_clone_and_find_again([:title, :address], {:title => "SpaceCube", :address => @venue.address})
     post.size.should == pre.size
   end
 end
