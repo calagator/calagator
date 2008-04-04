@@ -34,6 +34,16 @@ class Event < ActiveRecord::Base
     s = read_attribute(:title)
     s.blank? ? nil : s.strip
   end
+  
+  def end_time
+    return nil if self.start_time.nil? || self.duration.nil?
+    self.start_time + self.duration.minutes
+  end
+  
+  def end_time=(value)
+    value = Time.parse(value) if value.is_a?(String)
+    self.duration = (value - self.start_time) / 1.minute
+  end 
 
   #---[ Queries ]---------------------------------------------------------
 

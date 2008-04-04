@@ -74,4 +74,16 @@ describe Event do
     Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url ) ORDER BY a.title,a.url")
     Event.find_duplicates_by([:title,:url])
   end
+  it "should return an end time, based on duration" do
+    @event.start_time = DateTime.now
+    @event.duration = 60
+    @event.end_time.should == @event.start_time + 1.hour
+  end
+  
+  it "should set a duration when given an end time" do
+    now  = Time.now
+    @event.start_time = now
+    @event.end_time = (now + 1.hour)
+    @event.duration.should == 60
+  end
 end
