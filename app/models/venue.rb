@@ -28,6 +28,11 @@ class Venue < ActiveRecord::Base
   belongs_to :source
 
   validates_presence_of :title
+  
+  validates_inclusion_of :latitude, :longitude, 
+    :allow_nil => true,
+    :in => -180..180,
+    :message => "must be between -180 and 180"
 
   # Returns a new Venue created from an AbstractLocation.
   def self.from_abstract_location(abstract_location, source=nil)

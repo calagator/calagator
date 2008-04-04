@@ -10,9 +10,9 @@
 		<div>
       <%= f.label :address %>
 			<%= f.text_field :address %>
-		</div>
-		<div class='help'>
-			(one-line version of full address)
+		  <div class='help'>
+			&nbsp; (one-line version of full address)
+		  </div>
 		</div>
 		<div> 
       <%= f.label :street_address %>
@@ -25,10 +25,18 @@
 		<div>
       <%= f.label :region, "State" %>
       <%= f.text_field :region %>
-			</div>
-			<div>
+    </div>
+		<div>
       <%= f.label :postal_code, "ZIP Code" %>
       <%= f.text_field :postal_code %>
+		</div>
+		<div>
+      <%= f.label :latitude, "Latitude" %>
+      <%= f.text_field :latitude %>
+		</div>
+		<div>
+      <%= f.label :longitude, "Longitude" %>
+      <%= f.text_field :longitude %>
 		</div>
 		<div>
       <%= f.label :url, "Web Link" %>
@@ -66,9 +74,9 @@
 		</div>
 		<div class='help'>
 		  <% if @venue.location %>
-			([<%= @venue.latitude %>, <%= @venue.longitude %>] currently; if checked, we'll try again.)
+			  ([<%= @venue.latitude %>, <%= @venue.longitude %>] currently; if checked, we'll try again.)
 		  <% else %>
-			(if checked, we'll try to determine a map position for this venue.)
+			  (if checked, we'll try to determine a map position for this venue.)
       <% end %>
 		</div>
     <% end %>
