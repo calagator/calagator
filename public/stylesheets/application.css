@@ -18,6 +18,10 @@ a:visited {
 	color: #009100;
 }
 
+.hidden {
+  visibility: hidden;
+}
+
 #project-title {
 	font-weight: bold;
 	margin-right: 1em;
@@ -127,6 +131,11 @@ ul.event_list li {
 ul.event_list .list_date {
 	position: absolute;
 	left: 0;
+}
+
+
+ul.event_list .description, ul.event_list .url {
+	display: none;
 }
 
 #coming_events {

@@ -5,26 +5,39 @@ opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
 show_year ||= false
 %>
 <li class='vevent'>
-	<% if new_day && opts[:dates] %>
-	<div class='list_date'>
+  <% date_class = (opts[:dates]==false || !new_day) ? ' hidden' : '' %>
+  <div class='list_date<%=date_class%>'>
     <div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
-    <abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
       <%= datetime_format(event.start_time,'%b %d')%>
       <% if show_year %>
         <%= datetime_format(event.start_time,'%Y')%>
       <% end %>
-    </abbr>
 	</div>
-	<% end %>
 	<div class='list_content'>
 		<a href='<%= url_for event_url(event) %>' class='summary'>
 			<%= event.title %>
 		</a>
 		<div>
-      <%= normalize_time(event.start_time) -%>
+			<abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+	      <%= normalize_time(event.start_time) -%>
+			</abbr>
+      <%- if !event.end_time.nil? %>
+      &ndash;
+      <abbr class="dtend" title="<%=event.end_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
+        <%= normalize_time(event.end_time) %>
+      </abbr>
+      <% end -%>
       <%- if event.venue && !event.venue.title.blank? -%>
 , <%= link_to event.venue.title, event.venue, :class => "location" %>
 			<% end %>
 		</div>
+    <% if !event.description.blank? %>
+	  <div class="description">
+      <%= auto_link(event.description) %>
+	  </div>
+    <% end %>
+    <% if !event.url.blank? %>
+    <%= link_to "Website", event.url, :class => "url" %>
+    <% end %>
 	</div>
 </li>
