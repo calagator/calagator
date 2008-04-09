@@ -37,7 +37,7 @@ class Event < ActiveRecord::Base
   end
   
   def end_time
-    return nil if self.start_time.nil? || self.duration.nil?
+    return nil if self.duration.nil? || self.start_time.nil?
     self.start_time + self.duration.minutes
   end
   

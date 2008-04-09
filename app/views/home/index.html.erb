@@ -10,7 +10,7 @@ Calendar Aggregation With Teeth</p>
 <h2>What's happening?</h2>
 <div id='coming_events'>
 	<h3>Today</h3>
-  <%= render :partial => 'events/list', :locals => {:leaf => @events[:today], :dates => false} %>
+  	<%= render :partial => 'events/list', :locals => {:leaf => @events[:today], :dates => false} %>
 	<h3>Tomorrow</h3>
 	<%= render :partial => 'events/list', :locals => {:leaf => @events[:tomorrow], :dates => false} %>
 </div>
