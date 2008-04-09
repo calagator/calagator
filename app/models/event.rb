@@ -25,6 +25,7 @@ class Event < ActiveRecord::Base
   belongs_to :venue
   belongs_to :source
   validates_presence_of :title, :start_time
+  validate :end_time_later_than_start_time
 
   #---[ Overrides ]-------------------------------------------------------
 
@@ -149,9 +150,15 @@ EOF
     # TODO Add calendar title support to vpim or find a prettier way to do this.
     return icalendar.encode.sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:Calagator")
   end
-  
+
   def location
     venue && venue.location
+  end
+  
+protected
+  def end_time_later_than_start_time
+    errors.add(:end_time, "End must be after start") \
+      unless end_time.nil? or end_time >= start_time
   end
 end
 
