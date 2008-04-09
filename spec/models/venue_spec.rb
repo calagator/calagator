@@ -214,6 +214,12 @@ describe "Venue geocoding" do
     @venue.save
     @venue.locality.should == "Cleveland"
   end
+  
+  it "should strip location when geocoding is forced" do
+    @venue.force_geocoding=true
+    @venue.latitude.should==nil
+    @venue.longitude.should==nil
+  end
 end
 
 describe "Venue geocode addressing" do
