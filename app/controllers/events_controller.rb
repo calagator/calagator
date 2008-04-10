@@ -17,6 +17,8 @@ class EventsController < ApplicationController
     @events = params[:date] ? 
         Event.find_by_dates(@start_date, @end_date, order) : 
         Event.find_all_future_events(order)
+        
+    @page_title = "Events"
 
     respond_to do |format|
       format.html # index.html.erb
@@ -31,6 +33,7 @@ class EventsController < ApplicationController
   # GET /events/1.xml
   def show
     @event = Event.find(params[:id])
+    @page_title = @event.title
 
     respond_to do |format|
       format.html # show.html.erb
@@ -44,6 +47,7 @@ class EventsController < ApplicationController
   # GET /events/new.xml
   def new
     @event = Event.new
+    @page_title = "Add an Event"
 
     respond_to do |format|
       format.html # new.html.erb
@@ -54,6 +58,7 @@ class EventsController < ApplicationController
   # GET /events/1/edit
   def edit
     @event = Event.find(params[:id])
+    @page_title = "Editing '#{@event.title}'"
   end
 
   # POST /events
@@ -108,6 +113,7 @@ class EventsController < ApplicationController
     type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
     
     @events = Event.find_duplicates_by(type)
+    @page_title = "Duplicate Event Squasher"
     
     respond_to do |format|
       format.html # index.html.erb

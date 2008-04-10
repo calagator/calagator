@@ -7,6 +7,7 @@ class SourcesController < ApplicationController
 
   def new
     @source = Source.new
+    @page_title = "Import Events"
   end
 
   def create

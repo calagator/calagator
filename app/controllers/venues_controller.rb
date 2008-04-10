@@ -3,6 +3,7 @@ class VenuesController < ApplicationController
   # GET /venues.xml
   def index
     @venues = Venue.find(:non_duplicates, :order => :title)
+    @page_title = "Venues"
 
     respond_to do |format|
       format.html # index.html.erb
@@ -16,6 +17,7 @@ class VenuesController < ApplicationController
   # GET /venues/1.xml
   def show
     @venue = Venue.find(params[:id])
+    @page_title = @venue.title
 
     return redirect_to(venue_url(@venue.duplicate_of)) if @venue.duplicate_of
 
@@ -30,6 +32,7 @@ class VenuesController < ApplicationController
   # GET /venues/new.xml
   def new
     @venue = Venue.new
+    @page_title = "Add a Venue"
 
     respond_to do |format|
       format.html # new.html.erb
@@ -40,6 +43,7 @@ class VenuesController < ApplicationController
   # GET /venues/1/edit
   def edit
     @venue = Venue.find(params[:id])
+    @page_title = "Editing '#{@venue.title}'"
   end
 
   # POST /venues
@@ -96,6 +100,7 @@ class VenuesController < ApplicationController
 
     @venues = Venue.find_duplicates_by(type)
     @type = type
+    @page_title = "Duplicate Venue Squasher"
 
     respond_to do |format|
       format.html # index.html.erb
