@@ -3,6 +3,7 @@ class SourceParser
     :title,
     :description,
     :start_time,
+    :end_time,
     :url,
     :location)
 end

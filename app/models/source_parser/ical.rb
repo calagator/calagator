@@ -38,6 +38,7 @@ class SourceParser # :nodoc:
           event.title = component.summary
           event.description = component.description
           event.start_time = component.dtstart
+          event.end_time = component.dtend
           event.url = component.url
           event.location = to_abstract_location(content_calendar, :fallback => component.location)
           event

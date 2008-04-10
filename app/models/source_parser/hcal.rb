@@ -24,6 +24,7 @@ class SourceParser
       :title => :summary,
       :description => true,
       :start_time => :dtstart,
+      :end_time => :dtend,
       :url => true,
       :location => true
     }
@@ -41,17 +42,17 @@ class SourceParser
             next unless hcal.respond_to?(mofo_field)
             raw_field = hcal.send(mofo_field)
             next unless raw_field
-
             decoded_field = \
               case mofo_field
               when :dtstart
                 HTMLEntitiesCoder.decode(raw_field)
+              #when :dtend
+              #  HTMLEntitiesCoder.decode(raw_field)
               when :location
                 to_abstract_location(:value => raw_field)
               else
                 raw_field
               end
-
             event.send("#{abstract_field}=", decoded_field)
           end
         end

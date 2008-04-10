@@ -37,15 +37,17 @@ describe Source, "with hCalendar events" do
     SourceParser::Base.should_receive(:read_url).and_return(hcal_content)
 
     events = hcal_source.to_events
+
     events.size.should == 1
     for key, value in {
       :title => "Calendar event",
       :description => "Check it out!",
       :start_time => Time.parse("2008-1-19"),
+      :end_time => Time.parse("2008-1-20"),
       :url => "http://www.cubespacepdx.com",
-      :venue => nil, # TODO what should venue instance be?
+      :venue_id => nil, # TODO what should venue instance be?
     }
-      events.first[key].should == value
+      events.first.send(key).should == value
     end
   end
 
@@ -58,8 +60,10 @@ describe Source, "with hCalendar events" do
     events = hcal_source.to_events
     events.size.should == 2
     first, second = *events
-    first[:start_time ].should == Time.parse('2008-1-19')
-    second[:start_time].should == Time.parse('2008-2-2')
+    first.start_time.should == Time.parse('2008-1-19')
+    first.end_time.should == Time.parse('2008-01-20')
+    second.start_time.should == Time.parse('2008-2-2')
+    second.end_time.should == Time.parse('2008-02-03')
   end
 end
 
@@ -78,6 +82,7 @@ describe Source, "with iCalendar events" do
     event = events.first
     event.title.should =~ /Coffee with Jason/
     event.start_time.should == Time.parse('Mon Oct 28 14:00:00 -0800 2002')
+    event.end_time.should == Time.parse('Mon Oct 28 15:00:00 -0800 2002')
     event.venue.should be_nil
   end
 
@@ -97,6 +102,7 @@ describe Source, "with iCalendar events" do
     event = events.first
     event.title.should =~ /Ignite Portland/
     event.start_time.should == Time.parse('Tue Feb 05 18:00:00 -0800 2008')
+    event.end_time.should == Time.parse('Tue Feb 05 21:00:00 -0800 2008')
     event.description.should =~ /What if you only got 20 slides/
     event.venue.should_not be_blank
     event.venue.title.should =~ /Bagdad Theater/
@@ -116,16 +122,19 @@ describe Source, "with iCalendar events" do
     event.title.should == "XPDX (eXtreme Programming) at CubeSpace"
     event.description.should be_blank
     event.start_time.should == Time.parse("2007-10-24 18:30:00")
+    event.end_time.should == Time.parse('Wed Oct 24 19:30:00 -0700 2007')
 
     event = events[17]
     event.title.should == "Code Sprint/Coding Dojo at CubeSpace"
     event.description.should be_blank
     event.start_time.should == Time.parse("2007-10-17 19:00:00")
+    event.end_time.should == Time.parse('Wed Oct 17 21:00:00 -0700 2007')
 
     event = events.last
     event.title.should == "Adobe Developer User Group"
     event.description.should == "http://pdxria.com/"
     event.start_time.should == Time.parse("2007-01-16 17:30:00")
+    event.end_time.should == Time.parse("Tue Jan 16 18:30:00 -0800 2007")
   end
 
   it "should parse non-Vcard locations" do

@@ -43,6 +43,7 @@ class Event < ActiveRecord::Base
   
   def end_time=(value)
     value = Time.parse(value) if value.is_a?(String)
+    return nil if value.nil?
     self.duration = (value - self.start_time) / 1.minute
     value
   end 
@@ -70,12 +71,14 @@ class Event < ActiveRecord::Base
 
   # Returns a new Event created from an AbstractEvent.
   def self.from_abstract_event(abstract_event, source=nil)
+    
     event = Event.new
 
     event.source       = source
     event.title        = abstract_event.title
     event.description  = abstract_event.description
     event.start_time   = abstract_event.start_time
+    event.end_time     = abstract_event.end_time
     event.url          = abstract_event.url
     event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
 

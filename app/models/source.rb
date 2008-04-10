@@ -46,6 +46,7 @@ class Source < ActiveRecord::Base
       returning([]) do |events|
         SourceParser.to_abstract_events(opts).each do |abstract_event|
           event = Event.from_abstract_event(abstract_event, self)
+          
           events << event
         end
       end

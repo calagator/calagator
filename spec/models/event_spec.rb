@@ -14,9 +14,13 @@ describe Event do
   end
 
   it "should parse an AbstractEvent into an Event" do
-    event = Event.new(:title => true, :description => true, :start_time => true, :url => true)
+    event = Event.new(:title => "EventTitle", 
+                      :description => "EventDescription", 
+                      :start_time => Date.parse("2008-05-20"), 
+                      :end_time => Date.parse("2008-05-22"))
     Event.should_receive(:new).and_return(event)
-    abstract_event = SourceParser::AbstractEvent.new('title', 'description', 'start_time', 'url')
+    
+    abstract_event = SourceParser::AbstractEvent.new("EventTitle", "EventDescription", Date.parse("2008-05-20"), Date.parse("2008-05-22"))
 
     Event.from_abstract_event(abstract_event).should == event
   end
