@@ -285,7 +285,7 @@ class Microformat
         when 'img'  then element['alt']
         end || ''
 
-        (value.empty? ? element.innerHTML : value).strip.strip_html.coerce
+        (value.empty? ? element.innerHTML : value).strip.coerce
       end
     end
 
