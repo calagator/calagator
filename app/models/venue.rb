@@ -1,24 +1,26 @@
 # == Schema Information
-# Schema version: 7
+# Schema version: 14
 #
 # Table name: venues
 #
-#  id             :integer         not null, primary key
-#  title          :string(255)
-#  description    :text
-#  address        :string(255)
-#  url            :string(255)
-#  created_at     :datetime
-#  updated_at     :datetime
-#  street_address :string(255)
-#  locality       :string(255)
-#  region         :string(255)
-#  postal_code    :string(255)
-#  country        :string(255)
-#  latitude       :float
-#  longitude      :float
-#  email          :string(255)
-#  telephone      :string(255)
+#  id              :integer         not null, primary key
+#  title           :string(255)     
+#  description     :text            
+#  address         :string(255)     
+#  url             :string(255)     
+#  created_at      :datetime        
+#  updated_at      :datetime        
+#  street_address  :string(255)     
+#  locality        :string(255)     
+#  region          :string(255)     
+#  postal_code     :string(255)     
+#  country         :string(255)     
+#  latitude        :decimal(, )     
+#  longitude       :decimal(, )     
+#  email           :string(255)     
+#  telephone       :string(255)     
+#  source_id       :integer         
+#  duplicate_of_id :integer         
 #
 
 class Venue < ActiveRecord::Base

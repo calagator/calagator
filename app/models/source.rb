@@ -1,14 +1,15 @@
 # == Schema Information
-# Schema version: 7
+# Schema version: 14
 #
 # Table name: sources
 #
 #  id          :integer         not null, primary key
-#  title       :string(255)
-#  url         :string(255)
-#  imported_at :datetime
-#  created_at  :datetime
-#  updated_at  :datetime
+#  title       :string(255)     
+#  url         :string(255)     
+#  imported_at :datetime        
+#  created_at  :datetime        
+#  updated_at  :datetime        
+#  reimport    :boolean         
 #
 
 require 'uri'
