@@ -1,5 +1,14 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+describe Venue do
+  
+  it "should be valid" do
+    venue = Venue.new(:title => 'My Event')
+    venue.should be_valid
+  end
+
+end
+
 describe Venue, "with hCalendar to AbstractEvent parsing" do
   it "should extract an AbstractEvent from an hCalendar text" do
     hcal_upcoming = read_sample('hcal_upcoming.xml')

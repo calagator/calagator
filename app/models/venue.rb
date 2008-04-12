@@ -28,6 +28,8 @@ class Venue < ActiveRecord::Base
   belongs_to :source
 
   validates_presence_of :title
+  validates_format_of :url, :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/, 
+      :allow_blank => true, :allow_nil => true
   
   validates_inclusion_of :latitude, :longitude, 
     :allow_nil => true,
