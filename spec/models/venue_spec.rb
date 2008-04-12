@@ -6,6 +6,11 @@ describe Venue do
     venue = Venue.new(:title => 'My Event')
     venue.should be_valid
   end
+  
+  it "should add an http prefix to urls missing this before save" do
+    venue = Venue.new(:title => 'My Event', :url => 'google.com')
+    venue.should be_valid
+  end
 
 end
 

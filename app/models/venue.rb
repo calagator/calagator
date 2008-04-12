@@ -24,6 +24,7 @@
 class Venue < ActiveRecord::Base
   include DuplicateChecking
   before_save :geocode
+  before_validation :normalize_url
   has_many :events, :dependent => :nullify
   belongs_to :source
 
@@ -102,5 +103,11 @@ class Venue < ActiveRecord::Base
       # puts "Geocoding #{geo.success ? "successful" : "failed" }: #{geo.inspect}"
     end
     true
+  end
+  
+  def normalize_url
+    unless self.url.nil? || self.url.match(/^[\d\D]+:\/\//)
+      self.url = 'http://' + self.url
+    end
   end
 end
