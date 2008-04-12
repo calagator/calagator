@@ -41,6 +41,12 @@
     <div class='tel'><%= @venue.telephone %></div>
 	<% end %>
 	
+	<% unless @venue.description.blank? %>
+	<div class="description">
+    <%= auto_link(white_list(@venue.description)) %>
+	</div>
+  <% end %>
+	
 	<h2>Events Happening Here</h2>
   
 	<%= render :partial => 'events/list', :locals => { :events => Event.find_all_by_venue_id(@venue, :order => :start_time ) } %>

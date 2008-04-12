@@ -64,7 +64,7 @@
 
   <% unless @event.description.blank? %>
 	<div class="description">
-    <%= auto_link(@event.description) %>
+    <%= auto_link(white_list(@event.description)) %>
 	</div>
   <% end %>
 
