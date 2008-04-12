@@ -112,4 +112,21 @@ describe Event do
     @event.end_time = (now + 1.hour)
     @event.duration.should == 60
   end
+  
+  it "should handle setting end before start" do
+    @event = Event.new
+    now = Time.now
+    @event.end_time = now + 2.hours
+    @event.start_time = now
+    @event.duration.should == 120
+  end
+  
+  it "should handle setting duration before start" do
+    @event = Event.new
+    now = Time.now
+    @event.duration = 120
+    @event.start_time = now
+    @event.end_time.should == now + 2.hours
+  end
+  
 end
