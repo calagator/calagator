@@ -76,7 +76,11 @@
   <% end %>
 
 	<div class='single_view_right'>
-		<a href='<%= event_url(@event) %>.ics'>Download to iCal</a>
+		<%= link_to 'Download to iCal', "#{event_url(@event)}.ics" %><br/>
+		<%= link_to_function 'Get hCalendar markup', '$("hcal_field").toggle()' %>
+		<div id="hcal_field" style="display: none;">
+			<%= text_area_tag 'hCalendar', @hcal %>
+		</div>
 		<div id='edit_link'>
 			<h4>Something not right?</h4>
       <p>You can <%= link_to "edit this event", edit_event_url(@event) %>

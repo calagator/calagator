@@ -34,6 +34,8 @@ class EventsController < ApplicationController
   def show
     @event = Event.find(params[:id])
     @page_title = @event.title
+    @hcal = render_to_string :partial => 'list_item', 
+        :locals => { :event => @event, :show_year => true }
 
     respond_to do |format|
       format.html # show.html.erb

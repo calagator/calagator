@@ -4,7 +4,7 @@ opts ||= {}
 opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
 show_year ||= false
 %>
-<li class='vevent'>
+<div class='vevent'>
   <% date_class = (opts[:dates]==false || !new_day) ? ' hidden' : '' %>
   <div class='list_date<%=date_class%>'>
     <div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
@@ -45,4 +45,4 @@ show_year ||= false
       <%= link_to "Website", event.url, :class => "url" %>
     <% end %>
   </div>
-</li>
+</div>
