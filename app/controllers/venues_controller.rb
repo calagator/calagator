@@ -95,6 +95,7 @@ class VenuesController < ApplicationController
 
   # GET /venues/duplicates
   def duplicates
+    params[:type] ||= 'title'
     type = params[:type] || 'any'
     type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
 
