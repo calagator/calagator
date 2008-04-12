@@ -26,6 +26,10 @@ class Event < ActiveRecord::Base
   belongs_to :source
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time
+  validates_format_of :url, :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/, 
+      :allow_blank => true, :allow_nil => true
+      
+  before_validation :normalize_url
 
   #---[ Overrides ]-------------------------------------------------------
 
@@ -156,6 +160,12 @@ EOF
 
   def location
     venue && venue.location
+  end
+  
+  def normalize_url
+    unless self.url.nil? || self.url.match(/^[\d\D]+:\/\//)
+      self.url = 'http://' + self.url
+    end
   end
   
 protected

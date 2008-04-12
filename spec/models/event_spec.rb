@@ -1,6 +1,20 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Event do
+  
+  it "should be valid" do
+    event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'))
+    event.should be_valid
+  end
+  
+  it "should add a http:// prefix to urls without one" do
+    event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'), :url => 'google.com')
+    event.should be_valid
+  end
+  
+end
+
+describe Event do
   before(:each) do
     @event = Event.new
 
