@@ -109,6 +109,7 @@ class EventsController < ApplicationController
   
   # GET /venues/duplicates
   def duplicates
+    params[:type] ||= 'title'
     type = params[:type] || 'any'
     type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
     
@@ -119,6 +120,17 @@ class EventsController < ApplicationController
       format.html # index.html.erb
       format.xml  { render :xml => @venues }
     end
+  end
+  
+  # POST /events/squash_multiple_duplicates
+  def squash_many_duplicates
+    master_event_id = params[:master_event_id].to_i
+    duplicate_event_ids = params.keys.grep(/^duplicate_event_id_\d+$/){|t| params[t].to_i}
+
+    Event.squash(:master => master_event_id, :duplicates => duplicate_event_ids)
+
+    flash[:success] = "Squashed duplicates #{duplicate_event_ids.inspect} into master #{master_event_id}"
+    redirect_to :action => "duplicates"
   end
 
 protected

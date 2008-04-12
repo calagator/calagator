@@ -118,7 +118,7 @@ module DuplicateChecking
     def _record_for(value)
       case value
       when self then value # Expected class already, do nothing
-      when String, Fixnum then self.find(value.to_i)
+      when String, Fixnum, Bignum then self.find(value.to_i)
       else raise TypeError, "Unknown type: #{value.class}"
       end
     end
