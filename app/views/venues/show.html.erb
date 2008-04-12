@@ -43,7 +43,7 @@
 	
 	<% unless @venue.description.blank? %>
 	<div class="description">
-    <%= auto_link(white_list(@venue.description)) %>
+    <%= simple_format(auto_link(white_list(@venue.description))) %>
 	</div>
   <% end %>
 	

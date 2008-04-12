@@ -15,7 +15,7 @@ show_year ||= false
   </div>
   <div class='list_content'>
     <a href='<%= url_for event_url(event) %>' class='summary'>
-      <%= event.title %>
+      <%= h event.title %>
     </a>
     <div>
       <abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
