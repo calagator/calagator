@@ -54,7 +54,7 @@ class Event < ActiveRecord::Base
   def end_time=(value)
     # We might stash end_time in a non-AR attribute if we don't have start (and
     # thus can't calculate duration now).
-    value = Time.parse(value) if value.is_a?(String) and !value.empty?
+    value = (value.empty? ? nil : Time.parse(value)) if value.is_a?(String)
     @end_time = value if @stashed_end
     return write_attribute(:duration, nil) if value.nil?
     if self.start_time.nil?
