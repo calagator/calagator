@@ -35,6 +35,7 @@ class SourceParser
     # * :url => URL String to read events from.
     def self.to_abstract_events(opts = {})
       hcals = to_hcals(opts)
+      
       hcals.map do |hcal|
         returning(AbstractEvent.new) do |event|
           ABSTRACT_EVENT_TO_HCALENDAR_FIELD_MAP.each do |abstract_field, mofo_field|
@@ -91,7 +92,11 @@ class SourceParser
 
           if raw.respond_to?(:adr)
             for field in %w(street_address locality region country_name postal_code)
-              a[field] = raw.adr.send(field) if raw.adr.respond_to?(field)
+              if field =='country_name'
+                a[:country] = raw.adr.send(field) if raw.adr.respond_to?(field)
+              else
+                a[field] = raw.adr.send(field) if raw.adr.respond_to?(field)
+              end
             end
           end
 

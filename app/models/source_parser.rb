@@ -16,11 +16,13 @@ class SourceParser
 
     # TODO where does content_for belong?
     content = Base.content_for(opts)
-         
+    content = CGI::unescapeHTML(content) if content.respond_to?(:content_type) and content.content_type == "application/atom+xml"
+    
     for parser in parsers
       begin
         events += parser.to_abstract_events(opts.merge(:content => content))
       rescue Exception => e
+        puts e.inspect # FIXME
         # Ignore
       end
     end

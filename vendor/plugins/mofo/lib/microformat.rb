@@ -21,6 +21,7 @@ class Microformat
       @doc = build_doc(@options[:text] ? @options : target)
 
       microformats = find_occurences(@doc)
+
       raise MicroformatNotFound if @options[:strict] && microformats.empty?
       return @options[:first] ? nil : [] if microformats.empty?
 
