@@ -22,7 +22,7 @@ class SourceParser
       begin
         events += parser.to_abstract_events(opts.merge(:content => content))
       rescue Exception => e
-        puts e.inspect # FIXME
+        # FIXME We really shouldn't be just throwing out all of these exceptions.
         # Ignore
       end
     end
