@@ -32,7 +32,13 @@ class EventsController < ApplicationController
   # GET /events/1
   # GET /events/1.xml
   def show
-    @event = Event.find(params[:id])
+    begin
+      @event = Event.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:failure] = e.to_s
+      return redirect_to(:action => :index)
+    end
+
     @page_title = @event.title
     @hcal = render_to_string :partial => 'list_item', 
         :locals => { :event => @event, :show_year => true }

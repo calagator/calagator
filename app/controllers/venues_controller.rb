@@ -16,7 +16,13 @@ class VenuesController < ApplicationController
   # GET /venues/1
   # GET /venues/1.xml
   def show
-    @venue = Venue.find(params[:id])
+    begin
+      @venue = Venue.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:failure] = e.to_s
+      return redirect_to(:action => :index)
+    end
+
     @page_title = @venue.title
 
     return redirect_to(venue_url(@venue.duplicate_of)) if @venue.duplicate_of
