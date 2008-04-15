@@ -108,7 +108,7 @@ class Venue < ActiveRecord::Base
   end
   
   def normalize_url
-    unless self.url.nil? || self.url.match(/^[\d\D]+:\/\//)
+    unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + self.url
     end
   end
