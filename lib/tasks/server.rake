@@ -11,6 +11,11 @@ namespace :server do
 
   desc "Config"
   task :config => ["tmp:create"] do
+    if RAILS_ENV != "production"
+      puts "WARNING: CREATING CONFIGURATION FILE WHERE 'RAILS_ENV' IS NOT PRODUCTION!"
+      puts "         If this is undesirable, rerun task with 'RAILS_ENV=production' option"
+    end
+
     target = "config/mongrel_cluster.yml"
     source = "#{target}.erb"
     require "erb"

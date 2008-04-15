@@ -7,15 +7,17 @@ require 'ramaze'
 require 'optparse'
 
 # {{{
+# Are we running in production mode?
+def production?; RAILS_ENV == "production"; end
+
 PROG = File.basename(__FILE__)
 OWN_FILE = File.expand_path(__FILE__)
 PID_FILE = OWN_FILE+".pid"
 SOCK_FILE = OWN_FILE+".sock"
 RAILS_ENV = ENV['CALAGATOR_DEVELOPMENT'] ? "development" : "production"
 RAILS_ROOT = File.expand_path(File.dirname(File.dirname(__FILE__)))
-
-# Are we running in production mode?
-def production?; RAILS_ENV == "production"; end
+HOST = '*'
+PORT = 20019
 
 # Is process running? Returns PID if true, false otherwise.
 def running?
@@ -59,10 +61,10 @@ Options, meant for internal use:
   args = opts.parse!(ARGV)
 
   if args.include? "start"
-    puts "Starting"
+    puts "Starting on port #{PORT}"
     exec "dtach -n #{SOCK_FILE} #{OWN_FILE} --daemonize"
   elsif args.include? "restart"
-    puts "Restarting"
+    puts "Restarting on port #{PORT}"
     system "#{__FILE__} stop; sleep 3; #{__FILE__} start"
     exit 0
   elsif args.include? "stop"
@@ -103,11 +105,20 @@ class MainController < Ramaze::Controller
 # }}}
 
   def index
-    case request["action"]
+    action = request["action"] ? request["action"].match(/(\w+)/)[1] : nil
+    revision = request["revision"] ? request["revision"].match(/(\w+)/)[1] : nil
+
+    @command = nil
+    case action
     when "deploy"
-      @message = `(cd #{RAILS_ROOT} && svn cleanup && svn update -r #{request["revision"].match(/(\w+)/)[1]} && rake RAILS_ENV=production db:migrate restart) 2>&1`
+      @command = %{svn cleanup && svn update -r #{revision} && rake RAILS_ENV=production db:migrate restart}
     when "restart", "start", "stop", "status"
-      @message = `(cd #{RAILS_ROOT} && rake #{request["action"]}) 2>&1`
+      @command = %{rake #{action}}
+    end
+
+    if @command
+      @message = "Executing: #{@command}\n\n"
+      @message << `(cd #{RAILS_ROOT} && #{@command}) 2>&1`
     end
 
     %(
@@ -117,7 +128,7 @@ class MainController < Ramaze::Controller
     %title calagator admin console
   %body
     %h1 calagator admin console
-    %p 
+    %p
       %form{:method=>"post"}
         %label
           %input{:type=>"radio", :name=>"action", :value=>"status", :checked=>"checked"}
@@ -153,9 +164,9 @@ end
 puts "Starting#{production? ? " production" : ""} server at PID: #{Process.pid}"
 File.open(PID_FILE, "w+"){|h| h.write(Process.pid)}
 
-Ramaze.start({ 
-  :adapter => :mongrel, 
-  :host => production? ? 'localhost' : '*', 
-  :port => 20019,
+Ramaze.start({
+  :adapter => :mongrel,
+  :host => HOST,
+  :port => PORT,
   :sourcereload => production? ? false : true,
 })
