@@ -5,12 +5,12 @@ opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
 show_year ||= false
 %>
 <div class='vevent'>
-  <% date_class = (opts[:dates]==false || !new_day) ? ' hidden' : '' %>
+  <% date_class = (opts[:dates]==false || !new_day) ? ' hidden' : '' -%>
   <div class='list_date<%=date_class%>'>
     <div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
-      <%= datetime_format(event.start_time,'%b %d')%>
-      <% if show_year %>
-        <%= datetime_format(event.start_time,'%Y')%>
+      <%= datetime_format(event.start_time,'%b %d') -%>
+      <% if show_year -%>
+        <%= datetime_format(event.start_time,'%Y') -%>
       <% end %>
   </div>
   <div class='list_content'>
@@ -19,11 +19,11 @@ show_year ||= false
     </a>
     <div>
       <abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-      <%- if event.end_time.nil? %>
+      <%- if event.end_time.nil? -%>
         <% # need to do this to avoid space between time and comma %>
-        <%= normalize_time(event.start_time) %>,
-      <% else %>
-        <%= normalize_time(event.start_time) %>
+        <%= normalize_time(event.start_time) -%>,
+      <% else -%>
+        <%= normalize_time(event.start_time) -%>
         &ndash;
       <% end %>
       </abbr>
