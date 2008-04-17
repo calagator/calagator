@@ -1,38 +1,7 @@
 <%= google_map @event %>
 <div class="vevent">
 	<h1 class="summary"><%= h @event.title %></h1>
-
-	<%
-	unless @event.end_time.nil?
-		if @event.start_time.strftime('%Y:%j') != @event.end_time.strftime('%Y:%j')
-			span_days = true
-		end
-		end_format = @event.end_time.min ? '%I:%M%p' : '%I%p'
-	end
-	start_format = @event.start_time.min ? '%I:%M%p' : '%I%p'
-	%>
-
-	<div class='date'>
-		<abbr class="dtstart" title="<%=@event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-			<span class='weekday'><%= @event.start_time.strftime('%A') %></span>,
-			<span class="month"><%= @event.start_time.strftime("%B") %></span>
-			<span class="day"><%= @event.start_time.day %></span>, 
-        <span class="year"><%= @event.start_time.year %></span>;
-			<span class="time"><%= @event.start_time.strftime(start_format).downcase %></span>
-		</abbr>
-		<% unless @event.end_time.nil? %>
-		&ndash;
-		<abbr class="dtend" title="<%=@event.end_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-			<% if span_days %>
-				<span class='weekday'><%= @event.end_time.strftime('%A') %></span>,
-				<span class="month"><%= @event.end_time.strftime("%B") %></span>
-				<span class="day"><%= @event.end_time.day %></span>, 
-          <span class="year"><%= @event.end_time.year %></span>; 
-			<% end %>
-			<span class="time"><%= @event.end_time.strftime(end_format).downcase %></span>
-		</abbr>
-		<% end %>
-	</div>
+	<div class='date'><%= normalize_time(@event) %></div>
 
   <% unless @event.venue.blank? %>
     <div class="location vcard">
@@ -91,9 +60,9 @@
 			<% else %>
 			 imported from <%= link_to @event.source.name, @event.source.name %>
 			<% end %>
-			on <strong><%= @event.created_at.strftime('%a. %b. %d, %Y') %> at <%= normalize_time(@event.created_at) %></strong>
+			on <strong><%= normalize_time(@event.created_at, :format => :html) %></strong>
 			<% unless @event.created_at == @event.updated_at %>
-			and last updated on <strong><%= @event.updated_at.strftime('%a. %b. %d, %Y') %> at <%= normalize_time(@event.updated_at) %></strong>
+			and last updated on <strong><%= normalize_time(@event.updated_at, :format => :html) %></strong>
 			<% end %>.
 		</div>
 	</div>

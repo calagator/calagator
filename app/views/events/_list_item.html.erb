@@ -18,22 +18,9 @@ show_year ||= false
       <%= h event.title %>
     </a>
     <div>
-      <abbr class="dtstart" title="<%=event.start_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-      <%- if event.end_time.nil? -%>
-        <% # need to do this to avoid space between time and comma %>
-        <%= normalize_time(event.start_time) -%>,
-      <% else -%>
-        <%= normalize_time(event.start_time) -%>
-        &ndash;
-      <% end %>
-      </abbr>
-      <% if !event.end_time.nil? %>
-        <abbr class="dtend" title="<%=event.end_time.strftime('%Y-%m-%dT%H:%M:%S')%>">
-          <%= normalize_time(event.end_time) %>,
-        </abbr>
-      <% end %>
+      <%= normalize_time(event, :context => event.start_time.to_date) %>
       <% if event.venue && !event.venue.title.blank? %>
-        <%= link_to event.venue.title, event.venue, :class => "location" %>
+        <br/><%= link_to event.venue.title, event.venue, :class => "location" %>
       <% end %>
     </div>
     <% if !event.description.blank? %>
