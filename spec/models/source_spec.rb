@@ -1,5 +1,16 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+describe Source, "in general" do
+  it "should update the imported_at date when it retrieves events" do
+    @source = Source.new(:url => 'http://upcoming.yahoo.com/event/390164/')
+    @source.should_receive(:imported_at=).and_return(true)
+    @source.should_receive(:save).and_return(true)
+    SourceParser::Base.should_receive(:read_url).and_return(true)
+
+    @source.to_events
+  end
+end
+
 describe Source, "when parsing URLs" do
   before(:all) do
     @http_url = 'http://upcoming.yahoo.com/event/390164/'
@@ -25,7 +36,7 @@ describe Source, "when parsing URLs" do
 
   it "should add the http prefix to urls without one" do
     @source.url = @base_url
-
+    
     @source.url.should == @http_url
   end
 end

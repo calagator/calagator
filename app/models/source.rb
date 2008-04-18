@@ -42,6 +42,8 @@ class Source < ActiveRecord::Base
 
   # Returns an Array of Event objects that were read from this source.
   def to_events(opts={})
+    self.imported_at = DateTime.now()
+    self.save
     if valid?
       opts[:url] ||= url
       returning([]) do |events|
