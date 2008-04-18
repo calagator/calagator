@@ -1,6 +1,10 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  def upgrade_br(content)
+    content.gsub('<br>','<br />')
+  end
+
   FLASH_TYPES = [:success, :failure]
 
   def render_flash

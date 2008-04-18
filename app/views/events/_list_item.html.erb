@@ -20,12 +20,12 @@ show_year ||= false
     <div>
       <%= normalize_time(event, :context => event.start_time.to_date) %>
       <% if event.venue && !event.venue.title.blank? %>
-        <br/><%= link_to event.venue.title, event.venue, :class => "location" %>
+        <br/><%= link_to h(event.venue.title), event.venue, :class => "location" %>
       <% end %>
     </div>
     <% if !event.description.blank? %>
       <div class="description">
-        <%= auto_link(white_list(event.description)) %>
+        <%= upgrade_br(auto_link(white_list(event.description))) %>
       </div>
     <% end %>
     <% if !event.url.blank? %>
