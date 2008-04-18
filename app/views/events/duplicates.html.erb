@@ -25,7 +25,7 @@
 				<tr>
 					<th>Master?</th><th>Duplicate?</th><th>Event title</th><th>Start Time</th><th>Venue</th>
 				</tr>
-				<tr>
+				
 					<% last = {}; first_cycle = true; dupe_set = 1
 					for event in @events
 						if @type != :any && @type != :all
@@ -70,4 +70,3 @@
 		</div>
 	</form>
 	</div>
-</div>
