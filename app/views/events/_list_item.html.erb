@@ -8,17 +8,19 @@ show_year ||= false
   <% date_class = (opts[:dates]==false || !new_day) ? ' hidden' : '' -%>
   <div class='list_date<%=date_class%>'>
     <div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
-      <%= datetime_format(event.start_time,'%b %d') -%>
-      <% if show_year -%>
-        <%= datetime_format(event.start_time,'%Y') -%>
-      <% end %>
+    <%= datetime_format(event.start_time,'%b %d') -%>
+    <% if show_year -%>
+      <%= datetime_format(event.start_time,'%Y') -%>
+    <% end %>
   </div>
   <div class='list_content'>
     <a class='summary' href='<%= url_for event_url(event) %>'><%= h event.title %></a>
+    <div>
     <%= normalize_time(event, :context => event.start_time.to_date) -%>
     <% if event.venue && !event.venue.title.blank? %>
-    <a class='location' href='<%= url_for venue_url(event.venue) %>'><%= h event.venue.title -%></a>
+      <br/><a class='location' href='<%= url_for venue_url(event.venue) %>'><%= h event.venue.title -%></a>
     <% end -%>
+    </div>
     <% if !event.description.blank? %>
       <div class='description'>
         <%= upgrade_br(auto_link(white_list(event.description))) -%>
@@ -29,3 +31,4 @@ show_year ||= false
     <% end %>
   </div>
 </div>
+
