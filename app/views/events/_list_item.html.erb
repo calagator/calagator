@@ -14,22 +14,18 @@ show_year ||= false
       <% end %>
   </div>
   <div class='list_content'>
-    <a href='<%= url_for event_url(event) %>' class='summary'>
-      <%= h event.title %>
-    </a>
-    <div>
-      <%= normalize_time(event, :context => event.start_time.to_date) %>
-      <% if event.venue && !event.venue.title.blank? %>
-        <br/><%= link_to h(event.venue.title), event.venue, :class => "location" %>
-      <% end %>
-    </div>
+    <a class='summary' href='<%= url_for event_url(event) %>'><%= h event.title %></a>
+    <%= normalize_time(event, :context => event.start_time.to_date) -%>
+    <% if event.venue && !event.venue.title.blank? %>
+    <a class='location' href='<%= url_for venue_url(event.venue) %>'><%= h event.venue.title -%></a>
+    <% end -%>
     <% if !event.description.blank? %>
-      <div class="description">
-        <%= upgrade_br(auto_link(white_list(event.description))) %>
+      <div class='description'>
+        <%= upgrade_br(auto_link(white_list(event.description))) -%>
       </div>
-    <% end %>
-    <% if !event.url.blank? %>
-      <%= link_to "Website", event.url, :class => "url" %>
+    <% end -%>
+    <% if !event.url.blank? -%>
+      <%= link_to "Website", event.url, :class => "url" -%>
     <% end %>
   </div>
 </div>
