@@ -42,6 +42,10 @@ class EventsController < ApplicationController
     @page_title = @event.title
     @hcal = render_to_string :partial => 'list_item.html.erb', 
         :locals => { :event => @event, :show_year => true }
+    
+    # following used by Show so that weekday is rendered
+    @show_hcal = render_to_string :partial => 'hcal.html.erb', 
+        :locals => { :event => @event, :show_year => true }
 
     respond_to do |format|
       format.html # show.html.erb
