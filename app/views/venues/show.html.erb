@@ -1,64 +1,63 @@
 <%= google_map @venue %>
 <div class="vcard">
-	<h1 class="fn org"><%=h @venue.title %></h1>
+  <h1 class="fn org"><%=h @venue.title %></h1>
 
-	<% if !@venue.address.blank? %>
-		<div class='address'><%=h @venue.address %></div>
-	<% end %>
+  <% if !@venue.address.blank? %>
+    <div class='address'><%=h @venue.address %></div>
+  <% end %>
 
-	<% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
-		<div class="adr">
-			<% if !@venue.street_address.blank? %>
-				<div class="street-address"><%=h @venue.street_address %></div>
-			<% end %>
-			<% if !@venue.locality.blank? %>
-				<span class="locality"><%=h @venue.locality %></span>
-			<% end %>
-			<% if !@venue.region.blank? %>
-				, <span class="region"><%=h @venue.region %></span>
-			<% end %>
-			<% if !@venue.postal_code.blank? %>
-				<span class="postal-code"><%=h @venue.postal_code %></span>
-			<% end %>
-			<% if !@venue.country.blank? %>
-				<div class='country-name'><%=h @venue.country %><div>
-			<% end %>
+  <% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
+    <div class="adr">
+      <% if !@venue.street_address.blank? %>
+        <div class="street-address"><%=h @venue.street_address %></div>
+      <% end %>
+      <% if !@venue.locality.blank? %>
+        <span class="locality"><%=h @venue.locality %></span>
+      <% end %>
+      <% if !@venue.region.blank? %>
+        , <span class="region"><%=h @venue.region %></span>
+      <% end %>
+      <% if !@venue.postal_code.blank? %>
+        <span class="postal-code"><%=h @venue.postal_code %></span>
+      <% end %>
+      <% if !@venue.country.blank? %>
+        <div class='country-name'><%=h @venue.country %><div>
+      <% end %>
       <% if @venue && @venue.has_full_address? %>
         (<a href='<%=google_maps_url(@venue.full_address)%>'>map</a>)
       <% end %>
-		</div>
-	<% end %>
-
-	<% if !@venue.url.blank? %>
-		<div><a href='<%= @venue.url %>' class='url'><%= @venue.url %></a></div>
-	<% end %>
-
-	<% if !@venue.email.blank? %>
-	  <div><a href='mailto:<%= @venue.email %>' class='email'><%= @venue.email %></a></div>
-	<% end %>
-
-	<% if !@venue.telephone.blank? %>
-    <div class='tel'><%=h @venue.telephone %></div>
-	<% end %>
-	
-	<% unless @venue.description.blank? %>
-	<div class="description">
-    <%= upgrade_br(simple_format(auto_link(white_list(@venue.description)))) %>
-	</div>
+    </div>
   <% end %>
-	
-	<h2>Events Happening Here</h2>
+
+  <% if !@venue.url.blank? %>
+    <div><a href='<%= @venue.url %>' class='url'><%= @venue.url %></a></div>
+  <% end %>
+
+  <% if !@venue.email.blank? %>
+    <div><a href='mailto:<%= @venue.email %>' class='email'><%= @venue.email %></a></div>
+  <% end %>
+
+  <% if !@venue.telephone.blank? %>
+    <div class='tel'><%=h @venue.telephone %></div>
+  <% end %>
   
-	<%= render :partial => 'events/list', :locals => { :events => Event.find_all_by_venue_id(@venue, :order => :start_time ) } %>
-	<div class='single_view_right'>
-		<div id='edit_link'>
-			<h4>Something not right?</h4>
+  <% unless @venue.description.blank? %>
+  <div class="description">
+    <%= upgrade_br(simple_format(auto_link(white_list(@venue.description)))) %>
+  </div>
+  <% end %>
+  
+  <h2>Events Happening Here</h2>
+  
+  <%= render :partial => 'events/list', :locals => { :events => Event.find_all_by_venue_id(@venue, :order => :start_time ) } %>
+  <div class='single_view_right'>
+    <div id='edit_link'>
+      <h4>Something not right?</h4>
       <p>You can <%= link_to "edit this venue", edit_venue_url(@venue) %>
       or <%= link_to "delete it", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>.</p>
-		</div>
-    <div class="metadata">
-      Created <%= @venue.created_at %>
-      Modified <%= @venue.updated_at %>
     </div>
-	</div>
+    <div class="metadata">
+      <%= datestamp(@venue) %>
+    </div>
+  </div>
 </div>

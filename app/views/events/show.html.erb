@@ -14,16 +14,7 @@
       or <%= link_to "delete it", event_url(@event), :method => :delete, :confirm => "Are you sure?" %>.</p>
   </div>
   <div id='metadata'>
-    This event was
-    <% if @event.source.nil? %>
-    added directly to Calagator
-    <% else %>
-     imported from <%= link_to @event.source.name, @event.source.name %>
-    <% end %>
-    on <strong><%= normalize_time(@event.created_at, :format => :html) %></strong>
-    <% unless @event.created_at == @event.updated_at %>
-    and last updated on <strong><%= normalize_time(@event.updated_at, :format => :html) %></strong>
-    <% end %>.
+      <%= datestamp(@event) %>
   </div>
 </div>
 

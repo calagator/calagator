@@ -50,16 +50,7 @@
       <p>You can <%= link_to "edit this event", edit_event_url(event) %>.</p>
 		</div>
 		<div id='metadata'>
-			This event was
-			<% if event.source.nil? %>
-			added directly to Calagator
-			<% else %>
-			imported from <%= link_to event.source.name, source_url(event.source.id) %>
-			<% end %>
-			on <strong><%= normalize_time(event.created_at, :format => :html) %></strong>
-			<% unless event.created_at == event.updated_at %>
-			and last updated on <strong><%= normalize_time(event.updated_at, :format => :html) %></strong>
-			<% end %>.
+      <%= datestamp(@event) %>
 		</div>
 	</div>
 </div>

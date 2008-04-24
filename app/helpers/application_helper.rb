@@ -74,4 +74,20 @@ module ApplicationHelper
         end
     end
   end
+
+# returns html markup with source (if any), imported/created time, and - if modified - modified time
+  def datestamp(item)
+    stamp = "This item was " 
+    if item.source.nil? 
+      stamp << "added directly to Calagator" 
+    else
+      stamp << "imported from " << link_to(item.source.name)
+    end
+    stamp << "\s" << content_tag(:strong, normalize_time(item.created_at, :format => :html) )
+    if item.updated_at > item.created_at
+      stamp << " and last updated " << content_tag(:strong, normalize_time(item.updated_at, :format => :html) )
+    end
+    stamp << "."
+  end  
+
 end
