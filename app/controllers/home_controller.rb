@@ -16,12 +16,17 @@ class HomeController < ApplicationController
       @events[section] = leaf
     end
     populate[:today, {
-      :conditions => {:start_time => Time.today..(Time.today + 1.days)}}]
+      :conditions => ['(events.duplicate_of_id is NULL) AND
+        (start_time > ? AND start_time < ?)', Time.today, (Time.today + 1.days)], 
+      }]
     populate[:tomorrow, {
-      :conditions => {:start_time => (Time.today + 1.days)..(Time.today + 2.days)}}]
+      :conditions => ['(events.duplicate_of_id is NULL) AND
+        (start_time > ? AND start_time < ?)', (Time.today + 1.days), (Time.today + 2.days)],
+      }]
     current_size = @events[:today][:results].size + @events[:today][:results].size
     populate[:later, {
-      :conditions => {:start_time => (Time.today + 2.days)..(Time.today + 14.days)},
+      :conditions => ['(events.duplicate_of_id is NULL) AND
+        (start_time > ? AND start_time < ?)', (Time.today + 2.days), (Time.today + 14.days)],
       :limit => current_size > @min_events_per_later_section ? current_size : @min_events_per_later_section}]
   end
 

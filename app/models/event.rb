@@ -86,19 +86,20 @@ class Event < ActiveRecord::Base
   
   #---[ Queries ]---------------------------------------------------------
 
-  # Returns an Array of future Event instances.
+  # Returns an Array of non-duplicate future Event instances.
   def self.find_all_future_events(order)
-    return find(:all, :conditions => [ 'start_time > ?', Date.today ], 
+    return find(:all, :conditions => ['events.duplicate_of_id is NULL AND start_time > ?', Date.today ], 
               :include => :venue, 
               :order => order)
   end
   
-  # Returns an Array of Event instances within a given date range
+  # Returns an Array of non-duplicate Event instances within a given date range
+  # ToDo:  Why is the find ignoring 
   def self.find_by_dates(start_date, end_date, order='start_time')
     start_date = start_date.to_datetime if start_date.is_a?(Date)
     end_date = end_date.to_datetime+1.day-1.second if end_date.is_a?(Date)
 
-    find(:all, :conditions => ['start_time > ? AND start_time < ?', start_date, end_date], 
+    find(:all, :conditions => ['start_time > ? AND start_time < ? AND events.duplicate_of_id is NULL', start_date, end_date], 
         :include => :venue,
         :order => order)
   end
