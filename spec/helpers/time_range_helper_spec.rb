@@ -49,6 +49,7 @@ context "Time formatting" do
     it "should format from objects that respond to both start_time and end_time" do
       event = Event.new(:start_time => DateTime.new(2008, 4, 1, 13, 30),
                         :end_time => DateTime.new(2008, 4, 1, 15, 30))
+                        require 'rubygems'; require 'ruby-debug'; debugger; # FIXME
       TimeRange.new(event, :format => :text).to_s.should == "Tuesday, April 1, 2008 from 1:30-3:30pm"
     end
   end
