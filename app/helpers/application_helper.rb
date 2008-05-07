@@ -81,7 +81,7 @@ module ApplicationHelper
     if item.source.nil? 
       stamp << "added directly to Calagator" 
     else
-      stamp << "imported from " << link_to(item.source.name)
+      stamp << "imported from " << link_to(item.source.name, item.source.name)
     end
     stamp << "\s" << content_tag(:strong, normalize_time(item.created_at, :format => :html) )
     if item.updated_at > item.created_at
