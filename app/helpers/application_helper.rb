@@ -40,12 +40,14 @@ module ApplicationHelper
 
     # Make the map and our marker(s)
     map = GoogleMap.new(options)
+    icon = GoogleMapSmallIcon.new('green')
     [locatable_items].flatten.each do |locatable_item|
       location = locatable_item.location
       if location
         map.markers << GoogleMapMarker.new(:map => map,
           :lat => location[0], :lng => location[1],
-          :html => link_to(locatable_item.title, locatable_item))
+          :html => link_to(locatable_item.title, locatable_item),
+          :icon => icon)
       end
     end
     map.to_html + map.div(nil) unless map.markers.empty?
