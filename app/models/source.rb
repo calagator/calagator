@@ -20,6 +20,7 @@ require 'uri'
 class Source < ActiveRecord::Base
 
   has_many :events
+  has_many :updates
 
   def validate
     begin
