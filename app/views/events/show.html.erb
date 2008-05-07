@@ -6,7 +6,7 @@
   <%= link_to 'Download to iCal', "#{event_url(@event)}.ics" %><br/>
   <%= link_to_function 'Get hCalendar markup', '$("hcal_field").toggle()' %>
   <div id="hcal_field" style="display: none;">
-    <%= text_area_tag 'hCalendar', @show_hcal, :rows => 10, :cols => 80 %>
+    <%= text_area_tag 'hCalendar', h(@show_hcal), :rows => 10, :cols => 80 %>
   </div>
   <div id='edit_link'>
     <h4>Something not right?</h4>
