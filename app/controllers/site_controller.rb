@@ -1,4 +1,4 @@
-class HomeController < ApplicationController
+class SiteController < ApplicationController
   def index
     # TODO Refactor this for clarity
     @events = {}

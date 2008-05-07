@@ -37,12 +37,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :venues, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post}
 
   # Export action
-  map.connect 'export', :controller => 'home', :action => 'export'
-  map.connect 'export.:format', :controller => 'home', :action => 'export'
+  map.connect 'export', :controller => 'site', :action => 'export'
+  map.connect 'export.:format', :controller => 'site', :action => 'export'
 
   # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
   # map.root :controller => "welcome"
-  map.root :controller => "home"
+  map.root :controller => "site"
 
   # See how all your routes lay out with "rake routes"
 

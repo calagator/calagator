@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
-describe "/home/index" do
+describe "/site/index" do
   fixtures :events
   
   before(:each) do
@@ -18,7 +18,7 @@ describe "/home/index" do
   
   it "should render valid XHTML" do 
     pending "Complex object structure used on this page is being revised."
-    render "/home/index"
+    render "/site/index"
     response.should be_valid_xhtml_fragment
   end
 

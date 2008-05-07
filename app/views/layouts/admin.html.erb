@@ -17,7 +17,7 @@
 
 	  <%
 		link_class = {
-			:home =>   current_page?(:controller => 'home') ? 'active first' : 'first',
+			:home =>   current_page?(:controller => 'site') ? 'active first' : 'first',
 			:sources => !current_page?(:controller => 'sources') || 'active',
 			:events => !current_page?(:controller => 'events') || 'active',
 			:venues => !current_page?(:controller => 'venues') || 'active',
