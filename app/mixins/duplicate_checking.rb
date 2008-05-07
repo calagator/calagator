@@ -136,6 +136,8 @@ module DuplicateChecking
       raise(ArgumentError, ":duplicates not specified") if duplicates.blank?
 
       master = _record_for(master)
+      
+      squashed = []
 
       for duplicate in duplicates
         duplicate = _record_for(duplicate)
@@ -163,8 +165,10 @@ module DuplicateChecking
         # Mark this as a duplicate
         duplicate.duplicate_of = master
         duplicate.update_attribute(:duplicate_of, master) unless duplicate.new_record?
+        squashed << duplicate
         RAILS_DEFAULT_LOGGER.debug("#{self.name}#squash: marking #{self.name}@#{duplicate.id} as duplicate of #{self.name}@{master.id}")
       end
+      return squashed
     end
 
   end
