@@ -76,6 +76,15 @@ describe Source, "with hCalendar events" do
     second.start_time.should == Time.parse('2008-2-2')
     second.end_time.should == Time.parse('2008-02-03')
   end
+  
+  it "should strip html the venue title" do
+    hcal_content = read_sample('hcal_upcoming.xml')
+    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+    SourceParser::Base.stub!(:read_url).and_return(hcal_content)
+    events = hcal_source.to_events
+    events.first.venue.title.should == 'Jive Software Office'
+  end
+
 end
 
 describe Source, "with iCalendar events" do
