@@ -3,6 +3,7 @@
 <%= render :partial => 'events/hcal' %>
         
 <div class='single_view_right'>
+  <%= render :partial=>'gcal_reminder'%>
   <%= link_to 'Download to iCal', "#{event_url(@event)}.ics" %><br/>
   <%= link_to_function 'Get hCalendar markup', '$("hcal_field").toggle()' %>
   <div id="hcal_field" style="display: none;">

@@ -223,3 +223,7 @@ fieldset .help {
   width: 400px;
   height: 300px;
 }
+
+a.control-link {
+	border-bottom: none;
+}
