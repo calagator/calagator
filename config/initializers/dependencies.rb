@@ -20,3 +20,6 @@ require 'htmlentities'
 add_vendor_gem_to_load_path 'vpim-0.360'
 require 'vpim/icalendar'
 require 'vpim/vcard'
+
+add_vendor_gem_to_load_path 'tzinfo-0.3.8'
+require 'tzinfo'

@@ -24,8 +24,9 @@ module EventsHelper
   
   private
   
-  def portland_to_utc( p)
-    # TODO: fix this before Pacific Daylight Time (UTC -7) turns to Pacific Standard Time (UTC -8)
-    DateTime.civil( p.year, p.month, p.day, p.hour + 7, p.min, p.sec)
+  TZ = TZInfo::Timezone.get('America/Los_Angeles')
+
+  def portland_to_utc(time)
+    local = TZ.local_to_utc(time)
   end
 end
