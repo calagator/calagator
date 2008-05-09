@@ -1,6 +1,6 @@
 module EventsHelper
   include TimeRangeHelper # provides normalize_time
-  
+
   GOOGLE_TIME_FORMAT = "%Y%m%dT%H%M%SZ"
 
   def today_tomorrow_or_weekday(record)
@@ -16,17 +16,16 @@ module EventsHelper
   def google_maps_url(address)
     return "http://maps.google.com/maps?q=#{CGI::escape(address)}"
   end
-  
+
   def format_google_timespan( event)
     end_time = event.end_time || event.start_time
-    "#{portland_to_utc(event.start_time).strftime( GOOGLE_TIME_FORMAT)}/#{portland_to_utc(end_time).strftime( GOOGLE_TIME_FORMAT)}"
+    "#{local_to_utc(event.start_time).strftime( GOOGLE_TIME_FORMAT)}/#{local_to_utc(end_time).strftime( GOOGLE_TIME_FORMAT)}"
   end
-  
-  private
-  
-  TZ = TZInfo::Timezone.get('America/Los_Angeles')
 
-  def portland_to_utc(time)
+private
+
+  # Convert a +time+ from the local timezone to UTC.
+  def local_to_utc(time)
     local = TZ.local_to_utc(time)
   end
 end
