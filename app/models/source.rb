@@ -12,8 +12,6 @@
 #  reimport    :boolean         
 #
 
-require 'uri'
-
 # == Source
 #
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.

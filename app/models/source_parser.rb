@@ -1,7 +1,3 @@
-require 'open-uri'
-require 'uri'
-require 'set'
-
 # == SourceParser
 #
 # A hierarchy of classes that provide a way to parse different source formats and return hCalendar events.

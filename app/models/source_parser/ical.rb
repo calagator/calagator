@@ -1,7 +1,3 @@
-# Loads vpim from vendor/gems
-require 'vpim/icalendar'
-require 'vpim/vcard'
-
 class SourceParser # :nodoc:
   # == SourceParser::Ical
   #

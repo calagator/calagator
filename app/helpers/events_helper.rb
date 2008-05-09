@@ -1,5 +1,3 @@
-require 'uri'
-
 module EventsHelper
   include TimeRangeHelper # provides normalize_time
   

@@ -1,5 +1,3 @@
-require 'uri'
-
 class SourcesController < ApplicationController
   def index
     redirect_to new_source_path

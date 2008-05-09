@@ -16,8 +16,6 @@
 #  duration        :integer         
 #
 
-require 'vpim/icalendar'
-
 # == Event
 #
 # A model representing a calendar event.
