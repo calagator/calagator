@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/events/show" do
-  fixtures :events
+  fixtures :events, :venues
   
   before(:each) do
     @event = events(:calagator_codesprint)
