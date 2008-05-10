@@ -67,7 +67,12 @@ class SourceParser
 
     # Returns content read from a URL. Easier to stub.
     def self.read_url(url)
-      URI.parse(url).read
+      uri = URI.parse(url)
+      if uri.respond_to?(:read)
+        return uri.read
+      else
+        return open(url){|h| h.read}
+      end
     end
 
     # Stub which makes sure that subclasses of Base implement the #parse method.
