@@ -100,7 +100,7 @@ describe Source, "with iCalendar events" do
 
     events.size.should == 1
     event = events.first
-    event.title.should =~ /Coffee with Jason/
+    event.title.should == "Coffee with Jason"
     event.start_time.should == Time.parse('Mon Oct 28 14:00:00 -0800 2002')
     event.end_time.should == Time.parse('Mon Oct 28 15:00:00 -0800 2002')
     event.venue.should be_nil
@@ -120,15 +120,17 @@ describe Source, "with iCalendar events" do
     events = events_from_ical_at('ical_upcoming.ics')
     events.size.should == 1
     event = events.first
-    event.title.should =~ /Ignite Portland/
+
+    event.title.should == "Ignite Portland"
     event.start_time.should == Time.parse('Tue Feb 05 18:00:00 -0800 2008')
     event.end_time.should == Time.parse('Tue Feb 05 21:00:00 -0800 2008')
-    event.description.should =~ /What if you only got 20 slides/
+    event.description.should == "[Full details at http://upcoming.yahoo.com/event/390164/ ] If you had five minutes to talk to Portland what would you say? What if you only got 20 slides and they rotated automatically after 15 seconds? Launch a web site? Teach a hack? Talk about recent learnings, successes, failures?          Come join us for the second Ignite Portland! It's free to attend or present. We hope to have food and drinks, but we need sponsors for that, so check out http://www.igniteportland.com for details on attending, presenting, or sponsoring!          What is Ignite Portland? A bunch of fast-paced, interesting presentations - 20 slides for 15 seconds each. Our mantra is \"share burning ideas\" - just about any topic will do, as long as it's interesting. From tech to crafts to business to just plain fun! There will be time to network and chat after each series of presentations."
+
     event.venue.should_not be_blank
-    event.venue.title.should =~ /Bagdad Theater/
-    event.venue.locality.should =~ /Portland/
-    event.venue.country.should =~ /United States/
-    event.venue.postal_code.should =~ /97214/
+    event.venue.title.should == "Bagdad Theater and Pub"
+    event.venue.locality.should == "Portland"
+    event.venue.country.should == "United States"
+    event.venue.postal_code.should == "97214"
     event.venue.latitude.should == BigDecimal.new("45.5121")
     event.venue.longitude.should == BigDecimal.new("-122.626")
   end
