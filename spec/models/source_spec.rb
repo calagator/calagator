@@ -82,6 +82,7 @@ describe Source, "with hCalendar events" do
     hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
     SourceParser::Base.stub!(:read_url).and_return(hcal_content)
     events = hcal_source.to_events
+    
     events.first.venue.title.should == 'Jive Software Office'
   end
 
@@ -163,4 +164,29 @@ describe Source, "with iCalendar events" do
     events = events_from_ical_at('ical_google.ics')
     events.first.venue.title.should == 'CubeSpace'
   end
+  
+end
+
+describe Source, "when importing events" do
+  fixtures :events, :venues
+
+  it "should create only one event when importing two identical events" do
+    pending "fixing problems with postal codes" do
+      hcal_content = read_sample('hcal_duplicate_event+venue.xml')
+      hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+      SourceParser::Base.stub!(:read_url).and_return(hcal_content)
+
+      events = hcal_source.to_events
+      puts events.first.venue.postal_code.inspect
+
+      events.size.should == 0
+    end
+  end
+
+  it "should create only one event and one venue when importing two identical events with identical venues"
+  
+  it "should create two events when importing two non-identical events"
+  
+  it "two events and two venues should be created when importing two identical events with two non-identical venues"
+  
 end

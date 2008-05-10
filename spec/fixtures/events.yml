@@ -24,6 +24,13 @@ day_after_tomorrow:
   venue_id: 1
   url: http://www.imdb.com/title/tt0319262/
 
+duplicate_event:
+  id: 4
+  title: Web 2.0 Conference
+  start_time: 2007-10-05 00:00:00
+  venue_id: 2
+  url: http://www.web2con.com/
+
   # many future events
   <%
   id=100

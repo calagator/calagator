@@ -8,7 +8,15 @@ cubespace:
   url: http://www.cubespacepdx.com/
   latitude: 45.518493
   longitude: -122.660737
-  
+
+duplicate_venue:
+  id: 2
+  title: CubeSpace2
+  street_address: 622 SE Grand Ave.
+  locality: Portland 
+  region: OR
+  postal_code: 97204
+
   # many venues
   <%
   id=100
