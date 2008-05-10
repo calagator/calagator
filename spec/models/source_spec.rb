@@ -177,7 +177,7 @@ describe Source, "when importing events" do
       SourceParser::Base.stub!(:read_url).and_return(hcal_content)
 
       events = hcal_source.to_events
-      puts events.first.venue.postal_code.inspect
+#      puts events.first.venue.postal_code.inspect
 
       events.size.should == 0
     end
