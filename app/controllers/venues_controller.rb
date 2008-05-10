@@ -122,10 +122,10 @@ class VenuesController < ApplicationController
 
     squashed = Venue.squash(:master => master_venue_id, :duplicates => duplicate_venue_ids)
     
-    flash[:failure] = "The master venue could not be squashed into itself." if duplicate_event_ids.include?(master_event_id) 
+    flash[:failure] = "The master venue could not be squashed into itself." if duplicate_venue_ids.include?(master_venue_id)
     
     if squashed.size > 0 
-      message = "Squashed duplicates #{squashed.map {|obj| obj.title}} into master #{master_event_id}."
+      message = "Squashed duplicates #{squashed.map {|obj| obj.title}} into master #{master_venue_id}."
       flash[:success] = flash[:success].nil? ? message : flash[:success] + message
     else
       message = "No duplicates were squashed."
