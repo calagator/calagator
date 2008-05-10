@@ -24,10 +24,13 @@ describe Venue, "with hCalendar to AbstractEvent parsing" do
     abstract_location = abstract_event.location
 
     abstract_location.should be_a_kind_of(SourceParser::AbstractLocation)
-    abstract_location.locality.should =~ /portland/i
-    abstract_location.street_address.should =~ /317 SW Alder St Ste 500/i
-    abstract_location.latitude.should_not be_nil
-    abstract_location.longitude.should_not be_nil
+    abstract_location.locality.should == "portland"
+    abstract_location.street_address.should == "317 SW Alder St Ste 500"
+    abstract_location.latitude.should be_close(45.5191, 0.1)
+    abstract_location.longitude.should be_close(-122.675, 0.1)
+    pending "Fix postal_code parsing" do
+      abstract_location.postal_code.should == "97204"
+    end
   end
 end
 
