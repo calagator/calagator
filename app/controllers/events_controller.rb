@@ -125,13 +125,12 @@ class EventsController < ApplicationController
     type = params[:type] || 'any'
     type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
     
-    @events = Event.find_duplicates_by(type)
-    @type = type
+    @grouped_events = Event.find_duplicates_by(type, :grouped => true)
     @page_title = "Duplicate Event Squasher"
     
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @venues }
+      format.xml  { render :xml => @grouped_events }
     end
   end
   

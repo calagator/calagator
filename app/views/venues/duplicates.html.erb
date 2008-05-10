@@ -19,62 +19,40 @@
     </ul>
   </div>
 
-  <%= form_tag :action => "squash_many_duplicates", :method => :post %>
-  <div style="color: blue;">
-    Select only one set of master and duplicate venues. If you select an unrelated venue, it will be merged into the same single master record.
-  </div>
-  <div id='list_items'>
-    <table>
-      <tr>
-        <th>Master?</th><th>Duplicate?</th><th># of Events</th><th>Venue title</th>
-      </tr>
-        <% last = {}; first_cycle = true; dupe_set = 1; dupe_count = 0
-        for venue in @venues
-        
-          if @type != :any && @type != :all
-            changed = false
-            [@type].flatten.each do |t|
-              changed = true if venue.read_attribute(t) != last[t]
-              last[t] = venue.read_attribute(t)
-            end
-            if changed && !first_cycle %>
+  <% unless @grouped_venues.empty? %>
+    <%= form_tag :action => "squash_many_duplicates", :method => :post %>
+      <div style="color: blue;">
+        Select only one set of master and duplicate venues. If you select an unrelated venue, it will be merged into the same single master record.
+      </div>
+      <div id='list_items'>
+        <table>
+          <% for value, group in @grouped_venues %>
+            <tr>
+              <th>Master?</th><th>Duplicate?</th><th># of Events</th><th>Venue<%= " (#{value})" unless value.blank? %></th>
+            </tr>
+            <% for venue in group %>
+              <tr class="<%= cycle('odd', 'even') %>">
+                <td><%= radio_button_tag("master_venue_id", venue.id) %></td>
+                <td><%= check_box_tag("duplicate_venue_id_#{venue.id}", venue.id) %></td>
+                <td><%= venue.events.count %></td>
+                <td>
+                  <%= link_to(venue.title, venue_url(venue)) %>
+                  <% if venue.has_full_address? %>
+                    at <%= venue.full_address %>
+                  <% end %>
+                </td>
               </tr>
-              <tr>
-                <th>Master?</th><th>Duplicate?</th><th># of Events</th><th>Venue title</th>
-              </tr>
-              <% dupe_set += 1
-            end
-            first_cycle = false
-          end %>
-          
-          <tr class="<%= cycle('odd', 'even') %>">
-          <% # if @type != :any && @type != :all %>
-            <td><%= radio_button_tag("master_venue_id", venue.id) %></td>
-            <td><%= check_box_tag("duplicate_venue_id_#{venue.id}", venue.id) %></td>
-            <td><%= venue.events.count %></td>
-          <% # end %>
-            <td>
-              <%= link_to(venue.title, venue_url(venue)) %>
-              <% if venue.has_full_address? %>
-                at <%= venue.full_address %>
-              <% end %>
-              <%= "[DUPLICATE OF #{venue.duplicate_of_id}]" if venue.duplicate_of_id %>
-            </td>
-            <% dupe_count += 1 %>
-          </tr>
-        <% end %>
-    </table>
-
-    <% # if @type != :any && @type != :all %>
-    <% if dupe_count > 1 %>
-      <ul>
-      <li>Checked items will be deleted.</li>
-      <li>Events associated with deleted venues will be replaced with the venues selected using radio buttons.</li>
-      </ul>
-      <%= submit_tag "Squash Duplicates" %>
-    <% else %>
-      No duplicates found
-    <% end %>
-  </div>
-</form>
+            <% end %>
+          <% end %>		
+        </table>
+        <ul>
+          <li>Checked items will be deleted.</li>
+          <li>Events associated with deleted venues will be replaced with the venues selected using radio buttons.</li>
+        </ul>
+        <%= submit_tag "Squash Duplicates" %>
+      </div>
+    </form>
+  <% else %>
+    No duplicates found
+  <% end %>
 </div>

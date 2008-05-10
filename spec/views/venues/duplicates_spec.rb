@@ -5,7 +5,7 @@ describe "/venues/duplicates" do
   
   before(:each) do
     @cubespace = venues(:cubespace)
-    assigns[:venues] = [@cubespace]
+    assigns[:grouped_venues] = [[nil, [@cubespace]]]
   end
   
   it "should render valid XHTML" do

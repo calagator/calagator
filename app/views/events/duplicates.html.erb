@@ -16,60 +16,36 @@
       <li><%= link_to_unless_current "All Fields", url_for(:action => 'duplicates', :type => 'all') %></li>
     </ul>
   </div>
+  <% unless @grouped_events.empty? %>
     <%= form_tag :action => "squash_many_duplicates", :method => :post %>
-    <div style="color: blue;">
-      Select only one set of master and duplicate events. If you select an unrelated event, it will be merged into the same single master record.
-    </div>
-    <div id='list_items'>
-      <table>
-        <tr>
-          <th>Master?</th><th>Duplicate?</th><th>Event title</th><th>Start Time</th><th>Venue</th>
-        </tr>
-        
-          <% last = {}; first_cycle = true; dupe_set = 1; dupe_count = 0
-          for event in @events
-
-            if @type != :any && @type != :all
-              changed = false
-              [@type].flatten.each do |t|
-                changed = true if event.read_attribute(t) != last[t]
-                last[t] = event.read_attribute(t)
-              end
-              if changed && !first_cycle %>
-            </tr>
+      <div style="color: blue;">
+        Select only one set of master and duplicate events. If you select an unrelated event, it will be merged into the same single master record.
+      </div>
+      <div id='list_items'>
+        <table>
+          <% for value, group in @grouped_events %>
             <tr>
-              <th>Master?</th><th>Duplicate?</th><th>Event title</th><th>Start Time</th><th>Venue</th>
+              <th>Master?</th><th>Duplicate?</th><th>Event<%= " (#{value})" unless value.blank? %></th>
             </tr>
-            <% dupe_set += 1
-              end
-              first_cycle = false
-            end %>
-
-            <tr class="<%= cycle('odd', 'even') %>">
-              <% # if @type != :any && @type != :all %>
-              <td><%= radio_button_tag("master_event_id", event.id) %></td>
-              <td><%= check_box_tag("duplicate_event_id_#{event.id}", event.id) %></td>
-              <% # end %>
-              <td>
-              <%= link_to(event.title, event_url(event)) %>
-              <%= "[DUPLICATE OF #{event.duplicate_of_id}]" if event.duplicate_of_id %>
-              </td>
-              <td><%= event.start_time %></td>
-              <td><%= event.venue.title unless event.venue.nil? %></td>
-              <% dupe_count += 1 %>
-            </tr>
+            <% for event in group %>
+              <tr class="<%= cycle('odd', 'even') %>">
+                <td><%= radio_button_tag("master_event_id", event.id) %></td>
+                <td><%= check_box_tag("duplicate_event_id_#{event.id}", event.id) %></td>
+                <td>
+                  <div><%= link_to event.title, event_url(event) %></div>
+                  <div><%= event.start_time %><%= ", #{event.venue.title}" unless event.venue.nil? %></div>
+				</td>
+              </tr>
             <% end %>
-      </table>
-
-      <% # if @type != :any && @type != :all %>
-      <% if dupe_count > 1 %>
-      <ul>
-        <li>Checked items will be deleted.</li>
-      </ul>
-      <%= submit_tag "Squash Duplicates" %>
-      <% else %>
-        No duplicates found
-      <% end %>
-    </div>
-  </form>
-  </div>
+          <% end %>
+        </table>
+        <ul>
+          <li>Checked items will be deleted.</li>
+        </ul>
+        <%= submit_tag "Squash Duplicates" %>
+      </div>
+    </form>
+  <% else %>
+  No duplicates found
+  <% end %>
+</div>

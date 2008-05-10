@@ -78,9 +78,11 @@ module DuplicateChecking
     end
 
     # Return an array of events with duplicate values for a given set of fields
-    def find_duplicates_by(fields)
+    def find_duplicates_by(fields, options={})
+      grouped = options[:grouped] || false
       query = "SELECT DISTINCT a.* from #{table_name} a, #{table_name} b WHERE a.id <> b.id AND ("
       attributes = new.attribute_names
+      matched_fields = nil
 
       if fields == :all || fields == :any
         attributes.each do |attr|
@@ -97,18 +99,21 @@ module DuplicateChecking
             query += " a.#{attr} = b.#{attr} AND" if attributes.include?(attr.to_s)
         end
         order = fields.join(',a.')
+        matched_fields = lambda {|r| fields.map {|f| r.read_attribute(f.to_sym) }}
       end
       order ||= 'id'
       query = query[0..-4] + ") ORDER BY a.#{order}"
 
       RAILS_DEFAULT_LOGGER.debug("find_duplicates_by: SQL -- #{query}")
+      records = find_by_sql(query) || []
 
-      # TODO Refactor SQL generator to reject known duplicates
-      records = find_by_sql(query)
-      if records.nil?
-        []
-      elsif records.first.respond_to?(:duplicate_of_id)
-        records.reject{|t| t.duplicate_of_id}
+      # Reject known duplicates
+      records.reject! {|t| t.duplicate_of_id} if records.first.respond_to?(:duplicate_of_id)
+      
+      if grouped
+        # Group by the field values we're matching on; skip any values for which we only have one record
+        records.group_by { |record| matched_fields.call(record) if matched_fields }\
+               .reject { |value, group| group.size <= 1 }
       else
         records
       end

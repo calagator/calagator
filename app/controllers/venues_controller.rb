@@ -105,13 +105,12 @@ class VenuesController < ApplicationController
     type = params[:type] || 'any'
     type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
 
-    @venues = Venue.find_duplicates_by(type)
-    @type = type
+    @grouped_venues = Venue.find_duplicates_by(type, :grouped => true)
     @page_title = "Duplicate Venue Squasher"
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @venues }
+      format.xml  { render :xml => @grouped_venues }
     end
   end
 
