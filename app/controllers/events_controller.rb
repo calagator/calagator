@@ -125,7 +125,7 @@ class EventsController < ApplicationController
     type = params[:type] || 'any'
     type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
     
-    @grouped_events = Event.find_duplicates_by(type, :grouped => true)
+    @grouped_events = Event.find_duplicates_by(type, :grouped => true, :where => "a.start_time >= #{ActiveRecord::Base.connection.quote(Time.now - 1.day)}")
     @page_title = "Duplicate Event Squasher"
     
     respond_to do |format|

@@ -1,10 +1,20 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventsController do
+  integrate_views
+  fixtures :events, :venues
 
-  #Delete this example and add some real ones
-  it "should use EventsController" do
-    controller.should be_an_instance_of(EventsController)
+  it "should find new duplicates and not old duplicates" do
+    get 'duplicates'
+
+    # New duplicates
+    web3con = assigns[:grouped_events].select{|keys,values| keys.include?("Web 3.0 Conference")}
+    web3con.should_not be_blank
+    web3con.first.last.size.should == 2
+
+    # Old duplicates
+    web1con = assigns[:grouped_events].select{|keys,values| keys.include?("Web 1.0 Conference")}
+    web1con.should be_blank
   end
 
 end

@@ -77,10 +77,16 @@ module DuplicateChecking
       find_without_duplicate_support(*(args + [opts]))
     end
 
-    # Return an array of events with duplicate values for a given set of fields
+    # Return events with duplicate values for a given set of fields.
+    #
+    # Options:
+    # * :grouped => Return events grouped by commonality, rather than returning an Array. Defaults to false.
+    # * :where => String that specifies additional arguments to add to the WHERE clause.
     def find_duplicates_by(fields, options={})
       grouped = options[:grouped] || false
-      query = "SELECT DISTINCT a.* from #{table_name} a, #{table_name} b WHERE a.id <> b.id AND ("
+      query = "SELECT DISTINCT a.* from #{table_name} a, #{table_name} b WHERE"
+      query << " #{options[:where]} AND " if options[:where]
+      query << " a.id <> b.id AND ("
       attributes = new.attribute_names
       matched_fields = nil
 
