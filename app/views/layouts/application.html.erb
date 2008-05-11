@@ -4,10 +4,10 @@
 
 	 <%
 	link_class = {
-		:home =>   current_page?(:controller => 'site') ? 'active first' : 'first',
-		:import => !current_page?(:controller => 'sources') || 'active',
-		:events => !current_page?(:controller => 'events') || 'active',
-		:venues => !current_page?(:controller => 'venues') || 'active',
+		:home =>   (controller.controller_name == 'site' ? 'active first' : 'first'),
+		:import => (controller.controller_name == 'sources' && 'active'),
+		:events => (controller.controller_name == 'events'  && 'active'),
+		:venues => (controller.controller_name == 'venues'  && 'active'),
 	}
 	 %>
 
