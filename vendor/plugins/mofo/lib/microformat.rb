@@ -18,7 +18,7 @@ class Microformat
 
       extract_base_url! target
       
-      @doc = build_doc(@options[:text] ? @options : target)
+      @doc = target.kind_of?(Hpricot::Elem) ? target : build_doc(@options[:text] ? @options : target)
 
       microformats = find_occurences(@doc)
 
