@@ -15,9 +15,9 @@ namespace :sources do
     sources.each do |source|
       puts "Polling #{source.name}"
       begin
-        abstract_events = source.to_events
-        msg = "Got #{abstract_events.size} abstract events"
-        # do more here to turn these events into real events
+        events = source.to_events
+        events.map(&:save!)
+        msg = "Got #{events.size} abstract events"
       rescue Exception => e
         msg = e.to_s
       end
