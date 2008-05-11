@@ -196,3 +196,10 @@ end
 def be_valid_xhtml_fragment
   BeValidXhtml.new(:fragment => true)
 end
+
+# Save the response.body to "/tmp/response.html", to aid manual debugging.
+def save_body
+  filename = "/tmp/response.html"
+  bytes = File.open(filename, "w+"){|h| h.write(response.body)}
+  return [filename, bytes]
+end
