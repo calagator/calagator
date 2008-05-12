@@ -16,8 +16,10 @@ public/images/active_scaffold
 public/images/record_select
 public/javascripts/active_scaffold
 public/javascripts/record_select
+public/javascripts/all.js
 public/stylesheets/active_scaffold
 public/stylesheets/record_select
+public/stylesheets/all.css
 tmp/*
 tmp/cache/*
 tmp/pids/*
