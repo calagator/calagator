@@ -5,10 +5,11 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><%= @page_title ? "#{@page_title} &raquo; " : "" %>Calagator: Portland's Tech Calendar</title>
-    <%= stylesheet_link_tag "/css/base",
-                            "datepicker",
+    <%# Do NOT add caching to /css files, they're dynamically generated and the cacher can only read from the filesystem %>
+    <%= stylesheet_link_tag "/css/base" %>
+    <%= stylesheet_link_tag "datepicker",
                             "timePicker",
-                            :cache => false %>
+                            :cache => true %>
     <%= javascript_include_tag  'jquery-1.2.3.min.js',
                                 'jquery-ui',
                                 'jquery-fx',
@@ -16,7 +17,7 @@
                                 'ui.datepicker.js',
                                 'jquery.timePicker.js',
                                 'application',
-                                :cache => false %>
+                                :cache => true %>
 
     <%= auto_discovery_link_tag(:atom, formatted_events_url('atom'), :title => 'Atom: All Events' )%>
   </head>
