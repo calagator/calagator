@@ -8,13 +8,9 @@ describe "/site/index" do
     @tomorrow = events(:tomorrow)
     @day_after_tomorrow = events(:day_after_tomorrow)
     
-    @events = [@codesprint, @tomorrow, @day_after_tomorrow]
+    @events = {:today => {:count => 1, :results => [@codesprint], :skipped => 0}, :tomorrow => {:count => 1, :results => [@tomorrow], :skipped => 0}, :later => {:count=> 1, :results => [@day_after_tomorrow], :skipped => 0}}
     
     assigns[:events] = @events
-    assigns[:events_today] = @events
-    assigns[:events_tomorrow] = @events
-    assigns[:events_later] = @events
-    assigns[:recently_added_events] = @events
   end
   
   it "should render valid XHTML" do
