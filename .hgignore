@@ -6,6 +6,7 @@ tags
 *.swp
 *.tmp
 .dtach
+config/geocoder_api_keys.yml
 coverage/*
 db/schema.rb
 db/*.sqlite3
