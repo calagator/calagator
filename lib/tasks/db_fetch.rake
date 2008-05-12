@@ -5,7 +5,7 @@ namespace :db do
 
     require 'lib/database_yml_reader'
     d = DatabaseYmlReader.read
-    source = "http://calagator.org/export.sqlite3"
+    source = "http://#{PRODUCTION_HOSTNAME}/export.sqlite3"
     current = d.database
     backup = current + ".bak"
     replacement = current + ".replacement"

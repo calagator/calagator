@@ -26,6 +26,6 @@ private
 
   # Convert a +time+ from the local timezone to UTC.
   def local_to_utc(time)
-    local = TZ.local_to_utc(time)
+    local = TIMEZONE_COMPILED.local_to_utc(time)
   end
 end

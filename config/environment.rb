@@ -60,6 +60,4 @@ Rails::Initializer.run do |config|
   config.load_paths += %W( #{RAILS_ROOT}/app/mixins )
 end
 
-TZ = TZInfo::Timezone.get('America/Los_Angeles')
-
 # NOTE: See config/initializers/ directory for additional code loaded at start-up

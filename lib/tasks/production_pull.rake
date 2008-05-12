@@ -11,7 +11,7 @@ namespace :db do
         end
     
         class CalagatorResource < ActiveResource::Base
-          self.site = 'http://calagator.org'
+          self.site = "http://#{PRODUCTION_HOSTNAME}"
       
           # Infers the name of the local version of a class by looking for it in the root namespace.
           def self.local_class
