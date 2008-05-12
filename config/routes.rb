@@ -41,7 +41,7 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'export.:format', :controller => 'site', :action => 'export'
   
   # Stylesheets
-  map.connect 'css/:name.:format', :controller => 'site', :action => 'style'
+  map.connect 'css/:name', :controller => 'site', :action => 'style'
 
   # Site root
   map.root :controller => "site"
