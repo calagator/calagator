@@ -39,9 +39,11 @@ ActionController::Routing::Routes.draw do |map|
   # Export action
   map.connect 'export', :controller => 'site', :action => 'export'
   map.connect 'export.:format', :controller => 'site', :action => 'export'
+  
+  # Stylesheets
+  map.connect 'css/:name.:format', :controller => 'site', :action => 'style'
 
-  # You can have the root of your site routed with map.root -- just remember to delete public/index.html.
-  # map.root :controller => "welcome"
+  # Site root
   map.root :controller => "site"
 
   # See how all your routes lay out with "rake routes"

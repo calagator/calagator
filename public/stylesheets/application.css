@@ -1,23 +1,5 @@
 /* @override http://localhost:3000/stylesheets/application.css?1204562855 */
 
-abbr {
-	border-bottom: none;
-}
-
-a {
-	color: #008000;
-	text-decoration: none;
-	border-bottom: 1px dotted #008000;
-}
-
-.right {
-	float:  right;
-}
-
-a:visited {
-	color: #009100;
-}
-
 .hidden {
   visibility: hidden;
 }
@@ -35,7 +17,6 @@ a:visited {
 	color: #0f7800;
 	margin-bottom: 1em;
 	height: 1.5em;
-	margin-top: -1.5em;
 }
 
 #top_menu ul {

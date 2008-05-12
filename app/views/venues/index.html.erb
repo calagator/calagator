@@ -1,7 +1,8 @@
 <div id="venues_index">
-	<h1>Venues</h1>
+	<div id='list_description'>
+		<h2>Viewing all <strong><%= @venues.size %></strong> venues.</h2>
+	</div>
   <%= google_map @venues, :zoom => 12, :center => [45.518493, -122.660737] %>
-  <%= link_to "Add new venue", new_venue_url %>
 
   <ul>
     <% for venue in @venues %>

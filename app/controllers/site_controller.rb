@@ -1,4 +1,5 @@
 class SiteController < ApplicationController
+
   def index
     # TODO Refactor this for clarity
     @events = {}
@@ -29,9 +30,40 @@ class SiteController < ApplicationController
         (start_time > ? AND start_time < ?)', (Time.today + 2.days), (Time.today + 14.days)],
       :limit => current_size > @min_events_per_later_section ? current_size : @min_events_per_later_section}]
   end
-
-  # Used by #export action
-  Mime::Type.register "application/sqlite3", :sqlite3
+  
+  def style
+    # check to see if the request is an allowed file, if not, 404 it
+    if %w(base print ie).include?(params[:name])
+      template = params[:name]
+    else
+      render :file => "#{RAILS_ROOT}/public/404.html", :status => 404 and return
+    end
+    
+    # define colors to be used in CSS
+    @colors = {
+      :green =>         '#82c555',
+    	:light_green => 	'#bcf794',
+    	:dark_green => 		'#59a12d',
+    	:creme => 				'#f9ffec',
+    	:cyan => 					'#98f0f7',
+    	:light_cyan =>    '#e8fbfe',
+    	:teal =>          '#66baa9',
+    	:light_grey => 		'#aaccaa',
+    	:dark_grey => 		'#445544',
+    	
+    	# used for emphasis blocks of creme text
+    	:white =>         '#fff' 
+    }
+    
+    output = render_to_string(:template => "site/styles/#{template}.css.erb") 
+    # output.gsub!(/\/\*[^*]*\*+([^\/][^*]*\*+)*\//,'').gsub!(/$\s+/,'')
+    
+    respond_to do |format|
+      format.css { 
+        render :text => output
+      }
+    end
+  end
 
   # Export the database
   def export

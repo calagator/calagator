@@ -9,7 +9,6 @@ describe "/events/new" do
   
   it "should render valid XHTML" do
     render "/events/new"
-    pending "calendar_date_select adds a non-standard minute_interval attribute to its input tag."
     response.should be_valid_xhtml_fragment
   end
 end

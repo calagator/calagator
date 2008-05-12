@@ -61,8 +61,10 @@ class GoogleMap
     js << "}"
     
     # Load the map on window load preserving anything already on window.onload.
-# CALAGATOR: Prototype will make the load happen after page layout:
-    js << "Event.observe(window, 'load', initialize_google_map_#{dom_id});"
+
+# CALAGATOR: jQuery will make the load happen after page layout:
+    js << "$(window).load(initialize_google_map_#{dom_id});"
+
 # CALAGATOR: ... where this code blocked layout, which makes things look slow.
 #    js << "if (typeof window.onload != 'function') {"
 #    js << "  window.onload = initialize_google_map_#{dom_id};"

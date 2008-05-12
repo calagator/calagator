@@ -1,6 +1,7 @@
 class EventsController < ApplicationController
   # GET /events
   # GET /events.xml
+    
   def index
     order = params[:order] || 'date'
     order = case order
@@ -77,6 +78,8 @@ class EventsController < ApplicationController
   # POST /events.xml
   def create
     @event = Event.new(params[:event])
+    @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
+    @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
 
     respond_to do |format|
       if @event.save
@@ -93,7 +96,10 @@ class EventsController < ApplicationController
   # PUT /events/1
   # PUT /events/1.xml
   def update
+    debugger
     @event = Event.find(params[:id])
+    @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
+    @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
 
     respond_to do |format|
       if @event.update_attributes(params[:event])

@@ -18,7 +18,7 @@
         <span class="postal-code"><%= h @event.venue.postal_code -%></span>
       <% end -%>
       <% if !@event.venue.country.blank? -%>
-        <div class='country-name'><%= h @event.venue.country -%><div>
+        <div class='country-name'><%= h @event.venue.country -%></div>
       <% end -%>
       <% if @event.venue && @event.venue.has_full_address? -%>
         (<a href='<%=google_maps_url(@event.venue.full_address) -%>'>map</a>)

@@ -129,4 +129,13 @@ describe Event do
     @event.end_time.should == now + 2.hours
   end
   
+  it "should handle changing end time with an existing duration" do
+    @event = Event.new
+    now = Time.now
+    @event.start_time = now
+    @event.duration = 60
+    @event.end_time = now + 2.hours
+    @event.end_time.should == now + 2.hours
+  end
+  
 end

@@ -1,7 +1,7 @@
 <div id="events_duplicates">
   <h1>Duplicate Events</h1>
 
-  <div id='list_filters'>
+  <div id='list_filters' class='sidebar'>
     <h3>Show events with a duplicate</h3>
     <ul>
       <li><%= link_to_unless_current "Title", url_for(:action => 'duplicates', :type => 'title') %></li>

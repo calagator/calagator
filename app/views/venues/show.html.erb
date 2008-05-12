@@ -1,3 +1,4 @@
+<div class="single_venue">
 <%= google_map @venue %>
 <div class="vcard">
   <h1 class="fn org"><%=h @venue.title %></h1>
@@ -50,9 +51,8 @@
   <h2>Events Happening Here</h2>
   
   <%= render :partial => 'events/list', :locals => { :events => Event.find_all_by_venue_id(@venue, :order => :start_time ) } %>
-  <div class='single_view_right'>
+  <div class='single_view_right sidebar'>
     <div id='edit_link'>
-      <h4>Something not right?</h4>
       <p>You can <%= link_to "edit this venue", edit_venue_url(@venue) %>
       or <%= link_to "delete it", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>.</p>
     </div>
@@ -60,4 +60,5 @@
       <%= datestamp(@venue) %>
     </div>
   </div>
+</div>
 </div>

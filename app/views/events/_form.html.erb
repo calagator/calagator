@@ -17,49 +17,37 @@
     <%= link_to 'Add a new venue', new_venue_url %>
   </div>
 
-  <div id="event_times" class='no_label'>
-    <div id="start_time" class='date_picker'>
-      <%= f.label :start_time %>
-      <%= calendar_date_select :event, :start_time, :embedded => true, :popup => 'force', :minute_interval => 15, :time => true, :year_range => [Time.now, 1.year.from_now] %>
-    </div>
-    <div id="end_time" class='date_picker'>
-      <%= f.label :end_time %>
-      <%= calendar_date_select :event, :end_time, :embedded => true, :popup => 'force', :minute_interval => 15, :time => true, :year_range => [Time.now, 1.year.from_now] %>
-    </div>
-    <% javascript_tag do %>
-    /* If we start with no end date, but have a start date, display (but don't select) the start's date & time */    
-    var end_element = $('event_end_time');
-    if (!end_element.value) {
-      var end_calendar = end_element.calendar_date_select;
-      var start_date = $('event_start_time').calendar_date_select.date;
-      end_calendar.navTo(start_date);
-      var h = start_date.getHours(), m = start_date.getMinutes();
-      end_calendar.selected_date.setHours(h);
-      end_calendar.selected_date.setMinutes(m);
-      end_calendar.hour_select.setValue(h); 
-      end_calendar.minute_select.setValue(m);
-    }
-    <% end %>
-  </div>
-  <div>
-    <%= f.label :url, "Web Link" %>
-    <%= f.text_field :url, :size => 80 %>
-  </div>
-  <div>
-    <%= f.label :description %>
-    <%= f.text_area :description %>
-  </div>
-  <div class='help'>
-    (HTML formatting allowed)
-  </div>
-  <% if false %>
-  <%# TODO implement tags %>
-  <div>
-    <%= f.label :tags %>
-    <span class="note">(comma separated keywords)</span><br />
-    <input type="text" name="event_tags" value="" id="event_tags">
-  </div>
-  <% end %>
-  <div class='no_label'><%= f.submit(@event.new_record? ? "Create" : "Update") %></div>
+	<div id="event_times" class='no_label'>
+		<div id="start_time">
+			<%= f.label :start_time %>
+			<%= text_field_tag 'start_date', @event.start_time ? @event.start_time.to_date : '', :id => 'date_start', :class => 'date_picker' %>
+			<%= text_field_tag 'start_time', @event.start_time ? @event.start_time.strftime('%I:%M %p') : '', :id => 'time_start', :class => 'time_picker' %>
+		</div>
+		<div id="end_time">
+			<%= f.label :end_time %>
+			<%= text_field_tag 'end_date', @event.end_time ? @event.end_time.to_date : '', :id => 'date_end', :class => 'date_picker' %>
+			<%= text_field_tag 'end_time', @event.end_time ? @event.end_time.strftime('%I:%M %p') : '', :id => 'time_end', :class => 'time_picker' %>
+		</div>
+	</div>
+	<div>
+		<%= f.label :url, "Web Link" %>
+		<%= f.text_field :url %>
+	</div>
+	<div>
+		<%= f.label :description %>
+		<%= f.text_area :description %>
+	</div>
+	<div class='help'>
+		(HTML formatting allowed)
+	</div>
+	<% if false %>
+	<%# TODO implement tags %>
+	<div>
+		<%= f.label :tags %>
+		<span class="note">(comma separated keywords)</span><br />
+		<input type="text" name="event_tags" value="" id="event_tags">
+	</div>
+	<% end %>
+	<div class='no_label'><%= f.submit(@event.new_record? ? "Create" : "Update") %></div>
 </fieldset>
 <% end %>

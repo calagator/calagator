@@ -5,14 +5,16 @@
   <head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><%= @page_title ? "#{@page_title} &raquo; " : "" %>Calagator: Portland's Tech Calendar</title>
-	<%= stylesheet_link_tag "blueprint/screen" %>
-	<%= stylesheet_link_tag "blueprint/print", :media => 'print' %>
-	<!--[if IE]><%= stylesheet_link_tag "blueprint/lib/ie" %><![endif]-->
-    <%= stylesheet_link_tag "application" %>
-    <%= javascript_include_tag :defaults, :cache => true %>
-    <%= active_scaffold_includes %>
-		<%= calendar_date_select_includes %>
-		
+    <%= stylesheet_link_tag "/css/base.css" %>
+    <%= stylesheet_link_tag "datepicker.css", "timePicker.css" %>
+    <%= javascript_include_tag 	'jquery-1.2.3.min.js',
+ 																'jquery-ui',
+																'jquery-fx',
+																'jrails',
+																'ui.datepicker.js',
+																'jquery.timePicker.js',
+																'application' %>
+
 		<%= auto_discovery_link_tag(:atom, formatted_events_url('atom'), :title => 'Atom: All Events' )%>
   </head>
   <body>
