@@ -1,0 +1,37 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xml:lang="en" lang="en">
+<head>
+<%= javascript_include_tag "#{server}/javascripts/prototype" %>
+<%= javascript_include_tag "#{server}/javascripts/effects" %>
+<%= javascript_include_tag "#{server}/javascripts/dragdrop" %>
+<%= javascript_include_tag "#{server}/javascripts/controls" %>
+	<link href="<%= server %>/stylesheets/style.css?1198393656" 
+				media="screen" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="header">
+	<img width=100% height=4 src="<%= server %>/images/bevel_bar.gif">
+	<table width="100%" height=72>
+		<tr>
+			<td align='left'>
+<a href = "/newrelic"><img src="<%= server %>/images/new_relic_rpm_desktop.gif"/></a>
+<p class="description">
+Desktop Edition
+</p>
+			</td>
+			<td align='right' valign='top'>
+				<small>
+Monitor your Rails Application in production.<br/> <%=link_to 'www.newrelic.com', 'http://www.newrelic.com' %>. 
+				</small>
+			</td>
+		</tr>
+	</table>
+	<img width=100% height=4 src="<%= server %>/images/bevel_bar.gif">
+</div>
+<div id='content'>
+	<%= yield %>
+</div>
+<div align=center id='footer'>
+Monitor your Rails Application in production: <%=link_to 'www.newrelic.com', 'http://www.newrelic.com' %>. 
+</div>
+</body>
