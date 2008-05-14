@@ -7,7 +7,7 @@ show_year ||= false
 <div class='vevent'>
   <% date_class = (opts[:dates]==false || !new_day) ? ' hidden' : '' -%>
   <div class='list_date<%=date_class%>'>
-    <div class='weekday'><%= today_tomorrow_or_weekday(event) %></div>
+    <div class='day_of_week'><%= today_tomorrow_or_weekday(event) %></div>
     <%= datetime_format(event.start_time,'%b %d') -%>
     <% if show_year -%>
       <%= datetime_format(event.start_time,'%Y') -%>

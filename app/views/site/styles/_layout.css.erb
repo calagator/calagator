@@ -129,11 +129,14 @@ body {
 #list_items { margin-right: 20em; }
 
 .event_table .description,
-.event_table .url {
+.event_table .url, 
+ul.event_list .description, 
+ul.event_list .url {
 	display: none;
 }
 
-.event_table .date {
+.event_table .date,
+ul.event_list .list_date {
 	text-align: right;
 	padding-right: 1.5em;
 	border-right: 1px solid #e2fad2;
@@ -145,10 +148,10 @@ body {
 	padding-left: 1.5em
 }
 
-.event_table .day_of_week {
+.event_table .day_of_week,
+ul.event_list .day_of_week {
 	color: <%= @colors[:dark_green] %>;
 	font-weight: bold;
-	#text-transform: uppercase;
 }
 
 .event_table th {
@@ -175,6 +178,28 @@ body {
 	margin-right: 1em;
 }
 
+/* @end */
+
+/* @group Event List
+----------------------------------------*/
+
+ul.event_list {
+	list-style: none;
+	margin: 0;
+}
+
+ul.event_list li {
+	position: relative;
+	padding-left: 10em;
+	margin-bottom: 1em;
+}
+
+ul.event_list .list_date {
+	position: absolute;
+	left: 0;
+}
+
+	
 /* @end */
 
 
@@ -248,32 +273,7 @@ body {
 	
 /* @end */
 
-/* @group Event List (imported from old UI, might need refactoring)
-----------------------------------------*/
 
-ul.event_list {
-	list-style: none;
-	margin: 0;
-}
-
-ul.event_list li {
-	position: relative;
-	padding-left: 7em;
-	margin-bottom: 1em;
-}
-
-ul.event_list .list_date {
-	position: absolute;
-	left: 0;
-}
-
-
-ul.event_list .description, ul.event_list .url {
-	display: none;
-}
-
-	
-/* @end */
 
 /* @group Forms (imported from old UI)
 ----------------------------------------*/
