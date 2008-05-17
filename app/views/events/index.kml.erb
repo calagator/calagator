@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+	<Document>
+	<% for event in @events %>
+	<% next if event.venue.nil? %>
+	<% next if event.venue.latitude.nil? %>
+  <Placemark>
+    <name><%= escape_once(event.title) %></name>
+    <description><%= cdata_section("#{event.description}<p>Venue: #{event.venue.title}</p>") %></description>
+    <Point>
+      <coordinates><%= event.venue.longitude %>,<%= event.venue.latitude %></coordinates>
+    </Point>
+		<TimeSpan>
+		  <begin><%= event.start_time.xmlschema %></begin>
+		  <end><%= event.end_time.nil? ? (event.start_time+1.hours).xmlschema : event.end_time.xmlschema %></end>
+		</TimeSpan>
+  </Placemark>
+	<% end %>
+	</Document>
+</kml>

@@ -23,6 +23,7 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
+      format.kml # index.kml.erb
       format.xml  { render :xml => @events }
       format.json { render :json => @events }
       format.ics { ical_export() }
