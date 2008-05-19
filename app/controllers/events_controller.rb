@@ -82,8 +82,12 @@ class EventsController < ApplicationController
     @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
     @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
 
+    if evil_robot = !params[:trap_field].blank?
+      flash[:failure] = "<h3>Evil Robot</h3> We didn't create this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know." 
+    end
+
     respond_to do |format|
-      if @event.save
+      if !evil_robot && @event.save
         flash[:success] = 'Event was successfully created.'
         format.html { redirect_to(@event) }
         format.xml  { render :xml => @event, :status => :created, :location => @event }
