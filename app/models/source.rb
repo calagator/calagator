@@ -42,7 +42,7 @@ class Source < ActiveRecord::Base
   # Normalize the URL.
   def url=(value)
     begin
-      url = URI.parse(value)
+      url = URI.parse(value.strip)
       url.scheme = 'http' unless ['http','ftp'].include?(url.scheme) || url.scheme.nil?
       write_attribute(:url, url.scheme.nil? ? 'http://'+value.strip : url.to_s)
     rescue URI::InvalidURIError => e

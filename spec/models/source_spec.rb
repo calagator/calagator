@@ -96,6 +96,12 @@ describe Source, "when parsing URLs" do
     @source.url.should == @http_url
   end
 
+  it "should strip leading and trailing whitespace from URL" do
+    source = Source.new
+    source.url = "     #{@http_url}     "
+    source.url.should == @http_url
+  end
+
   it "should be invalid if given invalid URL" do
     source = Source.new
     source.url = '\O.o/'
