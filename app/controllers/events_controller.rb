@@ -41,6 +41,10 @@ class EventsController < ApplicationController
       return redirect_to(:action => :index)
     end
 
+    if @event.duplicate?
+      return redirect_to(event_path(@event.duplicate_of))
+    end
+
     @page_title = @event.title
     @hcal = render_to_string :partial => 'list_item.html.erb', 
         :locals => { :event => @event, :show_year => true }

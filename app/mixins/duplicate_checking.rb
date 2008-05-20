@@ -14,6 +14,11 @@ module DuplicateChecking
     end
   end
 
+  # Is this record a duplicate of another?
+  def duplicate?
+    !self.duplicate_of.blank?
+  end
+
   # Return either an Array of exact duplicates for this record, or nil if no exact duplicates were found. 
   #
   # Note that this method requires that all associations are set before this method is called.

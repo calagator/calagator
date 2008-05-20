@@ -23,6 +23,10 @@ class VenuesController < ApplicationController
       return redirect_to(:action => :index)
     end
 
+    if @venue.duplicate?
+      return redirect_to(venue_path(@venue.duplicate_of))
+     end
+
     @page_title = @venue.title
 
     return redirect_to(venue_url(@venue.duplicate_of)) if @venue.duplicate_of

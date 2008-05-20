@@ -17,4 +17,20 @@ describe EventsController do
     web1con.should be_blank
   end
 
+  it "should redirect duplicate events to their master" do
+    event_master = events(:calagator_codesprint)
+    event_duplicate = events(:tomorrow)
+
+    get 'show', :id => event_duplicate.id
+    response.should_not be_redirect
+    assigns(:event).id.should == event_duplicate.id
+
+    event_duplicate.duplicate_of = event_master
+    event_duplicate.save!
+
+    get 'show', :id => event_duplicate.id
+    response.should be_redirect
+    response.should redirect_to(event_url(event_master.id))
+  end
+
 end

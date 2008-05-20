@@ -108,7 +108,7 @@ describe Venue, "with duplicate finder (integration)" do
   end
 end
 
-describe Venue, "when squashing duplicates" do
+describe Venue, "when duplicates squashing" do
   before(:each) do
     Venue.destroy_all
     Event.destroy_all
@@ -129,6 +129,7 @@ describe Venue, "when squashing duplicates" do
     Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
 
     @submaster_venue.duplicate_of.should == @master_venue
+    @submaster_venue.duplicate?.should be_true
   end
 
   it "should squash multiple duplicates" do
