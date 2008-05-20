@@ -9,6 +9,30 @@ describe Source, "in general" do
 
     @source.to_events
   end
+
+  it "should create events from source" do
+    event = mock_model(Event)
+    event.should_receive(:save!)
+
+    source = Source.new(:url => "http://my.url/")
+    source.should_receive(:to_events).and_return([event])
+
+    source.create_events!.should == [event]
+  end
+
+  it "should create sources and events from URLs" do
+    urls = [
+      "http://first.url/",
+      "http://second.url/",
+    ]
+
+    event = mock_model(Event)
+    source = mock_model(Source)
+    source.should_receive(:create_events!).exactly(urls.size).times.and_return([event])
+
+    Source.should_receive(:find_or_create_by_url).exactly(urls.size).times.and_return(source)
+    Source.create_events_for!(urls).should == [event, event]
+  end
 end
 
 describe Source, "when reading name" do
@@ -70,6 +94,13 @@ describe Source, "when parsing URLs" do
     @source.url = @base_url
     
     @source.url.should == @http_url
+  end
+
+  it "should be invalid if given invalid URL" do
+    source = Source.new
+    source.url = '\O.o/'
+    source.url.should be_nil
+    source.should_not be_valid
   end
 end
 
@@ -220,5 +251,5 @@ describe Source, "when importing events" do
   it "should create two events when importing two non-identical events"
   
   it "two events and two venues should be created when importing two identical events with two non-identical venues"
-  
+
 end
