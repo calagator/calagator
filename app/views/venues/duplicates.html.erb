@@ -21,6 +21,7 @@
 
   <% unless @grouped_venues.empty? %>
     <%= form_tag :action => "squash_many_duplicates", :method => :post %>
+      <%= hidden_field_tag(:type, @type) %>
       <div style="color: blue;">
         Select only one set of master and duplicate venues. If you select an unrelated venue, it will be merged into the same single master record.
       </div>

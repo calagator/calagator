@@ -136,11 +136,10 @@ class EventsController < ApplicationController
   
   # GET /events/duplicates
   def duplicates
-    params[:type] ||= 'title'
-    type = params[:type] || 'any'
-    type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
+    @type = params[:type] || 'title'
+    @type = ['all','any'].include?(@type) ? @type.to_sym : @type.split(',')
     
-    @grouped_events = Event.find_duplicates_by(type, :grouped => true, :where => "a.start_time >= #{ActiveRecord::Base.connection.quote(Time.now - 1.day)}")
+    @grouped_events = Event.find_duplicates_by(@type, :grouped => true, :where => "a.start_time >= #{ActiveRecord::Base.connection.quote(Time.now - 1.day)}")
     @page_title = "Duplicate Event Squasher"
     
     respond_to do |format|
@@ -151,6 +150,7 @@ class EventsController < ApplicationController
   
   # POST /events/squash_multiple_duplicates
   def squash_many_duplicates
+    # TODO Extract common code between EventsController and VenuesController duplicate squasher
     master_event_id = params[:master_event_id].to_i
     duplicate_event_ids = params.keys.grep(/^duplicate_event_id_\d+$/){|t| params[t].to_i}
 
@@ -166,8 +166,7 @@ class EventsController < ApplicationController
       flash[:failure] = flash[:failure].nil? ? message : flash[:failure] + message
     end
     
-    
-    redirect_to :action => "duplicates"
+    redirect_to :action => "duplicates", :type => params[:type]
   end
 
 protected

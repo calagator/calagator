@@ -105,11 +105,10 @@ class VenuesController < ApplicationController
 
   # GET /venues/duplicates
   def duplicates
-    params[:type] ||= 'title'
-    type = params[:type] || 'any'
-    type = ['all','any'].include?(type) ? type.to_sym : type.split(',')
+    @type = params[:type] || 'title'
+    @type = ['all','any'].include?(@type) ? @type.to_sym : @type.split(',')
 
-    @grouped_venues = Venue.find_duplicates_by(type, :grouped => true)
+    @grouped_venues = Venue.find_duplicates_by(@type, :grouped => true)
     @page_title = "Duplicate Venue Squasher"
 
     respond_to do |format|
@@ -120,6 +119,7 @@ class VenuesController < ApplicationController
 
   # POST /venues/squash_multiple_duplicates
   def squash_many_duplicates
+    # TODO Extract common code between EventsController and VenuesController duplicate squasher
     master_venue_id = params[:master_venue_id].to_i
     duplicate_venue_ids = params.keys.grep(/^duplicate_venue_id_\d+$/){|t| params[t].to_i}
 
@@ -135,6 +135,6 @@ class VenuesController < ApplicationController
       flash[:failure] = flash[:failure].nil? ? message : flash[:failure] + message
     end
     
-    redirect_to :action => "duplicates"
+    redirect_to :action => "duplicates", :type => params[:type]
   end
 end
