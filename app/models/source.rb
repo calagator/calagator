@@ -57,7 +57,8 @@ class Source < ActiveRecord::Base
     end
   end
 
+  # Return the name of the source, which can be its title or URL.
   def name
-    title || url
+    [title,url].detect{|t| !t.blank?}
   end
 end

@@ -11,6 +11,38 @@ describe Source, "in general" do
   end
 end
 
+describe Source, "when reading name" do
+  before(:all) do
+    @title = "title"
+    @url = "http://my.url/"
+  end
+
+  before(:each) do
+    @source = Source.new
+  end
+  
+  it "should return nil if no title is available" do
+    @source.name.should be_nil
+  end
+
+  it "should use title if available" do
+    @source.title = @title
+    @source.name.should == @title
+  end
+
+  it "should use URL if available" do
+    @source.url = @url
+    @source.name.should == @url
+  end
+
+  it "should prefer to use title over URL if both are available" do
+    @source.title = @title
+    @source.url = @url
+
+    @source.name.should == @title
+  end
+end
+
 describe Source, "when parsing URLs" do
   before(:all) do
     @http_url = 'http://upcoming.yahoo.com/event/390164/'
