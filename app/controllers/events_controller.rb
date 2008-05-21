@@ -137,9 +137,17 @@ class EventsController < ApplicationController
   # GET /events/duplicates
   def duplicates
     @type = params[:type] || 'title'
-    @type = ['all','any'].include?(@type) ? @type.to_sym : @type.split(',')
+
+    if @type == 'na'
+      # Use find to get an Array of all non-duplicates in date order,
+      # make it a Hash so it takes the same form as find_duplicates_by(:grouped => true)
+      # so that the duplicate template will display it properly
+      @grouped_events = { [] => Event.find_all_future_events(:start_time) }
+    else
+      @type = ['all','any'].include?(@type) ? @type.to_sym : @type.split(',')
+      @grouped_events = Event.find_duplicates_by(@type, :grouped => true, :where => "a.start_time >= #{ActiveRecord::Base.connection.quote(Time.now - 1.day)}")
+    end
     
-    @grouped_events = Event.find_duplicates_by(@type, :grouped => true, :where => "a.start_time >= #{ActiveRecord::Base.connection.quote(Time.now - 1.day)}")
     @page_title = "Duplicate Event Squasher"
     
     respond_to do |format|

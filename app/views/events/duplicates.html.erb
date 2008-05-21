@@ -15,6 +15,10 @@
       <li><%= link_to_unless_current "Any Field", url_for(:action => 'duplicates', :type => 'any') %></li>
       <li><%= link_to_unless_current "All Fields", url_for(:action => 'duplicates', :type => 'all') %></li>
     </ul>
+    <h3>List Events</h3>
+    <ul>
+      <li><%= link_to_unless_current "All Events", url_for(:action => 'duplicates', :type => 'na') %></li>
+    </ul>
   </div>
   <% unless @grouped_events.empty? %>
     <%= form_tag :action => "squash_many_duplicates", :method => :post %>
