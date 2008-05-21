@@ -85,7 +85,7 @@ module DuplicateChecking
     # Return events with duplicate values for a given set of fields.
     #
     # Options:
-    # * :grouped => Return events grouped by commonality, rather than returning an Array. Defaults to false.
+    # * :grouped => Return Hash of events grouped by commonality, rather than returning an Array. Defaults to false.
     # * :where => String that specifies additional arguments to add to the WHERE clause.
     def find_duplicates_by(fields, options={})
       grouped = options[:grouped] || false

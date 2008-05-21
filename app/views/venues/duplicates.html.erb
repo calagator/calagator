@@ -17,6 +17,10 @@
       <li><%= link_to_unless_current "Any Field", url_for(:action => 'duplicates', :type => 'any') %></li>
       <li><%= link_to_unless_current "All Fields", url_for(:action => 'duplicates', :type => 'all') %></li>
     </ul>
+    <h3>List venues</h3>
+    <ul>
+      <li><%= link_to_unless_current "All Venues", url_for(:action => 'duplicates', :type => 'na') %></li>
+    </ul>
   </div>
 
   <% unless @grouped_venues.empty? %>
