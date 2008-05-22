@@ -1,4 +1,18 @@
-<%= render :partial => 'layouts/common_header' %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Calagator<%= @page_title ? " - #{@page_title}" : "" %></title>
+	<%= stylesheet_link_tag "blueprint/screen" %>
+	<%= stylesheet_link_tag "blueprint/print", :media => 'print' %>
+	<!--[if IE]><%= stylesheet_link_tag "blueprint/lib/ie" %><![endif]-->
+    <%= stylesheet_link_tag "application" %>
+    <%= javascript_include_tag :all, :cache => true %>
+    <%= active_scaffold_includes %>
+  </head>
+  <body>
     <div id="top_menu">
 
 	  <%
@@ -38,4 +52,5 @@
     <div id="top_footer">
       Calagator.org  <%= source_code_version %>
     </div>
-<%= render :partial => 'layouts/common_footer' %>
+  </body>
+</html>

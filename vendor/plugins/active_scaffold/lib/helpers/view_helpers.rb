@@ -78,9 +78,11 @@ module ActiveScaffold
 
       # easy way to include ActiveScaffold assets
       def active_scaffold_includes(frontend = :default)
-        js = ActiveScaffold::Config::Core.javascripts(frontend).collect do |name|
-          javascript_include_tag(ActiveScaffold::Config::Core.asset_path(name, frontend))
-        end.join('')
+        # NOTE Including these JavaScripts causes errors, but they don't do much that we need
+        ### js = ActiveScaffold::Config::Core.javascripts(frontend).collect do |name|
+        ###   javascript_include_tag(ActiveScaffold::Config::Core.asset_path(name, frontend))
+        ### end.join('')
+        js = ""
 
         css = stylesheet_link_tag(ActiveScaffold::Config::Core.asset_path("stylesheet.css", frontend))
         ie_css = stylesheet_link_tag(ActiveScaffold::Config::Core.asset_path("stylesheet-ie.css", frontend))
