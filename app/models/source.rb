@@ -4,12 +4,12 @@
 # Table name: sources
 #
 #  id          :integer         not null, primary key
-#  title       :string(255)     
-#  url         :string(255)     
-#  imported_at :datetime        
-#  created_at  :datetime        
-#  updated_at  :datetime        
-#  reimport    :boolean         
+#  title       :string(255)
+#  url         :string(255)
+#  imported_at :datetime
+#  created_at  :datetime
+#  updated_at  :datetime
+#  reimport    :boolean
 #
 
 # == Source
@@ -22,21 +22,38 @@ class Source < ActiveRecord::Base
   has_many :events
   has_many :updates
 
-  # Create events from list of +urls+. Returns the events created.
-  def self.create_events_for!(*urls)
-    urls.flatten!
-    created_events = []
-    urls.each do |url|
-      source = Source.find_or_create_by_url(:url => url)
-      created_events += source.create_events!
+  # Create sources and events for the Array of +urls+. Returns a Hash of
+  # Sources and the Events created.
+  def self.create_sources_and_events_for!(*urls)
+    sources2events = {}
+    transaction do
+      urls.flatten.each do |url|
+        source = Source.find_or_create_by_url(:url => url)
+        events = source.create_events!
+        sources2events[source] = events
+        source.save! # Updates the imported_at and othe fields
+      end
     end
-    return created_events
+    return sources2events
   end
 
   # Create events for this source. Returns the events created. URL must be set
   # for this source for this to work.
   def create_events!
-    return to_events.map{|event| event.save!; event}
+    now = Time.now.yesterday # All events before this date will be skipped
+    events = []
+    transaction do
+      for event in self.to_events
+        next if event.title.blank? && event.description.blank? && event.url.blank?
+        next if event.start_time < now
+        
+        event.save!
+        event.venue.save! if event.venue
+        events << event
+      end
+      self.save!
+    end
+    return events
   end
 
   # Normalize the URL.
@@ -53,18 +70,17 @@ class Source < ActiveRecord::Base
   # Returns an Array of Event objects that were read from this source.
   def to_events(opts={})
     self.imported_at = DateTime.now()
-    self.save
     if valid?
       opts[:url] ||= self.url
       returning([]) do |events|
         SourceParser.to_abstract_events(opts).each do |abstract_event|
           event = Event.from_abstract_event(abstract_event, self)
-          
+
           events << event
         end
       end
     else
-      raise ActiveRecord::RecordInvalid, "Invalid record: #{errors.full_messages.to_sentence}"
+      raise ActiveRecord::RecordInvalid, self
     end
   end
 

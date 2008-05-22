@@ -1,37 +1,40 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Source, "in general" do
-  it "should update the imported_at date when it retrieves events" do
-    @source = Source.new(:url => 'http://upcoming.yahoo.com/event/390164/')
-    @source.should_receive(:imported_at=).and_return(true)
-    @source.should_receive(:save).and_return(true)
-    SourceParser::Base.should_receive(:read_url).and_return(true)
-
-    @source.to_events
+  before(:each) do
+    @event = mock_model(Event,
+      :title => "Title",
+      :description => "Description",
+      :url => "http://my.url/",
+      :start_time => Time.now + 1.day,
+      :venue => nil)
   end
 
-  it "should create events from source" do
-    event = mock_model(Event)
-    event.should_receive(:save!)
+  it "should create events for source from URL" do
+    @event.should_receive(:save!)
 
     source = Source.new(:url => "http://my.url/")
-    source.should_receive(:to_events).and_return([event])
+    source.should_receive(:to_events).and_return([@event])
 
-    source.create_events!.should == [event]
+    source.create_events!.should == [@event]
   end
 
-  it "should create sources and events from URLs" do
-    urls = [
-      "http://first.url/",
-      "http://second.url/",
-    ]
+  it "should create source and events from URL" do
+    url = "http://my.url/"
+    source = mock_model(Source, :url => url)
+    source.should_receive(:create_events!).and_return([@event])
+    source.should_receive(:save!).and_return(true)
 
-    event = mock_model(Event)
-    source = mock_model(Source)
-    source.should_receive(:create_events!).exactly(urls.size).times.and_return([event])
+    Source.should_receive(:find_or_create_by_url).and_return(source)
+    result = Source.create_sources_and_events_for!(url)
 
-    Source.should_receive(:find_or_create_by_url).exactly(urls.size).times.and_return(source)
-    Source.create_events_for!(urls).should == [event, event]
+    result.keys.should == [source]
+    result.values.first.should == [@event]
+  end
+
+  it "should fail to create events for invalid sources" do
+    source = Source.new(:url => '\not valid/')
+    lambda{ source.to_events }.should raise_error(ActiveRecord::RecordInvalid, /Url has invalid format/i)
   end
 end
 
@@ -44,7 +47,7 @@ describe Source, "when reading name" do
   before(:each) do
     @source = Source.new
   end
-  
+
   it "should return nil if no title is available" do
     @source.name.should be_nil
   end
@@ -92,7 +95,7 @@ describe Source, "when parsing URLs" do
 
   it "should add the http prefix to urls without one" do
     @source.url = @base_url
-    
+
     @source.url.should == @http_url
   end
 
@@ -145,13 +148,13 @@ describe Source, "with hCalendar events" do
     second.start_time.should == Time.parse('2008-2-2')
     second.end_time.should == Time.parse('2008-02-03')
   end
-  
+
   it "should strip html the venue title" do
     hcal_content = read_sample('hcal_upcoming.xml')
     hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
     SourceParser::Base.stub!(:read_url).and_return(hcal_content)
     events = hcal_source.to_events
-    
+
     events.first.venue.title.should == 'Jive Software Office'
   end
 
@@ -233,7 +236,7 @@ describe Source, "with iCalendar events" do
     events = events_from_ical_at('ical_google.ics')
     events.first.venue.title.should == 'CubeSpace'
   end
-  
+
 end
 
 describe Source, "when importing events" do
@@ -253,9 +256,9 @@ describe Source, "when importing events" do
   end
 
   it "should create only one event and one venue when importing two identical events with identical venues"
-  
+
   it "should create two events when importing two non-identical events"
-  
+
   it "two events and two venues should be created when importing two identical events with two non-identical venues"
 
 end
