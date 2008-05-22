@@ -2,31 +2,28 @@
 <fieldset>
   <legend>Import a source</legend>
   <div>
-		<%= f.label :url, "URL" %>
-	  <%= f.text_field :url, :size => 60, :value => params[:url] %>
-	</div>
+    <%= f.label :url, "URL" %>
+    <%= f.text_field :url, :size => 60, :value => params[:url] %>
+  </div>
   <div>
-		<%= f.label :reimport, "Re-import?" %>
-	  <%= f.check_box :reimport %>
-	</div>
-	<div class='no_label'>
-        <%= f.submit %>
-	</div>
-	<div class='help'>
-				<p>
-        Example URLS:<br />
-        hCalendar at http://upcoming.yahoo.com/event/349225/<br />
-        iCalendar at webcal://upcoming.yahoo.com/calendar/v2/event/349225<br/>
-		For more information on import formats, see <%= link_to "this page", "http://code.google.com/p/calagator/wiki/IncomingEventDataFormats" %>
-				</p>
-				<p>
-				<em>New!</em> Import pages faster with our bookmarklet:
-        <a href="javascript:d=document;q=(d.location.href);w=window;location.href='http://<%= PRODUCTION_HOSTNAME %>/sources/new?url='+escape(q);">Add to Calagator</a>
-				</p>
-        <p>
-        Check the re-import box and we'll periodically visit this source
-        to get new events.
-        </p>
-	</div>
+    <%= f.label :reimport, "Re-import?" %>
+    <%= f.check_box :reimport %>
+  </div>
+  <div class='no_label'>
+        <%= f.submit "Import" %>
+  </div>
+  <div class='help'>
+    <p>
+      For information about import formats, see <%= link_to "this page", "http://code.google.com/p/calagator/wiki/IncomingEventDataFormats" %>.
+    </p>
+    <p>
+      <em>New!</em> Import pages faster with our bookmarklet:
+      <a href="javascript:d=document;q=(d.location.href);w=window;location.href='http://<%= PRODUCTION_HOSTNAME %>/sources/new?url='+escape(q);">Add to Calagator</a>
+    </p>
+    <p>
+    Check the re-import box and we'll periodically visit this source
+      to get new events.
+    </p>
+  </div>
 </fieldset>
 <% end %>
