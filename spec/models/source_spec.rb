@@ -165,7 +165,7 @@ describe Source, "with iCalendar events" do
     url = "http://foo.bar/"
     source = Source.new(:title => "Calendar event feed", :url => url)
     SourceParser::Base.should_receive(:read_url).and_return(read_sample(filename))
-    return source.to_events
+    return source.to_events(:skip_old => false)
   end
 
   it "should parse Apple iCalendar format" do
@@ -237,6 +237,49 @@ describe Source, "with iCalendar events" do
     events.first.venue.title.should == 'CubeSpace'
   end
 
+  describe Source, "when skipping old events" do
+    before(:each) do
+      SourceParser::Base.stub!(:read_url).and_return(<<-HERE)
+BEGIN:VCALENDAR
+X-WR-CALNAME;VALUE=TEXT:NERV
+VERSION:2.0
+CALSCALE:GREGORIAN
+PRODID:-//nerv.go.jp//iCal 1.0//EN
+X-WR-TIMEZONE;VALUE=TEXT:US/Eastern
+BEGIN:VEVENT
+UID:Unit-00
+SUMMARY:Rei
+DESCRIPTION:Ayanami
+DTSTART:#{(Time.now-1.year).strftime("%Y%m%d")}
+DTSTAMP:040425
+SEQ:0
+END:VEVENT
+BEGIN:VEVENT
+UID:Unit-02
+SUMMARY:Asuka
+DESCRIPTION:Soryu
+DTSTART:#{Time.now.strftime("%Y%m%d")}
+DTSTAMP:040425
+SEQ:1
+END:VEVENT
+END:VCALENDAR
+      HERE
+      @source = Source.new(:title => "Title", :url => "http://my.url/")
+    end
+
+    it "should be able to import all events" do
+      events = @source.to_events(:skip_old => false)
+      events.size.should == 2
+      events.first.title == "Rei"
+      events.last.title == "Asuka"
+    end
+
+    it "should be able to skip old events" do
+      events = @source.to_events(:skip_old => true)
+      events.size.should == 1
+      events.first.title == "Asuka"
+    end
+  end
 end
 
 describe Source, "when importing events" do

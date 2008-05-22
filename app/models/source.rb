@@ -68,6 +68,10 @@ class Source < ActiveRecord::Base
   end
 
   # Returns an Array of Event objects that were read from this source.
+  #
+  # Options:
+  # * :url -- URL of data to import. Defaults to record's #url attribute.
+  # * :skip_old -- Should old events be skipped? Default is true.
   def to_events(opts={})
     self.imported_at = DateTime.now()
     if valid?

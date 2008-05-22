@@ -18,29 +18,57 @@ class SourceParser # :nodoc:
       super(url.gsub(/^webcal:/, 'http:'))
     end
 
+    CALENDAR_CONTENT_RE    = /^BEGIN:VCALENDAR.*?^END:VCALENDAR/m
+    EVENT_CONTENT_RE       = /^BEGIN:VEVENT.*?^END:VEVENT/m
+    EVENT_DTSTART_RE       = /^DTSTART.*?:([^\r\n$]+)/m
+    VENUE_CONTENT_RE       = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
+    VENUE_CONTENT_BEGIN_RE = /^BEGIN:VVENUE$/m
+    VENUE_CONTENT_END_RE   = /^END:VVENUE$/m
+
     # Return an Array of AbstractEvent instances extracted from an iCalendar input.
     #
     # Options:
     # * :url -- URL of iCalendar data to import
     # * :content -- String of iCalendar data to import
+    # * :skip_old -- Should old events be skipped? Default is true.
     def self.to_abstract_events(opts={})
+      # Skip old events by default
+      opts[:skip_old] = true unless opts[:skip_old] == false
+      cutoff = Time.now.yesterday
+
       content = content_for(opts)
+      content_calendars = content.scan(CALENDAR_CONTENT_RE)
 
-      content_calendars = content.scan(/^BEGIN:VCALENDAR.*^END:VCALENDAR/m)
-      event_results = content_calendars.map do |content_calendar|
-        events = Vpim::Icalendar.decode(content_calendar).first.components.map do |component|
-          event = AbstractEvent.new
+      events = []
+      for content_calendar in content_calendars
+        for content_event in content_calendar.scan(EVENT_CONTENT_RE)
+          # Skip old events before handing them to VPIM
+          if opts[:skip_old]
+            if match = content_event.match(EVENT_DTSTART_RE)
+              dtstart = match[1]
+              time = Time.parse(dtstart)
+              ### puts "matched: #{dtstart} / #{time} / #{cutoff}"
+              if time < cutoff
+                ### puts "Skipping event: #{dtstart}"
+                next 
+              end
+            end
+          end
 
-          event.title = component.summary
-          event.description = component.description
-          event.start_time = component.dtstart
-          event.end_time = component.dtend
-          event.url = component.url
-          event.location = to_abstract_location(content_calendar, :fallback => component.location)
-          event
+          components = Vpim::Icalendar.decode("BEGIN:VCALENDAR\n"+content_event+"\nEND:VCALENDAR\n").first.components
+          for component in components
+            event = AbstractEvent.new
+            event.start_time = component.dtstart
+            event.title = component.summary
+            event.description = component.description
+            event.end_time = component.dtend
+            event.url = component.url
+            event.location = to_abstract_location(content_calendar, :fallback => component.location)
+           events << event
+          end
         end
       end
-      return event_results.flatten
+      return events
     end
 
     # Return an AbstractLocation extracted from an iCalendar input.
@@ -55,14 +83,14 @@ class SourceParser # :nodoc:
 
       # The Vpim libary doesn't understand that Vvenue entries are just Vcards,
       # so transform the content to trick it into treating them as such.
-      if vcard_content = value.scan(/^BEGIN:VVENUE$.*^END:VVENUE$/m).first
-        vcard_content.gsub!(/^BEGIN:VVENUE$/m, 'BEGIN:VCARD')
-        vcard_content.gsub!(/^END:VVENUE$/m, 'END:VCARD')
+      if vcard_content = value.scan(VENUE_CONTENT_RE).first
+        vcard_content.gsub!(VENUE_CONTENT_BEGIN_RE, 'BEGIN:VCARD')
+        vcard_content.gsub!(VENUE_CONTENT_END_RE, 'END:VCARD')
 
         begin
           # TODO What if there is more than one vcard in the vcalendar?!
           vcards = Vpim::Vcard.decode(vcard_content)
-          raise ArgumentError, "Wrong number of vcards" if vcards.size != 1
+          raise ArgumentError, "Wrong number of vcards" unless vcards.size == 1
           vcard = vcards.first
 
           a.title = vcard['name']
