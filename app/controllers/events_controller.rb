@@ -105,7 +105,6 @@ class EventsController < ApplicationController
   # PUT /events/1
   # PUT /events/1.xml
   def update
-    debugger
     @event = Event.find(params[:id])
     @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
     @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
