@@ -285,12 +285,27 @@ end
 describe Source, "when importing events" do
   fixtures :events, :venues
 
-  it "should not create a new event when importing an identical event" do
-    hcal_content = read_sample('hcal_dup_event_dup_venue.xml')
-    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-    SourceParser::Base.stub!(:read_url).and_return(hcal_content)
+  before(:all) do
+    @hcal_content = read_sample('hcal_dup_event_dup_venue.xml')
+    @hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+  end
 
-    events = hcal_source.to_events
+  before(:each) do
+    SourceParser::Base.stub!(:read_url).and_return(@hcal_content)
+  end
+
+  it "should not create a new event when importing an identical event" do
+    events = @hcal_source.to_events
+
+    events.first.should_not be_a_new_record # it should return an existing event record and not create a new one
+  end
+
+  it "should not import a record that matches a record that's marked as a duplicate" do
+    previous_duplicate = events(:duplicate_event)
+    previous_duplicate.duplicate_of_id = 1
+    previous_duplicate.save!
+
+    events = @hcal_source.to_events
 
     events.first.should_not be_a_new_record # it should return an existing event record and not create a new one
   end
