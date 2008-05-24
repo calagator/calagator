@@ -12,7 +12,7 @@ calagator_codesprint:
 tomorrow:
   id: <%=n+=1%>
   title: Calagator Ski Trip
-  description: It's only a day away.
+  description: "It's only a day away."
   start_time: <%= Date.today %> 10:00:00
   venue_id: 1
   url: http://www.allmusicals.com/lyrics/annie/tomorrow.htm
