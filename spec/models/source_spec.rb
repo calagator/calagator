@@ -286,8 +286,8 @@ describe Source, "when importing events" do
   fixtures :events, :venues
 
   it "should create only one event when importing two identical events" do
-    pending "svn import missing 'hcal_duplicate_event+venue.xml' file and finish writing the source_spec" do
-      hcal_content = read_sample('hcal_duplicate_event+venue.xml')
+    pending "finish writing the source_spec" do
+      hcal_content = read_sample('hcal_dup_event_dup_venue.xml')
       hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
       SourceParser::Base.stub!(:read_url).and_return(hcal_content)
 
