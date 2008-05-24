@@ -44,14 +44,14 @@
 	<h3 class='first'>Send to Calendar</h3>
 	<ul>
 		<li><%= render :partial=>'gcal_reminder'%></li>
-  	<li><%= link_to 'Download to iCal', "#{event_url(@event)}.ics" %></li>
+		<li><%= link_to 'Download to iCal', "#{event_url(@event)}.ics" %></li>
 		<li>
-			<%= link_to_function 'Get hCalendar markup', '$("hcal_field").toggle()' %>
+			<%= link_to_function 'Get hCalendar markup', '$("#hcal_field").toggle()' %>
 			<div id="hcal_field" style="display: none;">
-		    <%= text_area_tag 'hCalendar', h(@show_hcal), :rows => 10, :cols => 80 %>
-		  </div>
+				<%= text_area_tag 'hCalendar', h(@show_hcal), :rows => 10, :cols => 80 %>
+			</div>
 		</li>
-		</ul>
+	</ul>
 <hr>
   <div id='edit_link'>
       <p>You can <%= link_to "edit this event", edit_event_url(@event) %>
