@@ -86,7 +86,7 @@ class Event < ActiveRecord::Base
 
   # Returns an Array of non-duplicate future Event instances.
   def self.find_all_future_events(order)
-    return find(:all, :conditions => ['events.duplicate_of_id is NULL AND start_time > ?', Date.today ], 
+    return find(:all, :conditions => ['events.duplicate_of_id is NULL AND start_time >= ?', Date.today.to_datetime ], 
               :include => :venue, 
               :order => order)
   end
@@ -97,7 +97,7 @@ class Event < ActiveRecord::Base
     start_date = start_date.to_datetime if start_date.is_a?(Date)
     end_date = end_date.to_datetime+1.day-1.second if end_date.is_a?(Date)
 
-    find(:all, :conditions => ['start_time > ? AND start_time < ? AND events.duplicate_of_id is NULL', start_date, end_date], 
+    find(:all, :conditions => ['events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?', start_date, end_date], 
         :include => :venue,
         :order => order)
   end
