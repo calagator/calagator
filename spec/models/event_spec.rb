@@ -77,7 +77,8 @@ describe Event do
   end
   
   it "should find all events within a given date range" do
-    Event.should_receive(:find).with(:all, :conditions => ['start_time > ? AND start_time < ? AND events.duplicate_of_id is NULL', DateTime.parse(Date.today.to_s), DateTime.parse(Date.tomorrow.to_s)+1.day-1.second], 
+    Event.should_receive(:find).with(:all, 
+        :conditions => ['events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?', DateTime.parse(Date.today.to_s), DateTime.parse(Date.tomorrow.to_s)+1.day-1.second], 
         :order => 'start_time',
         :include => :venue)
     Event.find_by_dates(Date.today, Date.tomorrow)

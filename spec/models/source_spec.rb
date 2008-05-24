@@ -285,20 +285,15 @@ end
 describe Source, "when importing events" do
   fixtures :events, :venues
 
-  it "should create only one event when importing two identical events" do
-    pending "finish writing the source_spec" do
-      hcal_content = read_sample('hcal_dup_event_dup_venue.xml')
-      hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-      SourceParser::Base.stub!(:read_url).and_return(hcal_content)
+  it "should not create a new event when importing an identical event" do
+    hcal_content = read_sample('hcal_dup_event_dup_venue.xml')
+    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+    SourceParser::Base.stub!(:read_url).and_return(hcal_content)
 
-      events = hcal_source.to_events
-#      puts events.first.venue.postal_code.inspect
+    events = hcal_source.to_events
 
-      events.size.should == 0
-    end
+    events.first.should_not be_a_new_record # it should return an existing event record and not create a new one
   end
-
-  it "should create only one event and one venue when importing two identical events with identical venues"
 
   it "should create two events when importing two non-identical events"
 
