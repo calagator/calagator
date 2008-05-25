@@ -39,13 +39,18 @@ class Source < ActiveRecord::Base
 
   # Create events for this source. Returns the events created. URL must be set
   # for this source for this to work.
-  def create_events!
-    now = Time.now.yesterday # All events before this date will be skipped
+  def create_events!(opts={})
+    cutoff = Time.now.yesterday # All events before this date will be skipped
     events = []
     transaction do
-      for event in self.to_events
-        next if event.title.blank? && event.description.blank? && event.url.blank?
-        next if event.start_time < now
+      for event in self.to_events(opts)
+        if opts[:skip_old]
+          next if event.title.blank? && event.description.blank? && event.url.blank?
+          next if (event.end_time || event.start_time) < cutoff
+        end
+        
+        # Skip invalid events that start after they end
+        next if event.end_time && event.end_time < event.start_time
         
         event.save!
         event.venue.save! if event.venue
