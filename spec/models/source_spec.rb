@@ -175,8 +175,8 @@ describe Source, "with iCalendar events" do
     events.size.should == 1
     event = events.first
     event.title.should == "Coffee with Jason"
-    event.start_time.should == Time.parse('Mon Oct 28 14:00:00 -0800 2002')
-    event.end_time.should == Time.parse('Mon Oct 28 15:00:00 -0800 2002')
+    event.start_time.should == Time.parse('Thu Nov 28 14:00:00 -0800 2002')
+    event.end_time.should == Time.parse('Thu Nov 28 15:00:00 -0800 2002')
     event.venue.should be_nil
   end
 
