@@ -7,6 +7,7 @@ describe Source, "in general" do
       :description => "Description",
       :url => "http://my.url/",
       :start_time => Time.now + 1.day,
+      :end_time => nil,
       :venue => nil)
   end
 
@@ -247,8 +248,8 @@ CALSCALE:GREGORIAN
 PRODID:-//nerv.go.jp//iCal 1.0//EN
 X-WR-TIMEZONE;VALUE=TEXT:US/Eastern
 BEGIN:VEVENT
-UID:Unit-00
-SUMMARY:Rei
+UID:Unit-01
+SUMMARY:Past start and no end
 DESCRIPTION:Ayanami
 DTSTART:#{(Time.now-1.year).strftime("%Y%m%d")}
 DTSTAMP:040425
@@ -256,59 +257,91 @@ SEQ:0
 END:VEVENT
 BEGIN:VEVENT
 UID:Unit-02
-SUMMARY:Asuka
+SUMMARY:Current start and no end
 DESCRIPTION:Soryu
-DTSTART:#{Time.now.strftime("%Y%m%d")}
+DTSTART:#{(Time.now+1.year).strftime("%Y%m%d")}
 DTSTAMP:040425
 SEQ:1
+END:VEVENT
+BEGIN:VEVENT
+UID:Unit-03
+SUMMARY:Past start and current end
+DESCRIPTION:Soryu a
+DTSTART:#{(Time.now-1.year).strftime("%Y%m%d")}
+DTEND:#{(Time.now+1.year).strftime("%Y%m%d")}
+DTSTAMP:040425
+END:VEVENT
+BEGIN:VEVENT
+UID:Unit-04
+SUMMARY:Current start and current end
+DESCRIPTION:Soryu as
+DTSTART:#{Time.now.strftime("%Y%m%d")}
+DTEND:#{(Time.now+1.year).strftime("%Y%m%d")}
+DTSTAMP:040425
+END:VEVENT
+BEGIN:VEVENT
+UID:Unit-05
+SUMMARY:Past start and past end
+DESCRIPTION:Soryu qewr
+DTSTART:#{(Time.now-1.year).strftime("%Y%m%d")}
+DTEND:#{(Time.now-1.year).strftime("%Y%m%d")}
+DTSTAMP:040425
+END:VEVENT
+BEGIN:VEVENT
+UID:Unit-06
+SUMMARY:Current start and past end
+DESCRIPTION:Not a valid event
+DTSTART:#{Time.now.strftime("%Y%m%d")}
+DTEND:#{(Time.now-1.year).strftime("%Y%m%d")}
+DTSTAMP:040425
 END:VEVENT
 END:VCALENDAR
       HERE
       @source = Source.new(:title => "Title", :url => "http://my.url/")
     end
-
-    it "should be able to import all events" do
-      events = @source.to_events(:skip_old => false)
-      events.size.should == 2
-      events.first.title == "Rei"
-      events.last.title == "Asuka"
+    
+    # for following specs a 'valid' event does not start after it ends"
+    it "should be able to import all valid events" do
+      events = @source.create_events!(:skip_old => false)
+      events.size.should == 5
+      events.map(&:title).should == [
+        "Past start and no end",
+        "Current start and no end",
+        "Past start and current end",
+        "Current start and current end",
+        "Past start and past end"
+      ]
     end
-
-    it "should be able to skip old events" do
-      events = @source.to_events(:skip_old => true)
-      events.size.should == 1
-      events.first.title == "Asuka"
-    end
+       
+    it "should be able to skip invalid and old events" do
+      events = @source.create_events!(:skip_old => true)
+      events.size.should == 3
+      events.map(&:title).should == [
+        "Current start and no end",
+        "Past start and current end",
+        "Current start and current end"
+      ]
+    end    
   end
 end
 
 describe Source, "when importing events" do
   fixtures :events, :venues
 
-  before(:all) do
-    @hcal_content = read_sample('hcal_dup_event_dup_venue.xml')
-    @hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+  it "should create only one event when importing two identical events" do
+    pending "finish writing the source_spec" do
+      hcal_content = read_sample('hcal_dup_event_dup_venue.xml')
+      hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+      SourceParser::Base.stub!(:read_url).and_return(hcal_content)
+
+      events = hcal_source.to_events
+#      puts events.first.venue.postal_code.inspect
+
+      events.size.should == 0
+    end
   end
 
-  before(:each) do
-    SourceParser::Base.stub!(:read_url).and_return(@hcal_content)
-  end
-
-  it "should not create a new event when importing an identical event" do
-    events = @hcal_source.to_events
-
-    events.first.should_not be_a_new_record # it should return an existing event record and not create a new one
-  end
-
-  it "should not import a record that matches a record that's marked as a duplicate" do
-    previous_duplicate = events(:duplicate_event)
-    previous_duplicate.duplicate_of_id = 1
-    previous_duplicate.save!
-
-    events = @hcal_source.to_events
-
-    events.first.should_not be_a_new_record # it should return an existing event record and not create a new one
-  end
+  it "should create only one event and one venue when importing two identical events with identical venues"
 
   it "should create two events when importing two non-identical events"
 

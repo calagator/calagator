@@ -24,6 +24,7 @@ describe Event do
       :title => 'Web 2.0 Conference',
       :url => 'http://www.web2con.com/',
       :start_time => Time.parse('2007-10-05'),
+      :end_time => nil,
       :venue => @basic_venue)
   end
 
@@ -83,8 +84,8 @@ describe Event do
         :include => :venue)
     Event.find_by_dates(Date.today, Date.tomorrow)
   end
-  
-  it "should find all events with duplicate titles" do
+
+it "should find all events with duplicate titles" do
     Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
     Event.find_duplicates_by(:title)
   end
