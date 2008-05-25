@@ -21,6 +21,7 @@ class SourceParser # :nodoc:
     CALENDAR_CONTENT_RE    = /^BEGIN:VCALENDAR.*?^END:VCALENDAR/m
     EVENT_CONTENT_RE       = /^BEGIN:VEVENT.*?^END:VEVENT/m
     EVENT_DTSTART_RE       = /^DTSTART.*?:([^\r\n$]+)/m
+    EVENT_DTEND_RE         = /^DTEND.*?:([^\r\n$]+)/m
     VENUE_CONTENT_RE       = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
     VENUE_CONTENT_BEGIN_RE = /^BEGIN:VVENUE$/m
     VENUE_CONTENT_END_RE   = /^END:VVENUE$/m
@@ -45,13 +46,12 @@ class SourceParser # :nodoc:
           # Skip old events before handing them to VPIM
           if opts[:skip_old]
             if match = content_event.match(EVENT_DTSTART_RE)
-              dtstart = match[1]
-              time = Time.parse(dtstart)
-              ### puts "matched: #{dtstart} / #{time} / #{cutoff}"
-              if time < cutoff
-                ### puts "Skipping event: #{dtstart}"
-                next 
-              end
+              start_time = Time.parse(match[1])
+              
+              match = content_event.match(EVENT_DTEND_RE)
+              end_time = match ? Time.parse(match[1]) : nil
+              
+              next if (end_time || start_time) < cutoff
             end
           end
 

@@ -12,7 +12,8 @@ describe SourcesController do
       :source= => true,
       :save! => true,
       :venue => @venue,
-      :start_time => Time.now+1.week)
+      :start_time => Time.now+1.week,
+      :end_time => nil)
 
     @source = Source.new(:url => "http://my.url/")
     @source.stub!(:save!).and_return(true)
