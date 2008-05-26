@@ -79,9 +79,9 @@ describe Event do
   
   it "should find all events within a given date range" do
     Event.should_receive(:find).with(:all, 
-        :conditions => ['events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?', DateTime.parse(Date.today.to_s), DateTime.parse(Date.tomorrow.to_s)+1.day-1.second], 
-        :order => 'start_time',
-        :include => :venue)
+      :conditions => ["events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?", DateTime.parse(Date.today.to_s), DateTime.parse(Date.tomorrow.to_s)+1.day-1.second], 
+      :order => 'start_time',
+      :include => :venue)
     Event.find_by_dates(Date.today, Date.tomorrow)
   end
 
@@ -141,3 +141,24 @@ it "should find all events with duplicate titles" do
   end
   
 end
+
+describe Event do
+  
+  before(:each) do
+    @now = Time.now
+    @event = Event.new(:title => "Event in progress", :start_time => @now - 2.days, :end_time => @now + 2.days)
+    @event.save
+  end
+  
+  it "should include ongoing events as future events" do
+    @events = Event.find_future_events("start_time")
+    @events.should include(@event)
+  end
+  
+  it "should include, within a date range, events ongoing at the start of the range" do
+    @events = Event.find_by_dates(@now - 1.days, @now + 1.days)
+    @events.should include(@event)
+  end
+  
+end
+
