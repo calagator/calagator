@@ -41,24 +41,26 @@
   <% if !@venue.telephone.blank? %>
     <div class='tel'><%=h @venue.telephone %></div>
   <% end %>
-  
+
   <% unless @venue.description.blank? %>
   <div class="description">
     <%= upgrade_br(simple_format(auto_link(white_list(@venue.description)))) %>
   </div>
   <% end %>
-  
-  <h2>Future Events Happening Here</h2>
-  
-  <%= render :partial => 'events/list', :locals => { :events => Event.find_future_events(:venue => @venue) } %>
-  <div class='single_view_right sidebar'>
-    <div id='edit_link'>
-      <p>You can <%= link_to "edit this venue", edit_venue_url(@venue) %>
-      or <%= link_to "delete it", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>.</p>
+
+  <% if @events && @events.size > 0 %>
+    <h2>Future Events Happening Here</h2>
+
+    <%= render :partial => 'events/list', :locals => { :events => @events } %>
+    <div class='single_view_right sidebar'>
+      <div id='edit_link'>
+        <p>You can <%= link_to "edit this venue", edit_venue_url(@venue) %>
+        or <%= link_to "delete it", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>.</p>
+      </div>
+      <div class="metadata">
+        <%= datestamp(@venue) %>
+      </div>
     </div>
-    <div class="metadata">
-      <%= datestamp(@venue) %>
-    </div>
-  </div>
+  <% end %>
 </div>
 </div>

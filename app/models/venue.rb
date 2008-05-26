@@ -39,6 +39,12 @@ class Venue < ActiveRecord::Base
     :in => -180..180,
     :message => "must be between -180 and 180"
 
+  # Returns future events for this venue.
+  def find_future_events(opts={})
+    opts[:venue] = self
+    Event.find_future_events(opts)
+  end
+
   # Returns a new Venue created from an AbstractLocation.
   def self.from_abstract_location(abstract_location, source=nil)
     venue = Venue.new
