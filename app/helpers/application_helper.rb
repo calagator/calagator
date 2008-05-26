@@ -58,21 +58,21 @@ module ApplicationHelper
     begin
       if File.directory?(File.join(RAILS_ROOT, ".svn"))
         $svn_revision ||= \
-          if s = `svn info 2>&1 | /dev/null`
+          if s = `svn info 2>&1`
             if m = s.match(/^Revision: (\d+)/s)
               " - SVN revision: #{m[1]}"
             end
           end
       elsif File.directory?(File.join(RAILS_ROOT, ".git"))
         $git_date ||= \
-          if s = `git log -1 2>&1 | /dev/null`
+          if s = `git log -1 2>&1`
             if m = s.match(/^Date: (.+?)$/s)
               " - Git timestamp: #{m[1]}"
             end
           end
       elsif File.directory?(File.join(RAILS_ROOT, ".hg"))
         $git_date ||= \
-          if s = `hg id -nibt 2>&1 | /dev/null`
+          if s = `hg id -nibt 2>&1`
             " - Mercurial revision: #{s}"
         end
       end
