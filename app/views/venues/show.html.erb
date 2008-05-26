@@ -48,9 +48,9 @@
   </div>
   <% end %>
   
-  <h2>Events Happening Here</h2>
+  <h2>Future Events Happening Here</h2>
   
-  <%= render :partial => 'events/list', :locals => { :events => Event.find_all_by_venue_id_and_duplicate_of_id(@venue, nil, :order => 'start_time DESC') } %>
+  <%= render :partial => 'events/list', :locals => { :events => Event.find_future_events(:venue => @venue) } %>
   <div class='single_view_right sidebar'>
     <div id='edit_link'>
       <p>You can <%= link_to "edit this venue", edit_venue_url(@venue) %>

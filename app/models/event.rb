@@ -85,8 +85,20 @@ class Event < ActiveRecord::Base
   #---[ Queries ]---------------------------------------------------------
 
   # Returns an Array of non-duplicate future Event instances.
-  def self.find_all_future_events(order)
-    return find(:all, :conditions => ['events.duplicate_of_id is NULL AND start_time >= ?', Date.today.to_datetime ], 
+  # 
+  # Options:
+  # * :order => How to sort events. Defaults to :start_time.
+  # * :venue => Which venue to display events for. Defaults to all.
+  def self.find_future_events(opts={})
+    order = opts[:order] || :start_time
+    conditions_sql = "events.duplicate_of_id is NULL AND events.start_time >= :start_time"
+    conditions_vars = { :start_time => Date.today.to_datetime }
+    if venue = opts[:venue]
+      conditions_sql << " AND venues.id == :venue"
+      conditions_vars[:venue] = venue.id
+    end
+
+    return find(:all, :conditions => [conditions_sql, conditions_vars], 
               :include => :venue, 
               :order => order)
   end
