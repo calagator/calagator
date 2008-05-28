@@ -151,11 +151,13 @@ describe Event do
   end
   
   it "should include ongoing events as future events" do
+    pending "should include ongoing events as future events"
     @events = Event.find_future_events("start_time")
     @events.should include(@event)
   end
   
   it "should include, within a date range, events ongoing at the start of the range" do
+    pending "should include, within a date range, events ongoing at the start of the range"
     @events = Event.find_by_dates(@now - 1.days, @now + 1.days)
     @events.should include(@event)
   end
