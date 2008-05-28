@@ -4,16 +4,16 @@
 # Table name: events
 #
 #  id              :integer         not null, primary key
-#  title           :string(255)     
-#  description     :text            
-#  start_time      :datetime        
-#  url             :string(255)     
-#  created_at      :datetime        
-#  updated_at      :datetime        
-#  venue_id        :integer         
-#  source_id       :integer         
-#  duplicate_of_id :integer         
-#  duration        :integer         
+#  title           :string(255)
+#  description     :text
+#  start_time      :datetime
+#  url             :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  venue_id        :integer
+#  source_id       :integer
+#  duplicate_of_id :integer
+#  duration        :integer
 #
 
 # == Event
@@ -23,13 +23,13 @@ class Event < ActiveRecord::Base
   include DuplicateChecking
   belongs_to :venue
   belongs_to :source
-  
+
   before_validation :recalculate_duration
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time
-  validates_format_of :url, :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/, 
+  validates_format_of :url, :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
       :allow_blank => true, :allow_nil => true
-      
+
   before_validation :normalize_url
 
   #---[ Overrides ]-------------------------------------------------------
@@ -48,7 +48,7 @@ class Event < ActiveRecord::Base
     return nil if read_attribute(:duration).nil? || self.start_time.nil?
     self.start_time + read_attribute(:duration).minutes
   end
-  
+
   def end_time=(value)
     # We might stash end_time in a non-AR attribute if we don't have start (and
     # thus can't calculate duration now).
@@ -61,64 +61,69 @@ class Event < ActiveRecord::Base
       @stashed_end = true
     else
       # We have start and end, so we can calculate duration
-      write_attribute(:duration, (value - self.start_time) / 60)
+      write_attribute(:duration, (value - self.start_time) / 1.minute)
       @stashed_end = nil # forget any stash
     end
     value
   end
-  
+
   def duration
     if @stashed_end
       # We have a stashed end_time; calculate it if we have start too, or
       # return nil if we have no start (and can't calculate)
-      return start_time.nil? ? nil : (@end_time - start_time) / 60
+      return start_time.nil? ? nil : (@end_time - start_time) / 1.minute
     end
     return read_attribute(:duration)
   end
-  
+
   def duration=(the_duration)
     # Save the value we were given, and make sure we don't consider end_time anymore
     write_attribute(:duration, the_duration)
     @stashed_end = nil
   end
-  
+
   #---[ Queries ]---------------------------------------------------------
 
   # Returns an Array of non-duplicate future Event instances.
-  # 
+  #
   # Options:
   # * :order => How to sort events. Defaults to :start_time.
   # * :venue => Which venue to display events for. Defaults to all.
   def self.find_future_events(opts={})
     order = opts[:order] || :start_time
-    conditions_sql = "events.duplicate_of_id is NULL AND events.start_time >= :start_time"
-    conditions_vars = { :start_time => Date.today.to_datetime }
+    conditions_sql = "events.duplicate_of_id IS NULL AND events.start_time >= :start_time"
+    conditions_vars = {
+      :start_time => Date.today.to_datetime,
+      :end_time => Date.today.to_datetime,
+    }
     if venue = opts[:venue]
       conditions_sql << " AND venues.id == :venue"
       conditions_vars[:venue] = venue.id
     end
 
-    return find(:all, :conditions => [conditions_sql, conditions_vars], 
-              :include => :venue, 
-              :order => order)
+    return find(:all,
+      :conditions => [conditions_sql, conditions_vars],
+      :include => :venue,
+      :order => order)
   end
-  
+
   # Returns an Array of non-duplicate Event instances within a given date range
-  # ToDo:  Why is the find ignoring 
+  # ToDo:  Why is the find ignoring
   def self.find_by_dates(start_date, end_date, order='start_time')
     start_date = start_date.to_datetime if start_date.is_a?(Date)
     end_date = end_date.to_datetime+1.day-1.second if end_date.is_a?(Date)
 
-    find(:all, :conditions => ['events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?', start_date, end_date], 
-        :include => :venue,
-        :order => order)
+    find(:all,
+      :conditions => ['events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?', start_date, end_date],
+      :include => :venue,
+      :order => order)
   end
 
   #---[ Transformations ]-------------------------------------------------
 
   # Returns a new Event created from an AbstractEvent.
   def self.from_abstract_event(abstract_event, source=nil)
-    
+
     event = Event.new
 
     event.source       = source
@@ -180,8 +185,8 @@ EOF
         c.created       event.created_at if event.created_at
         c.lastmod       event.updated_at if event.updated_at
 
-        # TODO Come up with a generalized way to generate URLs for events that don't have them. 
-        # The reason for this messy URL helper business is that models can't access the route helpers, 
+        # TODO Come up with a generalized way to generate URLs for events that don't have them.
+        # The reason for this messy URL helper business is that models can't access the route helpers,
         # and even if they could, they'd need to access the request object so they know what the server's name is and such.
         if event.url.blank?
           c.url         opts[:url_helper].call(event) if opts[:url_helper]
@@ -189,23 +194,23 @@ EOF
           c.url         event.url
         end
 
-        # dtstamp and uid added because of a bug in Outlook; 
+        # dtstamp and uid added because of a bug in Outlook;
         # Outlook 2003 will not import and .ics file unless it has DTSTAMP, UID, and METHOD
-        # use created_at for DTSTAMP; if there's no created_at, use event.start_time; 
-        c.dtstamp       event.created_at || event.start_time 
+        # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
+        c.dtstamp       event.created_at || event.start_time
         # TODO substitute correct environment variables for "http://calagator.org/events/"
         c.uid         opts[:url_helper].call(event) if opts[:url_helper]
         # c.uid         ("http://calagator.org/events/" + event.id.to_s)
 
 
-        # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to 
-        # go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't 
-        # recognize location, priority, and a couple of other things that are included as modules in the Vevent class itself. 
+        # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to
+        # go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't
+        # recognize location, priority, and a couple of other things that are included as modules in the Vevent class itself.
         # This seems like a bug in Vpim.
         #c.location     !event.venue.nil? ? event.venue.title : ''
       end
     end
-    
+
     # TODO Add calendar title support to vpim or find a prettier way to do this.
     # method added because of bug in Outlook 2003, which won't import .ics without a METHOD
     return icalendar.encode.sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:Calagator\nMETHOD:PUBLISH")
@@ -214,21 +219,22 @@ EOF
   def location
     venue && venue.location
   end
-  
+
   def normalize_url
     unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + self.url
     end
   end
-  
+
 protected
+
   def end_time_later_than_start_time
     errors.add(:end_time, "End must be after start") \
       unless end_time.nil? or end_time >= start_time
   end
-  
+
   def recalculate_duration
-    write_attribute(:duration, (@end_time - start_time) / 60) \
+    write_attribute(:duration, (@end_time - start_time) / 1.minute) \
       unless @stashed_end.nil? or start_time.nil?
   end
 end
