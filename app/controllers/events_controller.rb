@@ -8,9 +8,9 @@ class EventsController < ApplicationController
             when 'date'
               'start_time'
             when 'name'
-              'events.title, start_time'
+              'lower(events.title), start_time'
             when 'venue'
-              'venues.title, start_time'
+              'lower(venues.title), start_time'
             end
     
     @start_date = params[:date] ? Date.parse(params[:date][:start]) : Date.today

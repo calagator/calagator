@@ -2,7 +2,7 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
-    @venues = Venue.find(:non_duplicates, :order => :title)
+    @venues = Venue.find(:non_duplicates, :order => 'lower(title)')
     @page_title = "Venues"
 
     respond_to do |format|
@@ -105,13 +105,15 @@ class VenuesController < ApplicationController
     @type = params[:type] || 'title'
 
     if @type == 'na'
-      # Use find to get an Array of all non-duplicates in title order,
+      # Use find to get an Array of all non-duplicates in title case insensitive order,
       # make it a Hash so it takes the same form as find_duplicates_by(:grouped => true)
       # so that the duplicate template will display it properly
-      @grouped_venues = { [] => Venue.find(:non_duplicates, :order => :title) }
+      @grouped_venues = { [] => Venue.find(:non_duplicates, :order => 'lower(title)') }
     else
       @type = ['all','any'].include?(@type) ? @type.to_sym : @type.split(',')
-      @grouped_venues = Venue.find_duplicates_by(@type, :grouped => true)
+      @order = params[:order]
+      @order = 'lower(title)' if @order == :title
+      @grouped_venues = Venue.find_duplicates_by(@type, :grouped => true, :order => @order)
     end
 
     @page_title = "Duplicate Venue Squasher"
