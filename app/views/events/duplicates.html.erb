@@ -22,11 +22,11 @@
   </div>
   <% unless @grouped_events.empty? %>
     <%= form_tag :action => "squash_many_duplicates", :method => :post %>
-      <%= hidden_field_tag(:type, @type) %>
-      <div style="color: blue;">
+      <div class="flash notice">
         Select only one set of master and duplicate events. If you select an unrelated event, it will be merged into the same single master record.
       </div>
       <div id='list_items'>
+				<%= hidden_field_tag(:type, @type) %>
         <table>
           <% for value, group in @grouped_events %>
             <tr>
