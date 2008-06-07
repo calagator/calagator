@@ -23,3 +23,6 @@ require 'vpim/vcard'
 
 add_vendor_gem_to_load_path 'tzinfo-0.3.8'
 require 'tzinfo'
+
+add_vendor_gem_to_load_path 'lucene_query'
+require 'lucene_query'

@@ -175,6 +175,10 @@ class EventsController < ApplicationController
     
     redirect_to :action => "duplicates", :type => params[:type]
   end
+  
+  # Search!!!
+  def search
+  end
 
 protected
 
