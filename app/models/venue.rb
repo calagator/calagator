@@ -24,7 +24,9 @@
 #
 
 class Venue < ActiveRecord::Base
-  acts_as_solr
+  unless RAILS_ENV == 'test'
+      acts_as_solr
+  end
   include DuplicateChecking
   before_save :geocode
   before_validation :normalize_url
