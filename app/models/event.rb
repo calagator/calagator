@@ -20,6 +20,7 @@
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
+  acts_as_solr
   include DuplicateChecking
   belongs_to :venue
   belongs_to :source

@@ -24,6 +24,7 @@
 #
 
 class Venue < ActiveRecord::Base
+  acts_as_solr
   include DuplicateChecking
   before_save :geocode
   before_validation :normalize_url

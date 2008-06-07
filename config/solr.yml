@@ -1,0 +1,10 @@
+# Config file for the acts_as_solr plugin.
+#
+# If you change the host or port number here, make sure you update 
+# them in your Solr config file
+
+development:
+  url: http://localhost:8982/solr
+  
+production:
+  url: http://localhost:8983/solr

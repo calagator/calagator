@@ -16,7 +16,7 @@
 #
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
 class Source < ActiveRecord::Base
-
+  acts_as_solr
   validate :assert_url
 
   has_many :events
