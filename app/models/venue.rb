@@ -14,7 +14,7 @@
 #  locality        :string(255)     
 #  region          :string(255)     
 #  postal_code     :string(255)     
-#  country         :string(255)     
+#  country         :string(255)
 #  latitude        :decimal(, )     
 #  longitude       :decimal(, )     
 #  email           :string(255)     
