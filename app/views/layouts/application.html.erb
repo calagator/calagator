@@ -38,13 +38,13 @@
 					<br />
 					<strong>Something not right?</strong> <%= link_to "Report an issue.", issues_path %>
 	      </div>
-				<% form_tag '/search', :method => :get do %>
+				<% form_tag '/events/search', :method => :get do %>
 					<div id='search_form'>
 						<label for="search_field">Search Events</label>
 						<% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
 							<input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
 						<% else %>
-							<%= text_field_tag 'query', :id => 'search_field' %>
+							<%= text_field_tag 'query', @query, :id => 'search_field' %>
 						<% end %>
 					</div>
 				<% end -%>
