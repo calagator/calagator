@@ -19,6 +19,9 @@ public/javascripts/all.js
 public/stylesheets/active_scaffold
 public/stylesheets/record_select
 public/stylesheets/all.css
+vendor/plugins/acts_as_solr/solr/logs/*
+vendor/plugins/acts_as_solr/solr/tmp/*
+vendor/plugins/acts_as_solr/solr/solr/data/*
 tmp/*
 tmp/cache/*
 tmp/pids/*
