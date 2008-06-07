@@ -38,15 +38,15 @@
 					<br />
 					<strong>Something not right?</strong> <%= link_to "Report an issue.", issues_path %>
 	      </div>
-				<div id='search_form'>
-					<% form_tag '/search', :method => :get do %>
-						<% if request.env["HTTP_USER_AGENT"].include?("Safari") %>
+				<% form_tag '/search', :method => :get do %>
+					<div id='search_form'>
+						<% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
 							<input type="search" name="q" value="<%= params[:q] %>" placeholder="Search Events..." results="5" id="search_field">
 						<% else %>
 							<%= text_field_tag 'query', :id => 'search_field' %>
 						<% end %>
-					<% end -%>
-				</div>
+					</div>
+				<% end -%>
 	    </div>			
 		</div>
 		
