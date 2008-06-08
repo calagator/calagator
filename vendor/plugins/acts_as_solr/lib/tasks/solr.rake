@@ -36,8 +36,12 @@ namespace :solr do
         File.open(file_path, "r") do |f| 
           pid = f.readline
           Process.kill('TERM', pid.to_i)
+          #IK# NOTE Why doesn't it just stop!?
+          sleep(3)
+          Process.kill('KILL', pid.to_i)
         end
-        File.unlink(file_path)
+        # NOTE: Do not delete the file, let solr replace it
+        #IK# File.unlink(file_path)
         Rake::Task["solr:destroy_index"].invoke if ENV['RAILS_ENV'] == 'test'
         puts "Solr shutdown successfully."
       else
