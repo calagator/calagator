@@ -15,7 +15,7 @@ namespace :solr do
     rescue Net::HTTPServerException #responding
       puts "Port #{SOLR_PORT} in use" and return
 
-    rescue Errno::ECONNREFUSED #not responding
+    rescue Errno::ECONNREFUSED, Errno::ECONNRESET #not responding
       Dir.chdir(SOLR_PATH) do
         pid = fork do
           #STDERR.close
