@@ -6,6 +6,8 @@ tags
 *.swp
 *.tmp
 .dtach
+config/thin.yml
+config/mongrel_cluster.yml
 config/geocoder_api_keys.yml
 coverage/*
 db/schema.rb
