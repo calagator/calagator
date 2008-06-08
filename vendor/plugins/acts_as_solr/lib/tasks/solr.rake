@@ -19,7 +19,9 @@ namespace :solr do
       Dir.chdir(SOLR_PATH) do
         pid = fork do
           #STDERR.close
-          exec "java -Dsolr.data.dir=solr/data/#{ENV['RAILS_ENV']} -Djetty.port=#{SOLR_PORT} -jar start.jar"
+          #IK# exec "java -Dsolr.data.dir=solr/data/#{ENV['RAILS_ENV']} -Djetty.port=#{SOLR_PORT} -jar start.jar"
+          # NOTE Why not log to a file instead of flooding the console!?
+          exec "java -Dsolr.data.dir=solr/data/#{ENV['RAILS_ENV']} -Djetty.port=#{SOLR_PORT} -jar start.jar > #{RAILS_ROOT}/log/solr.#{ENV['RAILS_ENV']}.log 2>&1"
         end
         sleep(5)
         File.open("#{SOLR_PATH}/tmp/#{ENV['RAILS_ENV']}_pid", "w"){ |f| f << pid}
@@ -35,10 +37,14 @@ namespace :solr do
       if File.exists?(file_path)
         File.open(file_path, "r") do |f| 
           pid = f.readline
-          Process.kill('TERM', pid.to_i)
-          #IK# NOTE Why doesn't it just stop!?
-          sleep(3)
-          Process.kill('KILL', pid.to_i)
+          begin
+            Process.kill('TERM', pid.to_i)
+            #IK# NOTE Why won't it just stop!?
+            sleep(3)
+            Process.kill('KILL', pid.to_i)
+          rescue Errno::ESRCH => e
+            # Process is already dead
+          end
         end
         # NOTE: Do not delete the file, let solr replace it
         #IK# File.unlink(file_path)
