@@ -19,9 +19,7 @@ namespace :solr do
       Dir.chdir(SOLR_PATH) do
         pid = fork do
           #STDERR.close
-          #IK# exec "java -Dsolr.data.dir=solr/data/#{ENV['RAILS_ENV']} -Djetty.port=#{SOLR_PORT} -jar start.jar"
-          # NOTE Why not log to a file instead of flooding the console!?
-          exec "java -Dsolr.data.dir=solr/data/#{ENV['RAILS_ENV']} -Djetty.port=#{SOLR_PORT} -jar start.jar > #{RAILS_ROOT}/log/solr.#{ENV['RAILS_ENV']}.log 2>&1"
+          exec "java -Dsolr.data.dir=solr/data/#{ENV['RAILS_ENV']} -Djetty.port=#{SOLR_PORT} -jar start.jar"
         end
         sleep(5)
         File.open("#{SOLR_PATH}/tmp/#{ENV['RAILS_ENV']}_pid", "w"){ |f| f << pid}
@@ -32,7 +30,8 @@ namespace :solr do
   
   desc 'Stops Solr. Specify the environment by using: RAILS_ENV=your_env. Defaults to development if none.'
   task :stop do
-    fork do
+    #IK# WTF? Why is this forking?
+    #IK# fork do
       file_path = "#{SOLR_PATH}/tmp/#{ENV['RAILS_ENV']}_pid"
       if File.exists?(file_path)
         File.open(file_path, "r") do |f| 
@@ -53,7 +52,7 @@ namespace :solr do
       else
         puts "Solr is not running.  I haven't done anything."
       end
-    end
+    #IK# end
   end
   
   desc 'Remove Solr index'
