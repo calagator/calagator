@@ -3,6 +3,8 @@ namespace :server do
   require 'yaml'
   require 'uri'
 
+  THIN_YML = "config/thin.yml"
+
   def yaml_struct_for(filename)
     YAML.load(ERB.new(File.read(filename)).result)
   end
@@ -16,13 +18,43 @@ namespace :server do
 
   def server_rails_env
     return @server_rails_env ||= begin
-      yaml_struct_for("#{RAILS_ROOT}/config/mongrel_cluster.yml")["environment"]
+      yaml_struct_for(THIN_YML)["environment"]
     end
   end
 
   def manage_solr(action)
     # Doesn't pass hostname, but solr ignores that anyway
     sh "rake RAILS_ENV=#{server_rails_env} PORT=#{solr_port} solr:#{action}"
+  end
+
+  def thin_configured?
+    return File.exist?(THIN_YML)
+  end
+
+  def manage_thin(action)
+    if thin_configured?
+      sh "thin --config #{THIN_YML} #{action}"
+    else
+      Rake::Task['server:help'].invoke
+      raise "ERROR: Couldn't find thin config."
+    end
+  end
+
+  desc "Help configure thin"
+  task :help do
+      puts <<-HERE
+You must create a thin config with a command similar to:
+
+  thin config --config #{THIN_YML} --timeout 3 --daemonize --environment ENV --port PORT --servers SERVERS
+
+E.g.,
+
+  # Production
+  thin config --config #{THIN_YML} --timeout 3 --daemonize --port 20010 --servers 2 --environment production
+
+  # Preview
+  thin config --config #{THIN_YML} --timeout 3 --daemonize --port 20010 --servers 2 --environment preview
+      HERE
   end
 
   desc "Deploy"
@@ -33,23 +65,6 @@ namespace :server do
   desc "Deploy and migrate database"
   task :deploy_and_migrate do
     sh "ssh calagator@calagator.org 'cd app; svn update; rake db:migrate restart'"
-  end
-
-  desc "Config"
-  task :config => ["tmp:create"] do
-    if RAILS_ENV != "production"
-      puts "WARNING: CREATING CONFIGURATION FILE WHERE 'RAILS_ENV' IS NOT PRODUCTION!"
-      puts "         If this is undesirable, rerun task with 'RAILS_ENV=production' option"
-    end
-
-    target = "config/mongrel_cluster.yml"
-    source = "#{target}.erb"
-    require "erb"
-    template = File.read(source)
-    File.open(target, "w+") do |h|
-      h.write(ERB.new(template, 0, "%<>-").result)
-    end
-    puts File.read(target)
   end
 
   desc "Clear"
@@ -63,22 +78,23 @@ namespace :server do
 
   desc "Stop"
   task :stop do
-    sh "mongrel_rails cluster::stop"
+    manage_thin(:stop)
     manage_solr(:stop)
   end
 
   desc "Start"
   task :start => [:clear] do
     manage_solr(:start)
-    sh "mongrel_rails cluster::start --clean"
+    manage_thin(:start)
   end
 
   desc "Restart"
   task :restart => [:clear] do
     manage_solr(:start)
-    sh "mongrel_rails cluster::restart"
+    manage_thin(:restart)
   end
 
+  # FIXME how to check status of thin?
   desc "Status"
   task :status do
     sh "mongrel_rails cluster::status"
@@ -86,6 +102,6 @@ namespace :server do
 end
 
 # Create aliases for common tasks
-for name in %w(deploy deploy_and_migrate config deploy start stop restart status)
+for name in %w(deploy deploy_and_migrate deploy start stop restart status)
   task name.to_sym => "server:#{name}"
 end
