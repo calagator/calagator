@@ -178,9 +178,19 @@ class EventsController < ApplicationController
   
   # Search!!!
   def search
+    order = params[:order] || 'date'
+    order = case order
+            when 'date'
+              'start_time asc'
+            when 'name'
+              'events.title asc'
+            when 'venue'
+              'venues.title asc'
+            end
+            
     @query = params[:query]
     # formatted_query = SolrQuery.new { @query }
-    response = Event.find_by_solr(@query)
+    response = Event.find_by_solr(@query, :order => order)
     @events = response.results    
   end
 
