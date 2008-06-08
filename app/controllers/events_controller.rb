@@ -178,6 +178,10 @@ class EventsController < ApplicationController
   
   # Search!!!
   def search
+    @query = params[:query]
+    # formatted_query = SolrQuery.new { @query }
+    response = Event.find_by_solr(@query)
+    @events = response.results    
   end
 
 protected

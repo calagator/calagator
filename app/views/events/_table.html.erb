@@ -31,7 +31,7 @@ end
 	<thead>
 		<tr>
 			<th class='date'>Sort By: <%= link_to "Date", url_for(params.merge(:order => 'date')) %></th>
-			<th class='event_summary'><%= link_to "Event Name", url_for(params.merge(:order => 'name')) %>, <%= link_to "Location", events_url(params.merge(:order => 'venue')) %></th>
+			<th class='event_summary'><%= link_to "Event Name", url_for(params.merge(:order => 'name')) %>, <%= link_to "Location", url_for(params.merge(:order => 'venue')) %></th>
 		</tr>
 	</thead>
 	<tbody>
