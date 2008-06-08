@@ -59,8 +59,19 @@ class Venue < ActiveRecord::Base
       end
     end
 
+    # if the new venue has no exact duplicate, use the new venue
+    # otherwise, find the ultimate master and return it 
     duplicates = venue.find_exact_duplicates
-    duplicates ? duplicates.first : venue
+    if duplicates.nil? 
+      venue
+    else
+      venue = duplicates.first
+      while venue.duplicate_of_id do
+        venue = Venue.find(venue.duplicate_of_id)
+      end
+    end
+    return venue
+    
   end
 
   # Does this venue have any address information?
