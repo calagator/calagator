@@ -130,12 +130,12 @@ class MainController < Ramaze::Controller
     %h1 calagator admin console
     %p
       %form{:method=>"post"}
+        // %label
+        //  %input{:type=>"radio", :name=>"action", :value=>"status", :checked=>"checked"}
+        //  status
+        // %br
         %label
-          %input{:type=>"radio", :name=>"action", :value=>"status", :checked=>"checked"}
-          status
-        %br
-        %label
-          %input{:type=>"radio", :name=>"action", :value=>"deploy"}
+          %input{:type=>"radio", :name=>"action", :value=>"deploy", :checked=>"checked"}
           deploy and migrate revision
           %input{:type=>"text", :name=>"revision", :value=>"HEAD"}
         %br
