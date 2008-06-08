@@ -56,7 +56,7 @@ describe EventsController, "search" do
     response = mock('response')
     results = [mock_model(Event), mock_model(Event)]
 
-#    SolrQuery.should_receive(:new).and_return(query)
+    SolrQuery.should_receive(:new).and_return(query)
     Event.should_receive(:find_by_solr).and_return(response)
     response.should_receive(:results).and_return(results)
     post :search, :query => @terms

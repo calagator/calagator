@@ -188,10 +188,10 @@ class EventsController < ApplicationController
               'venues.title asc'
             end
             
-    @query = params[:query]
-    # formatted_query = SolrQuery.new { @query }
-    response = Event.find_by_solr(@query, :order => order)
-    @events = response.results    
+    query = @query = params[:query]
+    formatted_query = SolrQuery.new { Fuzzy(query) }.to_s
+    response = Event.find_by_solr(formatted_query, :order => order, :limit => 500)
+    @events = response.results
   end
 
 protected
