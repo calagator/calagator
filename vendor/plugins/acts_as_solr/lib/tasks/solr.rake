@@ -17,13 +17,24 @@ namespace :solr do
 
     rescue Errno::ECONNREFUSED, Errno::ECONNRESET #not responding
       Dir.chdir(SOLR_PATH) do
-        pid = fork do
-          #STDERR.close
-          exec "java -Dsolr.data.dir=solr/data/#{ENV['RAILS_ENV']} -Djetty.port=#{SOLR_PORT} -jar start.jar"
+        cmd = "java -Dsolr.data.dir=solr/data/#{ENV['RAILS_ENV']} -Djetty.port=#{SOLR_PORT} -jar start.jar"
+        if RUBY_PLATFORM.match(/mswin|java/)
+          puts <<-HERE
+------------------------------------------------------------------------
+WARNING: Your platform doesn't have fork()! You must kill the Java
+process manually to stop it because 'rake solr:stop' will NOT work.
+------------------------------------------------------------------------
+          HERE
+          exec cmd
+        else
+          pid = fork do
+            #STDERR.close
+            exec cmd
+          end
+          sleep(5)
+          File.open("#{SOLR_PATH}/tmp/#{ENV['RAILS_ENV']}_pid", "w"){ |f| f << pid}
+          puts "#{ENV['RAILS_ENV']} Solr started successfully on #{SOLR_PORT}, pid: #{pid}."
         end
-        sleep(5)
-        File.open("#{SOLR_PATH}/tmp/#{ENV['RAILS_ENV']}_pid", "w"){ |f| f << pid}
-        puts "#{ENV['RAILS_ENV']} Solr started successfully on #{SOLR_PORT}, pid: #{pid}."
       end
     end
   end
