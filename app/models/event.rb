@@ -132,6 +132,15 @@ class Event < ActiveRecord::Base
       :order => order)
   end
 
+  # How similar should terms be to qualify as a match? This value should be
+  # close to zero because Lucene's implementation of fuzzy matching is
+  # defective, e.g., at 0.5 it can't even realize that "meetin" is similar to
+  # "meeting". 
+  SOLR_SIMILARITY = 0.3
+
+  # How much to boost the score of a match in the title?
+  SOLR_TITLE_BOOST = 4
+
   # Return an Array of non-duplicate Event instances matching the search +query+..
   #
   # Options:
@@ -152,8 +161,12 @@ class Event < ActiveRecord::Base
     skip_old = opts[:skip_old] != false
     limit = opts[:limit] || 50
 
-    # TODO boost matches in title
-    formatted_query = SolrQuery.new { Fuzzy(query) }.to_s
+    formatted_query = query \
+      .scan(/\S+/) \
+      .map(&:escape_lucene) \
+      .map{|term| %{title:"#{term}"~#{"%1.1f" % SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST} "#{term}"~#{"%1.1f" % SOLR_SIMILARITY}}} \
+      .join(" ")
+
     solr_opts = {
       :order => order, 
       :limit => limit,
@@ -169,6 +182,11 @@ class Event < ActiveRecord::Base
     results = results.reject{|event| event.old?} if skip_old
 
     return results
+  end
+
+  def self.search_grouped_by_currentness(*args)
+    results = self.search(*args)
+    return results.group_by(&:current?)
   end
 
   #---[ Transformations ]-------------------------------------------------
@@ -279,6 +297,11 @@ EOF
   end
 
   #---[ Misc. ]-----------------------------------------------------------
+  
+  # Is this event current? (not old)
+  def current?(cutoff=nil)
+    return !self.old?
+  end
 
   # Is this event old?
   def old?(cutoff=nil)
