@@ -186,7 +186,7 @@ class Event < ActiveRecord::Base
 
   def self.search_grouped_by_currentness(*args)
     results = self.search(*args).group_by(&:current?)
-    return {:current => results[true], :past => results[false]}
+    return {:current => results[true] || [], :past => results[false] || []}
   end
 
   #---[ Transformations ]-------------------------------------------------
