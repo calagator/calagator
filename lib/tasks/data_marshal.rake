@@ -12,5 +12,26 @@ namespace :data do
     filename = ENV["FILE"] or raise ArgumentError, "The data:restore task requires a FILE argument to define which file to restore from, e.g. 'rake FILE=current.data data:restore'"
     DataMarshal.restore(filename)
     puts "* Restored state from #{filename}"
+
+    # TODO automate
+    puts "!!! You must restart Solr to use this new data"
+  end
+
+  desc "Fetch state from production server and install it locally"
+  task :fetch do
+    source = "http://#{PRODUCTION_HOSTNAME}/export.data"
+    #IK# source = "http://localhost:3000/export.data" # Only for testing
+    target = "export.data"
+
+    puts "* Downloading #{source}..."
+    open(target, "w+"){|writer| writer.write(open(source).read)}
+
+    puts "* Replacing data..."
+    DataMarshal.restore(target)
+
+    # TODO automate
+    puts "!!! You must restart Solr to use this new data"
+
+    puts "* Done"
   end
 end

@@ -6,3 +6,4 @@
 
 Mime::Type.register "application/vnd.google-earth.kml+xml", :kml
 Mime::Type.register "application/sqlite3", :sqlite3
+Mime::Type.register "application/data", :data

@@ -1,13 +1,13 @@
 namespace :solr do
 
   require "lib/solr_marshal"
-  
+
   desc "Rebuild solr indexes"
   task :rebuild_index => :environment do
     Event.rebuild_solr_index
     Venue.rebuild_solr_index
   end
-  
+
   desc "Dump solr data to FILE"
   task :dump => :environment do
     filename = SolrMarshal.dump(ENV["FILE"])
@@ -19,6 +19,9 @@ namespace :solr do
     filename = ENV["FILE"] or raise ArgumentError, "Must specify a FILE argument, e.g. 'rake FILE=myindex.solr solr:restore'"
     SolrMarshal.restore(filename)
     puts "* Restored solr data from #{filename}"
+
+    # TODO automate
+    puts "!!! You must restart Solr to use this new data"
   end
 
 end

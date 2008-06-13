@@ -1,6 +1,8 @@
 namespace :db do
   desc "Download a copy of the remote production database and replace the loca development database"
   task :fetch do
+    # FIXME display warnings??
+    
     def bn(v); File.basename(v); end
 
     require 'lib/database_yml_reader'

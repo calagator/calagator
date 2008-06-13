@@ -72,6 +72,12 @@ class SiteController < ApplicationController
       format.sqlite3 do
         send_file(File.join(RAILS_ROOT, $database_yml_struct.database), :filename => File.basename($database_yml_struct.database))
       end
+      format.data do
+        require "lib/data_marshal"
+        target = "#{RAILS_ROOT}/tmp/dumps/current.data"
+        DataMarshal.dump_cached(target)
+        send_file(target)
+      end
     end
   end
 end
