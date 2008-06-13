@@ -1,7 +1,2 @@
-<div id='list_description'>
-  <h2>Viewing <strong><%= @events.size %></strong> events matching <strong><%= @query %></strong>.</h2>
-</div>
-
-<div id='list_items'>
-	<%= render :partial => 'events/table', :locals => { :events => @events } %>
-</div>
+<%= render :partial => 'search_section', :locals => {:description => "current", :events => @grouped_events[:current]} %>
+<%= render :partial => 'search_section', :locals => {:description => "past", :events => @grouped_events[:past]} %>

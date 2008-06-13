@@ -179,9 +179,7 @@ class EventsController < ApplicationController
   # Search!!!
   def search
     @query = params[:query]
-    @events = Event.search(params[:query], 
-      :order => params[:order],
-      :skip_old => params[:skip_old])
+    @grouped_events = Event.search_grouped_by_currentness(params[:query], :order => params[:order])
   end
 
 protected

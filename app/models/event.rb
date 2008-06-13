@@ -147,7 +147,7 @@ class Event < ActiveRecord::Base
   # * :order => How to order the entries? Can be :score, :date, :name, or :venue.
   #   Defaults to :score.
   # * :limit => Maximum number of entries to return, defaults to 50.
-  # * :skip_old => Return old entries? Defaults to true.
+  # * :skip_old => Return old entries? Defaults to false.
   def self.search(query, opts={})
     order_kind = opts[:order].blank? ? :score : opts[:order].to_sym
     order = \
@@ -158,7 +158,7 @@ class Event < ActiveRecord::Base
       when :score then 'score desc'
       else raise ArgumentError, "Unknown order: #{opts[:order]}"
       end
-    skip_old = opts[:skip_old] != false
+    skip_old = opts[:skip_old] == true
     limit = opts[:limit] || 50
 
     formatted_query = query \
@@ -185,8 +185,8 @@ class Event < ActiveRecord::Base
   end
 
   def self.search_grouped_by_currentness(*args)
-    results = self.search(*args)
-    return results.group_by(&:current?)
+    results = self.search(*args).group_by(&:current?)
+    return {:current => results[true], :past => results[false]}
   end
 
   #---[ Transformations ]-------------------------------------------------
