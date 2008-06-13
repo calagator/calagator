@@ -36,30 +36,10 @@ describe EventsController do
 end
 
 describe EventsController, "search" do
-  
-  before(:each) do
-    @terms = "one two three four"
-  end
-  
-  it "should receive a search string and run a Solr query" do
-    pending "figuring out why solrquery is breaking with real params" do
-      Event.stub!(:find_by_solr).and_return(mock('response', :results => nil))
 
-      SolrQuery.should_receive(:new).with(@terms)
-      post :search, :query => @terms
-    end
-  end
-
-  
-  it "should return an array of search results" do
-    query = mock('query')
-    response = mock('response')
-    results = [mock_model(Event), mock_model(Event)]
-
-    SolrQuery.should_receive(:new).and_return(query)
-    Event.should_receive(:find_by_solr).and_return(response)
-    response.should_receive(:results).and_return(results)
-    post :search, :query => @terms
+  it "should perform searches" do
+    Event.should_receive(:search_grouped_by_currentness).and_return({:current => [], :past => []})
+    post :search, :query => "myquery"
   end
 
 end

@@ -180,7 +180,7 @@ class Event < ActiveRecord::Base
 
     # TODO implement skip_old during query, not after records are loaded
     results = results.reject{|event| event.old?} if skip_old
-
+    
     return results
   end
 

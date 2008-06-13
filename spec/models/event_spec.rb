@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe Event do
-  
+describe Event, "in general" do
+
   it "should be valid" do
     event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'))
     event.should be_valid
@@ -11,10 +11,11 @@ describe Event do
     event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'), :url => 'google.com')
     event.should be_valid
   end
-  
+
 end
 
-describe Event do
+describe Event, "when parsing" do
+
   before(:each) do
     @event = Event.new
 
@@ -75,6 +76,14 @@ describe Event do
     # TODO implement venue generation
     #abstract_event.location.title.should == @basic_event.venue.title
     abstract_event.location.should be_nil
+  end
+
+end
+
+describe Event, "when processing date" do
+
+  before(:each) do
+    @event = Event.new
   end
   
   it "should find all events within a given date range" do
@@ -142,12 +151,12 @@ it "should find all events with duplicate titles" do
   
 end
 
-describe Event do
+describe Event, "when finding by dates" do
   
   before(:each) do
     @now = Time.now
     @event = Event.new(:title => "Event in progress", :start_time => @now - 2.days, :end_time => @now + 2.days)
-    @event.save
+    @event.save!
   end
   
   it "should include ongoing events as future events" do
@@ -164,3 +173,26 @@ describe Event do
   
 end
 
+describe Event, "when searching" do
+  # TODO figure out sane way to write spec for Event.search
+  it "should find events" do
+    solr_response = mock_model(Object, :results => [])
+    solr_return = mock_model(Object, :response => solr_response)
+    Event.should_receive(:find_by_solr).and_return(solr_response)
+
+    Event.search("myquery").should be_empty
+  end
+
+  it "should find events and group them" do
+    current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
+    past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
+    solr_response = mock_model(Object, :results => [current_event, past_event])
+    solr_return = mock_model(Object, :response => solr_response)
+    Event.should_receive(:find_by_solr).and_return(solr_response)
+
+    Event.search_grouped_by_currentness("myquery").should == {
+      :current => [current_event],
+      :past    => [past_event],
+    }
+  end
+end
