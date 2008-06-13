@@ -15,8 +15,9 @@ namespace :data do
     DataMarshal.restore(filename)
     puts "* Restored state from #{filename}"
 
-    # TODO automate
-    puts "!!! You must restart Solr to use this new data"
+    Rake::Task['solr:restart'].invoke
+    
+    puts "* Done"
   end
 
   desc "Fetch state from production server and install it locally"
@@ -31,8 +32,7 @@ namespace :data do
     puts "* Replacing data..."
     DataMarshal.restore(target)
 
-    # TODO automate
-    puts "!!! You must restart Solr to use this new data"
+    Rake::Task['solr:restart'].invoke
 
     puts "* Done"
   end

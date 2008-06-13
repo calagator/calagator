@@ -22,8 +22,13 @@ namespace :solr do
     SolrMarshal.restore(filename)
     puts "* Restored solr data from #{filename}"
 
-    # TODO automate
-    puts "!!! You must restart Solr to use this new data"
+    Rake::Task['solr:restart'].invoke
+  end
+
+  task :restart => :environment do
+    puts "* Restarting Solr..."
+    Rake::Task['solr:stop'].invoke
+    Rake::Task['solr:start'].invoke
   end
 
 end
