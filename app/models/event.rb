@@ -126,29 +126,34 @@ class Event < ActiveRecord::Base
   #
   # Options:
   # * :query => Natural language query.
-  # * :order => How to order the entries? Can be :date, :name, or :venue.
-  #   Defaults to :date.
+  # * :order => How to order the entries? Can be :score, :date, :name, or :venue.
+  #   Defaults to :score.
   # * :limit => Maximum number of entries to return, defaults to 50.
   # * :skip_old => Return old entries? Defaults to true.
   def self.search(opts)
     query = opts[:query] or raise ArgumentError, "No query specified"
+    order_kind = opts[:order].blank? ? :score : opts[:order].to_sym
     order = \
-      case opts[:order].blank? ? :date : opts[:order].to_sym
+      case order_kind
       when :date  then 'start_time asc'
       when :name  then 'events.title asc'
       when :venue then 'venues.title asc'
+      when :score then 'score desc'
       else raise ArgumentError, "Unknown order: #{opts[:order]}"
       end
     skip_old = opts[:skip_old] != false
     limit = opts[:limit] || 50
 
     formatted_query = SolrQuery.new { Fuzzy(query) }.to_s
-    response = Event.find_by_solr(
-      formatted_query, 
+    solr_opts = {
       :order => order, 
-      :limit => limit)
+      :limit => limit,
+    }
+    solr_opts[:scores] = true if order == :score
+    response = Event.find_by_solr(formatted_query, solr_opts)
     # TODO implement skip_old
     # TODO implement duplicate skipping
+    # TODO make query less fuzzy
     return response.results
   end
 
