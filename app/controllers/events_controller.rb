@@ -179,11 +179,9 @@ class EventsController < ApplicationController
   # Search!!!
   def search
     @query = params[:query]
-
-    @events = Event.search({
-      :query => params[:query],
+    @events = Event.search(params[:query], 
       :order => params[:order],
-    })
+      :skip_old => params[:skip_old])
   end
 
 protected

@@ -48,7 +48,7 @@ class Source < ActiveRecord::Base
       for event in self.to_events(opts)
         if opts[:skip_old]
           next if event.title.blank? && event.description.blank? && event.url.blank?
-          next if (event.end_time || event.start_time) < cutoff
+          next if event.old?
         end
         
         # Skip invalid events that start after they end

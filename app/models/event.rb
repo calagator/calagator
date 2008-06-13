@@ -37,6 +37,16 @@ class Event < ActiveRecord::Base
 
   #---[ Overrides ]-------------------------------------------------------
 
+  # Index only specific events
+  def self.rebuild_solr_index
+    # Skip old and duplicate events
+    ### self.find(:all, :conditions => ['duplicate_of_id IS NULL']).reject{|event| event.old?}.each {|content| content.solr_save}
+
+    # Skip duplicate events
+    self.find(:all, :conditions => ['duplicate_of_id IS NULL']).each {|content| content.solr_save}
+    logger.debug self.count>0 ? "Index for #{self.name} has been rebuilt" : "Nothing to index for #{self.name}"
+  end
+
   # Return the title but strip out any whitespace.
   def title
     # TODO Generalize this code so we can use it on other attributes in the different model classes. The solution should use an #alias_method_chain to make sure it's not breaking any explicit overrides for an attribute.
@@ -122,16 +132,14 @@ class Event < ActiveRecord::Base
       :order => order)
   end
 
-  # Return an Array of non-duplicate Event instances matching search.
+  # Return an Array of non-duplicate Event instances matching the search +query+..
   #
   # Options:
-  # * :query => Natural language query.
   # * :order => How to order the entries? Can be :score, :date, :name, or :venue.
   #   Defaults to :score.
   # * :limit => Maximum number of entries to return, defaults to 50.
   # * :skip_old => Return old entries? Defaults to true.
-  def self.search(opts)
-    query = opts[:query] or raise ArgumentError, "No query specified"
+  def self.search(query, opts={})
     order_kind = opts[:order].blank? ? :score : opts[:order].to_sym
     order = \
       case order_kind
@@ -144,6 +152,7 @@ class Event < ActiveRecord::Base
     skip_old = opts[:skip_old] != false
     limit = opts[:limit] || 50
 
+    # TODO boost matches in title
     formatted_query = SolrQuery.new { Fuzzy(query) }.to_s
     solr_opts = {
       :order => order, 
@@ -151,10 +160,17 @@ class Event < ActiveRecord::Base
     }
     solr_opts[:scores] = true if order == :score
     response = Event.find_by_solr(formatted_query, solr_opts)
-    # TODO implement skip_old
-    # TODO implement duplicate skipping
-    # TODO make query less fuzzy
-    return response.results
+    results = response.results
+
+    # TODO reject duplicates during query, not after records are loaded
+    results = results.reject{|event| !event.duplicate_of_id.blank?}
+
+    # TODO implement skip_old in more efficient manner
+    results = results.reject{|event| event.old?} if skip_old
+    
+    # TODO don't index old events because that takes forever
+
+    return results
   end
 
   #---[ Transformations ]-------------------------------------------------
@@ -262,6 +278,14 @@ EOF
     unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + self.url
     end
+  end
+
+  #---[ Misc. ]-----------------------------------------------------------
+
+  # Is this event old?
+  def old?(cutoff=nil)
+    cutoff ||= Time.now.yesterday
+    return (self.end_time || self.start_time) < cutoff
   end
 
 protected

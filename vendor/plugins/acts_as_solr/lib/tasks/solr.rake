@@ -69,10 +69,13 @@ process manually to stop it because 'rake solr:stop' will NOT work.
   desc 'Remove Solr index'
   task :destroy_index do
     raise "In production mode.  I'm not going to delete the index, sorry." if ENV['RAILS_ENV'] == "production"
-    if File.exists?("#{SOLR_PATH}/solr/data/#{ENV['RAILS_ENV']}")
-      Dir[ SOLR_PATH + "/solr/data/#{ENV['RAILS_ENV']}/index/*"].each{|f| File.unlink(f)}
-      Dir.rmdir(SOLR_PATH + "/solr/data/#{ENV['RAILS_ENV']}/index")
+    index_dir = "#{SOLR_PATH}/solr/data/#{ENV['RAILS_ENV']}"
+    if File.exists?(index_dir)
+      rm_rf index_dir
       puts "Index files removed under " + ENV['RAILS_ENV'] + " environment"
     end
   end
+
+  desc 'Remove and rebuild index, restart Solr server'
+  task :reset => [:stop, :destroy_index, :start, 'solr:rebuild_index']
 end
