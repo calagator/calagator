@@ -178,20 +178,12 @@ class EventsController < ApplicationController
   
   # Search!!!
   def search
-    order = params[:order] || 'date'
-    order = case order
-            when 'date'
-              'start_time asc'
-            when 'name'
-              'events.title asc'
-            when 'venue'
-              'venues.title asc'
-            end
-            
-    query = @query = params[:query]
-    formatted_query = SolrQuery.new { Fuzzy(query) }.to_s
-    response = Event.find_by_solr(formatted_query, :order => order, :limit => 500)
-    @events = response.results
+    @query = params[:query]
+
+    @events = Event.search({
+      :query => params[:query],
+      :order => params[:order],
+    })
   end
 
 protected

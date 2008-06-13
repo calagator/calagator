@@ -122,6 +122,36 @@ class Event < ActiveRecord::Base
       :order => order)
   end
 
+  # Return an Array of non-duplicate Event instances matching search.
+  #
+  # Options:
+  # * :query => Natural language query.
+  # * :order => How to order the entries? Can be :date, :name, or :venue.
+  #   Defaults to :date.
+  # * :limit => Maximum number of entries to return, defaults to 50.
+  # * :skip_old => Return old entries? Defaults to true.
+  def self.search(opts)
+    query = opts[:query] or raise ArgumentError, "No query specified"
+    order = \
+      case opts[:order].blank? ? :date : opts[:order].to_sym
+      when :date  then 'start_time asc'
+      when :name  then 'events.title asc'
+      when :venue then 'venues.title asc'
+      else raise ArgumentError, "Unknown order: #{opts[:order]}"
+      end
+    skip_old = opts[:skip_old] != false
+    limit = opts[:limit] || 50
+
+    formatted_query = SolrQuery.new { Fuzzy(query) }.to_s
+    response = Event.find_by_solr(
+      formatted_query, 
+      :order => order, 
+      :limit => limit)
+    # TODO implement skip_old
+    # TODO implement duplicate skipping
+    return response.results
+  end
+
   #---[ Transformations ]-------------------------------------------------
 
   # Returns a new Event created from an AbstractEvent.
