@@ -1,7 +1,9 @@
 syntax: glob
 
 tags
+*.data
 *.diff
+*.solr
 *.sql
 *.swp
 *.tmp

@@ -26,3 +26,6 @@ require 'tzinfo'
 
 add_vendor_gem_to_load_path 'lucene_query'
 require 'lucene_query'
+
+add_vendor_gem_to_load_path 'archive-tar-minitar-0.5.2'
+require 'archive/tar/minitar'

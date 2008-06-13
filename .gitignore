@@ -1,5 +1,9 @@
+
+
 tags
+*.data
 *.diff
+*.solr
 *.sql
 *.swp
 *.tmp
