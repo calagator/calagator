@@ -165,10 +165,8 @@ class Event < ActiveRecord::Base
     # TODO reject duplicates during query, not after records are loaded
     results = results.reject{|event| !event.duplicate_of_id.blank?}
 
-    # TODO implement skip_old in more efficient manner
+    # TODO implement skip_old during query, not after records are loaded
     results = results.reject{|event| event.old?} if skip_old
-    
-    # TODO don't index old events because that takes forever
 
     return results
   end
