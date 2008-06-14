@@ -18,6 +18,7 @@ namespace :solr do
     rescue Errno::ECONNREFUSED, Errno::ECONNRESET #not responding
       Dir.chdir(SOLR_PATH) do
         cmd = "java -Dsolr.data.dir=solr/data/#{ENV['RAILS_ENV']} -Djetty.port=#{SOLR_PORT} -jar start.jar"
+        puts cmd
         if RUBY_PLATFORM.match(/mswin|java/)
           puts <<-HERE
 ------------------------------------------------------------------------
