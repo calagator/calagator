@@ -226,5 +226,69 @@
     </Call>
     -->
 
+    <!-- Below are failed attempts to get Jetty to do logging -->
+
+    <!--
+    <Call class="org.apache.commons.logging.LogFactory" name="getFactory">
+      <Call name="setAttribute">
+        <Arg>org.mortbay.jetty.context./solr</Arg>
+        <Arg>org.apache.solr.*</Arg>
+      </Call>
+    </Call>  
+    -->
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Configure Jetty Logging.                                        -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Uncomment if using jetty logging. 
+    <Call class="org.mortbay.log.Slf4jLog" name="getFactory">
+      <Call name="getInstance">
+        <Arg/>
+        <Call name="reset"/>
+        <Call name="add">
+          <Arg>
+            <New class="org.mortbay.log.OutputStreamLogSink">
+              <Set name="filename"><SystemProperty name="jetty.home" default="."/>/logs/yyyy_mm_dd.jetty.log</Set>
+              <Set name="retainDays">90</Set>
+              <Set name="append">true</Set>
+              <Set name="logLabels">true</Set>
+              <Set name="logStackSize">true</Set>
+              <Set name="logStackTrace">false</Set>
+              <Set name="logOneLine">false</Set>
+              <Set name="suppressStack">false</Set>
+              <Set name="logTimeZone">GMT</Set>
+            </New>
+          </Arg>
+        </Call>
+      </Call>
+    </Call>
+    -->
+
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Configure Jetty Logging.                                        -->
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    <!-- Uncomment if using jetty logging. 
+    <Call class="org.mortbay.log.LogFactory" name="getFactory">
+      <Call name="getInstance">
+        <Arg/>
+        <Call name="reset"/>
+        <Call name="add">
+          <Arg>
+            <New class="org.mortbay.log.OutputStreamLogSink">
+              <Set name="filename"><SystemProperty name="jetty.home" default="."/>/logs/yyyy_mm_dd.jetty.log</Set>
+              <Set name="retainDays">90</Set>
+              <Set name="append">true</Set>
+              <Set name="logLabels">true</Set>
+              <Set name="logStackSize">true</Set>
+              <Set name="logStackTrace">false</Set>
+              <Set name="logOneLine">false</Set>
+              <Set name="suppressStack">false</Set>
+              <Set name="logTimeZone">GMT</Set>
+            </New>
+          </Arg>
+        </Call>
+      </Call>
+    </Call>
+    -->
 </Configure>
 
