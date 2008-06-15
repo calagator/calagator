@@ -25,7 +25,11 @@ class DbMarshal
     end
 
     def restore(filename)
-      File.unlink(self.database) if File.exist?(self.database)
+      if File.exist?(self.database)
+        ActiveRecord::Base.connection.select_values(%{SELECT name FROM sqlite_master WHERE type = 'table' AND NOT name = 'sqlite_sequence'}).each do |table|
+          ActiveRecord::Base.connection.drop_table(table)
+        end
+      end
       cmd = %{#{self.adapter} "#{self.database}" < "#{filename}"}
       system cmd
       return true

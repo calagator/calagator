@@ -22,10 +22,8 @@
 #   # ...or a restore
 #   SolrMarshal.new(:index_dir => "solr/data").restore("myindex.solr")
 class SolrMarshal
-  require 'zlib'
   require 'rubygems'
-  require 'archive/tar/minitar' # gem install archive-tar-minitar
-  require 'lib/easy_tgz'
+  require 'zip/zip' # gem install rubyzip
 
   # Directory with Solr indices
   attr_accessor :index_dir
@@ -53,18 +51,29 @@ class SolrMarshal
   def dump(filename=nil)
     target = filename || self.filename_or_default
 
-    EasyTgz.create(target) do |easytgz|
-      Dir["#{self.index_dir}/*"].each do |path|
-        easytgz.add :filename => path, :as => File.basename(path)
-      end
+    # NOTE ZipOutputStream.new fails if given a block
+    # NOTE File.read fails if given a "rb" option
+    zos = Zip::ZipOutputStream.new(target)
+    Dir["#{self.index_dir}/*"].each do |path|
+      zos.put_next_entry(File.basename(path))
+      File.open(path, "rb"){|reader| zos.write(reader.read)}
     end
+    zos.close
 
     return target
   end
 
   def restore(filename=nil)
     target = (filename || self.filename) or raise ArgumentError, "No filename specified"
-    EasyTgz.extract(target, self.index_dir)
+
+    # NOTE ZipInputStream.new fails if given a block
+    # NOTE File.read fails if given a "wb+" option
+    zis = Zip::ZipInputStream.new(target)
+    while entry = zis.get_next_entry
+      File.open("#{self.index_dir}/#{entry.name}", "wb+"){|h| h.write(zis.read)}
+    end
+    zis.close
+    
     return true
   end
 end

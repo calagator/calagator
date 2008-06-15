@@ -1,6 +1,7 @@
 namespace :data do
   task :prepare do
     require 'lib/data_marshal'
+    require 'open-uri'
   end
 
   desc "Dumps state to FILE, defaults to DBNAME.TIMESTAMP.data"
@@ -27,7 +28,12 @@ namespace :data do
     target = "export.data"
 
     puts "* Downloading #{source}..."
-    open(target, "w+"){|writer| writer.write(open(source).read)}
+    File.open(target, "wb+") do |writer| 
+      # NOTE Do not use File.open, open-uri doesn't intercept URL calls to that
+      open(source, "rb") do |reader|
+        writer.write(reader.read)
+      end
+    end
 
     puts "* Replacing data..."
     DataMarshal.restore(target)

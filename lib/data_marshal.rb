@@ -1,7 +1,3 @@
-require 'lib/db_marshal'
-require 'lib/solr_marshal'
-require 'lib/easy_tgz'
-
 # = DataMarshal
 #
 # Library for marshalling all Calagator data. Useful for packaging up the
@@ -16,6 +12,9 @@ require 'lib/easy_tgz'
 #
 #   DataMarshal.restore "mydata.data"
 class DataMarshal
+  require 'lib/db_marshal'
+  require 'lib/solr_marshal'
+  require 'zip/zip' # gem install rubyzip
 
   def self.dump(filename=nil)
     self.new.dump(filename)
@@ -68,10 +67,14 @@ class DataMarshal
     DbMarshal.dump(self.sql_filename)
     SolrMarshal.dump(self.solr_filename)
 
-    EasyTgz.create(target) do |t|
-      t.add :filename => self.sql_filename,  :as => File.basename(self.sql_filename)
-      t.add :filename => self.solr_filename, :as => File.basename(self.solr_filename)
-    end
+    # NOTE ZipOutputStream.new fails if given a block
+    # NOTE File.read fails if given a "rb" option
+    zos = Zip::ZipOutputStream.new(target)
+    zos.put_next_entry(File.basename(self.sql_filename))
+    File.open(self.sql_filename, "rb"){|h| zos.write(h.read)}
+    zos.put_next_entry(File.basename(self.solr_filename))
+    File.open(self.solr_filename, "rb"){|h| zos.write(h.read)}
+    zos.close
 
     return target
   end
@@ -81,7 +84,14 @@ class DataMarshal
     raise ArgumentError, "No filename specified" unless target
 
     self.prepare_dump_dir
-    EasyTgz.extract(filename, dump_dir)
+
+    # NOTE ZipInputStream.new fails if given a block
+    # NOTE File.read fails if given a "wb+" option
+    zis = Zip::ZipInputStream.new(target)
+    while entry = zis.get_next_entry
+      File.open("#{self.dump_dir}/#{entry.name}", "wb+"){|h| h.write(zis.read)}
+    end
+    zis.close
 
     DbMarshal.restore(self.sql_filename)
     SolrMarshal.restore(self.solr_filename)

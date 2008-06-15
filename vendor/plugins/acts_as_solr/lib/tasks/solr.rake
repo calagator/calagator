@@ -10,7 +10,7 @@ namespace :solr do
   task :start do
     begin
       n = Net::HTTP.new('localhost', SOLR_PORT)
-      n.request_head('/').value 
+      n.request_head('/').value
 
     rescue Net::HTTPServerException #responding
       puts "Port #{SOLR_PORT} in use" and return
@@ -39,14 +39,20 @@ process manually to stop it because 'rake solr:stop' will NOT work.
       end
     end
   end
-  
+
   desc 'Stops Solr. Specify the environment by using: RAILS_ENV=your_env. Defaults to development if none.'
   task :stop do
-    #IK# WTF? Why is this forking?
-    #IK# fork do
+    if RUBY_PLATFORM.match(/mswin/)
+      puts <<-HERE
+========================================================================
+WARNING: Windows can't stop Solr, you must do so manually by killing
+it through the Task Manager.
+========================================================================
+      HERE
+    else
       file_path = "#{SOLR_PATH}/tmp/#{ENV['RAILS_ENV']}_pid"
       if File.exists?(file_path)
-        File.open(file_path, "r") do |f| 
+        File.open(file_path, "r") do |f|
           pid = f.readline
           begin
             Process.kill('TERM', pid.to_i)
@@ -57,16 +63,14 @@ process manually to stop it because 'rake solr:stop' will NOT work.
             # Process is already dead
           end
         end
-        # NOTE: Do not delete the file, let solr replace it
-        #IK# File.unlink(file_path)
         Rake::Task["solr:destroy_index"].invoke if ENV['RAILS_ENV'] == 'test'
         puts "Solr shutdown successfully."
       else
         puts "Solr is not running.  I haven't done anything."
       end
-    #IK# end
+    end
   end
-  
+
   desc 'Remove Solr index'
   task :destroy_index do
     raise "In production mode.  I'm not going to delete the index, sorry." if ENV['RAILS_ENV'] == "production"

@@ -26,9 +26,19 @@ namespace :solr do
   end
 
   task :restart => :environment do
-    puts "* Restarting Solr..."
-    Rake::Task['solr:stop'].invoke
-    Rake::Task['solr:start'].invoke
+    if RUBY_PLATFORM.match(/mswin/)
+      puts <<-HERE
+========================================================================
+WARNING: Windows can't automatically restart Solr, you must do so
+manually by killing it through the Task Manager and then run: rake
+  rake solr:start
+========================================================================
+      HERE
+    else
+      puts "* Restarting Solr..."
+      Rake::Task['solr:stop'].invoke
+      Rake::Task['solr:start'].invoke
+    end
   end
 
 end
