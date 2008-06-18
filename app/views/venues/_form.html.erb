@@ -81,6 +81,9 @@
 		</div>
     <% end %>
 		<div class='no_label'>
+			<% if !params[:from_event].blank? %>
+				<%= hidden_field_tag(:from_event, params[:from_event]) %>
+			<% end %>
 	    <%= f.submit(@venue.new_record? ? "Create" : "Update") %>
 		</div>
 		</fieldset>

@@ -18,6 +18,32 @@ fieldset    { padding:1.4em; margin: 0 0 1.5em 0; border: 1px solid #ccc; }
 legend      { font-weight: bold; font-size:1.2em; }
 
 
+/* @group Autocomplete
+-------------------------------------------------------------- */
+ul.jq-ui-autocomplete {
+    position: absolute;
+    overflow: hidden;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    margin: 0px;
+    padding: 0;
+    list-style: none;
+    color: #333;
+}
+ul.jq-ui-autocomplete li { 
+  display: block; 
+  padding: .3em .5em .3em .3em; 
+  overflow: hidden;
+  width: 100%;
+}
+
+ul.jq-ui-autocomplete li.active { 
+  background-color: <%= @colors[:light_green] %>; 
+  color: <%= @colors[:dark_grey] %>;;
+}
+
+/* @end */
+
 /* @group Form fields
 -------------------------------------------------------------- */
 

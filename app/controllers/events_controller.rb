@@ -83,6 +83,14 @@ class EventsController < ApplicationController
   # POST /events.xml
   def create
     @event = Event.new(params[:event])
+    if @event.venue_id.nil?
+      @event.venue = Venue.find_or_initialize_by_title(params[:venue_name])
+      
+      #TODO, move this logic into Event#before_save
+      @event.venue = @event.venue.duplicate_of if @event.venue.duplicate?
+    end
+    redirect_to_venue = @event.venue.new_record?
+    
     @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
     @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
 
@@ -92,8 +100,15 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if !evil_robot && @event.save
-        flash[:success] = 'Event was successfully created.'
-        format.html { redirect_to(@event) }
+        flash[:success] = 'Your event was successfully created. '
+        format.html { 
+          if redirect_to_venue
+            flash[:success] += "Please tell us more about where it's being held."
+            redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
+          else
+            redirect_to(@event) 
+          end
+          }
         format.xml  { render :xml => @event, :status => :created, :location => @event }
       else
         format.html { render :action => "new" }
@@ -106,14 +121,29 @@ class EventsController < ApplicationController
   # PUT /events/1.xml
   def update
     @event = Event.find(params[:id])
+    if @event.venue_id.nil?
+      @event.venue = Venue.find_or_initialize_by_title(params[:venue_name])
+      
+      #TODO, move this logic into Event#before_save
+      @event.venue = @event.venue.duplicate_of if @event.venue.duplicate?
+    end
+    redirect_to_venue = @event.venue.new_record?
+    
     @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
     @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
 
     respond_to do |format|
       if @event.update_attributes(params[:event])
         flash[:success] = 'Event was successfully updated.'
-        format.html { redirect_to(@event) }
-        format.xml  { head :ok }
+        format.html { 
+          if redirect_to_venue
+            flash[:success] += "Please tell us more about where it's being held."
+            redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
+          else
+            redirect_to(@event) 
+          end
+          }
+          format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
         format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }

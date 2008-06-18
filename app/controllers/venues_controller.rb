@@ -2,13 +2,14 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
-    @venues = Venue.find(:non_duplicates, :order => 'lower(title)')
+    params[:val] ||= ""
+    @venues = Venue.find(:non_duplicates, :conditions => ["title LIKE ?", "%#{params[:val]}%"], :order => :title)
     @page_title = "Venues"
 
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @venues }
-      format.json  { render :json => @venues }
+      format.js  { render :json => @venues }
       format.kml  # index.kml.erb
     end
   end
@@ -42,7 +43,7 @@ class VenuesController < ApplicationController
     @page_title = "Add a Venue"
 
     respond_to do |format|
-      format.html # new.html.erb
+      format.html { render :layout => !(params[:layout]=="false") }
       format.xml  { render :xml => @venue }
     end
   end
@@ -79,7 +80,13 @@ class VenuesController < ApplicationController
     respond_to do |format|
       if @venue.update_attributes(params[:venue])
         flash[:success] = 'Venue was successfully updated.'
-        format.html { redirect_to(@venue) }
+        format.html { 
+          if(!params[:from_event].blank?)
+            redirect_to(event_url(params[:from_event]))
+          else
+            redirect_to(@venue)
+          end
+          }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
@@ -105,15 +112,13 @@ class VenuesController < ApplicationController
     @type = params[:type] || 'title'
 
     if @type == 'na'
-      # Use find to get an Array of all non-duplicates in title case insensitive order,
+      # Use find to get an Array of all non-duplicates in title order,
       # make it a Hash so it takes the same form as find_duplicates_by(:grouped => true)
       # so that the duplicate template will display it properly
-      @grouped_venues = { [] => Venue.find(:non_duplicates, :order => 'lower(title)') }
+      @grouped_venues = { [] => Venue.find(:non_duplicates, :order => :title) }
     else
       @type = ['all','any'].include?(@type) ? @type.to_sym : @type.split(',')
-      @order = params[:order]
-      @order = 'lower(title)' if @order == :title
-      @grouped_venues = Venue.find_duplicates_by(@type, :grouped => true, :order => @order)
+      @grouped_venues = Venue.find_duplicates_by(@type, :grouped => true)
     end
 
     @page_title = "Duplicate Venue Squasher"

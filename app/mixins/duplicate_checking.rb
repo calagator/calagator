@@ -62,11 +62,10 @@ module DuplicateChecking
           raise ArgumentError, "#{table_name} is not set up to track duplicates."
         end
         args[0] = :all
-        opts[:conditions] = condition
-        #TODO: Merge with existing conditions to further filter duplicate searching.
       end
-
-      find_without_duplicate_support(*(args + [opts]))
+      with_scope(:find => {:conditions => condition}) do 
+        find_without_duplicate_support(*(args + [opts]))
+      end
     end
 
     # Return events with duplicate values for a given set of fields.

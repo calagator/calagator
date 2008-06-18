@@ -1,6 +1,40 @@
+<% content_for :javascript_insert do %>
+	<%= javascript_include_tag 'jquery.dimensions.min.js', 'jquery.ui.autocomplete.ext.js', 'jquery.ui.autocomplete.js' %>
+	<script>
+		
+	  $(document).ready(function(){
+	    $("input.autocomplete").autocomplete({	ajax: "/venues.js", 
+																timeout: 200,
+																match: function(typed) { return this.title.match(new RegExp("^"+typed, "i")); },
+																insertText: function(venue)  { return venue.title },
+																template:   function(venue)  { 
+																		venue.short_address = (venue.street_address.length > 0) ? 
+																															venue.street_address+", "+venue.locality+" "+venue.region :
+																															venue.address;
+																		return "<li><strong>"+venue.title+"</strong><br />"+venue.short_address+"</li>"
+																	}
+																})
+	  														.bind("activate.autocomplete", function(e,venue) { 
+																		$("#event_venue_id").val(venue.id);
+																		completed_title = venue.title;
+																})
+																.bind("cancel.autocomplete", function(e,venue) { $("#event_venue_id").val(''); })
+																.bind("keydown.autocomplete", function (e) { 
+																			$("#event_venue_id").val('');
+																})
+																.attr('autocomplete', 'off');
+	  });
+  </script>
+<% end %>
+
+<% content_for :css_insert do %>
+	<%= stylesheet_link_tag 'jquery.ui.autocomplete.css' %>
+<% end %>
+
+
 <% form_for(@event) do |f| %>
 <fieldset>
-  <legend><%= @event.new_record? ? "New event" : "Edit event" %></legend>
+  <legend><%= @event.new_record? ? "Add an Event" : "Editing: <em>#{@event.title}</em>" %></legend>
   <p>You can <%= @event.new_record? ? "enter" : "edit" %> the details of your event below.  The more information we have about your event, the easier it will be for people to find it.</p>
 
   <%= error_messages_for :event %>
@@ -11,7 +45,8 @@
   </div>
   <div>
     <%= f.label :venue_id, "Venue" %>
-    <%= collection_select(:event, :venue_id, Venue.find(:non_duplicates, :order => 'lower(title)' ), :id, :title, :include_blank => true) %>
+		<%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !@event.venue.nil? ? @event.venue.title : params[:venue_name] %>
+		<%= hidden_field(:event, :venue_id, :value => (!@event.venue.nil? ? @event.venue.id : params[:event_venue_id])) %>
   </div>
   <div>
     <%= link_to 'Add a new venue', new_venue_url %>
@@ -40,6 +75,7 @@
 	<div class='help'>
 		(HTML formatting allowed)
 	</div>
+
 	<% if false %>
 	<%# TODO implement tags %>
 	<div>

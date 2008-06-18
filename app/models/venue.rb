@@ -87,6 +87,7 @@ class Venue < ActiveRecord::Base
       nil
     end
   end
+  
 
   # Get an address we can use for geocoding
   def geocode_address
