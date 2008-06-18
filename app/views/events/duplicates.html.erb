@@ -26,7 +26,7 @@
         Select only one set of master and duplicate events. If you select an unrelated event, it will be merged into the same single master record.
       </div>
       <div id='list_items'>
-				<%= hidden_field_tag(:type, @type) %>
+        <%= hidden_field_tag(:type, @type) %>
         <table>
           <% for value, group in @grouped_events %>
             <tr>
@@ -39,7 +39,7 @@
                 <td>
                   <div><%= link_to event.title, event_url(event) %></div>
                   <div><%= event.start_time %><%= ", #{event.venue.title}" unless event.venue.nil? %></div>
-				</td>
+               </td>
               </tr>
             <% end %>
           <% end %>

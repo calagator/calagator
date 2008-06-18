@@ -12,6 +12,7 @@
 #
 #   DataMarshal.restore "mydata.data"
 class DataMarshal
+  require 'fileutils'
   require 'lib/db_marshal'
   require 'lib/solr_marshal'
   require 'zip/zip' # gem install rubyzip
@@ -89,6 +90,7 @@ class DataMarshal
     # NOTE File.read fails if given a "wb+" option
     zis = Zip::ZipInputStream.new(target)
     while entry = zis.get_next_entry
+      FileUtils.mkdir_p(self.dump_dir) rescue nil
       File.open("#{self.dump_dir}/#{entry.name}", "wb+"){|h| h.write(zis.read)}
     end
     zis.close

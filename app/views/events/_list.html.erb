@@ -1,13 +1,11 @@
 <%
+# Arguments:
+# * events => Array of Event records
+
 opts ||= {}
 previous_start_time = nil
-if local_assigns.has_key?(:leaf)
-  events  ||= leaf[:results]
-  skipped ||= leaf[:skipped]
-else
-  skipped ||= 0
-end
 show_year ||= true
+skipped = 0
 
 %>
 <ul class='event_list'>

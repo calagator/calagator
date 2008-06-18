@@ -237,10 +237,43 @@ describe Source, "with iCalendar events" do
     events = events_from_ical_at('ical_google.ics')
     events.first.venue.title.should == 'CubeSpace'
   end
+  
+end
 
-  describe Source, "when skipping old events" do
-    before(:each) do
-      SourceParser::Base.stub!(:read_url).and_return(<<-HERE)
+describe Source, "when importing events with non-local times" do
+
+  it "should store time ending in Z as UTC" do
+    url = "http://foo.bar/"
+    SourceParser::Base.stub!(:read_url).and_return(read_sample('ical_z.ics'))
+    @source = Source.new(:title => "Non-local time", :url => url)
+    events = @source.create_events!(:skip_old => false)
+    event = events.first
+
+    event.start_time.should == Time.parse('Thu Jul 01 08:00:00 +0000 2010')
+    event.end_time.should == Time.parse('Thu Jul 01 09:00:00 +0000 2010')
+
+    # time should be the same after saving event to, and getting it from, database
+    event.save    
+    e = Event.find(event)
+    e.start_time.should == Time.parse('Thu Jul 01 08:00:00 +0000 2010')
+    e.end_time.should == Time.parse('Thu Jul 01 09:00:00 +0000 2010')
+    
+end
+
+  it "should store time with TZID=GMT in UTC" do
+    pending "should store time with TZID=GMT in UTC"
+    events = events_from_ical_at('ical_gmt.ics')
+    events.size.should == 1
+    abstract_event = events.first
+    abstract_event.start_time.should == Time.parse('Fri May 07 08:00:00 +0000 2020')
+    abstract_event.end_time.should == Time.parse('Fri May 07 09:00:00 +0000 2020')
+  end
+  
+end
+
+describe Source, "when skipping old events" do
+  before(:each) do
+    SourceParser::Base.stub!(:read_url).and_return(<<-HERE)
 BEGIN:VCALENDAR
 X-WR-CALNAME;VALUE=TEXT:NERV
 VERSION:2.0
@@ -297,32 +330,32 @@ DTSTAMP:040425
 END:VEVENT
 END:VCALENDAR
       HERE
-      @source = Source.new(:title => "Title", :url => "http://my.url/")
-    end
-    
-    # for following specs a 'valid' event does not start after it ends"
-    it "should be able to import all valid events" do
-      events = @source.create_events!(:skip_old => false)
-      events.size.should == 5
-      events.map(&:title).should == [
-        "Past start and no end",
-        "Current start and no end",
-        "Past start and current end",
-        "Current start and current end",
-        "Past start and past end"
-      ]
-    end
-       
-    it "should be able to skip invalid and old events" do
-      events = @source.create_events!(:skip_old => true)
-      events.size.should == 3
-      events.map(&:title).should == [
-        "Current start and no end",
-        "Past start and current end",
-        "Current start and current end"
-      ]
-    end    
+    @source = Source.new(:title => "Title", :url => "http://my.url/")
   end
+  
+  # for following specs a 'valid' event does not start after it ends"
+  it "should be able to import all valid events" do
+    events = @source.create_events!(:skip_old => false)
+    events.size.should == 5
+    events.map(&:title).should == [
+      "Past start and no end",
+      "Current start and no end",
+      "Past start and current end",
+      "Current start and current end",
+      "Past start and past end"
+    ]
+  end
+     
+  it "should be able to skip invalid and old events" do
+    events = @source.create_events!(:skip_old => true)
+    events.size.should == 3
+    events.map(&:title).should == [
+      "Current start and no end",
+      "Past start and current end",
+      "Current start and current end"
+    ]
+  end    
+
 end
 
 describe Source, "when importing events" do
@@ -334,7 +367,7 @@ describe Source, "when importing events" do
     SourceParser::Base.stub!(:read_url).and_return(hcal_content)
 
     events = hcal_source.to_events
-
+ 
     events.first.should_not be_a_new_record # it should return an existing event record and not create a new one
   end
   

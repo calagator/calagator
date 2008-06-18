@@ -24,12 +24,7 @@ ActionController::Routing::Routes.draw do |map|
   #     admin.resources :products
   #   end
 
-  # Admin controllers
-  map.namespace :admin do |admin|
-    admin.resources :events, :active_scaffold => true
-    admin.resources :sources,  :active_scaffold => true
-    admin.resources :venues,   :active_scaffold => true
-  end
+  map.connect 'omfg', :controller => 'site', :action => 'omfg'
 
   # Normal controllers
   map.resources :events, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'search' => :get}

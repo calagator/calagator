@@ -32,11 +32,11 @@ describe Event, "when parsing" do
   it "should parse an AbstractEvent into an Event" do
     event = Event.new(:title => "EventTitle", 
                       :description => "EventDescription", 
-                      :start_time => Date.parse("2008-05-20"), 
-                      :end_time => Date.parse("2008-05-22"))
+                      :start_time => Time.parse("2008-05-20"), 
+                      :end_time => Time.parse("2008-05-22"))
     Event.should_receive(:new).and_return(event)
     
-    abstract_event = SourceParser::AbstractEvent.new("EventTitle", "EventDescription", Date.parse("2008-05-20"), Date.parse("2008-05-22"))
+    abstract_event = SourceParser::AbstractEvent.new("EventTitle", "EventDescription", Time.parse("2008-05-20"), Time.parse("2008-05-22"))
 
     Event.from_abstract_event(abstract_event).should == event
   end
@@ -88,7 +88,7 @@ describe Event, "when processing date" do
   
   it "should find all events within a given date range" do
     Event.should_receive(:find).with(:all, 
-      :conditions => ["events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?", DateTime.parse(Date.today.to_s), DateTime.parse(Date.tomorrow.to_s)+1.day-1.second], 
+      :conditions => ["events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?", Time.parse(Date.today.to_s), Time.parse(Date.tomorrow.to_s)+1.day-1.second], 
       :order => 'start_time',
       :include => :venue)
     Event.find_by_dates(Date.today, Date.tomorrow)
@@ -105,14 +105,14 @@ it "should find all events with duplicate titles" do
   end
   
   it "should fail to validate if end_time is earlier than start time " do
-    @event.start_time = DateTime.now
+    @event.start_time = Time.now
     @event.end_time = @event.start_time - 2.hours
     @event.save.should be_false
     @event.should have(1).error_on(:end_time)
   end
   
   it "should return an end time, based on duration" do
-    @event.start_time = DateTime.now
+    @event.start_time = Time.now
     @event.duration = 60
     @event.end_time.should == @event.start_time + 1.hour
   end

@@ -42,14 +42,13 @@ context "Time formatting" do
   
   describe "with objects" do
     it "should format from objects that respond to just start_time" do
-      event = Event.new(:start_time => DateTime.new(2008, 4, 1, 13, 30))
+      event = Event.new(:start_time => Time.parse('2008-04-01 13:30'))
       TimeRange.new(event, :format => :text).to_s.should == "Tuesday, April 1, 2008 at 1:30pm"
     end
     
     it "should format from objects that respond to both start_time and end_time" do
-      pending "pending investigation of intermittent failures; see issue 132"
-      event = Event.new(:start_time => DateTime.new(2008, 4, 1, 13, 30),
-                        :end_time => DateTime.new(2008, 4, 1, 15, 30))
+      event = Event.new(:start_time => Time.parse('2008-04-01 13:30'),
+                        :end_time => Time.parse('2008-04-01 15:30'))
       TimeRange.new(event, :format => :text).to_s.should == "Tuesday, April 1, 2008 from 1:30-3:30pm"
     end
   end

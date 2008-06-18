@@ -1,34 +1,12 @@
 class SiteController < ApplicationController
 
+  # Raise exception, mostly for confirming that exception_notification works
+  def omfg
+    raise ArgumentError, "OMFG"
+  end
+
   def index
-    # TODO Refactor this for clarity
-    @events = {}
-    @max_events_per_current_section = 10
-    @min_events_per_later_section = (@max_events_per_current_section/2).round
-    populate = lambda do |section, opts|
-      leaf = {
-        :count => Event.count(:conditions => opts[:conditions]),
-        :results => Event.find(:all,
-          :conditions => opts[:conditions],
-          :limit => (opts[:limit] || @max_events_per_current_section),
-          :order => (opts[:order] || 'start_time ASC')),
-      }
-      leaf[:skipped] = leaf[:count] - (leaf[:results].size || 0)
-      @events[section] = leaf
-    end
-    populate[:today, {
-      :conditions => ['(events.duplicate_of_id is NULL) AND
-        (start_time > ? AND start_time < ?)', Time.today, (Time.today + 1.days)], 
-      }]
-    populate[:tomorrow, {
-      :conditions => ['(events.duplicate_of_id is NULL) AND
-        (start_time > ? AND start_time < ?)', (Time.today + 1.days), (Time.today + 2.days)],
-      }]
-    current_size = @events[:today][:results].size + @events[:today][:results].size
-    populate[:later, {
-      :conditions => ['(events.duplicate_of_id is NULL) AND
-        (start_time > ? AND start_time < ?)', (Time.today + 2.days), (Time.today + 14.days)],
-      :limit => current_size > @min_events_per_later_section ? current_size : @min_events_per_later_section}]
+    @times_to_events = Event.select_for_overview
   end
   
   def style

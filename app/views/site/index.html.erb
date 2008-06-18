@@ -9,12 +9,12 @@
 	<h1>What's happening?</h1>
 	<div id='coming_events'>
 		<h3>Today</h3>
-	  	<%= render :partial => 'events/list', :locals => {:leaf => @events[:today], :dates => false} %>
+	  	<%= render :partial => 'events/list', :locals => {:events => @times_to_events[:today], :dates => false} %>
 		<h3>Tomorrow</h3>
-		<%= render :partial => 'events/list', :locals => {:leaf => @events[:tomorrow], :dates => false} %>
+		<%= render :partial => 'events/list', :locals => {:events => @times_to_events[:tomorrow], :dates => false} %>
 	</div>
 	<div id='recently_added_events'>
 		<h3>Next two weeks</h3>
-	  <%= render :partial => 'events/list', :locals => {:leaf => @events[:later]} %>
+	  <%= render :partial => 'events/list', :locals => {:events => @times_to_events[:later]} %>
 	</div>
 </div>

@@ -20,8 +20,10 @@
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
+  # Names of columns and methods to create Solr indexes for
+  INDEXABLE_FIELDS = %w(title description url duplicate_for_solr start_time_for_solr end_time_for_solr text_for_solr).map(&:to_sym)
   unless RAILS_ENV == 'test'
-      acts_as_solr
+      acts_as_solr :fields => INDEXABLE_FIELDS
   end
   include DuplicateChecking
   belongs_to :venue
@@ -97,17 +99,58 @@ class Event < ActiveRecord::Base
 
   #---[ Queries ]---------------------------------------------------------
 
+  # Returns groups of records for the overview screen.
+  #
+  # The data structure returned maps time names to arrays of event records:
+  #   {
+  #     :today => [...],
+  #     :tomorrow => [...],
+  #     :later => [...],
+  #   }
+  def self.select_for_overview
+    today = Time.today
+    tomorrow = today + 1.day
+    after_tomorrow = tomorrow + 1.day
+    cutoff = today.utc + 2.weeks
+
+    times_to_events = {
+      :today    => [],
+      :tomorrow => [],
+      :later    => [],
+    }
+
+    Event.find(:all,
+      :include    => :venue,
+      :order      => 'start_time ASC',
+      :conditions => [
+        '(events.duplicate_of_id is NULL) AND (start_time > ? AND start_time < ?)',
+        today.utc, cutoff
+      ]
+    ).each do |event|
+      if event.start_time > today && event.start_time <= tomorrow
+        times_to_events[:today]    << event
+      elsif event.start_time > tomorrow && event.start_time <= after_tomorrow
+        times_to_events[:tomorrow] << event
+      else
+        times_to_events[:later]    << event
+      end
+    end
+
+    return times_to_events
+  end
+
   # Returns an Array of non-duplicate future Event instances.
   #
   # Options:
   # * :order => How to sort events. Defaults to :start_time.
   # * :venue => Which venue to display events for. Defaults to all.
   def self.find_future_events(opts={})
+    today = Time.now.utc
     order = opts[:order] || :start_time
     conditions_sql = "events.duplicate_of_id IS NULL AND events.start_time >= :start_time"
     conditions_vars = {
-      :start_time => Date.today.to_datetime,
-      :end_time => Date.today.to_datetime,
+      :start_time => today,
+      :end_time => today,
     }
     if venue = opts[:venue]
       conditions_sql << " AND venues.id == :venue"
@@ -123,11 +166,14 @@ class Event < ActiveRecord::Base
   # Returns an Array of non-duplicate Event instances within a given date range
   # ToDo:  Why is the find ignoring
   def self.find_by_dates(start_date, end_date, order='start_time')
-    start_date = start_date.to_datetime if start_date.is_a?(Date)
-    end_date = end_date.to_datetime+1.day-1.second if end_date.is_a?(Date)
+    start_date = Time.parse(start_date.to_s) if start_date.is_a?(Date)
+    end_date = Time.parse(end_date.to_s)+1.day-1.second if end_date.is_a?(Date)
 
     find(:all,
-      :conditions => ['events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?', start_date, end_date],
+      :conditions => [
+        'events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?',
+        start_date.utc, end_date.utc
+      ],
       :include => :venue,
       :order => order)
   end
@@ -135,7 +181,7 @@ class Event < ActiveRecord::Base
   # How similar should terms be to qualify as a match? This value should be
   # close to zero because Lucene's implementation of fuzzy matching is
   # defective, e.g., at 0.5 it can't even realize that "meetin" is similar to
-  # "meeting". 
+  # "meeting".
   SOLR_SIMILARITY = 0.3
 
   # How much to boost the score of a match in the title?
@@ -161,26 +207,27 @@ class Event < ActiveRecord::Base
     skip_old = opts[:skip_old] == true
     limit = opts[:limit] || 50
 
-    formatted_query = query \
+    formatted_query = \
+      %{NOT duplicate_for_solr:"1" AND (} \
+      << query \
       .scan(/\S+/) \
       .map(&:escape_lucene) \
       .map{|term| %{title:"#{term}"~#{"%1.1f" % SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST} "#{term}"~#{"%1.1f" % SOLR_SIMILARITY}}} \
-      .join(" ")
+      .join(" ") \
+      << %{)}
+
+    if skip_old
+      formatted_query << %{ AND (start_time:[#{Time.today.yesterday.strftime(SOLR_TIME_FORMAT)} TO #{SOLR_TIME_MAXIMUM}])}
+    end
 
     solr_opts = {
-      :order => order, 
+      :order => order,
       :limit => limit,
     }
     solr_opts[:scores] = true if order == :score
     response = Event.find_by_solr(formatted_query, solr_opts)
     results = response.results
 
-    # TODO reject duplicates during query, not after records are loaded
-    results = results.reject{|event| !event.duplicate_of_id.blank?}
-
-    # TODO implement skip_old during query, not after records are loaded
-    results = results.reject{|event| event.old?} if skip_old
-    
     return results
   end
 
@@ -199,10 +246,11 @@ class Event < ActiveRecord::Base
     event.source       = source
     event.title        = abstract_event.title
     event.description  = abstract_event.description
-    event.start_time   = abstract_event.start_time
-    event.end_time     = abstract_event.end_time
+    event.start_time   = Time.parse(abstract_event.start_time.to_s)
+    event.end_time     = abstract_event.end_time.blank? ? nil : Time.parse(abstract_event.end_time.to_s)
     event.url          = abstract_event.url
     event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
+
 
     duplicates = event.find_exact_duplicates
     duplicates ? duplicates.first : event
@@ -296,17 +344,46 @@ EOF
     end
   end
 
-  #---[ Misc. ]-----------------------------------------------------------
-  
-  # Is this event current? (not old)
+  #---[ Date related ]----------------------------------------------------
+
+  # Is this event current? Default cutoff is today
   def current?(cutoff=nil)
-    return !self.old?
+    cutoff ||= Time.today
+    return (self.end_time || self.start_time) >= cutoff
   end
 
-  # Is this event old?
+  # Is this event old? Default cutoff is yesterday
   def old?(cutoff=nil)
     cutoff ||= Time.now.yesterday
     return (self.end_time || self.start_time) < cutoff
+  end
+
+  #---[ Solr helpers ]----------------------------------------------------
+
+  SOLR_TIME_FORMAT = '%Y%m%d%H%M'
+  SOLR_TIME_LENGTH = Time.now.strftime(SOLR_TIME_FORMAT).length
+  SOLR_TIME_MAXIMUM = ('9' * SOLR_TIME_LENGTH).to_i
+
+  # Return a purely numeric representation of the start_time
+  def start_time_for_solr
+    time = self.start_time
+    time ? time.utc.strftime(SOLR_TIME_FORMAT).to_i : nil
+  end
+
+  # Return a purely numeric representation of the end_time
+  def end_time_for_solr
+    time = self.end_time
+    time ? time.utc.strftime(SOLR_TIME_FORMAT).to_i : nil
+  end
+
+  # Returns value for whether the record is a duplicate or not
+  def duplicate_for_solr
+    self.duplicate_of_id.blank? ? 0 : 1
+  end
+
+  # Return a string of all indexable fields, which may be useful for doing duplicate checks
+  def text_for_solr
+    INDEXABLE_FIELDS.reject{|name| name == :text_for_solr}.map{|name| self.send(name)}.join("|")
   end
 
 protected

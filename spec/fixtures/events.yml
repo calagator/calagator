@@ -28,7 +28,7 @@ day_after_tomorrow:
 duplicate_event:
   id: <%=n+=1%>
   title: Web 2.0 Conference
-  start_time: 2007-10-05 00:00:00
+  start_time: 2007-10-05 07:00:00 Z
   venue_id: 2
   url: http://www.web2con.com/
 

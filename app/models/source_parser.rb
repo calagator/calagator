@@ -8,36 +8,32 @@ class SourceParser
   # * :url - URL string to read as parser input.
   # * :content - String to read as parser input.
   def self.to_abstract_events(opts)
-    events = []
+    content = self.content_for(opts)
 
-    # TODO where does content_for belong?
-    content = Base.content_for(opts)
-    content = CGI::unescapeHTML(content) if content.respond_to?(:content_type) and content.content_type == "application/atom+xml"
-    
-    for parser in parsers
-      begin
-        events += parser.to_abstract_events(opts.merge(:content => content))
-      rescue Exception => e
-        # FIXME We really shouldn't be just throwing out all of these exceptions.
-        # Ignore
+    returning([]) do |events|
+      parsers.each do |parser|
+        begin
+          events.concat(parser.to_abstract_events(opts.merge(:content => content)))
+        rescue Exception => e
+          :ignore # Leave this line for rcov's code coverage
+        end
       end
     end
-
-    return events
-  end
-
-  # Returns a Hash of format types to human-readable labels
-  def self.formats_to_labels
-    result = ::ActiveSupport::OrderedHash.new
-    for parser in $SourceParserImplementations.sort_by{|t| t.label.to_s}
-      result[parser.to_s.demodulize.to_sym] = parser.label
-    end
-    return result
   end
 
   # Returns an Array of parser classes for the various formats
   def self.parsers
     $SourceParserImplementations.map{|parser| parser}.uniq
+  end
+
+  # Return content for the arguments
+  def self.content_for(*args)
+    ::SourceParser::Base.content_for(*args)
+  end
+
+  # Return content for a URL
+  def self.read_url(*args)
+    ::SourceParser::Base.read_url(*args)
   end
 
   # == SourceParser::Base
@@ -57,12 +53,17 @@ class SourceParser
     # Gets or sets the human-readable label for this parser.
     def self.label(value=nil)
       self._label = value if value
-      return _label
+      return self._label
     end
 
     # Returns content from either the :content option or by reading a :url.
     def self.content_for(opts)
-      opts[:content] || read_url(opts[:url])
+      content = opts[:content] || self.read_url(opts[:url])
+      if content.respond_to?(:content_type) && ["application/atom+xml"].include?(content.content_type)
+        return CGI::unescapeHTML(content)
+      else
+        return content
+      end
     end
 
     # Returns content read from a URL. Easier to stub.

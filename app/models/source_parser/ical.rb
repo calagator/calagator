@@ -50,7 +50,7 @@ class SourceParser # :nodoc:
               
               match = content_event.match(EVENT_DTEND_RE)
               end_time = match ? Time.parse(match[1]) : nil
-              
+
               next if (end_time || start_time) < cutoff
             end
           end
@@ -105,6 +105,7 @@ class SourceParser # :nodoc:
           return a
         rescue Vpim::InvalidEncodingError, ArgumentError, RuntimeError
           # Exceptional state will be handled below
+          :ignore # Leave this line in for rcov's code coverage
         end
       end
 

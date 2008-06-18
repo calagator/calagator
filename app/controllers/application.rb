@@ -9,6 +9,9 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # :secret => '8813a7fec0bb4fbffd283a3868998eed'
 
   layout "application"
+
+  # For vendor/plugins/exception_notification
+  include ExceptionNotifiable
 end
 
 # Make it possible to use helpers in controllers

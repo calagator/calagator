@@ -44,10 +44,8 @@ process manually to stop it because 'rake solr:stop' will NOT work.
   task :stop do
     if RUBY_PLATFORM.match(/mswin/)
       puts <<-HERE
-========================================================================
 WARNING: Windows can't stop Solr, you must do so manually by killing
 it through the Task Manager.
-========================================================================
       HERE
     else
       file_path = "#{SOLR_PATH}/tmp/#{ENV['RAILS_ENV']}_pid"

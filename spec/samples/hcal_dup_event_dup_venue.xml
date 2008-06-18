@@ -1,7 +1,7 @@
 <div class="vevent">
 	<a class="url" href="http://www.web2con.com/">http://www.web2con.com/</a>
 	<span class="summary">Web 2.0 Conference</span>: 
-	<abbr class="dtstart" title="2007-10-05">Friday, October 5, 2007</abbr>,
+	<abbr class="dtstart" title="2007-10-05 00:00:00">Friday, October 5, 2007</abbr>,
 	at the 
 	<div class="venue location vcard">
 		<span class="fn org"><a href="/venue/40384/">CubeSpace2</a></span><br />

@@ -19,13 +19,6 @@ module EventsHelper
 
   def format_google_timespan( event)
     end_time = event.end_time || event.start_time
-    "#{local_to_utc(event.start_time).strftime( GOOGLE_TIME_FORMAT)}/#{local_to_utc(end_time).strftime( GOOGLE_TIME_FORMAT)}"
-  end
-
-private
-
-  # Convert a +time+ from the local timezone to UTC.
-  def local_to_utc(time)
-    local = TIMEZONE_COMPILED.local_to_utc(time)
+    "#{event.start_time.utc.strftime(GOOGLE_TIME_FORMAT)}/#{end_time.utc.strftime(GOOGLE_TIME_FORMAT)}"
   end
 end

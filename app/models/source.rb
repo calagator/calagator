@@ -33,7 +33,7 @@ class Source < ActiveRecord::Base
         source = Source.find_or_create_by_url(:url => url)
         events = source.create_events!
         sources2events[source] = events
-        source.save! # Updates the imported_at and othe fields
+        source.save! # Updates the imported_at and other fields
       end
     end
     return sources2events
@@ -54,6 +54,10 @@ class Source < ActiveRecord::Base
         # Skip invalid events that start after they end
         next if event.end_time && event.end_time < event.start_time
         
+        # convert to local time, because time zone is simply discarded when event is saved
+        event.start_time.localtime
+        event.end_time.localtime if event.end_time
+    
         event.save!
         event.venue.save! if event.venue
         events << event

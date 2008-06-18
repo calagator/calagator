@@ -22,6 +22,7 @@
 #   # ...or a restore
 #   SolrMarshal.new(:index_dir => "solr/data").restore("myindex.solr")
 class SolrMarshal
+  require 'fileutils'
   require 'rubygems'
   require 'zip/zip' # gem install rubyzip
 
@@ -70,6 +71,7 @@ class SolrMarshal
     # NOTE File.read fails if given a "wb+" option
     zis = Zip::ZipInputStream.new(target)
     while entry = zis.get_next_entry
+      FileUtils.mkdir_p(self.index_dir) rescue nil
       File.open("#{self.index_dir}/#{entry.name}", "wb+"){|h| h.write(zis.read)}
     end
     zis.close

@@ -40,6 +40,8 @@ namespace :data do
 
     Rake::Task['solr:restart'].invoke
 
+    Rake::Task['db:migrate'].invoke
+
     puts "* Done"
   end
 end
