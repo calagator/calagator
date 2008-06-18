@@ -1,7 +1,7 @@
 <% content_for :javascript_insert do %>
 	<%= javascript_include_tag 'jquery.dimensions.min.js', 'jquery.ui.autocomplete.ext.js', 'jquery.ui.autocomplete.js' %>
 	<script>
-		
+		var completed_title = '';
 	  $(document).ready(function(){
 	    $("input.autocomplete").autocomplete({	ajax: "/venues.js", 
 																timeout: 200,
@@ -19,8 +19,10 @@
 																		completed_title = venue.title;
 																})
 																.bind("cancel.autocomplete", function(e,venue) { $("#event_venue_id").val(''); })
-																.bind("keydown.autocomplete", function (e) { 
-																			$("#event_venue_id").val('');
+																.bind("change", function(e) { 
+																	if(completed_title != e.target.value) {
+																		$("#event_venue_id").val('');
+																	}
 																})
 																.attr('autocomplete', 'off');
 	  });
