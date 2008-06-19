@@ -50,8 +50,8 @@
 		<%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !@event.venue.nil? ? @event.venue.title : params[:venue_name] %>
 		<%= hidden_field(:event, :venue_id, :value => (!@event.venue.nil? ? @event.venue.id : params[:event_venue_id])) %>
   </div>
-  <div>
-    <%= link_to 'Add a new venue', new_venue_url %>
+  <div class='help'>
+		Type the name of a venue to search. If it doesn't exist, we'll create it for you.
   </div>
 
 	<div id="event_times" class='no_label'>
