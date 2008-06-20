@@ -393,11 +393,26 @@ describe Source, "when importing events" do
     SourceParser::Base.stub!(:read_url).and_return(ical_content)
     source = Source.new(:title => "Event with squashed venue", :url => "http://IcalEventWithSquashedVenue.com/")
     
-
     events = source.to_events(:skip_old => false)
 
     event = events.first
     event.venue.title.should == "Master"
   end
 
+  it "should not import an event which after geocoding duplicates an existing event" do
+    pending "should not import an event which after geocoding duplicates an existing event" 
+    
+    # I need some help writing this spec
+    # 'hcal_event_wo_lat_and_long.xml' is a sample source with one event
+    # and with one venue that has address but no lat/long
+    # I would like to import this source once, just as if it was a parameter to Source/create
+    # then "import" it again
+    # and test to see that the second import does not result in a new event or venue
+
+    # import event 1st time and save
+
+    # try importing it again
+    # this should not create a new event or venue
+  
+  end
 end

@@ -27,11 +27,13 @@ class Venue < ActiveRecord::Base
   unless RAILS_ENV == 'test'
       acts_as_solr
   end
-  include DuplicateChecking
-  before_save :geocode
-  before_validation :normalize_url!
+
   has_many :events, :dependent => :nullify
   belongs_to :source
+  
+  include DuplicateChecking
+  before_validation :normalize_url!
+  before_save :geocode
 
   validates_presence_of :title
   validates_format_of :url, :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/, 
@@ -54,13 +56,15 @@ class Venue < ActiveRecord::Base
         venue[key] = value unless value.blank?
       end
     end
+    
+    # normalize it before duplicate checking
+    # so that we compare normalized to normalized
+    venue.normalize_venue
 
     # if the new venue has no exact duplicate, use the new venue
     # otherwise, find the ultimate master and return it 
     duplicates = venue.find_exact_duplicates
-    if duplicates.nil? 
-      venue
-    else
+    if duplicates
       venue = duplicates.first
       while venue.duplicate_of_id do
         venue = Venue.find(venue.duplicate_of_id)
@@ -69,6 +73,12 @@ class Venue < ActiveRecord::Base
     return venue
     
   end
+  
+  def normalize_venue
+    self.geocode
+    self.normalize_url!
+  end
+  
 
   #===[ Finders ]=========================================================
 
