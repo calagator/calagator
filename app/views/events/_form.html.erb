@@ -3,12 +3,13 @@
   <script>
     var completed_title = '';
     $(document).ready(function(){
-      $("input.autocomplete").autocomplete({  ajax: "/venues.js",
+      $("input.autocomplete").autocomplete({
+        ajax: "/venues.js",
         timeout: 200,
         match: function(typed) { return this.title.match(new RegExp("^"+typed, "i")); },
         insertText: function(venue) { return venue.title },
         template:   function(venue) {
-          venue.short_address = (venue.street_address.length > 0) ?
+          venue.short_address = (venue.street_address && venue.street_address.length > 0) ?
             venue.street_address+", "+venue.locality+" "+venue.region :
             venue.address;
           return "<li><strong>"+venue.title+"</strong><br />"+venue.short_address+"</li>"
