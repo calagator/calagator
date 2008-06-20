@@ -19,11 +19,19 @@
         $("#event_venue_id").val(venue.id);
         completed_title = venue.title;
       })
-      .bind("cancel.autocomplete", function(e,venue) { $("#event_venue_id").val(''); })
+      .bind("cancel.autocomplete", function(e,venue) { 
+        $("#event_venue_id").val(''); 
+      })
       .bind("change", function(e) {
         if(completed_title != e.target.value) {
           $("#event_venue_id").val('');
         }
+      })
+      .bind('autocomplete', function(e, value) {
+        $("#event_venue_loading").show();
+      })
+      .bind('updateList', function(e) {
+        $("#event_venue_loading").hide();
       })
       .attr('autocomplete', 'off');
     });
@@ -49,6 +57,7 @@
     <%= f.label :venue_id, "Venue" %>
     <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !@event.venue.nil? ? @event.venue.title : params[:venue_name] %>
     <%= hidden_field(:event, :venue_id, :value => (!@event.venue.nil? ? @event.venue.id : params[:event_venue_id])) %>
+    <%= image_tag "spinner.gif", :id=> "event_venue_loading", :style => "display: none; margin-left: 0.5em;" %>
   </div>
   <div class='help'>
     Type the name of a venue to search. If it doesn't exist, we'll create it for you.
