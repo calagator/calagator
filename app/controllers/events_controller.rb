@@ -103,7 +103,7 @@ class EventsController < ApplicationController
         flash[:success] = 'Your event was successfully created. '
         format.html { 
           if redirect_to_venue
-            flash[:success] += "Please tell us more about where it's being held."
+            flash[:success] += " Please tell us more about where it's being held."
             redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
           else
             redirect_to(@event) 

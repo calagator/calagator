@@ -35,15 +35,12 @@ class Event < ActiveRecord::Base
   validates_format_of :url, :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
       :allow_blank => true, :allow_nil => true
 
-  before_validation :normalize_url
+  before_validation :normalize_url!
 
   #---[ Overrides ]-------------------------------------------------------
 
   # Index only specific events
   def self.rebuild_solr_index
-    # Skip old and duplicate events
-    ### self.find(:all, :conditions => ['duplicate_of_id IS NULL']).reject{|event| event.old?}.each {|content| content.solr_save}
-
     # Skip duplicate events
     self.find(:all, :conditions => ['duplicate_of_id IS NULL']).each {|content| content.solr_save}
     logger.debug self.count>0 ? "Index for #{self.name} has been rebuilt" : "Nothing to index for #{self.name}"
@@ -338,7 +335,7 @@ EOF
     venue && venue.location
   end
 
-  def normalize_url
+  def normalize_url!
     unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + self.url
     end

@@ -29,7 +29,7 @@ class Venue < ActiveRecord::Base
   end
   include DuplicateChecking
   before_save :geocode
-  before_validation :normalize_url
+  before_validation :normalize_url!
   has_many :events, :dependent => :nullify
   belongs_to :source
 
@@ -42,11 +42,7 @@ class Venue < ActiveRecord::Base
     :in => -180..180,
     :message => "must be between -180 and 180"
 
-  # Returns future events for this venue.
-  def find_future_events(opts={})
-    opts[:venue] = self
-    Event.find_future_events(opts)
-  end
+  #===[ Instantiators ]===================================================
 
   # Returns a new Venue created from an AbstractLocation.
   def self.from_abstract_location(abstract_location, source=nil)
@@ -74,6 +70,16 @@ class Venue < ActiveRecord::Base
     
   end
 
+  #===[ Finders ]=========================================================
+
+  # Returns future events for this venue.
+  def find_future_events(opts={})
+    opts[:venue] = self
+    Event.find_future_events(opts)
+  end
+
+  #===[ Address helpers ]=================================================
+
   # Does this venue have any address information?
   def has_full_address?
     !"#{street_address}#{locality}#{region}#{postal_code}#{country}".blank?
@@ -88,6 +94,7 @@ class Venue < ActiveRecord::Base
     end
   end
   
+  #===[ Geocoding helpers ]===============================================
 
   # Get an address we can use for geocoding
   def geocode_address
@@ -115,20 +122,22 @@ class Venue < ActiveRecord::Base
     unless location or geocode_address.blank? or duplicate_of
       geo = GeoKit::Geocoders::MultiGeocoder.geocode(geocode_address)
       if geo.success
-        self.latitude = geo.lat
-        self.longitude = geo.lng
+        self.latitude       = geo.lat
+        self.longitude      = geo.lng
         self.street_address = geo.street_address if self.street_address.blank?
-        self.locality = geo.city if self.locality.blank?
-        self.region = geo.state if self.region.blank?
-        self.postal_code = geo.zip if self.postal_code.blank?
-        self.country = geo.country_code if self.country.blank?
+        self.locality       = geo.city           if self.locality.blank?
+        self.region         = geo.state          if self.region.blank?
+        self.postal_code    = geo.zip            if self.postal_code.blank?
+        self.country        = geo.country_code   if self.country.blank?
       end
       # puts "Geocoding #{geo.success ? "successful" : "failed" }: #{geo.inspect}"
     end
     true
   end
+
+  #===[ Triggers ]========================================================
   
-  def normalize_url
+  def normalize_url!
     unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + self.url
     end
