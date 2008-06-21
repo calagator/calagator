@@ -57,10 +57,6 @@ class Venue < ActiveRecord::Base
       end
     end
     
-    # normalize it before duplicate checking
-    # so that we compare normalized to normalized
-    venue.normalize_venue
-
     # if the new venue has no exact duplicate, use the new venue
     # otherwise, find the ultimate master and return it 
     duplicates = venue.find_exact_duplicates
@@ -74,12 +70,6 @@ class Venue < ActiveRecord::Base
     
   end
   
-  def normalize_venue
-    self.geocode
-    self.normalize_url!
-  end
-  
-
   #===[ Finders ]=========================================================
 
   # Returns future events for this venue.
@@ -152,4 +142,9 @@ class Venue < ActiveRecord::Base
       self.url = 'http://' + self.url
     end
   end
+  
+  def normalize_venue
+    # TODO: add appropriate sanitization and normalization of venue fields for display
+  end
+  
 end
