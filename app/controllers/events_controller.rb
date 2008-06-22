@@ -102,7 +102,7 @@ class EventsController < ApplicationController
       if !evil_robot && @event.save
         flash[:success] = 'Your event was successfully created. '
         format.html { 
-          if redirect_to_venue
+          if redirect_to_venue && !params[:venue_name].blank?
             flash[:success] += " Please tell us more about where it's being held."
             redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
           else
