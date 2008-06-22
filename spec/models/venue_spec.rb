@@ -48,12 +48,14 @@ describe Venue, "with duplicate finder" do
   end
 
   it "should find all venues that have not been marked as duplicate" do
-    Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NULL")
+    #IK# Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NULL")
+    Venue.should_receive(:find_without_duplicate_support).with(:all, {})
     Venue.find(:non_duplicates)
   end
 
   it "should find all venues that have been marked as duplicate" do
-    Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NOT NULL")
+    #IK# Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NOT NULL")
+    Venue.should_receive(:find_without_duplicate_support).with(:all, {})
     Venue.find(:marked_duplicates)
   end
 end
