@@ -3,7 +3,7 @@ class VenuesController < ApplicationController
   # GET /venues.xml
   def index
     params[:val] ||= ""
-    @venues = Venue.find(:non_duplicates, :conditions => ["title LIKE ?", "%#{params[:val]}%"], :order => :title)
+    @venues = Venue.find(:non_duplicates, :conditions => ["title LIKE ?", "%#{params[:val]}%"], :order => 'lower(title)')
     @page_title = "Venues"
 
     respond_to do |format|
