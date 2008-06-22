@@ -105,7 +105,7 @@ class Event < ActiveRecord::Base
   #     :later => [...],
   #   }
   def self.select_for_overview
-    today = Time.today
+    today = Time.today.beginning_of_day
     tomorrow = today + 1.day
     after_tomorrow = tomorrow + 1.day
     cutoff = today.utc + 2.weeks
@@ -120,13 +120,13 @@ class Event < ActiveRecord::Base
       :include    => :venue,
       :order      => 'start_time ASC',
       :conditions => [
-        '(events.duplicate_of_id is NULL) AND (start_time > ? AND start_time < ?)',
+        '(events.duplicate_of_id is NULL) AND (start_time >= ? AND start_time < ?)',
         today.utc, cutoff
       ]
     ).each do |event|
-      if event.start_time > today && event.start_time <= tomorrow
+      if event.start_time >= today && event.start_time <= tomorrow
         times_to_events[:today]    << event
-      elsif event.start_time > tomorrow && event.start_time <= after_tomorrow
+      elsif event.start_time >= tomorrow && event.start_time <= after_tomorrow
         times_to_events[:tomorrow] << event
       else
         times_to_events[:later]    << event
@@ -142,7 +142,7 @@ class Event < ActiveRecord::Base
   # * :order => How to sort events. Defaults to :start_time.
   # * :venue => Which venue to display events for. Defaults to all.
   def self.find_future_events(opts={})
-    today = Time.now.utc
+    today = Time.now.beginning_of_day.utc
     order = opts[:order] || :start_time
     conditions_sql = "events.duplicate_of_id IS NULL AND events.start_time >= :start_time"
     conditions_vars = {
@@ -161,10 +161,9 @@ class Event < ActiveRecord::Base
   end
 
   # Returns an Array of non-duplicate Event instances within a given date range
-  # ToDo:  Why is the find ignoring
   def self.find_by_dates(start_date, end_date, order='start_time')
     start_date = Time.parse(start_date.to_s) if start_date.is_a?(Date)
-    end_date = Time.parse(end_date.to_s)+1.day-1.second if end_date.is_a?(Date)
+    end_date = Time.parse(end_date.to_s).end_of_day if end_date.is_a?(Date)
 
     find(:all,
       :conditions => [

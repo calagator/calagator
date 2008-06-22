@@ -153,10 +153,27 @@ end
 
 describe Event, "when finding by dates" do
   
-  before(:each) do
+  before(:all) do
     @now = Time.now
     @event = Event.new(:title => "Event in progress", :start_time => @now - 2.days, :end_time => @now + 2.days)
     @event.save!
+    @midnight_start = Event.new(:title => "Midnight start", :start_time => Time.now.beginning_of_day, :end_time => @now + 2.days)
+    @midnight_start.save
+ end
+  
+  it "Overview should include events that started earlier today" do
+    @events = Event.select_for_overview[:today]
+    @events.should include(@midnight_start)
+  end
+  
+  it "Future Events should include events that started earlier today" do
+    @events = Event.find_future_events
+    @events.should include(@midnight_start)
+  end
+  
+  it "Date Range should include events that started earlier today" do
+    @events = Event.find_by_dates(Time.now.beginning_of_day, Time.now+1.day, order = "start_time")
+    @events.should include(@midnight_start)
   end
   
   it "should include ongoing events as future events" do
