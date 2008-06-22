@@ -31,6 +31,23 @@ describe EventsController do
       response.should redirect_to(event_path(event))
     end
   
+  it "should update an event"
+  
+  it "should update an event without a venue" do
+    params = { :end_date => "2008-06-04", 
+      :start_date => "2008-06-03", 
+      :event => { "title"=>"Foo", "venue_id"=>"", "url"=>"http://foo.com", "description"=>"Wheeeee"}, 
+      :venue_name => "", 
+      :end_time => "", 
+      :start_time => "",
+      :id => 1 }
+    Event.stub!(:find).and_return(event = mock_model(Event, :venue_id => nil, :venue= => true, :venue => Venue.new, 
+        :start_time= => true, :end_time= => true))
+    event.stub!(:update_attributes).and_return(true)
+    put "update", params
+    response.should redirect_to(event_path(event))
+  end
+  
 end
 
 describe EventsController, "managing duplicates" do

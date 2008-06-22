@@ -136,7 +136,7 @@ class EventsController < ApplicationController
       if @event.update_attributes(params[:event])
         flash[:success] = 'Event was successfully updated.'
         format.html { 
-          if redirect_to_venue
+          if redirect_to_venue && !params[:venue_name].blank?
             flash[:success] += "Please tell us more about where it's being held."
             redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
           else
