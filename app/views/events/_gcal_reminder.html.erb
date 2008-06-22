@@ -1,1 +1,11 @@
-<a class='control-link' href="http://www.google.com/calendar/event?action=TEMPLATE&amp;text=<%=u @event.title %>&amp;dates=<%=u format_google_timespan( @event) %>&amp;details=<%=u @event.description %>&amp;location=<%=u "#{@event.venue ? @event.venue.title : ''}#{@event.venue ? (@event.venue.geocode_address.blank? ? '' : " loc:#{@event.venue.geocode_address}") : ''}" %>&amp;trp=true&amp;sprop=<%=u url_for('/')%>&amp;sprop=name:Calagator">Add to Google Calendar</a>
+<% form_tag "http://www.google.com/calendar/event" do %>
+  <%= hidden_field_tag :action, "TEMPLATE" %>
+  <%= hidden_field_tag :text, @event.title %>
+  <%= hidden_field_tag :dates, format_google_timespan(@event) %>
+  <%= hidden_field_tag :details, @event.description %>
+  <%= hidden_field_tag :location, %{#{@event.venue ? @event.venue.title : ''}#{@event.venue ? (@event.venue.geocode_address.blank? ? '' : " #{@event.venue.geocode_address}") : ''}} %>
+  <%= hidden_field_tag :trp, "true" %>
+  <%= hidden_field_tag :sprop, url_for('/') %>
+  <%= hidden_field_tag :sprop, "name:Calagator" %>
+  <%= submit_tag "Add to Google Calendar" %>
+<% end %>
