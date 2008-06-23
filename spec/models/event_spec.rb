@@ -6,7 +6,7 @@ describe Event, "in general" do
     event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'))
     event.should be_valid
   end
-  
+
   it "should add a http:// prefix to urls without one" do
     event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'), :url => 'google.com')
     event.should be_valid
@@ -30,12 +30,12 @@ describe Event, "when parsing" do
   end
 
   it "should parse an AbstractEvent into an Event" do
-    event = Event.new(:title => "EventTitle", 
-                      :description => "EventDescription", 
-                      :start_time => Time.parse("2008-05-20"), 
+    event = Event.new(:title => "EventTitle",
+                      :description => "EventDescription",
+                      :start_time => Time.parse("2008-05-20"),
                       :end_time => Time.parse("2008-05-22"))
     Event.should_receive(:new).and_return(event)
-    
+
     abstract_event = SourceParser::AbstractEvent.new("EventTitle", "EventDescription", Time.parse("2008-05-20"), Time.parse("2008-05-22"))
 
     Event.from_abstract_event(abstract_event).should == event
@@ -85,10 +85,10 @@ describe Event, "when processing date" do
   before(:each) do
     @event = Event.new
   end
-  
+
   it "should find all events within a given date range" do
-    Event.should_receive(:find).with(:all, 
-      :conditions => ["events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?", Time.parse(Date.today.to_s), Time.parse(Date.tomorrow.to_s)+1.day-1.second], 
+    Event.should_receive(:find).with(:all,
+      :conditions => ["events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?", Time.parse(Date.today.to_s), Time.parse(Date.tomorrow.to_s)+1.day-1.second],
       :order => 'start_time',
       :include => :venue)
     Event.find_by_dates(Date.today, Date.tomorrow)
@@ -98,32 +98,32 @@ it "should find all events with duplicate titles" do
     Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
     Event.find_duplicates_by(:title)
   end
-  
+
   it "should find all events with duplicate titles and urls" do
     Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url ) ORDER BY a.title,a.url")
     Event.find_duplicates_by([:title,:url])
   end
-  
+
   it "should fail to validate if end_time is earlier than start time " do
     @event.start_time = Time.now
     @event.end_time = @event.start_time - 2.hours
     @event.save.should be_false
     @event.should have(1).error_on(:end_time)
   end
-  
+
   it "should return an end time, based on duration" do
     @event.start_time = Time.now
     @event.duration = 60
     @event.end_time.should == @event.start_time + 1.hour
   end
-  
+
   it "should set a duration when given an end time" do
     now  = Time.now
     @event.start_time = now
     @event.end_time = (now + 1.hour)
     @event.duration.should == 60
   end
-  
+
   it "should handle setting end before start" do
     @event = Event.new
     now = Time.now
@@ -131,7 +131,7 @@ it "should find all events with duplicate titles" do
     @event.start_time = now
     @event.duration.should == 120
   end
-  
+
   it "should handle setting duration before start" do
     @event = Event.new
     now = Time.now
@@ -139,7 +139,7 @@ it "should find all events with duplicate titles" do
     @event.start_time = now
     @event.end_time.should == now + 2.hours
   end
-  
+
   it "should handle changing end time with an existing duration" do
     @event = Event.new
     now = Time.now
@@ -148,46 +148,82 @@ it "should find all events with duplicate titles" do
     @event.end_time = now + 2.hours
     @event.end_time.should == now + 2.hours
   end
-  
+
 end
 
 describe Event, "when finding by dates" do
-  
+
   before(:all) do
     @now = Time.now
-    @event = Event.new(:title => "Event in progress", :start_time => @now - 2.days, :end_time => @now + 2.days)
-    @event.save!
-    @midnight_start = Event.new(:title => "Midnight start", :start_time => Time.now.beginning_of_day, :end_time => @now + 2.days)
-    @midnight_start.save
+
+    @started_before_and_continuing_after = Event.new(
+      :title => "Event in progress",
+      :start_time => @now - 2.days,
+      :end_time => @now + 2.days)
+    @started_before_and_continuing_after.save!
+
+    @started_midnight_and_continuing_after = Event.new(
+      :title => "Midnight start",
+      :start_time => Time.now.beginning_of_day,
+      :end_time => @now + 2.days)
+    @started_midnight_and_continuing_after.save
+
+    @started_before_and_ended_yesterday = Event.new(
+      :title => "Yesterday start",
+      :start_time => @now - 2.days,
+      :end_time => Time.now.beginning_of_day-1.second)
+    @started_before_and_ended_yesterday.save!
  end
-  
-  it "Overview should include events that started earlier today" do
-    @events = Event.select_for_overview[:today]
-    @events.should include(@midnight_start)
+
+  describe "for overview" do
+    it "should include ongoing events" do
+      events = Event.select_for_overview[:today]
+      events.should include(@started_midnight_and_continuing_after)
+    end
+
+    it "should not include past events" do
+      events = Event.select_for_overview[:today]
+      events.should_not include(@started_before_and_ended_yesterday)
+    end
   end
-  
-  it "Future Events should include events that started earlier today" do
-    @events = Event.find_future_events
-    @events.should include(@midnight_start)
+
+  describe "for future events" do
+    it "should include ongoing events" do
+      events = Event.find_future_events
+      events.should include(@started_midnight_and_continuing_after)
+    end
+
+    # TODO figure out what this example was intended to do
+    #it "should include ongoing events as future events" do
+    #  pending "should include ongoing events as future events"
+    #  events = Event.find_future_events("start_time")
+    #  events.should include(@started_before_and_continuing_after)
+    #end
+
+    it "should not include past events" do
+      events = Event.find_future_events
+      events.should_not include(@started_before_and_ended_yesterday)
+    end
   end
-  
-  it "Date Range should include events that started earlier today" do
-    @events = Event.find_by_dates(Time.now.beginning_of_day, Time.now+1.day, order = "start_time")
-    @events.should include(@midnight_start)
+
+  describe "for date range" do
+    it "should include ongoing events" do
+      events = Event.find_by_dates(Time.now.beginning_of_day, Time.now+1.day, order = "start_time")
+      events.should include(@started_midnight_and_continuing_after)
+    end
+
+    it "should not include past events" do
+      events = Event.find_by_dates(Time.now.beginning_of_day, Time.now+1.day, order = "start_time")
+      events.should_not include(@started_before_and_ended_yesterday)
+    end
+
+    # TODO figure out what this example was meant to do
+    #it "should include events ongoing at the start of the range" do
+    #  pending "should include events ongoing at the start of the range"
+    #  events = Event.find_by_dates(@now - 1.days, @now + 1.days)
+    #  events.should include(@started_before_and_continuing_after)
+    #end
   end
-  
-  it "should include ongoing events as future events" do
-    pending "should include ongoing events as future events"
-    @events = Event.find_future_events("start_time")
-    @events.should include(@event)
-  end
-  
-  it "should include, within a date range, events ongoing at the start of the range" do
-    pending "should include, within a date range, events ongoing at the start of the range"
-    @events = Event.find_by_dates(@now - 1.days, @now + 1.days)
-    @events.should include(@event)
-  end
-  
 end
 
 describe Event, "when searching" do
