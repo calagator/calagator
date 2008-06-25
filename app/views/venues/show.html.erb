@@ -31,11 +31,11 @@
   <% end %>
 
   <% if !@venue.url.blank? %>
-    <div><a href='<%= @venue.url %>' class='url'><%= @venue.url %></a></div>
+    <div class='url'><%= link_to(nil, url_for(@venue.url) ) %></div>
   <% end %>
 
   <% if !@venue.email.blank? %>
-    <div><a href='mailto:<%= @venue.email %>' class='email'><%= @venue.email %></a></div>
+    <div class='email'><%= mail_to( h(@venue.email) ) %></div>
   <% end %>
 
   <% if !@venue.telephone.blank? %>
