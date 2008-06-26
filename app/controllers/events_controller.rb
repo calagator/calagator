@@ -209,6 +209,10 @@ class EventsController < ApplicationController
   # Search!!!
   def search
     @query = params[:query]
+    if @query.blank?
+      flash[:failure] = "You must enter a search query"
+      return redirect_to(root_path)
+    end
     @grouped_events = Event.search_grouped_by_currentness(params[:query], :order => params[:order])
   end
 
