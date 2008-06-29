@@ -94,7 +94,6 @@ describe Venue, "with duplicate finder (integration)" do
 
   it "should find complete duplicates by all" do
     pre, post = find_duplicates_create_a_clone_and_find_again(:all, @venue.attributes)
-    pending "find_duplicates_by(:all) seems to be failing because of null handling"
     post.size.should == pre.size + 2
   end
 
