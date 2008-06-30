@@ -1,13 +1,45 @@
+# = DuplicateChecking
+#
+# This mixin provides a way for ActiveRecord classes to find and squash duplicates.
+#
+# Example:
+#   
+#   # Define your class
+#   class Thing < ActiveRecord::Base
+#     # Load the mixin into your class
+#     include DuplicateChecking
+#
+#     # Declare attributes that should be ignored during duplicate checks
+#     self.ignore_attributes << :random_value
+#   end
+#
+#   # Set duplicates on objects
+#   foo1 = Thing.create!!:name => "foo")
+#   foo2 = Thing.create!(:name => "foo", :duplicate_of => foo1)
+#   bar  = Thing.create!(:name => "bar")
+#
+#   # Check whether record is set as duplicate
+#   foo1.duplicate? # => false
+#   foo2.duplicate? # => true
+#   bar.duplicate?  # => false
+#
+#   # Find duplicate of a record
+#   foo3.find_exact_duplicates # => [foo1, foo2]
+#   bar.find_exact_duplicates  # => nil
 module DuplicateChecking
-  DUPLICATE_MARK_COLUMN = 'duplicate_of_id'
+  DUPLICATE_MARK_COLUMN = :duplicate_of_id
   DEFAULT_SQUASH_METHOD = :mark
-  IGNORE_ATTRIBUTES = %(created_at updated_at id source_id ) + DUPLICATE_MARK_COLUMN
+  IGNORE_ATTRIBUTES     = (%w(created_at updated_at id) + [DUPLICATE_MARK_COLUMN]).map(&:to_sym)
 
   def self.included(base)
     base.extend ClassMethods
     base.class_eval do
+      cattr_accessor :ignore_attributes
+      self.ignore_attributes = []
+
       belongs_to :duplicate_of, :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
-      has_many :duplicates, :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
+      has_many   :duplicates,   :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
+
       class << self
         VALID_FIND_OPTIONS << :duplicates
         alias_method_chain :find, :duplicate_support
@@ -15,21 +47,31 @@ module DuplicateChecking
     end
   end
 
+  # Return array of attributes that should be ignored for duplicate checking
+  def ignorable_attributes
+    return self.class.ignorable_attributes
+  end
+
   # Is this record a duplicate of another?
   def duplicate?
     !self.duplicate_of.blank?
   end
 
-  # Return either an Array of exact duplicates for this record, or nil if no exact duplicates were found. 
+  # Return either an Array of exact duplicates for this record, or nil if no exact duplicates were found.
   #
   # Note that this method requires that all associations are set before this method is called.
   def find_exact_duplicates
-    matchable_attributes = self.attributes.reject{|key, value| IGNORE_ATTRIBUTES.include?(key)}
+    matchable_attributes = self.attributes.reject{|key, value| ignorable_attributes.include?(key.to_sym)}
     duplicates = self.class.find(:all, :conditions => matchable_attributes).reject{|t| t.id == self.id}
     return duplicates.blank? ? nil : duplicates
   end
 
   module ClassMethods
+
+    # Return array of attributes that should be ignored for duplicate checking
+    def ignorable_attributes
+      return(IGNORE_ATTRIBUTES + self.ignore_attributes.map(&:to_sym))
+    end
 
     # Extends ActiveRecord find with support for duplicates.
     #
@@ -63,7 +105,7 @@ module DuplicateChecking
         end
         args[0] = :all
       end
-      with_scope(:find => {:conditions => condition}) do 
+      with_scope(:find => {:conditions => condition}) do
         find_without_duplicate_support(*(args + [opts]))
       end
     end
@@ -106,7 +148,7 @@ module DuplicateChecking
 
       # Reject known duplicates
       records.reject! {|t| t.duplicate_of_id} if records.first.respond_to?(:duplicate_of_id)
-      
+
       if grouped
         # Group by the field values we're matching on; skip any values for which we only have one record
         records.group_by { |record| matched_fields.call(record) if matched_fields }\
@@ -125,11 +167,11 @@ module DuplicateChecking
       end
     end
 
-    # Squash duplicates. Options accept Venue instances or IDs.
+    # Squash duplicates. Options accept ActiveRecord instances or IDs.
     #
     # Options:
-    # :duplicates => Venue(s) to mark as duplicates
-    # :master => Venue to use as master
+    # :duplicates => ActiveRecord instance(s) to mark as duplicates
+    # :master => ActiveRecord instance to use as master
     def squash(opts)
       master     = opts[:master]
       duplicates = [opts[:duplicates]].flatten
@@ -138,7 +180,7 @@ module DuplicateChecking
       raise(ArgumentError, ":duplicates not specified") if duplicates.blank?
 
       master = _record_for(master)
-      
+
       squashed = []
 
       for duplicate in duplicates

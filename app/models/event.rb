@@ -21,21 +21,40 @@
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
   # Names of columns and methods to create Solr indexes for
-  INDEXABLE_FIELDS = %w(title description url duplicate_for_solr start_time_for_solr end_time_for_solr text_for_solr).map(&:to_sym)
+  INDEXABLE_FIELDS = \
+    %w(
+      title
+      description
+      url
+      duplicate_for_solr
+      start_time_for_solr
+      end_time_for_solr
+      text_for_solr
+    ).map(&:to_sym)
+
   unless RAILS_ENV == 'test'
       acts_as_solr :fields => INDEXABLE_FIELDS
   end
-  include DuplicateChecking
+
+  # Associations
   belongs_to :venue
   belongs_to :source
 
+  # Triggers
+  before_validation :normalize_url!
   before_validation :recalculate_duration
+
+  # Validations
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time
-  validates_format_of :url, :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
-      :allow_blank => true, :allow_nil => true
+  validates_format_of :url,
+    :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
+    :allow_blank => true,
+    :allow_nil => true
 
-  before_validation :normalize_url!
+  # Duplicates
+  include DuplicateChecking
+  self.ignore_attributes << :source_id
 
   #---[ Overrides ]-------------------------------------------------------
 

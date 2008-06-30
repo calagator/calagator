@@ -4,45 +4,53 @@
 # Table name: venues
 #
 #  id              :integer         not null, primary key
-#  title           :string(255)     
-#  description     :text            
-#  address         :string(255)     
-#  url             :string(255)     
-#  created_at      :datetime        
-#  updated_at      :datetime        
-#  street_address  :string(255)     
-#  locality        :string(255)     
-#  region          :string(255)     
-#  postal_code     :string(255)     
+#  title           :string(255)
+#  description     :text
+#  address         :string(255)
+#  url             :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  street_address  :string(255)
+#  locality        :string(255)
+#  region          :string(255)
+#  postal_code     :string(255)
 #  country         :string(255)
-#  latitude        :decimal(, )     
-#  longitude       :decimal(, )     
-#  email           :string(255)     
-#  telephone       :string(255)     
-#  source_id       :integer         
-#  duplicate_of_id :integer         
+#  latitude        :decimal(, )
+#  longitude       :decimal(, )
+#  email           :string(255)
+#  telephone       :string(255)
+#  source_id       :integer
+#  duplicate_of_id :integer
 #
 
 class Venue < ActiveRecord::Base
+  # Solr
   unless RAILS_ENV == 'test'
       acts_as_solr
   end
 
+  # Associations
   has_many :events, :dependent => :nullify
   belongs_to :source
-  
-  include DuplicateChecking
+
+  # Triggers
   before_validation :normalize_url!
   before_save :geocode
 
+  # Validations
   validates_presence_of :title
-  validates_format_of :url, :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/, 
-      :allow_blank => true, :allow_nil => true
-  
-  validates_inclusion_of :latitude, :longitude, 
-    :allow_nil => true,
+  validates_format_of :url,
+    :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
+    :allow_blank => true,
+    :allow_nil => true
+  validates_inclusion_of :latitude, :longitude,
     :in => -180..180,
+    :allow_nil => true,
     :message => "must be between -180 and 180"
+
+  # Duplicates
+  include DuplicateChecking
+  self.ignore_attributes << :source_id
 
   #===[ Instantiators ]===================================================
 
@@ -56,9 +64,9 @@ class Venue < ActiveRecord::Base
         venue[key] = value unless value.blank?
       end
     end
-    
+
     # if the new venue has no exact duplicate, use the new venue
-    # otherwise, find the ultimate master and return it 
+    # otherwise, find the ultimate master and return it
     duplicates = venue.find_exact_duplicates
     if duplicates
       venue = duplicates.first
@@ -67,9 +75,9 @@ class Venue < ActiveRecord::Base
       end
     end
     return venue
-    
+
   end
-  
+
   #===[ Finders ]=========================================================
 
   # Returns future events for this venue.
@@ -93,7 +101,7 @@ class Venue < ActiveRecord::Base
       nil
     end
   end
-  
+
   #===[ Geocoding helpers ]===============================================
 
   # Get an address we can use for geocoding
@@ -101,7 +109,7 @@ class Venue < ActiveRecord::Base
     full_address or address
   end
 
-  # Return this venue's latitude/longitude location, 
+  # Return this venue's latitude/longitude location,
   # or nil if it doesn't have one.
   def location
     [latitude, longitude] unless latitude.blank? or longitude.blank?
@@ -111,12 +119,12 @@ class Venue < ActiveRecord::Base
   def force_geocoding
     location.nil? # Yes, if it has no location.
   end
-  
+
   # Maybe trigger geocoding when we save
   def force_geocoding=(force_it)
     self.latitude = self.longitude = nil if force_it
   end
-  
+
   # Try to geocode, but don't complain if we can't.
   def geocode
     unless location or geocode_address.blank? or duplicate_of
@@ -130,21 +138,18 @@ class Venue < ActiveRecord::Base
         self.postal_code    = geo.zip            if self.postal_code.blank?
         self.country        = geo.country_code   if self.country.blank?
       end
-      # puts "Geocoding #{geo.success ? "successful" : "failed" }: #{geo.inspect}"
+      # puts "Geocoding #{geo.success ? "successful" : "failed"}: #{geo.inspect}"
     end
-    true
+
+    return true
   end
 
   #===[ Triggers ]========================================================
-  
+
   def normalize_url!
     unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + self.url
     end
   end
-  
-  def normalize_venue
-    # TODO: add appropriate sanitization and normalization of venue fields for display
-  end
-  
+
 end

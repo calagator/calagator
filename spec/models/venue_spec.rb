@@ -32,16 +32,27 @@ describe Venue, "with hCalendar to AbstractEvent parsing" do
   end
 end
 
-describe Venue, "when finding an exact duplicate" do
-  it "should ignore source_id" do
-    @venue_first = Venue.create!(:title => "first", :source_id => "1")
-    @venue_first.save!
-    @venue_second = Venue.create!(:title => "first", :source_id => "2")
-    match = @venue_second.find_exact_duplicates
-    match.should_not be_blank
-    match.should include(@venue_first)
+describe Venue, "when finding exact duplicates" do
+  it "should ignore attributes like created_at" do
+    venue1 = Venue.create!(:title => "this", :description => "desc",:created_at => Time.now)
+    venue2 = Venue.new(    :title => "this", :description => "desc",:created_at => Time.now.yesterday)
+
+    venue2.find_exact_duplicates.should include(venue1)
   end
 
+  it "should ignore source_id" do
+    venue1 = Venue.create!(:title => "this", :description => "desc",:source_id => "1")
+    venue2 = Venue.new(    :title => "this", :description => "desc",:source_id => "2")
+
+    venue2.find_exact_duplicates.should include(venue1)
+  end
+
+  it "should not match non-duplicates" do
+    venue1 = Venue.create!(:title => "this", :description => "desc")
+    venue2 = Venue.new(    :title => "that", :description => "desc")
+
+    venue2.find_exact_duplicates.should be_blank
+  end
 end
 
 describe Venue, "with duplicate finder" do
@@ -68,7 +79,7 @@ describe Venue, "with duplicate finder" do
   end
 end
 
-describe Venue, "with duplicate finder (integration)" do
+describe Venue, "with duplicate finder (integration test)" do
   fixtures :venues
 
   before(:each) do
