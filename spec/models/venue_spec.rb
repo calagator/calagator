@@ -1,12 +1,12 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Venue do
-  
+
   it "should be valid" do
     venue = Venue.new(:title => 'My Event')
     venue.should be_valid
   end
-  
+
   it "should add an http prefix to urls missing this before save" do
     venue = Venue.new(:title => 'My Event', :url => 'google.com')
     venue.should be_valid
@@ -39,9 +39,7 @@ describe Venue, "when finding an exact duplicate" do
     @venue_second = Venue.create!(:title => "first", :source_id => "2")
     match = @venue_second.find_exact_duplicates
     match.should_not be_blank
-    if match
-      match.should include(@venue_first)
-    end
+    match.should include(@venue_first)
   end
 
 end
@@ -200,7 +198,7 @@ describe "Venue geocoding" do
   it "should be valid even if not yet geocoded" do
     @venue.valid?.should == true
   end
-  
+
   it "should report its location properly if it has one" do
     lambda {
       @venue.latitude = 45.0
@@ -212,13 +210,13 @@ describe "Venue geocoding" do
     GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
     @venue.save
   end
-  
+
   it "shouldn't geocode automatically unless there's an address" do
     @venue.address = ""
     GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
     @venue.save
   end
-    
+
   it "shouldn't geocode automatically if already geocoded" do
     @venue.latitude = @venue.longitude = 0.0
     GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
@@ -228,8 +226,8 @@ describe "Venue geocoding" do
   it "shouldn't fail if the geocoder returns failure" do
     GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_failure)
     @venue.save
-  end    
-  
+  end
+
   it "should fill in empty addressing fields" do
     GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
     @venue.save
@@ -238,14 +236,14 @@ describe "Venue geocoding" do
     @venue.region.should == @geo_success.state
     @venue.postal_code.should == @geo_success.zip
   end
-  
+
   it "should leave non-empty addressing fields alone" do
     @venue.locality = "Cleveland"
     GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
     @venue.save
     @venue.locality.should == "Cleveland"
   end
-  
+
   it "should strip location when geocoding is forced" do
     @venue.force_geocoding=true
     @venue.latitude.should==nil
@@ -260,11 +258,11 @@ describe "Venue geocode addressing" do
 
   it "should use the street address fields if they're present" do
     @venue.attributes = {
-      :street_address => "street_address", 
-      :locality => "locality", 
-      :region => "region", 
-      :postal_code => "postal_code", 
-      :country => "country", 
+      :street_address => "street_address",
+      :locality => "locality",
+      :region => "region",
+      :postal_code => "postal_code",
+      :country => "country",
       :address => "address"
     }
     @venue.geocode_address.should == "street_address, locality region postal_code country"
@@ -273,5 +271,5 @@ describe "Venue geocode addressing" do
   it "should fall back to 'address' field if street address fields are blank" do
     @venue.attributes = {:street_address => "", :address => "address"}
     @venue.geocode_address.should == "address"
-  end  
+  end
 end
