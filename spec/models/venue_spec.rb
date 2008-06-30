@@ -12,10 +12,6 @@ describe Venue do
     venue.should be_valid
   end
 
-  it "should normalize the venue for display" do
-    pending "deciding what this function should do"
-  end
-
 end
 
 describe Venue, "with hCalendar to AbstractEvent parsing" do
