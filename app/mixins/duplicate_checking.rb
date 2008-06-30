@@ -1,7 +1,7 @@
 module DuplicateChecking
   DUPLICATE_MARK_COLUMN = 'duplicate_of_id'
   DEFAULT_SQUASH_METHOD = :mark
-  IGNORE_ATTRIBUTES = %(created_at updated_at id) + DUPLICATE_MARK_COLUMN
+  IGNORE_ATTRIBUTES = %(created_at updated_at id source_id ) + DUPLICATE_MARK_COLUMN
 
   def self.included(base)
     base.extend ClassMethods

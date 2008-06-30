@@ -36,6 +36,20 @@ describe Venue, "with hCalendar to AbstractEvent parsing" do
   end
 end
 
+describe Venue, "when finding an exact duplicate" do
+  it "should ignore source_id" do
+    @venue_first = Venue.create!(:title => "first", :source_id => "1")
+    @venue_first.save!
+    @venue_second = Venue.create!(:title => "first", :source_id => "2")
+    match = @venue_second.find_exact_duplicates
+    match.should_not be_blank
+    if match
+      match.should include(@venue_first)
+    end
+  end
+
+end
+
 describe Venue, "with duplicate finder" do
   it "should find all venues with duplicate titles" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
