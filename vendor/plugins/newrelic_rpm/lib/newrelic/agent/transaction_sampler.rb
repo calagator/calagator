@@ -1,30 +1,48 @@
 require 'newrelic/transaction_sample'
 require 'thread'
 require 'newrelic/agent/method_tracer'
+require 'newrelic/agent/synchronize'
 
 module NewRelic::Agent
   class TransactionSampler
-    def initialize(agent = nil, max_samples = 100)
+    include(Synchronize)
+    
+    def initialize(agent, max_samples = 100)
       @samples = []
-      @mutex = Mutex.new
       @max_samples = max_samples
 
-      # when the agent is nil, we are in a unit test.
-      # don't hook into the stats engine, which owns
-      # the scope stack
-      unless agent.nil?
-        agent.stats_engine.add_scope_stack_listener self
-      end
+      agent.stats_engine.add_scope_stack_listener self
+
+      proc = Proc.new { |sql| default_sql_obfuscator(sql) }
+      
+      agent.set_sql_obfuscator(:replace, proc)
+    end
+    
+    
+    def default_sql_obfuscator(sql)
+#      puts "obfuscate: #{sql}"
+      
+      # remove escaped strings
+      sql = sql.gsub("''", "?")
+      
+      # replace all string literals
+      sql = sql.gsub(/'[^']*'/, "?")
+      
+      # replace all number literals
+      sql = sql.gsub(/\d+/, "?")
+      
+#      puts "result: #{sql}"
+      
+      sql
     end
     
     
     def notice_first_scope_push
-      get_or_create_builder
+      create_builder
     end
     
     def notice_push_scope(scope)
       with_builder do |builder|
-        check_rules(scope)      # TODO no longer necessary once we confirm overhead
         builder.trace_entry(scope)
         
         # in developer mode, capture the stack trace with the segment.
@@ -57,7 +75,7 @@ module NewRelic::Agent
         builder.finish_trace
         reset_builder
       
-        @mutex.synchronize do
+        synchronize do
           sample = builder.sample
         
           # ensure we don't collect more than a specified number of samples in memory
@@ -82,14 +100,18 @@ module NewRelic::Agent
     MAX_SQL_LENGTH = 16384
     def notice_sql(sql)
       with_builder do |builder|
-        segment = builder.current_segment
-        if segment
-          if sql.length > MAX_SQL_LENGTH
-            sql = sql[0..MAX_SQL_LENGTH] + '...'
+        if Thread::current[:record_sql].nil? || Thread::current[:record_sql]
+          segment = builder.current_segment
+          if segment
+            current_sql = segment[:sql]
+            sql = current_sql + ";\n" + sql if current_sql
+
+            if sql.length > (MAX_SQL_LENGTH - 4)
+              sql = sql[0..MAX_SQL_LENGTH-4] + '...'
+            end
+            
+            segment[:sql] = sql
           end
-          current_sql = segment[:sql]
-          sql = current_sql + ";\n" + sql if current_sql
-          segment[:sql] = sql
         end
       end
     end
@@ -98,7 +120,7 @@ module NewRelic::Agent
     # and clear the collected sample list. 
     
     def harvest_slowest_sample(previous_slowest = nil)
-      @mutex.synchronize do
+      synchronize do
         slowest = @slowest_sample
         @slowest_sample = nil
 
@@ -114,31 +136,16 @@ module NewRelic::Agent
 
     # get the list of samples without clearing the list.
     def get_samples
-      @mutex.synchronize do
+      synchronize do
         return @samples.clone
       end
     end
     
     private 
-      # TODO all of this goes away once we confirm that we can always measure samples
-      # at acceptable overhead.  Don't check rules, and remove shold_colelct_sample?
-      def check_rules(scope)
-        return if should_collect_sample?
-        set_should_collect_sample and return #if is_developer_mode?
-      end
-    
       BUILDER_KEY = :transaction_sample_builder
-      def get_or_create_builder
-        # Commenting out - see above.  We will leave sampling on all the time.
-#        return nil if @rules.empty? && !is_developer_mode?
-        
-        builder = get_builder
-        if builder.nil?
-          builder = TransactionSampleBuilder.new
-          Thread::current[BUILDER_KEY] = builder
-        end
-        
-        builder
+
+      def create_builder
+        Thread::current[BUILDER_KEY] = TransactionSampleBuilder.new
       end
       
       # most entry points into the transaction sampler take the current transaction
@@ -158,16 +165,6 @@ module NewRelic::Agent
       
       def reset_builder
         Thread::current[BUILDER_KEY] = nil
-        set_should_collect_sample(false)
-      end
-      
-      COLLECT_SAMPLE_KEY = :should_collect_sample
-      def should_collect_sample?
-        Thread::current[COLLECT_SAMPLE_KEY]
-      end
-      
-      def set_should_collect_sample(value=true)
-        Thread::current[COLLECT_SAMPLE_KEY] = value
       end
       
       def is_developer_mode?

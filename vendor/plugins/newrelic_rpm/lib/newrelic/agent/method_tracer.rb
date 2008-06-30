@@ -14,26 +14,40 @@ class Module
   end
   
   def trace_method_execution (metric_name, push_scope = true, agent = NewRelic::Agent.agent)
-    stats_engine = agent.stats_engine
-    stats = stats_engine.get_stats metric_name, push_scope
-  
-    stats_engine.push_scope metric_name if push_scope
+    
     t0 = Time.now
+    stats = nil
+    
+    begin
+      stats_engine = agent.stats_engine
+      
+      expected_scope = stats_engine.push_scope metric_name if push_scope
+      
+      stats = stats_engine.get_stats metric_name, push_scope
+    rescue => e
+      method_tracer_log.error("Caught exception in trace_method_execution header. Metric name = #{metric_name}, exception = #{e}")
+      method_tracer_log.info(e.backtrace.join("\n"))
+    end
 
     begin
       result = yield
     ensure
-      t1 = Time.now
-    
-      duration = t1 - t0
+      duration = Time.now - t0
       
-      if push_scope
-        scope = stats_engine.pop_scope 
-        exclusive = duration - scope.exclusive_time
-      else
-        exclusive = duration
+      begin
+        if stats
+          if push_scope
+            scope = stats_engine.pop_scope expected_scope
+            exclusive = duration - scope.exclusive_time
+          else
+            exclusive = duration
+          end
+          stats.trace_call duration, exclusive
+        end
+      rescue => e
+        method_tracer_log.error("Caught exception in trace_method_execution footer. Metric name = #{metric_name}, exception = #{e}")
+        method_tracer_log.info(e.backtrace.join("\n"))
       end
-      stats.trace_call duration, exclusive
     
       result 
     end
@@ -51,7 +65,7 @@ class Module
   # statically defined metric names can be specified as regular strings
   # push_scope specifies whether this method tracer should push
   # the metric name onto the scope stack.
-  def add_method_tracer (method_name, metric_name_code, push_scope = true)
+  def add_method_tracer (method_name, metric_name_code, push_scope = true, code_header="", code_footer="")
     return unless ::RPM_TRACERS_ENABLED
     klass = (self === Module) ? "self" : "self.class"
     
@@ -68,10 +82,13 @@ class Module
     
     code = <<-CODE
     def #{_traced_method_name(method_name, metric_name_code)}(*args, &block)
+      #{code_header}
       metric_name = "#{metric_name_code}"
-      #{klass}.trace_method_execution("\#{metric_name}", #{push_scope}) do
+      traced_method_result = #{klass}.trace_method_execution("\#{metric_name}", #{push_scope}) do
         #{_untraced_method_name(method_name, metric_name_code)}(*args, &block)
       end
+      #{code_footer}
+      traced_method_result
     end
     CODE
   
@@ -94,7 +111,7 @@ class Module
       alias_method method_name, "#{_untraced_method_name(method_name, metric_name_code)}"
       undef_method "#{_traced_method_name(method_name, metric_name_code)}"
     else
-      raise Exception.new("No tracer for '#{metric_name_code}' on method '#{method_name}'");
+      raise "No tracer for '#{metric_name_code}' on method '#{method_name}'"
     end
   end
 

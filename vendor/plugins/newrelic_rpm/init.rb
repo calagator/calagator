@@ -12,16 +12,21 @@ begin
 
   newrelic_agent_config = YAML.load(newrelic_config_file)[RAILS_ENV] || {}
   newrelic_agent_config.freeze
-
+  ::NR_CONFIG_FILE = newrelic_agent_config
+  
   ::RPM_AGENT_ENABLED = newrelic_agent_config['enabled']
   ::RPM_DEVELOPER = newrelic_agent_config['developer']
 
   ::RPM_TRACERS_ENABLED = ::RPM_DEVELOPER || ::RPM_AGENT_ENABLED
   
+  # Check to see if the agent should be enabled or not
+  
+  disabled = ENV['NEWRELIC_ENABLE'] && ENV['NEWRELIC_ENABLE'].downcase =~ /false|off|no/
+  
   # note if the agent is not turned on via the enabled flag in the 
   # configuration file, the application will be untouched, and it will
   # behave exaclty as if the agent were never installed in the first place.
-  if ::RPM_AGENT_ENABLED || ::RPM_DEVELOPER
+  if !disabled && (::RPM_AGENT_ENABLED || ::RPM_DEVELOPER)
     require 'newrelic/agent'
   
     agent = NewRelic::Agent.instance
@@ -46,7 +51,7 @@ begin
       # inform user that the dev edition is available if we are running inside
       # a webserver process
       if agent.local_port
-        to_stderr "NewRelic Desktop Edition enabled."
+        to_stderr "NewRelic Agent (Developer Mode) enabled."
         to_stderr "To view performance information, go to http://localhost:#{agent.local_port}/newrelic"
       end
     end
@@ -58,5 +63,6 @@ rescue Errno::ENOENT => e
 rescue Exception => e
   to_stderr "Error parsing #{config_filename}"
   to_stderr "#{e}"
+   to_stderr e.backtrace.join("\n")
   to_stderr "Agent is disabled."
 end

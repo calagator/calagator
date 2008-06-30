@@ -27,6 +27,9 @@ module NewRelic::Agent
       @scope_stack_listeners = []
       @log = log
       
+      # Makes the unit tests happy
+      Thread::current[:newrelic_scope_stack] = nil
+      
       # start up a thread that will periodically poll for metric samples
       @sampler_thread = Thread.new do
         while true do
@@ -35,7 +38,7 @@ module NewRelic::Agent
             @sampled_items.each do |sampled_item|
               begin 
                 sampled_item.poll
-              rescue Exception => e
+              rescue => e
                 log.error e
                 @sampled_items.delete sampled_item
                 log.error "Removing #{sampled_item} from list"
@@ -48,6 +51,7 @@ module NewRelic::Agent
     end
     
     def add_scope_stack_listener(l)
+      fail "Can't add a scope listener midflight in a transaction" if scope_stack.any?
       @scope_stack_listeners << l
     end
     
@@ -57,13 +61,21 @@ module NewRelic::Agent
         l.notice_push_scope scope
       end
       
-      scope_stack.push ScopeStackElement.new(scope, Time.new, 0)
+      nscope = ScopeStackElement.new(scope, Time.new, 0)
+      scope_stack.push nscope
+      
+      nscope
     end
     
-    def pop_scope
+    def pop_scope(expected_scope)
       stack = scope_stack
       
       scope = stack.pop
+      
+      if scope != expected_scope
+	      fail "unbalanced pop from blame stack: #{scope.name} != #{expected_scope.name}"
+      end
+      
       duration = Time.now - scope.timestamp
       
       stack.last.exclusive_time += duration unless stack.empty?
@@ -156,6 +168,11 @@ module NewRelic::Agent
       end
       
       timeslice_data
+    end
+    
+    
+    def start_transaction
+      Thread::current[:newrelic_scope_stack] = []
     end
     
     private

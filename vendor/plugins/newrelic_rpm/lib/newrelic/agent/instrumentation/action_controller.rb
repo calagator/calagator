@@ -15,7 +15,6 @@ module ActionController
         # generate metrics for this specific action
         path = _determine_metric_path
       
-        # TODO should we just make the transaction name the path, or the metric name for the controller?
         agent.stats_engine.transaction_name ||= "Controller/#{path}" if agent.stats_engine
       
         self.class.trace_method_execution "Controller/#{path}" do 
@@ -32,7 +31,11 @@ module ActionController
       agent.stats_engine.transaction_name = nil
     end
   
-    alias_method_chain :perform_action, :newrelic_trace
+    # Compare with #alias_method_chain, which is not available in 
+    # Rails 1.1:
+    alias_method :perform_action_without_newrelic_trace, :perform_action
+    alias_method :perform_action, :perform_action_with_newrelic_trace
+    private :perform_action
   
     add_method_tracer :render, 'View/#{_determine_metric_path}/Rendering'
   
@@ -40,16 +43,6 @@ module ActionController
     if method_defined? :perform_invocation
       add_method_tracer :perform_invocation, 'WebService/#{controller_name}/#{args.first}'
     end
-
-# This doesn't work well because around filters yield back to the action
-#    add_method_tracer :run_before_filters, "Controller/Before Filters"
-#    add_method_tracer :run_after_filters, "Controller/After Filters"
-  
- 
-    # trace the number of exceptions encountered 
-    # TODO determine how to break these out: by error code, contoller class, error class? all of the above?
-    # add_method_tracer :rescue_action, 'Errors/Type/#{args.first.class}', false
-    # add_method_tracer :rescue_action, 'Errors/Controller/#{self.class}', false
   
     private
       # determine the path that is used in the metric name for

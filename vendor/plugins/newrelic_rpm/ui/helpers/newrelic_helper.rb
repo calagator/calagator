@@ -50,6 +50,8 @@ module NewrelicHelper
       # we hit this exception when Pathame.realpath fails for some reason; attempt a link to
       # the file without a real path.  It may also fail, only when the user clicks on this specific
       # entry in the stack trace
+    rescue 
+      # catch all other exceptions.  We're going to create an invalid link below, but that's okay.
     end
       
     if using_textmate?
@@ -61,7 +63,6 @@ module NewrelicHelper
   
   def link_to_source(trace)
     image_url = "#{server}/images/"
-    # TODO need an image for regular text file
     image_url << (using_textmate? ? "textmate.png" : "file_icon.png")
     
     link_to image_tag(image_url), url_for_source(application_caller(trace))
@@ -111,7 +112,7 @@ private
   end
   
   def using_textmate?
-    # TODO make this a preference
+    # For now, disable textmate integration
     false
   end
   
@@ -130,7 +131,8 @@ private
     return is_agent if include_rails
     
     is_agent ||
-      file =~ /\/activerecord\// ||
+      file =~ /\/active(_)*record\// ||
+      file =~ /\/action(_)*controller\// ||
       file =~ /\/activesupport\// ||
       file =~ /\/actionpack\//
   end

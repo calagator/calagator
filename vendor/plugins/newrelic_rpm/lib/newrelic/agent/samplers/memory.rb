@@ -1,9 +1,22 @@
 module NewRelic::Agent
   class MemorySampler
     def initialize
+      if RUBY_PLATFORM =~ /java/
+        platform = %x[uname -s].downcase
+      else
+        platform = RUBY_PLATFORM.downcase
+      end
+      
       # macos, linux, solaris
-      if RUBY_PLATFORM =~ /(darwin|linux|solaris)/
+      if platform =~ /darwin|linux/
         @ps = "ps -o rsz #{$$}"
+      elsif platform =~ /freebsd/
+        @ps = "ps -o rss #{$$}"
+      elsif platform =~ /solaris/
+        @ps = "ps -o rss -p #{$$}"
+      end
+      if !@ps
+        raise SamplerInitFailure, "Unsupported platform for getting memory: #{platform}"
       end
       
       if @ps

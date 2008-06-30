@@ -6,10 +6,28 @@ require 'transaction_analysis'
 class NewrelicController < ActionController::Base
   include NewrelicHelper
   
+  # do not include any filters inside the application since there might be a conflict
+  if respond_to? :filter_chain
+    filters = filter_chain.collect do |f|
+      if f.respond_to? :filter
+        # rails 2.0
+        f.filter
+      elsif f.respond_to? :method
+        # rails 2.1
+        f.method
+      else
+        fail "Unknown filter class. Please send this exception to support@newrelic.com"
+      end
+    end
+    skip_filter filters
+  end
+  
   # for this controller, the views are located in a different directory from
   # the application's views.
   view_path = File.join(File.dirname(__FILE__), '..', 'views')
-  if public_methods.include? "view_paths"   # rails 2.0+
+  if public_methods.include? 'append_view_path' # rails 2.1+
+    self.append_view_path view_path
+  elsif public_methods.include? "view_paths"   # rails 2.0+
     self.view_paths << view_path
   else                                      # rails <2.0
     self.template_root = view_path
@@ -18,6 +36,23 @@ class NewrelicController < ActionController::Base
   layout "default"
   
   write_inheritable_attribute('do_not_trace', true)
+  
+  def css
+    forward_to_file '/newrelic/stylesheets/', 'text/css'
+  end
+  
+  def image
+    forward_to_file '/newrelic/images/', params[:content_type]
+  end
+  
+  def forward_to_file(root_path = nil, content_type = nil)
+    if root_path &&  file = params[:file]
+      full_path = root_path + file
+      render :file => full_path, :use_full_path => true, :content_type => content_type
+    else
+      render :nothing => true, :status => 404
+    end
+  end
   
   def index
     get_samples
@@ -34,7 +69,6 @@ class NewrelicController < ActionController::Base
     @request_params = @sample.params[:request_params] || {}
     controller_metric = @sample.root_segment.called_segments.first.metric_name
     
-    # TODO move metric parser into the developer edition (the agent?)
     controller_segments = controller_metric.split('/')
     @sample_controller_name = controller_segments[1..-2].join('/').camelize+"Controller"
     @sample_action_name = controller_segments[-1].underscore
@@ -51,6 +85,7 @@ class NewrelicController < ActionController::Base
 
     @sql = @segment[:sql]
     @trace = @segment[:backtrace]
+    @obfuscated_sql = @segment.obfuscated_sql
     explanations = @segment.explain_sql
     if explanations
       @explanation = explanations.first 
