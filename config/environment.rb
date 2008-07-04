@@ -16,6 +16,7 @@ Rails::Initializer.run do |config|
   config.gem "vpim"
   config.gem "lucene_query"
   config.gem "rubyzip", :lib =>  "zip/zip"
+  config.gem "has_many_polymorphs"
   
   config.time_zone = "Pacific Time (US & Canada)"
   
