@@ -114,6 +114,7 @@ describe Source, "when parsing URLs" do
   end
 end
 
+# TODO extract into soure_parser_hcal_spec.rb
 describe Source, "with hCalendar events" do
   it "should parse hcal" do
     hcal_content = read_sample('hcal_single.xml')
@@ -161,6 +162,7 @@ describe Source, "with hCalendar events" do
 
 end
 
+# TODO extract into source_parser_ical_spec
 describe Source, "with iCalendar events" do
   def events_from_ical_at(filename)
     url = "http://foo.bar/"
@@ -211,6 +213,7 @@ describe Source, "with iCalendar events" do
 
   it "should parse Google iCalendar feed with multiple events" do
     events = events_from_ical_at('ical_google.ics')
+    # TODO add specs for venues/locations
 
     events.size.should == 47
 
@@ -237,9 +240,10 @@ describe Source, "with iCalendar events" do
     events = events_from_ical_at('ical_google.ics')
     events.first.venue.title.should == 'CubeSpace'
   end
-  
+
 end
 
+# TODO extract to source_parser_ical_spec
 describe Source, "when importing events with non-local times" do
 
   it "should store time ending in Z as UTC" do
@@ -253,11 +257,11 @@ describe Source, "when importing events with non-local times" do
     event.end_time.should == Time.parse('Thu Jul 01 09:00:00 +0000 2010')
 
     # time should be the same after saving event to, and getting it from, database
-    event.save    
+    event.save
     e = Event.find(event)
     e.start_time.should == Time.parse('Thu Jul 01 08:00:00 +0000 2010')
     e.end_time.should == Time.parse('Thu Jul 01 09:00:00 +0000 2010')
-    
+
 end
 
   it "should store time with TZID=GMT in UTC" do
@@ -268,9 +272,10 @@ end
     abstract_event.start_time.should == Time.parse('Fri May 07 08:00:00 +0000 2020')
     abstract_event.end_time.should == Time.parse('Fri May 07 09:00:00 +0000 2020')
   end
-  
+
 end
 
+# TODO extract to source_parser_ical_spec
 describe Source, "when skipping old events" do
   before(:each) do
     SourceParser::Base.stub!(:read_url).and_return(<<-HERE)
@@ -332,7 +337,7 @@ END:VCALENDAR
       HERE
     @source = Source.new(:title => "Title", :url => "http://my.url/")
   end
-  
+
   # for following specs a 'valid' event does not start after it ends"
   it "should be able to import all valid events" do
     events = @source.create_events!(:skip_old => false)
@@ -345,7 +350,7 @@ END:VCALENDAR
       "Past start and past end"
     ]
   end
-     
+
   it "should be able to skip invalid and old events" do
     events = @source.create_events!(:skip_old => true)
     events.size.should == 3
@@ -354,10 +359,11 @@ END:VCALENDAR
       "Past start and current end",
       "Current start and current end"
     ]
-  end    
+  end
 
 end
 
+# TODO extract to source_parser_hcal_spec
 describe Source, "when importing events" do
   fixtures :events, :venues
 
@@ -367,10 +373,10 @@ describe Source, "when importing events" do
     SourceParser::Base.stub!(:read_url).and_return(hcal_content)
 
     events = hcal_source.to_events
- 
+
     events.first.should_not be_a_new_record # it should return an existing event record and not create a new one
   end
-  
+
   it "should create two events when importing two non-identical events"
 
   it "two events and two venues should be created when importing two identical events with two non-identical venues"
@@ -379,20 +385,20 @@ describe Source, "when importing events" do
     Event.destroy_all
     Source.destroy_all
     Venue.destroy_all
-    
+
     dummy_source = Source.new(:title => "Dummy", :url => "http://IcalEventWithSquashedVenue.com/")
-    dummy_source.save 
+    dummy_source.save
     master_venue = Venue.new(:title => "Master")
     master_venue.save
     squashed_venue = Venue.new(
-      :title => "Squashed Duplicate Venue", 
+      :title => "Squashed Duplicate Venue",
       :duplicate_of_id => master_venue.id)
     squashed_venue.save
-    
+
     ical_content = read_sample('ical_event_with_squashed_venue.ics')
     SourceParser::Base.stub!(:read_url).and_return(ical_content)
     source = Source.new(:title => "Event with squashed venue", :url => "http://IcalEventWithSquashedVenue.com/")
-    
+
     events = source.to_events(:skip_old => false)
 
     event = events.first

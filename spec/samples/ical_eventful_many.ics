@@ -1,0 +1,504 @@
+BEGIN:VCALENDAR
+METHOD:PUBLISH
+CALSCALE:GREGORIAN
+PRODID:-//EVDB//www.eventful.com//EN
+VERSION:2.0
+X-WR-CALNAME:Eventful results in "Portland metro area"
+BEGIN:VEVENT
+DTSTART:20080703T150000
+DTSTAMP:20080628T123653Z
+SUMMARY:iMovie and iDVD Workshop
+DESCRIPTION: iMovie has been rebuilt from the ground up for iLife '08 
+	and it's going to change the way you make movies. Discover new ways to
+	 store\, organize\, and browse your videos\, as well as the fastest wa
+	y ever to create amazing home movies to share with everyone in your li
+	fe. Sign up or drop in.
+LOCATION;VVENUE=V0-001-001423850-2@eventful.com:Apple Store Bridgeport
+	 Village @ 7293 SW Bridgeport Road, Portland, Oregon 97224 United Stat
+	es
+SEQUENCE:1214656613
+CATEGORIES:apple applecom appleinc technology 
+UID:E0-001-013482024-7
+URL:http://eventful.com/E0-001-013482024-7
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080703T150000
+DTSTAMP:20080628T125152Z
+SUMMARY:iMovie and iDVD Workshop
+DESCRIPTION: iMovie has been rebuilt from the ground up for iLife '08 
+	and it's going to change the way you make movies. Discover new ways to
+	 store\, organize\, and browse your videos\, as well as the fastest wa
+	y ever to create amazing home movies to share with everyone in your li
+	fe. Sign up or drop in.
+LOCATION;VVENUE=V0-001-001423875-1@eventful.com:Apple Store Pioneer Pl
+	ace @ 700 Southwest Fifth Avenue Suite #1035, Portland, Oregon 97204 U
+	nited States
+SEQUENCE:1214657512
+CATEGORIES:apple applecom appleinc technology 
+UID:E0-001-013482921-1
+URL:http://eventful.com/E0-001-013482921-1
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080708T013000Z
+DTEND:20080708T043000Z
+DTSTAMP:20070509T225043Z
+SUMMARY:Portland Macintosh Users Group (PMUG)
+DESCRIPTION:Portland Macintosh Users Group (PMUG) meets the 2nd monday
+	 of every month 2006 & 2007\n\nWeb Site: http://www.pmug.org\n\nContac
+	t Information: Peren Bjork perenb@pmug.org\n
+LOCATION;VVENUE=V0-001-000360625-7@eventful.com:Ecotrust @ Jean Vollum
+	 Natural Capital Center, Portland, Oregon 97209 United States
+SEQUENCE:1178751043
+CATEGORIES:mac technology 
+UID:E0-001-004424520-8@2008070718
+URL:http://eventful.com/E0-001-004424520-8@2008070718
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080708T100000
+DTSTAMP:20080507T171245Z
+SUMMARY:Morning Meetings: IT
+DESCRIPTION:Come into CubeSpace between 9 and 10 a.m. on weekdays to c
+	hat with the\nprofessional-in-residence about your needs. The Tuesday 
+	topic is:\n\nIT\,\nincluding best practices and infrastructure\, and I
+	P questions
+LOCATION;VVENUE=V0-001-000297430-0@eventful.com:CubeSpace @ 622 SE Gra
+	nd Avenue, Portland, Oregon 97214 United States
+SEQUENCE:1210180365
+CATEGORIES:business entrepreneur it learning pdx portland startup tech
+	 technology 
+UID:E0-001-011678529-6@2008070810
+URL:http://eventful.com/E0-001-011678529-6@2008070810
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080708T190000
+DTSTAMP:20080125T170552Z
+SUMMARY:Portland Python Users' Group
+DESCRIPTION:Socialize with other Python programming enthusiasts\, chec
+	k out presentations on Pythonic topics\, maybe participate in a code s
+	print or two\, possibly work on projects and provide mutual technical 
+	support.\n\nWe've recently re-formed the Portland Python group thanks 
+	to interest built up on Meetup and through the efforts of Brad Allen. 
+	It's still very early days- please help us spread the word that Portla
+	nd Python is back!
+LOCATION;VVENUE=V0-001-000297430-0@eventful.com:CubeSpace @ 622 SE Gra
+	nd Avenue, Portland, Oregon 97214 United States
+SEQUENCE:1201280752
+CATEGORIES:community technology 
+UID:E0-001-008759157-5@2008070819
+URL:http://eventful.com/E0-001-008759157-5@2008070819
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080711T100000
+DTSTAMP:20080702T040149Z
+SUMMARY:Computer Basics Class
+DESCRIPTION: Beaverton City Library  This class is intended for those 
+	who have never us...
+LOCATION;VVENUE=V0-001-001480762-1@eventful.com:Beaverton Library @ 12
+	375 SW Fifth Street, Beaverton, Oregon 97005 United States
+SEQUENCE:1214971309
+CATEGORIES:americantowns americantownscom community computer library l
+	ocal technology townsquare 
+UID:E0-001-013281663-9
+URL:http://eventful.com/E0-001-013281663-9
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080722T183000
+DTSTAMP:20080125T165745Z
+SUMMARY:Code 'n' Splode
+DESCRIPTION:Code 'n' Splode is a group of geeky people who get togethe
+	r on a monthly basis to talk about geeky things. We are an open\, rela
+	xed\, comfortable place to come and talk about programming. The group 
+	is primarily female and generally open by invitation only.\nEvent Cont
+	act: \n\nFor more information\, please visit pdx.codensplode.org.\n
+LOCATION;VVENUE=V0-001-000297430-0@eventful.com:CubeSpace @ 622 SE Gra
+	nd Avenue, Portland, Oregon 97214 United States
+SEQUENCE:1201280265
+CATEGORIES:community technology 
+UID:E0-001-008759146-9@2008072218
+URL:http://eventful.com/E0-001-008759146-9@2008072218
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080723T083000
+DTEND:20080724T163000
+DTSTAMP:20080627T163625Z
+SUMMARY:Google Analytics Seminars for Success in Portland\,OR
+DESCRIPTION:Learn the basics or expand your knowledge of Google Analyt
+	ics at the newly launched Google Analytics Seminars for Success. Our i
+	n-person Google Analytics training covers everything from basic setup 
+	to advanced visitor segmentation to keyword optimization.  Seminars fo
+	r Success is priced at $249 per day and includes a $50 AdWords Credit!
+	\n
+LOCATION;VVENUE=V0-001-000440624-7@eventful.com:University Place Hotel
+	 @ 310 SW Lincoln Street, Portland, Oregon 97201 United States
+SEQUENCE:1214584585
+CATEGORIES:analytics conference epikone google justincutroni learning 
+	onlinemarketing seminar technology training 
+UID:E0-001-013472128-3
+URL:http://eventful.com/E0-001-013472128-3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080806T010000Z
+DTSTAMP:20070605T022457Z
+SUMMARY:PDXPHP Monthly Meeting
+DESCRIPTION:The Portland PHP user's Group monthly meeting.\n\nSee pdxp
+	hp.org for information on the next meeting.\n\nPost meeting will be at
+	 Barley Mill Pub 
+LOCATION;VVENUE=V0-001-000448187-7@eventful.com:Free Geek @ 1731 SE Te
+	nth Avenue, Portland, Oregon 97214 United States
+SEQUENCE:1181010297
+CATEGORIES:learning php programming technology web 
+UID:E0-001-004708765-0@2008080518
+URL:http://eventful.com/E0-001-004708765-0@2008080518
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080805T190000
+DTSTAMP:20080125T170050Z
+SUMMARY:Portland Ruby Brigade
+DESCRIPTION:Portland Ruby Brigade is a gathering of Ruby programmers i
+	n the Portland\, Oregon\, area. \nEvent Contact: \n\nConsult http://ww
+	w.pdxruby.org/ for more information.\n
+LOCATION;VVENUE=V0-001-000297430-0@eventful.com:CubeSpace @ 622 SE Gra
+	nd Avenue, Portland, Oregon 97214 United States
+SEQUENCE:1201280450
+CATEGORIES:community technology 
+UID:E0-001-008759153-9@2008080519
+URL:http://eventful.com/E0-001-008759153-9@2008080519
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080818T090000
+DTEND:20080819T160000
+DTSTAMP:20080418T061241Z
+SUMMARY:Portland Cisco Router Training: 2-Day Hands-On Seminar
+DESCRIPTION:Presented by soundtraining.net and taught by veteran I.T. 
+	trainer\, writer\, and speaker Don R. Crawley.\nTwo intensive days of 
+	hands-on Cisco training including Cisco router installation\, configur
+	ation\, and troubleshooting using live in-classroom routers. You'll le
+	arn how to build a Cisco router configuration from scratch. You'll lea
+	rn different ways of monitoring your router\, saving and restoring con
+	figurations\, and how to design and implement access-control lists. Yo
+	u'll even learn how to encrypt your passwords and Cisco router passwor
+	d recovery procedures.\nLearning Objectives:\nThe overall objective of
+	 this workshop is to help you become comfortable with viewing\, editin
+	g\, managing\, and  troubleshooting Cisco router configurations. By th
+	e end of this workshop\, you  will...\n\n   Practice building a router
+	 configuration from scratch to full  functionality \n  Practice three 
+	techniques for saving configurations and for re-applying them (Perfect
+	 for disaster prevention and recovery)\n  Understand how to upgrade yo
+	ur router's Cisco Internetwork Operating System (CIOS) \n  Practice us
+	ing CDP (Cisco Discovery Protocol) in troubleshooting\n  Use the "show
+	 cdp neighbor detail" command to get information about  remote routers
+	\, even when they're on a different subnet \n  Practice converting and
+	 diagramming IP addresses and subnets\, including  decimal to binary c
+	onversion \n  Practice properly designing and configuring IP addressin
+	g schemes \n  Practice the step-by-step procedures to configure NAT to
+	 make your  router an Internet firewall \n  Practice configuring and d
+	eploying DHCP on a Cisco router for automatic  IP address assignment \
+	n  Practice using local and remote router configuration procedures \n 
+	 Learn how to configure static routes and practice building routing  t
+	ables \n  Gain hands-on experience in the basics of routing protocols 
+	with  hands-on exercises in RIP version 1\, RIP version 2\, and OSPF \
+	n  Work as a group to control traffic with standard and extended IP ac
+	cess  lists \n  Practice recovering passwords (and learn how to protec
+	t against unauthorized password recovery!)\n  Practice testing procedu
+	res using PING\, traceroute\, and debug \n\nA complete course outline 
+	is available at the event homepage.\nPre-registration is required\, al
+	so at the event homepage.
+LOCATION;VVENUE=V0-001-001274762-6@eventful.com:Homewood Suites West P
+	ortland-Beaverton @ 15525 NW Gateway Court, Beaverton, Oregon 97006 Un
+	ited States
+SEQUENCE:1208499161
+CATEGORIES:ciscoroutertraining learning networking tcpip technology 
+UID:E0-001-010925802-2
+URL:http://eventful.com/E0-001-010925802-2
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080914T000000
+DTEND:20080917T000000
+DTSTAMP:20080622T170652Z
+SUMMARY:Post Card & Souvenir Distributors Association Convention & Tra
+	de Show
+DESCRIPTION: Post Card & Souvenir Distributors Association Convention 
+	& Trade ShowIndustry: PrintingDates and Location:Sep 14 - Sep 17\, 200
+	8 Doubletree Hotel & Executive Meeting Center Portland-Lloyd Center  P
+	ortland\, OR - United States Contact: Steven King\,Exec. Dir. King Str
+	ingfellow Group2105 Laurel Bush Rd.\, Ste. 200Bel Air\, MD 21015 Phone
+	: (443) 640-1055Fax: (443) 640-1031 Email: steve@ksgroup.org\n
+LOCATION;VVENUE=V0-001-001363830-7@eventful.com:Doubletree Hotel @ 100
+	0 NE Multnomah, Portland, Oregon 97232 United States
+SEQUENCE:1214154412
+CATEGORIES:applications beverage boats business computers conference c
+	onvention dental exhibition expo financial food furnishings gifts indu
+	strial industry interior legal medical metalworking outdoors_recreatio
+	n packaging processing recreation restaurants sporting technology trad
+	e tradeshow tradeshowweekcom 
+UID:E0-001-007443788-8
+URL:http://eventful.com/E0-001-007443788-8
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20080929T090000
+DTEND:20080930T160000
+DTSTAMP:20080419T062034Z
+SUMMARY:Portland Cisco ASA Training:  2-Day Hands-On Seminar
+DESCRIPTION:Description:\nPresented by soundtraining.net and taught by
+	 veteran I.T. trainer\, writer\, and speaker Don R. Crawley.\nThis Cis
+	co ASA training serminar is two intensive days filled with hands-on la
+	b exercises where you'll learn how to reset the administrator password
+	 (even when   you don't know it)\, how to build a basic firewall confi
+	guration from scratch in   the command-line and in the GUI. You'll pra
+	ctice backing-up and restoring your configuration files and the firewa
+	ll's operating system image. We'll show you how to set up centralized 
+	logging with a syslog server. You'll practice configuring login banner
+	s. You'll configure local usernames and privilege   levels\, plus you'
+	ll practice using Active Directory for authentication. You'll set up a
+	 DHCP server for automatic address assignment. You'll practice buildin
+	g three types of VPNs including site-to-site\, remote access\, and a c
+	lientless Web   VPN. You'll build a DMZ with a Web server and a print 
+	server. You'll practice port-scanning to test for vulnerabilities. We'
+	ll show you how to configure   various types of filtering and you'll a
+	ctually practice configuring filters to block Java applets. In short\,
+	 this Cisco ASA training seminar is a lot of hands-on exercises and no
+	t a lot of talking! Our instructors are there to show you how to do th
+	ings\, answer your questions\, and help you troubleshoot your configur
+	ations.\nNow upgraded with even more "hands-on" lab exercises (and les
+	s lecture)!  \nLearning Objectives:\nUpon completion of soundtraining.
+	net's Cisco ASA training seminar\,   you'll...\n\n  Practice password 
+	recovery techniques for the Cisco ASA security appliance\n  Practice t
+	wo techniques for building a basic firewall configuration from   scrat
+	ch\n  Gain an understanding of logging configurations and practice usi
+	ng syslog   with the security appliance\n  Practice two methods of bac
+	king up and restoring device's configurations\n  Practice two methods 
+	of backing up and restoring your device's software   image (operating 
+	system)\, including how to recover the software in a   catastrophic fa
+	ult condition\n  Practice configuring and using three methods of remot
+	e management\n  Gain an understanding of Network Address Translation a
+	nd Port Address   Translation on the ASA Security Appliance and practi
+	ce using them in your   configurations\n  Practice configuring three t
+	ypes of banners\n  Gain an understanding of Cisco privilege levels and
+	 practice configuring   local usernames and privilege levels\n  Practi
+	ce configuring your security appliance to authenticate via Windows   A
+	ctive Directory using RADIUS\n  Practice buidling and troubleshooting 
+	a DHCP server\n  Practice building three types of VPNs including site-
+	to-site\, remote access\, and a clientless Web VPN\n  Gain an understa
+	nding of DMZs and practice buidling one with a Web server and a print 
+	server\n  Practice testing security configurations with a port scanner
+	\n  Gain an understanding of filtering techniques and practice blockin
+	g Java applets\n\nA complete course outline is available at the event 
+	homepage.\nPre-registration is required\, also at the event homepage.
+LOCATION;VVENUE=V0-001-001274762-6@eventful.com:Homewood Suites West P
+	ortland-Beaverton @ 15525 NW Gateway Court, Beaverton, Oregon 97006 Un
+	ited States
+SEQUENCE:1208586034
+CATEGORIES:ciscoasatraining dmz firewalls learning networksecurity pix
+	 technology vpn 
+UID:E0-001-010925788-3
+URL:http://eventful.com/E0-001-010925788-3
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20081005T140000
+DTSTAMP:20080618T195516Z
+SUMMARY:Mythbusters
+DESCRIPTION:
+LOCATION;VVENUE=V0-001-001385514-4@eventful.com:Arlene Schnitzer Conce
+	rt Hall @ Southwest Broadway at Main Street, Portland, Oregon 97205 Un
+	ited States
+SEQUENCE:1213818916
+CATEGORIES:art ticketmaster ticketmastercom tickets cast club entertai
+	nment fan meeting mythbusters other science skeptics technology televi
+	sion 
+UID:E0-001-012296830-4
+URL:http://eventful.com/E0-001-012296830-4
+END:VEVENT
+BEGIN:VEVENT
+DTSTART:20100309T000000
+DTEND:20100311T000000
+DTSTAMP:20080417T162719Z
+SUMMARY:Wood Technology Clinic & Show
+DESCRIPTION:  Wood Technology Clinic & Show is the only trade event ex
+	clusively dedicated to primary wood processing and technology setting 
+	a standard unmatched by any other industry event to date. Wood Technol
+	ogy Clinic & Show has proven to be the industry's leading exposition a
+	nd the ultimate source for equipment\, machinery\, services and techno
+	logy to keep the top industry professionals a cut above the rest. 
+LOCATION;VVENUE=V0-001-000356495-1@eventful.com:Oregon Convention Cent
+	er Portland @ 777 NE Martin Luther King Jr Boulevard, Portland, Oregon
+	 97232 United States
+SEQUENCE:1208449639
+CATEGORIES:biztradeshowscom business engineering industry internationa
+	l science show technology trade tradeshow 
+UID:E0-001-009977015-7
+URL:http://eventful.com/E0-001-009977015-7
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-001423850-2@eventful.com
+NAME:Apple Store Bridgeport Village
+DESCRIPTION:(503) 670-8400 Driving Directions & Map  Store Hours:  Mon
+	-Sat: 10:00 a.m. to 9:00 p.m. Sun: 11:00 a.m. to 6:00 p.m.
+ADDRESS:7293 SW Bridgeport Road
+CITY:Portland
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97224
+GEO:45.395376;-122.750832
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423850-2
+CATEGORIES:apple applecom appleinc technology 
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-001423875-1@eventful.com
+NAME:Apple Store Pioneer Place
+DESCRIPTION:(503) 222-3002 Driving Directions & Map  Store Hours:  Mon
+	 - Fri: 9:30 a.m. to 9:00 p.m. Sat: 9:30 a.m. to 8:00 p.m. Sun: 11:00 
+	a.m. to 6:00 p.m.
+ADDRESS:700 Southwest Fifth Avenue Suite #1035
+CITY:Portland
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97204
+GEO:45.518798;-122.677583
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
+CATEGORIES:apple applecom appleinc technology 
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-000360625-7@eventful.com
+NAME:Ecotrust
+ADDRESS:Jean Vollum Natural Capital Center
+CITY:Portland
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97209
+GEO:45.5331;-122.682
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-000360625-7
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-000297430-0@eventful.com
+NAME:CubeSpace
+ADDRESS:622 SE Grand Avenue
+CITY:Portland
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97214
+GEO:45.518456;-122.660752
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-000297430-0
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-001480762-1@eventful.com
+NAME:Beaverton Library
+ADDRESS:12375 SW Fifth Street
+CITY:Beaverton
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97005
+GEO:45.484058;-122.804126
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001480762-1
+CATEGORIES:2008 american americantownscom barackobama barackobamacom c
+	ampaign community dnc election library local politics_activism square 
+	town towns 
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-000440624-7@eventful.com
+NAME:University Place Hotel
+ADDRESS:310 SW Lincoln Street
+CITY:Portland
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97201
+GEO:45.4998;-122.702
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-000440624-7
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-000448187-7@eventful.com
+NAME:Free Geek
+ADDRESS:1731 SE Tenth Avenue
+CITY:Portland
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97214
+GEO:45.5139;-122.643
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-000448187-7
+CATEGORIES:community coop electronics geek recycling 
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-001274762-6@eventful.com
+NAME:Homewood Suites West Portland-Beaverton
+ADDRESS:15525 NW Gateway Court
+CITY:Beaverton
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97006
+GEO:45.528029;-122.837197
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001274762-6
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-001363830-7@eventful.com
+NAME:Doubletree Hotel
+ADDRESS:1000 NE Multnomah
+CITY:Portland
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97232
+GEO:45.530768;-122.655583
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001363830-7
+CATEGORIES:brownpaperticketscom 
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-001385514-4@eventful.com
+NAME:Arlene Schnitzer Concert Hall
+DESCRIPTION:503 248 4335
+ADDRESS:Southwest Broadway at Main Street
+CITY:Portland
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97205
+GEO:45.516686;-122.681067
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001385514-4
+CATEGORIES:business careers community concert concerts conferences ent
+	erprise gigaticket gigaticketcom group local minority minorityprofessi
+	onalanetworkcom music network oregon pop portland professional profess
+	ionals records rock small tickets tour tours travelportlandcom umeport
+	alcom universal 
+END:VVENUE
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
+	html
+UID:V0-001-000356495-1@eventful.com
+NAME:Oregon Convention Center Portland
+DESCRIPTION:OCC is the perfect venue for any type and size of event. A
+	ll told\, we have over a million square feet to offer\, making us the 
+	largest convention center in the Pacific Northwest! OCC is located wit
+	hin Portland's city center\, right around the corner from restaurants\
+	, tax-free shopping\, cultural attractions and entertainment. MAX ligh
+	t-rail makes getting around easy. It can pick you up or drop you off r
+	ight at our front door and take you just about anywhere downtown for f
+	ree! OCC is eight short miles from the airport\, and MAX can bring you
+	 straight to us or take you home.
+ADDRESS:777 NE Martin Luther King Jr Boulevard
+CITY:Portland
+REGION;ABBREV=OR:Oregon
+COUNTRY;ABBREV=USA:United States
+POSTALCODE:97232
+GEO:45.565133;-122.662066
+URL;X-LABEL=Venue Info:http://eventful.com/V0-001-000356495-1
+CATEGORIES:american americantownscom center community convention event
+	britecom eventseyecom local localwineevents occ oregonccorg square tow
+	n towns wine 
+END:VVENUE
+END:VCALENDAR

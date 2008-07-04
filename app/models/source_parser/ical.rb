@@ -37,38 +37,61 @@ class SourceParser # :nodoc:
       opts[:skip_old] = true unless opts[:skip_old] == false
       cutoff = Time.now.yesterday
 
-      content = content_for(opts)
+      content = content_for(opts).gsub(/\r\n/, "\n")
       content_calendars = content.scan(CALENDAR_CONTENT_RE)
 
-      events = []
-      for content_calendar in content_calendars
-        for content_event in content_calendar.scan(EVENT_CONTENT_RE)
-          # Skip old events before handing them to VPIM
-          if opts[:skip_old]
-            if match = content_event.match(EVENT_DTSTART_RE)
-              start_time = Time.parse(match[1])
-              
-              match = content_event.match(EVENT_DTEND_RE)
-              end_time = match ? Time.parse(match[1]) : nil
+      returning([]) do |events|
+        for content_calendar in content_calendars
+          content_venues = content_calendar.scan(VENUE_CONTENT_RE)
 
-              next if (end_time || start_time) < cutoff
+          content_calendar.scan(EVENT_CONTENT_RE).each_with_index do |content_event, index|
+            # Skip old events before handing them to VPIM
+            if opts[:skip_old]
+              if start_match = content_event.match(EVENT_DTSTART_RE)
+                start_time = Time.parse(start_match[1])
+
+                end_match = content_event.match(EVENT_DTEND_RE)
+                end_time = end_match ? Time.parse(end_match[1]) : nil
+
+                next if (end_time || start_time) < cutoff
+              end
             end
-          end
 
-          components = Vpim::Icalendar.decode("BEGIN:VCALENDAR\n"+content_event+"\nEND:VCALENDAR\n").first.components
-          for component in components
-            event = AbstractEvent.new
-            event.start_time = component.dtstart
-            event.title = component.summary
+            components = Vpim::Icalendar.decode(%{BEGIN:VCALENDAR\n#{content_event}\nEND:VCALENDAR\n}).first.components
+            raise TypeError, "Got multiple components for a single event" unless components.size == 1
+            component = components.first
+
+            event             = AbstractEvent.new
+            event.start_time  = component.dtstart
+            event.title       = component.summary
             event.description = component.description
-            event.end_time = component.dtend
-            event.url = component.url
-            event.location = to_abstract_location(content_calendar, :fallback => component.location)
+            event.end_time    = component.dtend
+            event.url         = component.url
+
+            content_venue = \
+              begin
+                if content_calendar.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
+                  # Special handling for Upcoming, where each event maps 1:1 to a venue
+                  content_venues[index]
+                else
+                  begin
+                    location_field = component.fields.find{|t| t.respond_to?(:name) && t.name.upcase == "LOCATION"}
+                    venue_values   = location_field ? location_field.pvalues("VVENUE") : nil
+                    venue_uid      = venue_values ? venue_values.first : venue_values
+                    venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
+                  rescue Exception => e
+                    # Ignore
+                    RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
+                    nil
+                  end
+                end
+              end
+
+            event.location = to_abstract_location(content_venue, :fallback => component.location)
            events << event
           end
         end
       end
-      return events
     end
 
     # Return an AbstractLocation extracted from an iCalendar input.
@@ -79,26 +102,26 @@ class SourceParser # :nodoc:
     # Options:
     # * :fallback - String to use as the title for the location if the +value+ doesn't contain a Vvenue.
     def self.to_abstract_location(value, opts={})
+      value = "" if value.nil?
       a = AbstractLocation.new
 
       # The Vpim libary doesn't understand that Vvenue entries are just Vcards,
       # so transform the content to trick it into treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
         vcard_content.gsub!(VENUE_CONTENT_BEGIN_RE, 'BEGIN:VCARD')
-        vcard_content.gsub!(VENUE_CONTENT_END_RE, 'END:VCARD')
+        vcard_content.gsub!(VENUE_CONTENT_END_RE,   'END:VCARD')
 
         begin
-          # TODO What if there is more than one vcard in the vcalendar?!
           vcards = Vpim::Vcard.decode(vcard_content)
           raise ArgumentError, "Wrong number of vcards" unless vcards.size == 1
           vcard = vcards.first
 
-          a.title = vcard['name']
+          a.title          = vcard['name']
           a.street_address = vcard['address']
-          a.locality = vcard['city']
-          a.region = vcard['region']
-          a.postal_code = vcard['postalcode']
-          a.country = vcard['country']
+          a.locality       = vcard['city']
+          a.region         = vcard['region']
+          a.postal_code    = vcard['postalcode']
+          a.country        = vcard['country']
 
           a.latitude, a.longitude = vcard['geo'].split(/;/).map(&:to_f)
 

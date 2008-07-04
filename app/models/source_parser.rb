@@ -15,6 +15,7 @@ class SourceParser
         begin
           events.concat(parser.to_abstract_events(opts.merge(:content => content)))
         rescue Exception => e
+          RAILS_DEFAULT_LOGGER.info("SourceParser.to_abstract_events : Can't parse with #{parser.name} because -- #{e}")
           :ignore # Leave this line for rcov's code coverage
         end
       end
