@@ -29,7 +29,11 @@ describe EventsController do
       event.should_receive(:save).and_return(true)
       post 'create', params
       response.should redirect_to(event_path(event))
-    end
+  end
+    
+  end
+  
+describe EventsController, "when updating event" do
   
   it "should update an event"
   
@@ -47,6 +51,18 @@ describe EventsController do
     put "update", params
     response.should redirect_to(event_path(event))
   end
+
+end
+
+describe EventsController, "when changing venue" do
+
+  it "should change the venue" 
+  
+  it "should show event when changing to an existing venue" 
+  
+  it "should create a new venue when changing to a nonexistent venue"
+  
+  it "should redirect to the new venue when changing to a nonexistent venue"
   
 end
 

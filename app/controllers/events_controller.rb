@@ -121,7 +121,7 @@ class EventsController < ApplicationController
   # PUT /events/1.xml
   def update
     @event = Event.find(params[:id])
-    if @event.venue_id.nil?
+    if @event.venue_id.nil? || (@event.venue.title != params[:venue_name])
       @event.venue = Venue.find_or_initialize_by_title(params[:venue_name])
       
       #TODO, move this logic into Event#before_save
