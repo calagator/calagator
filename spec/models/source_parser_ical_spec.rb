@@ -34,7 +34,7 @@ end
 describe SourceParser::Ical, "when parsing multiple items in an Upcoming feed" do
   before(:all) do
     SourceParser::Base.should_receive(:read_url).and_return(read_sample('ical_upcoming_many.ics'))
-    @events = SourceParser.to_abstract_events(:url => "intercepted")
+    @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
   end
 
   it "should find multiple events" do
@@ -66,7 +66,7 @@ end
 describe SourceParser::Ical, "when parsing multiple items in an Eventful feed" do
   before(:all) do
     SourceParser::Base.should_receive(:read_url).and_return(read_sample('ical_eventful_many.ics'))
-    @events = SourceParser.to_abstract_events(:url => "intercepted")
+    @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
   end
 
   it "should find multiple events" do
