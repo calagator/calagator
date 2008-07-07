@@ -115,6 +115,24 @@ class Event < ActiveRecord::Base
 
   #---[ Queries ]---------------------------------------------------------
 
+  # Associate this event with the +venue+. The +venue+ can be given as a Venue
+  # instance, an ID, or a title.
+  def associate_with_venue(venue)
+    venue = \
+      case venue
+      when Venue  then venue
+      when String then Venue.find_or_initialize_by_title(venue)
+      when Fixnum then Venue.find(venue)
+      else raise ArgumentError, "Unknown type: #{venue.class}"
+      end
+
+    if self.venue_id.nil? || (self.venue.title != venue.title)
+      self.venue = venue.duplicate? ? venue.duplicate_of : venue
+    end
+
+    return self.venue
+  end
+
   # Returns groups of records for the overview screen.
   #
   # The data structure returned maps time names to arrays of event records:

@@ -1,35 +1,68 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+
 describe EventsController do
 
   it "should create an event" do
-    params = { :end_date => "2008-06-04",
-      :start_date => "2008-06-03",
-      :event => { "title"=>"Foo", "venue_id"=>"1", "url"=>"http://foo.com", "description"=>"Wheeeee"},
-      :venue_name => "Old Venue",
-      :end_time => "",
-      :start_time => "" }
-    Event.should_receive(:new).with(params[:event]).and_return(
-        event = mock_model(Event, :venue_id => 1, :venue => mock_model(Venue), :start_time= => true, :end_time= => true))
+    params = {
+      :end_date       => "2008-06-04",
+      :start_date     => "2008-06-03",
+      :event => {
+        "title"       => "Foo",
+        "venue_id"    => "1",
+        "url"         => "http://foo.com",
+        "description" => "Wheeeee"
+      },
+      :venue_name     => "Old Venue",
+      :end_time       => "",
+      :start_time     => ""
+    }
+    venue = mock_model(Venue)
+    event = mock_model(Event, {
+      :venue_id       => 1,
+      :venue          => venue,
+      :start_time=    => true,
+      :end_time=      => true,
+    })
+    Event.should_receive(:new).with(params[:event]).and_return(event)
     event.should_receive(:save).and_return(true)
+    event.should_receive(:associate_with_venue).with(params[:venue_name])
+
     post 'create', params
     response.should redirect_to(event_path(event))
   end
 
   it "should create an event without a venue" do
-    params = { :end_date => "2008-06-04",
-      :start_date => "2008-06-03",
-      :event => { "title"=>"Foo", "venue_id"=>"", "url"=>"http://foo.com", "description"=>"Wheeeee"},
-      :venue_name => "",
-      :end_time => "",
-      :start_time => "" }
-      Event.should_receive(:new).with(params[:event]).and_return(
-          event = mock_model(Event, :venue_id => nil, :venue= => true, :venue => Venue.new, :start_time= => true,
-                                    :end_time= => true))
-      event.should_receive(:save).and_return(true)
-      post 'create', params
-      response.should redirect_to(event_path(event))
+    params = {
+      :end_date       => "2008-06-04",
+      :start_date     => "2008-06-03",
+      :event => {
+        "title"       => "Foo",
+        "venue_id"    => "",
+        "url"         => "http://foo.com",
+        "description" => "Wheeeee"
+      },
+      :venue_name     => "",
+      :end_time       => "",
+      :start_time     => ""
+    }
+    venue = mock_model(Venue)
+    event = mock_model(Event, {
+      :venue_id     => nil,
+      :venue=       => true,
+      :venue        => venue,
+      :start_time=  => true,
+      :end_time=    => true,
+    })
+    Event.should_receive(:new).with(params[:event]).and_return(event)
+    event.should_receive(:save).and_return(true)
+    event.should_receive(:associate_with_venue).with(params[:venue_name])
+
+    post 'create', params
+    response.should redirect_to(event_path(event))
   end
+
+  it "should create an event with a venue"
 
 end
 
@@ -38,16 +71,32 @@ describe EventsController, "when updating event" do
   it "should update an event"
 
   it "should update an event without a venue" do
-    params = { :end_date => "2008-06-04",
-      :start_date => "2008-06-03",
-      :event => { "title"=>"Foo", "venue_id"=>"", "url"=>"http://foo.com", "description"=>"Wheeeee"},
-      :venue_name => "",
-      :end_time => "",
-      :start_time => "",
-      :id => 1 }
-    Event.stub!(:find).and_return(event = mock_model(Event, :venue_id => nil, :venue= => true, :venue => Venue.new,
-        :start_time= => true, :end_time= => true))
-    event.stub!(:update_attributes).and_return(true)
+    params = {
+      :end_date       => "2008-06-04",
+      :end_time       => "",
+      :event => {
+        "title"       => "Foo",
+        "venue_id"    => "",
+        "url"         => "http://foo.com",
+        "description" => "Wheeeee",
+      },
+      :id => 1,
+      :start_date     => "2008-06-03",
+      :start_time     => "",
+      :venue_name     => "",
+    }
+    venue = mock_model(Venue)
+    event = mock_model(Event, {
+      :associate_with_venue => true,
+      :end_time=         => true,
+      :start_time=       => true,
+      :update_attributes => true,
+      :venue             => venue,
+      :venue=            => true,
+      :venue_id          => nil,
+    })
+    Event.stub!(:find).and_return(event)
+
     put "update", params
     response.should redirect_to(event_path(event))
   end
