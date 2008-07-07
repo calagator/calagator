@@ -249,3 +249,55 @@ describe Event, "when searching" do
     }
   end
 end
+
+describe Event, "when associating with venues" do
+
+  before(:each) do
+    @event = Event.new
+    @venue = mock_model(Venue, :title => "MyVenue", :duplicate? => false)
+  end
+
+  it "should not change a venue to a nil venue" do
+    @event.associate_with_venue(nil).should be_nil
+  end
+
+  it "should associate a venue if one wasn't set before" do
+    @event.associate_with_venue(@venue).should == @venue
+  end
+
+  it "should change an existing venue to a different one" do
+    @event.venue = mock_model(Venue, :title => "OtherVenue")
+
+    @event.associate_with_venue(@venue).should == @venue
+  end
+
+  it "should not change a venue if associated with one of same name" do
+    venue2 = mock_model(Venue, :title => "MyVenue")
+    @event.venue = venue2
+
+    @event.associate_with_venue(@venue).should == venue2
+  end
+
+  it "should clear an existing venue if given a nil venue" do
+    @event.venue = @venue
+
+    @event.associate_with_venue(nil).should be_nil
+    @event.venue.should be_nil
+  end
+
+  it "should associate venue by title" do
+    Venue.should_receive(:find_or_initialize_by_title).and_return(@venue)
+
+    @event.associate_with_venue(@venue.title).should == @venue
+  end
+
+  it "should associate venue by id" do
+    Venue.should_receive(:find).and_return(@venue)
+
+    @event.associate_with_venue(1234).should == @venue
+  end
+
+  it "should raise an exception if associated with an unknown type" do
+    lambda { @event.associate_with_venue(mock_model(SourceParser)) }.should raise_error(TypeError)
+  end
+end

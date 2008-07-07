@@ -120,14 +120,19 @@ class Event < ActiveRecord::Base
   def associate_with_venue(venue)
     venue = \
       case venue
-      when Venue  then venue
-      when String then Venue.find_or_initialize_by_title(venue)
-      when Fixnum then Venue.find(venue)
-      else raise ArgumentError, "Unknown type: #{venue.class}"
+      when Venue    then venue
+      when NilClass then nil
+      when String   then Venue.find_or_initialize_by_title(venue)
+      when Fixnum   then Venue.find(venue)
+      else raise TypeError, "Unknown type: #{venue.class}"
       end
 
-    if self.venue_id.nil? || (self.venue.title != venue.title)
+    if venue && ((self.venue && self.venue.title != venue.title) || (!self.venue))
+      # Set venue if it was nil or had a different title
       self.venue = venue.duplicate? ? venue.duplicate_of : venue
+    elsif !venue && self.venue
+      # Clear the event's venue field
+      self.venue = nil
     end
 
     return self.venue

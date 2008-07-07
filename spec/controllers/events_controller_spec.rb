@@ -1,6 +1,33 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe EventsController do
+describe EventsController, "when displaying events" do
+  it "should show an event" do
+    event = Event.new(:start_time => Time.now)
+    Event.should_receive(:find).and_return(event)
+
+    get "show", :id => 1234
+    response.should be_success
+  end
+
+  it "should redirect from a duplicate event to its master" do
+    master = mock_model(Event, :id => 4321)
+    event = Event.new(:start_time => Time.now, :duplicate_of => master)
+    Event.should_receive(:find).and_return(event)
+
+    get "show", :id => 1234
+    response.should redirect_to(event_path(master))
+  end
+
+  it "should show an error when asked to display a non-existent event" do
+    Event.should_receive(:find).and_raise(ActiveRecord::RecordNotFound)
+
+    get "show", :id => 1234
+    response.should redirect_to(events_path)
+    flash[:failure].should_not be_blank
+  end
+end
+
+describe EventsController, "when creating or updating events" do
   before(:each) do
     # Fields marked with "###" may be filled in by examples to alter behavior
     @params = {
@@ -31,8 +58,8 @@ describe EventsController do
 
     it "should create a new event without a venue" do
       Event.should_receive(:new).with(@params[:event]).and_return(@event)
-      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
-      @event.should_receive(:venue).and_return(nil)
+      @event.stub!(:associate_with_venue).with(@params[:venue_name])
+      @event.stub!(:venue).and_return(nil)
       @event.should_receive(:save).and_return(true)
 
       post "create", @params
@@ -42,10 +69,10 @@ describe EventsController do
     it "should create a new event for an existing venue" do
       @params[:venue_name] = "Old Venue"
       Event.should_receive(:new).with(@params[:event]).and_return(@event)
-      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
-      @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @event.stub!(:associate_with_venue).with(@params[:venue_name])
+      @event.stub!(:venue).and_return(@venue)
       @event.should_receive(:save).and_return(true)
-      @venue.should_receive(:new_record?).and_return(false)
+      @venue.stub!(:new_record?).and_return(false)
 
       post "create", @params
       response.should redirect_to(event_path(@event))
@@ -54,13 +81,24 @@ describe EventsController do
     it "should create a new event and new venue, and redirect to venue edit form" do
       @params[:venue_name] = "New Venue"
       Event.should_receive(:new).with(@params[:event]).and_return(@event)
-      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
-      @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @event.stub!(:associate_with_venue).with(@params[:venue_name])
+      @event.stub!(:venue).and_return(@venue)
       @event.should_receive(:save).and_return(true)
-      @venue.should_receive(:new_record?).and_return(true)
+      @venue.stub!(:new_record?).and_return(true)
 
       post "create", @params
       response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
+    end
+
+    it "should catch errors and redisplay the new event form" do
+      post "create"
+      response.should render_template(:new)
+    end
+
+    it "should stop evil robots" do
+      post "create", :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+      response.should render_template(:new)
+      flash[:failure].should match(/evil robot/i)
     end
   end
 
@@ -75,8 +113,8 @@ describe EventsController do
 
     it "should update an event without a venue" do
       Event.should_receive(:find).and_return(@event)
-      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
-      @event.should_receive(:venue).and_return(nil)
+      @event.stub!(:associate_with_venue).with(@params[:venue_name])
+      @event.stub!(:venue).and_return(nil)
       @event.should_receive(:update_attributes).and_return(true)
 
       put "update", @params
@@ -86,10 +124,10 @@ describe EventsController do
     it "should update an event and associate it with an existing venue" do
       @params[:venue_name] = "Old Venue"
       Event.should_receive(:find).and_return(@event)
-      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
-      @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @event.stub!(:associate_with_venue).with(@params[:venue_name])
+      @event.stub!(:venue).and_return(@venue)
       @event.should_receive(:update_attributes).and_return(true)
-      @venue.should_receive(:new_record?).and_return(false)
+      @venue.stub!(:new_record?).and_return(false)
 
       put "update", @params
       response.should redirect_to(event_path(@event))
@@ -98,14 +136,25 @@ describe EventsController do
     it "should update an event and create a new venue, and redirect to the venue edit form" do
       @params[:venue_name] = "New Venue"
       Event.should_receive(:find).and_return(@event)
-      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
-      @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @event.stub!(:associate_with_venue).with(@params[:venue_name])
+      @event.stub!(:venue).and_return(@venue)
       @event.should_receive(:update_attributes).and_return(true)
-      @venue.should_receive(:new_record?).and_return(true)
+      @venue.stub!(:new_record?).and_return(true)
 
       put "update", @params
       response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
     end
+
+    it "should catch errors and redisplay the new event form" do
+      Event.should_receive(:find).and_return(@event)
+      @event.stub!(:associate_with_venue)
+      @event.stub!(:venue).and_return(nil)
+      @event.should_receive(:update_attributes).and_return(false)
+
+      post "update", :id => 1234
+      response.should render_template(:edit)
+    end
+
   end
 end
 
