@@ -1,13 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventsController do
-  
+
   it "should create an event" do
-    params = { :end_date => "2008-06-04", 
-      :start_date => "2008-06-03", 
-      :event => { "title"=>"Foo", "venue_id"=>"1", "url"=>"http://foo.com", "description"=>"Wheeeee"}, 
-      :venue_name => "Old Venue", 
-      :end_time => "", 
+    params = { :end_date => "2008-06-04",
+      :start_date => "2008-06-03",
+      :event => { "title"=>"Foo", "venue_id"=>"1", "url"=>"http://foo.com", "description"=>"Wheeeee"},
+      :venue_name => "Old Venue",
+      :end_time => "",
       :start_time => "" }
     Event.should_receive(:new).with(params[:event]).and_return(
         event = mock_model(Event, :venue_id => 1, :venue => mock_model(Venue), :start_time= => true, :end_time= => true))
@@ -17,35 +17,35 @@ describe EventsController do
   end
 
   it "should create an event without a venue" do
-    params = { :end_date => "2008-06-04", 
-      :start_date => "2008-06-03", 
-      :event => { "title"=>"Foo", "venue_id"=>"", "url"=>"http://foo.com", "description"=>"Wheeeee"}, 
-      :venue_name => "", 
-      :end_time => "", 
+    params = { :end_date => "2008-06-04",
+      :start_date => "2008-06-03",
+      :event => { "title"=>"Foo", "venue_id"=>"", "url"=>"http://foo.com", "description"=>"Wheeeee"},
+      :venue_name => "",
+      :end_time => "",
       :start_time => "" }
       Event.should_receive(:new).with(params[:event]).and_return(
-          event = mock_model(Event, :venue_id => nil, :venue= => true, :venue => Venue.new, :start_time= => true, 
+          event = mock_model(Event, :venue_id => nil, :venue= => true, :venue => Venue.new, :start_time= => true,
                                     :end_time= => true))
       event.should_receive(:save).and_return(true)
       post 'create', params
       response.should redirect_to(event_path(event))
   end
-    
-  end
-  
+
+end
+
 describe EventsController, "when updating event" do
-  
+
   it "should update an event"
-  
+
   it "should update an event without a venue" do
-    params = { :end_date => "2008-06-04", 
-      :start_date => "2008-06-03", 
-      :event => { "title"=>"Foo", "venue_id"=>"", "url"=>"http://foo.com", "description"=>"Wheeeee"}, 
-      :venue_name => "", 
-      :end_time => "", 
+    params = { :end_date => "2008-06-04",
+      :start_date => "2008-06-03",
+      :event => { "title"=>"Foo", "venue_id"=>"", "url"=>"http://foo.com", "description"=>"Wheeeee"},
+      :venue_name => "",
+      :end_time => "",
       :start_time => "",
       :id => 1 }
-    Event.stub!(:find).and_return(event = mock_model(Event, :venue_id => nil, :venue= => true, :venue => Venue.new, 
+    Event.stub!(:find).and_return(event = mock_model(Event, :venue_id => nil, :venue= => true, :venue => Venue.new,
         :start_time= => true, :end_time= => true))
     event.stub!(:update_attributes).and_return(true)
     put "update", params
@@ -56,14 +56,14 @@ end
 
 describe EventsController, "when changing venue" do
 
-  it "should change the venue" 
-  
-  it "should show event when changing to an existing venue" 
-  
+  it "should change the venue"
+
+  it "should show event when changing to an existing venue"
+
   it "should create a new venue when changing to a nonexistent venue"
-  
+
   it "should redirect to the new venue when changing to a nonexistent venue"
-  
+
 end
 
 describe EventsController, "managing duplicates" do
@@ -98,7 +98,7 @@ describe EventsController, "managing duplicates" do
     response.should be_redirect
     response.should redirect_to(event_url(event_master.id))
   end
-  
+
 end
 
 describe EventsController, "search" do
