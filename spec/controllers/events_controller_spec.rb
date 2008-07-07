@@ -8,113 +8,90 @@ describe EventsController do
       :start_date     => "2008-06-03",
       :event => {
         "title"       => "Foo",
-        #### "venue_id"    => "1",
         "url"         => "http://foo.com",
         "description" => "Wheeeee"
       },
-      ### :venue_name     => "Old Venue",
       :end_time       => "",
       :start_time     => ""
     }
     @venue = mock_model(Venue)
     @event = mock_model(Event, {
-      ### :venue_id       => 1,
-      ### :venue          => venue,
       :start_time=    => true,
       :end_time=      => true,
     })
-    ### Event.should_receive(:new).with(params[:event]).and_return(@event)
-    ### @event.should_receive(:save).and_return(true)
-    ### @event.should_receive(:associate_with_venue).with(params[:venue_name])
   end
 
   describe "when creating events" do
     it "should create a new event without a venue" do
       Event.should_receive(:new).with(@params[:event]).and_return(@event)
-      @event.should_receive(:save).and_return(true)
       @event.should_receive(:associate_with_venue).with(@params[:venue_name])
       @event.should_receive(:venue).and_return(nil)
+      @event.should_receive(:save).and_return(true)
 
-      post 'create', @params
+      post "create", @params
       response.should redirect_to(event_path(@event))
     end
 
     it "should create a new event for an existing venue" do
       @params[:venue_name] = "Old Venue"
       Event.should_receive(:new).with(@params[:event]).and_return(@event)
-      @event.should_receive(:save).and_return(true)
       @event.should_receive(:associate_with_venue).with(@params[:venue_name])
       @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @event.should_receive(:save).and_return(true)
       @venue.should_receive(:new_record?).and_return(false)
 
-      post 'create', @params
+      post "create", @params
       response.should redirect_to(event_path(@event))
     end
 
     it "should create a new event and new venue, and redirect to venue edit form" do
       @params[:venue_name] = "New Venue"
       Event.should_receive(:new).with(@params[:event]).and_return(@event)
-      @event.should_receive(:save).and_return(true)
       @event.should_receive(:associate_with_venue).with(@params[:venue_name])
       @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @event.should_receive(:save).and_return(true)
       @venue.should_receive(:new_record?).and_return(true)
 
-      post 'create', @params
+      post "create", @params
       response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
     end
   end
 
   describe "when updating events" do
+    it "should update an event without a venue" do
+      Event.should_receive(:find).and_return(@event)
+      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
+      @event.should_receive(:venue).and_return(nil)
+      @event.should_receive(:update_attributes).and_return(true)
+
+      put "update", @params
+      response.should redirect_to(event_path(@event))
+    end
+
+    it "should update an event and associate it with an existing venue" do
+      @params[:venue_name] = "Old Venue"
+      Event.should_receive(:find).and_return(@event)
+      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
+      @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @event.should_receive(:update_attributes).and_return(true)
+      @venue.should_receive(:new_record?).and_return(false)
+
+      put "update", @params
+      response.should redirect_to(event_path(@event))
+    end
+
+    it "should update an event and create a new venue, and redirect to the venue edit form" do
+      @params[:venue_name] = "New Venue"
+      Event.should_receive(:find).and_return(@event)
+      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
+      @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @event.should_receive(:update_attributes).and_return(true)
+      @venue.should_receive(:new_record?).and_return(true)
+
+      put "update", @params
+      response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
+    end
   end
-end
-
-describe EventsController, "when updating event" do
-
-  it "should update an event"
-
-  it "should update an event without a venue" do
-    params = {
-      :end_date       => "2008-06-04",
-      :end_time       => "",
-      :event => {
-        "title"       => "Foo",
-        "venue_id"    => "",
-        "url"         => "http://foo.com",
-        "description" => "Wheeeee",
-      },
-      :id => 1,
-      :start_date     => "2008-06-03",
-      :start_time     => "",
-      :venue_name     => "",
-    }
-    venue = mock_model(Venue)
-    event = mock_model(Event, {
-      :associate_with_venue => true,
-      :end_time=         => true,
-      :start_time=       => true,
-      :update_attributes => true,
-      :venue             => venue,
-      :venue=            => true,
-      :venue_id          => nil,
-    })
-    Event.stub!(:find).and_return(event)
-
-    put "update", params
-    response.should redirect_to(event_path(event))
-  end
-
-end
-
-describe EventsController, "when changing venue" do
-
-  it "should change the venue"
-
-  it "should show event when changing to an existing venue"
-
-  it "should create a new venue when changing to a nonexistent venue"
-
-  it "should redirect to the new venue when changing to a nonexistent venue"
-
 end
 
 describe EventsController, "managing duplicates" do
