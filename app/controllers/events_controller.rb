@@ -84,7 +84,7 @@ class EventsController < ApplicationController
   def create
     @event = Event.new(params[:event])
     @event.associate_with_venue(params[:venue_name])
-    has_new_venue = @event.venue.new_record?
+    has_new_venue = @event.venue && @event.venue.new_record?
 
     @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
     @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
@@ -117,7 +117,7 @@ class EventsController < ApplicationController
   def update
     @event = Event.find(params[:id])
     @event.associate_with_venue(params[:venue_name])
-    has_new_venue = @event.venue.new_record?
+    has_new_venue = @event.venue && @event.venue.new_record?
 
     @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
     @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
