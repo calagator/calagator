@@ -1,69 +1,71 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-
 describe EventsController do
-
-  it "should create an event" do
-    params = {
+  before(:each) do
+    # Fields marked with "###" may be filled in by examples to alter behavior
+    @params = {
       :end_date       => "2008-06-04",
       :start_date     => "2008-06-03",
       :event => {
         "title"       => "Foo",
-        "venue_id"    => "1",
+        #### "venue_id"    => "1",
         "url"         => "http://foo.com",
         "description" => "Wheeeee"
       },
-      :venue_name     => "Old Venue",
+      ### :venue_name     => "Old Venue",
       :end_time       => "",
       :start_time     => ""
     }
-    venue = mock_model(Venue)
-    event = mock_model(Event, {
-      :venue_id       => 1,
-      :venue          => venue,
+    @venue = mock_model(Venue)
+    @event = mock_model(Event, {
+      ### :venue_id       => 1,
+      ### :venue          => venue,
       :start_time=    => true,
       :end_time=      => true,
     })
-    Event.should_receive(:new).with(params[:event]).and_return(event)
-    event.should_receive(:save).and_return(true)
-    event.should_receive(:associate_with_venue).with(params[:venue_name])
-
-    post 'create', params
-    response.should redirect_to(event_path(event))
+    ### Event.should_receive(:new).with(params[:event]).and_return(@event)
+    ### @event.should_receive(:save).and_return(true)
+    ### @event.should_receive(:associate_with_venue).with(params[:venue_name])
   end
 
-  it "should create an event without a venue" do
-    params = {
-      :end_date       => "2008-06-04",
-      :start_date     => "2008-06-03",
-      :event => {
-        "title"       => "Foo",
-        "venue_id"    => "",
-        "url"         => "http://foo.com",
-        "description" => "Wheeeee"
-      },
-      :venue_name     => "",
-      :end_time       => "",
-      :start_time     => ""
-    }
-    venue = mock_model(Venue)
-    event = mock_model(Event, {
-      :venue_id     => nil,
-      :venue=       => true,
-      :venue        => venue,
-      :start_time=  => true,
-      :end_time=    => true,
-    })
-    Event.should_receive(:new).with(params[:event]).and_return(event)
-    event.should_receive(:save).and_return(true)
-    event.should_receive(:associate_with_venue).with(params[:venue_name])
+  describe "when creating events" do
+    it "should create a new event without a venue" do
+      Event.should_receive(:new).with(@params[:event]).and_return(@event)
+      @event.should_receive(:save).and_return(true)
+      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
+      @event.should_receive(:venue).and_return(nil)
 
-    post 'create', params
-    response.should redirect_to(event_path(event))
+      post 'create', @params
+      response.should redirect_to(event_path(@event))
+    end
+
+    it "should create a new event for an existing venue" do
+      @params[:venue_name] = "Old Venue"
+      Event.should_receive(:new).with(@params[:event]).and_return(@event)
+      @event.should_receive(:save).and_return(true)
+      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
+      @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @venue.should_receive(:new_record?).and_return(false)
+
+      post 'create', @params
+      response.should redirect_to(event_path(@event))
+    end
+
+    it "should create a new event and new venue, and redirect to venue edit form" do
+      @params[:venue_name] = "New Venue"
+      Event.should_receive(:new).with(@params[:event]).and_return(@event)
+      @event.should_receive(:save).and_return(true)
+      @event.should_receive(:associate_with_venue).with(@params[:venue_name])
+      @event.should_receive(:venue).any_number_of_times.and_return(@venue)
+      @venue.should_receive(:new_record?).and_return(true)
+
+      post 'create', @params
+      response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
+    end
   end
 
-  it "should create an event with a venue"
-
+  describe "when updating events" do
+  end
 end
 
 describe EventsController, "when updating event" do
