@@ -144,11 +144,32 @@ describe EventsController, "managing duplicates" do
 
 end
 
-describe EventsController, "search" do
+describe EventsController, "when searching" do
 
-  it "should perform searches" do
+  it "should search" do
     Event.should_receive(:search_grouped_by_currentness).and_return({:current => [], :past => []})
+
     post :search, :query => "myquery"
+  end
+
+  it "should fail if given no search query" do
+    post :search
+
+    flash[:failure].should_not be_blank
+    response.should redirect_to(root_path)
+  end
+
+end
+
+describe EventsController, "when deleting" do
+
+  it "should destroy events" do
+    event = mock_model(Event)
+    event.should_receive(:destroy)
+    Event.should_receive(:find).and_return(event)
+
+    delete 'destroy', :id => 1234
+    response.should redirect_to(events_url)
   end
 
 end
