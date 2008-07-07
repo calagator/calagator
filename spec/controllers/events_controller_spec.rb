@@ -7,8 +7,8 @@ describe EventsController do
       :end_date       => "2008-06-04",
       :start_date     => "2008-06-03",
       :event => {
-        "title"       => "Foo",
-        "url"         => "http://foo.com",
+        "title"       => "MyVenue",
+        "url"         => "http://my.venue",
         "description" => "Wheeeee"
       },
       :end_time       => "",
@@ -16,12 +16,19 @@ describe EventsController do
     }
     @venue = mock_model(Venue)
     @event = mock_model(Event, {
+      :title          => "MyEvent",
       :start_time=    => true,
       :end_time=      => true,
     })
   end
 
   describe "when creating events" do
+    it "should display form for creating new event" do
+      get "new"
+      response.should be_success
+      response.should render_template(:new)
+    end
+
     it "should create a new event without a venue" do
       Event.should_receive(:new).with(@params[:event]).and_return(@event)
       @event.should_receive(:associate_with_venue).with(@params[:venue_name])
@@ -58,6 +65,14 @@ describe EventsController do
   end
 
   describe "when updating events" do
+    it "should display form for editing event" do
+      Event.should_receive(:find).and_return(@event)
+
+      get "edit", :id => 1
+      response.should be_success
+      response.should render_template(:edit)
+    end
+
     it "should update an event without a venue" do
       Event.should_receive(:find).and_return(@event)
       @event.should_receive(:associate_with_venue).with(@params[:venue_name])
