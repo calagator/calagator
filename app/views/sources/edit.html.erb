@@ -7,6 +7,10 @@
     <%= f.label :url %><br />
     <%= f.text_field :url %>
   </p>
+	<p>
+		<%= f.label :reimport, "Re-import?" %>
+    <%= f.check_box :reimport %>
+	</p>
   <p>
     <%= f.submit "Update" %>
   </p>
