@@ -6,7 +6,7 @@
     <ul>
       <li><%= link_to_unless_current "Title", url_for(:action => 'duplicates', :type => 'title') %></li>
       <li><%= link_to_unless_current "Start Time", url_for(:action => 'duplicates', :type => 'start_time') %></li>
-      <li><%= link_to_unless_current "Both Times", url_for(:action => 'duplicates', :type => 'start_time,duration') %></li>
+      <li><%= link_to_unless_current "Both Times", url_for(:action => 'duplicates', :type => 'start_time,end_time') %></li>
       <li><%= link_to_unless_current "URL", url_for(:action => 'duplicates', :type => 'url') %></li>
       <li><%= link_to_unless_current "Description", url_for(:action => 'duplicates', :type => 'description') %></li>
       <li><%= link_to_unless_current "Venue", url_for(:action => 'duplicates', :type => 'venue_id') %></li>

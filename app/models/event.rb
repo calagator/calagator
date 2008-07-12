@@ -13,7 +13,7 @@
 #  venue_id        :integer         
 #  source_id       :integer         
 #  duplicate_of_id :integer         
-#  duration        :integer         
+#  end_time        :datetime
 #
 
 # == Schema Information
@@ -62,7 +62,6 @@ class Event < ActiveRecord::Base
 
   # Triggers
   before_validation :normalize_url!
-  before_validation :recalculate_duration
 
   # Validations
   validates_presence_of :title, :start_time
@@ -90,47 +89,6 @@ class Event < ActiveRecord::Base
     # TODO Generalize this code so we can use it on other attributes in the different model classes. The solution should use an #alias_method_chain to make sure it's not breaking any explicit overrides for an attribute.
     s = read_attribute(:title)
     s.blank? ? nil : s.strip
-  end
-
-  def end_time
-    # If we have a temporary end_time stashed (it's not an AR field), prefer it to
-    # calculating using duration (which _is_ an AR field)
-    return @end_time if @stashed_end
-    return nil if read_attribute(:duration).nil? || self.start_time.nil?
-    self.start_time + read_attribute(:duration).minutes
-  end
-
-  def end_time=(value)
-    # We might stash end_time in a non-AR attribute if we don't have start (and
-    # thus can't calculate duration now).
-    value = (value.empty? ? nil : Time.parse(value)) if value.is_a?(String)
-    @end_time = value if @stashed_end
-    return write_attribute(:duration, nil) if value.nil?
-    if self.start_time.nil?
-      # We don't have a start, so stash the end until we can calculate it.
-      @end_time = value
-      @stashed_end = true
-    else
-      # We have start and end, so we can calculate duration
-      write_attribute(:duration, (value - self.start_time) / 1.minute)
-      @stashed_end = nil # forget any stash
-    end
-    value
-  end
-
-  def duration
-    if @stashed_end
-      # We have a stashed end_time; calculate it if we have start too, or
-      # return nil if we have no start (and can't calculate)
-      return start_time.nil? ? nil : (@end_time - start_time) / 1.minute
-    end
-    return read_attribute(:duration)
-  end
-
-  def duration=(the_duration)
-    # Save the value we were given, and make sure we don't consider end_time anymore
-    write_attribute(:duration, the_duration)
-    @stashed_end = nil
   end
 
   #---[ Queries ]---------------------------------------------------------
@@ -447,12 +405,7 @@ EOF
 protected
 
   def end_time_later_than_start_time
-    errors.add(:end_time, "End must be after start") \
+    errors.add(:end_time, "End cannot be before start") \
       unless end_time.nil? or end_time >= start_time
-  end
-
-  def recalculate_duration
-    write_attribute(:duration, (@end_time - start_time) / 1.minute) \
-      unless @stashed_end.nil? or start_time.nil?
   end
 end

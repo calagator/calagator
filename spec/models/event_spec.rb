@@ -145,41 +145,6 @@ describe Event do
       @event.should have(1).error_on(:end_time)
     end
 
-    it "should return an end time, based on duration" do
-      @event.start_time = Time.now
-      @event.duration = 60
-      @event.end_time.should == @event.start_time + 1.hour
-    end
-
-    it "should set a duration when given an end time" do
-      now  = Time.now
-      @event.start_time = now
-      @event.end_time = (now + 1.hour)
-      @event.duration.should == 60
-    end
-
-    it "should handle setting end before start" do
-      now = Time.now
-      @event.end_time = now + 2.hours
-      @event.start_time = now
-      @event.duration.should == 120
-    end
-
-    it "should handle setting duration before start" do
-      now = Time.now
-      @event.duration = 120
-      @event.start_time = now
-      @event.end_time.should == now + 2.hours
-    end
-
-    it "should handle changing end time with an existing duration" do
-      now = Time.now
-      @event.start_time = now
-      @event.duration = 60
-      @event.end_time = now + 2.hours
-      @event.end_time.should == now + 2.hours
-    end
-
   end
 
   describe "when finding by dates" do
