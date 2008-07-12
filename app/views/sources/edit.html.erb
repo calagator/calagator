@@ -1,0 +1,16 @@
+<h1>Editing source</h1>
+
+<% form_for(@source) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :url %><br />
+    <%= f.text_field :url %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @source %> |
+<%= link_to 'Back', sources_path %>

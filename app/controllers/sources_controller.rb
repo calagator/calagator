@@ -1,21 +1,8 @@
 class SourcesController < ApplicationController
   MAXIMUM_EVENTS_TO_DISPLAY_IN_FLASH = 5
-
-  def index
-    redirect_to new_source_path
-  end
-
-  def new
-    @source = Source.new
-    @page_title = "Import Events"
-  end
-
-  def update
-    # Treat all #update actions as #create actions. Necessary because if the user submits the create form with an invalid Source, Rails does something which tries to direct this to the #update action, regardless of what paramters you specify to the #form_for helper.
-    create
-  end
-
-  def create
+  
+  # Import sources
+  def import
     # TODO Import many sources at once
 
     @source = Source.new(params[:source])
@@ -58,6 +45,90 @@ class SourcesController < ApplicationController
         format.html { render :action => "new" }
         format.xml  { render :xml => @source.errors, :status => :unprocessable_entity }
       end
+    end
+  end
+  
+  # GET /sources
+  # GET /sources.xml
+  def index
+    @sources = Source.find(:all)
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @sources }
+    end
+  end
+
+  # GET /sources/1
+  # GET /sources/1.xml
+  def show
+    @source = Source.find(params[:id])
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @source }
+    end
+  end
+
+  # GET /sources/new
+  # GET /sources/new.xml
+  def new
+    @source = Source.new
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @source }
+    end
+  end
+
+  # GET /sources/1/edit
+  def edit
+    @source = Source.find(params[:id])
+  end
+
+  # POST /sources
+  # POST /sources.xml
+  def create
+    @source = Source.new(params[:source])
+
+    respond_to do |format|
+      if @source.save
+        flash[:notice] = 'Source was successfully created.'
+        format.html { redirect_to(@source) }
+        format.xml  { render :xml => @source, :status => :created, :location => @source }
+      else
+        format.html { render :action => "new" }
+        format.xml  { render :xml => @source.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  # PUT /sources/1
+  # PUT /sources/1.xml
+  def update
+    @source = Source.find(params[:id])
+
+    respond_to do |format|
+      if @source.update_attributes(params[:source])
+        flash[:notice] = 'Source was successfully updated.'
+        format.html { redirect_to(@source) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @source.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /sources/1
+  # DELETE /sources/1.xml
+  def destroy
+    @source = Source.find(params[:id])
+    @source.destroy
+
+    respond_to do |format|
+      format.html { redirect_to(sources_url) }
+      format.xml  { head :ok }
     end
   end
 end

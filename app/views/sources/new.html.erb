@@ -1,4 +1,4 @@
-<% form_for(@source) do |f| %>
+<% form_for @source, :url => { :action => :import } do |f| %>
 <fieldset>
   <legend>Import a source</legend>
   <div>

@@ -1,4 +1,8 @@
 ActionController::Routing::Routes.draw do |map|
+  map.resources :sources
+
+  map.resources :sources
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -28,7 +32,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Normal controllers
   map.resources :events, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'search' => :get}
-  map.resources :sources
+  map.resources :sources, :collection => { :import => :put }
   map.resources :venues, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post}
 
   # Export action
