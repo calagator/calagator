@@ -18,7 +18,8 @@ describe SourceParser, "when reading content" do
     uri.should_receive(:respond_to?).any_number_of_times.and_return(false)
     URI.should_receive(:parse).any_number_of_times.and_return(uri)
 
-    lambda { SourceParser.read_url("not://a.real/~url") }.should raise_error(Errno::ENOENT)
+    error_type = RUBY_PLATFORM.match(/mswin/) ? Errno::EINVAL : Errno::ENOENT
+    lambda { SourceParser.read_url("not://a.real/~url") }.should raise_error(error_type)
   end
 
   it "should unescape ATOM feeds" do
