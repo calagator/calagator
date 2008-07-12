@@ -7,3 +7,4 @@ require 'uri'
 #===[ /lib ]============================================================
 
 require 'metaclass'
+require 'tagging_extensions'

@@ -1,25 +1,45 @@
 # == Schema Information
-# Schema version: 14
+# Schema version: 20080704045101
 #
 # Table name: events
 #
 #  id              :integer         not null, primary key
-#  title           :string(255)
-#  description     :text
-#  start_time      :datetime
-#  url             :string(255)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  venue_id        :integer
-#  source_id       :integer
-#  duplicate_of_id :integer
-#  duration        :integer
+#  title           :string(255)     
+#  description     :text            
+#  start_time      :datetime        
+#  url             :string(255)     
+#  created_at      :datetime        
+#  updated_at      :datetime        
+#  venue_id        :integer         
+#  source_id       :integer         
+#  duplicate_of_id :integer         
+#  duration        :integer         
+#
+
+# == Schema Information
+# Schema version: 20080704045101
+#
+# Table name: events
+#
+#  id              :integer         not null, primary key
+#  title           :string(255)     
+#  description     :text            
+#  start_time      :datetime        
+#  venue_id        :integer         
+#  url             :string(255)     
+#  created_at      :datetime        
+#  updated_at      :datetime        
+#  source_id       :integer         
+#  duplicate_of_id :integer         
+#  duration        :integer         
 #
 
 # == Event
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
+  Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
+  
   # Names of columns and methods to create Solr indexes for
   INDEXABLE_FIELDS = \
     %w(
@@ -31,11 +51,11 @@ class Event < ActiveRecord::Base
       end_time_for_solr
       text_for_solr
     ).map(&:to_sym)
-
+    
   unless RAILS_ENV == 'test'
       acts_as_solr :fields => INDEXABLE_FIELDS
   end
-
+  
   # Associations
   belongs_to :venue
   belongs_to :source
@@ -114,7 +134,7 @@ class Event < ActiveRecord::Base
   end
 
   #---[ Queries ]---------------------------------------------------------
-
+  
   # Associate this event with the +venue+. The +venue+ can be given as a Venue
   # instance, an ID, or a title.
   def associate_with_venue(venue)

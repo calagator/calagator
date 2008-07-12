@@ -79,6 +79,7 @@
     <%= f.label :url, "Web Link" %>
     <%= f.text_field :url %>
   </div>
+
   <div>
     <%= f.label :description %>
     <%= f.text_area :description %>
@@ -87,14 +88,12 @@
     (HTML formatting allowed)
   </div>
 
-  <% if false %>
-  <%# TODO implement tags %>
   <div>
-    <%= f.label :tags %>
+    <%= f.label :tag_list, "Tags" %>
     <span class="note">(comma separated keywords)</span><br />
-    <input type="text" name="event_tags" value="" id="event_tags">
+    <%= f.text_field :tag_list %>
   </div>
-  <% end %>
+
   <div class='trap'>
     <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
     <%= text_field_tag 'trap_field', params[:trap_field] %>

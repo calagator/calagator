@@ -1,21 +1,23 @@
 # == Schema Information
-# Schema version: 14
+# Schema version: 20080704045101
 #
 # Table name: sources
 #
 #  id          :integer         not null, primary key
-#  title       :string(255)
-#  url         :string(255)
-#  imported_at :datetime
-#  created_at  :datetime
-#  updated_at  :datetime
-#  reimport    :boolean
+#  title       :string(255)     
+#  url         :string(255)     
+#  imported_at :datetime        
+#  created_at  :datetime        
+#  updated_at  :datetime        
+#  reimport    :boolean         
 #
 
 # == Source
 #
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
 class Source < ActiveRecord::Base
+  Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
+  
   unless RAILS_ENV == 'test'
       acts_as_solr
   end

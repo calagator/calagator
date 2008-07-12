@@ -6,7 +6,12 @@ describe Event, "in general" do
     event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'))
     event.should be_valid
   end
-
+  
+  it "should be taggable" do
+    Tag # need to reference Tag class in order to load it.
+    Event.new.tag_list.should == ""
+  end
+  
   it "should add a http:// prefix to urls without one" do
     event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'), :url => 'google.com')
     event.should be_valid

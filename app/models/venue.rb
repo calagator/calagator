@@ -1,29 +1,31 @@
 # == Schema Information
-# Schema version: 14
+# Schema version: 20080704045101
 #
 # Table name: venues
 #
 #  id              :integer         not null, primary key
-#  title           :string(255)
-#  description     :text
-#  address         :string(255)
-#  url             :string(255)
-#  created_at      :datetime
-#  updated_at      :datetime
-#  street_address  :string(255)
-#  locality        :string(255)
-#  region          :string(255)
-#  postal_code     :string(255)
-#  country         :string(255)
-#  latitude        :decimal(, )
-#  longitude       :decimal(, )
-#  email           :string(255)
-#  telephone       :string(255)
-#  source_id       :integer
-#  duplicate_of_id :integer
+#  title           :string(255)     
+#  description     :text            
+#  address         :string(255)     
+#  url             :string(255)     
+#  created_at      :datetime        
+#  updated_at      :datetime        
+#  street_address  :string(255)     
+#  locality        :string(255)     
+#  region          :string(255)     
+#  postal_code     :string(255)     
+#  country         :string(255)     
+#  latitude        :decimal(, )     
+#  longitude       :decimal(, )     
+#  email           :string(255)     
+#  telephone       :string(255)     
+#  source_id       :integer         
+#  duplicate_of_id :integer         
 #
 
 class Venue < ActiveRecord::Base
+  Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
+  
   # Solr
   unless RAILS_ENV == 'test'
       acts_as_solr
