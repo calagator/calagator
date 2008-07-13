@@ -164,7 +164,7 @@ class Event < ActiveRecord::Base
   def self.find_future_events(opts={})
     today = Time.now.beginning_of_day.utc
     order = opts[:order] || :start_time
-    conditions_sql = "events.duplicate_of_id IS NULL AND events.start_time >= :start_time"
+    conditions_sql = "events.duplicate_of_id IS NULL AND (events.end_time >= :start_time OR events.start_time >= :start_time)"
     conditions_vars = {
       :start_time => today,
       :end_time => today,
