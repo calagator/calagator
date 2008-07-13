@@ -2,16 +2,21 @@
 
 <table>
   <tr>
-    <th>Url</th>
+    <th>Reimport?</th>
+    <th>URL</th>
   </tr>
 
-<% for source in @sources %>
+<% sources_by_recurring = @sources.group_by{|source| source.reimport == true} %>
+<% for kind in [true, false] %>
+  <% for source in [sources_by_recurring[kind]].flatten.sort_by{|source| source.url} %>
   <tr>
+    <td><%= kind %></td>
     <td><%=h source.url %></td>
     <td><%= link_to 'Show', source %></td>
     <td><%= link_to 'Edit', edit_source_path(source) %></td>
     <td><%= link_to 'Destroy', source, :confirm => 'Are you sure?', :method => :delete %></td>
   </tr>
+  <% end %>
 <% end %>
 </table>
 
