@@ -2,12 +2,12 @@ require File.expand_path(File.dirname(__FILE__) + '/../../spec_helper')
 
 describe "/sources/index.html.erb" do
   include SourcesHelper
-  
+
   before(:each) do
-    source_98 = mock_model(Source)
-    source_98.should_receive(:url).and_return("MyString")
-    source_99 = mock_model(Source)
-    source_99.should_receive(:url).and_return("MyString")
+    source_98 = stub_model(Source)
+    source_98.should_receive(:url).any_number_of_times.and_return("MyString")
+    source_99 = stub_model(Source)
+    source_99.should_receive(:url).any_number_of_times.and_return("MyString")
 
     assigns[:sources] = [source_98, source_99]
   end

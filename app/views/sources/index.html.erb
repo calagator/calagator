@@ -8,7 +8,9 @@
 
 <% sources_by_recurring = @sources.group_by{|source| source.reimport == true} %>
 <% for kind in [true, false] %>
-  <% for source in [sources_by_recurring[kind]].flatten.sort_by{|source| source.url} %>
+  <% sources = sources_by_recurring[kind] %>
+  <% next if sources.blank? %>
+  <% for source in sources.sort_by{|source| source.url} %>
   <tr>
     <td><%= kind %></td>
     <td><%=h source.url %></td>
