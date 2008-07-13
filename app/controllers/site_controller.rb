@@ -1,5 +1,7 @@
 class SiteController < ApplicationController
 
+  caches_action :style
+
   # Raise exception, mostly for confirming that exception_notification works
   def omfg
     raise ArgumentError, "OMFG"
