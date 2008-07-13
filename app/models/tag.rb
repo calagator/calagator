@@ -30,7 +30,7 @@ class Tag < ActiveRecord::Base
       :parent_extend => proc {
         # Defined on the taggable models, not on Tag itself. Return the tagnames associated with this record as a string.
         def to_s
-          self.map(&:name).sort.join(Tag::DELIMITER)
+          self.map(&:name).sort.join("#{Tag::DELIMITER} ")
         end
       }
     
