@@ -31,7 +31,9 @@ describe Event do
     end
     
     it "should tag itself if it is an extant record" do 
-      @event.stub!(:new_record?).and_return(false)
+      # On next line, please retain the space between the "?" and ")";
+      # it solves a fold issue in the SciTE text editor
+      @event.stub!(:new_record? ).and_return(false)
       @event.should_receive(:tag_with).with(@tags).and_return(@event)
       @event.tag_list = @tags
     end
@@ -50,7 +52,7 @@ describe Event do
       @event.tag_list = @tags
       @event.save
     end
-  
+
   end
 
   describe "when parsing" do
@@ -120,15 +122,8 @@ describe Event do
 
   describe "when processing date" do
 
-    it "should find all events within a given date range" do
-      Event.should_receive(:find).with(:all,
-        :conditions => ["events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?", Time.parse(Date.today.to_s), Time.parse(Date.tomorrow.to_s)+1.day-1.second],
-        :order => 'start_time',
-        :include => :venue)
-      Event.find_by_dates(Date.today, Date.tomorrow)
-    end
-
-  it "should find all events with duplicate titles" do
+    # TODO: write integration specs for the following 2 tests
+    it "should find all events with duplicate titles" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
       Event.find_duplicates_by(:title)
     end
@@ -151,36 +146,66 @@ describe Event do
 
     before(:all) do
       @now = Time.now
+      @now_midnight = @now.beginning_of_day
+      @yesterday = @now.yesterday
+      @tomorrow = @now.tomorrow
 
       @started_before_today_and_ends_after_today = Event.new(
         :title => "Event in progress",
-        :start_time => @now - 2.days,
-        :end_time => @now + 2.days)
+        :start_time => @yesterday,
+        :end_time => @tomorrow)
       @started_before_today_and_ends_after_today.save!
 
       @started_midnight_and_continuing_after = Event.new(
         :title => "Midnight start",
-        :start_time => Time.now.beginning_of_day,
-        :end_time => @now + 2.days)
+        :start_time => @now_midnight,
+        :end_time => @tomorrow)
       @started_midnight_and_continuing_after.save!
 
-      @started_before_and_ended_yesterday = Event.new(
+      @started_and_ended_yesterday = Event.new(
         :title => "Yesterday start",
-        :start_time => @now - 2.days,
-        :end_time => Time.now.beginning_of_day-1.second)
-      @started_before_and_ended_yesterday.save!
-   end
+        :start_time => @yesterday,
+        :end_time => @yesterday.end_of_day)
+      @started_and_ended_yesterday.save!
+      
+      @started_today_and_no_end_time = Event.new(
+        :title => "nil end time",
+        :start_time => @now,
+        :end_time => nil)
+      @started_today_and_no_end_time.save!
+      
+      @starts_and_ends_tomorrow = Event.new(
+        :title => "starts and ends tomorrow",
+        :start_time => @tomorrow,
+        :end_time => @tomorrow.end_of_day)
+      @starts_and_ends_tomorrow.save!
+    end
 
     describe "for overview" do
-      it "should include events that started earlier today" do
+      # TODO:  consider writing the following specs as view specs
+      # either in addition to, or instead of, model specs
+      
+      it "Today events should include events that started before today and end after today" do
+        events = Event.select_for_overview[:today]
+        events.should include(@started_before_today_and_ends_after_today)
+      end
+
+      it "Today should include events that started earlier today" do
         events = Event.select_for_overview[:today]
         events.should include(@started_midnight_and_continuing_after)
       end
 
-      it "should not include events that ended before today" do
+      it "Today should not include events that ended before today" do
         events = Event.select_for_overview[:today]
-        events.should_not include(@started_before_and_ended_yesterday)
+        events.should_not include(@started_and_ended_yesterday)
       end
+      
+      it "Today should not include events that started after today" do
+      pending "Today should not include events that started after today"
+        events = Event.select_for_overview[:today]
+        events.should_not include(@starts_and_ends_tomorrow)
+      end
+      
     end
 
     describe "for future events" do
@@ -189,40 +214,47 @@ describe Event do
         events.should include(@started_midnight_and_continuing_after)
       end
 
-      it "should include events that started before today" do
+      it "should include events with no end time that started today" do
+        events = Event.find_future_events
+        events.should include(@started_today_and_no_end_time)
+      end
+      
+      it "should include events that started before today and ended after today" do
         events = Event.find_future_events("start_time")
         events.should include(@started_before_today_and_ends_after_today)
       end
 
       it "should not include events that ended before today" do
         events = Event.find_future_events
-        events.should_not include(@started_before_and_ended_yesterday)
+        events.should_not include(@started_and_ended_yesterday)
       end
     end
 
     describe "for date range" do
       it "should include events that started earlier today" do
-        events = Event.find_by_dates(Time.now.beginning_of_day, Time.now+1.day, order = "start_time")
+        events = Event.find_by_dates(@now_midnight, @tomorrow, order = "start_time")
         events.should include(@started_midnight_and_continuing_after)
       end
 
-      it "should include events that started before today" do
-        pending "should include events that started before today" 
-        events = Event.find_by_dates(Time.now.beginning_of_day, Time.now+1.day, order = "start_time")
+      it "should include events with no end time that started today" do
+        events = Event.find_future_events
+        events.should include(@started_today_and_no_end_time)
+      end
+      
+      it "should include events that started before today and end after today" do
+        events = Event.find_by_dates(@now_midnight, @tomorrow, order = "start_time")
         events.should include(@started_before_today_and_ends_after_today)
       end
 
       it "should not include past events" do
-        events = Event.find_by_dates(Time.now.beginning_of_day, Time.now+1.day, order = "start_time")
-        events.should_not include(@started_before_and_ended_yesterday)
+        events = Event.find_by_dates(@now_midnight, @tomorrow, order = "start_time")
+        events.should_not include(@started_and_ended_yesterday)
       end
-
-      # TODO figure out what this example was meant to do
-      #it "should include events ongoing at the start of the range" do
-      #  pending "should include events ongoing at the start of the range"
-      #  events = Event.find_by_dates(@now - 1.days, @now + 1.days)
-      #  events.should include(@started_before_today_and_ends_after_today)
-      #end
+      
+      it "should exclude events that start after the end of the range" do
+        events = Event.find_by_dates(@tomorrow, @tomorrow, order = "start_time")
+        events.should_not include(@started_today_and_no_end_time)
+      end
     end
   end
 

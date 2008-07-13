@@ -16,24 +16,6 @@
 #  end_time        :datetime
 #
 
-# == Schema Information
-# Schema version: 20080704045101
-#
-# Table name: events
-#
-#  id              :integer         not null, primary key
-#  title           :string(255)     
-#  description     :text            
-#  start_time      :datetime        
-#  venue_id        :integer         
-#  url             :string(255)     
-#  created_at      :datetime        
-#  updated_at      :datetime        
-#  source_id       :integer         
-#  duplicate_of_id :integer         
-#  duration        :integer         
-#
-
 # == Event
 #
 # A model representing a calendar event.
@@ -125,10 +107,10 @@ class Event < ActiveRecord::Base
   #     :later => [...],
   #   }
   def self.select_for_overview
-    today = Time.today.beginning_of_day
+    today = Time.today.beginning_of_day.utc
     tomorrow = today + 1.day
     after_tomorrow = tomorrow + 1.day
-    cutoff = today.utc + 2.weeks
+    future_cutoff = today + 2.weeks
 
     times_to_events = {
       :today    => [],
@@ -136,15 +118,18 @@ class Event < ActiveRecord::Base
       :later    => [],
     }
 
+    # TODO turn this into a call to find_by_dates
     Event.find(:all,
       :include    => :venue,
       :order      => 'start_time ASC',
       :conditions => [
-        '(events.duplicate_of_id is NULL) AND (start_time >= ? AND start_time < ?)',
-        today.utc, cutoff
+        # event is out of range if its start_time is after the future cutoff
+        # OR its end_time is before today
+        'events.duplicate_of_id is NULL AND NOT ((start_time > ?) OR (end_time < ?) )',
+        future_cutoff, today 
       ]
     ).each do |event|
-      if event.start_time >= today && event.start_time <= tomorrow
+      if event.start_time <= tomorrow
         times_to_events[:today]    << event
       elsif event.start_time >= tomorrow && event.start_time <= after_tomorrow
         times_to_events[:tomorrow] << event
@@ -157,6 +142,8 @@ class Event < ActiveRecord::Base
   end
 
   # Returns an Array of non-duplicate future Event instances.
+  # where "future" means any part of an event occurs today or later
+  # TODO: fix this to simply call find_by_dates
   #
   # Options:
   # * :order => How to sort events. Defaults to :start_time.
@@ -164,10 +151,11 @@ class Event < ActiveRecord::Base
   def self.find_future_events(opts={})
     today = Time.now.beginning_of_day.utc
     order = opts[:order] || :start_time
-    conditions_sql = "events.duplicate_of_id IS NULL AND (events.end_time >= :start_time OR events.start_time >= :start_time)"
+    conditions_sql = "events.duplicate_of_id IS NULL AND 
+      (events.end_time >= :early_cutoff OR events.start_time >= :early_cutoff)"
     conditions_vars = {
-      :start_time => today,
-      :end_time => today,
+      :early_cutoff => today,
+      :late_cutoff => today
     }
     if venue = opts[:venue]
       conditions_sql << " AND venues.id == :venue"
@@ -181,14 +169,17 @@ class Event < ActiveRecord::Base
   end
 
   # Returns an Array of non-duplicate Event instances within a given date range
-  def self.find_by_dates(start_date, end_date, order='start_time')
-    start_date = Time.parse(start_date.to_s) if start_date.is_a?(Date)
-    end_date = Time.parse(end_date.to_s).end_of_day if end_date.is_a?(Date)
+  # where "within" means that any part of an event is within the range
+  # event is out of range if its start_time is after the late cutoff
+  # OR its end_time is before the early cutoff
+  def self.find_by_dates(early_cutoff, late_cutoff, order='start_time')
+    early_cutoff = Time.parse(early_cutoff.to_s) if early_cutoff.is_a?(Date)
+    late_cutoff = Time.parse(late_cutoff.to_s).end_of_day if late_cutoff.is_a?(Date)
 
     find(:all,
       :conditions => [
-        'events.duplicate_of_id is NULL AND start_time >= ? AND start_time <= ?',
-        start_date.utc, end_date.utc
+        'events.duplicate_of_id is NULL AND NOT (start_time > ? OR (end_time < ?) )',
+        late_cutoff.utc, early_cutoff.utc
       ],
       :include => :venue,
       :order => order)
