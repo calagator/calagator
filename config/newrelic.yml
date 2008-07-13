@@ -92,3 +92,7 @@ staging:
   <<: *default_settings
   enabled: true
 
+preview:
+  <<: *default_settings
+  enabled: false
+  developer: true
