@@ -111,7 +111,7 @@ class Event < ActiveRecord::Base
   #     :later => [...],
   #   }
   def self.select_for_overview
-    today = Time.today.beginning_of_day.utc
+    today = Time.today.beginning_of_day
     tomorrow = today + 1.day
     after_tomorrow = tomorrow + 1.day
     future_cutoff = today + 2.weeks
@@ -124,11 +124,11 @@ class Event < ActiveRecord::Base
 
     # find all events between today and future_cutoff, sorted by start_time
     # includes events any part of which occurs on or after today through on or after future_cutoff
-    overview_events = Event.find_by_dates(today, future_cutoff, :order => :start_time)
+    overview_events = Event.find_by_dates(today.utc, future_cutoff, :order => :start_time)
     overview_events.each do |event|
-      if event.start_time <= tomorrow
+      if event.start_time < tomorrow
         times_to_events[:today]    << event
-      elsif event.start_time >= tomorrow && event.start_time <= after_tomorrow
+      elsif event.start_time >= tomorrow && event.start_time < after_tomorrow
         times_to_events[:tomorrow] << event
       else
         times_to_events[:later]    << event

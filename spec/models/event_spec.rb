@@ -147,8 +147,8 @@ describe Event do
     before(:all) do
       @now = Time.now
       @now_midnight = @now.beginning_of_day
-      @yesterday = @now.yesterday
-      @tomorrow = @now.tomorrow
+      @yesterday = @now.yesterday.beginning_of_day
+      @tomorrow = @now.tomorrow.beginning_of_day
 
       @started_before_today_and_ends_after_today = Event.new(
         :title => "Event in progress",
@@ -200,12 +200,19 @@ describe Event do
         events.should_not include(@started_and_ended_yesterday)
       end
       
-      it "Today should not include events that started after today" do
-      pending "Today should not include events that started after today"
+      it "Today should not include events that start tomorrow" do
         events = Event.select_for_overview[:today]
         events.should_not include(@starts_and_ends_tomorrow)
       end
       
+      it "Tomorrow should not include events that start after tomorrow" do
+      @starts_after_tomorrow = Event.new(
+        :title => "Starting after tomorrow",
+        :start_time => @tomorrow.tomorrow.beginning_of_day)
+      @starts_after_tomorrow.save!
+        events = Event.select_for_overview[:tomorrow]
+        events.should_not include(@starts_after_tomorrow)
+      end
     end
 
     describe "for future events" do
