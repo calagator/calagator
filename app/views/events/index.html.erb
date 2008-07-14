@@ -1,6 +1,6 @@
 
 <div id='list_description'>
-  <h2>Viewing all <strong><%= @events.size %></strong> <%= 'future' unless params[:date] %> events.</h2>
+  <h2>Viewing all <strong><%= @events.size %></strong> <%= 'future' unless params[:date] %><%= 'filtered' if params[:date] %> events.</h2>
 </div>
 
 <div id='list_items'>
