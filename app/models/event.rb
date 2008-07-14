@@ -37,6 +37,10 @@ class Event < ActiveRecord::Base
   unless RAILS_ENV == 'test'
       acts_as_solr :fields => INDEXABLE_FIELDS
   end
+
+  # last Time representable in certain operating systems is Jan 18 2038, local time
+  # TODO:  if possible, change this to the last Time representable in this server's op sys
+  END_OF_TIME = Time.local(2038, 01, 18).yesterday.end_of_day.utc
   
   # Associations
   belongs_to :venue
@@ -118,17 +122,10 @@ class Event < ActiveRecord::Base
       :later    => [],
     }
 
-    # TODO turn this into a call to find_by_dates
-    Event.find(:all,
-      :include    => :venue,
-      :order      => 'start_time ASC',
-      :conditions => [
-        # event is out of range if its start_time is after the future cutoff
-        # OR its end_time is before today
-        'events.duplicate_of_id is NULL AND NOT ((start_time > ?) OR (end_time < ?) )',
-        future_cutoff, today 
-      ]
-    ).each do |event|
+    # find all events between today and future_cutoff, sorted by start_time
+    # includes events any part of which occurs on or after today through on or after future_cutoff
+    overview_events = Event.find_by_dates(today, future_cutoff, :order => :start_time)
+    overview_events.each do |event|
       if event.start_time <= tomorrow
         times_to_events[:today]    << event
       elsif event.start_time >= tomorrow && event.start_time <= after_tomorrow
@@ -143,20 +140,37 @@ class Event < ActiveRecord::Base
 
   # Returns an Array of non-duplicate future Event instances.
   # where "future" means any part of an event occurs today or later
-  # TODO: fix this to simply call find_by_dates
-  #
   # Options:
   # * :order => How to sort events. Defaults to :start_time.
   # * :venue => Which venue to display events for. Defaults to all.
   def self.find_future_events(opts={})
-    today = Time.now.beginning_of_day.utc
     order = opts[:order] || :start_time
-    conditions_sql = "events.duplicate_of_id IS NULL AND 
-      (events.end_time >= :early_cutoff OR events.start_time >= :early_cutoff)"
+    venue = opts[:venue]
+    Event.find_by_dates(Time.now.beginning_of_day.utc, END_OF_TIME, :order => order, :venue => venue)
+  end
+
+  # Returns an Array of non-duplicate Event instances in a date range
+  # includes event if any part of the event is (on or after the start) and (on or before the end)
+  # Options:
+  # * :order => How to sort events. Defaults to :start_time.
+  # * :venue => Which venue to display events for. Defaults to all.
+  def self.find_by_dates(start_of_range, end_of_range, opts={})
+    start_of_range = Time.parse(start_of_range.to_s) if start_of_range.is_a?(Date)
+    end_of_range = Time.parse(end_of_range.to_s).end_of_day if end_of_range.is_a?(Date)
+    order = opts [:order] || :start_time
+
+  # an event with an end_time is out of range if
+  # its start_time is after the end of range OR its end_time is before the start of the range
+  # otherwise (an event with an end_time), event is in range if its start_time is in range
+  # Query is complex because SQL has tertiary logic for NUll and end_time may be NULL
+    conditions_sql = "events.duplicate_of_id is NULL AND
+      (NOT (start_time > :end_of_range OR end_time < :start_of_range ) OR
+      (start_time >= :start_of_range AND start_time <= :end_of_range) )"
+
     conditions_vars = {
-      :early_cutoff => today,
-      :late_cutoff => today
-    }
+      :start_of_range => start_of_range.utc, 
+      :end_of_range => end_of_range.utc }
+
     if venue = opts[:venue]
       conditions_sql << " AND venues.id == :venue"
       conditions_vars[:venue] = venue.id
@@ -164,23 +178,6 @@ class Event < ActiveRecord::Base
 
     return find(:all,
       :conditions => [conditions_sql, conditions_vars],
-      :include => :venue,
-      :order => order)
-  end
-
-  # Returns an Array of non-duplicate Event instances within a given date range
-  # where "within" means that any part of an event is within the range
-  # event is out of range if its start_time is after the late cutoff
-  # OR its end_time is before the early cutoff
-  def self.find_by_dates(early_cutoff, late_cutoff, order='start_time')
-    early_cutoff = Time.parse(early_cutoff.to_s) if early_cutoff.is_a?(Date)
-    late_cutoff = Time.parse(late_cutoff.to_s).end_of_day if late_cutoff.is_a?(Date)
-
-    find(:all,
-      :conditions => [
-        'events.duplicate_of_id is NULL AND NOT (start_time > ? OR (end_time < ?) )',
-        late_cutoff.utc, early_cutoff.utc
-      ],
       :include => :venue,
       :order => order)
   end
@@ -320,7 +317,7 @@ EOF
         end
 
         # dtstamp and uid added because of a bug in Outlook;
-        # Outlook 2003 will not import and .ics file unless it has DTSTAMP, UID, and METHOD
+        # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
         # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
         c.dtstamp       event.created_at || event.start_time
         # TODO substitute correct environment variables for "http://calagator.org/events/"
