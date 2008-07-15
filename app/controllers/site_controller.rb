@@ -1,6 +1,4 @@
 class SiteController < ApplicationController
-  caches_page :style
-  
   caches_action :style
 
   # Raise exception, mostly for confirming that exception_notification works
