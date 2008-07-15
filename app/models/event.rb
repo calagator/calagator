@@ -182,6 +182,8 @@ class Event < ActiveRecord::Base
       :order => order)
   end
 
+  #---[ Solr searching ]--------------------------------------------------
+
   # How similar should terms be to qualify as a match? This value should be
   # close to zero because Lucene's implementation of fuzzy matching is
   # defective, e.g., at 0.5 it can't even realize that "meetin" is similar to
@@ -238,6 +240,34 @@ class Event < ActiveRecord::Base
   def self.search_grouped_by_currentness(*args)
     results = self.search(*args).group_by(&:current?)
     return {:current => results[true] || [], :past => results[false] || []}
+  end
+
+  #---[ Solr helpers ]----------------------------------------------------
+
+  SOLR_TIME_FORMAT = '%Y%m%d%H%M'
+  SOLR_TIME_LENGTH = Time.now.strftime(SOLR_TIME_FORMAT).length
+  SOLR_TIME_MAXIMUM = ('9' * SOLR_TIME_LENGTH).to_i
+
+  # Return a purely numeric representation of the start_time
+  def start_time_for_solr
+    time = self.start_time
+    time ? time.utc.strftime(SOLR_TIME_FORMAT).to_i : nil
+  end
+
+  # Return a purely numeric representation of the end_time
+  def end_time_for_solr
+    time = self.end_time
+    time ? time.utc.strftime(SOLR_TIME_FORMAT).to_i : nil
+  end
+
+  # Returns value for whether the record is a duplicate or not
+  def duplicate_for_solr
+    self.duplicate_of_id.blank? ? 0 : 1
+  end
+
+  # Return a string of all indexable fields, which may be useful for doing duplicate checks
+  def text_for_solr
+    INDEXABLE_FIELDS.reject{|name| name == :text_for_solr}.map{|name| self.send(name)}.join("|")
   end
 
   #---[ Transformations ]-------------------------------------------------
@@ -360,34 +390,6 @@ EOF
   def old?(cutoff=nil)
     cutoff ||= Time.now.yesterday
     return (self.end_time || self.start_time) < cutoff
-  end
-
-  #---[ Solr helpers ]----------------------------------------------------
-
-  SOLR_TIME_FORMAT = '%Y%m%d%H%M'
-  SOLR_TIME_LENGTH = Time.now.strftime(SOLR_TIME_FORMAT).length
-  SOLR_TIME_MAXIMUM = ('9' * SOLR_TIME_LENGTH).to_i
-
-  # Return a purely numeric representation of the start_time
-  def start_time_for_solr
-    time = self.start_time
-    time ? time.utc.strftime(SOLR_TIME_FORMAT).to_i : nil
-  end
-
-  # Return a purely numeric representation of the end_time
-  def end_time_for_solr
-    time = self.end_time
-    time ? time.utc.strftime(SOLR_TIME_FORMAT).to_i : nil
-  end
-
-  # Returns value for whether the record is a duplicate or not
-  def duplicate_for_solr
-    self.duplicate_of_id.blank? ? 0 : 1
-  end
-
-  # Return a string of all indexable fields, which may be useful for doing duplicate checks
-  def text_for_solr
-    INDEXABLE_FIELDS.reject{|name| name == :text_for_solr}.map{|name| self.send(name)}.join("|")
   end
 
 protected
