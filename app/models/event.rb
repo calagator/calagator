@@ -182,6 +182,18 @@ class Event < ActiveRecord::Base
       :order => order)
   end
 
+  # Return Hash of Events grouped by the +type+.
+  def self.find_duplicates_by_type(type='title')
+    if type == 'na'
+      return { [] => self.find_future_events }
+    else
+      kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
+      return self.find_duplicates_by(kind,
+        :grouped => true,
+        :where => "a.start_time >= #{self.connection.quote(Time.now - 1.day)}")
+    end
+  end
+
   #---[ Solr searching ]--------------------------------------------------
 
   # How similar should terms be to qualify as a match? This value should be

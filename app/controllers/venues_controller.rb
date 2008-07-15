@@ -110,15 +110,11 @@ class VenuesController < ApplicationController
   # GET /venues/duplicates
   def duplicates
     @type = params[:type] || 'title'
-
-    if @type == 'na'
-      # Use find to get an Array of all non-duplicates in title order,
-      # make it a Hash so it takes the same form as find_duplicates_by(:grouped => true)
-      # so that the duplicate template will display it properly
-      @grouped_venues = { [] => Venue.find(:non_duplicates, :order => 'lower(title)') }
-    else
-      @type = ['all','any'].include?(@type) ? @type.to_sym : @type.split(',')
-      @grouped_venues = Venue.find_duplicates_by(@type, :grouped => true)
+    begin
+      @grouped_venues = Venue.find_duplicates_by_type(@type)
+    rescue ArgumentError => e
+      @grouped_venues = {}
+      flash[:failure] = "#{e}"
     end
 
     @page_title = "Duplicate Venue Squasher"

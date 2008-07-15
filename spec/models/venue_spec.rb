@@ -1,5 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+# TODO consider converting this to nested describe statements, similar to event_spec
+
 describe Venue do
 
   it "should be valid" do
@@ -14,6 +16,7 @@ describe Venue do
 
 end
 
+# TODO extract to source_parser_hcal
 describe Venue, "with hCalendar to AbstractEvent parsing" do
   it "should extract an AbstractEvent from an hCalendar text" do
     hcal_upcoming = read_sample('hcal_upcoming.xml')
@@ -55,7 +58,7 @@ describe Venue, "when finding exact duplicates" do
   end
 end
 
-describe Venue, "with duplicate finder" do
+describe Venue, "with finding duplicates" do
   it "should find all venues with duplicate titles" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
     Venue.find(:duplicates, :by => :title )
@@ -67,19 +70,21 @@ describe Venue, "with duplicate finder" do
   end
 
   it "should find all venues that have not been marked as duplicate" do
-    #IK# Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NULL")
     Venue.should_receive(:find_without_duplicate_support).with(:all, {})
     Venue.find(:non_duplicates)
   end
 
   it "should find all venues that have been marked as duplicate" do
-    #IK# Venue.should_receive(:find_without_duplicate_support).with(:all, :conditions => "duplicate_of_id IS NOT NULL")
     Venue.should_receive(:find_without_duplicate_support).with(:all, {})
     Venue.find(:marked_duplicates)
   end
+
+  it "should find duplicates by type" do
+    pending # Venue.find_duplicates_by_type
+  end
 end
 
-describe Venue, "with duplicate finder (integration test)" do
+describe Venue, "with finding duplicates (integration test)" do
   fixtures :venues
 
   before(:each) do

@@ -88,6 +88,16 @@ class Venue < ActiveRecord::Base
     Event.find_future_events(opts)
   end
 
+  # Return Hash of Venues grouped by the +type+.
+  def self.find_duplicates_by_type(type='title')
+    if type == 'na'
+      return { [] => self.find(:non_duplicates, :order => 'lower(title)')}
+    else
+      kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
+      return self.find_duplicates_by(kind, :grouped => true)
+    end
+  end
+
   #===[ Address helpers ]=================================================
 
   # Does this venue have any address information?

@@ -133,15 +133,22 @@ module DuplicateChecking
           end
         end
       else
+        matched = false
         fields = [fields].flatten
         fields.each do |attr|
-            query += " a.#{attr} = b.#{attr} AND" if attributes.include?(attr.to_s)
+          if attributes.include?(attr.to_s)
+            query += " a.#{attr} = b.#{attr} AND" 
+            matched = true
+          else
+            raise ArgumentError, "Unknow fields: #{fields.inspect}"
+          end
         end
         order = fields.join(',a.')
         matched_fields = lambda {|r| fields.map {|f| r.read_attribute(f.to_sym) }}
       end
       order ||= 'id'
-      query = query[0..-4] + ") ORDER BY a.#{order}"
+      # Remove last word from the query, e.g., "AND", and specify the order
+      query.sub!(/\s+\S+\s*$/, " ) ORDER BY a.#{order}")
 
       RAILS_DEFAULT_LOGGER.debug("find_duplicates_by: SQL -- #{query}")
       records = find_by_sql(query) || []

@@ -339,4 +339,10 @@ describe Event do
       lambda { @event.associate_with_venue(mock_model(SourceParser)) }.should raise_error(TypeError)
     end
   end
+
+  describe "when finding duplicates" do
+    it "should find duplicates by type" do
+      pending # Event.find_duplicates_by_type
+    end
+  end
 end
