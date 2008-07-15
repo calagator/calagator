@@ -71,7 +71,12 @@ development:
   # performance analysis.  To see high level performance information of your app
   # in development mode, simply point your browser to http://localhost:3000/newrelic
   developer: true
-
+  
+preview:
+  <<: *default_settings
+  enabled: true
+  developer: true
+  
 test:
   <<: *default_settings
   # it almost never makes sense to turn on the agent when running unit, functional or
