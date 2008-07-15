@@ -185,33 +185,38 @@ describe Event do
       # TODO:  consider writing the following specs as view specs
       # either in addition to, or instead of, model specs
       
-      it "Today events should include events that started before today and end after today" do
-        events = Event.select_for_overview[:today]
-        events.should include(@started_before_today_and_ends_after_today)
+      describe "events today" do
+        it "should include events that started before today and end after today" do
+          events = Event.select_for_overview[:today]
+          events.should include(@started_before_today_and_ends_after_today)
+        end
+
+        it "should include events that started earlier today" do
+          events = Event.select_for_overview[:today]
+          events.should include(@started_midnight_and_continuing_after)
+        end
+
+        it "should not include events that ended before today" do
+          events = Event.select_for_overview[:today]
+          events.should_not include(@started_and_ended_yesterday)
+        end
+
+        it "should not include events that start tomorrow" do
+          events = Event.select_for_overview[:today]
+          events.should_not include(@starts_and_ends_tomorrow)
+        end
       end
 
-      it "Today should include events that started earlier today" do
-        events = Event.select_for_overview[:today]
-        events.should include(@started_midnight_and_continuing_after)
-      end
+      describe "events tomorrow" do
+        it "should not include events that start after tomorrow" do
+          @starts_after_tomorrow = Event.new(
+            :title => "Starting after tomorrow",
+            :start_time => @tomorrow.tomorrow.beginning_of_day)
+          @starts_after_tomorrow.save!
+          events = Event.select_for_overview[:tomorrow]
 
-      it "Today should not include events that ended before today" do
-        events = Event.select_for_overview[:today]
-        events.should_not include(@started_and_ended_yesterday)
-      end
-      
-      it "Today should not include events that start tomorrow" do
-        events = Event.select_for_overview[:today]
-        events.should_not include(@starts_and_ends_tomorrow)
-      end
-      
-      it "Tomorrow should not include events that start after tomorrow" do
-      @starts_after_tomorrow = Event.new(
-        :title => "Starting after tomorrow",
-        :start_time => @tomorrow.tomorrow.beginning_of_day)
-      @starts_after_tomorrow.save!
-        events = Event.select_for_overview[:tomorrow]
-        events.should_not include(@starts_after_tomorrow)
+          events.should_not include(@starts_after_tomorrow)
+        end
       end
     end
 
