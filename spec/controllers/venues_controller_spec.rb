@@ -25,4 +25,10 @@ describe VenuesController do
     response.should redirect_to(venue_url(venue_master.id))
   end
 
+  it "should display an error message if given invalid arguments" do
+    get 'duplicates', :type => 'omgwtfbbq'
+
+    response.should be_success
+    response.should have_tag('.failure', :text => /omgwtfbbq/)
+  end
 end
