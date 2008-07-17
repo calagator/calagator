@@ -1,7 +1,7 @@
 namespace :sources do
   Rake::Task[:environment].invoke
   # How old should a source be before it needs to be refreshed?
-  SOURCE_STALE = DateTime.now - 2.days
+  SOURCE_STALE = DateTime.now - 1.days
 
   # How old should an update be before it needs to be deleted?
   UPDATE_STALE = DateTime.now - 2.weeks
