@@ -1,0 +1,14 @@
+<div class="vevent">
+  <a href="http://www.france.gov.fr" class="url">
+  <abbr title="20080714" class="dtstart"></abbr>,
+  <span class="summary">Bastille Day</span> at
+  <span class="location">Arc de Triomphe</span></a>
+  <div class="description">Alors!</div>
+</div>`
+<div class="vevent">
+  <a href="http://www.france.gov.fr" class="url">
+  <abbr title="20080714" class="dtstart"></abbr>,
+  <span class="summary">Bastille Day</span> at
+  <span class="location">Arc de Triomphe</span></a>
+  <div class="description">Alors!</div>
+</div>`

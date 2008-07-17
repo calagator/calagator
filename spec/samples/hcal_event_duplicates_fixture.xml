@@ -1,0 +1,13 @@
+<div class="vevent">
+  <a class="url" href="http://www.web2con.com/">http://www.web2con.com/</a>
+  <span class="summary">Web 2.0 Conference</span>:
+  <abbr class="dtstart" title="2007-10-05 00:00:00">Friday, October 5, 2007</abbr>,
+  at the
+  <div class="venue location vcard">
+    <span class="fn org"><a href="/venue/40384/">CubeSpace2</a></span><br />
+    <div class="address adr">
+      <span class="street-address">622 SE Grand Ave.</span><br />
+      <span class="locality">Portland</span>, <span class="region">OR</span> <span class="postal-code">97204</span>
+    </div>
+  </div>
+</div>
