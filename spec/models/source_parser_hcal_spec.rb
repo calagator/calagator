@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SourceParser::Hcal, "with hCalendar events" do
   fixtures :events, :venues
 
-it "should parse hcal" do
+  it "should parse hcal" do
     hcal_content = read_sample('hcal_single.xml')
     hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
     SourceParser::Base.should_receive(:read_url).and_return(hcal_content)
@@ -45,5 +45,19 @@ it "should parse hcal" do
     first.end_time.should == Time.parse('2008-01-20')
     second.start_time.should == Time.parse('2008-2-2')
     second.end_time.should == Time.parse('2008-02-03')
+  end
+end
+
+describe SourceParser::Hcal, "with Category" do
+  describe "in event" do
+    it "should parse a Category in an event"
+    it "should parse multiple instances of Category in an event"
+    it "should tag events with each parsed Category"
+  end
+
+  describe "in hCard" do
+    it "should parse a Category in an hCard"
+    it "should parse multiple instances of Category in an hCard"
+    it "should tag venues with each parsed Category"
   end
 end

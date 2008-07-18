@@ -174,6 +174,18 @@ describe SourceParser::Ical, "with iCalendar events" do
 
 end
 
+describe SourceParser::Ical, "with Categories" do
+  describe "in events" do
+    it "should parse Categories within events"
+    it "should tag events with parsed Categories"
+  end
+
+  describe "in vvenues" do
+    it "should parse Categories within vvenues"
+    it "should tag venues with parsed Categories"
+  end
+end
+
 describe SourceParser::Ical, "when importing events with non-local times" do
 
   it "should store time ending in Z as UTC" do
@@ -195,7 +207,7 @@ describe SourceParser::Ical, "when importing events with non-local times" do
 end
 
   it "should store time with TZID=GMT in UTC" do
-    pending "not implemented - requires VPIM fix or work-around"
+    pending "not activated - requires VPIM fix or work-around"
     events = events_from_ical_at('ical_gmt.ics')
     events.size.should == 1
     abstract_event = events.first
