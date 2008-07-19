@@ -162,10 +162,9 @@ describe Event do
   describe "when finding by dates" do
 
     before(:all) do
-      @now = Time.today
-      @now_midnight = Time.today
-      @yesterday = @now_midnight.yesterday
-      @tomorrow = @now_midnight.tomorrow
+      @today_midnight = Time.today
+      @yesterday = @today_midnight.yesterday
+      @tomorrow = @today_midnight.tomorrow
 
       @started_before_today_and_ends_after_today = Event.create(
         :title => "Event in progress",
@@ -174,7 +173,7 @@ describe Event do
 
       @started_midnight_and_continuing_after = Event.create(
         :title => "Midnight start",
-        :start_time => @now_midnight,
+        :start_time => @today_midnight,
         :end_time => @tomorrow)
 
       @started_and_ended_yesterday = Event.create(
@@ -259,17 +258,17 @@ describe Event do
 
     describe "for date range" do
       it "should include events that started earlier today" do
-        events = Event.find_by_dates(@now_midnight, @tomorrow, order = "start_time")
+        events = Event.find_by_dates(@today_midnight, @tomorrow, order = "start_time")
         events.should include(@started_midnight_and_continuing_after)
       end
 
       it "should include events that started before today and end after today" do
-        events = Event.find_by_dates(@now_midnight, @tomorrow, order = "start_time")
+        events = Event.find_by_dates(@today_midnight, @tomorrow, order = "start_time")
         events.should include(@started_before_today_and_ends_after_today)
       end
 
       it "should not include past events" do
-        events = Event.find_by_dates(@now_midnight, @tomorrow, order = "start_time")
+        events = Event.find_by_dates(@today_midnight, @tomorrow, order = "start_time")
         events.should_not include(@started_and_ended_yesterday)
       end
 
