@@ -162,45 +162,39 @@ describe Event do
   describe "when finding by dates" do
 
     before(:all) do
-      @now = Time.now
-      @now_midnight = @now.beginning_of_day
-      @yesterday = @now.yesterday.beginning_of_day
-      @tomorrow = @now.tomorrow.beginning_of_day
+      @now = Time.today
+      @now_midnight = Time.today
+      @yesterday = @now_midnight.yesterday
+      @tomorrow = @now_midnight.tomorrow
 
-      @started_before_today_and_ends_after_today = Event.new(
+      @started_before_today_and_ends_after_today = Event.create(
         :title => "Event in progress",
         :start_time => @yesterday,
         :end_time => @tomorrow)
-      @started_before_today_and_ends_after_today.save!
 
-      @started_midnight_and_continuing_after = Event.new(
+      @started_midnight_and_continuing_after = Event.create(
         :title => "Midnight start",
         :start_time => @now_midnight,
         :end_time => @tomorrow)
-      @started_midnight_and_continuing_after.save!
 
-      @started_and_ended_yesterday = Event.new(
+      @started_and_ended_yesterday = Event.create(
         :title => "Yesterday start",
         :start_time => @yesterday,
         :end_time => @yesterday.end_of_day)
-      @started_and_ended_yesterday.save!
 
-      @started_today_and_no_end_time = Event.new(
+      @started_today_and_no_end_time = Event.create(
         :title => "nil end time",
         :start_time => @now,
         :end_time => nil)
-      @started_today_and_no_end_time.save!
 
-      @starts_and_ends_tomorrow = Event.new(
+      @starts_and_ends_tomorrow = Event.create(
         :title => "starts and ends tomorrow",
         :start_time => @tomorrow,
         :end_time => @tomorrow.end_of_day)
-      @starts_and_ends_tomorrow.save!
 
-      @starts_after_tomorrow = Event.new(
+      @starts_after_tomorrow = Event.create(
         :title => "Starting after tomorrow",
-        :start_time => @tomorrow.tomorrow.beginning_of_day)
-      @starts_after_tomorrow.save!
+        :start_time => @tomorrow + 1.day)
     end
 
     describe "for overview" do
