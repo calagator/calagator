@@ -3,40 +3,48 @@
 	  <h1 class="summary"><%= h @event.title %></h1>
 	  <div class='date'><%= normalize_time(@event) -%></div>
 		<% unless @event.url.blank? -%>
-	  <%= link_to "Visit the website for this event", @event.url, :class => "url" -%>
-	  <% end -%>
-	  <% unless @event.venue.blank? %>
+	        <%= link_to "Visit the website for this event", @event.url, :class => "url" -%>
+	    <% end -%>
+	    <% unless @event.venue.blank? %>
 	    <div class="location vcard">
 			<%= google_map @event %>
-	    <a class="url" href='<%= url_for venue_url(@event.venue) %>'><span class='fn org'><%= h @event.venue.title -%></span></a>
-	    <div class="adr">
-	      <% if !@event.venue.street_address.blank? -%>
+	        <a class="url" href='<%= url_for venue_url(@event.venue) %>'>
+	            <span class='fn org'><%= h @event.venue.title -%></span>
+	        </a>
+	        <div class="adr">
+	        <% if !@event.venue.street_address.blank? -%>
 	        <div class="street-address"><%= h @event.venue.street_address -%></div>
-	      <% end %>
-	      <% if !@event.venue.locality.blank? -%>
-	        <span class="locality"><%= h @event.venue.locality -%></span>
-	      <% end -%>
-	      <% if !@event.venue.region.blank? -%>
-	        <span class="region"><%= h @event.venue.region -%></span>
-	      <% end -%>
-	      <% if !@event.venue.postal_code.blank? -%>
-	        <span class="postal-code"><%= h @event.venue.postal_code -%></span>
-	      <% end -%>
-	      <% if !@event.venue.country.blank? -%>
-	        <div class='country-name'><%= h @event.venue.country -%></div>
-	      <% end -%>
-	      <% if @event.venue && @event.venue.has_full_address? -%>
-	        (<a href='<%=google_maps_url(@event.venue.full_address) -%>'>map</a>)
-	      <% end -%>
+	        <% end %>
+	        <% if !@event.venue.locality.blank? -%>
+            <span class="locality"><%= h @event.venue.locality -%></span>
+            <% end -%>
+            <% if !@event.venue.region.blank? -%>
+            <span class="region"><%= h @event.venue.region -%></span>
+            <% end -%>
+            <% if !@event.venue.postal_code.blank? -%>
+            <span class="postal-code"><%= h @event.venue.postal_code -%></span>
+            <% end -%>
+            <% if !@event.venue.country.blank? -%>
+            <div class='country-name'><%= h @event.venue.country -%></div>
+            <% end -%>
+            <% if @event.venue && @event.venue.has_full_address? -%>
+            (<a href='<%=google_maps_url(@event.venue.full_address) -%>'>map</a>)
+            <% end -%>
 	    </div>
-	    </div>
+	  </div>
 	  <% end -%>
 	  <% unless @event.description.blank? -%>
-		<h3>Description</h3>
+	  <h3>Description</h3>
 	  <div class="description">
 	    <%= upgrade_br(simple_format(auto_link(white_list(@event.description)))) %>
 	  </div>
 	  <% end -%>
+	  <% unless @event.tags.blank? -%>
+	  <h3>Tags</h3>
+	  <div class="tags">
+	      <%= @event.tag_list %>
+	  </div>
+	  <% end %>
 	</div>
 </div>
         
