@@ -209,6 +209,7 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html
       format.atom { render :template => 'events/index' }
+      format.ics { ical_export(@events) }
     end
   end
 
