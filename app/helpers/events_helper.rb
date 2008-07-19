@@ -8,6 +8,8 @@ module EventsHelper
       'Today'
     elsif record.start_time.strftime('%Y:%j') == (Time.today+1.day).strftime('%Y:%j')
       'Tomorrow'
+    elsif record.start_time.midnight < Time.now.midnight
+      "Started #{record.start_time.strftime('%A')}"
     else
       record.start_time.strftime('%A')
     end
