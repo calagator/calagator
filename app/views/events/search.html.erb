@@ -1,2 +1,5 @@
+<% content_for :discovery_insert do %>
+	<%= auto_discovery_link_tag(:atom, formatted_search_events_url('atom', :query => @query), :title => "Atom: Search Results for '#{@query}'" )%>
+<% end -%>
 <%= render :partial => 'search_section', :locals => {:description => "current", :events => @grouped_events[:current]} %>
 <%= render :partial => 'search_section', :locals => {:description => "past", :events => @grouped_events[:past]} %>

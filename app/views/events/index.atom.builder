@@ -1,5 +1,5 @@
 atom_feed() do |feed|
-  feed.title("Calagator")
+  feed.title("Calagator#{': ' + @page_title if @page_title}")
   unless @events.size == 0
     feed.updated(@events.sort_by(&:updated_at).last.updated_at)
 

@@ -200,6 +200,16 @@ class EventsController < ApplicationController
       return redirect_to(root_path)
     end
     @grouped_events = Event.search_grouped_by_currentness(params[:query], :order => params[:order])
+    
+    # setting @events so that we can reuse the index atom builder
+    @events = @grouped_events[:past] + @grouped_events[:current]
+    
+    @page_title = "Search Results for '#{@query}'"
+    
+    respond_to do |format|
+      format.html
+      format.atom { render :template => 'events/index' }
+    end
   end
 
 protected

@@ -20,7 +20,8 @@
                                 :cache => true %>
 		<%= yield :javascript_insert %>
 		<%= javascript_include_tag 'application'%>
-
+		
+		<%= yield :discovery_insert %>
     <%= auto_discovery_link_tag(:atom, formatted_events_url('atom'), :title => 'Atom: All Events' )%>
   </head>
   <body>
