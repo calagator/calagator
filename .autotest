@@ -1,0 +1,14 @@
+require 'autotest/redgreen'
+
+Autotest.add_hook :run do |autotest|
+    autotest.add_exception(/\.git/)
+    autotest.add_exception(/\.hg/)
+    autotest.add_exception(/\.svn/)
+    autotest.add_exception(/^\.\/config/)
+    autotest.add_exception(/^\.\/coverage/)
+    autotest.add_exception(/^\.\/db/)
+    autotest.add_exception(/^\.\/log/)
+    autotest.add_exception(/^\.\/public/)
+    autotest.add_exception(/^\.\/tmp/)
+    autotest.add_exception(/^\.\/vendor/)
+end

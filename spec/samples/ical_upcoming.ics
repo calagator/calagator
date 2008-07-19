@@ -1,0 +1,36 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+X-WR-CALNAME:Upcoming Event: Ignite Portland
+PRODID:-//Upcoming.org/Upcoming ICS//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTART:20080205T180000
+DTEND:20080205T210000
+TRANSP:TRANSPARENT
+SUMMARY:Ignite Portland
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/390164/ ] If you had five minutes to talk to Portland what would you say? What if you only got 20 slides and they rotated automatically after 15 seconds? Launch a web site? Teach a hack? Talk about recent learnings\, successes\, failures?
+      
+      Come join us for the second Ignite Portland! It's free to attend or present. We hope to have food and drinks\, but we need sponsors for that\, so check out http://www.igniteportland.com for details on attending\, presenting\, or sponsoring!
+      
+      What is Ignite Portland? A bunch of fast-paced\, interesting presentations - 20 slides for 15 seconds each. Our mantra is "share burning ideas" - just about any topic will do\, as long as it's interesting. From tech to crafts to business to just plain fun! There will be time to network and chat after each series of presentations.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/390164/
+UID:http://upcoming.yahoo.com/event/390164/
+DTSTAMP:20071219T160342
+LAST-UPDATED:20071219T160342
+CATEGORIES:Social
+ORGANIZER;CN=tiesque:X-ADDR:http://upcoming.yahoo.com/user/28472/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/61559/":Bagdad Theater and Pub @ 3702 S.E. Hawthorne Blvd\, Portland\, Oregon 97214 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Bagdad Theater and Pub
+ADDRESS:3702 S.E. Hawthorne Blvd
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97214
+GEO:45.5121;-122.626
+URL;X-LABEL=Venue Info:http://www.mcmenamins.com/index.php?loc=9&id=176
+END:VVENUE
+END:VCALENDAR

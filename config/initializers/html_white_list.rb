@@ -1,0 +1,1 @@
+WhiteListHelper.tags += %w(a em i b p strong strike del address blockquote h1 h2 h3 h4 h5 h6 hr pre cite big small img sub sup)

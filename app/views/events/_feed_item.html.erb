@@ -1,0 +1,55 @@
+<div class="vevent">
+	<h1 class="summary"><%= event.title %></h1>
+	<div class='date'><%= normalize_time(event) %></div>
+
+  <% unless event.venue.blank? %>
+    <div class="location vcard">
+		<a href='<%= url_for venue_path(event.venue) %>' class='url'>
+		    <span class='fn org'><%= h event.venue.title %></span>
+		</a>
+		<div class="adr">
+			<% if !event.venue.street_address.blank? %>
+				<div class="street-address"><%= event.venue.street_address %></div>
+			<% end %>
+			<% if !event.venue.locality.blank? %>
+				<span class="locality"><%= event.venue.locality %></span>
+			<% end %>
+			<% if !event.venue.region.blank? %>
+				, <span class="region"><%= event.venue.region %></span>
+			<% end %>
+			<% if !event.venue.postal_code.blank? %>
+				<span class="postal-code"><%= event.venue.postal_code %></span>
+			<% end %>
+			<% if !event.venue.country.blank? %>
+				<div class='country-name'><%= event.venue.country %><div>
+			<% end %>
+      <% if event.venue && event.venue.has_full_address? %>
+        (<a href='<%=google_maps_url(event.venue.full_address)%>'>map</a>)
+      <% end %>
+		</div>
+    </div>
+  <% end %>
+
+  <% unless event.description.blank? %>
+	<div class="description">
+    <%= upgrade_br(auto_link(white_list(event.description))) %>
+	</div>
+  <% end %>
+
+  <% unless event.url.blank? %>
+	<h3>Links</h3>
+	<ul>
+		<li><%= link_to "Website", event.url, :class => "url" %></li>
+	</ul>
+  <% end %>
+
+	<div class='single_view_right'>
+		<a href='<%= event_url(event) %>.ics'>Download to iCal</a>
+		<div id='edit_link'>
+      <p>You can <%= link_to "edit this event", edit_event_url(event) %>.</p>
+		</div>
+		<div id='metadata'>
+      <%= datestamp(event) %>
+		</div>
+	</div>
+</div>

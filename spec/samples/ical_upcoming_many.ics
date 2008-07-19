@@ -1,0 +1,682 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+X-WR-CALNAME:Upcoming: Silicon Florist Events
+PRODID:-//Upcoming.org/Upcoming ICS//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTART:20080709T153000
+DURATION:PT0S
+TRANSP:TRANSPARENT
+SUMMARY:Substance Summit
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/834270/ ] The first in a series of conversations with the Portland creative community to help each other understand how we can be more inclusive\, collaborative and effective. We have been inspired by Portland's creative technology community (Legion of Tech and Silicon Florist to name a few) to help facilitate an environment where we share ideas and create a place that draws the best talent and the best clients to Portland to get the best creative work possible.
+      
+      This is the first of many conversations. We don't expect to solve the world's problems\, let alone ours\, over one beer (or two\, or three...). But if we're going to start\, it might as well be here and now.
+      
+      Location is the Lucky Lab NW Beer Hall
+URL;VALUE=URI:http://upcoming.yahoo.com/event/834270/
+UID:http://upcoming.yahoo.com/event/834270/
+DTSTAMP:20080624T140407
+LAST-UPDATED:20080624T140407
+CATEGORIES:Social
+ORGANIZER;CN=stlandau:X-ADDR:http://upcoming.yahoo.com/user/258412/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/97061/":Lucky Lab beer hall @ 1945 NW Quimby\, Portland\, Oregon US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Lucky Lab beer hall
+ADDRESS:1945 NW Quimby
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:
+GEO:45.5336;-122.692
+URL;X-LABEL=Venue Info:http://www.luckylab.com
+END:VVENUE
+BEGIN:VEVENT
+DTSTART:20080714T180000
+DTEND:20080714T200000
+TRANSP:TRANSPARENT
+SUMMARY:Mobile Love\, Android Style #4
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/732230/ ] come talk about the latest android news over a pint of beer.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/732230/
+UID:http://upcoming.yahoo.com/event/732230/
+DTSTAMP:20080527T182752
+LAST-UPDATED:20080527T182752
+CATEGORIES:Social
+ORGANIZER;CN=donpdonp:X-ADDR:http://upcoming.yahoo.com/user/40450/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/9175/":Lucky Labrador Brew Pub @ 915 SE Hawthorne Boulevard\, Portland\, Oregon 97214 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Lucky Labrador Brew Pub
+ADDRESS:915 SE Hawthorne Boulevard
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97214
+GEO:45.5123;-122.656
+URL;X-LABEL=Venue Info:http://www.luckylab.com/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART:20080716T120000
+DTEND:20080716T140000
+TRANSP:TRANSPARENT
+SUMMARY:Portland Lunch 2.0 at souk
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/840117/ ] The Portland Lunch 2.0 saga continues at flex term office space provider souk \, once again in Old Town on July 16\, 2008. 
+      
+      We won't stop until we have Lunch 2.0 at every\, single business in Old Town.
+      
+      Lunch 2.0 is a Valley phenomenon that you can read about here \, and we're putting a PDX stamp on it.
+      
+      Come one\, come all\, whether geek or not. Have some lunch on souk\, mix and mingle with your fellow Portlanders\, learn about the tech scene in Portland\, go home or back to work happy and full.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/840117/
+UID:http://upcoming.yahoo.com/event/840117/
+DTSTAMP:20080626T083924
+LAST-UPDATED:20080626T083924
+CATEGORIES:Social
+ORGANIZER;CN=Jake Kuramoto:X-ADDR:http://upcoming.yahoo.com/user/164150/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/92822/":souk @ 322 NW 6th Avenue\, suite 200\, Portland\, Oregon 97214 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:souk
+ADDRESS:322 NW 6th Avenue\, suite 200
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97214
+GEO:45.5254;-122.676
+URL;X-LABEL=Venue Info:http://soukllc.com
+END:VVENUE
+BEGIN:VEVENT
+DTSTART:20080716T173000
+DURATION:PT0S
+TRANSP:TRANSPARENT
+SUMMARY:SEMpdx Networking Event
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/840533/ ] Join SEMpdx at this networking event. Meet SEMpdx board members\, network with other Web professionals\, and learn more about membership and sponsorship opportunities.
+      
+      Who: Open to all Internet professionals 
+      What: networking event 
+      Why: networking\, meet SEMpdx\, learn about membership & benefits\, learn a little something about search marketing
+URL;VALUE=URI:http://upcoming.yahoo.com/event/840533/
+UID:http://upcoming.yahoo.com/event/840533/
+DTSTAMP:20080626T113239
+LAST-UPDATED:20080626T113239
+CATEGORIES:Social
+ORGANIZER;CN=SEMpdx:X-ADDR:http://upcoming.yahoo.com/user/125012/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/70028/":Paddy's Bar & Grill @ 65 SW Yamhill St.\, Portland\, Oregon US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Paddy's Bar & Grill
+ADDRESS:65 SW Yamhill St.
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:
+GEO:45.527;-122.674
+URL;X-LABEL=Venue Info:http://upcoming.yahoo.com/venue/70028/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20080717
+DTEND;VALUE=DATE:20080718
+TRANSP:TRANSPARENT
+SUMMARY:Internet Strategy Forum Summit
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/460690/ ] The Internet Strategy Forum Summit is the premiere annual conference from the Internet Strategy Forum\, a professional association for corporate Internet strategists.
+      
+      Attendees of the 5th annual Internet Strategy Forum Summit will engage with our keynote presenters from eMarketer\, Forrester Research\, Disney\, Nike\, Intel\, IBM\, WebTrends and Fandango\, who will share their insights and ideas on how to best leverage the Internet and integrate it into overall business strategy.
+      
+      Presenters confirmed so far include:
+      
+      * Geoffrey Ramsey\, Co-founder & CEO\, eMarketer 
+      * Nancy Bhagat\, Vice President\, Sales and Marketing Group\, Intel 
+      * Daniel Stickel\, new CEO\, WebTrends (formerly with Google) 
+      * Charlene Li\, Vice President & Principal Analyst\, Forrester Research 
+      * Chris Shimojima\, Vice President\, Global Digital Commerce\, Nike 
+      * David Placier\, Vice President\, Consumer Insights & Marketing\, Disney Online 
+      * Shane O'Neill\, Chief Technology Officer\, Fandango 
+      * Mike Moran\, Distinguished Engineer\, IBM\, author (highest-rated speaker at 2007 Summit)
+      
+      There are plenty of opportunities for networking with corporate Internet professionals and Internet-related product and service providers.
+      
+      Check out "The Road to Chief Internet Strategist"\, an optional corporate Internet strategist career path symposium on July 18th\, the day after the main conference.
+      
+      Registration starts at under US$250.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/460690/
+UID:http://upcoming.yahoo.com/event/460690/
+DTSTAMP:20080320T215235
+LAST-UPDATED:20080320T215235
+CATEGORIES:Commercial
+ORGANIZER;CN=sgehlen:X-ADDR:http://upcoming.yahoo.com/user/81099/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/35679/":Governor Hotel @ 614 SW 11th Ave.\, Portland\, Oregon US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Governor Hotel
+ADDRESS:614 SW 11th Ave.
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:
+GEO:45.5207;-122.683
+URL;X-LABEL=Venue Info:http://www.governorhotel.com/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20080721
+DTEND;VALUE=DATE:20080726
+TRANSP:TRANSPARENT
+SUMMARY:OSCON
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/350914/ ] The O'Reilly Open Source Convention (OSCON) is an annual convention for the discussion of open source software\, such as Linux\, MySQL\, Perl and Python. It is organized by the publisher O'Reilly Media and is held each summer in the United States.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/350914/
+UID:http://upcoming.yahoo.com/event/350914/
+DTSTAMP:20071204T100202
+LAST-UPDATED:20071204T100202
+CATEGORIES:Commercial
+ORGANIZER;CN=yahoo careers:X-ADDR:http://upcoming.yahoo.com/user/131158/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/1786/":Oregon Convention Center @ 777 NE Martin Luther King\, Jr. Blvd.\, Portland\, Oregon 97232 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Oregon Convention Center
+ADDRESS:777 NE Martin Luther King\, Jr. Blvd.
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97232
+GEO:45.5285;-122.662
+URL;X-LABEL=Venue Info:http://www.oregoncc.org/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20080721
+DTEND;VALUE=DATE:20080723
+TRANSP:TRANSPARENT
+SUMMARY:XMPP Summit 5
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/809912/ ] 
+URL;VALUE=URI:http://upcoming.yahoo.com/event/809912/
+UID:http://upcoming.yahoo.com/event/809912/
+DTSTAMP:20080617T141141
+LAST-UPDATED:20080617T141141
+CATEGORIES:Other
+ORGANIZER;CN=jaredhanson:X-ADDR:http://upcoming.yahoo.com/user/11503/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/1786/":Oregon Convention Center @ 777 NE Martin Luther King\, Jr. Blvd.\, Portland\, Oregon 97232 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Oregon Convention Center
+ADDRESS:777 NE Martin Luther King\, Jr. Blvd.
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97232
+GEO:45.5285;-122.662
+URL;X-LABEL=Venue Info:http://www.oregoncc.org/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20080721
+DTEND;VALUE=DATE:20080726
+TRANSP:TRANSPARENT
+SUMMARY:Open Source Convention 2008
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/430248/ ] OSCON is the crossroads of all things open source\, bringing together the best\, brightest\, and most interesting people to explore what's new\, and to champion the cause of open principles and open source adoption across the computing industry.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/430248/
+UID:http://upcoming.yahoo.com/event/430248/
+DTSTAMP:20080212T123950
+LAST-UPDATED:20080212T123950
+CATEGORIES:Commercial
+ORGANIZER;CN=mBLAST:X-ADDR:http://upcoming.yahoo.com/user/91675/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/46678/":Oregon Convention Center Portland @ 777 NE Martin Luther King Jr. Blvd\, Portland\, Oregon US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Oregon Convention Center Portland
+ADDRESS:777 NE Martin Luther King Jr. Blvd
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:
+GEO:45.5285;-122.662
+URL;X-LABEL=Venue Info:http://upcoming.yahoo.com/venue/46678/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20080722
+DTEND;VALUE=DATE:20080723
+TRANSP:TRANSPARENT
+SUMMARY:Choose the Right Technologies for a Virtualized Infrastructure
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/814468/ ] 
+       
+       
+       
+       Join Steelhead Data and Dell for an informative seminar on virtualization. 
+       &nbsp\; 
+       During this lunch seminar we'll discuss how Dell EqualLogic’s PS Series and VMware Infrastructure 3 is the solution that will enable you to: 
+       &nbsp\; 
+       · Dynamically provision\, migrate\, and manage computing and storage capacity across resources 
+       &nbsp\; 
+       &nbsp\; 
+       · Reduce downtime through automation - withstanding failures\, protecting and recovering data\, and overcoming resource constraints online without disruption to service levels 
+       &nbsp\; 
+       &nbsp\; 
+       · Simply deploy and manage the virtualized server and SAN infrastructure while leveraging existing skill sets and consolidated tools 
+       
+       Click the following link to register this event : http://www.regonline.com/?632729 powered by RegOnline http://www.regonline.com/
+URL;VALUE=URI:http://upcoming.yahoo.com/event/814468/
+UID:http://upcoming.yahoo.com/event/814468/
+DTSTAMP:20080619T115251
+LAST-UPDATED:20080619T115251
+CATEGORIES:Education
+ORGANIZER;CN=yt.regonline:X-ADDR:http://upcoming.yahoo.com/user/239289/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/154557/":Portland City Grill @ 111 SW 5th Ave #3000\, Portland\, OR 97204\, Portland\, Oregon 97204 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Portland City Grill
+ADDRESS:111 SW 5th Ave #3000\, Portland\, OR 97204
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=US:United States
+POSTALCODE:97204
+GEO:45.5226;-122.676
+URL;X-LABEL=Venue Info:http://www.regonline.com/632729
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20080723
+DTEND;VALUE=DATE:20080725
+TRANSP:TRANSPARENT
+SUMMARY:Google Analytics Seminars for Success\, Portland
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/841047/ ] Lead by Justin Cutroni of EpikOne\, a Google Analytics certified Seminar Leader.  Learn how to analyze and properly configure Google Analytics.  Develop your skills as an analyst to improve your websites' performance and understand how to configure Google Analytics to ensure accurate information flow.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/841047/
+UID:http://upcoming.yahoo.com/event/841047/
+DTSTAMP:20080626T151958
+LAST-UPDATED:20080626T151958
+CATEGORIES:Education
+ORGANIZER;CN=EpikEvents:X-ADDR:http://upcoming.yahoo.com/user/263864/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/35053/":University Place at Portland State University @ 310 SW Lincoln Street\, Portland\, Oregon 97201 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:University Place at Portland State University
+ADDRESS:310 SW Lincoln Street
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97201
+GEO:45.5078;-122.681
+URL;X-LABEL=Venue Info:http://upcoming.yahoo.com/venue/35053/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART:20080724T093000
+DTEND:20080724T113000
+TRANSP:TRANSPARENT
+SUMMARY:SAO Social Network Celebration
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/860989/ ] SAO Social Network Celebration
+      
+      Date: 
+      Thu\, Jul 24th
+      Time: 
+      9:30am-11:30am
+      Location: 
+      Intel - Ronler Acres Campus Auditorium 2501 NW 229th Ave. Hillsboro\, OR 97124
+      
+      Cost: 
+      $0 for members
+      Registration Deadline: 
+      07/24/2008
+      Topic: 
+      SAO Social Network Celebration
+      
+      Speaker: Timothy Chou\, Author\, Seven\, Software Business Models
+      Timothy Chou (the former President of Oracle on Demand) has over twenty-five years of experience in the technology business. Chou has been recognized as an industry visionary on the evolution of the software industry from the traditional model to Software as a Service (SaaS). Seven is a follow on book to The End of Software which predicted the rise of software delivered as a service. Now that this transition is happening Seven provides a framework for the producers and consumers of software to take the next steps.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/860989/
+UID:http://upcoming.yahoo.com/event/860989/
+DTSTAMP:20080702T101147
+LAST-UPDATED:20080702T101147
+CATEGORIES:Other
+ORGANIZER;CN=multimodal:X-ADDR:http://upcoming.yahoo.com/user/119942/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/159308/":Intel - Ronler Acres Campus Auditorium @ 2501 NW 229th Ave\, Hillsboro\, Oregon US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Intel - Ronler Acres Campus Auditorium
+ADDRESS:2501 NW 229th Ave
+CITY:Hillsboro
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:
+GEO:45.5433;-122.909
+URL;X-LABEL=Venue Info:http://www.intel.com
+END:VVENUE
+BEGIN:VEVENT
+DTSTART:20080724T180000
+DTEND:20080724T210000
+TRANSP:TRANSPARENT
+SUMMARY:SourceForge awards party
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/797535/ ] "We're throwing a party at the Jupiter Hotel in Portland on July 24th\, the week of OSCON\, to celebrate the winning projects. If you're going to be in town\, you are cordially invited to join us. Last year's party was a blast\, you don't want to miss it."
+URL;VALUE=URI:http://upcoming.yahoo.com/event/797535/
+UID:http://upcoming.yahoo.com/event/797535/
+DTSTAMP:20080614T175159
+LAST-UPDATED:20080614T175159
+CATEGORIES:Social
+ORGANIZER;CN=multimodal:X-ADDR:http://upcoming.yahoo.com/user/119942/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/8911/":Jupiter Hotel @ 800 E. Burnside\, Portland\, Oregon 97214 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Jupiter Hotel
+ADDRESS:800 E. Burnside
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97214
+GEO:45.5329;-122.658
+URL;X-LABEL=Venue Info:http://www.jupiterhotel.com/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART:20080724T200000
+DTEND:20080724T230000
+TRANSP:TRANSPARENT
+SUMMARY:Beerforge III
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/782117/ ] You're invited to the year’s best OSCON after party hosted by Jive Software\, Mozilla\, OpenSourcery\, OSL\, Songbird\, and Vidoop.  Make the arduous 370 foot walk after the SourceForge Awards Party to keep the party going strong!
+      
+      When: Thursday\, July 24\, 2008\, 8:00 PM to 11:00 PM
+      
+      Where: Bossanova Ballroom @ 722 E Burnside
+URL;VALUE=URI:http://upcoming.yahoo.com/event/782117/
+UID:http://upcoming.yahoo.com/event/782117/
+DTSTAMP:20080612T102921
+LAST-UPDATED:20080612T102921
+CATEGORIES:Social
+ORGANIZER;CN=stevel:X-ADDR:http://upcoming.yahoo.com/user/135162/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/83687/":Bossanova @ 722 E Burnside St\, Portland\, Oregon 97214 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Bossanova
+ADDRESS:722 E Burnside St
+CITY:Portland
+REGION;X-ABBREV=OR:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97214
+GEO:45.5329;-122.658
+URL;X-LABEL=Venue Info:http://upcoming.yahoo.com/venue/83687/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART:20080726T100000
+DTEND:20080726T150000
+TRANSP:TRANSPARENT
+SUMMARY:Cre8Camp Portland
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/781133/ ] Cre8Camp Portland is a BarCamp-like unconference for designers and other creatives.  There is no charge to attend\, but participants can opt to pay for a $10 box lunch.  Registration required.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/781133/
+UID:http://upcoming.yahoo.com/event/781133/
+DTSTAMP:20080611T163608
+LAST-UPDATED:20080611T163608
+CATEGORIES:Other
+ORGANIZER;CN=sgehlen:X-ADDR:http://upcoming.yahoo.com/user/81099/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/92822/":souk @ 322 NW 6th Avenue\, suite 200\, Portland\, Oregon 97214 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:souk
+ADDRESS:322 NW 6th Avenue\, suite 200
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97214
+GEO:45.5254;-122.676
+URL;X-LABEL=Venue Info:http://soukllc.com
+END:VVENUE
+BEGIN:VEVENT
+DTSTART:20080731T190000
+DTEND:20080731T210000
+TRANSP:TRANSPARENT
+SUMMARY:Oriented happy hour in Portland Oregon
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/849261/ ] You and your friends are cordially invited to join us on Thursday\, July 31 at Blue Dragon Fly in Portland!
+      
+      If you are interested in business or career opportunities in Greater China\, want to network with other like-minded\, international professionals in Portland who share the same interests\, or just want to stay abreast of what's happening in one of the most exciting regions of the world today\, this is the place to be!
+      
+      To learn more about who attends the ORIENTED Happy Hours and why\, check out these Youtube videos
+      
+        http://www.oriented.com/happyhours
+      
+      Dress code: Professional Attire or Business Casual
+      
+      Door Fees
+      
+      General Admission: 10 USD
+      
+      ORIENTED Members who RSVP before 8 PM EST on 7/30 will enjoy the following discounted rates:
+      
+        * Premium & Lifetime Members: Free!
+        * Standard Members: Free!
+URL;VALUE=URI:http://upcoming.yahoo.com/event/849261/
+UID:http://upcoming.yahoo.com/event/849261/
+DTSTAMP:20080628T174634
+LAST-UPDATED:20080628T174634
+CATEGORIES:Social
+ORGANIZER;CN=multimodal:X-ADDR:http://upcoming.yahoo.com/user/119942/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/58673/":Blue Dragonfly @ 1195 SE Powell Blvd\, Portland\, Oregon 97239 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Blue Dragonfly
+ADDRESS:1195 SE Powell Blvd
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97239
+GEO:45.5011;-122.653
+URL;X-LABEL=Venue Info:http://www.bluedragonflypdx.com
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20080904
+DTEND;VALUE=DATE:20080906
+TRANSP:TRANSPARENT
+SUMMARY:Inverge: the interactive convergence conference
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/460704/ ] Inverge: the interactive convergence conference\, is a transdisciplinary thought-leader event that focuses on the invergence of media platforms (transmedia/cross-media)\, of virtual + physical\, content + advertising\, and corporate content + consumer-generated content.
+      
+      To create a unique experience for attendees\, this conference is integrated with\, three other cultural events happening in Portland over the same multi-day period:
+      + Time-Based Art Festival (performance : dance : music : new media : visual arts)
+      + MusicFestNW (over 100 indie bands)
+      + First Thursday Gallery Walk (an evening of art\, wine and music)
+      
+      Visit the conference site to see the complete list of confirmed thought-leader speakers.
+      
+      Learn why Portland is an awesome place to visit for this event.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/460704/
+UID:http://upcoming.yahoo.com/event/460704/
+DTSTAMP:20080320T234244
+LAST-UPDATED:20080320T234244
+CATEGORIES:Commercial
+ORGANIZER;CN=sgehlen:X-ADDR:http://upcoming.yahoo.com/user/81099/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/107131/":Gerding Theater at the Armory @ 128 NW 11th Ave\, Portland\, Oregon 97209 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Gerding Theater at the Armory
+ADDRESS:128 NW 11th Ave
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97209
+GEO:45.5239;-122.682
+URL;X-LABEL=Venue Info:http://www.pcs.org/directions/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART:20080908T080000
+DTEND:20080908T170000
+RRULE:FREQ=DAILY;INTERVAL=1;UNTIL=20080911T000000
+TRANSP:TRANSPARENT
+SUMMARY:Micro Nano conference
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/470690/ ] Oregon Nanoscience and
+      Microtechnologies Institute
+      and Washington Technology Center
+      Presents
+      The Fifth Annual
+      Micro Nano Breakthrough Conference
+      Science To Commercialization for the Micro/Nanotechnology Economy
+      
+      September 8-10\, 2008
+      Hilton Hotel
+      Vancouver\, Washington
+      
+      This fifth annual conference has emerged as the premier nanoscience and microtechnologies research and business event in the Pacific Northwest.
+      
+      Join over 300 industry leaders\, researchers\, academics\, entrepreneurs\, investors\, and tech transfer professionals to discuss the issues and opportunities inherent in commercializing small tech innovation.
+      
+      Presentations on:
+      
+          * Nanoelectronics
+          * Nanoscale Lithography
+          * Printed Electronics
+          * Green Nanotechnologies
+          * Nanomaterial-biological Interactions\, EHS
+          * Nano-bio Technologies: Tools and Diagnostics
+          * Nanotechnology for Energy
+          * Nanomaterials for Electro-optics
+          * Novel Photovoltaic & Luminescent Devices
+          * Micro-Energy and Chemical Systems
+          * Micropower & Batteries
+          * Nanotechnology and Forest Products
+          * Nanoscale Measurement and Characterization
+          * Nanophotonics and Optics
+          * Nanomedicine - Therapies and Clinical Applications
+      
+      Special half-day parallel sessions (included in your registration fees):
+      
+          * Nanotechnology 101 for Business and Technical Professionals
+          * Commercialization\, Technology Transfer and IP Protection
+      
+      Who should attend:
+      
+      If you are involved in the transformation from discovery and development to commercialization of products this conference is for you.
+      
+          * Scientists
+          * Engineers
+          * Entrepreneurs
+          * Venture Capitalists
+          * R&D Managers
+          * Administrators
+          * Product Development Managers
+          * Government Officials
+          * Policy Makers
+          * Non-Government Organization Officials
+          * Students
+          * Technology transfer specialists
+          * Strategic Planners
+          * Business Development Managers
+          * Product Development Professionals
+          * Investors
+          * Investment Analysts
+          * Proposal Writers
+          * Legislators
+          * Academicians
+          * Legislative Assistants & Analysts
+          * Intellectual Property Managers
+URL;VALUE=URI:http://upcoming.yahoo.com/event/470690/
+UID:http://upcoming.yahoo.com/event/470690/
+DTSTAMP:20080408T085115
+LAST-UPDATED:20080408T085115
+CATEGORIES:Education
+ORGANIZER;CN=multimodal:X-ADDR:http://upcoming.yahoo.com/user/119942/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/48746/":Hilton Vancouver Washington @ 301 West 6th Street\, Vancouver\, Washington 98660 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Hilton Vancouver Washington
+ADDRESS:301 West 6th Street
+CITY:Vancouver
+REGION;X-ABBREV=wa:Washington
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:98660
+GEO:45.6256;-122.674
+URL;X-LABEL=Venue Info:http://upcoming.yahoo.com/venue/48746/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20080927
+DTEND;VALUE=DATE:20080928
+TRANSP:TRANSPARENT
+SUMMARY:WordCamp Portland
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/761020/ ] WordCamp Portland is a gathering of folks who are passionate about WordPress.  Exact details are being determined.  Watch this space for more information.
+      
+       This event listing is to gauge interest... please RSVP if you're planning on attending\, but keep an eye on the WordCamp Portland website for official registration information.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/761020/
+UID:http://upcoming.yahoo.com/event/761020/
+DTSTAMP:20080604T223808
+LAST-UPDATED:20080604T223808
+CATEGORIES:Social
+ORGANIZER;CN=aaronhockley:X-ADDR:http://upcoming.yahoo.com/user/240591/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/52522/":CubeSpace @ 622 SE Grand Ave\, Portland\, Oregon 97214 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:CubeSpace
+ADDRESS:622 SE Grand Ave
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97214
+GEO:45.5185;-122.661
+URL;X-LABEL=Venue Info:http://www.cubespacepdx.com/
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20081020
+DTEND;VALUE=DATE:20081024
+TRANSP:TRANSPARENT
+SUMMARY:Government Open Source Conference (GOSCON)
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/419314/ ] Hold the Dates: The fourth annual Government Open Source Conference returns to Portland Oregon with an expanded program which will include an International Open Source Summit\, hosting international governments as well as US state and locals.  Focus this year will be on OSS solutions in the public sector space.  You can subscribe to the conference mailing list for program updates\, registration information on the conference web site.  GOSCON is produced by Oregon State University's Open Source Lab.
+      
+      If you are involved in an OSS project or initiative you think we'd like to know about as we put the program together\, please let us know!
+URL;VALUE=URI:http://upcoming.yahoo.com/event/419314/
+UID:http://upcoming.yahoo.com/event/419314/
+DTSTAMP:20080128T112149
+LAST-UPDATED:20080128T112149
+CATEGORIES:Other
+ORGANIZER;CN=debbryant:X-ADDR:http://upcoming.yahoo.com/user/208262/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/112424/":Holiday Inn Downtown-Portland Convention Center @ 1441 NE 2nd Ave.\, Portland\, Oregon 97232 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Holiday Inn Downtown-Portland Convention Center
+ADDRESS:1441 NE 2nd Ave.
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:97232
+GEO:45.5333;-122.664
+URL;X-LABEL=Venue Info:http://www.hiportland.com/about
+END:VVENUE
+BEGIN:VEVENT
+DTSTART;VALUE=DATE:20090313
+DTEND;VALUE=DATE:20090318
+TRANSP:TRANSPARENT
+SUMMARY:South By Southwest (SXSW) Interactive Conference
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/453651/ ] What is the SXSW Interactive Festival?
+      The SXSW Interactive Festival offers five days of panels\, keynote discussions\, Trade Show\, and exciting evening events. Attendees benefit from hands-on\, how-to training as well as long-term\, big-picture analysis in an atmosphere that charges creativity and out-of-the-box thinking. More to the point\, coming to SXSW Interactive is a great way to recharge your creativity.
+      
+      Where does the SXSW Interactive Festival occur?
+      Daytime panel programming (as well as the Trade Show & Exhibition) takes place at the Austin Convention Center (500 E. Cesar Chavez) in downtown Austin. Evening events occur at various nightspots around the city.
+      
+      Who attends this event?
+      SXSW Interactive appeals to uber-geeks and digital creatives who push the cutting edge of technological change. The event appeals to content developers\, web designers\, programmers\, bloggers\, wireless innovators\, gamers\, tech entrepreneurs\, investors\, and educators. Even if you are not a technical person\, you will benefit from the outside-the-box thinking that thrives at SXSW.
+      
+      What kind of topics are covered at the event?
+      Panel topics cover everything from web design\, usability\, and blogging to wireless innovation and new technology business models. Other panels focus on more general topics that are nonetheless relevant to the digital creatives who attend SXSW Interactive. Discovering new ideas that lead us to a better future is the underlying theme on all of this programming.
+URL;VALUE=URI:http://upcoming.yahoo.com/event/453651/
+UID:http://upcoming.yahoo.com/event/453651/
+DTSTAMP:20080317T105502
+LAST-UPDATED:20080317T105502
+CATEGORIES:Festivals
+ORGANIZER;CN=kathrynyu:X-ADDR:http://upcoming.yahoo.com/user/155/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/799/":Austin Convention Center @ 500 E Cesar Chavez Street\, Austin\, Texas 78701 US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Austin Convention Center
+ADDRESS:500 E Cesar Chavez Street
+CITY:Austin
+REGION;X-ABBREV=tx:Texas
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:78701
+GEO:30.2622;-97.7399
+URL;X-LABEL=Venue Info:http://www.austinconventioncenter.com/
+END:VVENUE
+END:VCALENDAR

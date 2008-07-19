@@ -1,0 +1,25 @@
+!!!
+%html
+  %head
+    %title calagator admin console
+  %body
+    %h1 calagator admin console
+    %p
+      = `whoami`
+    %p
+      %form{:method=>"post"}
+        %label
+          %input{:type=>"radio", :name=>"action", :value=>"deploy", :checked=>"checked"}
+          deploy and migrate revision
+          %input{:type=>"text", :name=>"revision", :value=>"HEAD"}
+        %br
+        %label
+          %input{:type=>"radio", :name=>"action", :value=>"restart"}
+          restart
+        %br
+        %p
+          %input{:type=>"submit", :value=>"submit"}
+        %pre
+    - if @message
+      %pre
+        ~ @message

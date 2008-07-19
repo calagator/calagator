@@ -1,0 +1,11 @@
+<% require 'etc' -%>
+--- 
+cwd: <%= File.expand_path(Dir.pwd) %> 
+address: <%= RAILS_ENV == "production" ? "localhost" : "0.0.0.0" %>
+user: <%= Etc.getpwuid(Process.euid).name %>
+log_file: log/mongrel.log
+port: "20010"
+environment: <%= RAILS_ENV %>
+group: <%= Etc.getgrgid(Etc.getpwuid(Process.euid).gid).name %>
+pid_file: tmp/pids/mongrel.pid
+servers: 2

@@ -1,0 +1,14 @@
+<div id="event" class="vevent">
+  <span class="summary">Ignite Portland 2010</span>
+  <abbr class="dtstart" title="20100618T180000">June 18, 2010</abbr>
+  <abbr class="dtend" title="20100618T210000">9:00 PM</abbr>
+  <div class="venue location vcard">
+    <span class="fn org">Bagdad Theater and Pub</span><br />
+    <div class="address adr">
+      <span class="street-address">3702 S.E. Hawthorne Blvd</span><br />
+      <span class="locality">Portland</span>, 
+      <span class="region">OR</span> 
+      <span class="postal-code">97214</span>
+    </div>
+  </div>
+</div>

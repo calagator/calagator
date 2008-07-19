@@ -1,0 +1,10 @@
+first:
+  guid: ABC-123
+  name: Posting ABC
+  description: First posting testing primary key as string
+
+second:
+  guid: DEF-456
+  name: Posting DEF
+  description: Second posting testing primary key as string
+

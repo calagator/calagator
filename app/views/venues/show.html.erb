@@ -1,0 +1,69 @@
+<div class="single_venue">
+<%= google_map @venue %>
+<div class="vcard">
+  <h1 class="fn org"><%=h @venue.title %></h1>
+
+  <% if !@venue.address.blank? %>
+    <div class='address'><%=h @venue.address %></div>
+  <% end %>
+
+  <% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
+    <div class="adr">
+      <% if !@venue.street_address.blank? %>
+        <div class="street-address"><%=h @venue.street_address %></div>
+      <% end %>
+      <% if !@venue.locality.blank? %>
+        <span class="locality"><%=h @venue.locality %></span>
+      <% end %>
+      <% if !@venue.region.blank? %>
+        <span class="region"><%=h @venue.region %></span>
+      <% end %>
+      <% if !@venue.postal_code.blank? %>
+        <span class="postal-code"><%=h @venue.postal_code %></span>
+      <% end %>
+      <% if !@venue.country.blank? %>
+        <div class='country-name'><%=h @venue.country %><div>
+      <% end %>
+      <% if @venue && @venue.has_full_address? %>
+        (<a href='<%=google_maps_url(@venue.full_address)%>'>map</a>)
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if !@venue.url.blank? %>
+    <div class='url'><%= link_to(nil, url_for(@venue.url) ) %></div>
+  <% end %>
+
+  <% if !@venue.email.blank? %>
+    <div class='email'><%= mail_to( h(@venue.email) ) %></div>
+  <% end %>
+
+  <% if !@venue.telephone.blank? %>
+    <div class='tel'><%=h @venue.telephone %></div>
+  <% end %>
+
+  <% unless @venue.description.blank? %>
+  <div class="description">
+    <%= upgrade_br(simple_format(auto_link(white_list(@venue.description)))) %>
+  </div>
+  <% end %>
+
+  <% if @events && @events.size > 0 %>
+    <h2>Future Events Happening Here</h2>
+
+    <%= render :partial => 'events/list', :locals => { :events => @events } %>
+  <% end %>
+
+  <div class='single_view_right sidebar'>
+    <div id='edit_link'>
+      <p>
+        You can <%= link_to "edit this venue", edit_venue_url(@venue) %>
+        or <%= link_to "delete it", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>.
+      </p>
+    </div>
+    <div class="metadata">
+      <%= datestamp(@venue) %>
+    </div>
+  </div>
+</div>
+</div>

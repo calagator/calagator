@@ -1,0 +1,40 @@
+
+<div id='list_description'>
+  <h2>Viewing all <strong><%= @events.size %></strong> <%= 'future' unless params[:date] %><%= 'filtered' if params[:date] %> events.</h2>
+</div>
+
+<div id='list_items'>
+	<%= render :partial => 'events/table', :locals => { :events => @events } %>
+</div>
+
+<div id='list_filters' class='sidebar'>
+	
+	<h3 class='first'>Filter by date <span class="clear_filter">[<%= link_to 'clear', events_url %>]</span></h3>
+
+	<% form_tag events_url, :method => 'get' do  -%>
+	<div id="date_filter">
+		<div id='start_calendar'>
+			<label for='date_start'>Start</label>
+			<%= text_field_tag 'date[start]', @start_date.to_formatted_s(:long), :id => 'date_start', :class => 'date_picker' %>	
+		</div>
+		<div id='end_calendar'>
+			<label for='date_end'>End</label>
+			<%= text_field_tag 'date[end]', @end_date.to_formatted_s(:long), :id => 'date_end', :class => 'date_picker' %>
+		</div>
+	</div>
+	<div>
+	<%= submit_tag 'Filter' %>
+	</div>
+	<% end %>
+	
+	
+	<h3>Subscribe</h3>
+	<ul>
+		<li><%= link_to 'Subscribe to Atom feed', formatted_events_url('atom') %></li>
+		<li><%= link_to 'Download iCalendar file', formatted_events_url('ics') %></li>
+		<li><%= link_to "Subscribe to iCalendar feed", url_for(:action => 'index', :protocol => 'webcal', :only_path => false)+".ics" %></li>
+		<li><%= link_to "Add to Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_events_url('ics') %></li>
+		<li><%= link_to "Add to My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_events_url('ics') %></li>
+	</ul>
+
+</div>

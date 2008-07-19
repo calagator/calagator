@@ -1,0 +1,8 @@
+== How to run unit tests for this plugin:
+To run the acts_as_solr's plugin tests run the following steps:
+- rake solr:start RAILS_ENV=test
+- rake (Accepts the following arguments: DB=sqlite|mysql and MYSQL_USER=user)
+
+== Troubleshooting:
+If for some reason the tests don't run and you get MySQL errors, make sure you edit the MYSQL_USER entry under
+config/environment.rb. It's recommended to create or use a MySQL user with no password.

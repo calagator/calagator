@@ -1,0 +1,12 @@
+<div class="vevent">
+  <a href="http://www.cubespacepdx.com" class="url">
+  <span class="summary">Same hCal event twice</span>
+  <abbr title="20080119" class="dtstart"></abbr>
+  <span class="location">First venue</span></a>
+</div>
+<div class="vevent">
+  <a href="http://www.cubespacepdx.com" class="url">
+  <span class="summary">Same hCal event twice</span>
+  <abbr title="20080119" class="dtstart"></abbr>
+  <span class="location">Different venue</span></a>
+</div>
