@@ -401,10 +401,15 @@ EOF
 
   # Is this event old? Default cutoff is yesterday
   def old?(cutoff=nil)
-    cutoff ||= Time.now.yesterday
+    cutoff ||= Time.today # midnight today is the end of yesterday
     return (self.end_time || self.start_time) < cutoff
   end
-
+  
+  # Did this event start before today but ends today or later?
+  def ongoing?
+    self.start_time < Time.today && self.end_time && self.end_time >= Time.today
+  end
+  
 protected
 
   def end_time_later_than_start_time

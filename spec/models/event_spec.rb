@@ -17,6 +17,23 @@ describe Event do
       event.should be_valid
     end
   end
+  
+  describe "when checking time status" do
+    fixtures :events
+    
+    it "should be old if event ended before today" do 
+      events(:old_event).should be_old
+    end
+    
+    it "should be current if event is happening today" do 
+      events(:tomorrow).should be_current
+    end
+    
+    it "should be ongoing if it began before today but ends today or later" do
+      events(:ongoing_event).should be_ongoing
+    end
+    
+  end
 
   describe "dealing with tags" do
     before(:each) do

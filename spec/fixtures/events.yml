@@ -25,6 +25,24 @@ day_after_tomorrow:
   venue_id: 1
   url: http://www.imdb.com/title/tt0319262/
 
+old_event:
+  id: <%= n+=1 %>
+  title: Old Event
+  description: Already happened.
+  start_time: <%= Time.today.yesterday %>
+  end_time: <%= Time.today.yesterday + 12.hours %>
+  venue_id: 1
+  url: http://foo.com/event
+
+ongoing_event:
+  id: <%= n+=1 %>
+  title: Ongoing Event
+  description: It's going on all week
+  start_time: <%= Time.today.yesterday %>
+  end_time: <%= Time.today.tomorrow + 1.day %>
+  venue_id: 1
+  url: http://foo.com/ongoing_event
+
 duplicate_event:
   id: <%=n+=1%>
   title: Web 2.0 Conference
