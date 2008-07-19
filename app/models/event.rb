@@ -32,6 +32,7 @@ class Event < ActiveRecord::Base
       start_time_for_solr
       end_time_for_solr
       text_for_solr
+      tag_list
     ).map(&:to_sym)
     
   unless RAILS_ENV == 'test'
@@ -224,13 +225,13 @@ class Event < ActiveRecord::Base
       end
     skip_old = opts[:skip_old] == true
     limit = opts[:limit] || 50
-
+    
     formatted_query = \
       %{NOT duplicate_for_solr:"1" AND (} \
       << query \
       .scan(/\S+/) \
       .map(&:escape_lucene) \
-      .map{|term| %{title:"#{term}"~#{"%1.1f" % SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST} "#{term}"~#{"%1.1f" % SOLR_SIMILARITY}}} \
+      .map{|term| %{title:"#{term}"~#{"%1.1f" % SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST} OR "#{term}"~#{"%1.1f" % SOLR_SIMILARITY}}} \
       .join(" ") \
       << %{)}
 
