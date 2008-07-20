@@ -38,10 +38,6 @@
   </script>
 <% end %>
 
-<% content_for :css_insert do %>
-  <%= stylesheet_link_tag 'jquery.ui.autocomplete.css' %>
-<% end %>
-
 <% form_for(@event) do |f| %>
 <fieldset>
   <legend><%= @event.new_record? ? "Add an Event" : "Editing: <em>#{@event.title}</em>" %></legend>
