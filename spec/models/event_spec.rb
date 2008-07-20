@@ -354,9 +354,80 @@ describe Event do
     end
   end
 
-  describe "when finding duplicates" do
-    it "should find duplicates by type" do
-      pending # Event.find_duplicates_by_type
+  describe "with finding duplicates" do
+  it "should find all events with duplicate titles" do
+    Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
+    Event.find(:duplicates, :by => :title )
+  end
+
+  it "should find all events with duplicate titles and urls" do
+    Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url ) ORDER BY a.title,a.url")
+    Event.find(:duplicates, :by => [:title,:url])
+  end
+
+  it "should find all events that have not been marked as duplicate" do
+    Event.should_receive(:find_without_duplicate_support).with(:all, {})
+    Event.find(:non_duplicates)
+  end
+
+  it "should find all events that have been marked as duplicate" do
+    Event.should_receive(:find_without_duplicate_support).with(:all, {})
+    Event.find(:marked_duplicates)
+  end
+
+end
+
+  describe "with finding duplicates (integration test)" do
+    fixtures :events
+
+    before(:each) do
+      @event = events(:calagator_codesprint)
+    end
+
+    # Find duplicates, create another venue with the given attributes, and find duplicates again
+    def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes, create_class = Event)
+      before_results = create_class.find(:duplicates, :by => find_duplicates_arguments)
+      clone = create_class.new(clone_attributes)
+      clone.save!
+      after_results = Event.find(:duplicates, :by => find_duplicates_arguments)
+      return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
+    end
+
+    it "should find duplicate title by title" do
+      pre, post = find_duplicates_create_a_clone_and_find_again(:title, {:title => @event.title, :start_time => @event.start_time} )
+      post.size.should == pre.size + 2
+    end
+
+    it "should find duplicate title by any" do
+      pending "TODO: find out why this fails" 
+      pre, post = find_duplicates_create_a_clone_and_find_again(:any, {:title => @event.title, :start_time => @event.start_time} )
+      post.size.should == pre.size + 2
+    end
+
+    it "should not find duplicate title by url" do
+      pre, post = find_duplicates_create_a_clone_and_find_again(:url, {:title => @event.title, :start_time => @event.start_time} )
+      post.size.should == pre.size
+    end
+
+    it "should find complete duplicates by all" do
+      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes)
+      post.size.should == pre.size + 2
+    end
+
+    it "should not find incomplete duplicates by all" do
+      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(:title => "SpaceCube", :start_time => @event.start_time ))
+      post.size.should == pre.size
+    end
+
+    it "should find duplicate for matching multiple fields" do
+      pre, post = find_duplicates_create_a_clone_and_find_again([:title, :start_time], {:title => @event.title, :start_time => @event.start_time })
+      post.size.should == pre.size + 2
+    end
+
+    it "should not find duplicates for mismatching multiple fields" do
+      pre, post = find_duplicates_create_a_clone_and_find_again([:title, :start_time], {:title => "SpaceCube", :start_time => @event.start_time })
+      post.size.should == pre.size
     end
   end
+
 end

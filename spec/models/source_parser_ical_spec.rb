@@ -174,18 +174,6 @@ describe SourceParser::Ical, "with iCalendar events" do
 
 end
 
-describe SourceParser::Ical, "with Categories" do
-  describe "in events" do
-    it "should parse Categories within events"
-    it "should tag events with parsed Categories"
-  end
-
-  describe "in vvenues" do
-    it "should parse Categories within vvenues"
-    it "should tag venues with parsed Categories"
-  end
-end
-
 describe SourceParser::Ical, "when importing events with non-local times" do
 
   it "should store time ending in Z as UTC" do
