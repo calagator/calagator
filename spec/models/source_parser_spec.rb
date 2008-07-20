@@ -59,6 +59,7 @@ describe SourceParser, "checking duplicates when importing" do
 
   describe "two identical events" do
     before(:all) do
+      @venue_size_before_import = Venue.find(:all).size
       @cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
       @cal_content = (%{
       <div class="vevent">
@@ -80,18 +81,16 @@ describe SourceParser, "checking duplicates when importing" do
       @abstract_events.size.should == 2
     end
 
-    it "should create two events" do
-      @created_events.size.should == 2
+    it "should create only one event" do
+      pending "Marked as pending because test fails."
+      @created_events.size.should == 1
     end
 
-    it "should mark one event as a duplicate of the other" do
+    it "should create only one venue" do
       pending "Marked as pending because test fails."
-      # next line added for debugging this test; remove when fixed
-      @created_events.should == "remove this line"
-      ( (@created_events[1].duplicate_of == @created_events[0]) ||
-        (@created_events[0].duplicate_of == @created_events[1]) ).should be_true
+      Venue.find(:all).size.should == @venue_size_before_import + 1
     end
-   end
+  end
 
   it "should not create a new event when importing an event identical to a stored event" do
     @hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
