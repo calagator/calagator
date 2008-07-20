@@ -346,9 +346,13 @@ EOF
         c.dtstart       event.start_time
         c.dtend         event.end_time || event.start_time+1.hour
         c.summary       event.title || 'Untitled Event'
-        c.description   event.description if event.description
         c.created       event.created_at if event.created_at
         c.lastmod       event.updated_at if event.updated_at
+
+        description   = event.description
+        description  += "\n\nTags:\n#{event.tag_list}" unless event.tag_list.blank?
+        
+        c.description   description
 
         # TODO Come up with a generalized way to generate URLs for events that don't have them.
         # The reason for this messy URL helper business is that models can't access the route helpers,
