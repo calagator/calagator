@@ -183,7 +183,7 @@ describe Event do
 
       @started_today_and_no_end_time = Event.create(
         :title => "nil end time",
-        :start_time => @now,
+        :start_time => @today_midnight,
         :end_time => nil)
 
       @starts_and_ends_tomorrow = Event.create(
