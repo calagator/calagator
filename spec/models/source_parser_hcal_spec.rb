@@ -48,16 +48,20 @@ describe SourceParser::Hcal, "with hCalendar events" do
   end
 end
 
-describe SourceParser::Hcal, "with Category" do
-  describe "in event" do
-    it "should parse a Category in an event"
-    it "should parse multiple instances of Category in an event"
-    it "should tag events with each parsed Category"
-  end
+describe SourceParser::Hcal, "with hCalendar to AbstractLocation parsing" do
+  it "should extract an AbstractLocation from an hCalendar text" do
+    hcal_upcoming = read_sample('hcal_upcoming.xml')
 
-  describe "in hCard" do
-    it "should parse a Category in an hCard"
-    it "should parse multiple instances of Category in an hCard"
-    it "should tag venues with each parsed Category"
+    SourceParser::Hcal.stub!(:read_url).and_return(hcal_upcoming)
+    abstract_events = SourceParser::Hcal.to_abstract_events(:url => "http://foo.bar/")
+    abstract_event = abstract_events.first
+    abstract_location = abstract_event.location
+
+    abstract_location.should be_a_kind_of(SourceParser::AbstractLocation)
+    abstract_location.locality.should == "portland"
+    abstract_location.street_address.should == "317 SW Alder St Ste 500"
+    abstract_location.latitude.should be_close(45.5191, 0.1)
+    abstract_location.longitude.should be_close(-122.675, 0.1)
+    abstract_location.postal_code.should == "97204"
   end
 end

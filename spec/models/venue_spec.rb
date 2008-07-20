@@ -16,25 +16,6 @@ describe Venue do
 
 end
 
-# TODO extract to source_parser_hcal
-describe Venue, "with hCalendar to AbstractEvent parsing" do
-  it "should extract an AbstractEvent from an hCalendar text" do
-    hcal_upcoming = read_sample('hcal_upcoming.xml')
-
-    SourceParser::Hcal.stub!(:read_url).and_return(hcal_upcoming)
-    abstract_events = SourceParser::Hcal.to_abstract_events(:url => "http://foo.bar/")
-    abstract_event = abstract_events.first
-    abstract_location = abstract_event.location
-
-    abstract_location.should be_a_kind_of(SourceParser::AbstractLocation)
-    abstract_location.locality.should == "portland"
-    abstract_location.street_address.should == "317 SW Alder St Ste 500"
-    abstract_location.latitude.should be_close(45.5191, 0.1)
-    abstract_location.longitude.should be_close(-122.675, 0.1)
-    abstract_location.postal_code.should == "97204"
-  end
-end
-
 describe Venue, "when finding exact duplicates" do
   it "should ignore attributes like created_at" do
     venue1 = Venue.create!(:title => "this", :description => "desc",:created_at => Time.now)
@@ -79,9 +60,6 @@ describe Venue, "with finding duplicates" do
     Venue.find(:marked_duplicates)
   end
 
-  it "should find duplicates by type" do
-    pending # Venue.find_duplicates_by_type
-  end
 end
 
 describe Venue, "with finding duplicates (integration test)" do
