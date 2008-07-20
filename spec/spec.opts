@@ -4,3 +4,4 @@ progress
 mtime
 --reverse
 --backtrace
+--color
