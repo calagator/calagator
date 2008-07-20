@@ -43,6 +43,13 @@
 	</ul>
   <% end %>
 
+	<% unless event.tag_list.blank? %>
+	<div class="tags">
+		<h3>Tags</h3>
+		<p><%= event.tag_list %></p>
+	</div>
+	<% end %>
+
 	<div class='single_view_right'>
 		<a href='<%= event_url(event) %>.ics'>Download to iCal</a>
 		<div id='edit_link'>
