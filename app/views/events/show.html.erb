@@ -1,6 +1,6 @@
 <div class="single_event">
 	<div class="vevent">
-	  <h1 class="summary"><%= h @event.title %></h1>
+	  <h1 class="summary"><%= @event.title.strip_html %></h1>
 	  <div class='date'><%= normalize_time(@event) -%></div>
 		<% unless @event.url.blank? -%>
 	        <%= link_to "Visit the website for this event", @event.url, :class => "url" -%>
@@ -9,7 +9,7 @@
 	    <div class="location vcard">
 			<%= google_map @event %>
 	        <a class="url" href='<%= url_for venue_url(@event.venue) %>'>
-	            <span class='fn org'><%= h @event.venue.title -%></span>
+	            <span class='fn org'><%= @event.venue.title.strip_html -%></span>
 	        </a>
 	        <div class="adr">
 	        <% if !@event.venue.street_address.blank? -%>
