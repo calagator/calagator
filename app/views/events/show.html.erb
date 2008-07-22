@@ -9,7 +9,7 @@
 	    <div class="location vcard">
 			<%= google_map @event %>
 	        <a class="url" href='<%= url_for venue_url(@event.venue) %>'>
-	            <span class='fn org'><%= @event.venue.title.strip_html -%></span>
+            <span class='fn org'><%= @event.venue.title.strip_html -%></span>
 	        </a>
 	        <div class="adr">
 	        <% if !@event.venue.street_address.blank? -%>

@@ -8,3 +8,4 @@ require 'uri'
 
 require 'metaclass'
 require 'tagging_extensions'
+require 'ext'
