@@ -149,9 +149,9 @@ describe SourceParser, "checking duplicates when importing" do
     Source.destroy_all
     Venue.destroy_all
 
-    dummy_source = Source.create(:title => "Dummy", :url => "http://IcalEventWithSquashedVenue.com/")
-    master_venue = Venue.create(:title => "Master")
-    squashed_venue = Venue.create(
+    dummy_source = Source.create!(:title => "Dummy", :url => "http://IcalEventWithSquashedVenue.com/")
+    master_venue = Venue.create!(:title => "Master")
+    squashed_venue = Venue.create!(
       :title => "Squashed Duplicate Venue",
       :duplicate_of_id => master_venue.id)
 
