@@ -166,32 +166,32 @@ describe Event do
       @yesterday = @today_midnight.yesterday
       @tomorrow = @today_midnight.tomorrow
 
-      @started_before_today_and_ends_after_today = Event.create(
+      @started_before_today_and_ends_after_today = Event.create!(
         :title => "Event in progress",
         :start_time => @yesterday,
         :end_time => @tomorrow)
 
-      @started_midnight_and_continuing_after = Event.create(
+      @started_midnight_and_continuing_after = Event.create!(
         :title => "Midnight start",
         :start_time => @today_midnight,
         :end_time => @tomorrow)
 
-      @started_and_ended_yesterday = Event.create(
+      @started_and_ended_yesterday = Event.create!(
         :title => "Yesterday start",
         :start_time => @yesterday,
         :end_time => @yesterday.end_of_day)
 
-      @started_today_and_no_end_time = Event.create(
+      @started_today_and_no_end_time = Event.create!(
         :title => "nil end time",
         :start_time => @today_midnight,
         :end_time => nil)
 
-      @starts_and_ends_tomorrow = Event.create(
+      @starts_and_ends_tomorrow = Event.create!(
         :title => "starts and ends tomorrow",
         :start_time => @tomorrow,
         :end_time => @tomorrow.end_of_day)
 
-      @starts_after_tomorrow = Event.create(
+      @starts_after_tomorrow = Event.create!(
         :title => "Starting after tomorrow",
         :start_time => @tomorrow + 1.day)
     end
