@@ -16,7 +16,7 @@ class EventsController < ApplicationController
     @start_date = params[:date] ? Date.parse(params[:date][:start]) : Date.today
     @end_date = params[:date] ? Date.parse(params[:date][:end]) : Date.today + 6.months
     @events = params[:date] ?
-        Event.find_by_dates(@start_date, @end_date, order) :
+        Event.find_by_dates(@start_date, @end_date, :order => order) :
         Event.find_future_events(:order => order)
 
     @page_title = "Events"
@@ -200,12 +200,12 @@ class EventsController < ApplicationController
       return redirect_to(root_path)
     end
     @grouped_events = Event.search_grouped_by_currentness(params[:query], :order => params[:order])
-    
+
     # setting @events so that we can reuse the index atom builder
     @events = @grouped_events[:past] + @grouped_events[:current]
-    
+
     @page_title = "Search Results for '#{@query}'"
-    
+
     respond_to do |format|
       format.html
       format.atom { render :template => 'events/index' }
