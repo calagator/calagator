@@ -60,8 +60,8 @@ class Event < ActiveRecord::Base
 
   # Duplicates
   include DuplicateChecking
-  self.ignore_attributes   << :source_id
-  self.ignore_associations << :tags
+  ignore_attributes   :source_id
+  ignore_associations :tags
 
   #---[ Overrides ]-------------------------------------------------------
 
