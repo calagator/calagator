@@ -54,8 +54,9 @@ module ApplicationHelper
   end
 
   # Retrun a string describing the source code version being used, or false/nil if it can't figure out how to find the version.
-  def source_code_version
+  def self.source_code_version_raw
     begin
+      RAILS_DEFAULT_LOGGER.info("source_code_version: computing...")
       if File.directory?(File.join(RAILS_ROOT, ".svn"))
         $svn_revision ||= \
           if s = `svn info 2>&1`
@@ -78,11 +79,17 @@ module ApplicationHelper
       end
     rescue Errno::ENOENT
       # Platform (e.g., Windows) has the checkout directory but not the command-line command to manipulate it.
-      nil
+      ""
     end
   end
 
-# returns html markup with source (if any), imported/created time, and - if modified - modified time
+  ApplicationController::SOURCE_CODE_VERSION = self.source_code_version_raw
+
+  def source_code_version
+    return ApplicationController::SOURCE_CODE_VERSION
+  end
+
+  # returns html markup with source (if any), imported/created time, and - if modified - modified time
   def datestamp(item)
     stamp = "This item was " 
     if item.source.nil? 
