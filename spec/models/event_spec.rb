@@ -387,8 +387,7 @@ end
     # Find duplicates, create another venue with the given attributes, and find duplicates again
     def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes, create_class = Event)
       before_results = create_class.find(:duplicates, :by => find_duplicates_arguments)
-      clone = create_class.new(clone_attributes)
-      clone.save!
+      clone = create_class.create!(clone_attributes)
       after_results = Event.find(:duplicates, :by => find_duplicates_arguments)
       return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
     end
@@ -427,6 +426,30 @@ end
     it "should not find duplicates for mismatching multiple fields" do
       pre, post = find_duplicates_create_a_clone_and_find_again([:title, :start_time], {:title => "SpaceCube", :start_time => @event.start_time })
       post.size.should == pre.size
+    end
+  end
+
+  describe "when squashing duplicates (integration test)" do
+    fixtures :events
+
+    before(:each) do
+      @event = events(:calagator_codesprint)
+    end
+
+    it "should consolidate associations" do
+      tags = "bar, foo"
+
+      @event.tag_list.should be_blank
+
+      clone = Event.create!(@event.attributes)
+      clone.tag_list = tags
+      clone.save!
+      clone.reload
+      clone.should_not be_duplicate
+
+      Event.squash(:master => @event, :duplicates => clone)
+      @event.tag_list.should == tags
+      clone.duplicate_of.should == @event
     end
   end
 

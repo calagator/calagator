@@ -11,6 +11,9 @@
 #
 #     # Declare attributes that should be ignored during duplicate checks
 #     self.ignore_attributes << :random_value
+#
+#     # Declare associations that should be ignored during duplicate squashing
+#     self.ignore_associations << :tags
 #   end
 #
 #   # Set duplicates on objects
@@ -37,6 +40,9 @@ module DuplicateChecking
       cattr_accessor :ignore_attributes
       self.ignore_attributes = []
 
+      cattr_accessor :ignore_associations
+      self.ignore_associations = []
+
       belongs_to :duplicate_of, :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
       has_many   :duplicates,   :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
 
@@ -50,6 +56,11 @@ module DuplicateChecking
   # Return array of attributes that should be ignored for duplicate checking
   def ignorable_attributes
     return self.class.ignorable_attributes
+  end
+
+  # Return array of associations that should be ignored during duplicate squashing
+  def ignorable_associations
+    return self.class.ignorable_associations
   end
 
   # Is this record a duplicate of another?
@@ -71,6 +82,11 @@ module DuplicateChecking
     # Return array of attributes that should be ignored for duplicate checking
     def ignorable_attributes
       return(IGNORE_ATTRIBUTES + self.ignore_attributes.map(&:to_sym))
+    end
+
+    # Return array of associations that will be ignored during duplicate squashing
+    def ignorable_associations
+      return self.ignore_associations
     end
 
     # Extends ActiveRecord find with support for duplicates.
@@ -204,10 +220,18 @@ module DuplicateChecking
         # Transfer any has_many associations of this model to the master
         self.reflect_on_all_associations(:has_many).each do |association|
           next if association.name == :duplicates
+          if self.ignorable_associations.map(&:to_sym).include?(association.name.to_sym)
+            RAILS_DEFAULT_LOGGER.debug(%{#{self.name}#squash: skipping assocation '#{association.name}'})
+            next 
+          end
           foreign_objects = duplicate.send(association.name)
           for object in foreign_objects
+            begin
             object.update_attribute(association.primary_key_name, master.id) unless object.new_record?
-            RAILS_DEFAULT_LOGGER.debug("#{self.name}#squash: transfering #{object.class.name}@#{object.id} from #{self.name}@#{duplicate.id} to #{self.name}@{master.id}")
+            rescue Exception => e
+              require 'rubygems'; require 'ruby-debug'; Debugger.start; debugger; 1 # FIXME
+            end
+            RAILS_DEFAULT_LOGGER.debug(%{#{self.name}#squash: transferring foreign object "#{object.class.name}##{object.id}" from duplicate "#{self.name}##{duplicate.id}" to master "#{self.name}##{master.id}" via association "#{association.name}" using attribute "#{association.primary_key_name}"})
           end
         end
 
