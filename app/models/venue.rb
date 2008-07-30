@@ -28,7 +28,7 @@ class Venue < ActiveRecord::Base
   
   # Solr
   unless RAILS_ENV == 'test'
-      acts_as_solr
+    acts_as_solr
   end
 
   # Associations
