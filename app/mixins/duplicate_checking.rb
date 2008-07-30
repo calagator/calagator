@@ -3,17 +3,17 @@
 # This mixin provides a way for ActiveRecord classes to find and squash duplicates.
 #
 # Example:
-#   
+#
 #   # Define your class
 #   class Thing < ActiveRecord::Base
 #     # Load the mixin into your class
 #     include DuplicateChecking
 #
 #     # Declare attributes that should be ignored during duplicate checks
-#     ignore_attributes :random_value
+#     duplicate_checking_ignores_attributes :random_value
 #
 #     # Declare associations that should be ignored during duplicate squashing
-#     ignore_associations :tags
+#     duplicate_squashing_ignores_associations :tags
 #   end
 #
 #   # Set duplicates on objects
@@ -32,16 +32,17 @@
 module DuplicateChecking
   DUPLICATE_MARK_COLUMN = :duplicate_of_id
   DEFAULT_SQUASH_METHOD = :mark
-  IGNORE_ATTRIBUTES     = Set.new((%w(created_at updated_at id) + [DUPLICATE_MARK_COLUMN]).map(&:to_sym))
+  DUPLICATE_CHECKING_IGNORES_ATTRIBUTES =
+    Set.new((%w(created_at updated_at id) + [DUPLICATE_MARK_COLUMN]).map(&:to_sym))
 
   def self.included(base)
     base.extend ClassMethods
     base.class_eval do
-      cattr_accessor :_ignore_attributes
-      self._ignore_attributes = Set.new
+      cattr_accessor :_duplicate_checking_ignores_attributes
+      self._duplicate_checking_ignores_attributes = Set.new
 
-      cattr_accessor :_ignore_associations
-      self._ignore_associations = Set.new
+      cattr_accessor :_duplicate_squashing_ignores_associations
+      self._duplicate_squashing_ignores_associations = Set.new
 
       belongs_to :duplicate_of, :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
       has_many   :duplicates,   :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
@@ -62,7 +63,7 @@ module DuplicateChecking
   #
   # Note that this method requires that all associations are set before this method is called.
   def find_exact_duplicates
-    matchable_attributes = self.attributes.reject{|key, value| self.class.ignore_attributes.include?(key.to_sym)}
+    matchable_attributes = self.attributes.reject{|key, value| self.class.duplicate_checking_ignores_attributes.include?(key.to_sym)}
     duplicates = self.class.find(:all, :conditions => matchable_attributes).reject{|t| t.id == self.id}
     return duplicates.blank? ? nil : duplicates
   end
@@ -70,19 +71,19 @@ module DuplicateChecking
   module ClassMethods
 
     # Return array of attributes that should be ignored for duplicate checking
-    def ignore_attributes(*args)
+    def duplicate_checking_ignores_attributes(*args)
       unless args.empty?
-        self._ignore_attributes.merge(args.map(&:to_sym))
+        self._duplicate_checking_ignores_attributes.merge(args.map(&:to_sym))
       end
-      return(IGNORE_ATTRIBUTES + self._ignore_attributes)
+      return(DUPLICATE_CHECKING_IGNORES_ATTRIBUTES + self._duplicate_checking_ignores_attributes)
     end
 
     # Return array of associations that will be ignored during duplicate squashing
-    def ignore_associations(*args)
+    def duplicate_squashing_ignores_associations(*args)
       unless args.empty?
-        self._ignore_associations.merge(args.map(&:to_sym))
+        self._duplicate_squashing_ignores_associations.merge(args.map(&:to_sym))
       end
-      return self._ignore_associations
+      return self._duplicate_squashing_ignores_associations
     end
 
     # Extends ActiveRecord find with support for duplicates.
@@ -149,7 +150,7 @@ module DuplicateChecking
         fields = [fields].flatten
         fields.each do |attr|
           if attributes.include?(attr.to_s)
-            query += " a.#{attr} = b.#{attr} AND" 
+            query += " a.#{attr} = b.#{attr} AND"
             matched = true
           else
             raise ArgumentError, "Unknow fields: #{fields.inspect}"
@@ -216,17 +217,13 @@ module DuplicateChecking
         # Transfer any has_many associations of this model to the master
         self.reflect_on_all_associations(:has_many).each do |association|
           next if association.name == :duplicates
-          if self.ignore_associations.map(&:to_sym).include?(association.name.to_sym)
+          if self.duplicate_squashing_ignores_associations.include?(association.name.to_sym)
             RAILS_DEFAULT_LOGGER.debug(%{#{self.name}#squash: skipping assocation '#{association.name}'})
-            next 
+            next
           end
           foreign_objects = duplicate.send(association.name)
           for object in foreign_objects
-            begin
             object.update_attribute(association.primary_key_name, master.id) unless object.new_record?
-            rescue Exception => e
-              require 'rubygems'; require 'ruby-debug'; Debugger.start; debugger; 1 # FIXME
-            end
             RAILS_DEFAULT_LOGGER.debug(%{#{self.name}#squash: transferring foreign object "#{object.class.name}##{object.id}" from duplicate "#{self.name}##{duplicate.id}" to master "#{self.name}##{master.id}" via association "#{association.name}" using attribute "#{association.primary_key_name}"})
           end
         end
