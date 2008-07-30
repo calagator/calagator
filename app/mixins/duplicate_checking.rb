@@ -70,7 +70,7 @@ module DuplicateChecking
 
   module ClassMethods
 
-    # Return array of attributes that should be ignored for duplicate checking
+    # Return set of attributes that should be ignored for duplicate checking
     def duplicate_checking_ignores_attributes(*args)
       unless args.empty?
         self._duplicate_checking_ignores_attributes.merge(args.map(&:to_sym))
@@ -78,7 +78,7 @@ module DuplicateChecking
       return(DUPLICATE_CHECKING_IGNORES_ATTRIBUTES + self._duplicate_checking_ignores_attributes)
     end
 
-    # Return array of associations that will be ignored during duplicate squashing
+    # Return set of associations that will be ignored during duplicate squashing
     def duplicate_squashing_ignores_associations(*args)
       unless args.empty?
         self._duplicate_squashing_ignores_associations.merge(args.map(&:to_sym))
