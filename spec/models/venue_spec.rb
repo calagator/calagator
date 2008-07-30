@@ -115,7 +115,7 @@ describe Venue, "with finding duplicates (integration test)" do
   end
 end
 
-describe Venue, "when duplicates squashing" do
+describe Venue, "when squashing duplicates" do
   before(:each) do
     Venue.destroy_all
     Event.destroy_all
