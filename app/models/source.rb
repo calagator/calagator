@@ -86,7 +86,7 @@ class Source < ActiveRecord::Base
   # * :url -- URL of data to import. Defaults to record's #url attribute.
   # * :skip_old -- Should old events be skipped? Default is true.
   def to_events(opts={})
-    self.imported_at = DateTime.now()
+    self.imported_at = Time.now
     if valid?
       opts[:url] ||= self.url
       returning([]) do |events|
