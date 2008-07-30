@@ -91,9 +91,9 @@ module ApplicationHelper
 
   # returns html markup with source (if any), imported/created time, and - if modified - modified time
   def datestamp(item)
-    stamp = "This item was " 
-    if item.source.nil? 
-      stamp << "added directly to Calagator" 
+    stamp = "This item was "
+    if item.source.nil?
+      stamp << "added directly to Calagator"
     else
       stamp << "imported from " << link_to(item.source.name, item.source.name)
     end
@@ -102,6 +102,15 @@ module ApplicationHelper
       stamp << " and last updated " << content_tag(:strong, normalize_time(item.updated_at, :format => :html) )
     end
     stamp << "."
-  end  
+  end
 
+  # Caches +block+ in view only if the +condition+ is true.
+  # http://skionrails.wordpress.com/2008/05/22/conditional-fragment-caching/
+  def cache_if(condition, name={}, &block)
+    if condition
+      cache(name, &block)
+    else
+      block.call
+    end
+  end
 end

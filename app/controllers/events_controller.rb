@@ -19,6 +19,7 @@ class EventsController < ApplicationController
         Event.find_by_dates(@start_date, @end_date, :order => order) :
         Event.find_future_events(:order => order)
     }
+    @perform_caching = params[:order].blank? && params[:date].blank?
 
     @page_title = "Events"
 
