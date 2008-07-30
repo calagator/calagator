@@ -11,7 +11,7 @@ namespace :data do
   end
 
   desc "Restores state from FILE"
-  task :restore => :prepare do
+  task :restore => [:prepare, "tmp:cache:clear"] do
     filename = ENV["FILE"] or raise ArgumentError, "The data:restore task requires a FILE argument to define which file to restore from, e.g. 'rake FILE=current.data data:restore'"
     DataMarshal.restore(filename)
     puts "* Restored state from #{filename}"
