@@ -9,20 +9,37 @@ module ActionController
     def perform_action_with_newrelic_trace
       agent = NewRelic::Agent.instance
       return perform_action_without_newrelic_trace if self.class.read_inheritable_attribute('do_not_trace')
-    
+      
+      agent.ensure_started
+
       # generate metrics for all all controllers (no scope)
-      self.class.trace_method_execution "Controller", false do 
+      self.class.trace_method_execution "Controller", false, true, true do 
         # generate metrics for this specific action
         path = _determine_metric_path
       
         agent.stats_engine.transaction_name ||= "Controller/#{path}" if agent.stats_engine
       
-        self.class.trace_method_execution "Controller/#{path}" do 
+        self.class.trace_method_execution "Controller/#{path}", true, true, true do 
           # send request and parameter info to the transaction sampler
-          NewRelic::Agent.instance.transaction_sampler.notice_transaction(path, request, params)
+          
+          local_copy = params
+          
+          if respond_to? :filter_parameters
+            local_copy = filter_parameters(params)
+          else
+            local_copy = params
+          end
+            
+          agent.transaction_sampler.notice_transaction(path, request, local_copy)
         
-          # run the action
-          perform_action_without_newrelic_trace
+          t = Process.times.utime + Process.times.stime
+          
+          begin
+            # run the action
+            perform_action_without_newrelic_trace
+          ensure
+            agent.transaction_sampler.notice_transaction_cpu_time((Process.times.utime + Process.times.stime) - t)
+          end
         end
       end
     

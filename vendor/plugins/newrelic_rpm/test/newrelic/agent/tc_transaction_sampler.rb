@@ -50,6 +50,7 @@ module NewRelic
         assert new_slowest.duration >= 0.6
       end
       
+      
       def test_preare_to_send
         @sampler = TransactionSampler.new(Agent.instance)
 
@@ -80,11 +81,18 @@ module NewRelic
       def test_sample_with_parallel_paths
         @sampler = TransactionSampler.new(Agent.instance)
         
+        assert_equal 0, @sampler.scope_depth
+
         @sampler.notice_first_scope_push
         @sampler.notice_transaction "/path", nil, {}
         @sampler.notice_push_scope "a"
+        
+        assert_equal 1, @sampler.scope_depth 
+        
         @sampler.notice_pop_scope "a"
         @sampler.notice_scope_empty
+
+        assert_equal 0, @sampler.scope_depth 
         
         @sampler.notice_first_scope_push
         @sampler.notice_transaction "/path", nil, {}
@@ -108,6 +116,54 @@ module NewRelic
         assert_not_nil @sampler.harvest_slowest_sample(nil)
       end
       
+
+      def test_record_sql_off
+        sampler = TransactionSampler.new(Agent.instance, :record_sql => :off)
+        
+        sampler.notice_first_scope_push
+        
+        sampler.notice_sql("test", nil)
+        
+        segment = nil
+        
+        sampler.with_builder do |builder|
+          segment = builder.current_segment
+        end
+        
+        assert_nil segment[:sql]
+      end
+
+      def test_record_sql_raw
+        sampler = TransactionSampler.new(Agent.instance, :record_sql => :raw)
+        
+        sampler.notice_first_scope_push
+        
+        sampler.notice_sql("test", nil)
+        
+        segment = nil
+        
+        sampler.with_builder do |builder|
+          segment = builder.current_segment
+        end
+        
+        assert segment[:sql]
+      end
+
+      def test_record_sql_raw
+        sampler = TransactionSampler.new(Agent.instance, :record_sql => :obfuscated)
+        
+        sampler.notice_first_scope_push
+        
+        sampler.notice_sql("test", nil)
+        
+        segment = nil
+        
+        sampler.with_builder do |builder|
+          segment = builder.current_segment
+        end
+        
+        assert segment[:sql]
+      end
       
       def test_big_sql
         @sampler = TransactionSampler.new(Agent.instance)
@@ -118,7 +174,7 @@ module NewRelic
         
         len = 0
         while len <= NewRelic::Agent::TransactionSampler::MAX_SQL_LENGTH
-          @sampler.notice_sql(sql)
+          @sampler.notice_sql(sql, nil)
           len += sql.length
         end
         
@@ -140,7 +196,7 @@ module NewRelic
         
         orig_sql = "SELECT * from Jim where id=66"
         
-        @sampler.notice_sql(orig_sql)
+        @sampler.notice_sql(orig_sql, nil)
         
         segment = nil
         @sampler.with_builder do |builder|
@@ -203,7 +259,7 @@ module NewRelic
 
         assert_equal "12" + sql + "3", NewRelic::Agent.instance.obfuscator.call(sql)
         
-        NewRelic::Agent.agent.set_sql_obfuscator(:replace, orig)
+        NewRelic::Agent.agent.set_sql_obfuscator(:replace, &orig)
       end
       
       
@@ -212,13 +268,13 @@ module NewRelic
         @sampler.notice_first_scope_push
         @sampler.notice_transaction '/path', nil, {}
         @sampler.notice_push_scope "a"
-        @sampler.notice_sql("SELECT * FROM sandwiches WHERE bread = 'wheat'")
+        @sampler.notice_sql("SELECT * FROM sandwiches WHERE bread = 'wheat'", nil)
         @sampler.notice_push_scope "ab"
-        @sampler.notice_sql("SELECT * FROM sandwiches WHERE bread = 'white'")
+        @sampler.notice_sql("SELECT * FROM sandwiches WHERE bread = 'white'", nil)
         proc.call if proc
         @sampler.notice_pop_scope "ab"
         @sampler.notice_push_scope "lew"
-        @sampler.notice_sql("SELECT * FROM sandwiches WHERE bread = 'french'")
+        @sampler.notice_sql("SELECT * FROM sandwiches WHERE bread = 'french'", nil)
         @sampler.notice_pop_scope "lew"
         @sampler.notice_pop_scope "a"
         @sampler.notice_scope_empty

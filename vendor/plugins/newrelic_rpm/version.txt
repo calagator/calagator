@@ -1,3 +1,20 @@
+2008-07-30 version 2.4.1
+  * bugfix: initializing developer mode
+2008-07-29 version 2.4.0
+  * Beta support for LiteSpeed and Passenger
+2008-07-28 version 2.3.7
+  * bugfixes
+2008-07-28 version 2.3.6
+  * bugfixes
+2008-07-17 version 2.3.5
+  * bugfixes: pie chart data, rails 1.1 compability
+2008-07-11 version 2.3.4
+  * bugfix
+2008-07-10 version 2.3.3
+  * bugfix for non-mysql databases
+2008-07-07 version 2.3.2
+  * bugfixes
+  * Add enhancement for Transaction Traces early access feature
 2008-06-26 version 2.3.1
   * bugfixes
 2008-06-26 version 2.3.0

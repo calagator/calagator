@@ -208,7 +208,12 @@ module NewRelic
       self
     end
 
-    alias :trace_call :record_data_point
+    def trace_call(value, exclusive_time = nil)
+      value = 0 if value < 0
+      exclusive_time = 0 if exclusive_time && exclusive_time < 0
+      
+      record_data_point(value, exclusive_time)
+    end
 
     def freeze
       @end_time = Time.now
@@ -247,6 +252,19 @@ module NewRelic
 end
 
 class Numeric
+  
+  # copied from rails
+  def with_delimiter(delimiter=",", separator=".")
+    begin
+      parts = self.to_s.split('.')
+      parts[0].gsub!(/(\d)(?=(\d\d\d)+(?!\d))/, "\\1#{delimiter}")
+      parts.join separator
+    rescue
+      self
+    end
+  end
+  
+  
   # utlity method that converts floating point time values in seconds
   # to integers in milliseconds, to improve readability in ui
   def to_ms(decimal_places = 0)
