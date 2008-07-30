@@ -1,3 +1,4 @@
+@events = @events_deferred.call
 atom_feed() do |feed|
   feed.title("Calagator#{': ' + @page_title if @page_title}")
   unless @events.size == 0
