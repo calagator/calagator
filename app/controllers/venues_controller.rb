@@ -18,7 +18,7 @@ class VenuesController < ApplicationController
   # GET /venues/1.xml
   def show
     begin
-      @venue = Venue.find(params[:id])
+      @venue = Venue.find(params[:id], :include => :source)
     rescue ActiveRecord::RecordNotFound => e
       flash[:failure] = e.to_s
       return redirect_to(:action => :index)
