@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20080704045101
+# Schema version: 20080705164959
 #
 # Table name: events
 #
@@ -7,13 +7,13 @@
 #  title           :string(255)     
 #  description     :text            
 #  start_time      :datetime        
+#  venue_id        :integer         
 #  url             :string(255)     
 #  created_at      :datetime        
 #  updated_at      :datetime        
-#  venue_id        :integer         
 #  source_id       :integer         
 #  duplicate_of_id :integer         
-#  end_time        :datetime
+#  end_time        :datetime        
 #
 
 # == Event
