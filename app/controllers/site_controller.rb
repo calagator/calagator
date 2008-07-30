@@ -6,10 +6,15 @@ class SiteController < ApplicationController
     raise ArgumentError, "OMFG"
   end
 
-  def index
-    @times_to_events = Event.select_for_overview
+  # Render something to help benchmark stack without the views
+  def hello
+    render :text => "hello"
   end
-  
+
+  def index
+    @times_to_events_deferred = lambda { Event.select_for_overview }
+  end
+
   def style
     # check to see if the request is an allowed file, if not, 404 it
     if %w(base print ie).include?(params[:name])
@@ -17,7 +22,7 @@ class SiteController < ApplicationController
     else
       render :file => "#{RAILS_ROOT}/public/404.html", :status => 404 and return
     end
-    
+
     # define colors to be used in CSS
     @colors = {
       :green =>         '#82c555',
@@ -29,16 +34,16 @@ class SiteController < ApplicationController
     	:teal =>          '#66baa9',
     	:light_grey => 		'#aaccaa',
     	:dark_grey => 		'#445544',
-    	
+
     	# used for emphasis blocks of creme text
-    	:white =>         '#fff' 
+    	:white =>         '#fff'
     }
-    
-    output = render_to_string(:template => "site/styles/#{template}.css.erb") 
+
+    output = render_to_string(:template => "site/styles/#{template}.css.erb")
     # output.gsub!(/\/\*[^*]*\*+([^\/][^*]*\*+)*\//,'').gsub!(/$\s+/,'')
-    
+
     respond_to do |format|
-      format.css { 
+      format.css {
         render :text => output
       }
     end

@@ -25,7 +25,8 @@ ActionController::Routing::Routes.draw do |map|
   #     admin.resources :products
   #   end
 
-  map.connect 'omfg', :controller => 'site', :action => 'omfg'
+  map.connect 'omfg',  :controller => 'site', :action => 'omfg'
+  map.connect 'hello', :controller => 'site', :action => 'hello'
 
   # Normal controllers
   map.resources :events, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'search' => :get}

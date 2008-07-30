@@ -14,7 +14,7 @@ describe "/site/index" do
       :later    => [@day_after_tomorrow],
     }
 
-    assigns[:times_to_events] = @times_to_events
+    assigns[:times_to_events_deferred] = lambda { @times_to_events }
   end
 
   it "should render valid XHTML" do

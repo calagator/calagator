@@ -6,8 +6,8 @@
 development:
   url: http://localhost:8982/solr
   
+preview:
+  url: http://localhost:8982/solr
+  
 production:
   url: http://localhost:8983/solr
-  
-preview:
-  url: http://localhost:8984/solr
