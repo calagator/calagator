@@ -18,7 +18,7 @@
 		Obfuscated Query
 		</th>
 		<td colspan=<%= @explanation.length%>><small>
-			<%= @obfuscated_sql %>
+			<%= line_wrap_sql(@obfuscated_sql) %>
 		</small></td>
 	</tr>
 	<% end %>
@@ -27,7 +27,7 @@
 		<th align=right>
 		Duration
 		</th>
-		<td><%= @segment.duration.to_ms %> ms</td>
+		<td><%= @segment.duration.to_ms.with_delimiter %> ms</td>
 	</tr>
 	<% @row_headers.length.times do |r| %>
 		<% if @row_headers[r] %>
@@ -55,13 +55,13 @@
 	<tr>
 		<th align=right valign=top>Obfuscated SQL</th>
 		<td><small>
-			<%= @obfuscated_sql %>
+			<%= line_wrap_sql(@obfuscated_sql) %>
 		</small></td>
 	</tr>
 	<% end %>
   <tr>
     <th align=right>Duration</th>
-    <td><%= @segment.duration.to_ms%> ms</td>
+    <td><%= @segment.duration.to_ms.with_delimiter%> ms</td>
   </tr>
 <% end %>
 </table>

@@ -34,6 +34,17 @@ common: &default_settings
   # it should not impact response times.
   ssl: false
   
+
+  # Proxy settings for connecting to the RPM server.
+  #
+  # If a proxy is used, the host setting is required.  Other settings are optional.  Default
+  # port is 8080.
+  #
+  # proxy_host: proxy.sample.com
+  # proxy_port: 8080
+  # proxy_user:
+  # proxy_pass:
+
   
   # Transaction tracer is a EARLY ACCESS feature that captures deep information about slow
   # transactions and sends this to the RPM service once a minute. Included in the
@@ -49,11 +60,20 @@ common: &default_settings
     # mode before enabling transaction tracer.
     enabled: false
   
-    # When transaction tracer is on, the default behavior is to obfuscate all SQL. All
-    # string literals are replaced with '?' and all number sequences are replaced with ?.
-    # If this option is set to true, the raw SQL is sent rather than obfuscated SQL. This 
-    # should be used due to the sensitive nature of data stored in SQL statements
-    send_raw_sql: false
+    # When transaction tracer is on, only report the slowest trace every minute to RPM
+    # if the trace is slower than this value
+    transaction_threshold: 2.0
+ 
+    # When transaction tracer is on, SQL statements can optionally be recorded. The recorder
+    # has three modes, "off" which sends no SQL, "raw" which sends the SQL statement in its 
+    # original form, and "obfuscated", which strips out numeric and string literals
+    record_sql: obfuscated
+    
+    # When transaction tracer is on, should show SQL statements be EXPLAINED
+    explain_enabled: true
+
+    # When EXPLAIN is enabled, only run it for SQL statements slower than this value 
+    explain_threshold: 0.50
     
 
 # override default settings based on your application's environment

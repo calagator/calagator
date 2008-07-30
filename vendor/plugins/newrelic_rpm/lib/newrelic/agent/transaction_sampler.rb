@@ -7,15 +7,19 @@ module NewRelic::Agent
   class TransactionSampler
     include(Synchronize)
     
-    def initialize(agent, max_samples = 100)
+    def initialize(agent, options = {})
       @samples = []
-      @max_samples = max_samples
+      
+      @options = {:max_samples => 100, :record_sql => :obfuscated}
+      @options.merge!(options)
+
+      @max_samples = @options[:max_samples]
 
       agent.stats_engine.add_scope_stack_listener self
 
-      proc = Proc.new { |sql| default_sql_obfuscator(sql) }
-      
-      agent.set_sql_obfuscator(:replace, proc)
+      agent.set_sql_obfuscator(:replace) do |sql| 
+        default_sql_obfuscator(sql)
+      end
     end
     
     
@@ -63,6 +67,15 @@ module NewRelic::Agent
         end
       end
     end
+    
+    def scope_depth
+      depth = 0
+      with_builder do |builder|
+        depth = builder.scope_depth
+      end
+      
+      depth
+    end
   
     def notice_pop_scope(scope)
       with_builder do |builder|
@@ -95,12 +108,28 @@ module NewRelic::Agent
       end
     end
     
+    def notice_transaction_cpu_time(cpu_time)
+      with_builder do |builder|
+        builder.set_transaction_cpu_time(cpu_time)
+      end
+    end
+    
+    
+    # params == a hash of parameters to add
+    #
+    def add_request_parameters(params)
+      with_builder do |builder|
+        builder.add_request_parameters(params)
+      end
+    end
+    
     # some statements (particularly INSERTS with large BLOBS
     # may be very large; we should trim them to a maximum usable length
     MAX_SQL_LENGTH = 16384
-    def notice_sql(sql)
-      with_builder do |builder|
-        if Thread::current[:record_sql].nil? || Thread::current[:record_sql]
+    def notice_sql(sql, config)
+    
+      if (@options[:record_sql] != :off) && (Thread::current[:record_sql].nil? || Thread::current[:record_sql])
+        with_builder do |builder|
           segment = builder.current_segment
           if segment
             current_sql = segment[:sql]
@@ -111,6 +140,7 @@ module NewRelic::Agent
             end
             
             segment[:sql] = sql
+            segment[:connection_config] = config
           end
         end
       end
@@ -216,6 +246,18 @@ module NewRelic::Agent
       @current_segment = nil
     end
     
+    def scope_depth
+      depth = -1        # have to account for the root
+      current = @current_segment
+      
+      while(current)
+        depth += 1
+        current = current.parent_segment
+      end
+      
+      depth
+    end
+    
     def freeze
       @sample.freeze unless sample.frozen?
     end
@@ -226,10 +268,18 @@ module NewRelic::Agent
     
     def set_transaction_info(path, request, params)
       @sample.params[:path] = path
-      @sample.params[:request_params] = params.clone
+      @sample.params[:request_params].merge!(params)
       @sample.params[:request_params].delete :controller
       @sample.params[:request_params].delete :action
       @sample.params[:uri] = request.path if request
+    end
+    
+    def set_transaction_cpu_time(cpu_time)
+      @sample.params[:cpu_time] = cpu_time
+    end
+    
+    def add_request_parameters(params)
+      @sample.params[:request_params].merge!(params)
     end
     
     def sample

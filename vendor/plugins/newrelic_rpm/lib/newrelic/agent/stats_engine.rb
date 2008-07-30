@@ -8,7 +8,7 @@ module NewRelic::Agent
     
     attr_accessor :log
 
-    ScopeStackElement = Struct.new(:name, :timestamp, :exclusive_time)
+    ScopeStackElement = Struct.new(:name, :timestamp, :children_time, :deduct_call_time_from_parent)
     
     class SampledItem
       def initialize(stats, &callback)
@@ -30,6 +30,13 @@ module NewRelic::Agent
       # Makes the unit tests happy
       Thread::current[:newrelic_scope_stack] = nil
       
+      spawn_sampler_thread
+    end
+    
+    def spawn_sampler_thread
+      
+      return if !@sampler_process.nil? && @sampler_process == $$ 
+      
       # start up a thread that will periodically poll for metric samples
       @sampler_thread = Thread.new do
         while true do
@@ -48,6 +55,8 @@ module NewRelic::Agent
           end
         end
       end
+
+      @sampler_process = $$
     end
     
     def add_scope_stack_listener(l)
@@ -55,19 +64,19 @@ module NewRelic::Agent
       @scope_stack_listeners << l
     end
     
-    def push_scope(scope)
+    def push_scope(metric, time = Time.now, deduct_call_time_from_parent = true)
       @scope_stack_listeners.each do |l|
         l.notice_first_scope_push if scope_stack.empty? 
-        l.notice_push_scope scope
+        l.notice_push_scope metric
       end
       
-      nscope = ScopeStackElement.new(scope, Time.new, 0)
-      scope_stack.push nscope
+      scope = ScopeStackElement.new(metric, time, 0, deduct_call_time_from_parent)
+      scope_stack.push scope
       
-      nscope
+      scope
     end
     
-    def pop_scope(expected_scope)
+    def pop_scope(expected_scope, duration = Time.now - expected_scope.timestamp)
       stack = scope_stack
       
       scope = stack.pop
@@ -76,9 +85,11 @@ module NewRelic::Agent
 	      fail "unbalanced pop from blame stack: #{scope.name} != #{expected_scope.name}"
       end
       
-      duration = Time.now - scope.timestamp
+      stack.last.children_time += duration unless (stack.empty? || !scope.deduct_call_time_from_parent)
       
-      stack.last.exclusive_time += duration unless stack.empty?
+      if !scope.deduct_call_time_from_parent && !stack.empty?
+        stack.last.children_time += scope.children_time
+      end
       
       @scope_stack_listeners.each do |l|
         l.notice_pop_scope scope.name
@@ -111,6 +122,11 @@ module NewRelic::Agent
     
     def transaction_name
       Thread::current[:newrelic_transaction_name]
+    end
+    
+    
+    def lookup_stat(metric_name)
+      return @stats_hash[NewRelic::MetricSpec.new(metric_name)]
     end
     
     def get_stats(metric_name, use_scope = true)
