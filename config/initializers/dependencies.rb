@@ -3,6 +3,7 @@
 require 'open-uri'
 require 'set'
 require 'uri'
+require 'fileutils'
 
 #===[ /lib ]============================================================
 
