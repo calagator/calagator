@@ -52,7 +52,8 @@ class Venue < ActiveRecord::Base
 
   # Duplicates
   include DuplicateChecking
-  self.ignore_attributes << :source_id
+  self.ignore_attributes   << :source_id
+  self.ignore_associations << :tags
 
   #===[ Instantiators ]===================================================
 
