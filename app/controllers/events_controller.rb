@@ -1,7 +1,6 @@
 class EventsController < ApplicationController
   # GET /events
   # GET /events.xml
-
   def index
     order = params[:order] || 'date'
     order = case order
@@ -13,19 +12,21 @@ class EventsController < ApplicationController
               'lower(venues.title), start_time'
             end
 
-    @start_date = params[:date] ? Date.parse(params[:date][:start]) : Date.today
-    @end_date = params[:date] ? Date.parse(params[:date][:end]) : Date.today + 6.months
-    @events = params[:date] ?
+    @start_date = !params[:date].blank? ? Date.parse(params[:date][:start]) : Time.today
+    @end_date = !params[:date].blank? ? Date.parse(params[:date][:end]) : Time.today + 6.months
+    @events_deferred = lambda {
+      params[:date] ?
         Event.find_by_dates(@start_date, @end_date, :order => order) :
         Event.find_future_events(:order => order)
+    }
 
     @page_title = "Events"
 
     respond_to do |format|
       format.html # index.html.erb
       format.kml  # index.kml.erb
-      format.xml  { render :xml => @events }
-      format.json { render :json => @events }
+      format.xml  { render :xml => @events_deferred.call }
+      format.json { render :json => @events_deferred.call }
       format.ics  { ical_export() }
       format.atom # index.atom.builder
     end
