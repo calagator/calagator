@@ -36,7 +36,7 @@ class Event < ActiveRecord::Base
     ).map(&:to_sym)
     
   unless RAILS_ENV == 'test'
-      acts_as_solr :fields => INDEXABLE_FIELDS
+    acts_as_solr :fields => INDEXABLE_FIELDS
   end
 
   # last Time representable in certain operating systems is Jan 18 2038, local time
