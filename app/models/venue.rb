@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20080704045101
+# Schema version: 20080705164959
 #
 # Table name: venues
 #
@@ -25,10 +25,28 @@
 
 class Venue < ActiveRecord::Base
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
-  
-  # Solr
+
+  # Names of columns and methods to create Solr indexes for
+  INDEXABLE_FIELDS = \
+    %w(
+      title
+      description
+      address
+      url
+      street_address
+      locality
+      region
+      postal_code
+      country
+      latitude
+      longitude
+      email
+      telephone
+      tag_list
+    ).map(&:to_sym)
+
   unless RAILS_ENV == 'test'
-    acts_as_solr
+    acts_as_solr :fields => INDEXABLE_FIELDS
   end
 
   # Associations
