@@ -1,3 +1,4 @@
+require 'fileutils'
 require 'rubygems'
 require 'rake'
 require 'net/http'
@@ -8,6 +9,8 @@ namespace :solr do
 
   desc 'Starts Solr. Options accepted: RAILS_ENV=your_env, PORT=XX. Defaults to development if none.'
   task :start do
+    FileUtils.mkdir_p("#{File.dirname(__FILE__)}/../../solr/logs")
+
     begin
       n = Net::HTTP.new('localhost', SOLR_PORT)
       n.request_head('/').value
