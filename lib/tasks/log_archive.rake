@@ -6,7 +6,7 @@ task "log:archive" do
   require 'date'
   log_dir = File.join(RAILS_ROOT, "log")
   archive_dir = File.join(log_dir, "archive")
-  timestamp = Time.now.strftime
+  timestamp = DateTime.now.strftime
 
   mkdir_p(archive_dir) unless File.directory?(archive_dir)
   Dir["#{log_dir}/*.log"].each do |source|
