@@ -1,5 +1,5 @@
 <%#
-Locals: 
+Locals:
 * events => Array of Event objects
 * description => String description of events, e.g. "current"
 %>
@@ -8,6 +8,6 @@ Locals:
 </div>
 
 <div id='list_items'>
-	<%= render :partial => 'events/table', :locals => { :events => events } %>
+  <%= render :partial => 'events/table', :locals => { :events => events, :scores => true } %>
 </div>
 

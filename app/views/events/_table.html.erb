@@ -1,8 +1,10 @@
 <%-
 # Arguments:
-# * events => Array of Event records
+# * events => Array of Event records.
+# * scores => Offer a sort by score, like for search? Default to false.
 
-opts ||= {}
+scores = defined?(scores) ? scores : false
+
 previous_start_time = nil
 show_year ||= false
 skipped = 0
@@ -16,7 +18,13 @@ rowspans = calculate_rowspans(events)
 	<thead>
 		<tr>
 			<th class='date'>Sort By: <%= link_to "Date", url_for(params.merge(:order => 'date')) %></th>
-			<th class='event_summary'><%= link_to "Event Name", url_for(params.merge(:order => 'name')) %>, <%= link_to "Location", url_for(params.merge(:order => 'venue')) %></th>
+      <th class='event_summary'>
+        <%= link_to "Event Name", url_for(params.merge(:order => 'name')) -%>,
+        <%= link_to "Location", url_for(params.merge(:order => 'venue')) -%>
+        <%- if scores -%>,
+        <%= link_to "Relevance", url_for(params.merge(:order => 'score')) %>
+        <% end %>
+      </th>
 		</tr>
 	</thead>
 	<tbody>
