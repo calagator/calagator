@@ -57,7 +57,6 @@ class DataMarshal
   end
 
   def dump(filename=nil)
-    # TODO add caching option
     target = filename || self.filename_or_default
 
     if File.exist?(target) && self.use_cache && (File.mtime(target) > (Time.now-1.minute))
