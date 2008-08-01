@@ -245,8 +245,13 @@ class Event < ActiveRecord::Base
       :limit => limit,
     }
     solr_opts[:scores] = true if order == :score
-    response = Event.find_id_by_solr(formatted_query, solr_opts)
-    return Event.find(:all, :conditions => ["id in (?)", response.results], :include => [:venue, :source])
+    event_ids = self.find_id_by_solr(formatted_query, solr_opts).results
+    return self.find_by_id_for_solr(event_ids)
+  end
+
+  # Return an array of event records matching the IDs with their associations preloaded.
+  def self.find_by_id_for_solr(*event_ids)
+    return self.find(:all, :conditions => ["id in (?)", event_ids.flatten], :include => [:venue, :source])
   end
 
   def self.search_grouped_by_currentness(*args)
