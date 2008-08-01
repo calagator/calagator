@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: bbcode.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />bbcode.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/bbcode.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 14:56:45 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/BBCode.html">BBCode</a></h1>
+<h1>Synopsis</h1>
+<p>
+The <a href="../../../classes/BBCode.html">BBCode</a> module helps ease the
+separation of core and frontend with the core (or submodules) being still
+able to say, what colors shall be used in it&#8216;s responses. This is
+achieved by encoding formatting information using the <a
+href="../../../classes/BBCode.html">BBCode</a> tokens. This enables you to
+&quot;pipe&quot; layout information such as colors, style, fonttype, size
+and alignment through the core to the frontend.
+</p>
+<p>
+Additionally it converts markups/codes between ANSI, HTML and <a
+href="../../../classes/BBCode.html">BBCode</a> almost freely ;)
+</p>
+<h2>Usage</h2>
+<pre>
+  # Converting a bbcode string to ANSI and XHTML
+
+  str = &quot;this is [COLOR=red]red[/COLOR], this is [B]bold[/B]&quot;
+  print( BBCode.bbcode_to_ansi(str) )
+  print( BBCode.bbcode_to_html(str) )
+</pre>
+<h2>Authors</h2>
+<ul>
+<li>Thomas-Ivo Heinen
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2002 Thomas-Ivo Heinen
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

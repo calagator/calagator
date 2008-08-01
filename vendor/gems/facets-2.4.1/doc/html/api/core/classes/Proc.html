@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Proc</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Proc</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/proc/update_rb.html">lib/facets/proc/update.rb</a>
+<a href="../files/lib/facets/proc/curry_rb.html">lib/facets/proc/curry.rb</a>
+<a href="../files/lib/facets/proc/partial_rb.html">lib/facets/proc/partial.rb</a>
+<a href="../files/lib/facets/proc/compose_rb.html">lib/facets/proc/compose.rb</a>
+<a href="../files/lib/facets/proc/to_method_rb.html">lib/facets/proc/to_method.rb</a>
+<a href="../files/lib/facets/proc/bind_rb.html">lib/facets/proc/bind.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+        <a href="Object.html">
+Object
+         </a>
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000135">*</a></li>
+  <li><a href="#M000137">bind</a></li>
+  <li><a href="#M000134">compose</a></li>
+  <li><a href="#M000132">curry</a></li>
+  <li><a href="#M000133">partial</a></li>
+  <li><a href="#M000136">to_method</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000135"></a><b>*</b>(x)
+  </div>
+  <div class="description">
+  <p>
+Operator for <a href="Proc.html#M000134">Proc#compose</a> and <a
+href="Integer.html#M000024">Integer#times_collect</a>/of.
+</p>
+<pre>
+  a = lambda { |x| x + 4 }
+  b = lambda { |y| y / 2 }
+
+  (a * b).call(4)  #=&gt; 6
+  (b * a).call(4)  #=&gt; 4
+
+  CREDIT: Dave
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000135_source')" id="l_M000135_source">show source</a> ]</p>
+  <div id="M000135_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/proc/compose.rb, line 29</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">*</span>(<span class="ruby-identifier">x</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Integer</span><span class="ruby-operator">===</span><span class="ruby-identifier">x</span>
+      <span class="ruby-comment cmt"># collect times</span>
+      <span class="ruby-identifier">c</span> = []
+      <span class="ruby-identifier">x</span>.<span class="ruby-identifier">times</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">call</span>(<span class="ruby-identifier">i</span>)}
+      <span class="ruby-identifier">c</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-comment cmt"># compose procs</span>
+      <span class="ruby-identifier">lambda</span>{<span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">x</span>[<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>]]}
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000137"></a><b>bind</b>(object)
+  </div>
+  <div class="description">
+  <p>
+Bind a <a href="Proc.html">Proc</a> to an object returning a Method.
+</p>
+<p>
+NOTE: This version comes from Rails. The old Facets
+</p>
+<pre>
+      version used thread.rb, but I no longer think
+      the implementaiton is thread critical. Please
+      make a bug report if this proves wrong.
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000137_source')" id="l_M000137_source">show source</a> ]</p>
+  <div id="M000137_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/proc/bind.rb, line 10</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bind</span>(<span class="ruby-identifier">object</span>)
+    <span class="ruby-identifier">block</span>, <span class="ruby-identifier">time</span> = <span class="ruby-keyword kw">self</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+    (<span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">object</span>; <span class="ruby-keyword kw">self</span>; <span class="ruby-keyword kw">end</span>).<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-identifier">method_name</span> = <span class="ruby-node">&quot;__bind_#{time.to_i}_#{time.usec}&quot;</span>
+      <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">method_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">method</span> = <span class="ruby-identifier">instance_method</span>(<span class="ruby-identifier">method_name</span>)
+      <span class="ruby-identifier">remove_method</span>(<span class="ruby-identifier">method_name</span>)
+      <span class="ruby-identifier">method</span>
+    <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">bind</span>(<span class="ruby-identifier">object</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000134"></a><b>compose</b>(g)
+  </div>
+  <div class="description">
+  <p>
+Returns a new proc that is the functional composition of two procs, in
+order.
+</p>
+<pre>
+  a = lambda { |x| x + 4 }
+  b = lambda { |y| y / 2 }
+
+  a.compose(b).call(4)  #=&gt; 6
+  b.compose(a).call(4)  #=&gt; 4
+
+  CREDIT: Dave
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000134_source')" id="l_M000134_source">show source</a> ]</p>
+  <div id="M000134_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/proc/compose.rb, line 14</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">compose</span>(<span class="ruby-identifier">g</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;arity count mismatch&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">g</span>.<span class="ruby-identifier">arity</span>
+    <span class="ruby-identifier">lambda</span>{ <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>[ <span class="ruby-operator">*</span><span class="ruby-identifier">g</span>[<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>] ] }
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000132"></a><b>curry</b>(*args)
+  </div>
+  <div class="description">
+  <p>
+Curry <a href="Proc.html">Proc</a> object into new <a
+href="Proc.html">Proc</a> object.
+</p>
+<p>
+TODO: Utilize Ruby 1.9&#8216;s <a href="Proc.html#M000132">curry</a>
+method.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000132_source')" id="l_M000132_source">show source</a> ]</p>
+  <div id="M000132_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/proc/curry.rb, line 7</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">curry</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">idx</span> = (<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">arity</span>).<span class="ruby-identifier">to_a</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;argument count is greater than arity (#{args.size} &gt; #{arity})&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">arity</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;arguments must be unique indexes&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">uniq</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">args</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;arguments must be indexes&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">any?</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-operator">!</span><span class="ruby-constant">Fixnum</span><span class="ruby-operator">===</span><span class="ruby-identifier">a</span> }
+      <span class="ruby-identifier">idx</span> = (<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">arity</span>).<span class="ruby-identifier">to_a</span>
+      <span class="ruby-identifier">idx</span> = <span class="ruby-identifier">args</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">idx</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">args</span>)  
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">rec</span> = <span class="ruby-value str">''</span>
+    <span class="ruby-identifier">idx</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">rec</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;proc { |a#{i}| &quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">rec</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;self[&quot;</span>
+    <span class="ruby-identifier">rec</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">arity</span>).<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">collect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;a#{i}&quot;</span>}.<span class="ruby-identifier">join</span>(<span class="ruby-value str">','</span>)
+    <span class="ruby-identifier">rec</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;]&quot;</span>
+    <span class="ruby-identifier">rec</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;}&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">arity</span>
+
+    <span class="ruby-identifier">instance_eval</span> <span class="ruby-identifier">rec</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000133"></a><b>partial</b>(*args)
+  </div>
+  <div class="description">
+  <p>
+Convert a <a href="Proc.html">Proc</a> object into new <a
+href="Proc.html#M000133">partial</a> <a href="Proc.html">Proc</a> object.
+</p>
+<pre>
+  a = proc { |a,b,c| a+b+c }
+  b = a.partial(__, 2, __)
+  b[1,3] #=&gt; 6
+</pre>
+<p>
+This method is similar to <a href="Proc.html#M000132">Proc#curry</a>.
+</p>
+<p>
+CREDT Trans
+</p>
+<p>
+TODO: Parhaps ArgumentError would suffice, and we don&#8216;t need <a
+href="MissingArgument.html">MissingArgument</a>?
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000133_source')" id="l_M000133_source">show source</a> ]</p>
+  <div id="M000133_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/proc/partial.rb, line 27</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">partial</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-constant">Proc</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-operator">*</span><span class="ruby-identifier">spice</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span>
+        <span class="ruby-constant">MissingArgument</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">a</span> <span class="ruby-value">? </span><span class="ruby-identifier">spice</span>.<span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">a</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">call</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">result</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000136"></a><b>to_method</b>(object, name=nil)
+  </div>
+  <div class="description">
+  <p>
+Convert <a href="Proc.html">Proc</a> to method.
+</p>
+<pre>
+  plusproc = lambda { |x| x + 1 }
+  plusproc.to_method(self, 'foo')
+  X.new.foo(1)  #=&gt; 2
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000136_source')" id="l_M000136_source">show source</a> ]</p>
+  <div id="M000136_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/proc/to_method.rb, line 11</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_method</span>(<span class="ruby-identifier">object</span>, <span class="ruby-identifier">name</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-comment cmt">#object = object || eval(&quot;self&quot;, self)</span>
+    <span class="ruby-identifier">block</span>, <span class="ruby-identifier">time</span> = <span class="ruby-keyword kw">self</span>, <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+    <span class="ruby-identifier">method_name</span> = <span class="ruby-identifier">name</span> <span class="ruby-operator">||</span> <span class="ruby-node">&quot;__bind_#{time.to_i}_#{time.usec}&quot;</span>
+    <span class="ruby-keyword kw">begin</span>
+      (<span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">object</span>; <span class="ruby-keyword kw">self</span>; <span class="ruby-keyword kw">end</span>).<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">method_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">method</span> = <span class="ruby-identifier">instance_method</span>(<span class="ruby-identifier">method_name</span>)
+        <span class="ruby-identifier">remove_method</span>(<span class="ruby-identifier">method_name</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">name</span>
+        <span class="ruby-identifier">method</span>
+      <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">bind</span>(<span class="ruby-identifier">object</span>)
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">TypeError</span>
+      <span class="ruby-identifier">object</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">method_name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+        <span class="ruby-identifier">method</span> = <span class="ruby-identifier">instance_method</span>(<span class="ruby-identifier">method_name</span>)
+        <span class="ruby-identifier">remove_method</span>(<span class="ruby-identifier">method_name</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">name</span>
+        <span class="ruby-identifier">method</span>
+      <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">bind</span>(<span class="ruby-identifier">object</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

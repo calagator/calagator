@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: BinReadable::ByteOrder</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />BinReadable::ByteOrder</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/binreadable_rb.html">lib/facets/binreadable.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000848">big?</a></li>
+  <li><a href="#M000846">big_endian?</a></li>
+  <li><a href="#M000843">byte_order</a></li>
+  <li><a href="#M000844">byteorder</a></li>
+  <li><a href="#M000847">little?</a></li>
+  <li><a href="#M000845">little_endian?</a></li>
+  <li><a href="#M000849">network?</a></li>
+  </ul>
+
+
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">Native</td>
+    <td>=</td>
+    <td class="attr-value">:Native</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">BigEndian</td>
+    <td>=</td>
+    <td class="attr-value">Big = Network = :BigEndian</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">LittleEndian</td>
+    <td>=</td>
+    <td class="attr-value">Little = :LittleEndian</td>
+  </tr>
+  </table>
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000848"></a><b>big?</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for big_endian?
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000846"></a><b>big_endian?</b>()
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="ByteOrder.html#M000848">big?</a>
+  <a href="ByteOrder.html#M000849">network?</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000846_source')" id="l_M000846_source">show source</a> ]</p>
+  <div id="M000846_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 59</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">big_endian?</span>
+      <span class="ruby-identifier">byte_order</span> <span class="ruby-operator">==</span> <span class="ruby-constant">BigEndian</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000843"></a><b>byte_order</b>()
+  </div>
+  <div class="description">
+  <p>
+examines the byte order of the underlying machine
+</p>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="ByteOrder.html#M000844">byteorder</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000843_source')" id="l_M000843_source">show source</a> ]</p>
+  <div id="M000843_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 45</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">byte_order</span>
+      <span class="ruby-keyword kw">if</span> [<span class="ruby-value">0x12345678</span>].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">&quot;L&quot;</span>) <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;\x12\x34\x56\x78&quot;</span>
+        <span class="ruby-constant">BigEndian</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-constant">LittleEndian</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000844"></a><b>byteorder</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="ByteOrder.html#M000843">byte_order</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000847"></a><b>little?</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for little_endian?
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000845"></a><b>little_endian?</b>()
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="ByteOrder.html#M000847">little?</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000845_source')" id="l_M000845_source">show source</a> ]</p>
+  <div id="M000845_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 55</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">little_endian?</span>
+      <span class="ruby-identifier">byte_order</span> <span class="ruby-operator">==</span> <span class="ruby-constant">LittleEndian</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000849"></a><b>network?</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for big_endian?
+</p>
+  </div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

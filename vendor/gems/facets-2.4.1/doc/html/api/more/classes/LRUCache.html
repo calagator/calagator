@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: LRUCache</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />LRUCache</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/lrucache_rb.html">lib/facets/lrucache.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Hash
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="LRUCache.html">LRUCache</a></h1>
+<p>
+A cache utilizing a simple LRU (Least Recently Used) policy. The items
+managed by this cache must respond to the key method. Attempts to optimize
+reads rather than inserts!
+</p>
+<p>
+LRU semantics are enforced by inserting the items in a queue. The <a
+href="LRUCache.html#M000300">lru</a> item is always at the tail. Two
+special sentinels (head, tail) are used to simplify (?) the code.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000294">[]</a></li>
+  <li><a href="#M000295">[]=</a></li>
+  <li><a href="#M000297">clear</a></li>
+  <li><a href="#M000296">delete</a></li>
+  <li><a href="#M000298">first</a></li>
+  <li><a href="#M000299">last</a></li>
+  <li><a href="#M000300">lru</a></li>
+  <li><a href="#M000303">lru_append</a></li>
+  <li><a href="#M000306">lru_clear</a></li>
+  <li><a href="#M000301">lru_delete</a></li>
+  <li><a href="#M000304">lru_insert</a></li>
+  <li><a href="#M000302">lru_join</a></li>
+  <li><a href="#M000305">lru_touch</a></li>
+  <li><a href="#M000293">new</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="LRUCache/Item.html" class="link">LRUCache::Item</a><br />
+Class <a href="LRUCache/Sentinel.html" class="link">LRUCache::Sentinel</a><br />
+
+
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>head</td>
+    <td class='attr-desc'>
+the head sentinel and the tail sentinel, tail.prev points to the <a
+href="LRUCache.html#M000300">lru</a> item.
+
+</td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[RW]
+    </td>
+    <td class='attr-name'>max_items</td>
+    <td class='attr-desc'>
+the maximum number of items in the cache.
+
+</td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>tail</td>
+    <td class='attr-desc'>
+the head sentinel and the tail sentinel, tail.prev points to the <a
+href="LRUCache.html#M000300">lru</a> item.
+
+</td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000293"></a><b>new</b>(max_items)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000293_source')" id="l_M000293_source">show source</a> ]</p>
+  <div id="M000293_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 59</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">max_items</span>)
+    <span class="ruby-ivar">@max_items</span> = <span class="ruby-identifier">max_items</span>
+    <span class="ruby-identifier">lru_clear</span>()
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000294"></a><b>[]</b>(key)
+  </div>
+  <div class="description">
+  <p>
+Lookup an item in the cache.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000294_source')" id="l_M000294_source">show source</a> ]</p>
+  <div id="M000294_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 66</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">item</span> = <span class="ruby-keyword kw">super</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">lru_touch</span>(<span class="ruby-identifier">item</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000295"></a><b>[]=</b>(key, item)
+  </div>
+  <div class="description">
+  <p>
+The inserted item is considered mru!
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000295_source')" id="l_M000295_source">show source</a> ]</p>
+  <div id="M000295_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 74</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">item</span>)
+    <span class="ruby-identifier">item</span> = <span class="ruby-keyword kw">super</span>
+    <span class="ruby-identifier">item</span>.<span class="ruby-identifier">lru_key</span> = <span class="ruby-identifier">key</span>
+    <span class="ruby-identifier">lru_insert</span>(<span class="ruby-identifier">item</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000297"></a><b>clear</b>()
+  </div>
+  <div class="description">
+  <p>
+Clear the cache.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000297_source')" id="l_M000297_source">show source</a> ]</p>
+  <div id="M000297_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 90</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear</span>
+    <span class="ruby-keyword kw">super</span>
+    <span class="ruby-identifier">lru_clear</span>()
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000296"></a><b>delete</b>(key)
+  </div>
+  <div class="description">
+  <p>
+Delete an item from the cache.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000296_source')" id="l_M000296_source">show source</a> ]</p>
+  <div id="M000296_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 82</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">key</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">item</span> = <span class="ruby-keyword kw">super</span>
+      <span class="ruby-identifier">lru_delete</span>(<span class="ruby-identifier">item</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000298"></a><b>first</b>()
+  </div>
+  <div class="description">
+  <p>
+The <a href="LRUCache.html#M000298">first</a> (mru) element in the cache.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000298_source')" id="l_M000298_source">show source</a> ]</p>
+  <div id="M000298_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 97</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">first</span>
+    <span class="ruby-ivar">@head</span>.<span class="ruby-identifier">lru_next</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000299"></a><b>last</b>()
+  </div>
+  <div class="description">
+  <p>
+The <a href="LRUCache.html#M000299">last</a> (<a
+href="LRUCache.html#M000300">lru</a>) element in the cache.
+</p>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="LRUCache.html#M000300">lru</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000299_source')" id="l_M000299_source">show source</a> ]</p>
+  <div id="M000299_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 103</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">last</span>
+    <span class="ruby-ivar">@tail</span>.<span class="ruby-identifier">lru_prev</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000300"></a><b>lru</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="LRUCache.html#M000299">last</a>
+</p>
+  </div>
+</div>
+<div class="sectiontitle">Private Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000303"></a><b>lru_append</b>(parent, child)
+  </div>
+  <div class="description">
+  <p>
+Append a child item to a parent item in the <a
+href="LRUCache.html#M000300">lru</a> list (Re)inserts the child in the
+list.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000303_source')" id="l_M000303_source">show source</a> ]</p>
+  <div id="M000303_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 129</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lru_append</span>(<span class="ruby-identifier">parent</span>, <span class="ruby-identifier">child</span>)
+    <span class="ruby-identifier">lru_join</span>(<span class="ruby-identifier">child</span>, <span class="ruby-identifier">parent</span>.<span class="ruby-identifier">lru_next</span>)
+    <span class="ruby-identifier">lru_join</span>(<span class="ruby-identifier">parent</span>, <span class="ruby-identifier">child</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000306"></a><b>lru_clear</b>()
+  </div>
+  <div class="description">
+  <p>
+Clear the <a href="LRUCache.html#M000300">lru</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000306_source')" id="l_M000306_source">show source</a> ]</p>
+  <div id="M000306_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 150</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lru_clear</span>
+    <span class="ruby-ivar">@head</span> = <span class="ruby-constant">Sentinel</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-ivar">@tail</span> = <span class="ruby-constant">Sentinel</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">lru_join</span>(<span class="ruby-ivar">@head</span>, <span class="ruby-ivar">@tail</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000301"></a><b>lru_delete</b>(item)
+  </div>
+  <div class="description">
+  <p>
+Delete an item from the <a href="LRUCache.html#M000300">lru</a> list.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000301_source')" id="l_M000301_source">show source</a> ]</p>
+  <div id="M000301_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 112</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lru_delete</span>(<span class="ruby-identifier">item</span>)
+    <span class="ruby-identifier">lru_join</span>(<span class="ruby-identifier">item</span>.<span class="ruby-identifier">lru_prev</span>, <span class="ruby-identifier">item</span>.<span class="ruby-identifier">lru_next</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">item</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000304"></a><b>lru_insert</b>(item)
+  </div>
+  <div class="description">
+  <p>
+Insert an item
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000304_source')" id="l_M000304_source">show source</a> ]</p>
+  <div id="M000304_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 136</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lru_insert</span>(<span class="ruby-identifier">item</span>)
+    <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">last</span>.<span class="ruby-identifier">lru_key</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">size</span>() <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@max_items</span>
+    <span class="ruby-identifier">lru_append</span>(<span class="ruby-ivar">@head</span>, <span class="ruby-identifier">item</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000302"></a><b>lru_join</b>(x, y)
+  </div>
+  <div class="description">
+  <p>
+Join two items in the <a href="LRUCache.html#M000300">lru</a> list. Return
+y to allow for chaining.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000302_source')" id="l_M000302_source">show source</a> ]</p>
+  <div id="M000302_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 120</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lru_join</span>(<span class="ruby-identifier">x</span>, <span class="ruby-identifier">y</span>)
+    <span class="ruby-identifier">x</span>.<span class="ruby-identifier">lru_next</span> = <span class="ruby-identifier">y</span>
+    <span class="ruby-identifier">y</span>.<span class="ruby-identifier">lru_prev</span> = <span class="ruby-identifier">x</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">y</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000305"></a><b>lru_touch</b>(item)
+  </div>
+  <div class="description">
+  <p>
+Touch an item, make mru! Returns the item.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000305_source')" id="l_M000305_source">show source</a> ]</p>
+  <div id="M000305_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/lrucache.rb, line 144</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lru_touch</span>(<span class="ruby-identifier">item</span>)
+    <span class="ruby-identifier">lru_append</span>(<span class="ruby-ivar">@head</span>, <span class="ruby-identifier">lru_delete</span>(<span class="ruby-identifier">item</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

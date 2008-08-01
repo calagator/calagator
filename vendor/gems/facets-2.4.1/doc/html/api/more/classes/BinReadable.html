@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: BinReadable</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />BinReadable</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/binreadable_rb.html">lib/facets/binreadable.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="BinReadable.html">BinReadable</a></h1>
+<p>
+This mixin solely depends on method read(n), which must be defined in the
+class/module where you mix in this module.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000820">byte_order</a></li>
+  <li><a href="#M000821">byte_order=</a></li>
+  <li><a href="#M000822">byteorder</a></li>
+  <li><a href="#M000823">byteorder=</a></li>
+  <li><a href="#M000839">read_cstring</a></li>
+  <li><a href="#M000831">read_int16_big</a></li>
+  <li><a href="#M000830">read_int16_little</a></li>
+  <li><a href="#M000829">read_int16_native</a></li>
+  <li><a href="#M000837">read_int32_big</a></li>
+  <li><a href="#M000836">read_int32_little</a></li>
+  <li><a href="#M000835">read_int32_native</a></li>
+  <li><a href="#M000825">read_int8</a></li>
+  <li><a href="#M000838">read_uint8</a></li>
+  <li><a href="#M000828">read_word16_big</a></li>
+  <li><a href="#M000827">read_word16_little</a></li>
+  <li><a href="#M000826">read_word16_native</a></li>
+  <li><a href="#M000834">read_word32_big</a></li>
+  <li><a href="#M000833">read_word32_little</a></li>
+  <li><a href="#M000832">read_word32_native</a></li>
+  <li><a href="#M000824">read_word8</a></li>
+  <li><a href="#M000840">readn</a></li>
+  <li><a href="#M000841">ru</a></li>
+  <li><a href="#M000842">ru_swap</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="BinReadable/ByteOrder.html" class="link">BinReadable::ByteOrder</a><br />
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000820"></a><b>byte_order</b>()
+  </div>
+  <div class="description">
+  <p>
+default is native byte-order
+</p>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="BinReadable.html#M000822">byteorder</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000820_source')" id="l_M000820_source">show source</a> ]</p>
+  <div id="M000820_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 74</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">byte_order</span>
+    <span class="ruby-ivar">@byte_order</span> <span class="ruby-operator">||</span> <span class="ruby-constant">ByteOrder</span><span class="ruby-operator">::</span><span class="ruby-constant">Native</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000821"></a><b>byte_order=</b>(new_byteorder)
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="BinReadable.html#M000823">byteorder=</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000821_source')" id="l_M000821_source">show source</a> ]</p>
+  <div id="M000821_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 78</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">byte_order=</span>(<span class="ruby-identifier">new_byteorder</span>)
+    <span class="ruby-ivar">@byte_order</span> = <span class="ruby-identifier">new_byteorder</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000822"></a><b>byteorder</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="BinReadable.html#M000820">byte_order</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000823"></a><b>byteorder=</b>(new_byteorder)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="BinReadable.html#M000820">byte_order</a>=
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000839"></a><b>read_cstring</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000839_source')" id="l_M000839_source">show source</a> ]</p>
+  <div id="M000839_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 188</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_cstring</span>
+    <span class="ruby-identifier">str</span> = <span class="ruby-value str">&quot;&quot;</span>
+    <span class="ruby-keyword kw">while</span> (<span class="ruby-identifier">c</span>=<span class="ruby-identifier">readn</span>(<span class="ruby-value">1</span>)) <span class="ruby-operator">!=</span> <span class="ruby-value str">&quot;\0&quot;</span>
+      <span class="ruby-identifier">str</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">c</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">str</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000831"></a><b>read_int16_big</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000831_source')" id="l_M000831_source">show source</a> ]</p>
+  <div id="M000831_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 124</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_int16_big</span>
+    <span class="ruby-comment cmt"># swap bytes if native=little (but we want big)</span>
+    <span class="ruby-identifier">ru_swap</span>(<span class="ruby-value">2</span>, <span class="ruby-value str">'s'</span>, <span class="ruby-constant">ByteOrder</span><span class="ruby-operator">::</span><span class="ruby-constant">Little</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000830"></a><b>read_int16_little</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000830_source')" id="l_M000830_source">show source</a> ]</p>
+  <div id="M000830_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 119</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_int16_little</span>
+    <span class="ruby-comment cmt"># swap bytes if native=big (but we want little)</span>
+    <span class="ruby-identifier">ru_swap</span>(<span class="ruby-value">2</span>, <span class="ruby-value str">'s'</span>, <span class="ruby-constant">ByteOrder</span><span class="ruby-operator">::</span><span class="ruby-constant">Big</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000829"></a><b>read_int16_native</b>()
+  </div>
+  <div class="description">
+  <h3>Signed</h3>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000829_source')" id="l_M000829_source">show source</a> ]</p>
+  <div id="M000829_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 115</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_int16_native</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">2</span>, <span class="ruby-value str">'s'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000837"></a><b>read_int32_big</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000837_source')" id="l_M000837_source">show source</a> ]</p>
+  <div id="M000837_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 156</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_int32_big</span>
+    <span class="ruby-comment cmt"># swap bytes if native=little (but we want big)</span>
+    <span class="ruby-identifier">ru_swap</span>(<span class="ruby-value">4</span>, <span class="ruby-value str">'l'</span>, <span class="ruby-constant">ByteOrder</span><span class="ruby-operator">::</span><span class="ruby-constant">Little</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000836"></a><b>read_int32_little</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000836_source')" id="l_M000836_source">show source</a> ]</p>
+  <div id="M000836_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 151</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_int32_little</span>
+    <span class="ruby-comment cmt"># swap bytes if native=big (but we want little)</span>
+    <span class="ruby-identifier">ru_swap</span>(<span class="ruby-value">4</span>, <span class="ruby-value str">'l'</span>, <span class="ruby-constant">ByteOrder</span><span class="ruby-operator">::</span><span class="ruby-constant">Big</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000835"></a><b>read_int32_native</b>()
+  </div>
+  <div class="description">
+  <h3>Signed</h3>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000835_source')" id="l_M000835_source">show source</a> ]</p>
+  <div id="M000835_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 147</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_int32_native</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">4</span>, <span class="ruby-value str">'l'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000825"></a><b>read_int8</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000825_source')" id="l_M000825_source">show source</a> ]</p>
+  <div id="M000825_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 93</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_int8</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">1</span>, <span class="ruby-value str">'c'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000838"></a><b>read_uint8</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="BinReadable.html#M000824">read_word8</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000828"></a><b>read_word16_big</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000828_source')" id="l_M000828_source">show source</a> ]</p>
+  <div id="M000828_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 109</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_word16_big</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">2</span>, <span class="ruby-value str">'n'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000827"></a><b>read_word16_little</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000827_source')" id="l_M000827_source">show source</a> ]</p>
+  <div id="M000827_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 105</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_word16_little</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">2</span>, <span class="ruby-value str">'v'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000826"></a><b>read_word16_native</b>()
+  </div>
+  <div class="description">
+  <h3>Unsigned</h3>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000826_source')" id="l_M000826_source">show source</a> ]</p>
+  <div id="M000826_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 101</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_word16_native</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">2</span>, <span class="ruby-value str">'S'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000834"></a><b>read_word32_big</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000834_source')" id="l_M000834_source">show source</a> ]</p>
+  <div id="M000834_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 141</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_word32_big</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">4</span>, <span class="ruby-value str">'N'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000833"></a><b>read_word32_little</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000833_source')" id="l_M000833_source">show source</a> ]</p>
+  <div id="M000833_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 137</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_word32_little</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">4</span>, <span class="ruby-value str">'V'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000832"></a><b>read_word32_native</b>()
+  </div>
+  <div class="description">
+  <h3>Unsigned</h3>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000832_source')" id="l_M000832_source">show source</a> ]</p>
+  <div id="M000832_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 133</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_word32_native</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">4</span>, <span class="ruby-value str">'L'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000824"></a><b>read_word8</b>()
+  </div>
+  <div class="description">
+  <p>
+no <a href="BinReadable.html#M000822">byteorder</a> for 8 bit!
+</p>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="BinReadable.html#M000838">read_uint8</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000824_source')" id="l_M000824_source">show source</a> ]</p>
+  <div id="M000824_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 89</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read_word8</span>
+    <span class="ruby-identifier">ru</span>(<span class="ruby-value">1</span>, <span class="ruby-value str">'C'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000840"></a><b>readn</b>(n)
+  </div>
+  <div class="description">
+  <p>
+read exactly n characters, otherwise raise an exception.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000840_source')" id="l_M000840_source">show source</a> ]</p>
+  <div id="M000840_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 197</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">readn</span>(<span class="ruby-identifier">n</span>)
+    <span class="ruby-identifier">str</span> = <span class="ruby-identifier">read</span>(<span class="ruby-identifier">n</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;couldn't read #{n} characters&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">str</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">n</span>
+    <span class="ruby-identifier">str</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Private Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000841"></a><b>ru</b>(size, template)
+  </div>
+  <div class="description">
+  <p>
+shortcut method for <a href="BinReadable.html#M000840">readn</a>+unpack
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000841_source')" id="l_M000841_source">show source</a> ]</p>
+  <div id="M000841_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 206</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ru</span>(<span class="ruby-identifier">size</span>, <span class="ruby-identifier">template</span>)
+    <span class="ruby-identifier">readn</span>(<span class="ruby-identifier">size</span>).<span class="ruby-identifier">unpack</span>(<span class="ruby-identifier">template</span>).<span class="ruby-identifier">first</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000842"></a><b>ru_swap</b>(size, template, byteorder)
+  </div>
+  <div class="description">
+  <p>
+same as method <tt><a href="BinReadable.html#M000841">ru</a></tt>, but swap
+bytes if native <a href="BinReadable.html#M000822">byteorder</a> == <em><a
+href="BinReadable.html#M000822">byteorder</a></em>
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000842_source')" id="l_M000842_source">show source</a> ]</p>
+  <div id="M000842_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binreadable.rb, line 211</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ru_swap</span>(<span class="ruby-identifier">size</span>, <span class="ruby-identifier">template</span>, <span class="ruby-identifier">byteorder</span>)
+    <span class="ruby-identifier">str</span> = <span class="ruby-identifier">readn</span>(<span class="ruby-identifier">size</span>)
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">reverse!</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">ByteOrder</span>.<span class="ruby-identifier">byteorder</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">byteorder</span>
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-identifier">template</span>).<span class="ruby-identifier">first</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

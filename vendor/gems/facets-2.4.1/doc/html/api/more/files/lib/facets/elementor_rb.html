@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: elementor.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />elementor.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/elementor.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Mon Mar 17 14:31:23 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1>Elementor</h1>
+<p>
+Provides elementwise functionality.
+</p>
+<h2>Authors</h2>
+<ul>
+<li>Thomas Sawyer
+
+</li>
+<li>George Moschovitis
+
+</li>
+<li>Martin DeMello
+
+</li>
+</ul>
+<h2>Notes</h2>
+<ul>
+<li>This could have been impemented with a generic Functor, rather than the
+specialized Elementor, but for the fact Procs can not yet handle blocks.
+
+</li>
+<li>There used to be a &quot;Cascading Elementor&quot;, but that proved idiotic
+in the face of adding an instance_eval block to every.
+
+</li>
+<li>Any ideas for a better name for accumulate? &#8212;gmosx
+
+</li>
+<li>The use of every! and it&#8216;s relation to Enumerator still seems a bit
+off beat. Should every always use map? And another method each?
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2006 Thomas Sawyer
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+  <div class="sectiontitle">Required Files</div>
+  <ul>
+  <li>enumerator</li>
+  <li>facets/functor</li>
+  </ul>
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

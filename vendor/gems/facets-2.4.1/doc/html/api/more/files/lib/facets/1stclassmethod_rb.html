@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: 1stclassmethod.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />1stclassmethod.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/1stclassmethod.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Mon Mar 24 12:27:26 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1>First Class Methods</h1>
+<p>
+Gives Ruby 1st class methods.
+</p>
+<p>
+Easy access to method as objects, and they retain state!
+</p>
+<pre>
+  def hello
+    puts &quot;Hello World!&quot;
+  end
+
+  m1 = method!(:hello)   #=&gt; &lt;Method: #hello&gt;
+
+  def m1.annotate
+    &quot;simple example&quot;
+  end
+
+  m2 = method!(:hello)
+  m2.annotate  #=&gt; &quot;simple example&quot;
+</pre>
+<p>
+Easy access to method as objects, and they retain state!
+</p>
+<pre>
+  module K
+    def hello
+      puts &quot;Hello World!&quot;
+    end
+  end
+  p K.instance_method!(:hello)   #=&gt; &lt;UnboundMethod: #hello&gt;
+</pre>
+<p>
+CAUTION! This it is currently limited to the scope of the current
+module/class.
+</p>
+<h2>Notes</h2>
+<p>
+Should 1st Class Methods be part of Ruby proper?
+</p>
+<p>
+Perhaps the best solution would be using the notation <tt>::ameth</tt>.
+This would require some minor changes to Ruby, but with few backward
+incompatabilites if parantheticals revert back to the actual method
+invocation. Although this later stipulation means capitalized methods would
+not be accessible in this way b/c they would intefere with constant lookup.
+<a href="../../../classes/It.html">It</a>&#8216;s a trade off.
+</p>
+<pre>
+                  Current           Proposed           Alternate
+                  ----------------- ------------------ -------------------
+    Foo.Bar()     method call       method call        method call
+    Foo.Bar       method call       method call        method call
+    Foo.bar()     method call       method call        method call
+    Foo.bar       method call       method call        method call
+    Foo::Bar()    method call       method call        1st class method
+    Foo::Bar      constant lookup   constant lookup    constant lookup
+    Foo::bar()    method call       method call        1st class method
+    Foo::bar      method call       1st class method   1st class method
+</pre>
+<p>
+Then again this dosen&#8216;t address bound versus unbound.
+</p>
+<p>
+Which do you prefer?
+</p>
+<h2>Authors</h2>
+<ul>
+<li>Thomas Sawyer
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2005 Thomas Sawyer
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: synchash.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />synchash.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/synchash.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 16:01:00 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/SyncHash.html">SyncHash</a></h1>
+<p>
+A thread-safe hash. We use a sync object instead of a mutex, because it is
+re-entrant. An exclusive lock is needed when writing, a shared lock IS
+NEEDED when reading.
+</p>
+<p>
+Uses the delegator pattern to allow for multiple implementations!
+</p>
+<pre>
+  hash = SyncHash.new
+  hash = SyncHash.new(Hash.new)   # Delegates
+</pre>
+<h2>Design</h2>
+<p>
+This class uses the delegator pattern. However we don&#8216;t use
+Ruby&#8216;s delegation facilities, they are more general and powerful than
+we need here (and slower). Instead a custom (but simple) solution is used.
+</p>
+<h2>Authors</h2>
+<ul>
+<li>George Moschovitis
+
+</li>
+</ul>
+<h2>Copyright</h2>
+<p>
+Copyright (c) 2004 George Moschovitis
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+  <div class="sectiontitle">Required Files</div>
+  <ul>
+  <li>sync</li>
+  </ul>
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: OpenStruct</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />OpenStruct</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/ostruct_rb.html">lib/facets/ostruct.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000404">[]</a></li>
+  <li><a href="#M000405">[]=</a></li>
+  <li><a href="#M000411">__merge__</a></li>
+  <li><a href="#M000410">__update__</a></li>
+  <li><a href="#M000402">each</a></li>
+  <li><a href="#M000406">instance_delegate</a></li>
+  <li><a href="#M000401">new</a></li>
+  <li><a href="#M000407">ostruct_delegate</a></li>
+  <li><a href="#M000409">ostruct_merge</a></li>
+  <li><a href="#M000408">ostruct_update</a></li>
+  <li><a href="#M000403">to_h</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000401"></a><b>new</b>(hash=nil) {|self| ...}
+  </div>
+  <div class="description">
+  <p>
+Allows the initialization of an <a href="OpenStruct.html">OpenStruct</a>
+with a block:
+</p>
+<pre>
+  person = OpenStruct.new do |p|
+    p.name    = 'John Smith'
+    p.gender  = :M
+    p.age     = 71
+  end
+</pre>
+<p>
+You can still provide a hash for initialization purposes, and even combine
+the two approaches if you wish.
+</p>
+<pre>
+  person = OpenStruct.new(:name =&gt; 'John Smith', :age =&gt; 31) do |p|
+    p.gender = :M
+  end
+
+  CREDIT Noah Gibbs
+  CREDIT Gavin Sinclair
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000401_source')" id="l_M000401_source">show source</a> ]</p>
+  <div id="M000401_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 50</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">hash</span>=<span class="ruby-keyword kw">nil</span>) <span class="ruby-comment cmt"># :yield: self</span>
+    <span class="ruby-ivar">@table</span> = {}
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">hash</span>
+      <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">hash</span>
+        <span class="ruby-ivar">@table</span>[<span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">v</span>
+        <span class="ruby-identifier">new_ostruct_member</span>(<span class="ruby-identifier">k</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">yield</span> <span class="ruby-keyword kw">self</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000404"></a><b>[]</b>(key)
+  </div>
+  <div class="description">
+  <p>
+Access a value in the <a href="OpenStruct.html">OpenStruct</a> by key, like
+a Hash. This increases <a href="OpenStruct.html">OpenStruct</a>&#8216;s
+&quot;duckiness&quot;.
+</p>
+<pre>
+  o = OpenStruct.new
+  o.t = 4
+  o['t']  #=&gt; 4
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000404_source')" id="l_M000404_source">show source</a> ]</p>
+  <div id="M000404_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 78</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)
+    <span class="ruby-identifier">key</span> = <span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_sym</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">key</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)
+    <span class="ruby-ivar">@table</span>[<span class="ruby-identifier">key</span>]
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000405"></a><b>[]=</b>(key,val)
+  </div>
+  <div class="description">
+  <p>
+<a href="Set.html">Set</a> a value in the <a
+href="OpenStruct.html">OpenStruct</a> by key, like a Hash.
+</p>
+<pre>
+  o = OpenStruct.new
+  o['t'] = 4
+  o.t  #=&gt; 4
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000405_source')" id="l_M000405_source">show source</a> ]</p>
+  <div id="M000405_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 89</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>,<span class="ruby-identifier">val</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">TypeError</span>, <span class="ruby-node">&quot;can't modify frozen #{self.class}&quot;</span>, <span class="ruby-identifier">caller</span>(<span class="ruby-value">1</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">frozen?</span>
+    <span class="ruby-identifier">key</span> = <span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_sym</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">key</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>)
+    <span class="ruby-ivar">@table</span>[<span class="ruby-identifier">key</span>]=<span class="ruby-identifier">val</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000411"></a><b>__merge__</b>(other)
+  </div>
+  <div class="description">
+  <p>
+Merge hash data creating a <a href="OpenStruct.html#M000401">new</a> <a
+href="OpenStruct.html">OpenStruct</a> object.
+</p>
+<pre>
+  o = OpenStruct.new
+  o.ostruct_merge { :a =&gt; 2 }
+  o.a  #=&gt; 2
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000411_source')" id="l_M000411_source">show source</a> ]</p>
+  <div id="M000411_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 168</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__merge__</span>(<span class="ruby-identifier">other</span>)
+    <span class="ruby-identifier">o</span> = <span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">o</span>.<span class="ruby-identifier">__update__</span>(<span class="ruby-identifier">other</span>)
+    <span class="ruby-identifier">o</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000410"></a><b>__update__</b>(other)
+  </div>
+  <div class="description">
+  <p>
+Insert/update hash data on the fly.
+</p>
+<pre>
+  o = OpenStruct.new
+  o.ostruct_update { :a =&gt; 2 }
+  o.a  #=&gt; 2
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000410_source')" id="l_M000410_source">show source</a> ]</p>
+  <div id="M000410_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 154</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__update__</span>(<span class="ruby-identifier">other</span>)
+    <span class="ruby-comment cmt">#other = other.to_hash #to_h?</span>
+    <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">other</span>
+      <span class="ruby-ivar">@table</span>[<span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">v</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000402"></a><b>each</b>(&amp;blk)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000402_source')" id="l_M000402_source">show source</a> ]</p>
+  <div id="M000402_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 62</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)
+    <span class="ruby-ivar">@table</span>.<span class="ruby-identifier">each</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000406"></a><b>instance_delegate</b>()
+  </div>
+  <div class="description">
+  <p>
+Provides access to an <a href="OpenStruct.html">OpenStruct</a>&#8216;s
+inner table.
+</p>
+<pre>
+  o = OpenStruct.new
+  o.a = 1
+  o.b = 2
+  o.instance_delegate.each { |k, v| puts &quot;#{k} #{v}&quot; }
+</pre>
+<p>
+produces
+</p>
+<pre>
+  a 1
+  b 2
+</pre>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="OpenStruct.html#M000407">ostruct_delegate</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000406_source')" id="l_M000406_source">show source</a> ]</p>
+  <div id="M000406_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 111</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">instance_delegate</span>
+    <span class="ruby-ivar">@table</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000407"></a><b>ostruct_delegate</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="OpenStruct.html#M000406">instance_delegate</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000409"></a><b>ostruct_merge</b>(other)
+  </div>
+  <div class="description">
+  <p>
+Merge hash data creating a <a href="OpenStruct.html#M000401">new</a> <a
+href="OpenStruct.html">OpenStruct</a> object.
+</p>
+<pre>
+  o = OpenStruct.new
+  o.ostruct_merge { :a =&gt; 2 }
+  o.a  #=&gt; 2
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000409_source')" id="l_M000409_source">show source</a> ]</p>
+  <div id="M000409_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 136</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ostruct_merge</span>(<span class="ruby-identifier">other</span>)
+    <span class="ruby-identifier">o</span> = <span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">o</span>.<span class="ruby-identifier">ostruct_update</span>(<span class="ruby-identifier">other</span>)
+    <span class="ruby-identifier">o</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000408"></a><b>ostruct_update</b>(other)
+  </div>
+  <div class="description">
+  <p>
+Insert/update hash data on the fly.
+</p>
+<pre>
+  o = OpenStruct.new
+  o.ostruct_update { :a =&gt; 2 }
+  o.a  #=&gt; 2
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000408_source')" id="l_M000408_source">show source</a> ]</p>
+  <div id="M000408_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 122</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ostruct_update</span>(<span class="ruby-identifier">other</span>)
+    <span class="ruby-comment cmt">#other = other.to_hash  #to_h ?</span>
+    <span class="ruby-keyword kw">for</span> <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> <span class="ruby-keyword kw">in</span> <span class="ruby-identifier">other</span>
+      <span class="ruby-ivar">@table</span>[<span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">v</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000403"></a><b>to_h</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000403_source')" id="l_M000403_source">show source</a> ]</p>
+  <div id="M000403_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ostruct.rb, line 67</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_h</span>
+    <span class="ruby-ivar">@table</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

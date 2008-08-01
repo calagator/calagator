@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Binding</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Binding</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/ruby_rb.html">lib/facets/ruby.rb</a>
+<a href="../files/lib/facets/callstack_rb.html">lib/facets/callstack.rb</a>
+<a href="../files/lib/facets/binding/caller_rb.html">lib/facets/binding/caller.rb</a>
+<a href="../files/lib/facets/binding/self_rb.html">lib/facets/binding/self.rb</a>
+<a href="../files/lib/facets/binding/local_variables_rb.html">lib/facets/binding/local_variables.rb</a>
+<a href="../files/lib/facets/binding/defined_rb.html">lib/facets/binding/defined.rb</a>
+<a href="../files/lib/facets/binding/opvars_rb.html">lib/facets/binding/opvars.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+        <a href="Object.html">
+Object
+         </a>
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000210">[]</a></li>
+  <li><a href="#M000211">[]=</a></li>
+  <li><a href="#M000204">__DIR__</a></li>
+  <li><a href="#M000203">__FILE__</a></li>
+  <li><a href="#M000202">__LINE__</a></li>
+  <li><a href="#M000205">__callee__</a></li>
+  <li><a href="#M000206">__method__</a></li>
+  <li><a href="#M000201">caller</a></li>
+  <li><a href="#M000200">callstack</a></li>
+  <li><a href="#M000209">defined?</a></li>
+  <li><a href="#M000199">eval</a></li>
+  <li><a href="#M000208">local_variables</a></li>
+  <li><a href="#M000207">self</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000210"></a><b>[]</b>( x )
+  </div>
+  <div class="description">
+  <p>
+Returns the value of some variable.
+</p>
+<pre>
+  a = 2
+  binding[&quot;a&quot;]  #=&gt; 2
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000210_source')" id="l_M000210_source">show source</a> ]</p>
+  <div id="M000210_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/opvars.rb, line 10</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>( <span class="ruby-identifier">x</span> )
+    <span class="ruby-identifier">eval</span>( <span class="ruby-identifier">x</span>.<span class="ruby-identifier">to_s</span> )
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000211"></a><b>[]=</b>( l, v )
+  </div>
+  <div class="description">
+  <p>
+Set the value of a local variable.
+</p>
+<pre>
+  binding[&quot;a&quot;] = 4
+  a  #=&gt; 4
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000211_source')" id="l_M000211_source">show source</a> ]</p>
+  <div id="M000211_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/opvars.rb, line 19</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>( <span class="ruby-identifier">l</span>, <span class="ruby-identifier">v</span> )
+    <span class="ruby-identifier">eval</span>( <span class="ruby-node">&quot;lambda {|v| #{l} = v}&quot;</span>).<span class="ruby-identifier">call</span>( <span class="ruby-identifier">v</span> )
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000204"></a><b>__DIR__</b>()
+  </div>
+  <div class="description">
+  <p>
+Return the directory of the file.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000204_source')" id="l_M000204_source">show source</a> ]</p>
+  <div id="M000204_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/caller.rb, line 26</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__DIR__</span>
+    <span class="ruby-identifier">eval</span>(<span class="ruby-value str">&quot;File.dirname(__FILE__)&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000203"></a><b>__FILE__</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns file name.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000203_source')" id="l_M000203_source">show source</a> ]</p>
+  <div id="M000203_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/caller.rb, line 20</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">__FILE__</span>
+    <span class="ruby-identifier">eval</span>(<span class="ruby-value str">&quot;__FILE__&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000202"></a><b>__LINE__</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns line number.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000202_source')" id="l_M000202_source">show source</a> ]</p>
+  <div id="M000202_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/caller.rb, line 14</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">__LINE__</span>
+    <span class="ruby-identifier">eval</span>(<span class="ruby-value str">&quot;__LINE__&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000205"></a><b>__callee__</b>()
+  </div>
+  <div class="description">
+  <p>
+Retreive the current running method.
+</p>
+<pre>
+  def tester; p called; end
+  tester  #=&gt; :tester
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000205_source')" id="l_M000205_source">show source</a> ]</p>
+  <div id="M000205_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/caller.rb, line 36</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__callee__</span>
+    <span class="ruby-identifier">name</span> = <span class="ruby-regexp re">/\`([^\']+)\'/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">caller</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">first</span>)[<span class="ruby-value">1</span>]
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000206"></a><b>__method__</b>()
+  </div>
+  <div class="description">
+  <p>
+There is a lot of debate on what to call this. <tt>method_name</tt> differs
+from called only by the fact that it returns a string, rather then a
+symbol.
+</p>
+<pre>
+  def tester; p methodname; end
+  tester  #=&gt; &quot;tester&quot;
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000206_source')" id="l_M000206_source">show source</a> ]</p>
+  <div id="M000206_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/caller.rb, line 48</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__method__</span>
+    <span class="ruby-identifier">name</span> = <span class="ruby-regexp re">/\`([^\']+)\'/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">caller</span>(<span class="ruby-value">1</span>).<span class="ruby-identifier">first</span>)[<span class="ruby-value">1</span>]
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">name</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000201"></a><b>caller</b>( skip=0 )
+  </div>
+  <div class="description">
+  <p>
+Returns the call stack, same format as Kernel#caller()
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000201_source')" id="l_M000201_source">show source</a> ]</p>
+  <div id="M000201_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/caller.rb, line 8</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">caller</span>( <span class="ruby-identifier">skip</span>=<span class="ruby-value">0</span> )
+    <span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;caller(#{skip})&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000200"></a><b>callstack</b>(level=1)
+  </div>
+  <div class="description">
+  <p>
+Returns the call stack, in array format.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000200_source')" id="l_M000200_source">show source</a> ]</p>
+  <div id="M000200_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/callstack.rb, line 47</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">callstack</span>(<span class="ruby-identifier">level</span>=<span class="ruby-value">1</span>)
+    <span class="ruby-identifier">eval</span>( <span class="ruby-node">&quot;callstack( #{level} )&quot;</span> )
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000209"></a><b>defined?</b>(x)
+  </div>
+  <div class="description">
+  <p>
+Returns the nature of something within the context of the binding. Returns
+nil if that thing is not defined.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000209_source')" id="l_M000209_source">show source</a> ]</p>
+  <div id="M000209_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/defined.rb, line 8</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-identifier">x</span>)
+    <span class="ruby-identifier">eval</span>(<span class="ruby-node">&quot;defined? #{x}&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000199"></a><b>eval</b>(str)
+  </div>
+  <div class="description">
+  <p>
+Evaluate a Ruby source code string (or block) in the binding context.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000199_source')" id="l_M000199_source">show source</a> ]</p>
+  <div id="M000199_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 126</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">eval</span>(<span class="ruby-identifier">str</span>) <span class="ruby-comment cmt">#='', &amp;blk )</span>
+      <span class="ruby-comment cmt">#if block_given?</span>
+      <span class="ruby-comment cmt">#  Kernel.eval( self, &amp;blk )</span>
+      <span class="ruby-comment cmt">#elsif str</span>
+        <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">eval</span>(<span class="ruby-identifier">str</span>, <span class="ruby-keyword kw">self</span>)
+      <span class="ruby-comment cmt">#end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000208"></a><b>local_variables</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns the local variables defined in the binding context
+</p>
+<pre>
+  a = 2
+  binding.local_variables  #=&gt; [&quot;a&quot;]
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000208_source')" id="l_M000208_source">show source</a> ]</p>
+  <div id="M000208_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/local_variables.rb, line 10</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">local_variables</span>()
+    <span class="ruby-identifier">eval</span>(<span class="ruby-value str">&quot;local_variables&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000207"></a><b>self</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns <a href="Binding.html#M000207">self</a> of the binding context.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000207_source')" id="l_M000207_source">show source</a> ]</p>
+  <div id="M000207_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/binding/self.rb, line 7</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>()
+    <span class="ruby-ivar">@_self</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">eval</span>(<span class="ruby-value str">&quot;self&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

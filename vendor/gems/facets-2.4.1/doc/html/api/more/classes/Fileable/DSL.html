@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Fileable::DSL</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Fileable::DSL</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/fileable_rb.html">lib/facets/fileable.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000765">file</a></li>
+  <li><a href="#M000760">filename</a></li>
+  <li><a href="#M000759">included</a></li>
+  <li><a href="#M000762">load</a></li>
+  <li><a href="#M000766">load_cache</a></li>
+  <li><a href="#M000764">locate</a></li>
+  <li><a href="#M000763">lookup</a></li>
+  <li><a href="#M000761">open</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000765"></a><b>file</b>(path=nil)
+  </div>
+  <div class="description">
+  <p>
+Find <a href="DSL.html#M000765">file</a>. The <tt>path</tt> has to be
+either the exact path or the directory where a standard-named <a
+href="DSL.html#M000765">file</a> resides.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000765_source')" id="l_M000765_source">show source</a> ]</p>
+  <div id="M000765_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 140</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file</span>(<span class="ruby-identifier">path</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">path</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">LoadError</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">filename</span>
+        <span class="ruby-identifier">path</span> = <span class="ruby-identifier">filename</span>
+      <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">path</span>)
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">LoadError</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">filename</span>
+        <span class="ruby-identifier">path</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">path</span>, <span class="ruby-identifier">filename</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-identifier">path</span>, <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">FNM_CASEFOLD</span>)[<span class="ruby-value">0</span>]
+        <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">file</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ENOENT</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000760"></a><b>filename</b>()
+  </div>
+  <div class="description">
+  <p>
+Override this with the name or name-glob of the default <a
+href="DSL.html#M000765">file</a>. If no default, return nil.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000760_source')" id="l_M000760_source">show source</a> ]</p>
+  <div id="M000760_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 86</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">filename</span>; <span class="ruby-keyword kw">nil</span>; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000759"></a><b>included</b>(base)
+  </div>
+  <div class="description">
+  <p>
+While this doesn&#8216;t allpy to classes, for modules it is needed to keep
+the <a href="DSL.html">DSL</a> inheritance going.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000759_source')" id="l_M000759_source">show source</a> ]</p>
+  <div id="M000759_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 79</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">included</span>(<span class="ruby-identifier">base</span>)
+      <span class="ruby-identifier">base</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">DSL</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000762"></a><b>load</b>(path_or_data)
+  </div>
+  <div class="description">
+  <p>
+An initializer that can take either a <a href="../File.html">File</a>, <a
+href="../Pathname.html">Pathname</a> or raw data. This works much like
+YAML::load does. Unlike <tt><a href="DSL.html#M000761">open</a></tt>,
+<tt><a href="DSL.html#M000762">load</a></tt> requires an exact path
+parameter.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000762_source')" id="l_M000762_source">show source</a> ]</p>
+  <div id="M000762_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 103</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>(<span class="ruby-identifier">path_or_data</span>)
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">path_or_data</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">File</span>
+        <span class="ruby-identifier">open</span>(<span class="ruby-identifier">path_or_data</span>.<span class="ruby-identifier">path</span>)
+      <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Pathname</span>
+        <span class="ruby-identifier">open</span>(<span class="ruby-identifier">path_or_data</span>.<span class="ruby-identifier">realpath</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">new</span>(<span class="ruby-identifier">path_or_data</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000766"></a><b>load_cache</b>()
+  </div>
+  <div class="description">
+  <p>
+Load cache. PackageInfo is multiton when loaded by <a
+href="DSL.html#M000765">file</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000766_source')" id="l_M000766_source">show source</a> ]</p>
+  <div id="M000766_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 157</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_cache</span>
+      <span class="ruby-ivar">@load_cache</span> <span class="ruby-operator">||=</span> {}
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000764"></a><b>locate</b>(name=nil)
+  </div>
+  <div class="description">
+  <p>
+Locate <a href="DSL.html#M000765">file</a> (case insensitive).
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000764_source')" id="l_M000764_source">show source</a> ]</p>
+  <div id="M000764_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 123</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">locate</span>(<span class="ruby-identifier">name</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">name</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">filename</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">LoadError</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">name</span>
+      <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">ascend</span>(<span class="ruby-constant">Dir</span>.<span class="ruby-identifier">pwd</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">match</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-identifier">name</span>)
+        <span class="ruby-identifier">files</span> = <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">glob</span>(<span class="ruby-identifier">match</span>, <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">FNM_CASEFOLD</span>)
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span> = <span class="ruby-identifier">files</span>[<span class="ruby-value">0</span>]
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">file</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000763"></a><b>lookup</b>(name=nil)
+  </div>
+  <div class="description">
+  <p>
+Lookup <a href="DSL.html#M000765">file</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000763_source')" id="l_M000763_source">show source</a> ]</p>
+  <div id="M000763_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 116</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lookup</span>(<span class="ruby-identifier">name</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">file</span> = <span class="ruby-identifier">locate</span>(<span class="ruby-identifier">name</span>)
+      <span class="ruby-identifier">file</span> <span class="ruby-value">? </span><span class="ruby-identifier">open</span>(<span class="ruby-identifier">file</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt">#raise LoadError</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000761"></a><b>open</b>(path=nil)
+  </div>
+  <div class="description">
+  <p>
+Load from <a href="DSL.html#M000765">file</a>(s).
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000761_source')" id="l_M000761_source">show source</a> ]</p>
+  <div id="M000761_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 90</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">open</span>(<span class="ruby-identifier">path</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">file</span> = <span class="ruby-identifier">file</span>(<span class="ruby-identifier">path</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">file</span>
+        <span class="ruby-identifier">fobj</span> = <span class="ruby-identifier">new</span>
+        <span class="ruby-identifier">fobj</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:read</span>, <span class="ruby-identifier">file</span>)
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">fobj</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

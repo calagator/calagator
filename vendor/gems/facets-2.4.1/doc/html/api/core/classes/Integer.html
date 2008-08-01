@@ -1,0 +1,577 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Integer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Integer</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/ruby_rb.html">lib/facets/ruby.rb</a>
+<a href="../files/lib/facets/bitmask_rb.html">lib/facets/bitmask.rb</a>
+<a href="../files/lib/facets/integer/multiple_rb.html">lib/facets/integer/multiple.rb</a>
+<a href="../files/lib/facets/integer/ordinal_rb.html">lib/facets/integer/ordinal.rb</a>
+<a href="../files/lib/facets/integer/factorial_rb.html">lib/facets/integer/factorial.rb</a>
+<a href="../files/lib/facets/integer/of_rb.html">lib/facets/integer/of.rb</a>
+<a href="../files/lib/facets/numeric/round_rb.html">lib/facets/numeric/round.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+        <a href="Object.html">
+Object
+         </a>
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000011">bit</a></li>
+  <li><a href="#M000012">bit!</a></li>
+  <li><a href="#M000014">bit?</a></li>
+  <li><a href="#M000015">bitmask</a></li>
+  <li><a href="#M000016">bitmask!</a></li>
+  <li><a href="#M000017">bitmask?</a></li>
+  <li><a href="#M000013">clear_bit</a></li>
+  <li><a href="#M000010">even?</a></li>
+  <li><a href="#M000022">fac</a></li>
+  <li><a href="#M000021">factorial</a></li>
+  <li><a href="#M000018">multiple?</a></li>
+  <li><a href="#M000009">odd?</a></li>
+  <li><a href="#M000023">of</a></li>
+  <li><a href="#M000019">ordinal</a></li>
+  <li><a href="#M000020">ordinalize</a></li>
+  <li><a href="#M000026">round_at</a></li>
+  <li><a href="#M000027">round_to</a></li>
+  <li><a href="#M000024">times_collect</a></li>
+  <li><a href="#M000025">times_map</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000011"></a><b>bit</b>(bit)
+  </div>
+  <div class="description">
+  <p>
+Set a <a href="Integer.html#M000011">bit</a>.
+</p>
+<pre>
+  0.bit!(4)  #=&gt; 8
+</pre>
+<p>
+Using an inverted <a href="Integer.html#M000011">bit</a> will clear a <a
+href="Integer.html#M000011">bit</a>.
+</p>
+<pre>
+  10.bit!(~3)      #=&gt; 2
+  0xb0100.bit(~3)  #=&gt; 0
+
+  CREDIT: Thomas Sawyer
+  CREDIT: George Moschovitis
+</pre>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Integer.html#M000012">bit!</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000011_source')" id="l_M000011_source">show source</a> ]</p>
+  <div id="M000011_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/bitmask.rb, line 15</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bit</span>(<span class="ruby-identifier">bit</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bit</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">mask</span> = (<span class="ruby-value">1</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-operator">~</span><span class="ruby-identifier">bit</span>)
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&amp;</span> <span class="ruby-operator">~</span><span class="ruby-identifier">mask</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">mask</span> = (<span class="ruby-value">1</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">bit</span>)
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">mask</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000012"></a><b>bit!</b>(bit)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Integer.html#M000011">bit</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000014"></a><b>bit?</b>(bit)
+  </div>
+  <div class="description">
+  <p>
+Is a <a href="Integer.html#M000011">bit</a> set?
+</p>
+<pre>
+  8.bit?(3)  #=&gt; true
+  8.bit?(2)  #=&gt; false
+
+  CREDIT: Thomas Sawyer
+  CREDIT: George Moschovitis
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000014_source')" id="l_M000014_source">show source</a> ]</p>
+  <div id="M000014_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/bitmask.rb, line 45</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bit?</span>(<span class="ruby-identifier">bit</span>)
+    <span class="ruby-identifier">mask</span> = (<span class="ruby-value">1</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">bit</span>)
+    (<span class="ruby-keyword kw">self</span> <span class="ruby-operator">&amp;</span> <span class="ruby-identifier">mask</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000015"></a><b>bitmask</b>(mask)
+  </div>
+  <div class="description">
+  <p>
+Apply a <a href="Integer.html#M000015">bitmask</a>.
+</p>
+<pre>
+  1.bitmask(6) #=&gt; 7
+</pre>
+<p>
+Using a inverted <a href="Integer.html#M000015">bitmask</a> clears bits.
+</p>
+<pre>
+  7.bitmask(~2) #=&gt; 5
+  5.bitmask(~2) #=&gt; 5
+
+  CREDIT: George Moschovitis
+</pre>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Integer.html#M000016">bitmask!</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000015_source')" id="l_M000015_source">show source</a> ]</p>
+  <div id="M000015_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/bitmask.rb, line 61</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bitmask</span>(<span class="ruby-identifier">mask</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">mask</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&amp;</span> <span class="ruby-identifier">mask</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">mask</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000016"></a><b>bitmask!</b>(mask)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Integer.html#M000015">bitmask</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000017"></a><b>bitmask?</b>(mask)
+  </div>
+  <div class="description">
+  <p>
+Is <a href="Integer.html#M000015">bitmask</a> set?
+</p>
+<pre>
+  7.bitmask?(7) #=&gt; true
+  7.bitmask?(5) #=&gt; true
+  8.bitmask?(3) #=&gt; false
+
+  CREDIT: George Moschovitis
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000017_source')" id="l_M000017_source">show source</a> ]</p>
+  <div id="M000017_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/bitmask.rb, line 80</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bitmask?</span>(<span class="ruby-identifier">mask</span>)
+    (<span class="ruby-keyword kw">self</span> <span class="ruby-operator">&amp;</span> <span class="ruby-identifier">mask</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000013"></a><b>clear_bit</b>(bit)
+  </div>
+  <div class="description">
+  <p>
+Clear <a href="Integer.html#M000011">bit</a>.
+</p>
+<pre>
+  CREDIT: George Moschovitis
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000013_source')" id="l_M000013_source">show source</a> ]</p>
+  <div id="M000013_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/bitmask.rb, line 32</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear_bit</span>(<span class="ruby-identifier">bit</span>)
+    <span class="ruby-identifier">mask</span> = (<span class="ruby-value">1</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">bit</span>)
+    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&amp;</span> <span class="ruby-operator">~</span><span class="ruby-identifier">mask</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000010"></a><b>even?</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns true if this integer is even, false otherwise.
+</p>
+<pre>
+  2.even?  #=&gt; true
+  3.even?  #=&gt; false
+
+  CREDIT: Gavin Sinclair
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000010_source')" id="l_M000010_source">show source</a> ]</p>
+  <div id="M000010_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 255</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">even?</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">%</span> <span class="ruby-value">2</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000022"></a><b>fac</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Integer.html#M000021">factorial</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000021"></a><b>factorial</b>()
+  </div>
+  <div class="description">
+  <p>
+Calculate the <a href="Integer.html#M000021">factorial</a> <a
+href="Integer.html#M000023">of</a> an integer.
+</p>
+<pre>
+  2.factorial  #=&gt; 2
+  3.factorial  #=&gt; 6
+  3.factorial  #=&gt; 24
+
+ CREDIT: Malte Milatz
+</pre>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Integer.html#M000022">fac</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000021_source')" id="l_M000021_source">show source</a> ]</p>
+  <div id="M000021_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/integer/factorial.rb, line 11</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">factorial</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">zero?</span>
+    <span class="ruby-identifier">f</span> = <span class="ruby-value">1</span>
+    <span class="ruby-value">2</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-keyword kw">self</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">f</span> <span class="ruby-operator">*=</span> <span class="ruby-identifier">n</span> }
+    <span class="ruby-identifier">f</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000018"></a><b>multiple?</b>(number)
+  </div>
+  <div class="description">
+  <p>
+Is is a multiple <a href="Integer.html#M000023">of</a> a given number?
+</p>
+<pre>
+  7.multiple?(2)  #=&gt; false
+  8.multiple?(2)  #=&gt; true
+
+ CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000018_source')" id="l_M000018_source">show source</a> ]</p>
+  <div id="M000018_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/integer/multiple.rb, line 10</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">multiple?</span>(<span class="ruby-identifier">number</span>)
+    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">number</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000009"></a><b>odd?</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns true if this integer is odd, false otherwise.
+</p>
+<pre>
+  2.odd?            #=&gt; false
+  3.odd?            #=&gt; true
+
+  -99.odd?          # -&gt; true
+  -98.odd?          # -&gt; false
+
+  CREDIT: Gavin Sinclair
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000009_source')" id="l_M000009_source">show source</a> ]</p>
+  <div id="M000009_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 244</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">odd?</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">%</span> <span class="ruby-value">2</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000023"></a><b>of</b>(&amp;block)
+  </div>
+  <div class="description">
+  <p>
+Like times but returns a collection <a href="Integer.html#M000023">of</a>
+the yield results.
+</p>
+<pre>
+  a = 3.of { |i| &quot;#{i+1}&quot; }
+  a =&gt; [ &quot;1&quot;, &quot;2&quot;, &quot;3&quot; ]
+</pre>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Integer.html#M000024">times_collect</a>
+  <a href="Integer.html#M000025">times_map</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000023_source')" id="l_M000023_source">show source</a> ]</p>
+  <div id="M000023_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/integer/of.rb, line 9</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">of</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-constant">Array</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000019"></a><b>ordinal</b>()
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Integer.html#M000020">ordinalize</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000019_source')" id="l_M000019_source">show source</a> ]</p>
+  <div id="M000019_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/integer/ordinal.rb, line 3</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ordinal</span>
+    <span class="ruby-keyword kw">if</span> [<span class="ruby-value">11</span>,<span class="ruby-value">12</span>,<span class="ruby-value">13</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-keyword kw">self</span> <span class="ruby-operator">%</span> <span class="ruby-value">100</span>)
+      <span class="ruby-node">&quot;#{self}th&quot;</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">case</span> (<span class="ruby-keyword kw">self</span> <span class="ruby-operator">%</span> <span class="ruby-value">10</span>)
+      <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span>
+        <span class="ruby-node">&quot;#{self}st&quot;</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-value">2</span>
+        <span class="ruby-node">&quot;#{self}nd&quot;</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-value">3</span>
+        <span class="ruby-node">&quot;#{self}rd&quot;</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-node">&quot;#{self}th&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000020"></a><b>ordinalize</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Integer.html#M000019">ordinal</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000026"></a><b>round_at</b>(*args)
+  </div>
+  <div class="description">
+  <p>
+See <a href="Float.html#M000188">Float#round_at</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000026_source')" id="l_M000026_source">show source</a> ]</p>
+  <div id="M000026_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/numeric/round.rb, line 27</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">round_at</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-identifier">to_f</span>.<span class="ruby-identifier">round_at</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000027"></a><b>round_to</b>(*args)
+  </div>
+  <div class="description">
+  <p>
+See <a href="Float.html#M000189">Float#round_to</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000027_source')" id="l_M000027_source">show source</a> ]</p>
+  <div id="M000027_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/numeric/round.rb, line 33</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">round_to</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-identifier">to_f</span>.<span class="ruby-identifier">round_to</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000024"></a><b>times_collect</b>(&amp;block)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Integer.html#M000023">of</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000025"></a><b>times_map</b>(&amp;block)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Integer.html#M000023">of</a>
+</p>
+  </div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

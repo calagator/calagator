@@ -1,0 +1,2 @@
+require 'facets/hash/autonew'
+

@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Net::SMTP</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Net::SMTP</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/net/smtp_tls_rb.html">lib/facets/net/smtp_tls.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M001060">do_helo</a></li>
+  <li><a href="#M001059">do_tls_start</a></li>
+  <li><a href="#M001062">quit</a></li>
+  <li><a href="#M001058">start</a></li>
+  <li><a href="#M001057">start</a></li>
+  <li><a href="#M001061">starttls</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M001057"></a><b>start</b>( address, port = nil, helo = 'localhost.localdomain', user = nil, secret = nil, authtype = nil, use_tls = false) {|smtp| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001057_source')" id="l_M001057_source">show source</a> ]</p>
+  <div id="M001057_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/net/smtp_tls.rb, line 44</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">start</span>( <span class="ruby-identifier">address</span>, <span class="ruby-identifier">port</span> = <span class="ruby-keyword kw">nil</span>,
+                  <span class="ruby-identifier">helo</span> = <span class="ruby-value str">'localhost.localdomain'</span>,
+                  <span class="ruby-identifier">user</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">secret</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">authtype</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">use_tls</span> = <span class="ruby-keyword kw">false</span>,
+                  <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>) <span class="ruby-comment cmt"># :yield: smtp</span>
+    <span class="ruby-identifier">new</span>(<span class="ruby-identifier">address</span>, <span class="ruby-identifier">port</span>).<span class="ruby-identifier">start</span>(<span class="ruby-identifier">helo</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">authtype</span>, <span class="ruby-identifier">use_tls</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M001058"></a><b>start</b>( helo = 'localhost.localdomain', user = nil, secret = nil, authtype = nil, use_tls = false ) {|smtp| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001058_source')" id="l_M001058_source">show source</a> ]</p>
+  <div id="M001058_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/net/smtp_tls.rb, line 53</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>( <span class="ruby-identifier">helo</span> = <span class="ruby-value str">'localhost.localdomain'</span>,
+             <span class="ruby-identifier">user</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">secret</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">authtype</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">use_tls</span> = <span class="ruby-keyword kw">false</span> ) <span class="ruby-comment cmt"># :yield: smtp</span>
+    <span class="ruby-identifier">start_method</span> = <span class="ruby-identifier">use_tls</span> <span class="ruby-value">? </span><span class="ruby-operator">:</span><span class="ruby-identifier">do_tls_start</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:do_start</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">send</span> <span class="ruby-identifier">start_method</span>, <span class="ruby-identifier">helo</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">authtype</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-keyword kw">self</span>)
+      <span class="ruby-keyword kw">ensure</span>
+        <span class="ruby-identifier">do_finish</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">send</span> <span class="ruby-identifier">start_method</span>, <span class="ruby-identifier">helo</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">authtype</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Private Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M001060"></a><b>do_helo</b>(helodomain)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001060_source')" id="l_M001060_source">show source</a> ]</p>
+  <div id="M001060_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/net/smtp_tls.rb, line 103</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">do_helo</span>(<span class="ruby-identifier">helodomain</span>)
+     <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@esmtp</span>
+        <span class="ruby-identifier">ehlo</span> <span class="ruby-identifier">helodomain</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">helo</span> <span class="ruby-identifier">helodomain</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">ProtocolError</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@esmtp</span>
+        <span class="ruby-ivar">@esmtp</span> = <span class="ruby-keyword kw">false</span>
+        <span class="ruby-ivar">@error_occured</span> = <span class="ruby-keyword kw">false</span>
+        <span class="ruby-keyword kw">retry</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">raise</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001059"></a><b>do_tls_start</b>(helodomain, user, secret, authtype)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001059_source')" id="l_M001059_source">show source</a> ]</p>
+  <div id="M001059_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/net/smtp_tls.rb, line 71</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">do_tls_start</span>(<span class="ruby-identifier">helodomain</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">authtype</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">IOError</span>, <span class="ruby-value str">'SMTP session already started'</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@started</span>
+    <span class="ruby-identifier">check_auth_args</span> <span class="ruby-identifier">user</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">authtype</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">user</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">secret</span>
+
+    <span class="ruby-identifier">sock</span> = <span class="ruby-identifier">timeout</span>(<span class="ruby-ivar">@open_timeout</span>) { <span class="ruby-constant">TCPSocket</span>.<span class="ruby-identifier">open</span>(<span class="ruby-ivar">@address</span>, <span class="ruby-ivar">@port</span>) }
+    <span class="ruby-ivar">@socket</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">InternetMessageIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sock</span>)
+    <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">read_timeout</span> = <span class="ruby-value">60</span> <span class="ruby-comment cmt">#@read_timeout</span>
+    <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">debug_output</span> = <span class="ruby-constant">STDERR</span> <span class="ruby-comment cmt">#@debug_output</span>
+
+    <span class="ruby-identifier">check_response</span>(<span class="ruby-identifier">critical</span> { <span class="ruby-identifier">recv_response</span>() })
+    <span class="ruby-identifier">do_helo</span>(<span class="ruby-identifier">helodomain</span>)
+
+    <span class="ruby-identifier">raise</span> <span class="ruby-value str">'openssl library not installed'</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-constant">OpenSSL</span>)
+    <span class="ruby-identifier">starttls</span>
+    <span class="ruby-identifier">ssl</span> = <span class="ruby-constant">OpenSSL</span><span class="ruby-operator">::</span><span class="ruby-constant">SSL</span><span class="ruby-operator">::</span><span class="ruby-constant">SSLSocket</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">sock</span>)
+    <span class="ruby-identifier">ssl</span>.<span class="ruby-identifier">sync_close</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-identifier">ssl</span>.<span class="ruby-identifier">connect</span>
+    <span class="ruby-ivar">@socket</span> = <span class="ruby-constant">Net</span><span class="ruby-operator">::</span><span class="ruby-constant">InternetMessageIO</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">ssl</span>)
+    <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">read_timeout</span> = <span class="ruby-value">60</span> <span class="ruby-comment cmt">#@read_timeout</span>
+    <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">debug_output</span> = <span class="ruby-constant">STDERR</span> <span class="ruby-comment cmt">#@debug_output</span>
+    <span class="ruby-identifier">do_helo</span>(<span class="ruby-identifier">helodomain</span>)
+
+    <span class="ruby-identifier">authenticate</span> <span class="ruby-identifier">user</span>, <span class="ruby-identifier">secret</span>, <span class="ruby-identifier">authtype</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">user</span>
+    <span class="ruby-ivar">@started</span> = <span class="ruby-keyword kw">true</span>
+  <span class="ruby-keyword kw">ensure</span>
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@started</span>
+      <span class="ruby-comment cmt"># authentication failed, cancel connection.</span>
+        <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">close</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">not</span> <span class="ruby-ivar">@started</span> <span class="ruby-keyword kw">and</span> <span class="ruby-ivar">@socket</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">closed?</span>
+      <span class="ruby-ivar">@socket</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001062"></a><b>quit</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001062_source')" id="l_M001062_source">show source</a> ]</p>
+  <div id="M001062_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/net/smtp_tls.rb, line 126</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">quit</span>
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">getok</span>(<span class="ruby-value str">'QUIT'</span>)
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">EOFError</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001061"></a><b>starttls</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001061_source')" id="l_M001061_source">show source</a> ]</p>
+  <div id="M001061_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/net/smtp_tls.rb, line 120</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">starttls</span>
+    <span class="ruby-identifier">getok</span>(<span class="ruby-value str">'STARTTLS'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

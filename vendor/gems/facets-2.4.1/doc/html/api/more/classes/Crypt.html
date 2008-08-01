@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Crypt</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Crypt</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/crypt_rb.html">lib/facets/crypt.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Crypt.html">Crypt</a></h1>
+<p>
+A pure ruby version of <a href="Crypt.html#M001054">crypt</a>(3), a salted
+one-way hashing of a password.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M001055">check</a></li>
+  <li><a href="#M001054">crypt</a></li>
+  <li><a href="#M001056">generate_salt</a></li>
+  </ul>
+
+
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">ITOA64</td>
+    <td>=</td>
+    <td class="attr-value">&quot;./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&quot;</td>
+  </tr>
+  </table>
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M001055"></a><b>check</b>(password, hash, algo = :md5)
+  </div>
+  <div class="description">
+  <p>
+<a href="Crypt.html#M001055">check</a> the validity of a password against
+an hashed string
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001055_source')" id="l_M001055_source">show source</a> ]</p>
+  <div id="M001055_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/crypt.rb, line 153</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">check</span>(<span class="ruby-identifier">password</span>, <span class="ruby-identifier">hash</span>, <span class="ruby-identifier">algo</span> = <span class="ruby-identifier">:md5</span>)
+    <span class="ruby-identifier">magic</span>, <span class="ruby-identifier">salt</span> = <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'$'</span>)[<span class="ruby-value">1</span>,<span class="ruby-value">2</span>]
+    <span class="ruby-identifier">magic</span> = <span class="ruby-value str">'$'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">magic</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'$'</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">crypt</span>(<span class="ruby-identifier">password</span>, <span class="ruby-identifier">algo</span>, <span class="ruby-identifier">salt</span>, <span class="ruby-identifier">magic</span>) <span class="ruby-operator">==</span> <span class="ruby-identifier">hash</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001054"></a><b>crypt</b>(password, algo = :md5, salt = nil, magic='$1$')
+  </div>
+  <div class="description">
+  <p>
+A pure ruby version of <a href="Crypt.html#M001054">crypt</a>(3), a salted
+one-way hashing of a password.
+</p>
+<p>
+Supported hashing algorithms are: md5, sha1, sha256, sha384, sha512,
+rmd160.
+</p>
+<p>
+Only the md5 hashing algorithm is standard and compatible with <a
+href="Crypt.html#M001054">crypt</a>(3), the others are not standard.
+</p>
+<p>
+Automatically generate a 8-bytes salt if nil.
+</p>
+<p>
+Output a length hashed and salted string with size of magic.size +
+salt.size + 23.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001054_source')" id="l_M001054_source">show source</a> ]</p>
+  <div id="M001054_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/crypt.rb, line 58</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">crypt</span>(<span class="ruby-identifier">password</span>, <span class="ruby-identifier">algo</span> = <span class="ruby-identifier">:md5</span>, <span class="ruby-identifier">salt</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">magic</span>=<span class="ruby-value str">'$1$'</span>)
+
+    <span class="ruby-identifier">salt</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">generate_salt</span>(<span class="ruby-value">8</span>)
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">algo</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:md5</span>
+        <span class="ruby-identifier">require</span> <span class="ruby-value str">&quot;digest/md5&quot;</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:sha1</span>
+        <span class="ruby-identifier">require</span> <span class="ruby-value str">&quot;digest/sha1&quot;</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:rmd160</span>
+        <span class="ruby-identifier">require</span> <span class="ruby-value str">&quot;digest/rmd160&quot;</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:sha256</span>, <span class="ruby-identifier">:sha384</span>, <span class="ruby-identifier">:sha512</span>
+        <span class="ruby-identifier">require</span> <span class="ruby-value str">&quot;digest/sha2&quot;</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span>(<span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;unknown algorithm&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">digest_class</span> = <span class="ruby-constant">Digest</span>.<span class="ruby-identifier">const_get</span>(<span class="ruby-identifier">algo</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">upcase</span>)
+
+    <span class="ruby-comment cmt"># The password first, since that is what is most unknown. Then our magic string. Then the raw salt.</span>
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">digest_class</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">m</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">password</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">magic</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">salt</span>)
+
+    <span class="ruby-comment cmt"># Then just as many characters of the MD5(pw,salt,pw)</span>
+    <span class="ruby-identifier">mixin</span> = <span class="ruby-identifier">digest_class</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">password</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">salt</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">password</span>).<span class="ruby-identifier">digest</span>
+    <span class="ruby-identifier">password</span>.<span class="ruby-identifier">length</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">m</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">mixin</span>[<span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">16</span>].<span class="ruby-identifier">chr</span>)
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-comment cmt"># Then something really weird...</span>
+    <span class="ruby-comment cmt"># Also really broken, as far as I can tell.  -m</span>
+    <span class="ruby-identifier">i</span> = <span class="ruby-identifier">password</span>.<span class="ruby-identifier">length</span>
+    <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+      <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">i</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">1</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">m</span>.<span class="ruby-identifier">update</span>(<span class="ruby-value str">&quot;\x00&quot;</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">m</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">password</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">chr</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">i</span> <span class="ruby-operator">&gt;&gt;=</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">final</span> = <span class="ruby-identifier">m</span>.<span class="ruby-identifier">digest</span>
+
+    <span class="ruby-comment cmt"># and now, just to make sure things don't run too fast</span>
+    <span class="ruby-value">1000</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">m2</span> = <span class="ruby-identifier">digest_class</span>.<span class="ruby-identifier">new</span>
+
+      <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">i</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">1</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">m2</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">password</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">m2</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">final</span>)
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">3</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">m2</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">salt</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">i</span> <span class="ruby-operator">%</span> <span class="ruby-value">7</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">m2</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">password</span>)
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">i</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">1</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">m2</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">final</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">m2</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">password</span>)
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">final</span> = <span class="ruby-identifier">m2</span>.<span class="ruby-identifier">digest</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-comment cmt"># This is the bit that uses to64() in the original code.</span>
+
+    <span class="ruby-identifier">rearranged</span> = <span class="ruby-value str">&quot;&quot;</span>
+
+    [ [<span class="ruby-value">0</span>, <span class="ruby-value">6</span>, <span class="ruby-value">12</span>], [<span class="ruby-value">1</span>, <span class="ruby-value">7</span>, <span class="ruby-value">13</span>], [<span class="ruby-value">2</span>, <span class="ruby-value">8</span>, <span class="ruby-value">14</span>], [<span class="ruby-value">3</span>, <span class="ruby-value">9</span>, <span class="ruby-value">15</span>], [<span class="ruby-value">4</span>, <span class="ruby-value">10</span>, <span class="ruby-value">5</span>] ].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">a</span>, <span class="ruby-identifier">b</span>, <span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+
+      <span class="ruby-identifier">v</span> = <span class="ruby-identifier">final</span>[<span class="ruby-identifier">a</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">16</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">final</span>[<span class="ruby-identifier">b</span>] <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">8</span> <span class="ruby-operator">|</span> <span class="ruby-identifier">final</span>[<span class="ruby-identifier">c</span>]
+
+      <span class="ruby-value">4</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-identifier">rearranged</span> <span class="ruby-operator">+=</span> <span class="ruby-constant">ITOA64</span>[<span class="ruby-identifier">v</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">0x3f</span>].<span class="ruby-identifier">chr</span>
+        <span class="ruby-identifier">v</span> <span class="ruby-operator">&gt;&gt;=</span> <span class="ruby-value">6</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">v</span> = <span class="ruby-identifier">final</span>[<span class="ruby-value">11</span>]
+
+    <span class="ruby-value">2</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-identifier">rearranged</span> <span class="ruby-operator">+=</span> <span class="ruby-constant">ITOA64</span>[<span class="ruby-identifier">v</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">0x3f</span>].<span class="ruby-identifier">chr</span>
+      <span class="ruby-identifier">v</span> <span class="ruby-operator">&gt;&gt;=</span> <span class="ruby-value">6</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">magic</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">salt</span> <span class="ruby-operator">+</span> <span class="ruby-value str">'$'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">rearranged</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001056"></a><b>generate_salt</b>(size)
+  </div>
+  <div class="description">
+  <p>
+generate a <tt>size</tt> length random salt
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001056_source')" id="l_M001056_source">show source</a> ]</p>
+  <div id="M001056_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/crypt.rb, line 162</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">generate_salt</span>(<span class="ruby-identifier">size</span>)
+    (<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-identifier">size</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-constant">ITOA64</span>[<span class="ruby-identifier">rand</span>(<span class="ruby-constant">ITOA64</span>.<span class="ruby-identifier">size</span>)].<span class="ruby-identifier">chr</span> }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

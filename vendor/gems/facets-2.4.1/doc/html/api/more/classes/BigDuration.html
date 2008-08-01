@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: BigDuration</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />BigDuration</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/duration_rb.html">lib/facets/duration.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+        <a href="Duration.html">
+Duration
+         </a>
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+<a href="BigDuration.html">BigDuration</a> is a variant of <a
+href="Duration.html">Duration</a> that supports years and months. Support
+for months is not accurate, as a month is assumed to be 30 days so use at
+your own risk.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000226">each</a></li>
+  <li><a href="#M000229">months=</a></li>
+  <li><a href="#M000224">new</a></li>
+  <li><a href="#M000227">seconds</a></li>
+  <li><a href="#M000225">strftime</a></li>
+  <li><a href="#M000228">years=</a></li>
+  </ul>
+
+
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">YEAR</td>
+    <td>=</td>
+    <td class="attr-value">60 * 60 * 24 * 30 * 12</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">MONTH</td>
+    <td>=</td>
+    <td class="attr-value">60 * 60 * 24 * 30</td>
+  </tr>
+  </table>
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>months</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>years</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000224"></a><b>new</b>(seconds_or_attr = 0)
+  </div>
+  <div class="description">
+  <p>
+Similar to <a href="Duration.html#M000460">Duration.new</a> except that <a
+href="BigDuration.html#M000224">BigDuration.new</a> supports `:years&#8217;
+and `:months&#8217; and will also handle years and months correctly when
+breaking down the <a href="BigDuration.html#M000227">seconds</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000224_source')" id="l_M000224_source">show source</a> ]</p>
+  <div id="M000224_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/duration.rb, line 366</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">seconds_or_attr</span> = <span class="ruby-value">0</span>)
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">seconds_or_attr</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Hash</span>
+            <span class="ruby-comment cmt"># Part-&gt;time map table.</span>
+            <span class="ruby-identifier">h</span> =\
+            {<span class="ruby-identifier">:years</span>    =<span class="ruby-operator">&gt;</span>  <span class="ruby-constant">YEAR</span>  ,
+             <span class="ruby-identifier">:months</span>   =<span class="ruby-operator">&gt;</span>  <span class="ruby-constant">MONTH</span> ,
+             <span class="ruby-identifier">:weeks</span>    =<span class="ruby-operator">&gt;</span>  <span class="ruby-constant">WEEK</span>  ,
+             <span class="ruby-identifier">:days</span>     =<span class="ruby-operator">&gt;</span>  <span class="ruby-constant">DAY</span>   ,
+             <span class="ruby-identifier">:hours</span>    =<span class="ruby-operator">&gt;</span>  <span class="ruby-constant">HOUR</span>  ,
+             <span class="ruby-identifier">:minutes</span>  =<span class="ruby-operator">&gt;</span>  <span class="ruby-constant">MINUTE</span>,
+             <span class="ruby-identifier">:seconds</span>  =<span class="ruby-operator">&gt;</span>  <span class="ruby-constant">SECOND</span>}
+
+            <span class="ruby-comment cmt"># Loop through each valid part, ignore all others.</span>
+            <span class="ruby-identifier">seconds</span> = <span class="ruby-identifier">seconds_or_attr</span>.<span class="ruby-identifier">inject</span>(<span class="ruby-value">0</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">sec</span>, <span class="ruby-identifier">args</span><span class="ruby-operator">|</span>
+                <span class="ruby-comment cmt"># Grab the part of the duration (week, day, whatever) and the number of seconds for it.</span>
+                <span class="ruby-identifier">part</span>, <span class="ruby-identifier">time</span> = <span class="ruby-identifier">args</span>
+
+                <span class="ruby-comment cmt"># Map each part to their number of seconds and the given value.</span>
+                <span class="ruby-comment cmt"># {:weeks =&gt; 2} maps to h[:weeks] -- so... weeks = WEEK * 2</span>
+                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">h</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">prt</span> = <span class="ruby-identifier">part</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">to_sym</span>) <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">sec</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">time</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">h</span>[<span class="ruby-identifier">prt</span>] <span class="ruby-keyword kw">else</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">else</span>
+            <span class="ruby-identifier">seconds</span> = <span class="ruby-identifier">seconds_or_attr</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-ivar">@total</span>, <span class="ruby-identifier">array</span> = <span class="ruby-identifier">seconds</span>.<span class="ruby-identifier">to_f</span>.<span class="ruby-identifier">round</span>, []
+        <span class="ruby-ivar">@seconds</span> = [<span class="ruby-constant">YEAR</span>, <span class="ruby-constant">MONTH</span>, <span class="ruby-constant">WEEK</span>, <span class="ruby-constant">DAY</span>, <span class="ruby-constant">HOUR</span>, <span class="ruby-constant">MINUTE</span>].<span class="ruby-identifier">inject</span>(<span class="ruby-ivar">@total</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">left</span>, <span class="ruby-identifier">part</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">array</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">left</span> <span class="ruby-operator">/</span> <span class="ruby-identifier">part</span>; <span class="ruby-identifier">left</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">part</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-ivar">@years</span>, <span class="ruby-ivar">@months</span>, <span class="ruby-ivar">@weeks</span>, <span class="ruby-ivar">@days</span>, <span class="ruby-ivar">@hours</span>, <span class="ruby-ivar">@minutes</span> = <span class="ruby-identifier">array</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000226"></a><b>each</b>() {|part, time| ...}
+  </div>
+  <div class="description">
+  <p>
+Similar to <a href="Duration.html#M000463">Duration#each</a> except
+includes years and months in the interation.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000226_source')" id="l_M000226_source">show source</a> ]</p>
+  <div id="M000226_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/duration.rb, line 413</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>
+        [[<span class="ruby-value str">'years'</span>   ,  <span class="ruby-ivar">@years</span>  ],
+         [<span class="ruby-value str">'months'</span>  ,  <span class="ruby-ivar">@months</span> ],
+         [<span class="ruby-value str">'weeks'</span>   ,  <span class="ruby-ivar">@weeks</span>  ],
+         [<span class="ruby-value str">'days'</span>    ,  <span class="ruby-ivar">@days</span>   ],
+         [<span class="ruby-value str">'hours'</span>   ,  <span class="ruby-ivar">@hours</span>  ],
+         [<span class="ruby-value str">'minutes'</span> ,  <span class="ruby-ivar">@minutes</span>],
+         [<span class="ruby-value str">'seconds'</span> ,  <span class="ruby-ivar">@seconds</span>]].<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">part</span>, <span class="ruby-identifier">time</span><span class="ruby-operator">|</span>
+             <span class="ruby-comment cmt"># Yield to block</span>
+            <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">part</span>, <span class="ruby-identifier">time</span>
+        <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000229"></a><b>months=</b>(n)
+  </div>
+  <div class="description">
+  <p>
+<a href="Set.html">Set</a> the number of months in the <a
+href="BigDuration.html">BigDuration</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000229_source')" id="l_M000229_source">show source</a> ]</p>
+  <div id="M000229_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/duration.rb, line 445</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">months=</span>(<span class="ruby-identifier">n</span>)
+        <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">:months</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">n</span>, <span class="ruby-identifier">:seconds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@total</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">seconds</span>(<span class="ruby-identifier">:months</span>))
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000227"></a><b>seconds</b>(part = nil)
+  </div>
+  <div class="description">
+  <p>
+Derived from <a href="Duration.html#M000462">Duration#seconds</a>, but
+supports `:years&#8217; and `:months&#8217; as well.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000227_source')" id="l_M000227_source">show source</a> ]</p>
+  <div id="M000227_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/duration.rb, line 428</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">seconds</span>(<span class="ruby-identifier">part</span> = <span class="ruby-keyword kw">nil</span>)
+        <span class="ruby-identifier">h</span> = {<span class="ruby-identifier">:years</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">YEAR</span>, <span class="ruby-identifier">:months</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">MONTH</span>}
+        <span class="ruby-keyword kw">if</span> [<span class="ruby-identifier">:years</span>, <span class="ruby-identifier">:months</span>].<span class="ruby-identifier">include?</span> <span class="ruby-identifier">part</span>
+            <span class="ruby-identifier">__send__</span>(<span class="ruby-identifier">part</span>) <span class="ruby-operator">*</span> <span class="ruby-identifier">h</span>[<span class="ruby-identifier">part</span>]
+        <span class="ruby-keyword kw">else</span>
+            <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">part</span>)
+        <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000225"></a><b>strftime</b>(fmt)
+  </div>
+  <div class="description">
+  <p>
+<a href="BigDuration.html">BigDuration</a> variant of <a
+href="Duration.html#M000461">Duration#strftime</a>.
+</p>
+<p>
+*Identifiers: <a href="BigDuration.html">BigDuration</a>*
+</p>
+<pre>
+    %y -- Number of years
+    %m -- Number of months
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000225_source')" id="l_M000225_source">show source</a> ]</p>
+  <div id="M000225_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/duration.rb, line 406</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">strftime</span>(<span class="ruby-identifier">fmt</span>)
+        <span class="ruby-identifier">h</span> = {<span class="ruby-value str">'y'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@years</span>, <span class="ruby-value str">'M'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@months</span>}
+        <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">fmt</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/%?%(y|M)/</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">match</span><span class="ruby-operator">|</span> <span class="ruby-identifier">match</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">3</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">match</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">h</span>[<span class="ruby-identifier">match</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">1</span>]] })
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000228"></a><b>years=</b>(n)
+  </div>
+  <div class="description">
+  <p>
+<a href="Set.html">Set</a> the number of years in the <a
+href="BigDuration.html">BigDuration</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000228_source')" id="l_M000228_source">show source</a> ]</p>
+  <div id="M000228_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/duration.rb, line 439</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">years=</span>(<span class="ruby-identifier">n</span>)
+        <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">:years</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">n</span>, <span class="ruby-identifier">:seconds</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@total</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">seconds</span>(<span class="ruby-identifier">:years</span>))
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

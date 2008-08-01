@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: settings.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />settings.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/settings.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Mon Mar 24 13:38:25 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/Settings.html">Settings</a></h1>
+<p>
+<a href="../../../classes/Settings.html">Settings</a> holds configuration
+information organized by Owners. An owner is a class that represents the
+system to be configured. An alias for this class is <a
+href="../../../classes/Settings.html">Settings</a>.
+</p>
+<p>
+You can pass strings, constants or symbols as keys for the classes to be
+configured. Passing symbols you can configure classes even before they are
+defined.
+</p>
+<h2>Authors</h2>
+<ul>
+<li>George Moschovitis
+
+</li>
+</ul>
+<h2>Todo</h2>
+<ul>
+<li>Implement with annotations.
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2005 George Moschovitis
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+  <div class="sectiontitle">Required Files</div>
+  <ul>
+  <li>yaml</li>
+  <li>facets/kernel/constant</li>
+  <li>facets/string/capitalized</li>
+  <li>facets/synchash</li>
+  <li>facets/dictionary</li>
+  </ul>
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: buildable.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />buildable.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/buildable.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 14:58:17 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/Buildable.html">Buildable</a> / <a href="../../../classes/BuildingBlock.html">BuildingBlock</a></h1>
+<p>
+Build content programatically with Ruby and Ruby&#8216;s blocks.
+</p>
+<pre>
+  require 'facets'
+  require 'xmlhelper'
+
+  builder = BuildingBlock.new(XMLHelper, :element)
+
+  doc = builder.html do
+
+    head do
+      title &quot;Test&quot;
+    end
+
+    body do
+      i &quot;Hello&quot;
+      br
+      text &quot;Test&quot;
+      text &quot;Hey&quot;
+    end
+
+  end
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+  &lt;html&gt;&lt;head&gt;&lt;title&gt;Test&lt;/title&gt;&lt;body&gt;&lt;i&gt;Hello&lt;/i&gt;&lt;br /&gt;TestHey&lt;/body&gt;&lt;/html&gt;
+</pre>
+<p>
+All calls within the block are routed via the Helper <a
+href="../../../classes/Module.html">Module</a>&#8216;s constructor method
+(element in the above example) unless they are defined by the helper
+module, in which case they are sent to the helper module directly. The
+results of these invocations are appended to the output buffer. To prevent
+this, prefix the method with &#8216;call_&#8217;.
+</p>
+<p>
+Sometimes keywords can get in the way of a construction. In these cases you
+can ensure use of constructor method by calling the special build! command.
+You can also add verbatium text to the output via the #&lt;&lt; operator.
+Some common Ruby&#8216;s built-in methods treated as keywords:
+</p>
+<pre>
+     inspect
+     instance_eval
+     respond_to?
+     singleton_method_undefined
+     initialize
+     method_missing
+     to_str
+     to_s
+</pre>
+<p>
+And a few other speciality methods besides:
+</p>
+<pre>
+     to_buffer
+     build!
+     &lt;&lt;
+</pre>
+<p>
+This work was of course inspired by many great minds, and represents a
+concise and simple means of accomplishing this pattern of design, which is
+unique to Ruby.
+</p>
+<p>
+<a href="../../../classes/Buildable.html">Buildable</a> is mixin variation
+of <a href="../../../classes/BuildingBlock.html">BuildingBlock</a>.
+</p>
+<pre>
+  require 'facets/buildable'
+  require 'xmlmarkup'  # hypothetical library
+
+  module XMLMarkup
+    include Buildable
+    alias :build :element
+  end
+
+  doc = XMLMarkup.build do
+    html do
+      head do
+        title &quot;Test&quot;
+      end
+      body do
+        i &quot;Hello&quot;
+        br
+        text &quot;Test&quot;
+        text &quot;Hey&quot;
+      end
+    end
+  end
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+  &lt;html&gt;&lt;head&gt;&lt;title&gt;Test&lt;/title&gt;&lt;body&gt;&lt;i&gt;Hello&lt;/i&gt;&lt;br /&gt;TestHey&lt;/body&gt;&lt;/html&gt;
+</pre>
+<p>
+This is based on <a
+href="../../../classes/BuildingBlock.html">BuildingBlock</a>. Refer to it
+for more information.
+</p>
+<h2>Authors</h2>
+<ul>
+<li>Thomas Sawyer
+
+</li>
+</ul>
+<h2>Todo</h2>
+<ul>
+<li>Change name of <a
+href="../../../classes/BuildingBlock.html">BuildingBlock</a> to BlockUp ?
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2006 Thomas Sawyer
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

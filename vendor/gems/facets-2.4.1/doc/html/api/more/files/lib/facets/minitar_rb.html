@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: minitar.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />minitar.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/minitar.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 15:53:45 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/Archive/Tar/Minitar.html">Archive::Tar::Minitar</a></h1>
+<h1>Synopsis</h1>
+<p>
+<a
+href="../../../classes/Archive/Tar/Minitar.html">Archive::Tar::Minitar</a>
+is a pure-Ruby library and command-line utility that provides the ability
+to deal with POSIX tar(1) archive files. The implementation is based
+heavily on Mauricio Fern�dez&#8216;s implementation in rpa-base, but has
+been reorganised to promote reuse in other projects.
+</p>
+<p>
+This tar class performs a subset of all tar (POSIX tape archive)
+operations. We can only deal with typeflags 0, 1, 2, and 5 (see
+Archive::Tar::PosixHeader). All other typeflags will be treated as normal
+files.
+</p>
+<table>
+<tr><td valign="top">NOTE::</td><td>support for typeflags 1 and 2 is not yet implemented in this version.
+
+</td></tr>
+</table>
+<p>
+This release is version 0.5.1. The library can only handle files and
+directories at this point. A future version will be expanded to handle
+symbolic links and hard links in a portable manner. The command line
+utility, minitar, can only create archives, extract from archives, and list
+archive contents.
+</p>
+<h2>Synopsis</h2>
+<p>
+Using this library is easy. The simplest case is:
+</p>
+<pre>
+  require 'zlib'
+  require 'archive/tar/minitar'
+  include Archive::Tar
+
+    # Packs everything that matches Find.find('tests')
+  File.open('test.tar', 'wb') { |tar| Minitar.pack('tests', tar) }
+    # Unpacks 'test.tar' to 'x', creating 'x' if necessary.
+  Minitar.unpack('test.tar', 'x')
+</pre>
+<p>
+A gzipped tar can be written with:
+</p>
+<pre>
+  tgz = Zlib::GzipWriter.new(File.open('test.tgz', 'wb'))
+    # Warning: tgz will be closed!
+  Minitar.pack('tests', tgz)
+
+  tgz = Zlib::GzipReader.new(File.open('test.tgz', 'rb'))
+    # Warning: tgz will be closed!
+  Minitar.unpack(tgz, 'x')
+</pre>
+<p>
+As the case above shows, one need not write to a file. However, it will
+sometimes require that one dive a little deeper into the API, as in the
+case of StringIO objects. Note that I&#8216;m not providing a block with
+Minitar::Output, as Minitar::Output#close automatically closes both the
+Output object and the wrapped data stream object.
+</p>
+<pre>
+  begin
+    sgz = Zlib::GzipWriter.new(StringIO.new(&quot;&quot;))
+    tar = Output.new(sgz)
+    Find.find('tests') do |entry|
+      Minitar.pack_file(entry, tar)
+    end
+  ensure
+      # Closes both tar and sgz.
+    tar.close
+  end
+</pre>
+<h2>Version</h2>
+<pre>
+  0.5.1
+</pre>
+<h2>Authors</h2>
+<ul>
+<li>Mauricio Julio Fern�dez Pradier
+
+</li>
+<li>Austin Ziegler
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright 2004 Mauricio Julio Fern�dez Pradier and Austin Ziegler
+</p>
+<p>
+This program is based on and incorporates parts of RPA::Package from
+rpa-base (lib/rpa/package.rb and lib/rpa/util.rb) by Mauricio and has been
+adapted to be more generic by Austin.
+</p>
+<p>
+&#8216;minitar&#8217; contains an adaptation of Ruby/<a
+href="../../../classes/ProgressBar.html">ProgressBar</a> by Satoru
+Takabayashi &lt;satoru@namazu.org&gt;, copyright 2001 - 2004.
+</p>
+<p>
+This program is free software. <a href="../../../classes/It.html">It</a>
+may be redistributed and/or modified under the terms of the GPL version 2
+(or later) or Ruby&#8216;s licence.
+</p>
+</div>
+
+  <div class="sectiontitle">Required Files</div>
+  <ul>
+  <li>fileutils</li>
+  <li>find</li>
+  </ul>
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

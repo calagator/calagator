@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Cloneable</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Cloneable</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/cloneable_rb.html">lib/facets/cloneable.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1>Clonable</h1>
+<p>
+Standard basis for adding deep dup and clone to a class. Provides a class
+with deep cloneablity via the standard dup and clone methods.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000869">initialize_copy</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000869"></a><b>initialize_copy</b>(sibling)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000869_source')" id="l_M000869_source">show source</a> ]</p>
+  <div id="M000869_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/cloneable.rb, line 40</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize_copy</span>(<span class="ruby-identifier">sibling</span>)
+    <span class="ruby-comment cmt">#first duplicate my superclass' state. Note that if it's duplicating</span>
+    <span class="ruby-comment cmt">#instance variables, this will be overwritten, but this is important</span>
+    <span class="ruby-comment cmt">#because we could be dealing with a C extension with state hidden from</span>
+    <span class="ruby-comment cmt">#the Ruby interpreter</span>
+    <span class="ruby-keyword kw">super</span>
+
+    <span class="ruby-comment cmt">#we want to know if we're being dup'ed or clone'd, because we want to</span>
+    <span class="ruby-comment cmt">#preserve the state of our internals the same way our state is being</span>
+    <span class="ruby-comment cmt">#preserved. (If we can't figure it out, we'll just use #dup.)</span>
+    <span class="ruby-identifier">operation</span>=<span class="ruby-identifier">caller</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span> <span class="ruby-operator">!~</span> <span class="ruby-regexp re">/'initialize_copy'/</span>}.
+      <span class="ruby-identifier">match</span>(<span class="ruby-regexp re">/`(dup|clone)'/</span>)[<span class="ruby-value">1</span>] <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">:dup</span>
+
+    <span class="ruby-identifier">sibling</span>.<span class="ruby-identifier">instance_variables</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">ivar</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">value</span> = <span class="ruby-identifier">sibling</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-identifier">ivar</span>)
+
+      <span class="ruby-comment cmt">#set my instance variable to be a #dup or #clone</span>
+      <span class="ruby-comment cmt">#or my sibling, depending on what's happening to me right now</span>
+      <span class="ruby-identifier">instance_variable_set</span>(<span class="ruby-identifier">ivar</span>, <span class="ruby-identifier">value</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">operation</span>))
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

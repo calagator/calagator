@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Reference</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Reference</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/reference_rb.html">lib/facets/reference.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Reference.html">Reference</a></h1>
+<p>
+<a href="Reference.html">Reference</a> provides a way to access object
+indirectly. This allows for the object itself to be changed on the fly.
+</p>
+<pre>
+  a = &quot;HELLO&quot;
+  b = ref(a)
+  puts b    #=&gt; &quot;HELLO&quot;
+  c = 10
+  b.become(c)
+  puts b    #=&gt; &quot;10&quot;
+</pre>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000270">__value__</a></li>
+  <li><a href="#M000269">become</a></li>
+  <li><a href="#M000271">instance_delegate</a></li>
+  <li><a href="#M000268">method_missing</a></li>
+  <li><a href="#M000267">new</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000267"></a><b>new</b>(obj)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000267_source')" id="l_M000267_source">show source</a> ]</p>
+  <div id="M000267_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/reference.rb, line 50</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">obj</span>)
+    <span class="ruby-identifier">ref</span> = <span class="ruby-identifier">allocate</span>
+    <span class="ruby-identifier">ref</span>.<span class="ruby-identifier">become</span> <span class="ruby-identifier">obj</span>
+    <span class="ruby-identifier">ref</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000270"></a><b>__value__</b>()
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Reference.html#M000271">instance_delegate</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000270_source')" id="l_M000270_source">show source</a> ]</p>
+  <div id="M000270_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/reference.rb, line 66</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">__value__</span>
+    <span class="ruby-ivar">@ref</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000269"></a><b>become</b>(obj)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000269_source')" id="l_M000269_source">show source</a> ]</p>
+  <div id="M000269_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/reference.rb, line 60</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">become</span>(<span class="ruby-identifier">obj</span>)
+    <span class="ruby-identifier">old</span> = <span class="ruby-ivar">@ref</span>
+    <span class="ruby-ivar">@ref</span> = <span class="ruby-identifier">obj</span>
+    <span class="ruby-identifier">old</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000271"></a><b>instance_delegate</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for #<em>value</em>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000268"></a><b>method_missing</b>(*args, &amp;block)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000268_source')" id="l_M000268_source">show source</a> ]</p>
+  <div id="M000268_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/reference.rb, line 56</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-ivar">@ref</span>.<span class="ruby-identifier">__send__</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

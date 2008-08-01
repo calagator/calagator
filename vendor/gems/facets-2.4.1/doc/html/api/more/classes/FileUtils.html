@@ -1,0 +1,454 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: FileUtils</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />FileUtils</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/fileutils/which_rb.html">lib/facets/fileutils/which.rb</a>
+<a href="../files/lib/facets/fileutils/whereis_rb.html">lib/facets/fileutils/whereis.rb</a>
+<a href="../files/lib/facets/fileutils/wc_rb.html">lib/facets/fileutils/wc.rb</a>
+<a href="../files/lib/facets/fileutils/slice_rb.html">lib/facets/fileutils/slice.rb</a>
+<a href="../files/lib/facets/fileutils/safe_ln_rb.html">lib/facets/fileutils/safe_ln.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000915">head</a></li>
+  <li><a href="#M000918">safe_ln</a></li>
+  <li><a href="#M000917">slice</a></li>
+  <li><a href="#M000916">tail</a></li>
+  <li><a href="#M000914">wc</a></li>
+  <li><a href="#M000913">whereis</a></li>
+  <li><a href="#M000912">which</a></li>
+  </ul>
+
+
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">Win32Exts</td>
+    <td>=</td>
+    <td class="attr-value">%w{.exe .com .bat .cmd}</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">Win32Exts</td>
+    <td>=</td>
+    <td class="attr-value">%w{.exe .com .bat .cmd}</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">LINKING_SUPPORTED</td>
+    <td>=</td>
+    <td class="attr-value">[true]</td>
+  </tr>
+  </table>
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000915"></a><b>head</b>(filename,lines=10) {|| ...}
+  </div>
+  <div class="description">
+  <p>
+In block form, yields the first number of ((<b>lines</b>)) of file
+((<b>filename</b>)). In non-block form, it returns an array of the first
+number of ((<b>lines</b>)).
+</p>
+<pre>
+  # Returns first 10 lines of 'myfile'
+  FileUtils.head(&quot;myfile&quot;)
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000915_source')" id="l_M000915_source">show source</a> ]</p>
+  <div id="M000915_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileutils/slice.rb, line 11</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">head</span>(<span class="ruby-identifier">filename</span>,<span class="ruby-identifier">lines</span>=<span class="ruby-value">10</span>) <span class="ruby-comment cmt">#:yield:</span>
+    <span class="ruby-identifier">a</span> = []
+    <span class="ruby-constant">IO</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">filename</span>){<span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lines</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">lines</span> <span class="ruby-operator">-=</span> <span class="ruby-value">1</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+          <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">line</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">a</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">line</span>
+        <span class="ruby-keyword kw">end</span>
+    }
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">a</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000918"></a><b>safe_ln</b>(*args)
+  </div>
+  <div class="description">
+  <p>
+Attempt to do a normal file link, but fall back to a copy if the link
+fails.
+</p>
+<p>
+CREDIT Jim Weirich
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000918_source')" id="l_M000918_source">show source</a> ]</p>
+  <div id="M000918_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileutils/safe_ln.rb, line 14</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">safe_ln</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">LINKING_SUPPORTED</span>[<span class="ruby-value">0</span>]
+      <span class="ruby-identifier">cp</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">ln</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">EOPNOTSUPP</span>
+        <span class="ruby-constant">LINKING_SUPPORTED</span>[<span class="ruby-value">0</span>] = <span class="ruby-keyword kw">false</span>
+        <span class="ruby-identifier">cp</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000917"></a><b>slice</b>(filename,from,to) {|| ...}
+  </div>
+  <div class="description">
+  <p>
+In block form, yields lines ((<b>from</b>))-((<b>to</b>)). In non-block
+form, returns an array of lines ((<b>from</b>))-((<b>to</b>)).
+</p>
+<pre>
+  # Returns lines 8-12 of 'myfile'
+  FileUtils.body(&quot;myfile&quot;,8,12)
+</pre>
+<p>
+CREDIT Shashank <a href="Date.html">Date</a>, via Daniel Berger.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000917_source')" id="l_M000917_source">show source</a> ]</p>
+  <div id="M000917_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileutils/slice.rb, line 48</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">slice</span>(<span class="ruby-identifier">filename</span>,<span class="ruby-identifier">from</span>,<span class="ruby-identifier">to</span>) <span class="ruby-comment cmt">#:yield:</span>
+    <span class="ruby-constant">IO</span>.<span class="ruby-identifier">readlines</span>(<span class="ruby-identifier">filename</span>)[<span class="ruby-identifier">from</span><span class="ruby-operator">-</span><span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-identifier">to</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>]
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000916"></a><b>tail</b>(filename,lines=10)
+  </div>
+  <div class="description">
+  <p>
+In block form, yields the last number of ((<b>lines</b>)) of file
+((<b>filename</b>)). In non-block form, it returns the lines as an array.
+</p>
+<p>
+Note that this method slurps the entire file, so I don&#8216;t recommend it
+for very large files. If you want an advanced form of ((<b><a
+href="FileUtils.html#M000916">tail</a></b>)), I suggest using file-<a
+href="FileUtils.html#M000916">tail</a>, by Florian Frank (available on the
+RAA). And no <a href="FileUtils.html#M000916">tail</a> -f.
+</p>
+<pre>
+  # Returns last 3 lines of 'myfile'
+  FileUtils.tail(&quot;myfile&quot;,3)
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000916_source')" id="l_M000916_source">show source</a> ]</p>
+  <div id="M000916_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileutils/slice.rb, line 36</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tail</span>(<span class="ruby-identifier">filename</span>,<span class="ruby-identifier">lines</span>=<span class="ruby-value">10</span>) <span class="ruby-comment cmt">#:yield</span>
+    <span class="ruby-constant">IO</span>.<span class="ruby-identifier">readlines</span>(<span class="ruby-identifier">filename</span>).<span class="ruby-identifier">reverse</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">lines</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>].<span class="ruby-identifier">reverse</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000914"></a><b>wc</b>(filename,option='all')
+  </div>
+  <div class="description">
+  <p>
+With no arguments, returns a four element array consisting of the number of
+bytes, characters, words and lines in <em>filename</em>, respectively.
+</p>
+<p>
+Valid options are <tt>bytes</tt>, <tt>characters</tt> (or just
+&#8216;chars&#8217;), <tt>words</tt> and <tt>lines</tt>.
+</p>
+<pre>
+  # Return the number of words in 'myfile'
+  FileUtils.wc(&quot;myfile&quot;,'words')
+</pre>
+<p>
+CREDIT Daniel J. Berger
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000914_source')" id="l_M000914_source">show source</a> ]</p>
+  <div id="M000914_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileutils/wc.rb, line 16</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">wc</span>(<span class="ruby-identifier">filename</span>,<span class="ruby-identifier">option</span>=<span class="ruby-value str">'all'</span>)
+    <span class="ruby-identifier">option</span>.<span class="ruby-identifier">downcase!</span>
+    <span class="ruby-identifier">valid</span> = <span class="ruby-node">%w/all bytes characters chars lines words/</span>
+
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">valid</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">option</span>)
+        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;Invalid option: '#{option}'&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">n</span> = <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">option</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'lines'</span>
+        <span class="ruby-constant">IO</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">filename</span>){ <span class="ruby-identifier">n</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> }
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">n</span>
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">option</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'bytes'</span>
+        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>){ <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">f</span>.<span class="ruby-identifier">each_byte</span>{ <span class="ruby-identifier">n</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span> }
+        }
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">n</span>
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">option</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'characters'</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">option</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'chars'</span>
+        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>){ <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">getc</span>
+              <span class="ruby-identifier">n</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+          <span class="ruby-keyword kw">end</span>
+        }
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">n</span>
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">option</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'words'</span>
+        <span class="ruby-constant">IO</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">filename</span>){ <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">n</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">split</span>.<span class="ruby-identifier">length</span>
+        }
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">n</span>
+    <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">bytes</span>,<span class="ruby-identifier">chars</span>,<span class="ruby-identifier">lines</span>,<span class="ruby-identifier">words</span> = <span class="ruby-value">0</span>,<span class="ruby-value">0</span>,<span class="ruby-value">0</span>,<span class="ruby-value">0</span>
+        <span class="ruby-constant">IO</span>.<span class="ruby-identifier">foreach</span>(<span class="ruby-identifier">filename</span>){ <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">lines</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+          <span class="ruby-identifier">words</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">split</span>.<span class="ruby-identifier">length</span>
+          <span class="ruby-identifier">chars</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">''</span>).<span class="ruby-identifier">length</span>
+        }
+        <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">filename</span>){ <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">getc</span>
+              <span class="ruby-identifier">bytes</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+          <span class="ruby-keyword kw">end</span>
+        }
+        <span class="ruby-keyword kw">return</span> [<span class="ruby-identifier">bytes</span>,<span class="ruby-identifier">chars</span>,<span class="ruby-identifier">words</span>,<span class="ruby-identifier">lines</span>]
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000913"></a><b>whereis</b>(prog, path=ENV['PATH']) {|| ...}
+  </div>
+  <div class="description">
+  <p>
+In block form, yields each ((<b>program</b>)) within ((<b>path</b>)). In
+non-block form, returns an array of each ((<b>program</b>)) within
+((<b>path</b>)). Returns (({nil})) if not found.
+</p>
+<p>
+On the MS Windows platform, it looks for executables ending with .exe, .bat
+and .com, <a href="FileUtils.html#M000912">which</a> you may optionally
+include in the program name.
+</p>
+<pre>
+   File.whereis(&quot;ruby&quot;) -&gt; ['/usr/local/bin/ruby','/opt/bin/ruby']
+</pre>
+<p>
+CREDIT Daniel J. Berger
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000913_source')" id="l_M000913_source">show source</a> ]</p>
+  <div id="M000913_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileutils/whereis.rb, line 22</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">whereis</span>(<span class="ruby-identifier">prog</span>, <span class="ruby-identifier">path</span>=<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'PATH'</span>]) <span class="ruby-comment cmt">#:yield:</span>
+    <span class="ruby-identifier">dirs</span> = []
+    <span class="ruby-identifier">path</span>.<span class="ruby-identifier">split</span>(<span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">PATH_SEPARATOR</span>).<span class="ruby-identifier">each</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>
+        <span class="ruby-comment cmt"># Windows checks against specific extensions</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">ALT_SEPARATOR</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">prog</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">'.'</span>)
+              <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">dir</span>,<span class="ruby-identifier">prog</span>)
+              <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">executable?</span>(<span class="ruby-identifier">f</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">f</span>)
+                <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+                    <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\//</span>,<span class="ruby-value str">'\\'</span>)
+                <span class="ruby-keyword kw">else</span>
+                    <span class="ruby-identifier">dirs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\//</span>,<span class="ruby-value str">'\\'</span>)
+                <span class="ruby-keyword kw">end</span>
+              <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">else</span>
+              <span class="ruby-constant">Win32Exts</span>.<span class="ruby-identifier">find_all</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">ext</span><span class="ruby-operator">|</span>
+                <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">dir</span>,<span class="ruby-identifier">prog</span><span class="ruby-operator">+</span><span class="ruby-identifier">ext</span>)
+                <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">executable?</span>(<span class="ruby-identifier">f</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">f</span>)
+                    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+                      <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\//</span>,<span class="ruby-value str">'\\'</span>)
+                    <span class="ruby-keyword kw">else</span>
+                      <span class="ruby-identifier">dirs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\//</span>,<span class="ruby-value str">'\\'</span>)
+                    <span class="ruby-keyword kw">end</span>
+                <span class="ruby-keyword kw">end</span>
+              }
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">dir</span>,<span class="ruby-identifier">prog</span>)
+          <span class="ruby-comment cmt"># Avoid /usr/lib/ruby, for example</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">executable?</span>(<span class="ruby-identifier">f</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">f</span>)
+              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+                <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">f</span>
+              <span class="ruby-keyword kw">else</span>
+                <span class="ruby-identifier">dirs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">f</span>
+              <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+    }
+    <span class="ruby-identifier">dirs</span>.<span class="ruby-identifier">empty?</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">dirs</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000912"></a><b>which</b>(prog, path=ENV['PATH'])
+  </div>
+  <div class="description">
+  <p>
+Looks for the first occurrence of <em>program</em> within <em>path</em>.
+</p>
+<p>
+On the MS Windows platform, it looks for executables ending with .exe, .bat
+and .com, <a href="FileUtils.html#M000912">which</a> you may optionally
+include in the program name. Returns <tt>nil</tt> if not found.
+</p>
+<p>
+CREDIT Daniel J. Berger &amp; Michael Granger
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000912_source')" id="l_M000912_source">show source</a> ]</p>
+  <div id="M000912_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileutils/which.rb, line 24</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">which</span>(<span class="ruby-identifier">prog</span>, <span class="ruby-identifier">path</span>=<span class="ruby-constant">ENV</span>[<span class="ruby-value str">'PATH'</span>])
+    <span class="ruby-identifier">path</span>.<span class="ruby-identifier">split</span>(<span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">PATH_SEPARATOR</span>).<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">dir</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment cmt"># Windows checks against specific extensions</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">ALT_SEPARATOR</span>
+        <span class="ruby-identifier">ext</span> = <span class="ruby-constant">Win32Exts</span>.<span class="ruby-identifier">find</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">ext</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">prog</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">'.'</span>) <span class="ruby-comment cmt"># Assume extension already included</span>
+            <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">dir</span>,<span class="ruby-identifier">prog</span>)
+          <span class="ruby-keyword kw">else</span>
+            <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">dir</span>,<span class="ruby-identifier">prog</span><span class="ruby-operator">+</span><span class="ruby-identifier">ext</span>)
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-constant">File</span>.<span class="ruby-identifier">executable?</span>(<span class="ruby-identifier">f</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">f</span>)
+        }
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ext</span>
+          <span class="ruby-comment cmt"># Use backslashes, not forward slashes</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">prog</span>.<span class="ruby-identifier">include?</span>(<span class="ruby-value str">'.'</span>) <span class="ruby-comment cmt"># Assume extension already included</span>
+            <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-identifier">dir</span>, <span class="ruby-identifier">prog</span> ).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\//</span>,<span class="ruby-value str">'\\'</span>)
+          <span class="ruby-keyword kw">else</span>
+            <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>( <span class="ruby-identifier">dir</span>, <span class="ruby-identifier">prog</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ext</span> ).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\//</span>,<span class="ruby-value str">'\\'</span>)
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">f</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">f</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">dir</span>,<span class="ruby-identifier">prog</span>)
+        <span class="ruby-comment cmt"># Avoid /usr/lib/ruby, for example</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">executable?</span>(<span class="ruby-identifier">f</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">f</span>)
+          <span class="ruby-keyword kw">return</span> <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-identifier">join</span>( <span class="ruby-identifier">dir</span>, <span class="ruby-identifier">prog</span> )
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    }
+    <span class="ruby-keyword kw">nil</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: tracepoint.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />tracepoint.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/tracepoint.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 16:01:39 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/TracePoint.html">TracePoint</a></h1>
+<p>
+A <a href="../../../classes/TracePoint.html">TracePoint</a> is a Binding
+with the addition event information. And it&#8216;s a better way to use
+set_trace_func.
+</p>
+<p>
+A <a href="../../../classes/TracePoint.html">TracePoint</a> is a Binding
+with the addition of event information. Among other things, it functions
+very well as the join-point for Event-based AOP.
+</p>
+<h2>Usage</h2>
+<pre>
+  TracePoint.trace { |tp|
+    puts &quot;#{tp.self.class}\t#{tp.called}\t#{tp.event}\t#{tp.return?}\t#{tp.back == tp.bind}&quot;
+  }
+
+  1 + 1
+</pre>
+<p>
+produces
+</p>
+<pre>
+  Class   trace   return     true    false
+  Object          line       false   false
+  Fixnum  +       c-call     false   false
+  Fixnum  +       c-return   false   false
+</pre>
+<h2>Notes</h2>
+<p>
+You can&#8216;t subclass Binding, so we delegate (which is better anyway).
+</p>
+<h2>Authors</h2>
+<ul>
+<li>Thomas Sawyer
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2005 Thomas Sawyer
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+  <div class="sectiontitle">Required Files</div>
+  <ul>
+  <li>facets/binding</li>
+  </ul>
+
+
+
+
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">CodePoint</td>
+    <td>=</td>
+    <td class="attr-value">Binding</td>
+  </tr>
+  <tr valign='top'>
+    <td>&nbsp;</td>
+    <td colspan="2" class="attr-desc"><h1>CodePoint</h1>
+
+This is the same as a Binding. Not really needed, but I like consistency :)
+
+</td>
+  </tr>
+  </table>
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

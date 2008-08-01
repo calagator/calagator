@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Logger::Ansicolor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Logger::Ansicolor</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/logger_rb.html">lib/facets/logger.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+For adding ansicolor output.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000053">debug</a></li>
+  <li><a href="#M000059">debug_with_color</a></li>
+  <li><a href="#M000054">error</a></li>
+  <li><a href="#M000058">error_with_color</a></li>
+  <li><a href="#M000055">fatal</a></li>
+  <li><a href="#M000060">fatal_with_color</a></li>
+  <li><a href="#M000051">info</a></li>
+  <li><a href="#M000056">info_with_color</a></li>
+  <li><a href="#M000052">warn</a></li>
+  <li><a href="#M000057">warn_with_color</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000053"></a><b>debug</b>(str)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000053_source')" id="l_M000053_source">show source</a> ]</p>
+  <div id="M000053_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 192</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">debug</span>(<span class="ruby-identifier">str</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">debug?</span>
+      <span class="ruby-ivar">@logdev</span>.<span class="ruby-identifier">ansicolor?</span> <span class="ruby-value">? </span><span class="ruby-identifier">debug_with_color</span>{ <span class="ruby-keyword kw">super</span> } <span class="ruby-operator">:</span> <span class="ruby-keyword kw">super</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000059"></a><b>debug_with_color</b>( {|| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000059_source')" id="l_M000059_source">show source</a> ]</p>
+  <div id="M000059_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 225</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">debug_with_color</span> <span class="ruby-comment cmt">#:yield:</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">yellow</span>
+      <span class="ruby-keyword kw">yield</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">clear</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000054"></a><b>error</b>(str)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000054_source')" id="l_M000054_source">show source</a> ]</p>
+  <div id="M000054_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 197</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">error</span>(<span class="ruby-identifier">str</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">error?</span>
+      <span class="ruby-ivar">@logdev</span>.<span class="ruby-identifier">ansicolor?</span> <span class="ruby-value">? </span><span class="ruby-identifier">error_with_color</span>{ <span class="ruby-keyword kw">super</span> } <span class="ruby-operator">:</span> <span class="ruby-keyword kw">super</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000058"></a><b>error_with_color</b>( {|| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000058_source')" id="l_M000058_source">show source</a> ]</p>
+  <div id="M000058_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 219</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">error_with_color</span> <span class="ruby-comment cmt">#:yield:</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">red</span>
+      <span class="ruby-keyword kw">yield</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">clear</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000055"></a><b>fatal</b>(str)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000055_source')" id="l_M000055_source">show source</a> ]</p>
+  <div id="M000055_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 202</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fatal</span>(<span class="ruby-identifier">str</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">error?</span>
+      <span class="ruby-ivar">@logdev</span>.<span class="ruby-identifier">ansicolor?</span> <span class="ruby-value">? </span><span class="ruby-identifier">fatal_with_color</span>{ <span class="ruby-keyword kw">super</span> } <span class="ruby-operator">:</span> <span class="ruby-keyword kw">super</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000060"></a><b>fatal_with_color</b>( {|| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000060_source')" id="l_M000060_source">show source</a> ]</p>
+  <div id="M000060_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 231</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fatal_with_color</span> <span class="ruby-comment cmt">#:yield:</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">bold</span> <span class="ruby-operator">+</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">red</span>
+      <span class="ruby-keyword kw">yield</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">clear</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000051"></a><b>info</b>(str)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000051_source')" id="l_M000051_source">show source</a> ]</p>
+  <div id="M000051_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 182</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">info</span>(<span class="ruby-identifier">str</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">info?</span>
+      <span class="ruby-ivar">@logdev</span>.<span class="ruby-identifier">ansicolor?</span> <span class="ruby-value">? </span><span class="ruby-identifier">info_with_color</span>{ <span class="ruby-keyword kw">super</span> } <span class="ruby-operator">:</span> <span class="ruby-keyword kw">super</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000056"></a><b>info_with_color</b>( {|| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000056_source')" id="l_M000056_source">show source</a> ]</p>
+  <div id="M000056_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 207</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">info_with_color</span> <span class="ruby-comment cmt">#:yield:</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">green</span>
+      <span class="ruby-keyword kw">yield</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">clear</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000052"></a><b>warn</b>(str)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000052_source')" id="l_M000052_source">show source</a> ]</p>
+  <div id="M000052_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 187</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">warn</span>(<span class="ruby-identifier">str</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">warn?</span>
+      <span class="ruby-ivar">@logdev</span>.<span class="ruby-identifier">ansicolor?</span> <span class="ruby-value">? </span><span class="ruby-identifier">warn_with_color</span>{ <span class="ruby-keyword kw">super</span> } <span class="ruby-operator">:</span> <span class="ruby-keyword kw">super</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000057"></a><b>warn_with_color</b>( {|| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000057_source')" id="l_M000057_source">show source</a> ]</p>
+  <div id="M000057_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 213</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">warn_with_color</span> <span class="ruby-comment cmt">#:yield:</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">cyan</span>
+      <span class="ruby-keyword kw">yield</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">ANSICode</span>.<span class="ruby-identifier">clear</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

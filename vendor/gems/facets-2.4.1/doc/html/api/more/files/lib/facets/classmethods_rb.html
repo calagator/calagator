@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: classmethods.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />classmethods.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/classmethods.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 15:00:45 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1>ClassMethods</h1>
+<p>
+Miniframework provides a very convenient way to have modules pass along
+class methods in the inheritance chain.
+</p>
+<p>
+An oddity of Ruby, when including modules, class/module methods are not
+inherited. To achieve this behavior requires some clever Ruby Karate.
+Instead ClassMethods provides an easy to use and clean solution. Simply
+place the class inheritable methods in a block of the special module method
+ClassMetods.
+</p>
+<pre>
+  module Mix
+    def inst_meth
+      puts 'inst_meth'
+    end
+
+    class_methods do
+      def class_meth
+        &quot;Class Method!&quot;
+      end
+    end
+  end
+
+  class X
+    include Mix
+  end
+
+  X.class_meth  #=&gt; &quot;Class Method!&quot;
+</pre>
+<p>
+This is equivalent to the original (but still functional) techinique of
+putting the class/module methods in a nested ClassMethods module and
+extending the original module <b>manually</b>. Eg.
+</p>
+<pre>
+  module Mix
+    def inst_meth
+      puts 'inst_meth'
+    end
+
+    module ClassMethods
+      def class_meth
+        &quot;Class Method!&quot;
+      end
+    end
+
+    extend ClassMethods
+  end
+
+  class X
+    include Mix
+  end
+
+  X.class_meth  #=&gt; &quot;Class Method!&quot;
+</pre>
+<p>
+Also note that class_inherit is an available alias for class_methods for
+the sake of backward compatability. And class_extension is alias
+(potentially) looking forward to a future version on Ruby.
+</p>
+<h2>On Topic</h2>
+<p>
+Just a quick comment on the need for this behavior.
+</p>
+<p>
+A module is an encapsulation of code, hence when a module is included (or
+extends), the module itself should have discretion over how it effects the
+receiving class/module. That is the very embodiment of encapsulation.
+Having it otherwise, as Ruby now does, stymies the practice &#8212;and we
+end up with &quot;hacks&quot;, like this and ClassMethods, to compensate.
+</p>
+<p>
+Ruby would be much improved by making this bevaivor standard. And making
+non-inheritance the exception, which is alwasy easy enough to achieve: put
+the code in a separate (and thus uninherited) module.
+</p>
+<h2>Notes</h2>
+<ul>
+<li>There are currently two approaches to this, ClassMethods and
+class_extensions. A third is being worked on called Component with the idea
+that a &quot;component&quot; is like a module except that it&#8216;s
+class-level methods are mixed-in as well. This is an idea solution, however
+it is less that ideal to implement.
+
+</li>
+</ul>
+<h2>History</h2>
+<p>
+Thanks to Nobu and Ulysses for their original work on this.
+</p>
+<h2>Authors</h2>
+<ul>
+<li>Nobu Nakada
+
+</li>
+<li>Thomas Sawyer
+
+</li>
+<li>Ulysses
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2005 Nobu Nakada, Thomas Sawyer
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

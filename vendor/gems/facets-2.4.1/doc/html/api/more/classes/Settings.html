@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Settings</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Settings</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/settings_rb.html">lib/facets/settings.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Settings.html">Settings</a></h1>
+<p>
+<a href="Settings.html">Settings</a> holds configuration information
+organized by Owners. An owner is a class that represents the system to be
+configured. An alias for this class is <a
+href="Settings.html">Settings</a>.
+</p>
+<p>
+You can pass strings, constants or symbols as keys for the classes to be
+configured. Passing symbols you can configure classes even before they are
+defined.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000286">add_setting</a></li>
+  <li><a href="#M000285">load</a></li>
+  <li><a href="#M000288">method_missing</a></li>
+  <li><a href="#M000284">parse</a></li>
+  <li><a href="#M000287">settings</a></li>
+  <li><a href="#M000283">setup</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Class <a href="Settings/Setting.html" class="link">Settings::Setting</a><br />
+Class <a href="Settings/SettingCollection.html" class="link">Settings::SettingCollection</a><br />
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000286"></a><b>add_setting</b>(owner, name, options)
+  </div>
+  <div class="description">
+  <p>
+Manually add a <a href="Settings.html">Settings</a> setting. The class key
+can be the actual class name constant or a symbol. If the setting is
+already defined it updates it.
+</p>
+<h3>Examples</h3>
+<p>
+<a href="Settings.html#M000286">Settings.add_setting</a> Compiler,
+:verification, :value =&gt; 12, :doc =&gt; &#8217;&#8230;&#8217;
+Settings.setting :IdPart, :verify_registration_email, :value =&gt; false s
+= Settings.Compiler.verification.value
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000286_source')" id="l_M000286_source">show source</a> ]</p>
+  <div id="M000286_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/settings.rb, line 175</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_setting</span>(<span class="ruby-identifier">owner</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)
+      <span class="ruby-identifier">owner</span> = <span class="ruby-identifier">owner</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">to_sym</span>
+      <span class="ruby-ivar">@@owners</span>[<span class="ruby-identifier">owner</span>] <span class="ruby-operator">||=</span> {}
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span> = <span class="ruby-ivar">@@owners</span>[<span class="ruby-identifier">owner</span>][<span class="ruby-identifier">name</span>]
+        <span class="ruby-comment cmt"># The setting already exists, update it.</span>
+        <span class="ruby-identifier">s</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">options</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-comment cmt"># The setting does not exist, create it.</span>
+        <span class="ruby-ivar">@@owners</span>[<span class="ruby-identifier">owner</span>][<span class="ruby-identifier">name</span>] = <span class="ruby-constant">Setting</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">owner</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">options</span>)
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000285"></a><b>load</b>(filename)
+  </div>
+  <div class="description">
+  <p>
+Load and <a href="Settings.html#M000284">parse</a> an external yaml <a
+href="Settings.html">Settings</a> file.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000285_source')" id="l_M000285_source">show source</a> ]</p>
+  <div id="M000285_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/settings.rb, line 161</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load</span>(<span class="ruby-identifier">filename</span>)
+      <span class="ruby-identifier">parse</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">filename</span>))
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000288"></a><b>method_missing</b>(sym)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000288_source')" id="l_M000288_source">show source</a> ]</p>
+  <div id="M000288_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/settings.rb, line 208</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">sym</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sym</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">capitalized?</span>
+         <span class="ruby-identifier">bdl</span> = <span class="ruby-constant">SettingCollection</span>.<span class="ruby-identifier">new</span>
+         <span class="ruby-identifier">bdl</span>.<span class="ruby-identifier">owner</span> = <span class="ruby-identifier">sym</span>
+         <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">hash</span> = <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">sym</span>]
+           <span class="ruby-identifier">bdl</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">hash</span>)
+         <span class="ruby-keyword kw">end</span>
+         <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">bdl</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000284"></a><b>parse</b>(options)
+  </div>
+  <div class="description">
+  <p>
+Parse <a href="Settings.html">Settings</a> parameters in yaml format.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000284_source')" id="l_M000284_source">show source</a> ]</p>
+  <div id="M000284_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/settings.rb, line 145</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>(<span class="ruby-identifier">options</span>)
+      <span class="ruby-identifier">temp</span> = <span class="ruby-constant">YAML</span><span class="ruby-operator">::</span><span class="ruby-identifier">load</span>(<span class="ruby-identifier">options</span>)
+      <span class="ruby-identifier">options</span> = <span class="ruby-constant">Dictionary</span>.<span class="ruby-identifier">new</span>
+      <span class="ruby-identifier">temp</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">begin</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">k</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\./</span>, <span class="ruby-value str">'::'</span>).<span class="ruby-identifier">to_sym</span>] = <span class="ruby-identifier">v</span>
+        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Object</span>
+          <span class="ruby-identifier">options</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">setup</span>(<span class="ruby-identifier">options</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000287"></a><b>settings</b>(owner = nil)
+  </div>
+  <div class="description">
+  <p>
+Return the <a href="Settings.html#M000287">settings</a> for the given
+owner. The owner is typically the Class that represents the system to be
+configured. If no class is provided, it returns all the registered <a
+href="Settings.html#M000287">settings</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000287_source')" id="l_M000287_source">show source</a> ]</p>
+  <div id="M000287_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/settings.rb, line 193</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">settings</span>(<span class="ruby-identifier">owner</span> = <span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">owner</span>
+        <span class="ruby-identifier">owner</span> = <span class="ruby-identifier">owner</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">to_sym</span>
+        <span class="ruby-ivar">@@owners</span>[<span class="ruby-identifier">owner</span>]
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-ivar">@@owners</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">inject</span>([]) { <span class="ruby-operator">|</span><span class="ruby-identifier">memo</span>, <span class="ruby-identifier">obj</span><span class="ruby-operator">|</span> <span class="ruby-identifier">memo</span>.<span class="ruby-identifier">concat</span>(<span class="ruby-identifier">obj</span>.<span class="ruby-identifier">values</span>) }
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000283"></a><b>setup</b>(options)
+  </div>
+  <div class="description">
+  <p>
+Inject the <a href="Settings.html">Settings</a> parameters provided as a
+hash (dictionary, ordered) to classes to be configured.
+</p>
+<h3>Warning: Pass an ordered hash (dictionary)</h3>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000283_source')" id="l_M000283_source">show source</a> ]</p>
+  <div id="M000283_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/settings.rb, line 134</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">setup</span>(<span class="ruby-identifier">options</span>)
+      <span class="ruby-identifier">options</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">owner</span>, <span class="ruby-identifier">ss</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">ss</span>
+        <span class="ruby-identifier">ss</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">name</span>, <span class="ruby-identifier">s</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">add_setting</span>(<span class="ruby-identifier">owner</span>, <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">:value</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">s</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

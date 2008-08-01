@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Fileable</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Fileable</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/fileable_rb.html">lib/facets/fileable.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Fileable.html">Fileable</a></h1>
+<p>
+Make <a href="File.html">File</a>-esque classes. <a
+href="Fileable.html">Fileable</a> makes it easy to create classes that can
+load from files.
+</p>
+<p>
+Class level mixin for loading/opening file classes. You will generally want
+to use extend with this.
+</p>
+<p>
+NOTE: This is an expiremental library, and is still
+</p>
+<pre>
+      undergoing revision.
+</pre>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000756">included</a></li>
+  <li><a href="#M000757">new</a></li>
+  <li><a href="#M000758">read</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Fileable/DSL.html" class="link">Fileable::DSL</a><br />
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000756"></a><b>included</b>(base)
+  </div>
+  <div class="description">
+  <p>
+When <a href="Fileable.html#M000756">included</a> extend <a
+href="Fileable/DSL.html">DSL</a> too.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000756_source')" id="l_M000756_source">show source</a> ]</p>
+  <div id="M000756_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 50</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">included</span>(<span class="ruby-identifier">base</span>)
+    <span class="ruby-identifier">base</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">DSL</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000757"></a><b>new</b>(content)
+  </div>
+  <div class="description">
+  <p>
+New fileable object. By default this is called by <a
+href="Fileable.html#M000758">read</a> passing the file contents. Override
+it if need is differnt.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000757_source')" id="l_M000757_source">show source</a> ]</p>
+  <div id="M000757_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 62</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">content</span>)
+    <span class="ruby-ivar">@content</span> = <span class="ruby-identifier">content</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000758"></a><b>read</b>(file)
+  </div>
+  <div class="description">
+  <p>
+Override this if reading is differnt.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000758_source')" id="l_M000758_source">show source</a> ]</p>
+  <div id="M000758_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileable.rb, line 68</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>)
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">file</span> = <span class="ruby-identifier">file</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">defined?</span>(<span class="ruby-identifier">:file=</span>)
+    <span class="ruby-identifier">initialize</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">file</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

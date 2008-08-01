@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: EnumerablePass</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />EnumerablePass</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/enumerablepass_rb.html">lib/facets/enumerablepass.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="EnumerablePass.html">EnumerablePass</a></h1>
+<p>
+This is a simple reimplementation of the core <a
+href="Enumerable.html">Enumerable</a> module to allow the methods to take
+and pass-on arbitrary arguments to the underlying each call. This library
+uses Enumerator and scans <a href="Enumerable.html">Enumerable</a> so it
+can alwasy stay in sync.
+</p>
+<p>
+NOTE Any <a href="Enumerable.html">Enumerable</a> method with a negative
+arity cannot do pass arguments due to ambiguity in the argument count. So
+the methods inject and zip do NOT work this way, but simply work as they do
+in <a href="Enumerable.html">Enumerable</a>. The method <a
+href="EnumerablePass.html#M000907">find</a> (and <a
+href="EnumerablePass.html#M000908">detect</a>) though has been made to work
+by removing its rarely used optional parameter and providing instead an
+optional keyword parameter (:ifnone =&gt; &#8230;). Please keep these
+difference in mind.
+</p>
+<pre>
+  class T
+    include EnumerablePass
+    def initialize(arr)
+      @arr = arr
+    end
+    def each(n)
+      arr.each{ |e| yield(e+n) }
+    end
+  end
+
+  t = T.new([1,2,3])
+  t.collect(4)
+  #=&gt; [5,6,7]
+</pre>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000908">detect</a></li>
+  <li><a href="#M000907">find</a></li>
+  <li><a href="#M000906">wrap_enumerable_method</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000906"></a><b>wrap_enumerable_method</b>( methodname )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000906_source')" id="l_M000906_source">show source</a> ]</p>
+  <div id="M000906_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/enumerablepass.rb, line 78</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">wrap_enumerable_method</span>( <span class="ruby-identifier">methodname</span> )
+
+    <span class="ruby-identifier">m</span> = <span class="ruby-identifier">methodname</span>
+    <span class="ruby-identifier">meth</span> = <span class="ruby-constant">Enumerable</span>.<span class="ruby-identifier">instance_method</span>(<span class="ruby-identifier">m</span>)
+    <span class="ruby-identifier">arity</span> = <span class="ruby-identifier">meth</span>.<span class="ruby-identifier">arity</span>
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">arity</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">class_eval</span> <span class="ruby-node">%{
+        def #{m}( *args, &amp;yld )
+          enum_for(:each, *args).#{m}( &amp;yld )
+        end
+      }</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span>
+      <span class="ruby-identifier">class_eval</span> <span class="ruby-node">%{
+        def #{m}( *args, &amp;yld )
+          args, each_args = args[0...#{arity}], args[#{arity}..-1]
+          enum_for(:each, *each_args).#{m}( *args, &amp;yld )
+        end
+      }</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">class_eval</span> <span class="ruby-node">%{
+        def #{m}( *args, &amp;yld )
+          enum_for(:each).#{m}( *args, &amp;yld )
+        end
+      }</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000908"></a><b>detect</b>(*args, &amp;yld)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="EnumerablePass.html#M000907">find</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000907"></a><b>find</b>(*args, &amp;yld)
+  </div>
+  <div class="description">
+  <p>
+Make exception for <a href="EnumerablePass.html#M000907">find</a> (a
+negative arity method) to accept keyword argument.
+</p>
+<pre>
+  ObjectSpace.find(Class, :ifnone=&gt;lambda{1}) { |e| ... }
+  ObjectSpace.find(Class, :ifnone=&gt;lambda{1}) { |e| ... }
+</pre>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="EnumerablePass.html#M000908">detect</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000907_source')" id="l_M000907_source">show source</a> ]</p>
+  <div id="M000907_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/enumerablepass.rb, line 117</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">find</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">yld</span>)  <span class="ruby-comment cmt"># future use **keys ?</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Hash</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">:ifnone</span>)
+      <span class="ruby-identifier">ifnone</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">:ifnone</span>)
+      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">pop</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">empty?</span>
+      <span class="ruby-identifier">enum_for</span>(<span class="ruby-identifier">:each</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>).<span class="ruby-identifier">find</span>( <span class="ruby-identifier">ifnone</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">yld</span> )
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">enum_for</span>(<span class="ruby-identifier">:each</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>).<span class="ruby-identifier">find</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">yld</span> )
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

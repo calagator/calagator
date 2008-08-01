@@ -1,0 +1,237 @@
+
+= TODO
+
+== file://lib/facets/1stclassmethod.rb
+* TODO Should there be a #this! ? (102)
+
+== file://lib/facets/annotations.rb
+* TODO Should attribute alias be kept? (279)
+
+== file://lib/facets/array/indexable.rb
+* TODO Probably not best to overide store and fetch operators. Rename? (36)
+
+== file://lib/facets/attr.rb
+* TODO Perhaps need to make a check against overriding annotated version. (33)
+
+== file://lib/facets/basicobject.rb
+* TODO In the future it might be nice to allow some selectability
+in these via a factory method. (166)
+
+== file://lib/facets/binreadable.rb
+* TODO Would like to get the core functionality this provides into the
+System module and then change BinaryReader to depend on that instead. (35)
+
+== file://lib/facets/buildable.rb
+* TODO: There may be other methods that need to be in this exception list. (219)
+
+== file://lib/facets/capsule.rb
+* TODO In order to load/require at the instance level.
+This needs to be in a separate namespace however
+b/c it can interfere with what is expected.
+[ :require, :load ].each{ |meth|
+m = method(meth)
+define_method(meth) do |*args| m.call(*args) end
+} (102)
+* TODO Need to add load_path lookup. (140)
+* TODO Is autoimport bets name for this? (215)
+
+== file://lib/facets/class/prepend.rb
+* TODO: Perhaps rename this to preallocate, b/c of
+the way it works. It is not really a clean
+prepend, like that of Module#prepend. (27)
+
+== file://lib/facets/command.rb
+* TODO Add support for __options. (368)
+
+== file://lib/facets/consoleutils.rb
+* TODO: Don't know how portable #screen_width is. (64)
+
+== file://lib/facets/cssfilter.rb
+* TODO: Not complete, does not work with "@xxx foo;" for example. (156)
+* TODO: So far this does absolutely nothing! (176)
+* TODO: allowed_urls (119)
+
+== file://lib/facets/dictionary.rb
+* TODO is this needed? Doesn't the super class do this? (125)
+
+== file://lib/facets/dir/ascend.rb
+* TODO: Make instance method versions ? (3)
+
+== file://lib/facets/dir/parent.rb
+* TODO: Instance version? (6)
+* TODO: Needs improvement. (5)
+
+== file://lib/facets/duration.rb
+* TODO: IF WE WANT TO DO THIS IT NEEDS TO BE ADDED TO times.rb ??? (486)
+
+== file://lib/facets/enumerablepass.rb
+* TODO (212)
+
+== file://lib/facets/expirable.rb
+* TODO (69)
+
+== file://lib/facets/file/rewrite.rb
+* TODO Should it be in-place modification like this? Or would it be better
+if whatever the block returns is written to the file instead? (24)
+
+== file://lib/facets/filelist.rb
+* TODO: check for pending (184)
+* TODO This test needs a mock File class. (473)
+
+== file://lib/facets/fileutils/slice.rb
+* TODO This test have been remarked out until such time
+as a mock FileSystem can be used to test it against. (55)
+
+== file://lib/facets/fileutils/wc.rb
+* TODO FileUtils#wc test needs needs a Mock File. (64)
+
+== file://lib/facets/fileutils/which.rb
+* TODO FileUtils#which This test needs a mock File. (59)
+
+== file://lib/facets/hash/alias.rb
+* TODO: Rename to #aliaskey or something else. (23)
+
+== file://lib/facets/hash/insert.rb
+* TODO: Would #store? be a better name? (6)
+
+== file://lib/facets/hash/to_struct.rb
+* TODO: Is this robust enough considerd hashes aren't ordered? (8)
+
+== file://lib/facets/hash/traverse.rb
+* TODO: Contrast these to recursibely --we may not need both. (11)
+* TODO: Testing value to see if it is a Hash also catches subclasses of Hash.
+This is probably not the right thing to do and should catch Hashes only (?) (13)
+
+== file://lib/facets/indexable.rb
+* TODO Maybe #range could use a little error catch code (todo). (225)
+* TODO: Remove Array#index_of when Ruby 1.9 adds block to #index. (217)
+
+== file://lib/facets/inheritor.rb
+* TODO This is an issue if you try to include a module
+into Module or Class itself. How to fix? (107)
+
+== file://lib/facets/interval.rb
+* TODO: Add +n+ parameter to count segmentations like those produced by #each. (174)
+
+== file://lib/facets/ioredirect.rb
+* TODO (121)
+
+== file://lib/facets/kernel/as.rb
+* TODO: Deprecate this and use Functor (HigherOrderMessage) instead. (85)
+* TODO: Does this have the proper scope for #send? (34)
+
+== file://lib/facets/kernel/d.rb
+* TODO: This is borderline "prime". Keep here?
+Another copy of it exits in dtools.rb (16)
+
+== file://lib/facets/kernel/demo.rb
+* TODO: Is there a way to do this without the eval string in block?
+Preferably just a block and no string. (16)
+
+== file://lib/facets/kernel/object_send.rb
+* TODO: object_send needs to change for 1.9. (13)
+
+== file://lib/facets/kernel/populate.rb
+* TODO: Better name, #set_with ? (23)
+* TODO: pepulate_from(obj) ? (52)
+
+== file://lib/facets/kernel/resc.rb
+* TODO: Should this be deprecated in favor of String#to_re/to_rx ? (7)
+
+== file://lib/facets/kernel/suppress.rb
+* TODO: This will be deprecatd in favor or Exception#suppress. (5)
+
+== file://lib/facets/logger.rb
+* TODO: What's all this about then? (54)
+
+== file://lib/facets/module/conflict.rb
+* TODO: All instance methods, or just public? (16)
+
+== file://lib/facets/module/instance_methods.rb
+* TODO: Better name for #all_instance_methods? (9)
+
+== file://lib/facets/module/op.rb
+* TODO: Should this use all instance_methods, not just public? (46)
+
+== file://lib/facets/module/revise.rb
+* TODO: Are these aliases really desitrable? (133)
+
+== file://lib/facets/multiton.rb
+* TODO Convert this into a real test and/or benchmark. (278)
+
+== file://lib/facets/nullclass.rb
+* TODO: Perhaps NullClass and NackClass should be one and the same? (32)
+* TODO (71)
+
+== file://lib/facets/openobject.rb
+* TODO Not so sure about #as_hash!. For starters if it doesn't return a hash it will fail. (162)
+* TODO Replace by using #as(Hash). Perhaps as_hash and as_object shortcuts? Why? (163)
+
+== file://lib/facets/pool.rb
+* TODO (87)
+
+== file://lib/facets/proc/curry.rb
+* TODO: Utilize Ruby 1.9's #curry method. (5)
+
+== file://lib/facets/proc/partial.rb
+* TODO: Parhaps ArgumentError would suffice, and we don't need MissingArgument? (25)
+
+== file://lib/facets/range/combine.rb
+* TODO: Incorporate end-sentinal inclusion vs. exclusion. (8)
+
+== file://lib/facets/reference.rb
+* TODO (97)
+
+== file://lib/facets/ruby.rb
+* TODO: Make this  work more like a simple character dial? (434)
+* TODO: This will be deprecated as of Ruby 1.9, since it will become standard Ruby. (414)
+
+== file://lib/facets/semaphore.rb
+* TODO (86)
+
+== file://lib/facets/settings.rb
+* TODO: find a better name. (53)
+
+== file://lib/facets/stackable.rb
+* TODO: Better name (besides unshift)? (67)
+
+== file://lib/facets/string/natcmp.rb
+* TODO: Invert case flag? (13)
+
+== file://lib/facets/string/range.rb
+* TODO: Add offset, perhaps ? (20)
+* TODO: Culd probably be defined for Indexable in general too. (64)
+
+== file://lib/facets/string/words.rb
+* TODO: This is alternateive from glue: worth providing? (68)
+
+== file://lib/facets/string/xor.rb
+* TODO: This is used by crypt.rb, it needs to be documented. (5)
+
+== file://lib/facets/style.rb
+* TODO: With #pathize, is downcasing really needed? After all paths can have capitalize letters ;p (28)
+* TODO: With #methodize, is downcasing any but the first letter really needed? Desipite Matz prefernce methods can have capitalized letters. (29)
+* TODO:
+* Make sure that all scenarios return a valid unix path
+* Make sure it is revertible (100)
+
+== file://lib/facets/symbol/generate.rb
+* TODO: Is the generated symbol format acceptable? (11)
+
+== file://lib/facets/tracepoint.rb
+* TODO (193)
+
+== file://lib/facets/tuple.rb
+* TODO This needs to take into account the default
+and maybe the divider too. (217)
+
+== file://lib/facets/uri.rb
+* TODO: optimize (186)
+* TODO: How does this compare to URI.escape? (107)
+* TODO: find a better name.
+Gets the request uri, injects extra parameters in the query string
+and returns a new uri. The request object is not modified.
+There is always a qs string so an extra test is skipped. (203)
+
+== file://lib/facets/ziputils.rb
+* TODO Write internalized untar_gzip function. (96)

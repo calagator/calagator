@@ -1,0 +1,45 @@
+
+      <html>
+      <head>
+        <title>Rakefile</title>
+        <link href="api.css" rel="stylesheet" type="text/css">
+      </head>
+      <body>
+        <div class="content">
+        <div class="main">
+          <p>
+# Facets Rakefile
+</p>
+<p>
+task :default =&gt; [:test]
+</p>
+<p>
+desc &quot;Run unit tests (default).&quot;
+</p>
+<p>
+task :test do
+</p>
+<pre>
+  system 'task/test'
+</pre>
+<p>
+end
+</p>
+<p>
+desc &quot;Local site_ruby install.&quot;
+</p>
+<p>
+task :install do
+</p>
+<pre>
+  system 'task/install'
+</pre>
+<p>
+end
+</p>
+
+        </div>
+        </div>
+      </body>
+      </html>
+    
