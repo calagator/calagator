@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Random</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Random</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/random_rb.html">lib/facets/random.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Random.html">Random</a></h1>
+<p>
+Randomization core extension methods.
+</p>
+<p>
+This library extends <a href="Random/Array.html">Array</a>, <a
+href="Random/String.html">String</a> and <a
+href="Random/Hash.html">Hash</a> with randomization methods. Most of the
+methods are of one of two kinds. Either they &quot;pick&quot; a random
+element from the reciever or they randomly &quot;shuffle&quot; the
+reciever.
+</p>
+<p>
+The most common example is <a
+href="Random/Array.html#M000893">Array#shuffle</a>, which simply
+randmomizes the order of an array&#8216;s elements.
+</p>
+<pre>
+  [1,2,3].shuffle  #=&gt; [2,3,1]
+</pre>
+<p>
+The other methods do similar things for their respective classes.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000873">append_features</a></li>
+  <li><a href="#M000872">number</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Random/Array.html" class="link">Random::Array</a><br />
+Module <a href="Random/Hash.html" class="link">Random::Hash</a><br />
+Module <a href="Random/Object.html" class="link">Random::Object</a><br />
+Module <a href="Random/String.html" class="link">Random::String</a><br />
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000873"></a><b>append_features</b>(mod)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000873_source')" id="l_M000873_source">show source</a> ]</p>
+  <div id="M000873_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 63</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">append_features</span>(<span class="ruby-identifier">mod</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">mod</span> <span class="ruby-operator">==</span> <span class="ruby-operator">::</span><span class="ruby-constant">Object</span>
+      <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:include</span>, <span class="ruby-constant">Random</span><span class="ruby-operator">::</span><span class="ruby-constant">Object</span>)
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">mod</span> <span class="ruby-operator">==</span> <span class="ruby-operator">::</span><span class="ruby-constant">Array</span>
+      <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:include</span>, <span class="ruby-constant">Random</span><span class="ruby-operator">::</span><span class="ruby-constant">Array</span>)
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">mod</span> <span class="ruby-operator">==</span> <span class="ruby-operator">::</span><span class="ruby-constant">Hash</span>
+      <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:include</span>, <span class="ruby-constant">Random</span><span class="ruby-operator">::</span><span class="ruby-constant">Hash</span>)
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">mod</span> <span class="ruby-operator">==</span> <span class="ruby-operator">::</span><span class="ruby-constant">String</span>
+      <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">:include</span>, <span class="ruby-constant">Random</span><span class="ruby-operator">::</span><span class="ruby-constant">String</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">TypeError</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000872"></a><b>number</b>(*args)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000872_source')" id="l_M000872_source">show source</a> ]</p>
+  <div id="M000872_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 57</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">number</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-operator">::</span><span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">rand</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

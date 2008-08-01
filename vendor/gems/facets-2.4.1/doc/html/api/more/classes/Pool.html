@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Pool</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Pool</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/pool_rb.html">lib/facets/pool.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Array
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Pool.html">Pool</a></h1>
+<p>
+Generalized object pool implementation. Implemented as a thread safe stack.
+Exclusive locking is needed both for <a href="Pool.html#M000491">push</a>
+and <a href="Pool.html#M000492">pop</a>.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000490">new</a></li>
+  <li><a href="#M000493">obtain</a></li>
+  <li><a href="#M000492">pop</a></li>
+  <li><a href="#M000491">push</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li>MonitorMixin</li>
+</ul>
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000490"></a><b>new</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000490_source')" id="l_M000490_source">show source</a> ]</p>
+  <div id="M000490_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/pool.rb, line 39</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>
+    <span class="ruby-keyword kw">super</span>
+    <span class="ruby-ivar">@cv</span> = <span class="ruby-identifier">new_cond</span>()
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000493"></a><b>obtain</b>() {|obj| ...}
+  </div>
+  <div class="description">
+  <p>
+Obtains an object, passes it to a block for processing and restores it to
+the pool.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000493_source')" id="l_M000493_source">show source</a> ]</p>
+  <div id="M000493_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/pool.rb, line 65</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">obtain</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">obj</span> = <span class="ruby-identifier">pop</span>()
+      <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">obj</span>)
+    <span class="ruby-keyword kw">ensure</span>
+      <span class="ruby-identifier">push</span>(<span class="ruby-identifier">obj</span>)
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000492"></a><b>pop</b>()
+  </div>
+  <div class="description">
+  <p>
+Obtain an object from the pool.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000492_source')" id="l_M000492_source">show source</a> ]</p>
+  <div id="M000492_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/pool.rb, line 55</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pop</span>
+    <span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-ivar">@cv</span>.<span class="ruby-identifier">wait_while</span> { <span class="ruby-identifier">empty?</span> }
+      <span class="ruby-keyword kw">super</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000491"></a><b>push</b>(obj)
+  </div>
+  <div class="description">
+  <p>
+Add, restore an object to the pool.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000491_source')" id="l_M000491_source">show source</a> ]</p>
+  <div id="M000491_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/pool.rb, line 46</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">push</span>(<span class="ruby-identifier">obj</span>)
+    <span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-keyword kw">super</span>
+      <span class="ruby-ivar">@cv</span>.<span class="ruby-identifier">signal</span>()
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

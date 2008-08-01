@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: CGI</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />CGI</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/cgi_rb.html">lib/facets/cgi.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="CGI.html">CGI</a> Extensions</h1>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M001012">esc</a></li>
+  <li><a href="#M001013">escformat</a></li>
+  <li><a href="#M001011">marshal_from_cgi</a></li>
+  <li><a href="#M001010">marshal_to_cgi</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M001012"></a><b>esc</b>(str)
+  </div>
+  <div class="description">
+  <p>
+Return an html &quot;safe&quot; version of the string, where every &amp;,
+&lt; and &gt; are replaced with appropriate entities.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001012_source')" id="l_M001012_source">show source</a> ]</p>
+  <div id="M001012_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/cgi.rb, line 33</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">esc</span>(<span class="ruby-identifier">str</span>)
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&amp;/</span>,<span class="ruby-value str">'&amp;amp;'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&lt;/</span>,<span class="ruby-value str">'&amp;lt;'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/&gt;/</span>,<span class="ruby-value str">'&amp;gt;'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001013"></a><b>escformat</b>(str)
+  </div>
+  <div class="description">
+  <p>
+Calls <a href="CGI.html#M001012">esc</a>, and then further replaces
+carriage returns and quote characters with entities.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001013_source')" id="l_M001013_source">show source</a> ]</p>
+  <div id="M001013_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/cgi.rb, line 38</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">escformat</span>(<span class="ruby-identifier">str</span>)
+    <span class="ruby-identifier">esc</span>(<span class="ruby-identifier">str</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[\r\n]+/</span>,<span class="ruby-value str">'&amp;#13;&amp;#10;'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">%r|&quot;|</span>,<span class="ruby-value str">'&amp;quot;'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">%r|'|</span>,<span class="ruby-value str">'&amp;#39;'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001011"></a><b>marshal_from_cgi</b>(name)
+  </div>
+  <div class="description">
+  <p>
+Create an hidden input field through which an object can can be marshalled.
+This makes it very easy to pass from data between requests.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001011_source')" id="l_M001011_source">show source</a> ]</p>
+  <div id="M001011_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/cgi.rb, line 21</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">marshal_from_cgi</span>(<span class="ruby-identifier">name</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">params</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-node">&quot;__#{name}__&quot;</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-constant">Marshal</span>.<span class="ruby-identifier">load</span>(<span class="ruby-constant">CGI</span>.<span class="ruby-identifier">unescape</span>(<span class="ruby-keyword kw">self</span>[<span class="ruby-node">&quot;__#{name}__&quot;</span>][<span class="ruby-value">0</span>]))
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001010"></a><b>marshal_to_cgi</b>(name, iobj)
+  </div>
+  <div class="description">
+  <p>
+Create an hidden input field through which an object can can be marshalled.
+This makes it very easy to pass from data betwenn requests.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001010_source')" id="l_M001010_source">show source</a> ]</p>
+  <div id="M001010_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/cgi.rb, line 14</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">marshal_to_cgi</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">iobj</span>)
+    <span class="ruby-identifier">data</span> = <span class="ruby-constant">CGI</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-constant">Marshal</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">iobj</span>))
+    <span class="ruby-keyword kw">return</span> <span class="ruby-node">%Q{&lt;input type=&quot;hidden&quot; name=&quot;__#{name}__&quot; value=&quot;#{data}&quot;/&gt;\n}</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

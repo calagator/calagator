@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: continuation.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />continuation.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/continuation.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Mon Mar 17 13:09:12 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/Continuation.html">Continuation</a> Extension</h1>
+<p>
+Creates a continuation in a way that is easier to use than callcc. On the
+initial call this will return the created <a
+href="../../../classes/Continuation.html">Continuation</a> and the
+arguments you gave to <a
+href="../../../classes/Continuation.html#M000400">Continuation.create</a>
+in an Array. If you then issue .call() on the <a
+href="../../../classes/Continuation.html">Continuation</a> execution will
+jump back to the point of time where you initially invoked <a
+href="../../../classes/Continuation.html#M000400">Continuation.create</a>,
+but this time it will return the <a
+href="../../../classes/Continuation.html">Continuation</a> and the
+arguments you supplied in an Array.
+</p>
+<p>
+You can supply a block instead of default arguments which will cause that
+block to be executed once and its result to be returned along side the
+created <a href="../../../classes/Continuation.html">Continuation</a>, but
+this form is confusing and does only rarely make sense.
+</p>
+<pre>
+  # Count from 0 to 10
+  cc, counter = Continuation.create(0)
+  puts counter
+  cc.call(counter + 1) if counter &lt; 10
+
+  # Implement something similar to Array#inject using Continuations.
+  # For simplicity's sake, this is not fully compatible with the real
+  # inject. Make sure that you understand Array#inject before you try
+  # to understand this.
+  class Array
+    def cc_inject(value = nil)
+      copy = self.clone
+      cc, result, item = Continuation.create(value, nil)
+      next_item = copy.shift
+      if result and item
+        # Aggregate the result using the block.
+        cc.call(yield(result, item), next_item)
+      elsif next_item
+        # item not yet set and Array is not empty:
+        # This means we did not get a value and thus need to use the
+        # first item from the Array before we can start using the
+        # block to aggregate the result.
+        cc.call(next_item, result)
+      end
+
+      return result
+   end
+ end
+ [1,2,3,4,5].cc_inject { |acc, n| acc + n } # =&gt; 15
+</pre>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

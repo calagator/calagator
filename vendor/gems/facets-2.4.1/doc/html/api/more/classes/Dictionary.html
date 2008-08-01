@@ -1,0 +1,1247 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Dictionary</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Dictionary</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/dictionary_rb.html">lib/facets/dictionary.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Dictionary.html">Dictionary</a></h1>
+<p>
+The <a href="Dictionary.html">Dictionary</a> class is a Hash that preserves
+<a href="Dictionary.html#M000117">order</a>. So it has some array-like
+extensions also. By defualt a <a href="Dictionary.html">Dictionary</a>
+object preserves insertion <a href="Dictionary.html#M000117">order</a>, but
+any <a href="Dictionary.html#M000117">order</a> can be specified including
+alphabetical key <a href="Dictionary.html#M000117">order</a>.
+</p>
+<h2>Usage</h2>
+<p>
+Just require this file and use <a href="Dictionary.html">Dictionary</a>
+instead of Hash.
+</p>
+<pre>
+  # You can do simply
+  hsh = Dictionary.new
+  hsh['z'] = 1
+  hsh['a'] = 2
+  hsh['c'] = 3
+  p hsh.keys     #=&gt; ['z','a','c']
+
+  # or using Dictionary[] method
+  hsh = Dictionary['z', 1, 'a', 2, 'c', 3]
+  p hsh.keys     #=&gt; ['z','a','c']
+
+  # but this don't preserve order
+  hsh = Dictionary['z'=&gt;1, 'a'=&gt;2, 'c'=&gt;3]
+  p hsh.keys     #=&gt; ['a','c','z']
+
+  # Dictionary has useful extensions: push, pop and unshift
+  p hsh.push('to_end', 15)       #=&gt; true, key added
+  p hsh.push('to_end', 30)       #=&gt; false, already - nothing happen
+  p hsh.unshift('to_begin', 50)  #=&gt; true, key added
+  p hsh.unshift('to_begin', 60)  #=&gt; false, already - nothing happen
+  p hsh.keys                     #=&gt; [&quot;to_begin&quot;, &quot;a&quot;, &quot;c&quot;, &quot;z&quot;, &quot;to_end&quot;]
+  p hsh.pop                      #=&gt; [&quot;to_end&quot;, 15], if nothing remains, return nil
+  p hsh.keys                     #=&gt; [&quot;to_begin&quot;, &quot;a&quot;, &quot;c&quot;, &quot;z&quot;]
+  p hsh.shift                    #=&gt; [&quot;to_begin&quot;, 30], if nothing remains, return nil
+</pre>
+<h2>Usage Notes</h2>
+<ul>
+<li>You can use <a href="Dictionary.html#M000118">order_by</a> to set internal
+sort <a href="Dictionary.html#M000117">order</a>.
+
+</li>
+<li>#&lt;&lt; takes a two element [k,v] array and inserts.
+
+</li>
+<li>Use ::<a href="Dictionary.html#M000115">auto</a> which creates Dictionay
+sub-entries as needed.
+
+</li>
+<li>And ::<a href="Dictionary.html#M000114">alpha</a> which creates a <a
+href="Dictionary.html#M000116">new</a> <a
+href="Dictionary.html">Dictionary</a> sorted by key.
+
+</li>
+</ul>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000143">&lt;&lt;</a></li>
+  <li><a href="#M000122">==</a></li>
+  <li><a href="#M000112">[]</a></li>
+  <li><a href="#M000123">[]</a></li>
+  <li><a href="#M000125">[]=</a></li>
+  <li><a href="#M000114">alpha</a></li>
+  <li><a href="#M000115">auto</a></li>
+  <li><a href="#M000128">clear</a></li>
+  <li><a href="#M000129">delete</a></li>
+  <li><a href="#M000134">delete_if</a></li>
+  <li><a href="#M000147">dup</a></li>
+  <li><a href="#M000132">each</a></li>
+  <li><a href="#M000130">each_key</a></li>
+  <li><a href="#M000133">each_pair</a></li>
+  <li><a href="#M000131">each_value</a></li>
+  <li><a href="#M000158">empty?</a></li>
+  <li><a href="#M000124">fetch</a></li>
+  <li><a href="#M000154">first</a></li>
+  <li><a href="#M000159">has_key?</a></li>
+  <li><a href="#M000126">insert</a></li>
+  <li><a href="#M000146">inspect</a></li>
+  <li><a href="#M000137">invert</a></li>
+  <li><a href="#M000160">key?</a></li>
+  <li><a href="#M000136">keys</a></li>
+  <li><a href="#M000155">last</a></li>
+  <li><a href="#M000156">length</a></li>
+  <li><a href="#M000150">merge</a></li>
+  <li><a href="#M000149">merge!</a></li>
+  <li><a href="#M000116">new</a></li>
+  <li><a href="#M000113">new_by</a></li>
+  <li><a href="#M000117">order</a></li>
+  <li><a href="#M000118">order_by</a></li>
+  <li><a href="#M000119">order_by_key</a></li>
+  <li><a href="#M000120">order_by_value</a></li>
+  <li><a href="#M000145">pop</a></li>
+  <li><a href="#M000144">push</a></li>
+  <li><a href="#M000138">reject</a></li>
+  <li><a href="#M000139">reject!</a></li>
+  <li><a href="#M000121">reorder</a></li>
+  <li><a href="#M000140">replace</a></li>
+  <li><a href="#M000153">reverse</a></li>
+  <li><a href="#M000152">reverse!</a></li>
+  <li><a href="#M000151">select</a></li>
+  <li><a href="#M000141">shift</a></li>
+  <li><a href="#M000157">size</a></li>
+  <li><a href="#M000127">store</a></li>
+  <li><a href="#M000161">to_a</a></li>
+  <li><a href="#M000164">to_h</a></li>
+  <li><a href="#M000163">to_hash</a></li>
+  <li><a href="#M000162">to_s</a></li>
+  <li><a href="#M000142">unshift</a></li>
+  <li><a href="#M000148">update</a></li>
+  <li><a href="#M000135">values</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li><a href="Enumerable.html">Enumerable</a></li>
+</ul>
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000112"></a><b>[]</b>(*args)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000112_source')" id="l_M000112_source">show source</a> ]</p>
+  <div id="M000112_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 128</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+      <span class="ruby-identifier">hsh</span> = <span class="ruby-identifier">new</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Hash</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>]
+        <span class="ruby-identifier">hsh</span>.<span class="ruby-identifier">replace</span>(<span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>])
+      <span class="ruby-keyword kw">elsif</span> (<span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">%</span> <span class="ruby-value">2</span>) <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;odd number of elements for Hash&quot;</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-keyword kw">while</span> <span class="ruby-operator">!</span><span class="ruby-identifier">args</span>.<span class="ruby-identifier">empty?</span>
+          <span class="ruby-identifier">hsh</span>[<span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>] = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">hsh</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000114"></a><b>alpha</b>(*args, &amp;block)
+  </div>
+  <div class="description">
+  <p>
+Alternate to <a href="Dictionary.html#M000116">new</a> which creates a
+dictionary sorted by key.
+</p>
+<pre>
+  d = Dictionary.alpha
+  d[&quot;z&quot;] = 1
+  d[&quot;y&quot;] = 2
+  d[&quot;x&quot;] = 3
+  d  #=&gt; {&quot;x&quot;=&gt;3,&quot;y&quot;=&gt;2,&quot;z&quot;=&gt;2}
+</pre>
+<p>
+This is equivalent to:
+</p>
+<pre>
+  Dictionary.new.order_by { |key,value| key }
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000114_source')" id="l_M000114_source">show source</a> ]</p>
+  <div id="M000114_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 160</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">alpha</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>).<span class="ruby-identifier">order_by_key</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000115"></a><b>auto</b>(*args)
+  </div>
+  <div class="description">
+  <p>
+Alternate to <a href="Dictionary.html#M000116">new</a> which <a
+href="Dictionary.html#M000115">auto</a>-creates sub-dictionaries as needed.
+</p>
+<pre>
+  d = Dictionary.auto
+  d[&quot;a&quot;][&quot;b&quot;][&quot;c&quot;] = &quot;abc&quot;  #=&gt; { &quot;a&quot;=&gt;{&quot;b&quot;=&gt;{&quot;c&quot;=&gt;&quot;abc&quot;}}}
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000115_source')" id="l_M000115_source">show source</a> ]</p>
+  <div id="M000115_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 169</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">auto</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+      <span class="ruby-comment cmt">#AutoDictionary.new(*args)</span>
+      <span class="ruby-identifier">leet</span> = <span class="ruby-identifier">lambda</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">hsh</span>, <span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hsh</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">new</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">leet</span>) }
+      <span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">leet</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000116"></a><b>new</b>(*args, &amp;blk)
+  </div>
+  <div class="description">
+  <p>
+New Dictiionary.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000116_source')" id="l_M000116_source">show source</a> ]</p>
+  <div id="M000116_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 178</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)
+    <span class="ruby-ivar">@order</span> = []
+    <span class="ruby-ivar">@order_by</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">blk</span>
+      <span class="ruby-identifier">dict</span> = <span class="ruby-keyword kw">self</span>                                  <span class="ruby-comment cmt"># This ensure autmatic key entry effect the</span>
+      <span class="ruby-identifier">oblk</span> = <span class="ruby-identifier">lambda</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">hsh</span>, <span class="ruby-identifier">key</span><span class="ruby-operator">|</span> <span class="ruby-identifier">blk</span>[<span class="ruby-identifier">dict</span>,<span class="ruby-identifier">key</span>] }    <span class="ruby-comment cmt"># dictionary rather then just the interal hash.</span>
+      <span class="ruby-ivar">@hash</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">oblk</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-ivar">@hash</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000113"></a><b>new_by</b>(*args, &amp;blk)
+  </div>
+  <div class="description">
+  <p>
+Like <a href="Dictionary.html#M000116">new</a> but the block sets the <a
+href="Dictionary.html#M000117">order</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000113_source')" id="l_M000113_source">show source</a> ]</p>
+  <div id="M000113_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 144</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_by</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)
+      <span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>).<span class="ruby-identifier">order_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000143"></a><b>&lt;&lt;</b>(kv)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000143_source')" id="l_M000143_source">show source</a> ]</p>
+  <div id="M000143_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 375</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">kv</span>)
+    <span class="ruby-identifier">push</span> <span class="ruby-operator">*</span><span class="ruby-identifier">kv</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000122"></a><b>==</b>(hsh2)
+  </div>
+  <div class="description">
+  <p>
+def ==( hsh2 )
+</p>
+<pre>
+  return false if @order != hsh2.order
+  super hsh2
+</pre>
+<p>
+end
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000122_source')" id="l_M000122_source">show source</a> ]</p>
+  <div id="M000122_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 256</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">==</span>(<span class="ruby-identifier">hsh2</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">hsh2</span>.<span class="ruby-identifier">is_a?</span>( <span class="ruby-constant">Dictionary</span> )
+      <span class="ruby-ivar">@order</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">hsh2</span>.<span class="ruby-identifier">order</span> <span class="ruby-operator">&amp;&amp;</span>
+      <span class="ruby-ivar">@hash</span>  <span class="ruby-operator">==</span> <span class="ruby-identifier">hsh2</span>.<span class="ruby-identifier">instance_variable_get</span>(<span class="ruby-value str">&quot;@hash&quot;</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000123"></a><b>[]</b>(k)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000123_source')" id="l_M000123_source">show source</a> ]</p>
+  <div id="M000123_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 265</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span> <span class="ruby-identifier">k</span>
+    <span class="ruby-ivar">@hash</span>[ <span class="ruby-identifier">k</span> ]
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000125"></a><b>[]=</b>(k, i=nil, v=nil)
+  </div>
+  <div class="description">
+  <p>
+Store operator.
+</p>
+<pre>
+  h[key] = value
+</pre>
+<p>
+Or with additional index.
+</p>
+<pre>
+ h[key,index] = value
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000125_source')" id="l_M000125_source">show source</a> ]</p>
+  <div id="M000125_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 281</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">k</span>, <span class="ruby-identifier">i</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">v</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">v</span>
+      <span class="ruby-identifier">insert</span>(<span class="ruby-identifier">i</span>,<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">store</span>(<span class="ruby-identifier">k</span>,<span class="ruby-identifier">i</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000128"></a><b>clear</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000128_source')" id="l_M000128_source">show source</a> ]</p>
+  <div id="M000128_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 299</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear</span>
+    <span class="ruby-ivar">@order</span> = []
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">clear</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000129"></a><b>delete</b>( key )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000129_source')" id="l_M000129_source">show source</a> ]</p>
+  <div id="M000129_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 304</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>( <span class="ruby-identifier">key</span> )
+    <span class="ruby-ivar">@order</span>.<span class="ruby-identifier">delete</span>( <span class="ruby-identifier">key</span> )
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">delete</span>( <span class="ruby-identifier">key</span> )
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000134"></a><b>delete_if</b>() {|k,@hash[k]| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000134_source')" id="l_M000134_source">show source</a> ]</p>
+  <div id="M000134_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 325</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_if</span>
+    <span class="ruby-identifier">order</span>.<span class="ruby-identifier">clone</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">delete</span> <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">k</span>,<span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">k</span>]) }
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000147"></a><b>dup</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000147_source')" id="l_M000147_source">show source</a> ]</p>
+  <div id="M000147_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 400</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">a</span> = []
+    <span class="ruby-identifier">each</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">a</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">k</span>; <span class="ruby-identifier">a</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span> }
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>[<span class="ruby-operator">*</span><span class="ruby-identifier">a</span>]
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000132"></a><b>each</b>() {|k,@hash[k]| ...}
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Dictionary.html#M000133">each_pair</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000132_source')" id="l_M000132_source">show source</a> ]</p>
+  <div id="M000132_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 319</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each</span>
+    <span class="ruby-identifier">order</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>( <span class="ruby-identifier">k</span>,<span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">k</span>] ) }
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000130"></a><b>each_key</b>() {|k| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000130_source')" id="l_M000130_source">show source</a> ]</p>
+  <div id="M000130_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 309</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_key</span>
+    <span class="ruby-identifier">order</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>( <span class="ruby-identifier">k</span> ) }
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000133"></a><b>each_pair</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Dictionary.html#M000132">each</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000131"></a><b>each_value</b>() {|@hash[k]| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000131_source')" id="l_M000131_source">show source</a> ]</p>
+  <div id="M000131_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 314</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_value</span>
+    <span class="ruby-identifier">order</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">yield</span>( <span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">k</span>] ) }
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000158"></a><b>empty?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000158_source')" id="l_M000158_source">show source</a> ]</p>
+  <div id="M000158_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 445</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">empty?</span>
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">empty?</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000124"></a><b>fetch</b>(k, *a, &amp;b)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000124_source')" id="l_M000124_source">show source</a> ]</p>
+  <div id="M000124_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 269</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">k</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-identifier">k</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000154"></a><b>first</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000154_source')" id="l_M000154_source">show source</a> ]</p>
+  <div id="M000154_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 432</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">first</span>
+    <span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">order</span>.<span class="ruby-identifier">first</span>]
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000159"></a><b>has_key?</b>(key)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000159_source')" id="l_M000159_source">show source</a> ]</p>
+  <div id="M000159_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 449</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">key</span>)
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">key</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000126"></a><b>insert</b>( i,k,v )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000126_source')" id="l_M000126_source">show source</a> ]</p>
+  <div id="M000126_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 289</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">insert</span>( <span class="ruby-identifier">i</span>,<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> )
+    <span class="ruby-ivar">@order</span>.<span class="ruby-identifier">insert</span>( <span class="ruby-identifier">i</span>,<span class="ruby-identifier">k</span> )
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">store</span>( <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> )
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000146"></a><b>inspect</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000146_source')" id="l_M000146_source">show source</a> ]</p>
+  <div id="M000146_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 394</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>
+    <span class="ruby-identifier">ary</span> = []
+    <span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ary</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">k</span>.<span class="ruby-identifier">inspect</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;=&gt;&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">inspect</span>}
+    <span class="ruby-value str">'{'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;, &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-value str">'}'</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000137"></a><b>invert</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000137_source')" id="l_M000137_source">show source</a> ]</p>
+  <div id="M000137_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 340</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">invert</span>
+    <span class="ruby-identifier">hsh2</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-identifier">order</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">hsh2</span>[<span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">k</span>]] = <span class="ruby-identifier">k</span> }
+    <span class="ruby-identifier">hsh2</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000160"></a><b>key?</b>(key)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000160_source')" id="l_M000160_source">show source</a> ]</p>
+  <div id="M000160_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 453</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">key?</span>(<span class="ruby-identifier">key</span>)
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">key</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000136"></a><b>keys</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000136_source')" id="l_M000136_source">show source</a> ]</p>
+  <div id="M000136_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 336</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>
+    <span class="ruby-identifier">order</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000155"></a><b>last</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000155_source')" id="l_M000155_source">show source</a> ]</p>
+  <div id="M000155_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 436</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">last</span>
+    <span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">order</span>.<span class="ruby-identifier">last</span>]
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000156"></a><b>length</b>()
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Dictionary.html#M000157">size</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000156_source')" id="l_M000156_source">show source</a> ]</p>
+  <div id="M000156_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 440</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">length</span>
+    <span class="ruby-ivar">@order</span>.<span class="ruby-identifier">length</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000150"></a><b>merge</b>( hsh2 )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000150_source')" id="l_M000150_source">show source</a> ]</p>
+  <div id="M000150_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 413</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">merge</span>( <span class="ruby-identifier">hsh2</span> )
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">hsh2</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000149"></a><b>merge!</b>( hsh2 )
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Dictionary.html#M000148">update</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000117"></a><b>order</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000117_source')" id="l_M000117_source">show source</a> ]</p>
+  <div id="M000117_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 190</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order</span>
+    <span class="ruby-identifier">reorder</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@order_by</span>
+    <span class="ruby-ivar">@order</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000118"></a><b>order_by</b>( &amp;block )
+  </div>
+  <div class="description">
+  <p>
+Keep dictionary sorted by a specific sort <a
+href="Dictionary.html#M000117">order</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000118_source')" id="l_M000118_source">show source</a> ]</p>
+  <div id="M000118_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 197</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_by</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+    <span class="ruby-ivar">@order_by</span> = <span class="ruby-identifier">block</span>
+    <span class="ruby-identifier">order</span>
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000119"></a><b>order_by_key</b>()
+  </div>
+  <div class="description">
+  <p>
+Keep dictionary sorted by key.
+</p>
+<pre>
+  d = Dictionary.new.order_by_key
+  d[&quot;z&quot;] = 1
+  d[&quot;y&quot;] = 2
+  d[&quot;x&quot;] = 3
+  d  #=&gt; {&quot;x&quot;=&gt;3,&quot;y&quot;=&gt;2,&quot;z&quot;=&gt;2}
+</pre>
+<p>
+This is equivalent to:
+</p>
+<pre>
+  Dictionary.new.order_by { |key,value| key }
+</pre>
+<p>
+The initializer <a href="Dictionary.html#M000114">Dictionary#alpha</a> also
+provides this.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000119_source')" id="l_M000119_source">show source</a> ]</p>
+  <div id="M000119_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 217</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_by_key</span>
+    <span class="ruby-ivar">@order_by</span> = <span class="ruby-identifier">lambda</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span> }
+    <span class="ruby-identifier">order</span>
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000120"></a><b>order_by_value</b>()
+  </div>
+  <div class="description">
+  <p>
+Keep dictionary sorted by value.
+</p>
+<pre>
+  d = Dictionary.new.order_by_value
+  d[&quot;z&quot;] = 1
+  d[&quot;y&quot;] = 2
+  d[&quot;x&quot;] = 3
+  d  #=&gt; {&quot;x&quot;=&gt;3,&quot;y&quot;=&gt;2,&quot;z&quot;=&gt;2}
+</pre>
+<p>
+This is equivalent to:
+</p>
+<pre>
+  Dictionary.new.order_by { |key,value| value }
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000120_source')" id="l_M000120_source">show source</a> ]</p>
+  <div id="M000120_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 235</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">order_by_value</span>
+    <span class="ruby-ivar">@order_by</span> = <span class="ruby-identifier">lambda</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">v</span> }
+    <span class="ruby-identifier">order</span>
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000145"></a><b>pop</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000145_source')" id="l_M000145_source">show source</a> ]</p>
+  <div id="M000145_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 389</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pop</span>
+    <span class="ruby-identifier">key</span> = <span class="ruby-identifier">order</span>.<span class="ruby-identifier">last</span>
+    <span class="ruby-identifier">key</span> <span class="ruby-value">? </span>[<span class="ruby-identifier">key</span>,<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">key</span>)] <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000144"></a><b>push</b>( k,v )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000144_source')" id="l_M000144_source">show source</a> ]</p>
+  <div id="M000144_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 379</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">push</span>( <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> )
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">include?</span>( <span class="ruby-identifier">k</span> )
+      <span class="ruby-ivar">@order</span>.<span class="ruby-identifier">push</span>( <span class="ruby-identifier">k</span> )
+      <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">store</span>( <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> )
+      <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000138"></a><b>reject</b>( &amp;block )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000138_source')" id="l_M000138_source">show source</a> ]</p>
+  <div id="M000138_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 346</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reject</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">delete_if</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000139"></a><b>reject!</b>( &amp;block )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000139_source')" id="l_M000139_source">show source</a> ]</p>
+  <div id="M000139_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 350</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reject!</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+    <span class="ruby-identifier">hsh2</span> = <span class="ruby-identifier">reject</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>
+    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">hsh2</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">hsh2</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000121"></a><b>reorder</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000121_source')" id="l_M000121_source">show source</a> ]</p>
+  <div id="M000121_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 243</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reorder</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@order_by</span>
+      <span class="ruby-identifier">assoc</span> = <span class="ruby-ivar">@order</span>.<span class="ruby-identifier">collect</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> [<span class="ruby-identifier">k</span>,<span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">k</span>]] }.<span class="ruby-identifier">sort_by</span>(<span class="ruby-operator">&amp;</span><span class="ruby-ivar">@order_by</span>)
+      <span class="ruby-ivar">@order</span> = <span class="ruby-identifier">assoc</span>.<span class="ruby-identifier">collect</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">k</span> }
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-ivar">@order</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000140"></a><b>replace</b>( hsh2 )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000140_source')" id="l_M000140_source">show source</a> ]</p>
+  <div id="M000140_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 355</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">replace</span>( <span class="ruby-identifier">hsh2</span> )
+    <span class="ruby-ivar">@order</span> = <span class="ruby-identifier">hsh2</span>.<span class="ruby-identifier">order</span>
+    <span class="ruby-ivar">@hash</span> = <span class="ruby-identifier">hsh2</span>.<span class="ruby-identifier">hash</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000153"></a><b>reverse</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000153_source')" id="l_M000153_source">show source</a> ]</p>
+  <div id="M000153_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 428</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reverse</span>
+    <span class="ruby-identifier">dup</span>.<span class="ruby-identifier">reverse!</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000152"></a><b>reverse!</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000152_source')" id="l_M000152_source">show source</a> ]</p>
+  <div id="M000152_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 423</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reverse!</span>
+    <span class="ruby-ivar">@order</span>.<span class="ruby-identifier">reverse!</span>
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000151"></a><b>select</b>() {|k,v| ...}
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000151_source')" id="l_M000151_source">show source</a> ]</p>
+  <div id="M000151_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 417</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">select</span>
+    <span class="ruby-identifier">ary</span> = []
+    <span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ary</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> }
+    <span class="ruby-identifier">ary</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000141"></a><b>shift</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000141_source')" id="l_M000141_source">show source</a> ]</p>
+  <div id="M000141_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 360</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">shift</span>
+    <span class="ruby-identifier">key</span> = <span class="ruby-identifier">order</span>.<span class="ruby-identifier">first</span>
+    <span class="ruby-identifier">key</span> <span class="ruby-value">? </span>[<span class="ruby-identifier">key</span>,<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">key</span>)] <span class="ruby-operator">:</span> <span class="ruby-keyword kw">super</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000157"></a><b>size</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Dictionary.html#M000156">length</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000127"></a><b>store</b>( a,b )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000127_source')" id="l_M000127_source">show source</a> ]</p>
+  <div id="M000127_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 294</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">store</span>( <span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span> )
+    <span class="ruby-ivar">@order</span>.<span class="ruby-identifier">push</span>( <span class="ruby-identifier">a</span> ) <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">has_key?</span>( <span class="ruby-identifier">a</span> )
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">store</span>( <span class="ruby-identifier">a</span>,<span class="ruby-identifier">b</span> )
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000161"></a><b>to_a</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000161_source')" id="l_M000161_source">show source</a> ]</p>
+  <div id="M000161_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 457</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_a</span>
+    <span class="ruby-identifier">ary</span> = []
+    <span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ary</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span>] }
+    <span class="ruby-identifier">ary</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000164"></a><b>to_h</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000164_source')" id="l_M000164_source">show source</a> ]</p>
+  <div id="M000164_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 471</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_h</span>
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">dup</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000163"></a><b>to_hash</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000163_source')" id="l_M000163_source">show source</a> ]</p>
+  <div id="M000163_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 467</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_hash</span>
+    <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">dup</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000162"></a><b>to_s</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000162_source')" id="l_M000162_source">show source</a> ]</p>
+  <div id="M000162_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 463</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">to_a</span>.<span class="ruby-identifier">to_s</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000142"></a><b>unshift</b>( k,v )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000142_source')" id="l_M000142_source">show source</a> ]</p>
+  <div id="M000142_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 365</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unshift</span>( <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> )
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">include?</span>( <span class="ruby-identifier">k</span> )
+      <span class="ruby-ivar">@order</span>.<span class="ruby-identifier">unshift</span>( <span class="ruby-identifier">k</span> )
+      <span class="ruby-ivar">@hash</span>.<span class="ruby-identifier">store</span>( <span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span> )
+      <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000148"></a><b>update</b>( hsh2 )
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Dictionary.html#M000149">merge!</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000148_source')" id="l_M000148_source">show source</a> ]</p>
+  <div id="M000148_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 406</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update</span>( <span class="ruby-identifier">hsh2</span> )
+    <span class="ruby-identifier">hsh2</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span> }
+    <span class="ruby-identifier">reorder</span>
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000135"></a><b>values</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000135_source')" id="l_M000135_source">show source</a> ]</p>
+  <div id="M000135_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/dictionary.rb, line 330</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">values</span>
+    <span class="ruby-identifier">ary</span> = []
+    <span class="ruby-identifier">order</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ary</span>.<span class="ruby-identifier">push</span> <span class="ruby-ivar">@hash</span>[<span class="ruby-identifier">k</span>] }
+    <span class="ruby-identifier">ary</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

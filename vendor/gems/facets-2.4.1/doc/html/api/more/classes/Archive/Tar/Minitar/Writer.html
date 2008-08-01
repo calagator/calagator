@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Archive::Tar::Minitar::Writer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Archive::Tar::Minitar::Writer</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../../files/lib/facets/minitar_rb.html">lib/facets/minitar.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+The class that writes a tar format archive to a data stream.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M001039">add_file</a></li>
+  <li><a href="#M001038">add_file_simple</a></li>
+  <li><a href="#M001042">close</a></li>
+  <li><a href="#M001041">flush</a></li>
+  <li><a href="#M001040">mkdir</a></li>
+  <li><a href="#M001037">new</a></li>
+  <li><a href="#M001036">open</a></li>
+  <li><a href="#M001043">split_name</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M001037"></a><b>new</b>(anIO)
+  </div>
+  <div class="description">
+  <p>
+Creates and returns a <a href="Writer.html#M001037">new</a> <a
+href="Writer.html">Writer</a> object.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001037_source')" id="l_M001037_source">show source</a> ]</p>
+  <div id="M001037_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/minitar.rb, line 388</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">anIO</span>)
+      <span class="ruby-ivar">@io</span>     = <span class="ruby-identifier">anIO</span>
+      <span class="ruby-ivar">@closed</span> = <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001036"></a><b>open</b>(anIO) {|writer| ...}
+  </div>
+  <div class="description">
+  <p>
+With no associated block, +Writer::open+ is a synonym for +Writer::new+. If
+the optional code block is given, it will be passed the <a
+href="Writer.html#M001037">new</a> <em>writer</em> as an argument and the
+<a href="Writer.html">Writer</a> object will automatically be closed when
+the block terminates. In this instance, +Writer::open+ returns the value of
+the block.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001036_source')" id="l_M001036_source">show source</a> ]</p>
+  <div id="M001036_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/minitar.rb, line 373</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">anIO</span>)
+      <span class="ruby-identifier">writer</span> = <span class="ruby-constant">Writer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">anIO</span>)
+
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">writer</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block_given?</span>
+
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">res</span> = <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">writer</span>
+      <span class="ruby-keyword kw">ensure</span>
+        <span class="ruby-identifier">writer</span>.<span class="ruby-identifier">close</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">res</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M001039"></a><b>add_file</b>(name, opts = {}) {|RestrictedStream.new(@io), opts| ...}
+  </div>
+  <div class="description">
+  <p>
+Adds a file to the archive as <tt>name</tt>. <tt>opts</tt> must contain the
+following value:
+</p>
+<table>
+<tr><td valign="top"><tt>:mode</tt>:</td><td>The Unix file permissions mode value.
+
+</td></tr>
+</table>
+<p>
+<tt>opts</tt> may contain the following values:
+</p>
+<p>
+<tt>:uid</tt>: The Unix file owner user ID number. <tt>:gid</tt>: The Unix
+file owner group ID number.
+</p>
+<table>
+<tr><td valign="top"><tt>:mtime</tt>:</td><td>The <b>integer</b> modification time value.
+
+</td></tr>
+</table>
+<p>
+The file&#8216;s size will be determined from the amount of data written to
+the stream.
+</p>
+<p>
+For <a href="Writer.html#M001039">add_file</a> to be used, the <a
+href="Writer.html">Archive::Tar::Minitar::Writer</a> must be wrapping a
+stream object that is seekable (e.g., it responds to pos=). Otherwise, <a
+href="Writer.html#M001038">add_file_simple</a> must be used.
+</p>
+<p>
+<tt>opts</tt> may be modified during the writing to the stream.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001039_source')" id="l_M001039_source">show source</a> ]</p>
+  <div id="M001039_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/minitar.rb, line 448</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_file</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span> = {}) <span class="ruby-comment cmt"># :yields RestrictedStream, +opts+:</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Archive</span><span class="ruby-operator">::</span><span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">Minitar</span><span class="ruby-operator">::</span><span class="ruby-constant">BlockRequired</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block_given?</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Archive</span><span class="ruby-operator">::</span><span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">Minitar</span><span class="ruby-operator">::</span><span class="ruby-constant">ClosedStream</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@closed</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Archive</span><span class="ruby-operator">::</span><span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">Minitar</span><span class="ruby-operator">::</span><span class="ruby-constant">NonSeekableStream</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:pos=</span>)
+
+      <span class="ruby-identifier">name</span>, <span class="ruby-identifier">prefix</span> = <span class="ruby-identifier">split_name</span>(<span class="ruby-identifier">name</span>)
+      <span class="ruby-identifier">init_pos</span> = <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">pos</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-value">512</span>) <span class="ruby-comment cmt"># placeholder for the header</span>
+
+      <span class="ruby-keyword kw">yield</span> <span class="ruby-constant">RestrictedStream</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@io</span>), <span class="ruby-identifier">opts</span>
+        <span class="ruby-comment cmt"># FIXME: what if an exception is raised in the block?</span>
+
+      <span class="ruby-identifier">size</span>      = <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">pos</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">init_pos</span> <span class="ruby-operator">+</span> <span class="ruby-value">512</span>)
+      <span class="ruby-identifier">remainder</span> = (<span class="ruby-value">512</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">size</span> <span class="ruby-operator">%</span> <span class="ruby-value">512</span>)) <span class="ruby-operator">%</span> <span class="ruby-value">512</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">remainder</span>)
+
+      <span class="ruby-identifier">final_pos</span> = <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">pos</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">pos</span>   = <span class="ruby-identifier">init_pos</span>
+
+      <span class="ruby-identifier">header</span> = { <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">:mode</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:mode</span>], <span class="ruby-identifier">:mtime</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:mtime</span>],
+                 <span class="ruby-identifier">:size</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">size</span>, <span class="ruby-identifier">:gid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:gid</span>], <span class="ruby-identifier">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:uid</span>],
+                 <span class="ruby-identifier">:prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">prefix</span> }
+      <span class="ruby-identifier">header</span> = <span class="ruby-constant">Archive</span><span class="ruby-operator">::</span><span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">PosixHeader</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">header</span>).<span class="ruby-identifier">to_s</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">header</span>)
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">pos</span> = <span class="ruby-identifier">final_pos</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001038"></a><b>add_file_simple</b>(name, opts = {}) {|os| ...}
+  </div>
+  <div class="description">
+  <p>
+Adds a file to the archive as <tt>name</tt>. <tt>opts</tt> must contain the
+following values:
+</p>
+<table>
+<tr><td valign="top"><tt>:mode</tt>:</td><td>The Unix file permissions mode value.
+
+</td></tr>
+<tr><td valign="top"><tt>:size</tt>:</td><td>The size, in bytes.
+
+</td></tr>
+</table>
+<p>
+<tt>opts</tt> may contain the following values:
+</p>
+<p>
+<tt>:uid</tt>: The Unix file owner user ID number. <tt>:gid</tt>: The Unix
+file owner group ID number.
+</p>
+<table>
+<tr><td valign="top"><tt>:mtime</tt>:</td><td>The <b>integer</b> modification time value.
+
+</td></tr>
+</table>
+<p>
+<a href="../../../It.html">It</a> will not be possible to add more than
+<tt>opts[:size]</tt> bytes to the file.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001038_source')" id="l_M001038_source">show source</a> ]</p>
+  <div id="M001038_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/minitar.rb, line 407</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_file_simple</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span> = {}) <span class="ruby-comment cmt"># :yields BoundedStream:</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Archive</span><span class="ruby-operator">::</span><span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">Minitar</span><span class="ruby-operator">::</span><span class="ruby-constant">BlockRequired</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block_given?</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">Archive</span><span class="ruby-operator">::</span><span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">ClosedStream</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@closed</span>
+
+      <span class="ruby-identifier">name</span>, <span class="ruby-identifier">prefix</span> = <span class="ruby-identifier">split_name</span>(<span class="ruby-identifier">name</span>)
+
+      <span class="ruby-identifier">header</span> = { <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">:mode</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:mode</span>], <span class="ruby-identifier">:mtime</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:mtime</span>],
+        <span class="ruby-identifier">:size</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:size</span>], <span class="ruby-identifier">:gid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:gid</span>], <span class="ruby-identifier">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:uid</span>],
+        <span class="ruby-identifier">:prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">prefix</span> }
+      <span class="ruby-identifier">header</span> = <span class="ruby-constant">Archive</span><span class="ruby-operator">::</span><span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">PosixHeader</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">header</span>).<span class="ruby-identifier">to_s</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">header</span>)
+
+      <span class="ruby-identifier">os</span> = <span class="ruby-constant">BoundedStream</span>.<span class="ruby-identifier">new</span>(<span class="ruby-ivar">@io</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:size</span>])
+      <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">os</span>
+        <span class="ruby-comment cmt"># FIXME: what if an exception is raised in the block?</span>
+
+      <span class="ruby-identifier">min_padding</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:size</span>] <span class="ruby-operator">-</span> <span class="ruby-identifier">os</span>.<span class="ruby-identifier">written</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">min_padding</span>)
+      <span class="ruby-identifier">remainder</span> = (<span class="ruby-value">512</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:size</span>] <span class="ruby-operator">%</span> <span class="ruby-value">512</span>)) <span class="ruby-operator">%</span> <span class="ruby-value">512</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">remainder</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001042"></a><b>close</b>()
+  </div>
+  <div class="description">
+  <p>
+Closes the <a href="Writer.html">Writer</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001042_source')" id="l_M001042_source">show source</a> ]</p>
+  <div id="M001042_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/minitar.rb, line 495</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">close</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@closed</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">write</span>(<span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-operator">*</span> <span class="ruby-value">1024</span>)
+      <span class="ruby-ivar">@closed</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001041"></a><b>flush</b>()
+  </div>
+  <div class="description">
+  <p>
+Passes the <a href="Writer.html#M001041">flush</a> method to the wrapped
+stream, used for buffered streams.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001041_source')" id="l_M001041_source">show source</a> ]</p>
+  <div id="M001041_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/minitar.rb, line 489</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">flush</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ClosedStream</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@closed</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">flush</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:flush</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M001040"></a><b>mkdir</b>(name, opts = {})
+  </div>
+  <div class="description">
+  <p>
+Creates a directory in the tar.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001040_source')" id="l_M001040_source">show source</a> ]</p>
+  <div id="M001040_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/minitar.rb, line 476</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">opts</span> = {})
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ClosedStream</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@closed</span>
+      <span class="ruby-identifier">name</span>, <span class="ruby-identifier">prefix</span> = <span class="ruby-identifier">split_name</span>(<span class="ruby-identifier">name</span>)
+      <span class="ruby-identifier">header</span> = { <span class="ruby-identifier">:name</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">:mode</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:mode</span>], <span class="ruby-identifier">:typeflag</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;5&quot;</span>,
+                 <span class="ruby-identifier">:size</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>, <span class="ruby-identifier">:gid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:gid</span>], <span class="ruby-identifier">:uid</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:uid</span>],
+                 <span class="ruby-identifier">:mtime</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:mtime</span>], <span class="ruby-identifier">:prefix</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">prefix</span> }
+      <span class="ruby-identifier">header</span> = <span class="ruby-constant">Archive</span><span class="ruby-operator">::</span><span class="ruby-constant">Tar</span><span class="ruby-operator">::</span><span class="ruby-constant">PosixHeader</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">header</span>).<span class="ruby-identifier">to_s</span>
+      <span class="ruby-ivar">@io</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">header</span>)
+      <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Private Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M001043"></a><b>split_name</b>(name)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001043_source')" id="l_M001043_source">show source</a> ]</p>
+  <div id="M001043_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/minitar.rb, line 502</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">split_name</span>(<span class="ruby-identifier">name</span>)
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">FileNameTooLong</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">256</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&lt;=</span> <span class="ruby-value">100</span>
+        <span class="ruby-identifier">prefix</span> = <span class="ruby-value str">&quot;&quot;</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">parts</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\//</span>)
+        <span class="ruby-identifier">newname</span> = <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">pop</span>
+
+        <span class="ruby-identifier">nxt</span> = <span class="ruby-value str">&quot;&quot;</span>
+
+        <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">nxt</span> = <span class="ruby-identifier">parts</span>.<span class="ruby-identifier">pop</span>
+          <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">newname</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">nxt</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">100</span>
+          <span class="ruby-identifier">newname</span> = <span class="ruby-node">&quot;#{nxt}/#{newname}&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-identifier">prefix</span> = (<span class="ruby-identifier">parts</span> <span class="ruby-operator">+</span> [<span class="ruby-identifier">nxt</span>]).<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;/&quot;</span>)
+
+        <span class="ruby-identifier">name</span> = <span class="ruby-identifier">newname</span>
+
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">FileNameTooLong</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">name</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">100</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">prefix</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">155</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">prefix</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

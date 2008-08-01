@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: String::Words</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />String::Words</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/string/words_rb.html">lib/facets/string/words.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000294">brief</a></li>
+  <li><a href="#M000289">each_word</a></li>
+  <li><a href="#M000290">word_filter</a></li>
+  <li><a href="#M000291">word_filter!</a></li>
+  <li><a href="#M000292">word_wrap</a></li>
+  <li><a href="#M000293">word_wrap!</a></li>
+  <li><a href="#M000288">words</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000294"></a><b>brief</b>(range=76, ellipsis=&quot;...&quot;)
+  </div>
+  <div class="description">
+  <p>
+Returns short abstract of long strings; not exceeding <tt>range</tt>
+characters. If range is an integer then the minimum is 20% of the maximum.
+The string is chopped at the nearest word if possible, and appended by
+<tt>ellipsis</tt>, which defaults to &#8217;&#8230;&#8217;.
+</p>
+<pre>
+  CREDIT: George Moschovitis
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000294_source')" id="l_M000294_source">show source</a> ]</p>
+  <div id="M000294_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/words.rb, line 148</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">brief</span>(<span class="ruby-identifier">range</span>=<span class="ruby-value">76</span>, <span class="ruby-identifier">ellipsis</span>=<span class="ruby-value str">&quot;...&quot;</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Range</span><span class="ruby-operator">===</span><span class="ruby-identifier">range</span>
+        <span class="ruby-identifier">min</span> = <span class="ruby-identifier">range</span>.<span class="ruby-identifier">first</span>
+        <span class="ruby-identifier">max</span> = <span class="ruby-identifier">range</span>.<span class="ruby-identifier">last</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">max</span> = <span class="ruby-identifier">range</span>
+        <span class="ruby-identifier">min</span> = <span class="ruby-identifier">max</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">max</span><span class="ruby-operator">/</span><span class="ruby-value">5</span>).<span class="ruby-identifier">to_i</span>
+        <span class="ruby-identifier">range</span> = <span class="ruby-identifier">min</span><span class="ruby-operator">..</span><span class="ruby-identifier">max</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">max</span>
+        <span class="ruby-identifier">cut_at</span> = <span class="ruby-identifier">rindex</span>(<span class="ruby-regexp re">/\b/</span>, <span class="ruby-identifier">max</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">max</span>
+        <span class="ruby-identifier">cut_at</span> = <span class="ruby-identifier">max</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cut_at</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">min</span>
+        <span class="ruby-identifier">xstring</span> = <span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>, <span class="ruby-identifier">cut_at</span>)
+        <span class="ruby-identifier">xstring</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-value str">&quot; &quot;</span>) <span class="ruby-operator">+</span> <span class="ruby-identifier">ellipsis</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-keyword kw">self</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000289"></a><b>each_word</b>( &amp;yld )
+  </div>
+  <div class="description">
+  <p>
+Iterate through each word of a string.
+</p>
+<pre>
+  &quot;a string&quot;.each_word { |word, range| ... }
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000289_source')" id="l_M000289_source">show source</a> ]</p>
+  <div id="M000289_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/words.rb, line 19</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_word</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">yld</span> )
+      <span class="ruby-identifier">rest_of_string</span> = <span class="ruby-keyword kw">self</span>
+      <span class="ruby-identifier">wordfind</span> = <span class="ruby-regexp re">/([-'\w]+)/</span>
+      <span class="ruby-identifier">arity</span> = <span class="ruby-identifier">yld</span>.<span class="ruby-identifier">arity</span>
+      <span class="ruby-identifier">offset</span> = <span class="ruby-value">0</span>
+      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">wmatch</span> = <span class="ruby-identifier">wordfind</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">rest_of_string</span>)
+        <span class="ruby-identifier">word</span> = <span class="ruby-identifier">wmatch</span>[<span class="ruby-value">0</span>]
+        <span class="ruby-identifier">range</span> = <span class="ruby-identifier">offset</span><span class="ruby-operator">+</span><span class="ruby-identifier">wmatch</span>.<span class="ruby-identifier">begin</span>(<span class="ruby-value">0</span>) <span class="ruby-operator">...</span> <span class="ruby-identifier">offset</span><span class="ruby-operator">+</span><span class="ruby-identifier">wmatch</span>.<span class="ruby-identifier">end</span>(<span class="ruby-value">0</span>)
+        <span class="ruby-identifier">rest_of_string</span> = <span class="ruby-identifier">wmatch</span>.<span class="ruby-identifier">post_match</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arity</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+          <span class="ruby-identifier">yld</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">word</span>)
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">yld</span>.<span class="ruby-identifier">call</span>(<span class="ruby-identifier">word</span>, <span class="ruby-identifier">range</span>)
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">offset</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">rest_of_string</span>.<span class="ruby-identifier">length</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000290"></a><b>word_filter</b>( &amp;blk )
+  </div>
+  <div class="description">
+  <p>
+Filters out <a href="Words.html#M000288">words</a> from a string based on
+block test.
+</p>
+<pre>
+  &quot;a string&quot;.word_filter { |word| word =~ /^a/ }  #=&gt; &quot;string&quot;
+
+  CREDIT: George Moschovitis
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000290_source')" id="l_M000290_source">show source</a> ]</p>
+  <div id="M000290_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/words.rb, line 43</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">word_filter</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span> )
+      <span class="ruby-identifier">s</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+      <span class="ruby-identifier">s</span>.<span class="ruby-identifier">word_filter!</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span> )
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000291"></a><b>word_filter!</b>( {|| ...}
+  </div>
+  <div class="description">
+  <p>
+In place version of <a href="Words.html#M000290">word_filter</a>.
+</p>
+<pre>
+  &quot;a string&quot;.word_filter { |word| ... }
+
+  CREDIT: George Moschovitis
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000291_source')" id="l_M000291_source">show source</a> ]</p>
+  <div id="M000291_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/words.rb, line 54</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">word_filter!</span> <span class="ruby-comment cmt">#:yield:</span>
+      <span class="ruby-identifier">rest_of_string</span> = <span class="ruby-keyword kw">self</span>
+      <span class="ruby-identifier">wordfind</span> = <span class="ruby-regexp re">/(\w+)/</span>
+      <span class="ruby-identifier">offset</span> = <span class="ruby-value">0</span>
+      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">wmatch</span> = <span class="ruby-identifier">wordfind</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">rest_of_string</span>)
+        <span class="ruby-identifier">word</span> = <span class="ruby-identifier">wmatch</span>[<span class="ruby-value">0</span>]
+        <span class="ruby-identifier">range</span> = <span class="ruby-identifier">offset</span><span class="ruby-operator">+</span><span class="ruby-identifier">wmatch</span>.<span class="ruby-identifier">begin</span>(<span class="ruby-value">0</span>) <span class="ruby-operator">...</span> <span class="ruby-identifier">offset</span><span class="ruby-operator">+</span><span class="ruby-identifier">wmatch</span>.<span class="ruby-identifier">end</span>(<span class="ruby-value">0</span>)
+        <span class="ruby-identifier">rest_of_string</span> = <span class="ruby-identifier">wmatch</span>.<span class="ruby-identifier">post_match</span>
+        <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">range</span>] = <span class="ruby-keyword kw">yield</span>( <span class="ruby-identifier">word</span> ).<span class="ruby-identifier">to_s</span>
+        <span class="ruby-identifier">offset</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">rest_of_string</span>.<span class="ruby-identifier">length</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000292"></a><b>word_wrap</b>( col_width=80 )
+  </div>
+  <div class="description">
+  <p>
+Word wrap a string not exceeding max width.
+</p>
+<pre>
+  puts &quot;this is a test&quot;.word_wrap(4)
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+  this
+  is a
+  test
+
+  CREDIT: Gavin Kistner
+  CREDIT: Dayne Broderson
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000292_source')" id="l_M000292_source">show source</a> ]</p>
+  <div id="M000292_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/words.rb, line 110</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">word_wrap</span>( <span class="ruby-identifier">col_width</span>=<span class="ruby-value">80</span> )
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">word_wrap!</span>( <span class="ruby-identifier">col_width</span> )
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000293"></a><b>word_wrap!</b>( col_width=80 )
+  </div>
+  <div class="description">
+  <p>
+As with <a href="Words.html#M000292">word_wrap</a>, but modifies the string
+in place.
+</p>
+<pre>
+  CREDIT: Gavin Kistner
+  CREDIT: Dayne Broderson
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000293_source')" id="l_M000293_source">show source</a> ]</p>
+  <div id="M000293_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/words.rb, line 119</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">word_wrap!</span>( <span class="ruby-identifier">col_width</span>=<span class="ruby-value">80</span> )
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub!</span>( <span class="ruby-node">/(\S{#{col_width}})(?=\S)/</span>, <span class="ruby-value str">'\1 '</span> )
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub!</span>( <span class="ruby-node">/(.{1,#{col_width}})(?:\s+|$)/</span>, <span class="ruby-value str">&quot;\\1\n&quot;</span> )
+      <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000288"></a><b>words</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns an array of characters.
+</p>
+<pre>
+  &quot;abc 123&quot;.words  #=&gt; [&quot;abc&quot;,&quot;123&quot;]
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000288_source')" id="l_M000288_source">show source</a> ]</p>
+  <div id="M000288_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/words.rb, line 11</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">words</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\s+/</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

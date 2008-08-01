@@ -1,0 +1,683 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: ProgressBar</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />ProgressBar</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/progressbar_rb.html">lib/facets/progressbar.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="ProgressBar.html">ProgressBar</a></h1>
+<p>
+<a href="ProgressBar.html">ProgressBar</a> is a text-based progressbar
+library.
+</p>
+<pre>
+  pbar = ProgressBar.new( &quot;Demo&quot;, 100 )
+  100.times { pbar.inc }
+  pbar.finish
+</pre>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000205">bar</a></li>
+  <li><a href="#M000213">bar_mark=</a></li>
+  <li><a href="#M000198">bytes</a></li>
+  <li><a href="#M000196">convert_bytes</a></li>
+  <li><a href="#M000201">elapsed</a></li>
+  <li><a href="#M000204">eol</a></li>
+  <li><a href="#M000200">eta</a></li>
+  <li><a href="#M000211">file_transfer_mode</a></li>
+  <li><a href="#M000217">finish</a></li>
+  <li><a href="#M000218">flush</a></li>
+  <li><a href="#M000215">format=</a></li>
+  <li><a href="#M000216">format_arguments=</a></li>
+  <li><a href="#M000199">format_time</a></li>
+  <li><a href="#M000208">get_width</a></li>
+  <li><a href="#M000219">halt</a></li>
+  <li><a href="#M000221">inc</a></li>
+  <li><a href="#M000222">inspect</a></li>
+  <li><a href="#M000195">new</a></li>
+  <li><a href="#M000206">percentage</a></li>
+  <li><a href="#M000220">set</a></li>
+  <li><a href="#M000209">show</a></li>
+  <li><a href="#M000210">show_progress</a></li>
+  <li><a href="#M000202">stat</a></li>
+  <li><a href="#M000203">stat_for_file_transfer</a></li>
+  <li><a href="#M000207">title</a></li>
+  <li><a href="#M000212">title=</a></li>
+  <li><a href="#M000214">total_overflow=</a></li>
+  <li><a href="#M000197">transfer_rate</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000195"></a><b>new</b>(title, total, out = STDERR)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000195_source')" id="l_M000195_source">show source</a> ]</p>
+  <div id="M000195_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 38</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">title</span>, <span class="ruby-identifier">total</span>, <span class="ruby-identifier">out</span> = <span class="ruby-constant">STDERR</span>)
+    <span class="ruby-ivar">@title</span> = <span class="ruby-identifier">title</span>
+    <span class="ruby-ivar">@total</span> = <span class="ruby-identifier">total</span>
+    <span class="ruby-ivar">@out</span> = <span class="ruby-identifier">out</span>
+    <span class="ruby-ivar">@bar_length</span> = <span class="ruby-value">80</span>
+    <span class="ruby-ivar">@bar_mark</span> = <span class="ruby-value str">&quot;o&quot;</span>
+    <span class="ruby-ivar">@total_overflow</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-ivar">@current</span> = <span class="ruby-value">0</span>
+    <span class="ruby-ivar">@previous</span> = <span class="ruby-value">0</span>
+    <span class="ruby-ivar">@is_finished</span> = <span class="ruby-keyword kw">false</span>
+    <span class="ruby-ivar">@start_time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+    <span class="ruby-ivar">@format</span> = <span class="ruby-value str">&quot;%-14s %3d%% %s %s&quot;</span>
+    <span class="ruby-ivar">@format_arguments</span> = [<span class="ruby-identifier">:title</span>, <span class="ruby-identifier">:percentage</span>, <span class="ruby-identifier">:bar</span>, <span class="ruby-identifier">:stat</span>]
+    <span class="ruby-identifier">show_progress</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000213"></a><b>bar_mark=</b>(mark)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000213_source')" id="l_M000213_source">show source</a> ]</p>
+  <div id="M000213_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 189</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bar_mark=</span>(<span class="ruby-identifier">mark</span>)
+    <span class="ruby-ivar">@bar_mark</span> = <span class="ruby-constant">String</span>(<span class="ruby-identifier">mark</span>)[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">0</span>]
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000211"></a><b>file_transfer_mode</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000211_source')" id="l_M000211_source">show source</a> ]</p>
+  <div id="M000211_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 181</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">file_transfer_mode</span>
+    <span class="ruby-ivar">@format_arguments</span> = [<span class="ruby-identifier">:title</span>, <span class="ruby-identifier">:percentage</span>, <span class="ruby-identifier">:bar</span>, <span class="ruby-identifier">:stat_for_file_transfer</span>]
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000217"></a><b>finish</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000217_source')" id="l_M000217_source">show source</a> ]</p>
+  <div id="M000217_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 205</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">finish</span>
+    <span class="ruby-ivar">@current</span> = <span class="ruby-ivar">@total</span>
+    <span class="ruby-ivar">@is_finished</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-identifier">show_progress</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000218"></a><b>flush</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000218_source')" id="l_M000218_source">show source</a> ]</p>
+  <div id="M000218_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 211</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">flush</span>
+    <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">flush</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000215"></a><b>format=</b>(format)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000215_source')" id="l_M000215_source">show source</a> ]</p>
+  <div id="M000215_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 197</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format=</span>(<span class="ruby-identifier">format</span>)
+    <span class="ruby-ivar">@format</span> = <span class="ruby-identifier">format</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000216"></a><b>format_arguments=</b>(arguments)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000216_source')" id="l_M000216_source">show source</a> ]</p>
+  <div id="M000216_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 201</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format_arguments=</span>(<span class="ruby-identifier">arguments</span>)
+    <span class="ruby-ivar">@format_arguments</span> = <span class="ruby-identifier">arguments</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000219"></a><b>halt</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000219_source')" id="l_M000219_source">show source</a> ]</p>
+  <div id="M000219_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 215</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">halt</span>
+    <span class="ruby-ivar">@is_finished</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-identifier">show_progress</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000221"></a><b>inc</b>(step = 1)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000221_source')" id="l_M000221_source">show source</a> ]</p>
+  <div id="M000221_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 235</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inc</span>(<span class="ruby-identifier">step</span> = <span class="ruby-value">1</span>)
+    <span class="ruby-ivar">@current</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">step</span>
+    <span class="ruby-ivar">@current</span> = <span class="ruby-ivar">@total</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@current</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@total</span>
+    <span class="ruby-identifier">show_progress</span>
+    <span class="ruby-ivar">@previous</span> = <span class="ruby-ivar">@current</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000222"></a><b>inspect</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000222_source')" id="l_M000222_source">show source</a> ]</p>
+  <div id="M000222_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 242</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>
+    <span class="ruby-node">&quot;(ProgressBar: #{@current}/#{@total})&quot;</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000220"></a><b>set</b>(count)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000220_source')" id="l_M000220_source">show source</a> ]</p>
+  <div id="M000220_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 220</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">count</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;invalid count less than zero: #{count}&quot;</span>
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">count</span> <span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@total</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@total_overflow</span>
+        <span class="ruby-ivar">@total</span> = <span class="ruby-identifier">count</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;invalid count greater than total: #{count}&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-ivar">@current</span> = <span class="ruby-identifier">count</span>
+    <span class="ruby-identifier">show_progress</span>
+    <span class="ruby-ivar">@previous</span> = <span class="ruby-ivar">@current</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000212"></a><b>title=</b>(str)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000212_source')" id="l_M000212_source">show source</a> ]</p>
+  <div id="M000212_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 185</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">title=</span>(<span class="ruby-identifier">str</span>)
+    <span class="ruby-ivar">@title</span> = <span class="ruby-identifier">str</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000214"></a><b>total_overflow=</b>(boolv)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000214_source')" id="l_M000214_source">show source</a> ]</p>
+  <div id="M000214_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 193</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">total_overflow=</span>(<span class="ruby-identifier">boolv</span>)
+    <span class="ruby-ivar">@total_overflow</span> = <span class="ruby-identifier">boolv</span> <span class="ruby-value">? </span><span class="ruby-keyword kw">true</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">false</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Private Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000205"></a><b>bar</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000205_source')" id="l_M000205_source">show source</a> ]</p>
+  <div id="M000205_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 116</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bar</span>
+    <span class="ruby-identifier">len</span> = <span class="ruby-identifier">percentage</span> <span class="ruby-operator">*</span> <span class="ruby-ivar">@bar_length</span> <span class="ruby-operator">/</span> <span class="ruby-value">100</span>
+    <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;|%s%s|&quot;</span>, <span class="ruby-ivar">@bar_mark</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">len</span>, <span class="ruby-value str">&quot; &quot;</span> <span class="ruby-operator">*</span>  (<span class="ruby-ivar">@bar_length</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">len</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000198"></a><b>bytes</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000198_source')" id="l_M000198_source">show source</a> ]</p>
+  <div id="M000198_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 72</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bytes</span>
+    <span class="ruby-identifier">convert_bytes</span>(<span class="ruby-ivar">@current</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000196"></a><b>convert_bytes</b>(bytes)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000196_source')" id="l_M000196_source">show source</a> ]</p>
+  <div id="M000196_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 55</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">convert_bytes</span> (<span class="ruby-identifier">bytes</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bytes</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">1024</span>
+      <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;%6dB&quot;</span>, <span class="ruby-identifier">bytes</span>)
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">bytes</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">1024</span> <span class="ruby-operator">*</span> <span class="ruby-value">1000</span> <span class="ruby-comment cmt"># 1000kb</span>
+      <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;%5.1fKB&quot;</span>, <span class="ruby-identifier">bytes</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">/</span> <span class="ruby-value">1024</span>)
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">bytes</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">1024</span> <span class="ruby-operator">*</span> <span class="ruby-value">1024</span> <span class="ruby-operator">*</span> <span class="ruby-value">1000</span>  <span class="ruby-comment cmt"># 1000mb</span>
+      <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;%5.1fMB&quot;</span>, <span class="ruby-identifier">bytes</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">/</span> <span class="ruby-value">1024</span> <span class="ruby-operator">/</span> <span class="ruby-value">1024</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;%5.1fGB&quot;</span>, <span class="ruby-identifier">bytes</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">/</span> <span class="ruby-value">1024</span> <span class="ruby-operator">/</span> <span class="ruby-value">1024</span> <span class="ruby-operator">/</span> <span class="ruby-value">1024</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000201"></a><b>elapsed</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000201_source')" id="l_M000201_source">show source</a> ]</p>
+  <div id="M000201_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 95</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">elapsed</span>
+    <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-ivar">@start_time</span>
+    <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;Time: %s&quot;</span>, <span class="ruby-identifier">format_time</span>(<span class="ruby-identifier">elapsed</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000204"></a><b>eol</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000204_source')" id="l_M000204_source">show source</a> ]</p>
+  <div id="M000204_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 112</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">eol</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@is_finished</span> <span class="ruby-keyword kw">then</span> <span class="ruby-value str">&quot;\n&quot;</span> <span class="ruby-keyword kw">else</span> <span class="ruby-value str">&quot;\r&quot;</span> <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000200"></a><b>eta</b>()
+  </div>
+  <div class="description">
+  <p>
+ETA stands for Estimated Time of Arrival.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000200_source')" id="l_M000200_source">show source</a> ]</p>
+  <div id="M000200_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 85</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">eta</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@current</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+      <span class="ruby-value str">&quot;ETA:  --:--:--&quot;</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">elapsed</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-ivar">@start_time</span>
+      <span class="ruby-identifier">eta</span> = <span class="ruby-identifier">elapsed</span> <span class="ruby-operator">*</span> <span class="ruby-ivar">@total</span> <span class="ruby-operator">/</span> <span class="ruby-ivar">@current</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">elapsed</span>;
+      <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;ETA:  %s&quot;</span>, <span class="ruby-identifier">format_time</span>(<span class="ruby-identifier">eta</span>))
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000199"></a><b>format_time</b>(t)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000199_source')" id="l_M000199_source">show source</a> ]</p>
+  <div id="M000199_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 76</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format_time</span>(<span class="ruby-identifier">t</span>)
+    <span class="ruby-identifier">t</span> = <span class="ruby-identifier">t</span>.<span class="ruby-identifier">to_i</span>
+    <span class="ruby-identifier">sec</span> = <span class="ruby-identifier">t</span> <span class="ruby-operator">%</span> <span class="ruby-value">60</span>
+    <span class="ruby-identifier">min</span>  = (<span class="ruby-identifier">t</span> <span class="ruby-operator">/</span> <span class="ruby-value">60</span>) <span class="ruby-operator">%</span> <span class="ruby-value">60</span>
+    <span class="ruby-identifier">hour</span> = <span class="ruby-identifier">t</span> <span class="ruby-operator">/</span> <span class="ruby-value">3600</span>
+    <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;%02d:%02d:%02d&quot;</span>, <span class="ruby-identifier">hour</span>, <span class="ruby-identifier">min</span>, <span class="ruby-identifier">sec</span>);
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000208"></a><b>get_width</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000208_source')" id="l_M000208_source">show source</a> ]</p>
+  <div id="M000208_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 133</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_width</span>
+    <span class="ruby-comment cmt"># FIXME: I don't know how portable it is.</span>
+    <span class="ruby-identifier">default_width</span> = <span class="ruby-value">80</span>
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">tiocgwinsz</span> = <span class="ruby-value">0x5413</span>
+      <span class="ruby-identifier">data</span> = [<span class="ruby-value">0</span>, <span class="ruby-value">0</span>, <span class="ruby-value">0</span>, <span class="ruby-value">0</span>].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">&quot;SSSS&quot;</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">ioctl</span>(<span class="ruby-identifier">tiocgwinsz</span>, <span class="ruby-identifier">data</span>) <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">rows</span>, <span class="ruby-identifier">cols</span>, <span class="ruby-identifier">xpixels</span>, <span class="ruby-identifier">ypixels</span> = <span class="ruby-identifier">data</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-value str">&quot;SSSS&quot;</span>)
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cols</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">cols</span> <span class="ruby-keyword kw">else</span> <span class="ruby-identifier">default_width</span> <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">default_width</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span>
+      <span class="ruby-identifier">default_width</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000206"></a><b>percentage</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000206_source')" id="l_M000206_source">show source</a> ]</p>
+  <div id="M000206_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 121</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">percentage</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@total</span>.<span class="ruby-identifier">zero?</span>
+      <span class="ruby-value">100</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-ivar">@current</span>  <span class="ruby-operator">*</span> <span class="ruby-value">100</span> <span class="ruby-operator">/</span> <span class="ruby-ivar">@total</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000209"></a><b>show</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000209_source')" id="l_M000209_source">show source</a> ]</p>
+  <div id="M000209_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 150</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show</span>
+    <span class="ruby-identifier">arguments</span> = <span class="ruby-ivar">@format_arguments</span>.<span class="ruby-identifier">map</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">method</span><span class="ruby-operator">|</span> <span class="ruby-identifier">send</span>(<span class="ruby-identifier">method</span>)}
+    <span class="ruby-identifier">line</span> = <span class="ruby-identifier">sprintf</span>(<span class="ruby-ivar">@format</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">arguments</span>)
+
+    <span class="ruby-identifier">width</span> = <span class="ruby-identifier">get_width</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">width</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>
+      <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">print</span>(<span class="ruby-identifier">line</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">eol</span>)
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-identifier">width</span>
+      <span class="ruby-ivar">@bar_length</span> = [<span class="ruby-ivar">@bar_length</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">width</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>), <span class="ruby-value">0</span>].<span class="ruby-identifier">max</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@bar_length</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-keyword kw">then</span> <span class="ruby-ivar">@out</span>.<span class="ruby-identifier">print</span>(<span class="ruby-identifier">line</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">eol</span>) <span class="ruby-keyword kw">else</span> <span class="ruby-identifier">show</span> <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">else</span> <span class="ruby-comment cmt">#line.length &lt; width - 1</span>
+      <span class="ruby-ivar">@bar_length</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">width</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
+      <span class="ruby-identifier">show</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000210"></a><b>show_progress</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000210_source')" id="l_M000210_source">show source</a> ]</p>
+  <div id="M000210_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 166</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">show_progress</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@total</span>.<span class="ruby-identifier">zero?</span>
+      <span class="ruby-identifier">cur_percentage</span> = <span class="ruby-value">100</span>
+      <span class="ruby-identifier">prev_percentage</span> = <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">cur_percentage</span>  = (<span class="ruby-ivar">@current</span>  <span class="ruby-operator">*</span> <span class="ruby-value">100</span> <span class="ruby-operator">/</span> <span class="ruby-ivar">@total</span>).<span class="ruby-identifier">to_i</span>
+      <span class="ruby-identifier">prev_percentage</span> = (<span class="ruby-ivar">@previous</span> <span class="ruby-operator">*</span> <span class="ruby-value">100</span> <span class="ruby-operator">/</span> <span class="ruby-ivar">@total</span>).<span class="ruby-identifier">to_i</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">cur_percentage</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">prev_percentage</span> <span class="ruby-operator">||</span> <span class="ruby-ivar">@is_finished</span>
+      <span class="ruby-identifier">show</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000202"></a><b>stat</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000202_source')" id="l_M000202_source">show source</a> ]</p>
+  <div id="M000202_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 100</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stat</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@is_finished</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">elapsed</span> <span class="ruby-keyword kw">else</span> <span class="ruby-identifier">eta</span> <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000203"></a><b>stat_for_file_transfer</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000203_source')" id="l_M000203_source">show source</a> ]</p>
+  <div id="M000203_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 104</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stat_for_file_transfer</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@is_finished</span> <span class="ruby-keyword kw">then</span> 
+      <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;%s %s %s&quot;</span>, <span class="ruby-identifier">bytes</span>, <span class="ruby-identifier">transfer_rate</span>, <span class="ruby-identifier">elapsed</span>)
+    <span class="ruby-keyword kw">else</span> 
+      <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;%s %s %s&quot;</span>, <span class="ruby-identifier">bytes</span>, <span class="ruby-identifier">transfer_rate</span>, <span class="ruby-identifier">eta</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000207"></a><b>title</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000207_source')" id="l_M000207_source">show source</a> ]</p>
+  <div id="M000207_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 129</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">title</span>
+    <span class="ruby-ivar">@title</span>[<span class="ruby-value">0</span>,<span class="ruby-value">13</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;:&quot;</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000197"></a><b>transfer_rate</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000197_source')" id="l_M000197_source">show source</a> ]</p>
+  <div id="M000197_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/progressbar.rb, line 67</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">transfer_rate</span>
+    <span class="ruby-identifier">bytes_per_second</span> = <span class="ruby-ivar">@current</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">/</span> (<span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-ivar">@start_time</span>)
+    <span class="ruby-identifier">sprintf</span>(<span class="ruby-value str">&quot;%s/s&quot;</span>, <span class="ruby-identifier">convert_bytes</span>(<span class="ruby-identifier">bytes_per_second</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

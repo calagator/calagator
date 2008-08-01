@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: OpEsc</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />OpEsc</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/opesc_rb.html">lib/facets/opesc.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="OpEsc.html">OpEsc</a></h1>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M001134">escape</a></li>
+  </ul>
+
+
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">OPERATORS</td>
+    <td>=</td>
+    <td class="attr-value">%w{ +@ -@ + - ** * / % ~ &lt;=&gt; &lt;&lt; &gt;&gt; &lt; &gt; === == =~ &lt;= &gt;= | &amp; ^ []= [] }</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">OPERATORS_REGEXP</td>
+    <td>=</td>
+    <td class="attr-value">Regexp.new( '(' &lt;&lt; OPERATORS.collect{ |k| Regexp.escape(k) }.join('|') &lt;&lt; ')' )</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">OPERATORS_ESC_TABLE</td>
+    <td>=</td>
+    <td class="attr-value">{       &quot;+@&quot;   =&gt; &quot;op_plus_self&quot;,       &quot;-@&quot;   =&gt; &quot;op_minus_self&quot;,       &quot;+&quot;    =&gt; &quot;op_plus&quot;,       &quot;-&quot;    =&gt; &quot;op_minus&quot;,       &quot;**&quot;   =&gt; &quot;op_pow&quot;,       &quot;*&quot;    =&gt; &quot;op_mul&quot;,       &quot;/&quot;    =&gt; &quot;op_div&quot;,       &quot;%&quot;    =&gt; &quot;op_mod&quot;,       &quot;~&quot;    =&gt; &quot;op_tilde&quot;,       &quot;&lt;=&gt;&quot;  =&gt; &quot;op_cmp&quot;,       &quot;&lt;&lt;&quot;   =&gt; &quot;op_lshift&quot;,       &quot;&gt;&gt;&quot;   =&gt; &quot;op_rshift&quot;,       &quot;&lt;&quot;    =&gt; &quot;op_lt&quot;,       &quot;&gt;&quot;    =&gt; &quot;op_gt&quot;,       &quot;===&quot;  =&gt; &quot;op_case_eq&quot;,       &quot;==&quot;   =&gt; &quot;op_equal&quot;,       &quot;=~&quot;   =&gt; &quot;op_apply&quot;,       &quot;&lt;=&quot;   =&gt; &quot;op_lt_eq&quot;,       &quot;&gt;=&quot;   =&gt; &quot;op_gt_eq&quot;,       &quot;|&quot;    =&gt; &quot;op_or&quot;,       &quot;&amp;&quot;    =&gt; &quot;op_and&quot;,       &quot;^&quot;    =&gt; &quot;op_xor&quot;,       &quot;[]=&quot;  =&gt; &quot;op_store&quot;,       &quot;[]&quot;   =&gt; &quot;op_fetch&quot;</td>
+  </tr>
+  </table>
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M001134"></a><b>escape</b>(str)
+  </div>
+  <div class="description">
+  <p>
+Applies operator <a href="OpEsc.html#M001134">escape</a>&#8216;s according
+to OPERATORS_ESCAPE_TABLE.
+</p>
+<pre>
+  op_esc('-') #=&gt; &quot;op_minus&quot;
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M001134_source')" id="l_M001134_source">show source</a> ]</p>
+  <div id="M001134_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/opesc.rb, line 40</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">str</span>)
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-constant">OPERATORS_REGEXP</span>){ <span class="ruby-constant">OPERATORS_ESC_TABLE</span>[<span class="ruby-identifier">$1</span>] }
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

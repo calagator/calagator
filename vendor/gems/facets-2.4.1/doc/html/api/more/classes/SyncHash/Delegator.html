@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: SyncHash::Delegator</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />SyncHash::Delegator</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/synchash_rb.html">lib/facets/synchash.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+This module is used when a delegate is being used.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000041">[]</a></li>
+  <li><a href="#M000042">[]=</a></li>
+  <li><a href="#M000044">clear</a></li>
+  <li><a href="#M000043">delete</a></li>
+  <li><a href="#M000047">keys</a></li>
+  <li><a href="#M000045">size</a></li>
+  <li><a href="#M000046">values</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000041"></a><b>[]</b>(key)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000041_source')" id="l_M000041_source">show source</a> ]</p>
+  <div id="M000041_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/synchash.rb, line 119</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>)
+      <span class="ruby-ivar">@sync</span>.<span class="ruby-identifier">synchronize</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Sync</span><span class="ruby-operator">::</span><span class="ruby-constant">SH</span>) { <span class="ruby-ivar">@delegate</span>[<span class="ruby-identifier">key</span>] }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000042"></a><b>[]=</b>(key, value)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000042_source')" id="l_M000042_source">show source</a> ]</p>
+  <div id="M000042_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/synchash.rb, line 123</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]=</span>(<span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span>)
+      <span class="ruby-ivar">@sync</span>.<span class="ruby-identifier">synchronize</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Sync</span><span class="ruby-operator">::</span><span class="ruby-constant">EX</span>) { <span class="ruby-ivar">@delegate</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">value</span> }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000044"></a><b>clear</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000044_source')" id="l_M000044_source">show source</a> ]</p>
+  <div id="M000044_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/synchash.rb, line 131</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">clear</span>
+      <span class="ruby-ivar">@sync</span>.<span class="ruby-identifier">synchronize</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Sync</span><span class="ruby-operator">::</span><span class="ruby-constant">EX</span>) { <span class="ruby-ivar">@delegate</span>.<span class="ruby-identifier">clear</span> }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000043"></a><b>delete</b>(key)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000043_source')" id="l_M000043_source">show source</a> ]</p>
+  <div id="M000043_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/synchash.rb, line 127</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete</span>(<span class="ruby-identifier">key</span>)
+      <span class="ruby-ivar">@sync</span>.<span class="ruby-identifier">synchronize</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Sync</span><span class="ruby-operator">::</span><span class="ruby-constant">EX</span>) { <span class="ruby-ivar">@delegate</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">key</span>) }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000047"></a><b>keys</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000047_source')" id="l_M000047_source">show source</a> ]</p>
+  <div id="M000047_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/synchash.rb, line 143</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">keys</span>
+      <span class="ruby-ivar">@sync</span>.<span class="ruby-identifier">synchronize</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Sync</span><span class="ruby-operator">::</span><span class="ruby-constant">SH</span>) { <span class="ruby-ivar">@delegate</span>.<span class="ruby-identifier">keys</span>() }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000045"></a><b>size</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000045_source')" id="l_M000045_source">show source</a> ]</p>
+  <div id="M000045_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/synchash.rb, line 135</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">size</span>
+      <span class="ruby-ivar">@sync</span>.<span class="ruby-identifier">synchronize</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Sync</span><span class="ruby-operator">::</span><span class="ruby-constant">SH</span>) { <span class="ruby-ivar">@delegate</span>.<span class="ruby-identifier">size</span>() }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000046"></a><b>values</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000046_source')" id="l_M000046_source">show source</a> ]</p>
+  <div id="M000046_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/synchash.rb, line 139</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">values</span>
+      <span class="ruby-ivar">@sync</span>.<span class="ruby-identifier">synchronize</span>(<span class="ruby-operator">::</span><span class="ruby-constant">Sync</span><span class="ruby-operator">::</span><span class="ruby-constant">SH</span>) { <span class="ruby-ivar">@delegate</span>.<span class="ruby-identifier">values</span>() }
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

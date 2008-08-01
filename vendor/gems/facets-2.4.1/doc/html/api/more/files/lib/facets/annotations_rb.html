@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: annotations.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />annotations.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/annotations.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 16:49:56 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1>Annotation</h1>
+<p>
+Annotations allows you to annontate objects, including methods with
+arbitrary &quot;metadata&quot;. These annotations don&#8216;t do anything
+in themselves. They are merely comments. But you can put them to use. For
+instance an attribute validator might check for an annotation called :valid
+and test against it.
+</p>
+<p>
+Annotation is an <a href="../../../classes/OpenObject.html">OpenObject</a>,
+and is used across the board for keeping annotations.
+</p>
+<p>
+Annotation class serves for both simple and inherited cases depending on
+whether a base class is given.
+</p>
+<pre>
+  class X
+    attr :a
+    ann :@a, :valid =&gt; lambda{ |x| x.is_a?(Integer) }
+
+    def validate
+      instance_variables.each { |iv|
+        if validator = self.class.ann(iv)[:valid]
+          value = instance_variable_get(iv)
+          unless validator.call(vale)
+            raise &quot;Invalid value #{value} for #{iv}&quot;
+          end
+        end
+      }
+    end
+
+  end
+</pre>
+<h2>Authors</h2>
+<ul>
+<li>Thomas Sawyer
+
+</li>
+<li>George Moschovitis
+
+</li>
+</ul>
+<h2>History</h2>
+<ul>
+<li>2006-11-07 trans Created this ultra-concise version of annotations.
+
+</li>
+</ul>
+<h2>Todo</h2>
+<ul>
+<li>Might be nice to have a default object of annotation, eg. the next method
+defined, like how <tt>desc</tt> annotates a rake <tt>task</tt>.
+
+</li>
+<li>The ann(x).name notation is kind of nice. Would like to add that back-in if
+reasonable. Basically this require heritage to be an <a
+href="../../../classes/OpenObject.html">OpenObject</a> rather than just a
+hash.
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2005 Thomas Sawyer, George Moschovitis
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+  <div class="sectiontitle">Required Files</div>
+  <ul>
+  <li>facets/hash/to_h</li>
+  <li>facets/hash/rekey</li>
+  <li>facets/hash/op</li>
+  <li>facets/annotations.rb</li>
+  <li>facets/inheritor.rb</li>
+  </ul>
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

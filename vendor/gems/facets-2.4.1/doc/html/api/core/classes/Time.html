@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Time</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Time</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/ruby_rb.html">lib/facets/ruby.rb</a>
+<a href="../files/lib/facets/time/elapse_rb.html">lib/facets/time/elapse.rb</a>
+<a href="../files/lib/facets/time/hence_rb.html">lib/facets/time/hence.rb</a>
+<a href="../files/lib/facets/time/change_rb.html">lib/facets/time/change.rb</a>
+<a href="../files/lib/facets/time/stamp_rb.html">lib/facets/time/stamp.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+        <a href="Object.html">
+Object
+         </a>
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000041">ago</a></li>
+  <li><a href="#M000046">ago</a></li>
+  <li><a href="#M000044">change</a></li>
+  <li><a href="#M000040">elapse</a></li>
+  <li><a href="#M000042">hence</a></li>
+  <li><a href="#M000047">hence</a></li>
+  <li><a href="#M000048">in</a></li>
+  <li><a href="#M000043">in</a></li>
+  <li><a href="#M000045">set</a></li>
+  <li><a href="#M000049">stamp</a></li>
+  <li><a href="#M000050">stamp</a></li>
+  <li><a href="#M000038">to_date</a></li>
+  <li><a href="#M000039">to_time</a></li>
+  </ul>
+
+
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">FORMAT</td>
+    <td>=</td>
+    <td class="attr-value">{       :db      =&gt; &quot;%Y-%m-%d %H:%M:%S&quot;,       :dbase   =&gt; &quot;%Y-%m-%d %H:%M:%S&quot;,       :datbase =&gt; &quot;%Y-%m-%d %H:%M:%S&quot;,       :utc     =&gt; &quot;%Y-%m-%d %H:%M:%S&quot;,       :short   =&gt; &quot;%d %b %H:%M&quot;,       :long    =&gt; &quot;%B %d, %Y %H:%M&quot;,       :day1st  =&gt; &quot;%d-%m-%Y %H:%M&quot;,       :dmYHM   =&gt; &quot;%d-%m-%Y %H:%M&quot;,       :rfc822  =&gt; &quot;%a, %d %b %Y %H:%M:%S %z&quot;,       nil      =&gt; &quot;%a %b %d %H:%M:%S %Z %Y&quot;</td>
+  </tr>
+  </table>
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000040"></a><b>elapse</b>() {|| ...}
+  </div>
+  <div class="description">
+  <p>
+Tracks the <a href="Time.html#M000040">elapse</a> time of a code block.
+</p>
+<pre>
+  Time.elapse { sleep 1 }  #=&gt; 0.999188899993896
+
+  CREDIT: Hal Fulton
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000040_source')" id="l_M000040_source">show source</a> ]</p>
+  <div id="M000040_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/time/elapse.rb, line 9</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">elapse</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Need block&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">block_given?</span>
+    <span class="ruby-identifier">t0</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_f</span>
+    <span class="ruby-keyword kw">yield</span>
+    <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">t0</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000049"></a><b>stamp</b>(*args)
+  </div>
+  <div class="description">
+  <p>
+Produce time <a href="Time.html#M000049">stamp</a> for Time.now. See <a
+href="Time.html#M000049">stamp</a>.
+</p>
+<pre>
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000049_source')" id="l_M000049_source">show source</a> ]</p>
+  <div id="M000049_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/time/stamp.rb, line 22</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">stamp</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-identifier">now</span>.<span class="ruby-identifier">stamp</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000041"></a><b>ago</b>(number, units=:seconds)
+  </div>
+  <div class="description">
+  <p>
+Returns a new <a href="Time.html">Time</a> representing the time a number
+of time-units <a href="Time.html#M000041">ago</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000041_source')" id="l_M000041_source">show source</a> ]</p>
+  <div id="M000041_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/time/hence.rb, line 6</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ago</span>(<span class="ruby-identifier">number</span>, <span class="ruby-identifier">units</span>=<span class="ruby-identifier">:seconds</span>)
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">units</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:years</span>
+      <span class="ruby-identifier">set</span>(<span class="ruby-identifier">:year=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">year</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">number</span>))
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:months</span>
+      <span class="ruby-identifier">years</span> = (<span class="ruby-identifier">month</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">number</span> <span class="ruby-operator">/</span> <span class="ruby-value">12</span>).<span class="ruby-identifier">to_i</span>
+      <span class="ruby-identifier">set</span>(<span class="ruby-identifier">:year=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">year</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">years</span>), <span class="ruby-identifier">:month=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">month</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">number</span>) <span class="ruby-operator">%</span> <span class="ruby-value">12</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:weeks</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">604800</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:days</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">86400</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hours</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">3600</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:minutes</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">60</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:seconds</span>, <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">number</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;unrecognized time units -- #{units}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000046"></a><b>ago</b>(number, units=:seconds)
+  </div>
+  <div class="description">
+  <p>
+Returns a new <a href="Time.html">Time</a> representing the time a number
+of time-units <a href="Time.html#M000041">ago</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000046_source')" id="l_M000046_source">show source</a> ]</p>
+  <div id="M000046_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/time/change.rb, line 49</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ago</span>(<span class="ruby-identifier">number</span>, <span class="ruby-identifier">units</span>=<span class="ruby-identifier">:seconds</span>)
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">units</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:years</span>
+      <span class="ruby-identifier">set</span>(<span class="ruby-identifier">:year=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">year</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">number</span>))
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:months</span>
+      <span class="ruby-identifier">years</span> = (<span class="ruby-identifier">month</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">number</span> <span class="ruby-operator">/</span> <span class="ruby-value">12</span>).<span class="ruby-identifier">to_i</span>
+      <span class="ruby-identifier">set</span>(<span class="ruby-identifier">:year=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">year</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">years</span>), <span class="ruby-identifier">:month=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">month</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">number</span>) <span class="ruby-operator">%</span> <span class="ruby-value">12</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:weeks</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">604800</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:days</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">86400</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hours</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">3600</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:minutes</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">60</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:seconds</span>, <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">number</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;unrecognized time units -- #{units}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000044"></a><b>change</b>(options)
+  </div>
+  <div class="description">
+  <p>
+Returns a new <a href="Time.html">Time</a> where one or more of the
+elements have been changed according to the <tt>options</tt> parameter. The
+time options (hour, minute, sec, usec) reset cascadingly, so if only the
+hour is passed, then minute, sec, and usec is <a
+href="Time.html#M000045">set</a> to 0. If the hour and minute is passed,
+then sec and usec is <a href="Time.html#M000045">set</a> to 0.
+</p>
+<pre>
+ t = Time.now            #=&gt; Sat Dec 01 14:10:15 -0500 2007
+ t.change(:hour =&gt; 11)   #=&gt; Sat Dec 01 11:00:00 -0500 2007
+
+ CREDIT: David Hansson (?)
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000044_source')" id="l_M000044_source">show source</a> ]</p>
+  <div id="M000044_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/time/change.rb, line 15</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">change</span>(<span class="ruby-identifier">options</span>)
+    <span class="ruby-identifier">opts</span>={}; <span class="ruby-identifier">options</span>.<span class="ruby-identifier">each_pair</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">to_i</span> }
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">send</span>( <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">utc?</span> <span class="ruby-value">? </span><span class="ruby-operator">:</span><span class="ruby-identifier">utc</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:local</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:year</span>]  <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">year</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:month</span>] <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">month</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:day</span>]   <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">day</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:hour</span>]  <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">hour</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:min</span>]   <span class="ruby-operator">||</span> (<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:hour</span>] <span class="ruby-operator">?</span> <span class="ruby-value">0</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">min</span>),
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:sec</span>]   <span class="ruby-operator">||</span> ((<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:hour</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:min</span>]) <span class="ruby-operator">?</span> <span class="ruby-value">0</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">sec</span>),
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:usec</span>]  <span class="ruby-operator">||</span> ((<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:hour</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:min</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:usec</span>]) <span class="ruby-operator">?</span> <span class="ruby-value">0</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">usec</span>)
+    )
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000042"></a><b>hence</b>(number, units=:seconds)
+  </div>
+  <div class="description">
+  <p>
+Returns a new <a href="Time.html">Time</a> representing the time a number
+of time-units <a href="Time.html#M000042">hence</a>.
+</p>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Time.html#M000043">in</a>
+  <a href="Time.html#M000048">in</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000042_source')" id="l_M000042_source">show source</a> ]</p>
+  <div id="M000042_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/time/hence.rb, line 31</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hence</span>(<span class="ruby-identifier">number</span>, <span class="ruby-identifier">units</span>=<span class="ruby-identifier">:seconds</span>)
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">units</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:years</span>
+      <span class="ruby-identifier">set</span>(<span class="ruby-identifier">:year=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">year</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">number</span>))
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:months</span>
+      <span class="ruby-identifier">years</span> = (<span class="ruby-identifier">month</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">number</span> <span class="ruby-operator">/</span> <span class="ruby-value">12</span>).<span class="ruby-identifier">to_i</span>
+      <span class="ruby-identifier">set</span>(<span class="ruby-identifier">:year=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">year</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">years</span>), <span class="ruby-identifier">:month=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">month</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">number</span>) <span class="ruby-operator">%</span> <span class="ruby-value">12</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:weeks</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">604800</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:days</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">86400</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hours</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">3600</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:minutes</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">60</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:seconds</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">number</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;unrecognized time units -- #{units}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000047"></a><b>hence</b>(number, units=:seconds)
+  </div>
+  <div class="description">
+  <p>
+Returns a new <a href="Time.html">Time</a> representing the time a number
+of time-units <a href="Time.html#M000042">hence</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000047_source')" id="l_M000047_source">show source</a> ]</p>
+  <div id="M000047_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/time/change.rb, line 74</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hence</span>(<span class="ruby-identifier">number</span>, <span class="ruby-identifier">units</span>=<span class="ruby-identifier">:seconds</span>)
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">units</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">to_sym</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:years</span>
+      <span class="ruby-identifier">set</span>(<span class="ruby-identifier">:year=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">year</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">number</span>))
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:months</span>
+      <span class="ruby-identifier">years</span> = (<span class="ruby-identifier">month</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">number</span> <span class="ruby-operator">/</span> <span class="ruby-value">12</span>).<span class="ruby-identifier">to_i</span>
+      <span class="ruby-identifier">set</span>(<span class="ruby-identifier">:year=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">year</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">years</span>), <span class="ruby-identifier">:month=</span><span class="ruby-operator">&gt;</span>(<span class="ruby-identifier">month</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">number</span>) <span class="ruby-operator">%</span> <span class="ruby-value">12</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:weeks</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">604800</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:days</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">86400</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:hours</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">3600</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:minutes</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> (<span class="ruby-identifier">number</span> <span class="ruby-operator">*</span> <span class="ruby-value">60</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:seconds</span>
+      <span class="ruby-keyword kw">self</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">number</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-node">&quot;unrecognized time units -- #{units}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000048"></a><b>in</b>(number, units=:seconds)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Time.html#M000042">hence</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000043"></a><b>in</b>(number, units=:seconds)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Time.html#M000042">hence</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000045"></a><b>set</b>(options)
+  </div>
+  <div class="description">
+  <p>
+Like <a href="Time.html#M000044">change</a> but does not reset earlier
+times.
+</p>
+<p>
+NOTE: It would be better, probably if this were called &quot;<a
+href="Time.html#M000044">change</a>&quot;.
+</p>
+<pre>
+      and that #change were called &quot;reset&quot;.
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000045_source')" id="l_M000045_source">show source</a> ]</p>
+  <div id="M000045_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/time/change.rb, line 33</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set</span>(<span class="ruby-identifier">options</span>)
+    <span class="ruby-identifier">opts</span>={}; <span class="ruby-identifier">options</span>.<span class="ruby-identifier">each_pair</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">to_i</span> }
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">send</span>( <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">utc?</span> <span class="ruby-value">? </span><span class="ruby-operator">:</span><span class="ruby-identifier">utc</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:local</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:year</span>]  <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">year</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:month</span>] <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">month</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:day</span>]   <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">day</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:hour</span>]  <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">hour</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:min</span>]   <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">min</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:sec</span>]   <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">sec</span>,
+      <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:usec</span>]  <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">usec</span>
+    )
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000050"></a><b>stamp</b>(fmt = nil)
+  </div>
+  <div class="description">
+  <p>
+Create a time <a href="Time.html#M000049">stamp</a>.
+</p>
+<pre>
+  Time.now.stamp(:short)    #=&gt; &quot;01 Dec 15:15&quot;
+</pre>
+<p>
+Supported formats come from the Time::FORMAT constant.
+</p>
+<pre>
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000050_source')" id="l_M000050_source">show source</a> ]</p>
+  <div id="M000050_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/time/stamp.rb, line 34</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stamp</span>(<span class="ruby-identifier">fmt</span> = <span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">fmt</span>
+      <span class="ruby-identifier">fmt</span> = <span class="ruby-constant">FORMAT</span>[<span class="ruby-identifier">fmt</span>]
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">strftime</span>(<span class="ruby-identifier">fmt</span>).<span class="ruby-identifier">strip</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000038"></a><b>to_date</b>()
+  </div>
+  <div class="description">
+  <p>
+Convert a <a href="Time.html">Time</a> to a Date. <a
+href="Time.html">Time</a> is a superset of Date. It is the year, month and
+day that are carried over.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000038_source')" id="l_M000038_source">show source</a> ]</p>
+  <div id="M000038_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 447</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_date</span>
+      <span class="ruby-identifier">require</span> <span class="ruby-value str">'date'</span> <span class="ruby-comment cmt"># just in case</span>
+      <span class="ruby-identifier">jd</span> = <span class="ruby-constant">Date</span>.<span class="ruby-identifier">__send__</span>(<span class="ruby-identifier">:civil_to_jd</span>, <span class="ruby-identifier">year</span>, <span class="ruby-identifier">mon</span>, <span class="ruby-identifier">mday</span>, <span class="ruby-constant">Date</span><span class="ruby-operator">::</span><span class="ruby-constant">ITALY</span>)
+      <span class="ruby-constant">Date</span>.<span class="ruby-identifier">new!</span>(<span class="ruby-constant">Date</span>.<span class="ruby-identifier">__send__</span>(<span class="ruby-identifier">:jd_to_ajd</span>, <span class="ruby-identifier">jd</span>, <span class="ruby-value">0</span>, <span class="ruby-value">0</span>), <span class="ruby-value">0</span>, <span class="ruby-constant">Date</span><span class="ruby-operator">::</span><span class="ruby-constant">ITALY</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000039"></a><b>to_time</b>()
+  </div>
+  <div class="description">
+  <p>
+To be able to keep Dates and Times interchangeable on conversions.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000039_source')" id="l_M000039_source">show source</a> ]</p>
+  <div id="M000039_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 456</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_time</span>
+      <span class="ruby-identifier">getlocal</span> 
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

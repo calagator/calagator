@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Instantise</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Instantise</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/instantise_rb.html">lib/facets/instantise.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Instantise.html">Instantise</a></h1>
+<p>
+<a href="Instantise.html">Instantise</a> converts module methods into
+instance methods such that the first parameter is passed self at the
+instance level. This promotes DRY programming when wishing to offer both an
+inheritable and a module callable procedure.
+</p>
+<pre>
+  module MyModule
+    extend Instantise
+
+    def self.jumble( obj, arg )
+      obj + arg
+    end
+  end
+
+  class String
+    include MyModule
+  end
+
+  MyModule.jumble( &quot;Try&quot;, &quot;Me&quot; )  #=&gt; &quot;TryMe&quot;
+
+  &quot;Try&quot;.jumble( &quot;Me&quot; )            #=&gt; 'TryMe'
+</pre>
+<h2>Notes</h2>
+<p>
+This module used to be called PromoteSelf. <a
+href="Instantise.html">Instantise</a> is more descriptive, but a better
+name is probably still out there.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000987">append_features</a></li>
+  <li><a href="#M000988">singleton_method_added</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000987"></a><b>append_features</b>(mod)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000987_source')" id="l_M000987_source">show source</a> ]</p>
+  <div id="M000987_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/instantise.rb, line 77</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">append_features</span>(<span class="ruby-identifier">mod</span>)
+    <span class="ruby-identifier">mod</span>.<span class="ruby-identifier">extend</span> <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000988"></a><b>singleton_method_added</b>( meth )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000988_source')" id="l_M000988_source">show source</a> ]</p>
+  <div id="M000988_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/instantise.rb, line 81</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">singleton_method_added</span>( <span class="ruby-identifier">meth</span> )
+    <span class="ruby-identifier">d</span> = <span class="ruby-node">%{
+      def #{meth}(*args)
+        #{self.name}.#{meth}(self,*args)
+      end
+    }</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class_eval</span> <span class="ruby-identifier">d</span>
+    <span class="ruby-keyword kw">super</span>(<span class="ruby-identifier">meth</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

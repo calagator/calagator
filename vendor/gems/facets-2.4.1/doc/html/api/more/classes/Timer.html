@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Timer</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Timer</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/timer_rb.html">lib/facets/timer.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Timer.html">Timer</a></h1>
+<p>
+Provides a strightforward means for controlling time critical execution.
+Can be used as a &quot;<a href="Timer.html#M000602">stop</a> watch&quot;
+timer or as a &quot;time bomb&quot; timer.
+</p>
+<pre>
+  t = Timer.new(10) { raise TimeoutError, &quot;timeout!&quot; }
+  t.start
+    :      # done within 10sec timeout
+  t.stop
+  t.start
+    :
+  if condition then
+    t.reset       #--&gt; restart timer
+  end
+</pre>
+<p>
+A Kernel method is also provided for easily timing the exectuion of a
+block.
+</p>
+<pre>
+  timed { |timer|
+     timer.total_time.round #=&gt; 0
+
+     sleep 1
+     timer.total_time.round #=&gt; 1
+
+     timer.stop
+     timer.total_time.round #=&gt; 1
+
+     sleep 2
+     timer.total_time.round #=&gt; 1
+
+     timer.start
+     timer.total_time.round #=&gt; 1
+
+     sleep 1
+     timer.total_time.round #=&gt; 2
+  }
+</pre>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000601">defuse</a></li>
+  <li><a href="#M000600">limit</a></li>
+  <li><a href="#M000597">new</a></li>
+  <li><a href="#M000598">on_timeout</a></li>
+  <li><a href="#M000603">reset</a></li>
+  <li><a href="#M000604">reset_limit</a></li>
+  <li><a href="#M000605">running?</a></li>
+  <li><a href="#M000599">start</a></li>
+  <li><a href="#M000602">stop</a></li>
+  <li><a href="#M000606">stopped?</a></li>
+  <li><a href="#M000607">total_time</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Class <a href="Timer/Dummy.html" class="link">Timer::Dummy</a><br />
+
+
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>end_time</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>start_time</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[RW]
+    </td>
+    <td class='attr-name'>time_limit</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000597"></a><b>new</b>( time_limit=nil, &amp;block )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000597_source')" id="l_M000597_source">show source</a> ]</p>
+  <div id="M000597_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 110</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>( <span class="ruby-identifier">time_limit</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+    <span class="ruby-comment cmt"># standard timer</span>
+    <span class="ruby-ivar">@start_time</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-ivar">@end_time</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-ivar">@total_time</span> = <span class="ruby-value">0</span>
+    <span class="ruby-ivar">@runnning</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-comment cmt"># for using time limit</span>
+    <span class="ruby-ivar">@time_limit</span> = <span class="ruby-identifier">time_limit</span>
+    <span class="ruby-ivar">@on_timeout</span> = <span class="ruby-identifier">block</span>
+    <span class="ruby-ivar">@current_thread</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-ivar">@timer_thread</span> = <span class="ruby-keyword kw">nil</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000601"></a><b>defuse</b>()
+  </div>
+  <div class="description">
+  <p>
+Kill time <a href="Timer.html#M000600">limit</a> thread, if any.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000601_source')" id="l_M000601_source">show source</a> ]</p>
+  <div id="M000601_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 171</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">defuse</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@timer_thread</span>
+      <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">kill</span> <span class="ruby-ivar">@timer_thread</span>
+      <span class="ruby-ivar">@timer_thread</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000600"></a><b>limit</b>( time_limit=nil )
+  </div>
+  <div class="description">
+  <p>
+Establish a time <a href="Timer.html#M000600">limit</a> on execution.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000600_source')" id="l_M000600_source">show source</a> ]</p>
+  <div id="M000600_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 155</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">limit</span>( <span class="ruby-identifier">time_limit</span>=<span class="ruby-keyword kw">nil</span> )
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@time_limit</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">time_limit</span>
+      <span class="ruby-ivar">@current_thread</span> = <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">current</span>
+      <span class="ruby-ivar">@timer_thread</span> = <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">fork</span> {
+        <span class="ruby-identifier">sleep</span> <span class="ruby-ivar">@time_limit</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@on_timeout</span> <span class="ruby-keyword kw">then</span>
+          <span class="ruby-ivar">@on_timeout</span>.<span class="ruby-identifier">call</span> <span class="ruby-ivar">@time_limit</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-ivar">@current_thread</span>.<span class="ruby-identifier">raise</span> <span class="ruby-constant">TimeoutError</span>, <span class="ruby-node">&quot;#{@time_limit} seconds past&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+      }
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000598"></a><b>on_timeout</b>( &amp;block )
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000598_source')" id="l_M000598_source">show source</a> ]</p>
+  <div id="M000598_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 123</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">on_timeout</span>( <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span> )
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-ivar">@on_timeout</span> = <span class="ruby-identifier">block</span>
+      <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000603"></a><b>reset</b>()
+  </div>
+  <div class="description">
+  <p>
+Stops and resets the timer. If the timer was running returns the total
+time. If not returns 0.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000603_source')" id="l_M000603_source">show source</a> ]</p>
+  <div id="M000603_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 196</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">running?</span>
+      <span class="ruby-identifier">r</span> = <span class="ruby-identifier">stop</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">r</span> = <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-ivar">@total_time</span> = <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">r</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000604"></a><b>reset_limit</b>()
+  </div>
+  <div class="description">
+  <p>
+Resets the time <a href="Timer.html#M000600">limit</a>. Same as:
+</p>
+<pre>
+  t.stop
+  t.start
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000604_source')" id="l_M000604_source">show source</a> ]</p>
+  <div id="M000604_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 212</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset_limit</span>
+    <span class="ruby-comment cmt">#stop</span>
+    <span class="ruby-comment cmt">#start</span>
+    <span class="ruby-identifier">defuse</span>
+    <span class="ruby-identifier">limit</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000605"></a><b>running?</b>()
+  </div>
+  <div class="description">
+  <p>
+Queries whether the timer is still running.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000605_source')" id="l_M000605_source">show source</a> ]</p>
+  <div id="M000605_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 221</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">running?</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@running</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000599"></a><b>start</b>()
+  </div>
+  <div class="description">
+  <p>
+Start the timer.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000599_source')" id="l_M000599_source">show source</a> ]</p>
+  <div id="M000599_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 134</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>
+    <span class="ruby-ivar">@running</span> = <span class="ruby-keyword kw">true</span>
+    <span class="ruby-ivar">@start_time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+
+    <span class="ruby-identifier">limit</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@time_limit</span>
+
+    <span class="ruby-keyword kw">self</span>
+
+    <span class="ruby-comment cmt">#if block_given? then</span>
+    <span class="ruby-comment cmt">#  begin</span>
+    <span class="ruby-comment cmt">#    yield( self )</span>
+    <span class="ruby-comment cmt">#  ensure</span>
+    <span class="ruby-comment cmt">#    stop</span>
+    <span class="ruby-comment cmt">#  end</span>
+    <span class="ruby-comment cmt">#else</span>
+    <span class="ruby-comment cmt">#  @time_limit</span>
+    <span class="ruby-comment cmt">#end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000602"></a><b>stop</b>()
+  </div>
+  <div class="description">
+  <p>
+Stops timer and returns total time. If timer was not running returns false.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000602_source')" id="l_M000602_source">show source</a> ]</p>
+  <div id="M000602_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 181</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@running</span>
+      <span class="ruby-identifier">defuse</span>
+      <span class="ruby-comment cmt"># record running time</span>
+      <span class="ruby-ivar">@end_time</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>
+      <span class="ruby-ivar">@running</span> = <span class="ruby-keyword kw">false</span>
+      <span class="ruby-ivar">@total_time</span> <span class="ruby-operator">+=</span> (<span class="ruby-ivar">@end_time</span> <span class="ruby-operator">-</span> <span class="ruby-ivar">@start_time</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000606"></a><b>stopped?</b>()
+  </div>
+  <div class="description">
+  <p>
+Queries whether the timer is still not running.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000606_source')" id="l_M000606_source">show source</a> ]</p>
+  <div id="M000606_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 227</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stopped?</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-operator">!</span><span class="ruby-ivar">@running</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000607"></a><b>total_time</b>()
+  </div>
+  <div class="description">
+  <p>
+Queries total recorded time of timer.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000607_source')" id="l_M000607_source">show source</a> ]</p>
+  <div id="M000607_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/timer.rb, line 233</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">total_time</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">running?</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@total_time</span> <span class="ruby-operator">+</span> (<span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span> <span class="ruby-operator">-</span> <span class="ruby-ivar">@start_time</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@total_time</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

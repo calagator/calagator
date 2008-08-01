@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: multiton.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />multiton.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/multiton.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 15:54:31 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/Multiton.html">Multiton</a></h1>
+<h2>Synopsis</h2>
+<p>
+<a href="../../../classes/Multiton.html">Multiton</a> design pattern
+ensures only one object is allocated for a given state.
+</p>
+<p>
+The &#8216;multiton&#8217; pattern is similar to a singleton, but instead
+of only one instance, there are several similar instances. <a
+href="../../../classes/It.html">It</a> is useful when you want to avoid
+constructing objects many times because of some huge expense (connecting to
+a database for example), require a set of similar but not identical
+objects, and cannot easily control how many times a contructor may be
+called.
+</p>
+<pre>
+  class SomeMultitonClass
+    include Multiton
+    attr :arg
+    def initialize(arg)
+      @arg = arg
+    end
+  end
+
+  a = SomeMultitonClass.new(4)
+  b = SomeMultitonClass.new(4)   # a and b are same object
+  c = SomeMultitonClass.new(2)   # c is a different object
+</pre>
+<h2>Previous <a href="../../../classes/Behavior.html">Behavior</a></h2>
+<p>
+In previous versions of <a
+href="../../../classes/Multiton.html">Multiton</a> the new method was made
+private and instance had to be used in its stay &#8212;just like Singleton.
+But this is less desirable for <a
+href="../../../classes/Multiton.html">Multiton</a> since Multitions can
+have multiple instances, not just one.
+</p>
+<p>
+So instead <a href="../../../classes/Multiton.html">Multiton</a> now
+defines create as a private alias of the original new method (just in case
+it is needed) and then defines new to handle the multiton; instance is
+provided as an alias for it.
+</p>
+<h2>How <a href="../../../classes/It.html">It</a> Works</h2>
+<p>
+A pool of objects is searched for a previously cached object, if one is not
+found we construct one and cache it in the pool based on class and the args
+given to the contructor.
+</p>
+<p>
+A limitation of this approach is that it is impossible to detect if
+different blocks were given to a contructor (if it takes a block). So it is
+the constructor arguments <em>only</em> which determine the uniqueness of
+an object. To workaround this, define the <em>class</em> method
+::multiton_id.
+</p>
+<pre>
+  def Klass.multiton_id(*args, &amp;block)
+    # ...
+  end
+</pre>
+<p>
+Which should return a hash key used to identify the object being
+constructed as (not) unique.
+</p>
+<h2>Authors</h2>
+<ul>
+<li>Christoph Rippel
+
+</li>
+<li>Thomas Sawyer
+
+</li>
+</ul>
+<h1>Copying</h1>
+<p>
+Copyright (c) 2007 Christoph Rippel, Thomas Sawyer
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+  <div class="sectiontitle">Required Files</div>
+  <ul>
+  <li>thread</li>
+  </ul>
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

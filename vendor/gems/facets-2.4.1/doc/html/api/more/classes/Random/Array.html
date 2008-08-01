@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Random::Array</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Random::Array</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/random_rb.html">lib/facets/random.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000887">at_rand</a></li>
+  <li><a href="#M000888">at_rand!</a></li>
+  <li><a href="#M000889">pick</a></li>
+  <li><a href="#M000890">pick!</a></li>
+  <li><a href="#M000891">rand_index</a></li>
+  <li><a href="#M000892">rand_subset</a></li>
+  <li><a href="#M000893">shuffle</a></li>
+  <li><a href="#M000894">shuffle!</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000887"></a><b>at_rand</b>()
+  </div>
+  <div class="description">
+  <p>
+Return a random element of the array.
+</p>
+<pre>
+  [1, 2, 3, 4].at_rand           #=&gt; 2
+  [1, 2, 3, 4].at_rand           #=&gt; 4
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000887_source')" id="l_M000887_source">show source</a> ]</p>
+  <div id="M000887_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 104</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">at_rand</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">at</span>( <span class="ruby-identifier">rand</span>( <span class="ruby-identifier">size</span> ) )
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000888"></a><b>at_rand!</b>()
+  </div>
+  <div class="description">
+  <p>
+Same as <a href="Array.html#M000887">at_rand</a>, but acts in place
+removing a random element from the array.
+</p>
+<pre>
+  a = [1,2,3,4]
+  a.at_rand!       #=&gt; 2
+  a                #=&gt; [1,3,4]
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000888_source')" id="l_M000888_source">show source</a> ]</p>
+  <div id="M000888_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 115</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">at_rand!</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">delete_at</span>( <span class="ruby-constant">Random</span>.<span class="ruby-identifier">number</span>( <span class="ruby-identifier">size</span> ) )
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000889"></a><b>pick</b>(n=nil)
+  </div>
+  <div class="description">
+  <p>
+Similar to <a href="Array.html#M000887">at_rand</a>, but will return an
+array of randomly picked exclusive elements if given a number.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000889_source')" id="l_M000889_source">show source</a> ]</p>
+  <div id="M000889_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 121</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pick</span>(<span class="ruby-identifier">n</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n</span>
+        <span class="ruby-identifier">a</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+        <span class="ruby-identifier">a</span>.<span class="ruby-identifier">pick!</span>(<span class="ruby-identifier">n</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">at</span>( <span class="ruby-constant">Random</span>.<span class="ruby-identifier">number</span>( <span class="ruby-identifier">size</span> ) )
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000890"></a><b>pick!</b>(n=nil)
+  </div>
+  <div class="description">
+  <p>
+Similar to <a href="Array.html#M000887">at_rand</a>!, but given a number
+will return an array of exclusive elements.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000890_source')" id="l_M000890_source">show source</a> ]</p>
+  <div id="M000890_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 132</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pick!</span>(<span class="ruby-identifier">n</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">size</span>
+          <span class="ruby-identifier">r</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">replace</span>([])
+          <span class="ruby-identifier">r</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">r</span> = []
+          <span class="ruby-identifier">n</span>.<span class="ruby-identifier">times</span> { <span class="ruby-identifier">r</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">delete_at</span>( <span class="ruby-constant">Random</span>.<span class="ruby-identifier">number</span>( <span class="ruby-identifier">size</span> ) ) }
+          <span class="ruby-identifier">r</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">delete_at</span>( <span class="ruby-constant">Random</span>.<span class="ruby-identifier">number</span>( <span class="ruby-identifier">size</span> ) )
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000891"></a><b>rand_index</b>()
+  </div>
+  <div class="description">
+  <p>
+<a href="../Random.html">Random</a> index.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000891_source')" id="l_M000891_source">show source</a> ]</p>
+  <div id="M000891_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 150</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rand_index</span>
+      <span class="ruby-identifier">rand</span>( <span class="ruby-identifier">size</span> )
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000892"></a><b>rand_subset</b>( number=nil, exclusive=true )
+  </div>
+  <div class="description">
+  <p>
+Returns a random subset of an <a href="Array.html">Array</a>. If a
+<em>number</em> of elements is specified then returns that number of
+elements, otherwise returns a random number of elements upto the size of
+the <a href="Array.html">Array</a>.
+</p>
+<p>
+By defualt the returned values are exclusive of each other, but if
+<em>exclusive</em> is set to <tt>false</tt>, the same values can be choosen
+more than once.
+</p>
+<p>
+When <em>exclusive</em> is <tt>true</tt> (the default) and the
+<em>number</em> given is greater than the size of the array, then all
+values are returned.
+</p>
+<pre>
+  [1, 2, 3, 4].rand_subset(1)        #=&gt; [2]
+  [1, 2, 3, 4].rand_subset(4)        #=&gt; [2, 1, 3, 4]
+  [1, 2, 3, 4].rand_subset           #=&gt; [1, 3, 4]
+  [1, 2, 3, 4].rand_subset           #=&gt; [2, 3]
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000892_source')" id="l_M000892_source">show source</a> ]</p>
+  <div id="M000892_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 172</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rand_subset</span>( <span class="ruby-identifier">number</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">exclusive</span>=<span class="ruby-keyword kw">true</span> )
+      <span class="ruby-identifier">number</span> = <span class="ruby-identifier">rand</span>( <span class="ruby-identifier">size</span> ) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">number</span>
+      <span class="ruby-identifier">number</span> = <span class="ruby-identifier">number</span>.<span class="ruby-identifier">to_int</span>
+      <span class="ruby-comment cmt">#return self.dup if (number &gt;= size and exlusive)</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">sort_by</span>{<span class="ruby-identifier">rand</span>}.<span class="ruby-identifier">slice</span>(<span class="ruby-value">0</span>,<span class="ruby-identifier">number</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">exclusive</span>
+      <span class="ruby-identifier">ri</span> =[]; <span class="ruby-identifier">number</span>.<span class="ruby-identifier">times</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">ri</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rand</span>( <span class="ruby-identifier">size</span> ) }
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">values_at</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">ri</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000893"></a><b>shuffle</b>()
+  </div>
+  <div class="description">
+  <p>
+Randomize the order of an array.
+</p>
+<pre>
+  [1,2,3,4].shuffle  #=&gt; [2,4,1,3]
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000893_source')" id="l_M000893_source">show source</a> ]</p>
+  <div id="M000893_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 185</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">shuffle</span>
+      <span class="ruby-identifier">dup</span>.<span class="ruby-identifier">shuffle!</span>
+      <span class="ruby-comment cmt">#sort_by{Random.number}</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000894"></a><b>shuffle!</b>()
+  </div>
+  <div class="description">
+  <p>
+As with <a href="Array.html#M000893">shuffle</a> but modifies the array in
+place. The algorithm used here is known as a Fisher-Yates <a
+href="Array.html#M000893">shuffle</a>.
+</p>
+<pre>
+  a = [1,2,3,4]
+  a.shuffle!
+  a  #=&gt; [2,4,1,3]
+</pre>
+<p>
+CREDIT Niel Spring
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000894_source')" id="l_M000894_source">show source</a> ]</p>
+  <div id="M000894_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 199</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">shuffle!</span>
+      <span class="ruby-identifier">s</span> = <span class="ruby-identifier">size</span>
+      <span class="ruby-identifier">each_index</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">j</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">i</span> = <span class="ruby-constant">Random</span>.<span class="ruby-identifier">number</span>(<span class="ruby-identifier">s</span><span class="ruby-operator">-</span><span class="ruby-identifier">j</span>)
+        <span class="ruby-comment cmt">#self[j], self[j+i] = self[j+i], self[j]</span>
+        <span class="ruby-identifier">tmp</span> = <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">j</span>]
+        <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">j</span>] = <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">j</span><span class="ruby-operator">+</span><span class="ruby-identifier">i</span>]
+        <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">j</span><span class="ruby-operator">+</span><span class="ruby-identifier">i</span>] = <span class="ruby-identifier">tmp</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

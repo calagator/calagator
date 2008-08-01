@@ -1,0 +1,455 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: URI</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />URI</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/uri_rb.html">lib/facets/uri.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000858">cgi_escape</a></li>
+  <li><a href="#M000860">cgi_parse</a></li>
+  <li><a href="#M000859">cgi_unescape</a></li>
+  <li><a href="#M000862">chomp_query_string</a></li>
+  <li><a href="#M000853">decode</a></li>
+  <li><a href="#M000861">get_query_string</a></li>
+  <li><a href="#M000856">hash_to_query</a></li>
+  <li><a href="#M000857">hash_to_query_string</a></li>
+  <li><a href="#M000855">query_string_to_hash</a></li>
+  <li><a href="#M000854">query_to_hash</a></li>
+  <li><a href="#M000863">update_query_string</a></li>
+  <li><a href="#M000864">update_request_uri</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="URI/Hash.html" class="link">URI::Hash</a><br />
+Module <a href="URI/Kernel.html" class="link">URI::Kernel</a><br />
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000858"></a><b>cgi_escape</b>(string)
+  </div>
+  <div class="description">
+  <p>
+TODO: How does this compare to URI.escape?
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000858_source')" id="l_M000858_source">show source</a> ]</p>
+  <div id="M000858_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 109</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cgi_escape</span>(<span class="ruby-identifier">string</span>)
+    <span class="ruby-identifier">string</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/([^ a-zA-Z0-9_.-]+)/n</span>) <span class="ruby-keyword kw">do</span>
+      <span class="ruby-value str">'%'</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-value str">'H2'</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">size</span>).<span class="ruby-identifier">join</span>(<span class="ruby-value str">'%'</span>).<span class="ruby-identifier">upcase</span>
+    <span class="ruby-keyword kw">end</span>.<span class="ruby-identifier">tr</span>(<span class="ruby-value str">' '</span>, <span class="ruby-value str">'+'</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000860"></a><b>cgi_parse</b>(query)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000860_source')" id="l_M000860_source">show source</a> ]</p>
+  <div id="M000860_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 125</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cgi_parse</span>(<span class="ruby-identifier">query</span>)
+    <span class="ruby-identifier">params</span> = <span class="ruby-constant">Hash</span>.<span class="ruby-identifier">new</span>([].<span class="ruby-identifier">freeze</span>)
+
+    <span class="ruby-identifier">query</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/[&amp;;]/n</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">pairs</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span> = <span class="ruby-identifier">pairs</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'='</span>,<span class="ruby-value">2</span>).<span class="ruby-identifier">collect</span>{<span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">cgi_unescape</span>(<span class="ruby-identifier">v</span>) }
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">params</span>.<span class="ruby-identifier">has_key?</span>(<span class="ruby-identifier">key</span>)
+        <span class="ruby-identifier">params</span>[<span class="ruby-identifier">key</span>].<span class="ruby-identifier">push</span>(<span class="ruby-identifier">value</span>)
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">params</span>[<span class="ruby-identifier">key</span>] = [<span class="ruby-identifier">value</span>]
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">params</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000859"></a><b>cgi_unescape</b>(string)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000859_source')" id="l_M000859_source">show source</a> ]</p>
+  <div id="M000859_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 117</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cgi_unescape</span>(<span class="ruby-identifier">string</span>)
+    <span class="ruby-identifier">string</span>.<span class="ruby-identifier">tr</span>(<span class="ruby-value str">'+'</span>, <span class="ruby-value str">' '</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/((?:%[0-9a-fA-F]{2})+)/n</span>) <span class="ruby-keyword kw">do</span>
+      [<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-value str">'%'</span>)].<span class="ruby-identifier">pack</span>(<span class="ruby-value str">'H*'</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000862"></a><b>chomp_query_string</b>(uri)
+  </div>
+  <div class="description">
+  <p>
+Removes the query string from a uri
+</p>
+<p>
+Input: the uri
+</p>
+<p>
+Output: the chomped uri.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000862_source')" id="l_M000862_source">show source</a> ]</p>
+  <div id="M000862_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 169</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">chomp_query_string</span>(<span class="ruby-identifier">uri</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">uri</span>
+    <span class="ruby-identifier">query_string</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_query_string</span>(<span class="ruby-identifier">uri</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-node">&quot;?#{query_string}&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000853"></a><b>decode</b>(uri)
+  </div>
+  <div class="description">
+  <p>
+Decode the uri components.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000853_source')" id="l_M000853_source">show source</a> ]</p>
+  <div id="M000853_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 33</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">decode</span>(<span class="ruby-identifier">uri</span>)
+    <span class="ruby-comment cmt"># gmosx: hmm is this needed?</span>
+    <span class="ruby-comment cmt"># guard against invalid filenames for example pictures with</span>
+    <span class="ruby-comment cmt"># spaces uploaded by users</span>
+    <span class="ruby-identifier">escaped_uri</span> = <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/ /</span>, <span class="ruby-value str">&quot;+&quot;</span>)
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">md</span> = <span class="ruby-constant">URI</span><span class="ruby-operator">::</span><span class="ruby-constant">REGEXP</span><span class="ruby-operator">::</span><span class="ruby-constant">REL_URI</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">escaped_uri</span>)
+
+      <span class="ruby-identifier">path</span> = <span class="ruby-node">&quot;#{md[5]}#{md[6]}&quot;</span>
+      <span class="ruby-identifier">type</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">extname</span>(<span class="ruby-identifier">path</span>)
+      <span class="ruby-identifier">query_string</span> = <span class="ruby-identifier">md</span>[<span class="ruby-value">7</span>]
+
+<span class="ruby-comment cmt">#      real_path = &quot;#{$root_dir}/#{path}&quot;</span>
+
+      <span class="ruby-identifier">parameters</span> = <span class="ruby-constant">URI</span>.<span class="ruby-identifier">query_to_hash</span>(<span class="ruby-identifier">query_string</span>)
+      <span class="ruby-identifier">path</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\+/</span>, <span class="ruby-value str">&quot; &quot;</span>)
+
+      <span class="ruby-keyword kw">return</span> [<span class="ruby-identifier">path</span>, <span class="ruby-identifier">type</span>, <span class="ruby-identifier">parameters</span>, <span class="ruby-identifier">query_string</span>]
+
+    <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># match</span>
+
+    <span class="ruby-comment cmt"># this is usefull for uncovering bugs!</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;the parameter '#{uri}' is not a valid uri&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000861"></a><b>get_query_string</b>(uri)
+  </div>
+  <div class="description">
+  <p>
+This method returns the query string of a uri
+</p>
+<p>
+Input: the uri
+</p>
+<p>
+Output: the query string. returns nil if no query string
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000861_source')" id="l_M000861_source">show source</a> ]</p>
+  <div id="M000861_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 149</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_query_string</span>(<span class="ruby-identifier">uri</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">uri</span>
+    <span class="ruby-comment cmt"># gmosx: INVESTIGATE ruby's URI seems to differently handle</span>
+    <span class="ruby-comment cmt"># abs and rel uris.</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">md</span> = <span class="ruby-constant">URI</span><span class="ruby-operator">::</span><span class="ruby-constant">REGEXP</span><span class="ruby-operator">::</span><span class="ruby-constant">ABS_URI</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">uri</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">md</span>[<span class="ruby-value">8</span>]
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">md</span> = <span class="ruby-constant">URI</span><span class="ruby-operator">::</span><span class="ruby-constant">REGEXP</span><span class="ruby-operator">::</span><span class="ruby-constant">REL_URI</span>.<span class="ruby-identifier">match</span>(<span class="ruby-identifier">uri</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">md</span>[<span class="ruby-value">7</span>]
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000856"></a><b>hash_to_query</b>(parameters)
+  </div>
+  <div class="description">
+  <p>
+Given a hash with parameter/value pairs construct a standard query string.
+</p>
+<pre>
+  URI.hash_to_query(:a =&gt; 1, :b =&gt; 2)
+  =&gt; &quot;a=1&amp;b=2&quot;
+</pre>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="URI.html#M000857">hash_to_query_string</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000856_source')" id="l_M000856_source">show source</a> ]</p>
+  <div id="M000856_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 94</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">hash_to_query</span>(<span class="ruby-identifier">parameters</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-value str">''</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">parameters</span>
+    <span class="ruby-identifier">pairs</span> = []
+    <span class="ruby-identifier">parameters</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">param</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">pairs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">&quot;#{param}=#{cgi_escape(value.to_s)}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-comment cmt">#return pairs.join('&amp;')</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">pairs</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;;&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000857"></a><b>hash_to_query_string</b>(parameters)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="URI.html#M000856">hash_to_query</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000855"></a><b>query_string_to_hash</b>(query_string)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="URI.html#M000854">query_to_hash</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000854"></a><b>query_to_hash</b>(query_string)
+  </div>
+  <div class="description">
+  <p>
+Extend the basic query string parser provided by the cgi module. converts
+single valued params (the most common case) to objects instead of arrays
+</p>
+<p>
+Input: the query string
+</p>
+<p>
+Output: hash of parameters, contains arrays for multivalued parameters
+(multiselect, checkboxes , etc) If no query string is provided (nil or
+&quot;&quot;) returns an empty hash.
+</p>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="URI.html#M000855">query_string_to_hash</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000854_source')" id="l_M000854_source">show source</a> ]</p>
+  <div id="M000854_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 70</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">query_to_hash</span>(<span class="ruby-identifier">query_string</span>)
+    <span class="ruby-keyword kw">return</span> {} <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">query_string</span>
+
+    <span class="ruby-identifier">query_parameters</span> = <span class="ruby-identifier">cgi_parse</span>(<span class="ruby-identifier">query_string</span>)
+
+    <span class="ruby-identifier">query_parameters</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">|</span>
+      <span class="ruby-comment cmt"># replace the array with an object</span>
+      <span class="ruby-identifier">query_parameters</span>[<span class="ruby-identifier">key</span>] = <span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-value">1</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">val</span>.<span class="ruby-identifier">length</span>
+    }
+
+    <span class="ruby-comment cmt"># set default value to nil! cgi sets this to []</span>
+    <span class="ruby-identifier">query_parameters</span>.<span class="ruby-identifier">default</span> = <span class="ruby-keyword kw">nil</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">query_parameters</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000863"></a><b>update_query_string</b>(uri, parameters)
+  </div>
+  <div class="description">
+  <p>
+Get a uri and a hash of parameters. Inject the hash values as parameters in
+the query sting path. Returns the full uri.
+</p>
+<p>
+Input: the uri to filter (String) hash of parameters to update
+</p>
+<p>
+Output: the full updated query string
+</p>
+<p>
+TODO: optimize
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000863_source')" id="l_M000863_source">show source</a> ]</p>
+  <div id="M000863_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 188</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_query_string</span>(<span class="ruby-identifier">uri</span>, <span class="ruby-identifier">parameters</span>)
+    <span class="ruby-identifier">query_string</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">get_query_string</span>(<span class="ruby-identifier">uri</span>)
+    <span class="ruby-identifier">rest</span> = <span class="ruby-identifier">uri</span>.<span class="ruby-identifier">dup</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/\?#{query_string}/</span>, <span class="ruby-value str">&quot;&quot;</span>)
+
+    <span class="ruby-identifier">hash</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">query_string_to_hash</span>(<span class="ruby-identifier">query_string</span>)
+    <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">parameters</span>)
+    <span class="ruby-identifier">query_string</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">hash_to_query_string</span>(<span class="ruby-identifier">hash</span>)
+
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">query_string</span>.<span class="ruby-identifier">blank?</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-node">&quot;#{rest}?#{query_string}&quot;</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">rest</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000864"></a><b>update_request_uri</b>(request, parameters)
+  </div>
+  <div class="description">
+  <p>
+TODO: find a better name. Gets the request uri, injects extra parameters in
+the query string and returns a new uri. The request object is not modified.
+There is always a qs string so an extra test is skipped.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000864_source')" id="l_M000864_source">show source</a> ]</p>
+  <div id="M000864_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/uri.rb, line 208</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_request_uri</span>(<span class="ruby-identifier">request</span>, <span class="ruby-identifier">parameters</span>)
+    <span class="ruby-identifier">hash</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">parameters</span>.<span class="ruby-identifier">dup</span>()
+    <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">update</span>(<span class="ruby-identifier">parameters</span>)
+
+    <span class="ruby-comment cmt"># use this in hash_to_querystring.</span>
+    <span class="ruby-identifier">query_string</span> = <span class="ruby-identifier">hash</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+      <span class="ruby-node">&quot;#{k}=#{v}&quot;</span>
+    }.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;;&quot;</span>)
+
+    <span class="ruby-comment cmt">#return &quot;#{request.translated_uri}?#{query_string}&quot;</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-node">&quot;#{request.path}?#{query_string}&quot;</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

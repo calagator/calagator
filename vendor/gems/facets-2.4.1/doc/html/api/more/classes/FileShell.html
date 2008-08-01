@@ -1,0 +1,774 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: FileShell</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />FileShell</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/fileshell_rb.html">lib/facets/fileshell.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="File.html">File</a> Shell</h1>
+<p>
+Comprehensive file system access tool. <a
+href="FileShell.html">FileShell</a> acts as a &quot;virtual&quot; shell
+prompt.
+</p>
+<pre>
+  c = VirtualShell.new
+  c.ls  #=&gt; ['ipso.txt']
+</pre>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000169">[]</a></li>
+  <li><a href="#M000173">cd</a></li>
+  <li><a href="#M000174">chdir</a></li>
+  <li><a href="#M000189">chmod</a></li>
+  <li><a href="#M000190">chmod_R</a></li>
+  <li><a href="#M000191">chown</a></li>
+  <li><a href="#M000192">chown_R</a></li>
+  <li><a href="#M000181">cp</a></li>
+  <li><a href="#M000182">cp_r</a></li>
+  <li><a href="#M000166">dryrun?</a></li>
+  <li><a href="#M000194">fu</a></li>
+  <li><a href="#M000188">install</a></li>
+  <li><a href="#M000178">ln</a></li>
+  <li><a href="#M000179">ln_s</a></li>
+  <li><a href="#M000180">ln_sf</a></li>
+  <li><a href="#M000172">ls</a></li>
+  <li><a href="#M000175">mkdir</a></li>
+  <li><a href="#M000176">mkdir_p</a></li>
+  <li><a href="#M000184">move</a></li>
+  <li><a href="#M000183">mv</a></li>
+  <li><a href="#M000165">new</a></li>
+  <li><a href="#M000171">pwd</a></li>
+  <li><a href="#M000167">quiet?</a></li>
+  <li><a href="#M000185">rm</a></li>
+  <li><a href="#M000186">rm_r</a></li>
+  <li><a href="#M000187">rm_rf</a></li>
+  <li><a href="#M000177">rmdir</a></li>
+  <li><a href="#M000170">root?</a></li>
+  <li><a href="#M000193">touch</a></li>
+  <li><a href="#M000168">verbose?</a></li>
+  </ul>
+
+
+
+
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>root</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000165"></a><b>new</b>(*root_and_options)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000165_source')" id="l_M000165_source">show source</a> ]</p>
+  <div id="M000165_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 31</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">root_and_options</span>)
+    <span class="ruby-ivar">@options</span> = <span class="ruby-constant">Hash</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">root_and_options</span> <span class="ruby-value">? </span><span class="ruby-identifier">root_and_options</span>.<span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> {}
+    <span class="ruby-ivar">@root</span>    = <span class="ruby-identifier">root_and_options</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">||</span> <span class="ruby-value str">&quot;/&quot;</span>
+
+    <span class="ruby-ivar">@dryrun</span> = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:dryrun</span>]
+    <span class="ruby-ivar">@quiet</span>  = <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:quiet</span>]
+    <span class="ruby-comment cmt">#@force  = options[:force]</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000169"></a><b>[]</b>(name)
+  </div>
+  <div class="description">
+  <p>
+Direct access to a directory or a file.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000169_source')" id="l_M000169_source">show source</a> ]</p>
+  <div id="M000169_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 46</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">name</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">name</span>)
+      <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>)
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">file?</span>(<span class="ruby-identifier">name</span>)
+      <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">name</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000173"></a><b>cd</b>(dir, options=nil, &amp;yld)
+  </div>
+  <div class="description">
+  <p>
+Change directory.
+</p>
+<p>
+<a href="FileShell.html#M000173">cd</a>(dir, options) <a
+href="FileShell.html#M000173">cd</a>(dir, options) {|dir| .&#8230; }
+</p>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="FileShell.html#M000174">chdir</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000173_source')" id="l_M000173_source">show source</a> ]</p>
+  <div id="M000173_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 78</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cd</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">yld</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">cd</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">yld</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000174"></a><b>chdir</b>(dir, options=nil, &amp;yld)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="FileShell.html#M000173">cd</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000189"></a><b>chmod</b>(mode, list, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000189">chmod</a>(mode, list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000189_source')" id="l_M000189_source">show source</a> ]</p>
+  <div id="M000189_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 158</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">chmod</span>(<span class="ruby-identifier">mode</span>, <span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">chmod</span>(<span class="ruby-identifier">mode</span>, <span class="ruby-identifier">list</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000190"></a><b>chmod_R</b>(mode, list, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000190">chmod_R</a>(mode, list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000190_source')" id="l_M000190_source">show source</a> ]</p>
+  <div id="M000190_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 163</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">chmod_R</span>(<span class="ruby-identifier">mode</span>, <span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">chmod_R</span>(<span class="ruby-identifier">mode</span>, <span class="ruby-identifier">list</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000191"></a><b>chown</b>(user, group, list, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000191">chown</a>(user, group, list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000191_source')" id="l_M000191_source">show source</a> ]</p>
+  <div id="M000191_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 168</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">chown</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">group</span>, <span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">chown</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">group</span>, <span class="ruby-identifier">list</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000192"></a><b>chown_R</b>(user, group, list, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000192">chown_R</a>(user, group, list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000192_source')" id="l_M000192_source">show source</a> ]</p>
+  <div id="M000192_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 173</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">group</span>, <span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">chown_R</span>(<span class="ruby-identifier">user</span>, <span class="ruby-identifier">group</span>, <span class="ruby-identifier">list</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000181"></a><b>cp</b>(src, dest, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000181">cp</a>(src, dest, options) <a
+href="FileShell.html#M000181">cp</a>(list, dir, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000181_source')" id="l_M000181_source">show source</a> ]</p>
+  <div id="M000181_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 120</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cp</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">cp</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000182"></a><b>cp_r</b>(src, dest, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000182">cp_r</a>(src, dest, options) <a
+href="FileShell.html#M000182">cp_r</a>(list, dir, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000182_source')" id="l_M000182_source">show source</a> ]</p>
+  <div id="M000182_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 126</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cp_r</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">cp_r</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000166"></a><b>dryrun?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000166_source')" id="l_M000166_source">show source</a> ]</p>
+  <div id="M000166_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 40</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dryrun?</span> ; <span class="ruby-ivar">@dryrun</span> ; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000188"></a><b>install</b>(src, dest, mode=src, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000188">install</a>(src, dest, mode =
+&lt;src&#8216;s&gt;, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000188_source')" id="l_M000188_source">show source</a> ]</p>
+  <div id="M000188_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 153</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">install</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>, <span class="ruby-identifier">mode</span>=<span class="ruby-identifier">src</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">install</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>, <span class="ruby-identifier">mode</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000178"></a><b>ln</b>(old, new, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000178">ln</a>(old, <a
+href="FileShell.html#M000165">new</a>, options) <a
+href="FileShell.html#M000178">ln</a>(list, destdir, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000178_source')" id="l_M000178_source">show source</a> ]</p>
+  <div id="M000178_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 103</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ln</span>(<span class="ruby-identifier">old</span>, <span class="ruby-identifier">new</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">ln</span>(<span class="ruby-identifier">old</span>, <span class="ruby-identifier">new</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000179"></a><b>ln_s</b>(old, new, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000179">ln_s</a>(old, <a
+href="FileShell.html#M000165">new</a>, options) <a
+href="FileShell.html#M000179">ln_s</a>(list, destdir, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000179_source')" id="l_M000179_source">show source</a> ]</p>
+  <div id="M000179_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 109</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ln_s</span>(<span class="ruby-identifier">old</span>, <span class="ruby-identifier">new</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">ln_s</span>(<span class="ruby-identifier">old</span>, <span class="ruby-identifier">new</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000180"></a><b>ln_sf</b>(src, dest, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000180">ln_sf</a>(src, dest, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000180_source')" id="l_M000180_source">show source</a> ]</p>
+  <div id="M000180_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 114</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ln_sf</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">ln_sf</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000172"></a><b>ls</b>(dir, options=nil)
+  </div>
+  <div class="description">
+  <p>
+Directory listing
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000172_source')" id="l_M000172_source">show source</a> ]</p>
+  <div id="M000172_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 68</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ls</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">entries</span>.<span class="ruby-identifier">collect</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+      <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">f</span>) <span class="ruby-operator">?</span> <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">f</span>) <span class="ruby-operator">:</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">f</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000175"></a><b>mkdir</b>(dir, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000175">mkdir</a>(dir, options) <a
+href="FileShell.html#M000175">mkdir</a>(list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000175_source')" id="l_M000175_source">show source</a> ]</p>
+  <div id="M000175_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 85</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">mkdir</span>(<span class="ruby-identifier">dir</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000176"></a><b>mkdir_p</b>(dir, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000176">mkdir_p</a>(dir, options) <a
+href="FileShell.html#M000176">mkdir_p</a>(list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000176_source')" id="l_M000176_source">show source</a> ]</p>
+  <div id="M000176_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 91</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-identifier">dir</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000184"></a><b>move</b>(src, dest, options=nil)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="FileShell.html#M000183">mv</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000183"></a><b>mv</b>(src, dest, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000183">mv</a>(src, dest, options) <a
+href="FileShell.html#M000183">mv</a>(list, dir, options)
+</p>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="FileShell.html#M000184">move</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000183_source')" id="l_M000183_source">show source</a> ]</p>
+  <div id="M000183_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 132</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mv</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">mv</span>(<span class="ruby-identifier">src</span>, <span class="ruby-identifier">dest</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000171"></a><b>pwd</b>()
+  </div>
+  <div class="description">
+  <p>
+Present working directory.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000171_source')" id="l_M000171_source">show source</a> ]</p>
+  <div id="M000171_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 65</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pwd</span>; <span class="ruby-keyword kw">super</span>; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000167"></a><b>quiet?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000167_source')" id="l_M000167_source">show source</a> ]</p>
+  <div id="M000167_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 41</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">quiet?</span>  ; <span class="ruby-ivar">@quiet</span>  ; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000185"></a><b>rm</b>(list, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000185">rm</a>(list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000185_source')" id="l_M000185_source">show source</a> ]</p>
+  <div id="M000185_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 138</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rm</span>(<span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">rm</span>(<span class="ruby-identifier">list</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000186"></a><b>rm_r</b>(list, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000186">rm_r</a>(list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000186_source')" id="l_M000186_source">show source</a> ]</p>
+  <div id="M000186_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 143</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rm_r</span>(<span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">rm_r</span>(<span class="ruby-identifier">list</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000187"></a><b>rm_rf</b>(list, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000187">rm_rf</a>(list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000187_source')" id="l_M000187_source">show source</a> ]</p>
+  <div id="M000187_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 148</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rm_rf</span>(<span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">rm_rf</span>(<span class="ruby-identifier">list</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000177"></a><b>rmdir</b>(dir, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000177">rmdir</a>(dir, options) <a
+href="FileShell.html#M000177">rmdir</a>(list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000177_source')" id="l_M000177_source">show source</a> ]</p>
+  <div id="M000177_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 97</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rmdir</span>(<span class="ruby-identifier">dir</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">rmdir</span>(<span class="ruby-identifier">dir</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000170"></a><b>root?</b>(dir=nil)
+  </div>
+  <div class="description">
+  <p>
+Is a directory <a href="FileShell.html#M000170">root?</a>
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000170_source')" id="l_M000170_source">show source</a> ]</p>
+  <div id="M000170_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 57</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">root?</span>(<span class="ruby-identifier">dir</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">pth</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">expand_path</span>(<span class="ruby-identifier">dir</span><span class="ruby-operator">||</span><span class="ruby-identifier">work</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pth</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'/'</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">pth</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^(\w:)?\/$/</span>
+    <span class="ruby-keyword kw">false</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000193"></a><b>touch</b>(list, options=nil)
+  </div>
+  <div class="description">
+  <p>
+<a href="FileShell.html#M000193">touch</a>(list, options)
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000193_source')" id="l_M000193_source">show source</a> ]</p>
+  <div id="M000193_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 178</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">touch</span>(<span class="ruby-identifier">list</span>, <span class="ruby-identifier">options</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">options</span>).<span class="ruby-identifier">touch</span>(<span class="ruby-identifier">list</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000168"></a><b>verbose?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000168_source')" id="l_M000168_source">show source</a> ]</p>
+  <div id="M000168_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 42</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">verbose?</span>  ; <span class="ruby-operator">!</span><span class="ruby-ivar">@quiet</span>  ; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Private Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000194"></a><b>fu</b>(opts)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000194_source')" id="l_M000194_source">show source</a> ]</p>
+  <div id="M000194_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/fileshell.rb, line 185</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fu</span>(<span class="ruby-identifier">opts</span>)
+    <span class="ruby-identifier">nowrite</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:nowrite</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:dryrun</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:noop</span>]   <span class="ruby-operator">||</span> <span class="ruby-identifier">dryrun?</span>
+    <span class="ruby-identifier">verbose</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:verbose</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:dryrun</span>] <span class="ruby-operator">||</span> <span class="ruby-operator">!</span><span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:quiet</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">verbose?</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">nowrite</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">verbose</span>
+      <span class="ruby-constant">FileUtils</span><span class="ruby-operator">::</span><span class="ruby-constant">Dryrun</span>
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">nowrite</span>
+      <span class="ruby-constant">FileUtils</span><span class="ruby-operator">::</span><span class="ruby-constant">NoWrite</span>
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">verbose</span>
+      <span class="ruby-constant">FileUtils</span><span class="ruby-operator">::</span><span class="ruby-constant">Verbose</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-constant">FileUtils</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

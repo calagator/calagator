@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: GetoptLong::DSL</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />GetoptLong::DSL</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/getoptlong_rb.html">lib/facets/getoptlong.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+<a href="DSL.html">DSL</a>-mode parser.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000245">flag</a></li>
+  <li><a href="#M000244">new</a></li>
+  <li><a href="#M000248">optional</a></li>
+  <li><a href="#M000249">opts</a></li>
+  <li><a href="#M000247">reqs</a></li>
+  <li><a href="#M000246">required</a></li>
+  </ul>
+
+
+
+
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>arguments</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000244"></a><b>new</b>(&amp;block)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000244_source')" id="l_M000244_source">show source</a> ]</p>
+  <div id="M000244_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/getoptlong.rb, line 50</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+      <span class="ruby-ivar">@arguments</span> = []
+      <span class="ruby-identifier">instance_eval</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000245"></a><b>flag</b>(*opts)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000245_source')" id="l_M000245_source">show source</a> ]</p>
+  <div id="M000245_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/getoptlong.rb, line 55</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">flag</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">opts</span>)
+      <span class="ruby-ivar">@arguments</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">opts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">GetoptLong</span><span class="ruby-operator">::</span><span class="ruby-constant">NO_ARGUMENT</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000248"></a><b>optional</b>(*opts)
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="DSL.html#M000249">opts</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000248_source')" id="l_M000248_source">show source</a> ]</p>
+  <div id="M000248_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/getoptlong.rb, line 64</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">optional</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">opts</span>)
+      <span class="ruby-ivar">@arguments</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">opts</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-constant">GetoptLong</span><span class="ruby-operator">::</span><span class="ruby-constant">OPTIONAL_ARGUMENT</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000249"></a><b>opts</b>(*opts)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="DSL.html#M000248">optional</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000247"></a><b>reqs</b>(*opts)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="DSL.html#M000246">required</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000246"></a><b>required</b>(*opts)
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="DSL.html#M000247">reqs</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000246_source')" id="l_M000246_source">show source</a> ]</p>
+  <div id="M000246_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/getoptlong.rb, line 59</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">required</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">opts</span>)
+      <span class="ruby-ivar">@arguments</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">opts</span> <span class="ruby-operator">&lt;&lt;</span>  <span class="ruby-constant">GetoptLong</span><span class="ruby-operator">::</span><span class="ruby-constant">REQUIRED_ARGUMENT</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

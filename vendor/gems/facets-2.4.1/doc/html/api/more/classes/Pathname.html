@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Pathname</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Pathname</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/pathname_rb.html">lib/facets/pathname.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000237">/</a></li>
+  <li><a href="#M000236">[]</a></li>
+  <li><a href="#M000238">null</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000237"></a><b>/</b>(path)
+  </div>
+  <div class="description">
+  <p>
+Active path separator.
+</p>
+<pre>
+  p1 = Pathname.new('/')
+  p2 = p1 / 'usr' / 'share'   #=&gt; Pathname:/usr/share
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000237_source')" id="l_M000237_source">show source</a> ]</p>
+  <div id="M000237_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/pathname.rb, line 40</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-operator">/</span>(<span class="ruby-identifier">path</span>)
+    <span class="ruby-identifier">new</span>(<span class="ruby-identifier">path</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000236"></a><b>[]</b>(path)
+  </div>
+  <div class="description">
+  <p>
+Alternate to Pathname#new.
+</p>
+<pre>
+  Pathname['/usr/share']
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000236_source')" id="l_M000236_source">show source</a> ]</p>
+  <div id="M000236_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/pathname.rb, line 31</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-operator">[]</span>(<span class="ruby-identifier">path</span>)
+    <span class="ruby-identifier">new</span>(<span class="ruby-identifier">path</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000238"></a><b>null</b>()
+  </div>
+  <div class="description">
+  <p>
+Platform dependent <a href="Pathname.html#M000238">null</a> device.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000238_source')" id="l_M000238_source">show source</a> ]</p>
+  <div id="M000238_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/pathname.rb, line 51</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">null</span>
+    <span class="ruby-keyword kw">case</span> <span class="ruby-constant">RUBY_PLATFORM</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/mswin/i</span>
+      <span class="ruby-value str">'NUL'</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/amiga/i</span>
+      <span class="ruby-value str">'NIL:'</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/openvms/i</span>
+      <span class="ruby-value str">'NL:'</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-value str">'/dev/null'</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

@@ -1,0 +1,2297 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: String</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />String</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/ruby_rb.html">lib/facets/ruby.rb</a>
+<a href="../files/lib/facets/metaid_rb.html">lib/facets/metaid.rb</a>
+<a href="../files/lib/facets/blank_rb.html">lib/facets/blank.rb</a>
+<a href="../files/lib/facets/boolean_rb.html">lib/facets/boolean.rb</a>
+<a href="../files/lib/facets/comparable/bound_rb.html">lib/facets/comparable/bound.rb</a>
+<a href="../files/lib/facets/comparable/cmp_rb.html">lib/facets/comparable/cmp.rb</a>
+<a href="../files/lib/facets/string/shatter_rb.html">lib/facets/string/shatter.rb</a>
+<a href="../files/lib/facets/string/to_re_rb.html">lib/facets/string/to_re.rb</a>
+<a href="../files/lib/facets/string/fold_rb.html">lib/facets/string/fold.rb</a>
+<a href="../files/lib/facets/string/camelcase_rb.html">lib/facets/string/camelcase.rb</a>
+<a href="../files/lib/facets/string/align_rb.html">lib/facets/string/align.rb</a>
+<a href="../files/lib/facets/string/tab_rb.html">lib/facets/string/tab.rb</a>
+<a href="../files/lib/facets/string/range_rb.html">lib/facets/string/range.rb</a>
+<a href="../files/lib/facets/string/snakecase_rb.html">lib/facets/string/snakecase.rb</a>
+<a href="../files/lib/facets/string/divide_rb.html">lib/facets/string/divide.rb</a>
+<a href="../files/lib/facets/string/mscan_rb.html">lib/facets/string/mscan.rb</a>
+<a href="../files/lib/facets/string/capitalized_rb.html">lib/facets/string/capitalized.rb</a>
+<a href="../files/lib/facets/string/natcmp_rb.html">lib/facets/string/natcmp.rb</a>
+<a href="../files/lib/facets/string/subtract_rb.html">lib/facets/string/subtract.rb</a>
+<a href="../files/lib/facets/string/stylize_rb.html">lib/facets/string/stylize.rb</a>
+<a href="../files/lib/facets/string/titlecase_rb.html">lib/facets/string/titlecase.rb</a>
+<a href="../files/lib/facets/string/words_rb.html">lib/facets/string/words.rb</a>
+<a href="../files/lib/facets/string/interpolate_rb.html">lib/facets/string/interpolate.rb</a>
+<a href="../files/lib/facets/string/cleave_rb.html">lib/facets/string/cleave.rb</a>
+<a href="../files/lib/facets/string/to_time_rb.html">lib/facets/string/to_time.rb</a>
+<a href="../files/lib/facets/string/line_wrap_rb.html">lib/facets/string/line_wrap.rb</a>
+<a href="../files/lib/facets/string/bracket_rb.html">lib/facets/string/bracket.rb</a>
+<a href="../files/lib/facets/string/chomp_rb.html">lib/facets/string/chomp.rb</a>
+<a href="../files/lib/facets/string/splice_rb.html">lib/facets/string/splice.rb</a>
+<a href="../files/lib/facets/string/rewrite_rb.html">lib/facets/string/rewrite.rb</a>
+<a href="../files/lib/facets/string/nchar_rb.html">lib/facets/string/nchar.rb</a>
+<a href="../files/lib/facets/string/xor_rb.html">lib/facets/string/xor.rb</a>
+<a href="../files/lib/facets/string/underscore_rb.html">lib/facets/string/underscore.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+        <a href="Object.html">
+Object
+         </a>
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000262">-</a></li>
+  <li><a href="#M000285">^</a></li>
+  <li><a href="#M000240">align</a></li>
+  <li><a href="#M000243">align_center</a></li>
+  <li><a href="#M000242">align_left</a></li>
+  <li><a href="#M000241">align_right</a></li>
+  <li><a href="#M000231">blank?</a></li>
+  <li><a href="#M000274">bracket</a></li>
+  <li><a href="#M000275">bracket!</a></li>
+  <li><a href="#M000224">bytes</a></li>
+  <li><a href="#M000239">camelcase</a></li>
+  <li><a href="#M000258">capitalized?</a></li>
+  <li><a href="#M000225">chars</a></li>
+  <li><a href="#M000270">cleave</a></li>
+  <li><a href="#M000234">cmp</a></li>
+  <li><a href="#M000279">dequote</a></li>
+  <li><a href="#M000256">divide</a></li>
+  <li><a href="#M000259">downcase?</a></li>
+  <li><a href="#M000227">each_char</a></li>
+  <li><a href="#M000229">end_with?</a></li>
+  <li><a href="#M000246">expand_tabs</a></li>
+  <li><a href="#M000238">fold</a></li>
+  <li><a href="#M000266">humanize</a></li>
+  <li><a href="#M000248">indent</a></li>
+  <li><a href="#M000254">index_all</a></li>
+  <li><a href="#M000269">interpolate</a></li>
+  <li><a href="#M000280">lchomp</a></li>
+  <li><a href="#M000281">lchomp!</a></li>
+  <li><a href="#M000273">line_wrap</a></li>
+  <li><a href="#M000226">lines</a></li>
+  <li><a href="#M000250">margin</a></li>
+  <li><a href="#M000265">methodize</a></li>
+  <li><a href="#M000263">modulize</a></li>
+  <li><a href="#M000257">mscan</a></li>
+  <li><a href="#M000261">natcmp</a></li>
+  <li><a href="#M000284">nchar</a></li>
+  <li><a href="#M000249">outdent</a></li>
+  <li><a href="#M000264">pathize</a></li>
+  <li><a href="#M000278">quote</a></li>
+  <li><a href="#M000251">range</a></li>
+  <li><a href="#M000252">range_all</a></li>
+  <li><a href="#M000253">range_of_line</a></li>
+  <li><a href="#M000283">rewrite</a></li>
+  <li><a href="#M000235">shatter</a></li>
+  <li><a href="#M000255">snakecase</a></li>
+  <li><a href="#M000287">space</a></li>
+  <li><a href="#M000282">splice</a></li>
+  <li><a href="#M000228">start_with?</a></li>
+  <li><a href="#M000244">tab</a></li>
+  <li><a href="#M000245">taballto</a></li>
+  <li><a href="#M000247">tabto</a></li>
+  <li><a href="#M000268">titlecase</a></li>
+  <li><a href="#M000267">titleize</a></li>
+  <li><a href="#M000232">to_b</a></li>
+  <li><a href="#M000272">to_date</a></li>
+  <li><a href="#M000236">to_re</a></li>
+  <li><a href="#M000237">to_rx</a></li>
+  <li><a href="#M000233">to_s</a></li>
+  <li><a href="#M000271">to_time</a></li>
+  <li><a href="#M000276">unbracket</a></li>
+  <li><a href="#M000277">unbracket!</a></li>
+  <li><a href="#M000286">underscore</a></li>
+  <li><a href="#M000260">upcase?</a></li>
+  <li><a href="#M000230">variablize</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li><a href="String/Words.html">Words</a></li>
+</ul>
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="String/Words.html" class="link">String::Words</a><br />
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">BRA2KET</td>
+    <td>=</td>
+    <td class="attr-value">{ '['=&gt;']', '('=&gt;')', '{'=&gt;'}', '&lt;'=&gt;'&gt;' }</td>
+  </tr>
+  </table>
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000269"></a><b>interpolate</b>(&amp;str)
+  </div>
+  <div class="description">
+  <p>
+Interpolate. Provides a means of extenally using Ruby string interpolation
+mechinism.
+</p>
+<pre>
+  try = &quot;hello&quot;
+  str = &quot;\#{try}!!!&quot;
+  String.interpolate{ str }    #=&gt; &quot;hello!!!&quot;
+
+  NOTE: The block neccessary in order to get
+        then binding of the caller.
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000269_source')" id="l_M000269_source">show source</a> ]</p>
+  <div id="M000269_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/interpolate.rb, line 15</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">interpolate</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">str</span>)
+    <span class="ruby-identifier">eval</span> <span class="ruby-node">&quot;%{#{str.call}}&quot;</span>, <span class="ruby-identifier">str</span>.<span class="ruby-identifier">binding</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000262"></a><b>-</b>(pattern)
+  </div>
+  <div class="description">
+  <p>
+Removes occurances of a string or regexp.
+</p>
+<pre>
+  &quot;HELLO HELLO&quot; - &quot;LL&quot;    #=&gt; &quot;HEO HEO&quot;
+
+  CREDIT: Benjamin David Oakes
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000262_source')" id="l_M000262_source">show source</a> ]</p>
+  <div id="M000262_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/subtract.rb, line 9</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">-</span>(<span class="ruby-identifier">pattern</span>)
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-identifier">pattern</span>, <span class="ruby-value str">''</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000285"></a><b>^</b>(aString)
+  </div>
+  <div class="description">
+  <p>
+XOR two string.
+</p>
+<p>
+TODO: This is used by crypt.rb, it needs to be documented.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000285_source')" id="l_M000285_source">show source</a> ]</p>
+  <div id="M000285_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/xor.rb, line 7</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">^</span>(<span class="ruby-identifier">aString</span>)
+    <span class="ruby-identifier">a</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-value str">'C'</span><span class="ruby-operator">*</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">length</span>))
+    <span class="ruby-identifier">b</span> = <span class="ruby-identifier">aString</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-value str">'C'</span><span class="ruby-operator">*</span>(<span class="ruby-identifier">aString</span>.<span class="ruby-identifier">length</span>))
+    <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">b</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">a</span>.<span class="ruby-identifier">length</span>)
+      (<span class="ruby-identifier">a</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">b</span>.<span class="ruby-identifier">length</span>).<span class="ruby-identifier">times</span> { <span class="ruby-identifier">b</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value">0</span> }
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">xor</span> = <span class="ruby-value str">&quot;&quot;</span>
+    <span class="ruby-value">0</span>.<span class="ruby-identifier">upto</span>(<span class="ruby-identifier">a</span>.<span class="ruby-identifier">length</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">pos</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">x</span> = <span class="ruby-identifier">a</span>[<span class="ruby-identifier">pos</span>] <span class="ruby-operator">^</span> <span class="ruby-identifier">b</span>[<span class="ruby-identifier">pos</span>]
+      <span class="ruby-identifier">xor</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">chr</span>()
+    }
+    <span class="ruby-keyword kw">return</span>(<span class="ruby-identifier">xor</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000240"></a><b>align</b>(direction, n, sep=&quot;\n&quot;, c=' ')
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000240_source')" id="l_M000240_source">show source</a> ]</p>
+  <div id="M000240_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/align.rb, line 3</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">align</span>(<span class="ruby-identifier">direction</span>, <span class="ruby-identifier">n</span>, <span class="ruby-identifier">sep</span>=<span class="ruby-value str">&quot;\n&quot;</span>, <span class="ruby-identifier">c</span>=<span class="ruby-value str">' '</span>)
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">direction</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:right</span>
+      <span class="ruby-identifier">align_right</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">sep</span>=<span class="ruby-value str">&quot;\n&quot;</span>, <span class="ruby-identifier">c</span>=<span class="ruby-value str">' '</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:left</span>
+      <span class="ruby-identifier">align_left</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">sep</span>=<span class="ruby-value str">&quot;\n&quot;</span>, <span class="ruby-identifier">c</span>=<span class="ruby-value str">' '</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:center</span>
+      <span class="ruby-identifier">align_center</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">sep</span>=<span class="ruby-value str">&quot;\n&quot;</span>, <span class="ruby-identifier">c</span>=<span class="ruby-value str">' '</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000243"></a><b>align_center</b>(n, sep=&quot;\n&quot;, c=' ')
+  </div>
+  <div class="description">
+  <p>
+Centers each line of a string.
+</p>
+<p>
+The defualt alignment seperation is a new line (&quot;/n&quot;) This can be
+changed as can be the padding string which defaults to a single <a
+href="String.html#M000287">space</a> (&#8217; &#8217;).
+</p>
+<pre>
+  s = &lt;&lt;-EOS
+    This is a test
+    and
+    so on
+  EOS
+
+  puts s.align_center(14)
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+  This is a test
+       and
+      so on
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000243_source')" id="l_M000243_source">show source</a> ]</p>
+  <div id="M000243_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/align.rb, line 97</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">align_center</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">sep</span>=<span class="ruby-value str">&quot;\n&quot;</span>, <span class="ruby-identifier">c</span>=<span class="ruby-value str">' '</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">center</span>(<span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_i</span>,<span class="ruby-identifier">c</span>.<span class="ruby-identifier">to_s</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sep</span><span class="ruby-operator">==</span><span class="ruby-keyword kw">nil</span>
+    <span class="ruby-identifier">q</span> = <span class="ruby-identifier">split</span>(<span class="ruby-identifier">sep</span>.<span class="ruby-identifier">to_s</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">line</span>.<span class="ruby-identifier">center</span>(<span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_i</span>,<span class="ruby-identifier">c</span>.<span class="ruby-identifier">to_s</span>)
+    }
+    <span class="ruby-identifier">q</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">sep</span>.<span class="ruby-identifier">to_s</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000242"></a><b>align_left</b>(n, sep=&quot;\n&quot;, c=' ')
+  </div>
+  <div class="description">
+  <p>
+Align a string to the left.
+</p>
+<p>
+The defualt alignment seperation is a new line (&quot;/n&quot;) This can be
+changes as can be the padding string which defaults to a single <a
+href="String.html#M000287">space</a> (&#8217; &#8217;).
+</p>
+<pre>
+  s = &lt;&lt;-EOS
+  This is a test
+    and
+    so on
+  EOS
+
+  puts s.align_left(2)
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+    This is a test
+    and
+    so on
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000242_source')" id="l_M000242_source">show source</a> ]</p>
+  <div id="M000242_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/align.rb, line 67</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">align_left</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">sep</span>=<span class="ruby-value str">&quot;\n&quot;</span>, <span class="ruby-identifier">c</span>=<span class="ruby-value str">' '</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">ljust</span>(<span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_i</span>,<span class="ruby-identifier">c</span>.<span class="ruby-identifier">to_s</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sep</span><span class="ruby-operator">==</span><span class="ruby-keyword kw">nil</span>
+    <span class="ruby-identifier">q</span> = <span class="ruby-identifier">split</span>(<span class="ruby-identifier">sep</span>.<span class="ruby-identifier">to_s</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">line</span>.<span class="ruby-identifier">ljust</span>(<span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_i</span>,<span class="ruby-identifier">c</span>.<span class="ruby-identifier">to_s</span>)
+    }
+    <span class="ruby-identifier">q</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">sep</span>.<span class="ruby-identifier">to_s</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000241"></a><b>align_right</b>(n, sep=&quot;\n&quot;, c=' ')
+  </div>
+  <div class="description">
+  <p>
+Align a string to the right. The defualt alignment seperation is a new line
+(&quot;/n&quot;) This can be changes as can be the padding string which
+defaults to a single <a href="String.html#M000287">space</a> (&#8217;
+&#8217;).
+</p>
+<pre>
+  s = &lt;&lt;-EOS
+  This is a test
+    and
+    so on
+  EOS
+
+  puts s.align_right(2)
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+    This is a test
+               and
+             so on
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000241_source')" id="l_M000241_source">show source</a> ]</p>
+  <div id="M000241_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/align.rb, line 37</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">align_right</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">sep</span>=<span class="ruby-value str">&quot;\n&quot;</span>, <span class="ruby-identifier">c</span>=<span class="ruby-value str">' '</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">rjust</span>(<span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_i</span>,<span class="ruby-identifier">c</span>.<span class="ruby-identifier">to_s</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sep</span><span class="ruby-operator">==</span><span class="ruby-keyword kw">nil</span>
+    <span class="ruby-identifier">q</span> = <span class="ruby-identifier">split</span>(<span class="ruby-identifier">sep</span>.<span class="ruby-identifier">to_s</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">line</span>.<span class="ruby-identifier">rjust</span>(<span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_i</span>,<span class="ruby-identifier">c</span>.<span class="ruby-identifier">to_s</span>)
+    }
+    <span class="ruby-identifier">q</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">sep</span>.<span class="ruby-identifier">to_s</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000231"></a><b>blank?</b>()
+  </div>
+  <div class="description">
+  <p>
+Is this string just whitespace?
+</p>
+<pre>
+  &quot;abc&quot;.blank?  #=&gt; false
+  &quot;   &quot;.blank?  #=&gt; true
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000231_source')" id="l_M000231_source">show source</a> ]</p>
+  <div id="M000231_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/blank.rb, line 50</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">blank?</span>
+    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">!~</span> <span class="ruby-regexp re">/\S/</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000274"></a><b>bracket</b>(bra, ket=nil)
+  </div>
+  <div class="description">
+  <p>
+Return a new string embraced by given brakets. If only one <a
+href="String.html#M000274">bracket</a> char is given it will be placed on
+either side.
+</p>
+<pre>
+  &quot;wrap me&quot;.bracket('{')        #=&gt; &quot;{wrap me}&quot;
+  &quot;wrap me&quot;.bracket('--','!')   #=&gt; &quot;--wrap me!&quot;
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000274_source')" id="l_M000274_source">show source</a> ]</p>
+  <div id="M000274_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/bracket.rb, line 14</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bracket</span>(<span class="ruby-identifier">bra</span>, <span class="ruby-identifier">ket</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-comment cmt">#ket = String.bra2ket[$&amp;] if ! ket &amp;&amp; /^[\[({&lt;]$/ =~ bra</span>
+    <span class="ruby-identifier">ket</span> = <span class="ruby-constant">BRA2KET</span>[<span class="ruby-identifier">bra</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">ket</span>
+    <span class="ruby-node">&quot;#{bra}#{self}#{ket ? ket : bra}&quot;</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000275"></a><b>bracket!</b>(bra, ket=nil)
+  </div>
+  <div class="description">
+  <p>
+Inplace version of braket.
+</p>
+<pre>
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000275_source')" id="l_M000275_source">show source</a> ]</p>
+  <div id="M000275_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/bracket.rb, line 24</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bracket!</span>(<span class="ruby-identifier">bra</span>, <span class="ruby-identifier">ket</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">replace</span>(<span class="ruby-identifier">bracket</span>(<span class="ruby-identifier">bra</span>, <span class="ruby-identifier">ket</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000224"></a><b>bytes</b>()
+  </div>
+  <div class="description">
+  <p>
+Upacks string into <a href="String.html#M000224">bytes</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000224_source')" id="l_M000224_source">show source</a> ]</p>
+  <div id="M000224_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 336</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">bytes</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">unpack</span>(<span class="ruby-value str">'C*'</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000239"></a><b>camelcase</b>(upcase_first_letter=true)
+  </div>
+  <div class="description">
+  <p>
+Converts a string to <a href="String.html#M000239">camelcase</a>.
+</p>
+<p>
+By default <a href="String.html#M000239">camelcase</a> convert to
+UpperCamelCase, If an argument is set to <tt>false</tt>, then <a
+href="String.html#M000239">camelcase</a> will produce lowerCamelCase.
+</p>
+<p>
+<tt><a href="String.html#M000239">camelcase</a></tt> also converts
+&#8217;/&#8217; to &#8217;::&#8217; which is useful for converting paths to
+namespaces.
+</p>
+<p>
+Examples
+</p>
+<pre>
+  &quot;camel_case&quot;.camelcase                    #=&gt; &quot;CamelCase&quot;
+  &quot;camel/case&quot;.camelcase                    #=&gt; &quot;Camel::Case&quot;
+  &quot;camel_case&quot;.camelcase(false)             #=&gt; &quot;camelCase&quot;
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000239_source')" id="l_M000239_source">show source</a> ]</p>
+  <div id="M000239_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/camelcase.rb, line 16</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">camelcase</span>(<span class="ruby-identifier">upcase_first_letter</span>=<span class="ruby-keyword kw">true</span>)
+    <span class="ruby-identifier">up</span> = <span class="ruby-identifier">upcase_first_letter</span>
+    <span class="ruby-identifier">str</span> = <span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\/(.?)/</span>){ <span class="ruby-node">&quot;::#{$1.upcase}&quot;</span> }  <span class="ruby-comment cmt"># NOT SO SURE ABOUT THIS -T</span>
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/(?:_+|-+)([a-z])/</span>){ <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">upcase</span> }
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/(\A|\s)([a-z])/</span>){ <span class="ruby-identifier">$1</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">upcase</span> } <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">up</span>
+    <span class="ruby-identifier">str</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000258"></a><b>capitalized?</b>()
+  </div>
+  <div class="description">
+  <p>
+Return true if the string is capitalized, otherwise false.
+</p>
+<pre>
+  &quot;THIS&quot;.capitalized?  #=&gt; true
+  &quot;This&quot;.capitalized?  #=&gt; true
+  &quot;this&quot;.capitalized?  #=&gt; false
+
+ CREDIT: Phil Tomson
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000258_source')" id="l_M000258_source">show source</a> ]</p>
+  <div id="M000258_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/capitalized.rb, line 11</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">capitalized?</span>
+    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^[A-Z]/</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000225"></a><b>chars</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns an array of characters.
+</p>
+<pre>
+  &quot;abc&quot;.chars  #=&gt; [&quot;a&quot;,&quot;b&quot;,&quot;c&quot;]
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000225_source')" id="l_M000225_source">show source</a> ]</p>
+  <div id="M000225_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 344</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">chars</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">//</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000270"></a><b>cleave</b>(threshold=nil, len=nil)
+  </div>
+  <div class="description">
+  <p>
+Cleave a string. Break a string in two parts at the nearest whitespace.
+</p>
+<pre>
+ CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000270_source')" id="l_M000270_source">show source</a> ]</p>
+  <div id="M000270_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/cleave.rb, line 8</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cleave</span>(<span class="ruby-identifier">threshold</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">len</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">l</span> = (<span class="ruby-identifier">len</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">/</span> <span class="ruby-value">2</span>)
+    <span class="ruby-identifier">t</span> = <span class="ruby-identifier">threshold</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">size</span>
+
+    <span class="ruby-identifier">h1</span> = <span class="ruby-keyword kw">self</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">l</span>]
+    <span class="ruby-identifier">h2</span> = <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">l</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+
+    <span class="ruby-identifier">i1</span> = <span class="ruby-identifier">h1</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-regexp re">/\s/</span>) <span class="ruby-operator">||</span> <span class="ruby-value">0</span>
+    <span class="ruby-identifier">d1</span> = (<span class="ruby-identifier">i1</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">l</span>).<span class="ruby-identifier">abs</span>
+
+    <span class="ruby-identifier">d2</span> = <span class="ruby-identifier">h2</span>.<span class="ruby-identifier">index</span>(<span class="ruby-regexp re">/\s/</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">l</span>
+    <span class="ruby-identifier">i2</span> = <span class="ruby-identifier">d2</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">l</span>
+
+    <span class="ruby-identifier">d1</span> = (<span class="ruby-identifier">i1</span><span class="ruby-operator">-</span><span class="ruby-identifier">l</span>).<span class="ruby-identifier">abs</span>
+    <span class="ruby-identifier">d2</span> = (<span class="ruby-identifier">i2</span><span class="ruby-operator">-</span><span class="ruby-identifier">l</span>).<span class="ruby-identifier">abs</span>
+
+    <span class="ruby-keyword kw">if</span> [<span class="ruby-identifier">d1</span>, <span class="ruby-identifier">d2</span>].<span class="ruby-identifier">min</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">t</span>
+      <span class="ruby-identifier">i</span> = <span class="ruby-identifier">t</span>
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">d1</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">d2</span>
+      <span class="ruby-identifier">i</span> = <span class="ruby-identifier">i1</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">i</span> = <span class="ruby-identifier">i2</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-comment cmt">#dup.insert(l, &quot;\n&quot;).gsub(/^\s+|\s+$/, '')</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">i</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">strip</span>, <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">i</span><span class="ruby-operator">+</span><span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">strip</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000234"></a><b>cmp</b>(other)
+  </div>
+  <div class="description">
+  <p>
+Compare method that takes length into account. Unlike #&lt;=&gt;, this is
+compatible with succ.
+</p>
+<pre>
+  &quot;abc&quot;.cmp(&quot;abc&quot;)   #=&gt;  0
+  &quot;abcd&quot;.cmp(&quot;abc&quot;)  #=&gt;  1
+  &quot;abc&quot;.cmp(&quot;abcd&quot;)  #=&gt; -1
+  &quot;xyz&quot;.cmp(&quot;abc&quot;)   #=&gt;  1
+
+  CREDIT Peter Vanbroekhoven
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000234_source')" id="l_M000234_source">show source</a> ]</p>
+  <div id="M000234_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/comparable/cmp.rb, line 31</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">cmp</span>(<span class="ruby-identifier">other</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-value">-1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">length</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-identifier">other</span>.<span class="ruby-identifier">length</span>
+    <span class="ruby-keyword kw">self</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">other</span>  <span class="ruby-comment cmt"># alphabetic compare</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000279"></a><b>dequote</b>()
+  </div>
+  <div class="description">
+  <p>
+Remove quotes from string.
+</p>
+<pre>
+  &quot;'hi'&quot;.dequite    #=&gt; &quot;hi&quot;
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000279_source')" id="l_M000279_source">show source</a> ]</p>
+  <div id="M000279_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/bracket.rb, line 88</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dequote</span>
+    <span class="ruby-identifier">s</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-value">0</span>,<span class="ruby-value">1</span>]
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;'&quot;</span>, <span class="ruby-value str">'&quot;'</span>, <span class="ruby-value str">'`'</span>
+      <span class="ruby-identifier">s</span>[<span class="ruby-value">0</span>] = <span class="ruby-value str">''</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-value">-1</span>,<span class="ruby-value">1</span>]
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;'&quot;</span>, <span class="ruby-value str">'&quot;'</span>, <span class="ruby-value str">'`'</span>
+      <span class="ruby-identifier">s</span>[<span class="ruby-value">-1</span>] = <span class="ruby-value str">''</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000256"></a><b>divide</b>( re )
+  </div>
+  <div class="description">
+  <p>
+Breaks a string up into an array based on a regular expression. Similar to
+scan, but includes the matches.
+</p>
+<pre>
+  s = &quot;&lt;p&gt;This&lt;b&gt;is&lt;/b&gt;a test.&lt;/p&gt;&quot;
+  s.divide( /\&lt;.*?\&gt;/ )
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+  [&quot;&lt;p&gt;This&quot;, &quot;&lt;b&gt;is&quot;, &quot;&lt;/b&gt;a test.&quot;, &quot;&lt;/p&gt;&quot;]
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000256_source')" id="l_M000256_source">show source</a> ]</p>
+  <div id="M000256_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/divide.rb, line 15</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">divide</span>( <span class="ruby-identifier">re</span> )
+    <span class="ruby-identifier">re2</span> = <span class="ruby-node">/#{re}.*?(?=#{re}|\Z)/</span>
+    <span class="ruby-identifier">scan</span>(<span class="ruby-identifier">re2</span>) <span class="ruby-comment cmt">#{re}(?=#{re})/)</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000259"></a><b>downcase?</b>()
+  </div>
+  <div class="description">
+  <p>
+Return true if the string is lowercase (downcase), otherwise false.
+</p>
+<pre>
+  &quot;THIS&quot;.downcase?  #=&gt; false
+  &quot;This&quot;.downcase?  #=&gt; false
+  &quot;this&quot;.downcase?  #=&gt; true
+
+ CREDIT: Phil Tomson
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000259_source')" id="l_M000259_source">show source</a> ]</p>
+  <div id="M000259_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/capitalized.rb, line 23</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">downcase?</span>
+    <span class="ruby-identifier">downcase</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000227"></a><b>each_char</b>( {|| ...}
+  </div>
+  <div class="description">
+  <p>
+Iterates through each character. This is a little faster than using <a
+href="String.html#M000225">chars</a> b/c it does not create the
+intermediate array.
+</p>
+<pre>
+   a = ''
+  &quot;HELLO&quot;.each_character{ |c| a &lt;&lt; #{c.downcase} }
+   a  #=&gt; 'hello'
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000227_source')" id="l_M000227_source">show source</a> ]</p>
+  <div id="M000227_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 363</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_char</span>  <span class="ruby-comment cmt"># :yield:</span>
+      <span class="ruby-identifier">size</span>.<span class="ruby-identifier">times</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">yield</span>(<span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">i</span>,<span class="ruby-value">1</span>])
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000229"></a><b>end_with?</b>(suffix)
+  </div>
+  <div class="description">
+  <p>
+Does a string end with the given suffix?
+</p>
+<pre>
+  &quot;hello&quot;.ends_with?(&quot;lo&quot;)    #=&gt; true
+  &quot;hello&quot;.ends_with?(&quot;to&quot;)    #=&gt; false
+
+ CREDIT: Lucas Carlson
+ CREDIT: Blaine Cook
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000229_source')" id="l_M000229_source">show source</a> ]</p>
+  <div id="M000229_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 389</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">end_with?</span>(<span class="ruby-identifier">suffix</span>)
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rindex</span>(<span class="ruby-identifier">suffix</span>) <span class="ruby-operator">==</span> <span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">suffix</span>.<span class="ruby-identifier">size</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000246"></a><b>expand_tabs</b>(n=8)
+  </div>
+  <div class="description">
+  <p>
+Expands tabs to <tt>n</tt> spaces. Non-destructive. If <tt>n</tt> is 0,
+then tabs are simply removed. Raises an exception if <tt>n</tt> is
+negative.
+</p>
+<p>
+Thanks to GGaramuno for a more efficient algorithm. Very nice.
+</p>
+<pre>
+ CREDIT: Gavin Sinclair
+ CREDIT: Noah Gibbs
+ CREDIT: GGaramuno
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000246_source')" id="l_M000246_source">show source</a> ]</p>
+  <div id="M000246_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/tab.rb, line 26</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">expand_tabs</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">8</span>)
+    <span class="ruby-identifier">n</span> = <span class="ruby-identifier">n</span>.<span class="ruby-identifier">to_int</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>, <span class="ruby-value str">&quot;n must be &gt;= 0&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\t/</span>, <span class="ruby-value str">&quot;&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\t/</span>, <span class="ruby-value str">&quot; &quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+    <span class="ruby-identifier">str</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+    <span class="ruby-keyword kw">while</span>
+      <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/^([^\t\n]*)(\t+)/</span>) { <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">val</span> = ( <span class="ruby-identifier">n</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">-</span> (<span class="ruby-identifier">$1</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">%</span> <span class="ruby-identifier">n</span>) )
+        <span class="ruby-identifier">$1</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-value str">' '</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">val</span>)
+      }
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">str</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000238"></a><b>fold</b>(ignore_indented=false)
+  </div>
+  <div class="description">
+  <p>
+Returns a new string with all new <a href="String.html#M000226">lines</a>
+removed from adjacent <a href="String.html#M000226">lines</a> of text.
+</p>
+<pre>
+  s = &quot;This is\na test.\n\nIt clumps\nlines of text.&quot;
+  s.fold
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+  &quot;This is a test.\n\nIt clumps lines of text. &quot;
+</pre>
+<p>
+One arguable flaw with this, that might need a fix: if the given string
+ends in a newline, it is replaced with a single <a
+href="String.html#M000287">space</a>.
+</p>
+<pre>
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000238_source')" id="l_M000238_source">show source</a> ]</p>
+  <div id="M000238_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/fold.rb, line 19</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">fold</span>(<span class="ruby-identifier">ignore_indented</span>=<span class="ruby-keyword kw">false</span>)
+    <span class="ruby-identifier">ns</span> = <span class="ruby-value str">''</span>
+    <span class="ruby-identifier">i</span> = <span class="ruby-value">0</span>
+    <span class="ruby-identifier">br</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/(\n\s*\n|\Z)/</span><span class="ruby-identifier">m</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">b</span> = <span class="ruby-identifier">$~</span>.<span class="ruby-identifier">begin</span>(<span class="ruby-value">1</span>)
+      <span class="ruby-identifier">e</span> = <span class="ruby-identifier">$~</span>.<span class="ruby-identifier">end</span>(<span class="ruby-value">1</span>)
+      <span class="ruby-identifier">nl</span> = <span class="ruby-identifier">$&amp;</span>
+      <span class="ruby-identifier">tx</span> = <span class="ruby-identifier">slice</span>(<span class="ruby-identifier">i</span><span class="ruby-operator">...</span><span class="ruby-identifier">b</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ignore_indented</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">slice</span>(<span class="ruby-identifier">i</span><span class="ruby-operator">...</span><span class="ruby-identifier">b</span>) <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^[ ]+/</span>
+        <span class="ruby-identifier">ns</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tx</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">ns</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tx</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/[ ]*\n+/</span>,<span class="ruby-value str">' '</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">ns</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">nl</span>
+      <span class="ruby-identifier">i</span> = <span class="ruby-identifier">e</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">ns</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000266"></a><b>humanize</b>()
+  </div>
+  <div class="description">
+  <p>
+Replaces underscores with spaces and capitalizes word.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000266_source')" id="l_M000266_source">show source</a> ]</p>
+  <div id="M000266_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/stylize.rb, line 59</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">humanize</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/_/</span>, <span class="ruby-value str">&quot; &quot;</span>).<span class="ruby-identifier">capitalize</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000248"></a><b>indent</b>(n)
+  </div>
+  <div class="description">
+  <p>
+Indent left or right by n spaces. (This used to be called <a
+href="String.html#M000244">tab</a> and aliased as <a
+href="String.html#M000248">indent</a>.)
+</p>
+<pre>
+ CREDIT: Gavin Sinclair
+ CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000248_source')" id="l_M000248_source">show source</a> ]</p>
+  <div id="M000248_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/tab.rb, line 60</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">indent</span>(<span class="ruby-identifier">n</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^/</span>, <span class="ruby-value str">' '</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">n</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">gsub</span>(<span class="ruby-node">/^ {0,#{-n}}/</span>, <span class="ruby-value str">&quot;&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000254"></a><b>index_all</b>(s, reuse=false)
+  </div>
+  <div class="description">
+  <p>
+Like index but returns an array of all index locations. The reuse flag
+allows the trailing portion of a match to be reused for subsquent matches.
+</p>
+<pre>
+  &quot;abcabcabc&quot;.index_all('a')  #=&gt; [0,3,6]
+
+  &quot;bbb&quot;.index_all('bb', false)  #=&gt; [0]
+  &quot;bbb&quot;.index_all('bb', true)   #=&gt; [0,1]
+
+  TODO: Culd probably be defined for Indexable in general too.
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000254_source')" id="l_M000254_source">show source</a> ]</p>
+  <div id="M000254_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/range.rb, line 66</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">index_all</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">reuse</span>=<span class="ruby-keyword kw">false</span>)
+    <span class="ruby-identifier">s</span> = <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-identifier">s</span>)) <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">===</span><span class="ruby-identifier">s</span>
+    <span class="ruby-identifier">ia</span> = []; <span class="ruby-identifier">i</span> = <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">while</span> (<span class="ruby-identifier">i</span> = <span class="ruby-identifier">index</span>(<span class="ruby-identifier">s</span>,<span class="ruby-identifier">i</span>))
+      <span class="ruby-identifier">ia</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">i</span>
+      <span class="ruby-identifier">i</span> <span class="ruby-operator">+=</span> (<span class="ruby-identifier">reuse</span> <span class="ruby-value">? </span><span class="ruby-value">1</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">$~</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">size</span>)
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">ia</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000280"></a><b>lchomp</b>(match)
+  </div>
+  <div class="description">
+  <p>
+Left chomp.
+</p>
+<pre>
+  &quot;help&quot;.lchomp(&quot;h&quot;)  #=&gt; &quot;elp&quot;
+  &quot;help&quot;.lchomp(&quot;k&quot;)  #=&gt; &quot;help&quot;
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000280_source')" id="l_M000280_source">show source</a> ]</p>
+  <div id="M000280_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/chomp.rb, line 10</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lchomp</span>(<span class="ruby-identifier">match</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">index</span>(<span class="ruby-identifier">match</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+      <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">match</span>.<span class="ruby-identifier">size</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000281"></a><b>lchomp!</b>(match)
+  </div>
+  <div class="description">
+  <p>
+In-place left chomp.
+</p>
+<pre>
+  &quot;help&quot;.lchomp(&quot;h&quot;)  #=&gt; &quot;elp&quot;
+  &quot;help&quot;.lchomp(&quot;k&quot;)  #=&gt; &quot;help&quot;
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000281_source')" id="l_M000281_source">show source</a> ]</p>
+  <div id="M000281_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/chomp.rb, line 25</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lchomp!</span>(<span class="ruby-identifier">match</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">index</span>(<span class="ruby-identifier">match</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+      <span class="ruby-keyword kw">self</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">match</span>.<span class="ruby-identifier">size</span>] = <span class="ruby-value str">''</span>
+      <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000273"></a><b>line_wrap</b>(width, tabs=4)
+  </div>
+  <div class="description">
+  <p>
+Line wrap at width.
+</p>
+<pre>
+  puts &quot;1234567890&quot;.line_wrap(5)
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+  12345
+  67890
+
+ CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000273_source')" id="l_M000273_source">show source</a> ]</p>
+  <div id="M000273_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/line_wrap.rb, line 14</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">line_wrap</span>(<span class="ruby-identifier">width</span>, <span class="ruby-identifier">tabs</span>=<span class="ruby-value">4</span>)
+    <span class="ruby-identifier">s</span> = <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\t/</span>,<span class="ruby-value str">' '</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">tabs</span>) <span class="ruby-comment cmt"># tabs default to 4 spaces</span>
+    <span class="ruby-identifier">s</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n/</span>,<span class="ruby-value str">' '</span>)
+    <span class="ruby-identifier">r</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">scan</span>( <span class="ruby-node">/.{1,#{width}}/</span> )
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">&quot;\n&quot;</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;\n&quot;</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000226"></a><b>lines</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns an array of characters.
+</p>
+<pre>
+  &quot;abc\n123&quot;.lines  #=&gt; [&quot;abc&quot;,&quot;123&quot;]
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000226_source')" id="l_M000226_source">show source</a> ]</p>
+  <div id="M000226_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 352</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">lines</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">/\n/</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000250"></a><b>margin</b>(n=0)
+  </div>
+  <div class="description">
+  <p>
+Provides a <a href="String.html#M000250">margin</a> controlled string.
+</p>
+<pre>
+  x = %Q{
+        | This
+        |   is
+        |     margin controlled!
+        }.margin
+
+  NOTE: This may still need a bit of tweaking.
+
+ CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000250_source')" id="l_M000250_source">show source</a> ]</p>
+  <div id="M000250_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/tab.rb, line 89</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">margin</span>(<span class="ruby-identifier">n</span>=<span class="ruby-value">0</span>)
+    <span class="ruby-comment cmt">#d = /\A.*\n\s*(.)/.match( self )[1]</span>
+    <span class="ruby-comment cmt">#d = /\A\s*(.)/.match( self)[1] unless d</span>
+    <span class="ruby-identifier">d</span> = ((<span class="ruby-regexp re">/\A.*\n\s*(.)/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-keyword kw">self</span>)) <span class="ruby-operator">||</span>
+        (<span class="ruby-regexp re">/\A\s*(.)/</span>.<span class="ruby-identifier">match</span>(<span class="ruby-keyword kw">self</span>)))[<span class="ruby-value">1</span>]
+    <span class="ruby-keyword kw">return</span> <span class="ruby-value str">''</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">d</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n</span> <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+      <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n\s*\Z/</span>,<span class="ruby-value str">''</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/^\s*[#{d}]/</span>, <span class="ruby-value str">''</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\n\s*\Z/</span>,<span class="ruby-value str">''</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-node">/^\s*[#{d}]/</span>, <span class="ruby-value str">' '</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">n</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000265"></a><b>methodize</b>()
+  </div>
+  <div class="description">
+  <p>
+Just like <a href="String.html#M000255">snakecase</a>. Makes an underscored
+form from the expression in the string, but also changes &#8217;::&#8217;
+to &#8217;/&#8217; to convert namespaces to paths.
+</p>
+<p>
+Examples
+</p>
+<pre>
+  &quot;SuperMan&quot;.methodize         #=&gt; &quot;super_man&quot;
+  &quot;SuperMan::Errors&quot;.methodize #=&gt; &quot;super_man__errors
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000265_source')" id="l_M000265_source">show source</a> ]</p>
+  <div id="M000265_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/stylize.rb, line 48</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">methodize</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\//</span>, <span class="ruby-value str">'__'</span>).
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/::/</span>, <span class="ruby-value str">'__'</span>).
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/([A-Z]+)([A-Z][a-z])/</span>,<span class="ruby-value str">'\1_\2'</span>).
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/([a-z\d])([A-Z])/</span>,<span class="ruby-value str">'\1_\2'</span>).
+    <span class="ruby-identifier">tr</span>(<span class="ruby-value str">&quot;-&quot;</span>, <span class="ruby-value str">&quot;_&quot;</span>).
+    <span class="ruby-identifier">downcase</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000263"></a><b>modulize</b>()
+  </div>
+  <div class="description">
+  <p>
+Like <a href="String.html#M000239">camelcase</a>, but also converts
+&#8217;/&#8217; to &#8217;::&#8217;.
+</p>
+<p>
+By default <a href="String.html#M000239">camelcase</a> convert to
+UpperCamelCase, If an argument is set to <tt>false</tt>, then <a
+href="String.html#M000239">camelcase</a> will produce lowerCamelCase.
+</p>
+<p>
+<tt><a href="String.html#M000239">camelcase</a></tt> also converts
+&#8217;/&#8217; to &#8217;::&#8217; which is useful for converting paths to
+namespaces.
+</p>
+<p>
+Examples
+</p>
+<pre>
+  &quot;camel_case&quot;.modulize                    #=&gt; &quot;CamelCase&quot;
+  &quot;camel/case&quot;.modulize                    #=&gt; &quot;Camel::Case&quot;
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000263_source')" id="l_M000263_source">show source</a> ]</p>
+  <div id="M000263_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/stylize.rb, line 15</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">modulize</span>
+    <span class="ruby-identifier">str</span> = <span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/__(.?)/</span>){ <span class="ruby-node">&quot;::#{$1.upcase}&quot;</span> }
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\/(.?)/</span>){ <span class="ruby-node">&quot;::#{$1.upcase}&quot;</span> }
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/(?:_+)([a-z])/</span>){ <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">upcase</span> }
+    <span class="ruby-identifier">str</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/(^|\s+)([a-z])/</span>){ <span class="ruby-identifier">$1</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">upcase</span> }
+    <span class="ruby-identifier">str</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000257"></a><b>mscan</b>(re) {|| ...}
+  </div>
+  <div class="description">
+  <p>
+Like scan but returns <a href="MatchData.html">MatchData</a> ($~) rather
+then matched string ($&amp;).
+</p>
+<pre>
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000257_source')" id="l_M000257_source">show source</a> ]</p>
+  <div id="M000257_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/mscan.rb, line 8</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mscan</span>(<span class="ruby-identifier">re</span>) <span class="ruby-comment cmt">#:yield:</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
+      <span class="ruby-identifier">scan</span>(<span class="ruby-identifier">re</span>) { <span class="ruby-keyword kw">yield</span>(<span class="ruby-identifier">$~</span>) }
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">m</span> = []
+      <span class="ruby-identifier">scan</span>(<span class="ruby-identifier">re</span>) { <span class="ruby-identifier">m</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">$~</span> }
+      <span class="ruby-identifier">m</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000261"></a><b>natcmp</b>(str2, caseInsensitive=false)
+  </div>
+  <div class="description">
+  <p>
+&#8216;Natural order&#8217; comparison of strings, e.g.
+</p>
+<pre>
+  &quot;my_prog_v1.1.0&quot; &lt; &quot;my_prog_v1.2.0&quot; &lt; &quot;my_prog_v1.10.0&quot;
+</pre>
+<p>
+which does not follow alphabetically. A secondary parameter, if set to
+<em>true</em>, makes the comparison case insensitive.
+</p>
+<pre>
+  &quot;Hello.10&quot;.natcmp(&quot;Hello.1&quot;)  #=&gt; -1
+
+  TODO: Invert case flag?
+
+  CREDIT: Alan Davies
+  CREDIT: Martin Pool
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000261_source')" id="l_M000261_source">show source</a> ]</p>
+  <div id="M000261_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/natcmp.rb, line 47</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">natcmp</span>(<span class="ruby-identifier">str2</span>, <span class="ruby-identifier">caseInsensitive</span>=<span class="ruby-keyword kw">false</span>)
+    <span class="ruby-identifier">str1</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">str2</span> = <span class="ruby-identifier">str2</span>.<span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">compareExpression</span> = <span class="ruby-regexp re">/^(\D*)(\d*)(.*)$/</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">caseInsensitive</span>
+      <span class="ruby-identifier">str1</span>.<span class="ruby-identifier">downcase!</span>
+      <span class="ruby-identifier">str2</span>.<span class="ruby-identifier">downcase!</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-comment cmt"># remove all whitespace</span>
+    <span class="ruby-identifier">str1</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\s*/</span>, <span class="ruby-value str">''</span>)
+    <span class="ruby-identifier">str2</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-regexp re">/\s*/</span>, <span class="ruby-value str">''</span>)
+
+    <span class="ruby-keyword kw">while</span> (<span class="ruby-identifier">str1</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>) <span class="ruby-keyword kw">or</span> (<span class="ruby-identifier">str2</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span>) <span class="ruby-keyword kw">do</span>
+      <span class="ruby-comment cmt"># Extract non-digits, digits and rest of string</span>
+      <span class="ruby-identifier">str1</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">compareExpression</span>
+      <span class="ruby-identifier">chars1</span>, <span class="ruby-identifier">num1</span>, <span class="ruby-identifier">str1</span> = <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">dup</span>, <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">dup</span>, <span class="ruby-identifier">$3</span>.<span class="ruby-identifier">dup</span>
+      <span class="ruby-identifier">str2</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">compareExpression</span>
+      <span class="ruby-identifier">chars2</span>, <span class="ruby-identifier">num2</span>, <span class="ruby-identifier">str2</span> = <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">dup</span>, <span class="ruby-identifier">$2</span>.<span class="ruby-identifier">dup</span>, <span class="ruby-identifier">$3</span>.<span class="ruby-identifier">dup</span>
+      <span class="ruby-comment cmt"># Compare the non-digits</span>
+      <span class="ruby-keyword kw">case</span> (<span class="ruby-identifier">chars1</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">chars2</span>)
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value">0</span> <span class="ruby-comment cmt"># Non-digits are the same, compare the digits...</span>
+          <span class="ruby-comment cmt"># If either number begins with a zero, then compare alphabetically,</span>
+          <span class="ruby-comment cmt"># otherwise compare numerically</span>
+          <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">num1</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">!=</span> <span class="ruby-value">48</span>) <span class="ruby-keyword kw">and</span> (<span class="ruby-identifier">num2</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">!=</span> <span class="ruby-value">48</span>)
+            <span class="ruby-identifier">num1</span>, <span class="ruby-identifier">num2</span> = <span class="ruby-identifier">num1</span>.<span class="ruby-identifier">to_i</span>, <span class="ruby-identifier">num2</span>.<span class="ruby-identifier">to_i</span>
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">case</span> (<span class="ruby-identifier">num1</span> <span class="ruby-operator">&lt;=&gt;</span> <span class="ruby-identifier">num2</span>)
+            <span class="ruby-keyword kw">when</span> <span class="ruby-value">-1</span> <span class="ruby-keyword kw">then</span> <span class="ruby-keyword kw">return</span> <span class="ruby-value">-1</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span> <span class="ruby-keyword kw">return</span> <span class="ruby-value">1</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value">-1</span> <span class="ruby-keyword kw">then</span> <span class="ruby-keyword kw">return</span> <span class="ruby-value">-1</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">then</span> <span class="ruby-keyword kw">return</span> <span class="ruby-value">1</span>
+      <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># case</span>
+    <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># while</span>
+
+    <span class="ruby-comment cmt"># strings are naturally equal.</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-value">0</span>
+  <span class="ruby-keyword kw">end</span>
+
+<span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000284"></a><b>nchar</b>(n, replacement=nil)
+  </div>
+  <div class="description">
+  <p>
+Returns <em>n</em> characters of the string. If <em>n</em> is positive the
+characters are from the beginning of the string. If <em>n</em> is negative
+from the end of the string.
+</p>
+<p>
+Alternatively a replacement string can be given, which will replace the
+<em>n</em> characters.
+</p>
+<pre>
+   str = &quot;this is text&quot;
+   str.nchar(4)            #=&gt; &quot;this&quot;
+   str.nchar(4, 'that')    #=&gt; &quot;that&quot;
+   str                     #=&gt; &quot;that is text&quot;
+
+  CREDIT: ?
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000284_source')" id="l_M000284_source">show source</a> ]</p>
+  <div id="M000284_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/nchar.rb, line 17</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nchar</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">replacement</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">replacement</span>
+      <span class="ruby-identifier">s</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+      <span class="ruby-identifier">n</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">?</span> (<span class="ruby-identifier">s</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">n</span>] = <span class="ruby-identifier">replacement</span>) <span class="ruby-operator">:</span> (<span class="ruby-identifier">s</span>[<span class="ruby-identifier">n</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>] = <span class="ruby-identifier">replacement</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">n</span> <span class="ruby-operator">&gt;</span> <span class="ruby-value">0</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">n</span>] <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-identifier">n</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>]
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000249"></a><b>outdent</b>(n)
+  </div>
+  <div class="description">
+  <p>
+Outdent just indents a negative number of spaces.
+</p>
+<pre>
+ CREDIT: Noah Gibbs
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000249_source')" id="l_M000249_source">show source</a> ]</p>
+  <div id="M000249_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/tab.rb, line 72</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">outdent</span>(<span class="ruby-identifier">n</span>)
+    <span class="ruby-identifier">indent</span>(<span class="ruby-operator">-</span><span class="ruby-identifier">n</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000264"></a><b>pathize</b>()
+  </div>
+  <div class="description">
+  <p>
+Just like <a href="String.html#M000255">snakecase</a>. Makes an underscored
+form from the expression in the string, but also changes &#8217;::&#8217;
+to &#8217;/&#8217; to convert namespaces to paths.
+</p>
+<p>
+Examples
+</p>
+<pre>
+  &quot;SuperMan&quot;.pathize           #=&gt; &quot;super_man&quot;
+  &quot;SuperMan::Errors&quot;.pathize   #=&gt; &quot;super_man/errors
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000264_source')" id="l_M000264_source">show source</a> ]</p>
+  <div id="M000264_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/stylize.rb, line 32</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">pathize</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/::/</span>, <span class="ruby-value str">'/'</span>).
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/([A-Z]+)([A-Z][a-z])/</span>,<span class="ruby-value str">'\1_\2'</span>).
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/([a-z\d])([A-Z])/</span>,<span class="ruby-value str">'\1_\2'</span>).
+    <span class="ruby-identifier">tr</span>(<span class="ruby-value str">&quot;-&quot;</span>, <span class="ruby-value str">&quot;_&quot;</span>).
+    <span class="ruby-identifier">downcase</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000278"></a><b>quote</b>(type=:s)
+  </div>
+  <div class="description">
+  <p>
+Return a new string embraced by given quotes. If no quotes are specified,
+then assumes single quotes.
+</p>
+<pre>
+  &quot;quote me&quot;.quote     #=&gt; &quot;'quote me'&quot;
+  &quot;quote me&quot;.quote(2)  #=&gt; &quot;\&quot;quote me\&quot;&quot;
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000278_source')" id="l_M000278_source">show source</a> ]</p>
+  <div id="M000278_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/bracket.rb, line 69</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">quote</span>(<span class="ruby-identifier">type</span>=<span class="ruby-identifier">:s</span>)
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">type</span>.<span class="ruby-identifier">to_s</span>.<span class="ruby-identifier">downcase</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'s'</span>, <span class="ruby-value str">'single'</span>
+      <span class="ruby-identifier">bracket</span>(<span class="ruby-value str">&quot;'&quot;</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'d'</span>, <span class="ruby-value str">'double'</span>
+      <span class="ruby-identifier">bracket</span>(<span class="ruby-value str">'&quot;'</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'b'</span>, <span class="ruby-value str">'back'</span>
+      <span class="ruby-identifier">bracket</span>(<span class="ruby-value str">'`'</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">bracket</span>(<span class="ruby-value str">&quot;'&quot;</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000251"></a><b>range</b>(s, offset=0)
+  </div>
+  <div class="description">
+  <p>
+Like index but returns a <a href="Range.html">Range</a>.
+</p>
+<pre>
+  &quot;This is a test!&quot;.range('test')  #=&gt; 10..13
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000251_source')" id="l_M000251_source">show source</a> ]</p>
+  <div id="M000251_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/range.rb, line 9</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">range</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">offset</span>=<span class="ruby-value">0</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">index</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">offset</span>)
+      <span class="ruby-keyword kw">return</span> (<span class="ruby-identifier">$~</span>.<span class="ruby-identifier">begin</span>(<span class="ruby-value">0</span>))<span class="ruby-operator">..</span>(<span class="ruby-identifier">$~</span>.<span class="ruby-identifier">end</span>(<span class="ruby-value">0</span>)<span class="ruby-operator">-</span><span class="ruby-value">1</span>)
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">nil</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000252"></a><b>range_all</b>(s, reuse=false)
+  </div>
+  <div class="description">
+  <p>
+Like <a href="String.html#M000254">index_all</a> but returns an array of
+Ranges.
+</p>
+<pre>
+  &quot;abc123abc123&quot;.range_all('abc')  #=&gt; [0..2, 6..8]
+
+  TODO: Add offset, perhaps ?
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000252_source')" id="l_M000252_source">show source</a> ]</p>
+  <div id="M000252_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/range.rb, line 24</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">range_all</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">reuse</span>=<span class="ruby-keyword kw">false</span>)
+    <span class="ruby-identifier">r</span> = []; <span class="ruby-identifier">i</span> = <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">length</span>
+      <span class="ruby-identifier">rng</span> = <span class="ruby-identifier">range</span>(<span class="ruby-identifier">s</span>, <span class="ruby-identifier">i</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">rng</span>
+        <span class="ruby-identifier">r</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rng</span>
+        <span class="ruby-identifier">i</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">reuse</span> <span class="ruby-value">? </span><span class="ruby-value">1</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">rng</span>.<span class="ruby-identifier">end</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-keyword kw">break</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">uniq</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000253"></a><b>range_of_line</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns an array of ranges mapping the characters per line.
+</p>
+<pre>
+  &quot;this\nis\na\ntest&quot;.range_of_line
+  #=&gt; [0..4, 5..7, 8..9, 10..13]
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000253_source')" id="l_M000253_source">show source</a> ]</p>
+  <div id="M000253_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/range.rb, line 46</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">range_of_line</span>
+    <span class="ruby-identifier">offset</span>=<span class="ruby-value">0</span>; <span class="ruby-identifier">charmap</span> = []
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">line</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">charmap</span> <span class="ruby-operator">&lt;&lt;</span> (<span class="ruby-identifier">offset</span><span class="ruby-operator">..</span>(<span class="ruby-identifier">offset</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>))
+      <span class="ruby-identifier">offset</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">line</span>.<span class="ruby-identifier">length</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">charmap</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000283"></a><b>rewrite</b>(rules)
+  </div>
+  <div class="description">
+  <p>
+Apply a set of rules (regular expression matches) to the string.
+</p>
+<h3>Requirements:</h3>
+<p>
+The rules must be applied in order! So we cannot use a hash because the
+ordering is not guaranteed! we use an array instead.
+</p>
+<h3>Input:</h3>
+<p>
+The array containing rule-pairs (match, write).
+</p>
+<h3>Output:</h3>
+<p>
+The rewritten string.
+</p>
+<pre>
+  CREDIT: George Moschovitis
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000283_source')" id="l_M000283_source">show source</a> ]</p>
+  <div id="M000283_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/rewrite.rb, line 18</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rewrite</span>(<span class="ruby-identifier">rules</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'The rules parameter is nil'</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">rules</span>
+    <span class="ruby-identifier">rewritten_string</span> = <span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">rules</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">match</span>,<span class="ruby-identifier">write</span><span class="ruby-operator">|</span>
+      <span class="ruby-identifier">rewritten_string</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-identifier">match</span>,<span class="ruby-identifier">write</span>)
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">rewritten_string</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000235"></a><b>shatter</b>( re )
+  </div>
+  <div class="description">
+  <p>
+Breaks a string up into an array based on a regular expression. Similar to
+scan, but includes the matches.
+</p>
+<pre>
+  s = &quot;&lt;p&gt;This&lt;b&gt;is&lt;/b&gt;a test.&lt;/p&gt;&quot;
+  s.shatter( /\&lt;.*?\&gt;/ )
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+  [&quot;&lt;p&gt;&quot;, &quot;This&quot;, &quot;&lt;b&gt;&quot;, &quot;is&quot;, &quot;&lt;/b&gt;&quot;, &quot;a test.&quot;, &quot;&lt;/p&gt;&quot;]
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000235_source')" id="l_M000235_source">show source</a> ]</p>
+  <div id="M000235_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/shatter.rb, line 15</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">shatter</span>( <span class="ruby-identifier">re</span> )
+    <span class="ruby-identifier">r</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gsub</span>( <span class="ruby-identifier">re</span> ){ <span class="ruby-operator">|</span><span class="ruby-identifier">s</span><span class="ruby-operator">|</span> <span class="ruby-value str">&quot;\1&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\1&quot;</span> }
+    <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">r</span>[<span class="ruby-value">0</span>,<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;\1&quot;</span> ; <span class="ruby-identifier">r</span>[<span class="ruby-value">0</span>] = <span class="ruby-value str">''</span> ; <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">r</span>[<span class="ruby-value">-1</span>,<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;\1&quot;</span> ; <span class="ruby-identifier">r</span>[<span class="ruby-value">-1</span>] = <span class="ruby-value str">''</span> ; <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">r</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">&quot;\1&quot;</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000255"></a><b>snakecase</b>()
+  </div>
+  <div class="description">
+  <p>
+The reverse of <tt><a href="String.html#M000239">camelcase</a></tt>. Makes
+an underscored of a <a href="String.html#M000239">camelcase</a> string.
+</p>
+<p>
+Changes &#8217;::&#8217; to &#8217;/&#8217; to convert namespaces to paths.
+</p>
+<p>
+Examples
+</p>
+<pre>
+  &quot;SnakeCase&quot;.snakecase           #=&gt; &quot;snake_case&quot;
+  &quot;Snake-Case&quot;.snakecase          #=&gt; &quot;snake_case&quot;
+  &quot;SnakeCase::Errors&quot;.underscore  #=&gt; &quot;snake_case/errors&quot;
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000255_source')" id="l_M000255_source">show source</a> ]</p>
+  <div id="M000255_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/snakecase.rb, line 12</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">snakecase</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/::/</span>, <span class="ruby-value str">'/'</span>).  <span class="ruby-comment cmt"># NOT SO SURE ABOUT THIS -T</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/([A-Z]+)([A-Z][a-z])/</span>,<span class="ruby-value str">'\1_\2'</span>).
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/([a-z\d])([A-Z])/</span>,<span class="ruby-value str">'\1_\2'</span>).
+    <span class="ruby-identifier">tr</span>(<span class="ruby-value str">&quot;-&quot;</span>, <span class="ruby-value str">&quot;_&quot;</span>).
+    <span class="ruby-identifier">downcase</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000287"></a><b>space</b>()
+  </div>
+  <div class="description">
+  <p>
+Replaces underscores with spaces and capitalizes word.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000287_source')" id="l_M000287_source">show source</a> ]</p>
+  <div id="M000287_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/underscore.rb, line 23</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">space</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-value str">'_'</span>, <span class="ruby-value str">' '</span>).<span class="ruby-identifier">capitalize</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000282"></a><b>splice</b>(*args)
+  </div>
+  <div class="description">
+  <p>
+Like slice, but writes rather than reads. Like store, but acts like slice!
+when given only one argument.
+</p>
+<pre>
+  a = &quot;HELLO&quot;
+  a.splice(1)    #=&gt; &quot;E&quot;
+  a              #=&gt; &quot;HLLO&quot;
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000282_source')" id="l_M000282_source">show source</a> ]</p>
+  <div id="M000282_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/splice.rb, line 13</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">splice</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+      <span class="ruby-identifier">slice!</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">store</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000228"></a><b>start_with?</b>(prefix)
+  </div>
+  <div class="description">
+  <p>
+Does a string start with the given prefix.
+</p>
+<pre>
+  &quot;hello&quot;.starts_with?(&quot;he&quot;)    #=&gt; true
+  &quot;hello&quot;.starts_with?(&quot;to&quot;)    #=&gt; false
+
+ CREDIT: Lucas Carlson
+ CREDIT: Blaine Cook
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000228_source')" id="l_M000228_source">show source</a> ]</p>
+  <div id="M000228_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ruby.rb, line 377</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start_with?</span>(<span class="ruby-identifier">prefix</span>)
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">prefix</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000244"></a><b>tab</b>(n)
+  </div>
+  <div class="description">
+  <p>
+Aligns each line n spaces.
+</p>
+<pre>
+ CREDIT: Gavin Sinclair
+</pre>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="String.html#M000245">taballto</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000244_source')" id="l_M000244_source">show source</a> ]</p>
+  <div id="M000244_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/tab.rb, line 10</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tab</span>(<span class="ruby-identifier">n</span>)
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ */</span>, <span class="ruby-value str">' '</span> <span class="ruby-operator">*</span> <span class="ruby-identifier">n</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000245"></a><b>taballto</b>(n)
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="String.html#M000244">tab</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000247"></a><b>tabto</b>(n)
+  </div>
+  <div class="description">
+  <p>
+Preserves relative tabbing. The first non-empty line ends up with n spaces
+before nonspace.
+</p>
+<pre>
+ CREDIT: Gavin Sinclair
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000247_source')" id="l_M000247_source">show source</a> ]</p>
+  <div id="M000247_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/tab.rb, line 46</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">tabto</span>(<span class="ruby-identifier">n</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^( *)\S/</span>
+      <span class="ruby-identifier">indent</span>(<span class="ruby-identifier">n</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">$1</span>.<span class="ruby-identifier">length</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">self</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000268"></a><b>titlecase</b>()
+  </div>
+  <div class="description">
+  <p>
+Title case.
+</p>
+<pre>
+  &quot;this is a string&quot;.titlecase
+  =&gt; &quot;This Is A String&quot;
+
+ CREDIT: Eliazar Parra
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000268_source')" id="l_M000268_source">show source</a> ]</p>
+  <div id="M000268_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/titlecase.rb, line 10</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">titlecase</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\b\w/</span>){<span class="ruby-identifier">$&amp;</span>.<span class="ruby-identifier">upcase</span>}
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000267"></a><b>titleize</b>()
+  </div>
+  <div class="description">
+  <p>
+Titleize.
+</p>
+<pre>
+  &quot;this is a string&quot;.titlecase
+  =&gt; &quot;This Is A String&quot;
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000267_source')" id="l_M000267_source">show source</a> ]</p>
+  <div id="M000267_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/stylize.rb, line 68</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">titleize</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\b\w/</span>){<span class="ruby-identifier">$&amp;</span>.<span class="ruby-identifier">upcase</span>}
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000232"></a><b>to_b</b>()
+  </div>
+  <div class="description">
+  <p>
+Interpret common affirmative string meanings as true, otherwise false.
+Balnk sapce and case are ignored. The following strings that will return
+true:
+</p>
+<pre>
+  &lt;tt&gt;true&lt;/tt&gt;,&lt;tt&gt;yes&lt;/tt&gt;,&lt;tt&gt;on&lt;/tt&gt;,&lt;tt&gt;t&lt;/tt&gt;,&lt;tt&gt;1&lt;/tt&gt;,&lt;tt&gt;y&lt;/tt&gt;,&lt;tt&gt;==&lt;/tt&gt;
+</pre>
+<p>
+Examples:
+</p>
+<pre>
+  &quot;true&quot;.to_b   #=&gt; true
+  &quot;yes&quot;.to_b    #=&gt; true
+  &quot;no&quot;.to_b     #=&gt; false
+  &quot;123&quot;.to_b    #=&gt; false
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000232_source')" id="l_M000232_source">show source</a> ]</p>
+  <div id="M000232_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/boolean.rb, line 43</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_b</span>
+    <span class="ruby-keyword kw">case</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">downcase</span>.<span class="ruby-identifier">strip</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'true'</span>, <span class="ruby-value str">'yes'</span>, <span class="ruby-value str">'on'</span>, <span class="ruby-value str">'t'</span>, <span class="ruby-value str">'1'</span>, <span class="ruby-value str">'y'</span>, <span class="ruby-value str">'=='</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'nil'</span>, <span class="ruby-value str">'null'</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000272"></a><b>to_date</b>()
+  </div>
+  <div class="description">
+  <p>
+Parse data from string.
+</p>
+<pre>
+ CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000272_source')" id="l_M000272_source">show source</a> ]</p>
+  <div id="M000272_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/to_time.rb, line 16</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_date</span>
+    <span class="ruby-identifier">require</span> <span class="ruby-value str">'date'</span>
+    <span class="ruby-identifier">require</span> <span class="ruby-value str">'parsedate'</span>
+    <span class="ruby-operator">::</span><span class="ruby-constant">Date</span><span class="ruby-operator">::</span><span class="ruby-identifier">civil</span>(<span class="ruby-operator">*</span><span class="ruby-constant">ParseDate</span>.<span class="ruby-identifier">parsedate</span>(<span class="ruby-keyword kw">self</span>)[<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-value">2</span>])
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000236"></a><b>to_re</b>(esc=false)
+  </div>
+  <div class="description">
+  <p>
+Turns a string into a regular expression.
+</p>
+<pre>
+  &quot;a?&quot;.to_re  #=&gt; /a?/
+
+ CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000236_source')" id="l_M000236_source">show source</a> ]</p>
+  <div id="M000236_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/to_re.rb, line 9</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_re</span>(<span class="ruby-identifier">esc</span>=<span class="ruby-keyword kw">false</span>)
+    <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>((<span class="ruby-identifier">esc</span> <span class="ruby-value">? </span><span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-keyword kw">self</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000237"></a><b>to_rx</b>(esc=true)
+  </div>
+  <div class="description">
+  <p>
+Turns a string into a regular expression. By default it will escape all
+characters. Use <tt>false</tt> argument to turn off escaping.
+</p>
+<pre>
+  &quot;[&quot;.to_rx  #=&gt; /\[/
+
+ CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000237_source')" id="l_M000237_source">show source</a> ]</p>
+  <div id="M000237_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/to_re.rb, line 21</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_rx</span>(<span class="ruby-identifier">esc</span>=<span class="ruby-keyword kw">true</span>)
+    <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>((<span class="ruby-identifier">esc</span> <span class="ruby-value">? </span><span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">escape</span>(<span class="ruby-keyword kw">self</span>) <span class="ruby-operator">:</span> <span class="ruby-keyword kw">self</span>))
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000233"></a><b>to_s</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000233_source')" id="l_M000233_source">show source</a> ]</p>
+  <div id="M000233_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/comparable/bound.rb, line 2</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000271"></a><b>to_time</b>()
+  </div>
+  <div class="description">
+  <p>
+Parse string to time.
+</p>
+<pre>
+ CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000271_source')" id="l_M000271_source">show source</a> ]</p>
+  <div id="M000271_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/to_time.rb, line 7</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_time</span>
+    <span class="ruby-identifier">require</span> <span class="ruby-value str">'time'</span>
+    <span class="ruby-constant">Time</span>.<span class="ruby-identifier">parse</span>(<span class="ruby-keyword kw">self</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000276"></a><b>unbracket</b>(bra=nil, ket=nil)
+  </div>
+  <div class="description">
+  <p>
+Return a new string embraced by given brakets. If only one <a
+href="String.html#M000274">bracket</a> char is given it will be placed on
+either side.
+</p>
+<pre>
+  &quot;{unwrap me}&quot;.debracket('{')        #=&gt; &quot;unwrap me&quot;
+  &quot;--unwrap me!&quot;.debracket('--','!')  #=&gt; &quot;unwrap me!&quot;
+
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000276_source')" id="l_M000276_source">show source</a> ]</p>
+  <div id="M000276_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/bracket.rb, line 37</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unbracket</span>(<span class="ruby-identifier">bra</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">ket</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bra</span>
+      <span class="ruby-identifier">ket</span> = <span class="ruby-constant">BRA2KET</span>[<span class="ruby-identifier">bra</span>] <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">ket</span>
+      <span class="ruby-identifier">ket</span> = <span class="ruby-identifier">ket</span> <span class="ruby-value">? </span><span class="ruby-identifier">ket</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">bra</span>
+      <span class="ruby-identifier">s</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>
+      <span class="ruby-identifier">s</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">%r[^#{Regexp.escape(bra)}]</span>, <span class="ruby-value str">''</span>)
+      <span class="ruby-identifier">s</span>.<span class="ruby-identifier">gsub!</span>(<span class="ruby-node">%r[#{Regexp.escape(ket)}$]</span>, <span class="ruby-value str">''</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">m</span> = <span class="ruby-constant">BRA2KET</span>[ <span class="ruby-keyword kw">self</span>[<span class="ruby-value">0</span>,<span class="ruby-value">1</span>] ]
+        <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">slice</span>(<span class="ruby-value">1</span><span class="ruby-operator">...</span><span class="ruby-value">-1</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>[<span class="ruby-value">-1</span>,<span class="ruby-value">1</span>]  <span class="ruby-operator">==</span> <span class="ruby-identifier">m</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dup</span>  <span class="ruby-comment cmt"># if nothing else</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000277"></a><b>unbracket!</b>(bra=nil, ket=nil)
+  </div>
+  <div class="description">
+  <p>
+Inplace version of debraket.
+</p>
+<pre>
+  CREDIT: Trans
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000277_source')" id="l_M000277_source">show source</a> ]</p>
+  <div id="M000277_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/bracket.rb, line 57</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">unbracket!</span>(<span class="ruby-identifier">bra</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">ket</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">replace</span>( <span class="ruby-identifier">unbracket</span>(<span class="ruby-identifier">bra</span>, <span class="ruby-identifier">ket</span>) )
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000286"></a><b>underscore</b>()
+  </div>
+  <div class="description">
+  <p>
+Converts spaces into underscores.
+</p>
+<p>
+Examples
+</p>
+<pre>
+  &quot;This Is Helpful&quot;.underscore  #=&gt; &quot;This_Is_Helpful&quot;
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000286_source')" id="l_M000286_source">show source</a> ]</p>
+  <div id="M000286_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/underscore.rb, line 17</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">underscore</span>
+    <span class="ruby-identifier">gsub</span>(<span class="ruby-value str">' '</span>, <span class="ruby-value str">'_'</span>) <span class="ruby-comment cmt">#.capitalize</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000260"></a><b>upcase?</b>()
+  </div>
+  <div class="description">
+  <p>
+Is the string upcase/uppercase?
+</p>
+<pre>
+  &quot;THIS&quot;.upcase?  #=&gt; true
+  &quot;This&quot;.upcase?  #=&gt; false
+  &quot;this&quot;.upcase?  #=&gt; false
+
+ CREDIT: Phil Tomson
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000260_source')" id="l_M000260_source">show source</a> ]</p>
+  <div id="M000260_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/string/capitalized.rb, line 38</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">upcase?</span>
+    <span class="ruby-identifier">upcase</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000230"></a><b>variablize</b>()
+  </div>
+  <div class="description">
+  <p>
+Append an &quot;@&quot; to the beginning of a string to make a instance
+variable name. This also replaces non-valid characters with underscores.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000230_source')" id="l_M000230_source">show source</a> ]</p>
+  <div id="M000230_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/metaid.rb, line 128</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">variablize</span>
+    <span class="ruby-node">&quot;@#{self}&quot;</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\W/</span>, <span class="ruby-value str">'_'</span>).<span class="ruby-identifier">to_sym</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

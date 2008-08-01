@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: CLI::Arguments</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />CLI::Arguments</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/arguments_rb.html">lib/facets/arguments.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Arguments.html">CLI::Arguments</a></h1>
+<p>
+<a href="Arguments.html">CLI::Arguments</a> provides a very simple means of
+parsing command line arguments.
+</p>
+<p>
+Unlike other more complex libs this provides only the most basic and
+standard parsing functionality. In many cases that&#8216;s all one really
+needs.
+</p>
+<p>
+Usage is straight foward. Simply instantiate the class and query it for the
+particular &quot;views&quot; of the command line you want.
+</p>
+<pre>
+  cargs = CLI::Arguments.new(&quot;-a foo -b=2&quot;)
+
+  cargs.parameters    #=&gt; [['foo'],{'a'=&gt;true,'b'=&gt;'2'}]
+  cargs.flags         #=&gt; ['a']
+  cargs.preoptions    #=&gt; {'a'=&gt;true}
+  cargs.preflags      #=&gt; ['a']
+  cargs.subcommand    #=&gt; ['foo',{'b'=&gt;'2'}]
+</pre>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000783">assoc_options</a></li>
+  <li><a href="#M000772">flags</a></li>
+  <li><a href="#M000785">format_options</a></li>
+  <li><a href="#M000784">multi_flag</a></li>
+  <li><a href="#M000768">new</a></li>
+  <li><a href="#M000769">operands</a></li>
+  <li><a href="#M000770">options</a></li>
+  <li><a href="#M000771">parameters</a></li>
+  <li><a href="#M000767">parameters</a></li>
+  <li><a href="#M000778">parameters_without_duplicates</a></li>
+  <li><a href="#M000779">parse</a></li>
+  <li><a href="#M000781">parse_arity</a></li>
+  <li><a href="#M000780">parse_line</a></li>
+  <li><a href="#M000782">parse_preoptions</a></li>
+  <li><a href="#M000777">preflags</a></li>
+  <li><a href="#M000776">preoptions</a></li>
+  <li><a href="#M000774">subcommand</a></li>
+  <li><a href="#M000775">subcommand_with_arguments</a></li>
+  <li><a href="#M000773">subcommand_with_parameters</a></li>
+  </ul>
+
+
+
+
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>argv</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>arity</td>
+    <td class='attr-desc'></td>
+  </tr>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[R]
+    </td>
+    <td class='attr-name'>line</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000768"></a><b>new</b>(line=nil, arity=nil)
+  </div>
+  <div class="description">
+  <p>
+Takes the command line string (or array) and <a
+href="Arguments.html#M000770">options</a>. Options have <a
+href="Arguments.html#M000772">flags</a> and end with a hash of option
+arity.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000768_source')" id="l_M000768_source">show source</a> ]</p>
+  <div id="M000768_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 83</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">line</span>=<span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">arity</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-ivar">@line</span>, <span class="ruby-ivar">@argv</span>  = <span class="ruby-identifier">parse_line</span>(<span class="ruby-identifier">line</span>)
+      <span class="ruby-ivar">@arity</span> = <span class="ruby-identifier">parse_arity</span>(<span class="ruby-identifier">arity</span><span class="ruby-operator">||</span>{})
+      <span class="ruby-identifier">parse</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000767"></a><b>parameters</b>(*args)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000767_source')" id="l_M000767_source">show source</a> ]</p>
+  <div id="M000767_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 69</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parameters</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+      <span class="ruby-identifier">new</span>.<span class="ruby-identifier">parameters</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000772"></a><b>flags</b>()
+  </div>
+  <div class="description">
+  <p>
+Return <a href="Arguments.html#M000772">flags</a>, which are true <a
+href="Arguments.html#M000770">options</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000772_source')" id="l_M000772_source">show source</a> ]</p>
+  <div id="M000772_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 112</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">flags</span>
+      <span class="ruby-identifier">f</span> = []
+      <span class="ruby-ivar">@options</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">TrueClass</span><span class="ruby-operator">===</span><span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-constant">FalseClass</span><span class="ruby-operator">===</span><span class="ruby-identifier">v</span>  <span class="ruby-comment cmt"># not that it's ever false</span>
+          <span class="ruby-identifier">f</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">k</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">f</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000769"></a><b>operands</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns operand array.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000769_source')" id="l_M000769_source">show source</a> ]</p>
+  <div id="M000769_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 93</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">operands</span>
+      <span class="ruby-ivar">@operands</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000770"></a><b>options</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns <a href="Arguments.html#M000770">options</a> hash.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000770_source')" id="l_M000770_source">show source</a> ]</p>
+  <div id="M000770_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 99</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">options</span>
+      <span class="ruby-ivar">@options</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000771"></a><b>parameters</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns [<a href="Arguments.html#M000769">operands</a>, <a
+href="Arguments.html#M000770">options</a>], which is good for plugging
+directly into a method.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000771_source')" id="l_M000771_source">show source</a> ]</p>
+  <div id="M000771_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 106</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parameters</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@operands</span>, <span class="ruby-ivar">@options</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000778"></a><b>parameters_without_duplicates</b>()
+  </div>
+  <div class="description">
+  <p>
+Like <a href="Arguments.html#M000767">parameters</a> but without allowing
+for duplicate <a href="Arguments.html#M000770">options</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000778_source')" id="l_M000778_source">show source</a> ]</p>
+  <div id="M000778_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 176</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parameters_without_duplicates</span>
+      <span class="ruby-identifier">opts</span> = {}
+      <span class="ruby-ivar">@options</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Array</span><span class="ruby-operator">===</span><span class="ruby-identifier">v</span>
+          <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>[<span class="ruby-value">0</span>]
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>] =  <span class="ruby-identifier">v</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@operands</span>, <span class="ruby-identifier">opts</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000777"></a><b>preflags</b>()
+  </div>
+  <div class="description">
+  <p>
+Same as <tt><a href="Arguments.html#M000772">flags</a></tt> but only
+returns <a href="Arguments.html#M000772">flags</a> in the <a
+href="Arguments.html#M000776">preoptions</a>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000777_source')" id="l_M000777_source">show source</a> ]</p>
+  <div id="M000777_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 163</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">preflags</span>
+      <span class="ruby-identifier">preopts</span>, <span class="ruby-identifier">remainder</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">parse_preoptions</span>(<span class="ruby-identifier">argv</span>)
+      <span class="ruby-identifier">f</span> = []
+      <span class="ruby-identifier">preopts</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">TrueClass</span><span class="ruby-operator">===</span><span class="ruby-identifier">v</span> <span class="ruby-keyword kw">or</span> <span class="ruby-constant">FalseClass</span><span class="ruby-operator">===</span><span class="ruby-identifier">v</span>  <span class="ruby-comment cmt"># not that it's ever false</span>
+          <span class="ruby-identifier">f</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">k</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">f</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000776"></a><b>preoptions</b>()
+  </div>
+  <div class="description">
+  <p>
+Returns a hash of <a href="Arguments.html#M000770">options</a> that occur
+before the first operand. This works well with <a
+href="Arguments.html#M000774">subcommand</a> to get the main
+command&#8216;s <a href="Arguments.html#M000770">options</a>.
+</p>
+<pre>
+  line = &quot;--trace stamp --file VERSION&quot;
+  cargs = CLI::Arguments.new(line)
+  opts = cargs.preoptions
+  opts #=&gt; {&quot;trace&quot;=&gt;true}
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000776_source')" id="l_M000776_source">show source</a> ]</p>
+  <div id="M000776_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 155</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">preoptions</span>
+      <span class="ruby-identifier">preopts</span>, <span class="ruby-identifier">remainder</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">parse_preoptions</span>(<span class="ruby-identifier">argv</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">preopts</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000774"></a><b>subcommand</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for <a href="Arguments.html#M000773">subcommand_with_parameters</a>
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000775"></a><b>subcommand_with_arguments</b>()
+  </div>
+  <div class="description">
+  <p>
+Assumes the first operand is a &quot;<a
+href="Arguments.html#M000774">subcommand</a>&quot; and returns it and the
+argments following it as another <a href="Arguments.html">Arguments</a>
+object.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000775_source')" id="l_M000775_source">show source</a> ]</p>
+  <div id="M000775_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 139</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subcommand_with_arguments</span>
+      <span class="ruby-identifier">opts</span>, <span class="ruby-identifier">args</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">parse_preoptions</span>(<span class="ruby-identifier">argv</span>)
+      <span class="ruby-identifier">cmd</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>
+      <span class="ruby-identifier">subargs</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">args</span>, <span class="ruby-ivar">@arity</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">subargs</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000773"></a><b>subcommand_with_parameters</b>()
+  </div>
+  <div class="description">
+  <p>
+Assumes the first operand is a &quot;<a
+href="Arguments.html#M000774">subcommand</a>&quot; and returns it and the
+argments following it as <a href="Arguments.html#M000767">parameters</a>.
+</p>
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Arguments.html#M000774">subcommand</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000773_source')" id="l_M000773_source">show source</a> ]</p>
+  <div id="M000773_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 126</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">subcommand_with_parameters</span>
+      <span class="ruby-identifier">opts</span>, <span class="ruby-identifier">args</span> = <span class="ruby-operator">*</span><span class="ruby-identifier">parse_preoptions</span>(<span class="ruby-identifier">argv</span>)
+      <span class="ruby-identifier">cmd</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>
+      <span class="ruby-identifier">subargs</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">class</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">args</span>, <span class="ruby-ivar">@arity</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">cmd</span>, <span class="ruby-identifier">subargs</span>.<span class="ruby-identifier">parameters</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Private Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000783"></a><b>assoc_options</b>(args)
+  </div>
+  <div class="description">
+  <p>
+Parse <a href="Arguments.html#M000772">flags</a> takes the command line and
+transforms it such that <a href="Arguments.html#M000772">flags</a> (eg. -x
+and &#8212;x) are elemental associative arrays.
+</p>
+<pre>
+  line = &quot;--foo hello --try=this&quot;
+
+  parse_flags(line) #=&gt; [ [foo,true], hello, [&quot;try&quot;,&quot;this&quot;] ]
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000783_source')" id="l_M000783_source">show source</a> ]</p>
+  <div id="M000783_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 282</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">assoc_options</span>(<span class="ruby-identifier">args</span>)
+      <span class="ruby-comment cmt">#args = args.dup</span>
+      <span class="ruby-identifier">args</span> = <span class="ruby-identifier">multi_flag</span>(<span class="ruby-identifier">args</span>) <span class="ruby-comment cmt">#unless opts.include?(:simple)</span>
+
+      <span class="ruby-identifier">i</span> = <span class="ruby-value">0</span>
+      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">i</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">size</span>
+        <span class="ruby-identifier">arg</span> = <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>]
+        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">arg</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-regexp re">/^-/</span>
+          <span class="ruby-identifier">arg</span> = <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">sub</span>(<span class="ruby-regexp re">/^-{1,2}/</span>,<span class="ruby-value str">''</span>)
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">'='</span>)
+            <span class="ruby-identifier">key</span>, <span class="ruby-identifier">val</span> = <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'='</span>)
+            <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>] = [<span class="ruby-identifier">key</span>, <span class="ruby-identifier">val</span><span class="ruby-operator">||</span><span class="ruby-keyword kw">true</span>]
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">arity</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">arg</span>)
+            <span class="ruby-identifier">cnt</span> = <span class="ruby-identifier">arity</span>[<span class="ruby-identifier">arg</span>]
+            <span class="ruby-identifier">key</span> = <span class="ruby-identifier">arg</span>
+            <span class="ruby-identifier">val</span> = <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>,<span class="ruby-identifier">cnt</span>]
+            <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>,<span class="ruby-identifier">cnt</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>] = [[<span class="ruby-identifier">key</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">val</span>]]
+            <span class="ruby-identifier">i</span> <span class="ruby-operator">+=</span> (<span class="ruby-identifier">cnt</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>)
+          <span class="ruby-keyword kw">else</span>
+            <span class="ruby-identifier">key</span> = <span class="ruby-identifier">arg</span>
+            <span class="ruby-identifier">args</span>[<span class="ruby-identifier">i</span>] = [<span class="ruby-identifier">key</span>,<span class="ruby-keyword kw">true</span>]
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">i</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">args</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000785"></a><b>format_options</b>(assoc_options)
+  </div>
+  <div class="description">
+  <p>
+Format flag <a href="Arguments.html#M000770">options</a>. This converts the
+associative array of options/flags into a hash. Repeat <a
+href="Arguments.html#M000770">options</a> will be placed in arrays.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000785_source')" id="l_M000785_source">show source</a> ]</p>
+  <div id="M000785_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 328</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format_options</span>(<span class="ruby-identifier">assoc_options</span>)
+      <span class="ruby-identifier">opts</span> = {}
+      <span class="ruby-identifier">assoc_options</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">k</span>)
+          <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>] = [<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>]].<span class="ruby-identifier">flatten</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">v</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">k</span>] = <span class="ruby-identifier">v</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">opts</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000784"></a><b>multi_flag</b>(args=nil)
+  </div>
+  <div class="description">
+  <p>
+Split single letter option groupings into separate <a
+href="Arguments.html#M000770">options</a>. ie. -xyz =&gt; -x -y -z
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000784_source')" id="l_M000784_source">show source</a> ]</p>
+  <div id="M000784_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 314</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">multi_flag</span>(<span class="ruby-identifier">args</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-identifier">args</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">argv</span>
+      <span class="ruby-identifier">args</span>.<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">arg</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">md</span> = <span class="ruby-regexp re">/^-(\w{2,})/</span>.<span class="ruby-identifier">match</span>( <span class="ruby-identifier">arg</span> )
+          <span class="ruby-identifier">md</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">//</span>).<span class="ruby-identifier">collect</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-node">&quot;-#{c}&quot;</span> }
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">arg</span>.<span class="ruby-identifier">dup</span>
+        <span class="ruby-keyword kw">end</span>
+      }.<span class="ruby-identifier">flatten</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000779"></a><b>parse</b>()
+  </div>
+  <div class="description">
+  <p>
+Basic parser partitions the command line into <a
+href="Arguments.html#M000770">options</a> and <a
+href="Arguments.html#M000769">operands</a>. Options are converted to a hash
+and the two parts are returned.
+</p>
+<pre>
+  line = &quot;--trace stamp --file=VERSION&quot;
+
+  args, keys = *parse_command(line)
+
+  args #=&gt; [&quot;stamp&quot;]
+  keys #=&gt; {&quot;trace&quot;=&gt;true, &quot;file&quot;=&gt;&quot;VERSION&quot;}
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000779_source')" id="l_M000779_source">show source</a> ]</p>
+  <div id="M000779_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 201</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse</span>
+      <span class="ruby-identifier">args</span> = <span class="ruby-identifier">assoc_options</span>(<span class="ruby-identifier">argv</span>) <span class="ruby-comment cmt">#, *opts_arity)</span>
+
+      <span class="ruby-identifier">opts</span>, <span class="ruby-identifier">opds</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">partition</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">a</span><span class="ruby-operator">|</span> <span class="ruby-constant">Array</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">a</span> }
+
+      <span class="ruby-ivar">@operands</span> = <span class="ruby-identifier">opds</span>
+      <span class="ruby-ivar">@options</span>  = <span class="ruby-identifier">format_options</span>(<span class="ruby-identifier">opts</span>)
+
+      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@operands</span>, <span class="ruby-ivar">@options</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000781"></a><b>parse_arity</b>(arity)
+  </div>
+  <div class="description">
+  <p>
+Ensure arity is uniform.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000781_source')" id="l_M000781_source">show source</a> ]</p>
+  <div id="M000781_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 241</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_arity</span>(<span class="ruby-identifier">arity</span>)
+      <span class="ruby-identifier">arity2</span> = {}
+      <span class="ruby-identifier">arity</span>.<span class="ruby-identifier">each</span>{ <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>,<span class="ruby-identifier">v</span><span class="ruby-operator">|</span> <span class="ruby-identifier">arity2</span>[<span class="ruby-identifier">k</span>.<span class="ruby-identifier">to_s</span>] = <span class="ruby-identifier">v</span>.<span class="ruby-identifier">to_i</span> }
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">arity2</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000780"></a><b>parse_line</b>(line=nil)
+  </div>
+  <div class="description">
+  <p>
+First pass parser to split the command line into an array using <a
+href="../Shellwords.html">Shellwords</a>, if not already so divided.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000780_source')" id="l_M000780_source">show source</a> ]</p>
+  <div id="M000780_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 215</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_line</span>(<span class="ruby-identifier">line</span>=<span class="ruby-keyword kw">nil</span>)
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">line</span>
+        <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">line</span>
+        <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+          <span class="ruby-identifier">argv</span> = <span class="ruby-constant">Shellwords</span>.<span class="ruby-identifier">shellwords</span>(<span class="ruby-identifier">line</span>)
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">argv</span> = <span class="ruby-identifier">line</span>.<span class="ruby-identifier">to_ary</span>.<span class="ruby-identifier">dup</span>
+          <span class="ruby-identifier">line</span> = <span class="ruby-identifier">argv</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' '</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">argv</span> = <span class="ruby-constant">ARGV</span>.<span class="ruby-identifier">dup</span>
+        <span class="ruby-identifier">line</span> = <span class="ruby-identifier">argv</span>.<span class="ruby-identifier">join</span>(<span class="ruby-value str">' '</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">line</span>, <span class="ruby-identifier">argv</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000782"></a><b>parse_preoptions</b>(args)
+  </div>
+  <div class="description">
+  <p>
+Parse <a href="Arguments.html#M000776">preoptions</a>. A
+&quot;preoption&quot; is one that occurs before the first operans (if any).
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000782_source')" id="l_M000782_source">show source</a> ]</p>
+  <div id="M000782_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/arguments.rb, line 250</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_preoptions</span>(<span class="ruby-identifier">args</span>)
+      <span class="ruby-comment cmt">#args = args.dup</span>
+      <span class="ruby-identifier">args</span> = <span class="ruby-identifier">multi_flag</span>(<span class="ruby-identifier">args</span>) <span class="ruby-comment cmt">#unless opts.include?(:simple)</span>
+
+      <span class="ruby-identifier">flags</span> = []
+      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^-/</span>
+        <span class="ruby-identifier">key</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span>
+        <span class="ruby-identifier">key</span>.<span class="ruby-identifier">sub!</span>(<span class="ruby-regexp re">/^-{1,2}/</span>,<span class="ruby-value str">''</span>)
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">key</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">'='</span>)
+          <span class="ruby-identifier">key</span>, <span class="ruby-identifier">val</span> = <span class="ruby-identifier">key</span>.<span class="ruby-identifier">split</span>(<span class="ruby-value str">'='</span>)
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">a</span> = <span class="ruby-identifier">arity</span>[<span class="ruby-identifier">key</span>]
+          <span class="ruby-identifier">val</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-value">0</span>,<span class="ruby-identifier">a</span>)
+          <span class="ruby-identifier">val</span> = <span class="ruby-identifier">val</span>.<span class="ruby-identifier">first</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">a</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">val</span> = <span class="ruby-keyword kw">true</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">flags</span> <span class="ruby-operator">&lt;&lt;</span> [<span class="ruby-identifier">key</span>, <span class="ruby-identifier">val</span>]
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">flags</span> = <span class="ruby-identifier">format_options</span>(<span class="ruby-identifier">flags</span>)
+
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">flags</span>, <span class="ruby-identifier">args</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

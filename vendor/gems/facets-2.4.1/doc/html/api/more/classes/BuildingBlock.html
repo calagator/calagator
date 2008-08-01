@@ -1,0 +1,362 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: BuildingBlock</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />BuildingBlock</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/buildable_rb.html">lib/facets/buildable.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="BuildingBlock.html">BuildingBlock</a></h1>
+<p>
+Build content programatically with Ruby and Ruby&#8216;s blocks.
+</p>
+<pre>
+  require 'facets'
+  require 'xmlhelper'
+
+  builder = BuildingBlock.new(XMLHelper, :element)
+
+  doc = builder.html do
+
+    head do
+      title &quot;Test&quot;
+    end
+
+    body do
+      i &quot;Hello&quot;
+      br
+      text &quot;Test&quot;
+      text &quot;Hey&quot;
+    end
+
+  end
+</pre>
+<p>
+<em>produces</em>
+</p>
+<pre>
+  &lt;html&gt;&lt;head&gt;&lt;title&gt;Test&lt;/title&gt;&lt;body&gt;&lt;i&gt;Hello&lt;/i&gt;&lt;br /&gt;TestHey&lt;/body&gt;&lt;/html&gt;
+</pre>
+<p>
+All calls within the block are routed via the Helper <a
+href="Module.html">Module</a>&#8216;s constructor method (element in the
+above example) unless they are defined by the helper module, in which case
+they are sent to the helper module directly. The results of these
+invocations are appended to the output buffer. To prevent this, prefix the
+method with &#8216;call_&#8217;.
+</p>
+<p>
+Sometimes keywords can get in the way of a construction. In these cases you
+can ensure use of constructor method by calling the special build! command.
+You can also add verbatium text to the output via the #&lt;&lt; operator.
+Some common Ruby&#8216;s built-in methods treated as keywords:
+</p>
+<pre>
+     inspect
+     instance_eval
+     respond_to?
+     singleton_method_undefined
+     initialize
+     method_missing
+     to_str
+     to_s
+</pre>
+<p>
+And a few other speciality methods besides:
+</p>
+<pre>
+     to_buffer
+     build!
+     &lt;&lt;
+</pre>
+<p>
+This work was of course inspired by many great minds, and represents a
+concise and simple means of accomplishing this pattern of design, which is
+unique to Ruby.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000024">&lt;&lt;</a></li>
+  <li><a href="#M000019">build!</a></li>
+  <li><a href="#M000025">inspect</a></li>
+  <li><a href="#M000020">method_missing</a></li>
+  <li><a href="#M000018">new</a></li>
+  <li><a href="#M000021">to_buffer</a></li>
+  <li><a href="#M000022">to_s</a></li>
+  <li><a href="#M000023">to_str</a></li>
+  </ul>
+
+
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">ESCAPE</td>
+    <td>=</td>
+    <td class="attr-value">[     'singleton_method_undefined',     'respond_to?',     'instance_eval',     'inspect',     'initialize'</td>
+  </tr>
+  <tr valign='top'>
+    <td>&nbsp;</td>
+    <td colspan="2" class="attr-desc">
+NOTE: When debugging, you may want to add the &#8216;p&#8217; entry. TODO:
+There may be other methods that need to be in this exception list.
+
+</td>
+  </tr>
+  </table>
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000018"></a><b>new</b>(dslModule, constructor, output_buffer=nil)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000018_source')" id="l_M000018_source">show source</a> ]</p>
+  <div id="M000018_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/buildable.rb, line 234</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">dslModule</span>, <span class="ruby-identifier">constructor</span>, <span class="ruby-identifier">output_buffer</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-ivar">@buffer</span> = <span class="ruby-identifier">output_buffer</span> <span class="ruby-operator">||</span> <span class="ruby-value str">''</span>
+    <span class="ruby-ivar">@stack</span>  = []
+
+    <span class="ruby-ivar">@dsl</span> = <span class="ruby-constant">Class</span>.<span class="ruby-identifier">new</span>{
+      <span class="ruby-identifier">include</span> <span class="ruby-identifier">dslModule</span>
+    }.<span class="ruby-identifier">new</span>
+
+    <span class="ruby-ivar">@constructor</span> = <span class="ruby-identifier">constructor</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000024"></a><b>&lt;&lt;</b>(s)
+  </div>
+  <div class="description">
+  <p>
+Add directly to buffer.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000024_source')" id="l_M000024_source">show source</a> ]</p>
+  <div id="M000024_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/buildable.rb, line 289</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">&lt;&lt;</span>(<span class="ruby-identifier">s</span>)
+    <span class="ruby-ivar">@buffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_s</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000019"></a><b>build!</b>(s, *a, &amp;b)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000019_source')" id="l_M000019_source">show source</a> ]</p>
+  <div id="M000019_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/buildable.rb, line 247</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">build!</span>(<span class="ruby-identifier">s</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)
+    <span class="ruby-identifier">s</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">to_s</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">b</span>
+      <span class="ruby-ivar">@stack</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@buffer</span>
+      <span class="ruby-ivar">@buffer</span> = <span class="ruby-value str">''</span>
+      <span class="ruby-identifier">instance_eval</span> <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>
+      <span class="ruby-identifier">out</span> = <span class="ruby-ivar">@buffer</span>
+      <span class="ruby-ivar">@buffer</span> = <span class="ruby-ivar">@stack</span>.<span class="ruby-identifier">pop</span>
+      <span class="ruby-identifier">a</span>.<span class="ruby-identifier">unshift</span>(<span class="ruby-identifier">out</span>)
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/^call_/</span>
+      <span class="ruby-identifier">m</span> = <span class="ruby-identifier">s</span>[<span class="ruby-value">5</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">to_sym</span>
+      <span class="ruby-ivar">@dsl</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">m</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>).<span class="ruby-identifier">to_s</span>
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-ivar">@dsl</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">s</span>) <span class="ruby-comment cmt">#o =~ /^build_/</span>
+      <span class="ruby-ivar">@buffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@dsl</span>.<span class="ruby-identifier">send</span>(<span class="ruby-identifier">s</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>).<span class="ruby-identifier">to_s</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">s</span> = <span class="ruby-identifier">s</span>.<span class="ruby-identifier">chomp</span>(<span class="ruby-value str">'?'</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">s</span>[<span class="ruby-value">-1</span>,<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">'?'</span>
+      <span class="ruby-ivar">@buffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-ivar">@dsl</span>.<span class="ruby-identifier">send</span>(<span class="ruby-ivar">@constructor</span>, <span class="ruby-identifier">s</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>).<span class="ruby-identifier">to_s</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000025"></a><b>inspect</b>()
+  </div>
+  <div class="description">
+  <p>
+Could improve.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000025_source')" id="l_M000025_source">show source</a> ]</p>
+  <div id="M000025_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/buildable.rb, line 300</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span>
+    <span class="ruby-identifier">r</span> = <span class="ruby-keyword kw">super</span>
+    <span class="ruby-identifier">i</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">index</span>(<span class="ruby-value str">','</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">r</span>[<span class="ruby-value">0</span><span class="ruby-operator">...</span><span class="ruby-identifier">i</span>] <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;&gt;&quot;</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000020"></a><b>method_missing</b>(s, *a, &amp;b)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000020_source')" id="l_M000020_source">show source</a> ]</p>
+  <div id="M000020_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/buildable.rb, line 272</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">s</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)
+    <span class="ruby-identifier">build!</span>(<span class="ruby-identifier">s</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">a</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">b</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000021"></a><b>to_buffer</b>()
+  </div>
+  <div class="description">
+  <p>
+Return buffer
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000021_source')" id="l_M000021_source">show source</a> ]</p>
+  <div id="M000021_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/buildable.rb, line 278</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_buffer</span>()
+    <span class="ruby-ivar">@buffer</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000022"></a><b>to_s</b>()
+  </div>
+  <div class="description">
+  <p>
+Return buffer as string.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000022_source')" id="l_M000022_source">show source</a> ]</p>
+  <div id="M000022_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/buildable.rb, line 284</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>()   <span class="ruby-ivar">@buffer</span>.<span class="ruby-identifier">to_s</span>   <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000023"></a><b>to_str</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000023_source')" id="l_M000023_source">show source</a> ]</p>
+  <div id="M000023_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/buildable.rb, line 285</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_str</span>() <span class="ruby-ivar">@buffer</span>.<span class="ruby-identifier">to_str</span> <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

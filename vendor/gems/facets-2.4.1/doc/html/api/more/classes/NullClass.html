@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: NullClass</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />NullClass</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/nullclass_rb.html">lib/facets/nullclass.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1>Nullclass</h1>
+<p>
+<a href="NullClass.html">NullClass</a> is essentially <a
+href="NilClass.html">NilClass</a> but it differs in one important way. When
+a method is called against it that it deoesn&#8216;t have, it will simply
+return null value rather then raise an error.
+</p>
+<p>
+TODO: Perhaps <a href="NullClass.html">NullClass</a> and <a
+href="NackClass.html">NackClass</a> should be one and the same?
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000417">[]</a></li>
+  <li><a href="#M000414">inspect</a></li>
+  <li><a href="#M000418">method_missing</a></li>
+  <li><a href="#M000413">new</a></li>
+  <li><a href="#M000415">nil?</a></li>
+  <li><a href="#M000416">null?</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000413"></a><b>new</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000413_source')" id="l_M000413_source">show source</a> ]</p>
+  <div id="M000413_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/nullclass.rb, line 36</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new</span>
+      <span class="ruby-ivar">@null</span> <span class="ruby-operator">||=</span> <span class="ruby-constant">NullClass</span>.<span class="ruby-identifier">allocate</span>
+    <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000417"></a><b>[]</b>(key)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000417_source')" id="l_M000417_source">show source</a> ]</p>
+  <div id="M000417_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/nullclass.rb, line 43</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-operator">[]</span>(<span class="ruby-identifier">key</span>); <span class="ruby-keyword kw">nil</span>; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000414"></a><b>inspect</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000414_source')" id="l_M000414_source">show source</a> ]</p>
+  <div id="M000414_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/nullclass.rb, line 40</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">inspect</span> ; <span class="ruby-value str">'null'</span> ; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000418"></a><b>method_missing</b>(sym, *args)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000418_source')" id="l_M000418_source">show source</a> ]</p>
+  <div id="M000418_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/nullclass.rb, line 44</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_missing</span>(<span class="ruby-identifier">sym</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sym</span>.<span class="ruby-identifier">to_s</span>[<span class="ruby-value">-1</span>,<span class="ruby-value">1</span>] <span class="ruby-operator">==</span> <span class="ruby-value str">'?'</span>
+    <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000415"></a><b>nil?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000415_source')" id="l_M000415_source">show source</a> ]</p>
+  <div id="M000415_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/nullclass.rb, line 41</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nil?</span>  ; <span class="ruby-keyword kw">true</span> ; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000416"></a><b>null?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000416_source')" id="l_M000416_source">show source</a> ]</p>
+  <div id="M000416_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/nullclass.rb, line 42</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">null?</span> ; <span class="ruby-keyword kw">true</span> ; <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

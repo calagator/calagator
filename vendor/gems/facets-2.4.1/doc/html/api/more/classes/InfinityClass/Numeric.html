@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: InfinityClass::Numeric</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />InfinityClass::Numeric</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../files/lib/facets/infinity_rb.html">lib/facets/infinity.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000428">finite?</a></li>
+  <li><a href="#M000430">inf?</a></li>
+  <li><a href="#M000429">infinite?</a></li>
+  <li><a href="#M000431">nan?</a></li>
+  <li><a href="#M000433">neginf?</a></li>
+  <li><a href="#M000432">posinf?</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000428"></a><b>finite?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000428_source')" id="l_M000428_source">show source</a> ]</p>
+  <div id="M000428_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/infinity.rb, line 161</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">finite?</span>
+    <span class="ruby-keyword kw">not</span> <span class="ruby-constant">InfinityClass</span> <span class="ruby-operator">===</span> <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000430"></a><b>inf?</b>()
+  </div>
+  <div class="description">
+  <p>
+Alias for infinite?
+</p>
+  </div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000429"></a><b>infinite?</b>()
+  </div>
+<div class="aka">
+  This method is also aliased as
+  <a href="Numeric.html#M000430">inf?</a>
+</div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000429_source')" id="l_M000429_source">show source</a> ]</p>
+  <div id="M000429_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/infinity.rb, line 165</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">infinite?</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">NaN</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>
+    <span class="ruby-constant">InfinityClass</span> <span class="ruby-operator">===</span> <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000431"></a><b>nan?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000431_source')" id="l_M000431_source">show source</a> ]</p>
+  <div id="M000431_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/infinity.rb, line 171</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">nan?</span>
+    <span class="ruby-constant">NaN</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000433"></a><b>neginf?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000433_source')" id="l_M000433_source">show source</a> ]</p>
+  <div id="M000433_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/infinity.rb, line 179</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">neginf?</span>
+    <span class="ruby-constant">NegInf</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000432"></a><b>posinf?</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000432_source')" id="l_M000432_source">show source</a> ]</p>
+  <div id="M000432_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/infinity.rb, line 175</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">posinf?</span>
+    <span class="ruby-constant">PosInf</span> <span class="ruby-operator">==</span> <span class="ruby-keyword kw">self</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

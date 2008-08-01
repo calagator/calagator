@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Random::String::Self</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Random::String::Self</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../../../files/lib/facets/random_rb.html">lib/facets/random.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><p>
+Class-level methods.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000905">rand_letter</a></li>
+  <li><a href="#M000904">random</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000905"></a><b>rand_letter</b>()
+  </div>
+  <div class="description">
+  <p>
+<a href="../../Module.html">Module</a> method to generate a <a
+href="Self.html#M000904">random</a> letter.
+</p>
+<pre>
+  String::Random.rand_letter  #=&gt; &quot;q&quot;
+  String::Random.rand_letter  #=&gt; &quot;r&quot;
+  String::Random.rand_letter  #=&gt; &quot;a&quot;
+</pre>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000905_source')" id="l_M000905_source">show source</a> ]</p>
+  <div id="M000905_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 352</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">rand_letter</span>
+        (<span class="ruby-identifier">rand</span>(<span class="ruby-value">26</span>) <span class="ruby-operator">+</span> (<span class="ruby-identifier">rand</span>(<span class="ruby-value">2</span>) <span class="ruby-operator">==</span> <span class="ruby-value">0</span> <span class="ruby-operator">?</span> <span class="ruby-value">65</span> <span class="ruby-operator">:</span> <span class="ruby-value">97</span>) ).<span class="ruby-identifier">chr</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000904"></a><b>random</b>(max_length = 8, char_re = /[\w\d]/)
+  </div>
+  <div class="description">
+  <p>
+Returns a randomly generated string. One possible use is password
+initialization. Takes a max legnth of characters (default 8) and an
+optional valid char Regexp (default /\w\d/).
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000904_source')" id="l_M000904_source">show source</a> ]</p>
+  <div id="M000904_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/random.rb, line 333</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">random</span>(<span class="ruby-identifier">max_length</span> = <span class="ruby-value">8</span>, <span class="ruby-identifier">char_re</span> = <span class="ruby-regexp re">/[\w\d]/</span>)
+        <span class="ruby-comment cmt"># gmosx: this is a nice example of input parameter checking.</span>
+        <span class="ruby-comment cmt"># this is NOT a real time called method so we can add this</span>
+        <span class="ruby-comment cmt"># check. Congrats to the author.</span>
+        <span class="ruby-identifier">raise</span> <span class="ruby-constant">ArgumentError</span>.<span class="ruby-identifier">new</span>(<span class="ruby-value str">'char_re must be a regular expression!'</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">char_re</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Regexp</span>)
+        <span class="ruby-identifier">string</span> = <span class="ruby-value str">&quot;&quot;</span>
+        <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">string</span>.<span class="ruby-identifier">length</span> <span class="ruby-operator">&lt;</span> <span class="ruby-identifier">max_length</span>
+            <span class="ruby-identifier">ch</span> = <span class="ruby-identifier">rand</span>(<span class="ruby-value">255</span>).<span class="ruby-identifier">chr</span>
+            <span class="ruby-identifier">string</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">ch</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">ch</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">char_re</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">string</span>
+      <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

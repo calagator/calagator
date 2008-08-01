@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: Advisable</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />Advisable</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/advisable_rb.html">lib/facets/advisable.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Advisable.html">Advisable</a></h1>
+<p>
+<a href="Advisable.html">Advisable</a> provides a means of using <a
+href="Advisable.html#M000809">before</a>, <a
+href="Advisable.html#M000810">after</a> and <a
+href="Advisable.html#M000811">around</a> adivce.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000807">advice_after</a></li>
+  <li><a href="#M000808">advice_around</a></li>
+  <li><a href="#M000806">advice_before</a></li>
+  <li><a href="#M000812">advise</a></li>
+  <li><a href="#M000810">after</a></li>
+  <li><a href="#M000811">around</a></li>
+  <li><a href="#M000809">before</a></li>
+  <li><a href="#M000813">method_added</a></li>
+  </ul>
+
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Advisable/Method.html" class="link">Advisable::Method</a><br />
+
+
+
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000807"></a><b>advice_after</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000807_source')" id="l_M000807_source">show source</a> ]</p>
+  <div id="M000807_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/advisable.rb, line 36</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">advice_after</span>
+    <span class="ruby-ivar">@advice_after</span> <span class="ruby-operator">||=</span> {} <span class="ruby-comment cmt">#Hash.new{|h,k| h[k] = []}</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000808"></a><b>advice_around</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000808_source')" id="l_M000808_source">show source</a> ]</p>
+  <div id="M000808_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/advisable.rb, line 40</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">advice_around</span>
+    <span class="ruby-ivar">@advice_around</span> <span class="ruby-operator">||=</span> {} <span class="ruby-comment cmt">#Hash.new{|h,k| h[k] = []}</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000806"></a><b>advice_before</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000806_source')" id="l_M000806_source">show source</a> ]</p>
+  <div id="M000806_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/advisable.rb, line 32</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">advice_before</span>
+    <span class="ruby-ivar">@advice_before</span> <span class="ruby-operator">||=</span> {} <span class="ruby-comment cmt">#Hash.new{|h,k| h[k] = []}</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000812"></a><b>advise</b>(meth)
+  </div>
+  <div class="description">
+  <p>
+Advise a method.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000812_source')" id="l_M000812_source">show source</a> ]</p>
+  <div id="M000812_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/advisable.rb, line 64</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">advise</span>(<span class="ruby-identifier">meth</span>)
+    <span class="ruby-comment cmt">#return false if defined?(meth_origin)</span>
+    <span class="ruby-identifier">args</span> = <span class="ruby-identifier">instance_method</span>(<span class="ruby-identifier">meth</span>).<span class="ruby-identifier">arguments</span>
+
+    <span class="ruby-identifier">module_eval</span>(<span class="ruby-value str">&quot;alias_method '\#{meth}_origin', '\#{meth}'\ndef \#{meth}(\#{args})\ntarget = method!('\#{meth}_origin')\n\nunless target.advised\nancs = self.class.ancestors.select{ |anc| anc.respond_to?(:advice_before) }\ntarget.advice_before = ancs.collect{ |anc| anc.advice_before[:'\#{meth}'] }\ntarget.advice_after  = ancs.collect{ |anc| anc.advice_after[:'\#{meth}'] }\ntarget.advice_around = ancs.collect{ |anc| anc.advice_around[:'\#{meth}'] }\ntarget.advised = true\nend\n\ntarget.call_with_advice(self, *[\#{args}])\nend\n&quot;</span>, <span class="ruby-keyword kw">__FILE__</span>, <span class="ruby-keyword kw">__LINE__</span>)
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000810"></a><b>after</b>(meth, &amp;block)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000810_source')" id="l_M000810_source">show source</a> ]</p>
+  <div id="M000810_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/advisable.rb, line 50</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">after</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-identifier">name</span> = <span class="ruby-node">&quot;#{meth}:after#{block.object_id}&quot;</span>
+    <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    (<span class="ruby-identifier">advice_after</span>[<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> []) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">name</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000811"></a><b>around</b>(meth, &amp;block)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000811_source')" id="l_M000811_source">show source</a> ]</p>
+  <div id="M000811_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/advisable.rb, line 56</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">around</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-identifier">name</span> = <span class="ruby-node">&quot;#{meth}:around#{block.object_id}&quot;</span>
+    <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    (<span class="ruby-identifier">advice_around</span>[<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> []) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">name</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000809"></a><b>before</b>(meth, &amp;block)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000809_source')" id="l_M000809_source">show source</a> ]</p>
+  <div id="M000809_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/advisable.rb, line 44</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">before</span>(<span class="ruby-identifier">meth</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    <span class="ruby-identifier">name</span> = <span class="ruby-node">&quot;#{meth}:before#{block.object_id}&quot;</span>
+    <span class="ruby-identifier">define_method</span>(<span class="ruby-identifier">name</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
+    (<span class="ruby-identifier">advice_before</span>[<span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_sym</span>] <span class="ruby-operator">||=</span> []) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">name</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000813"></a><b>method_added</b>(meth)
+  </div>
+  <div class="description">
+  <p>
+<a href="Advisable.html#M000810">after</a> :<a
+href="Advisable.html#M000813">method_added</a> do |meth|
+</p>
+<pre>
+  advise(meth) unless defined?(&quot;#{meth}_orig&quot;)
+</pre>
+<p>
+end
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000813_source')" id="l_M000813_source">show source</a> ]</p>
+  <div id="M000813_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/advisable.rb, line 93</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">method_added</span>(<span class="ruby-identifier">meth</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">meth</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:method_added</span>
+    <span class="ruby-ivar">@added_stack</span> <span class="ruby-operator">||=</span> []
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@added_stack</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">meth</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-regexp re">/_(origin)$/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_s</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">if</span> <span class="ruby-regexp re">/:(before|after|around)/</span> <span class="ruby-operator">=~</span> <span class="ruby-identifier">meth</span>.<span class="ruby-identifier">to_s</span>
+    <span class="ruby-ivar">@added_stack</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">meth</span>
+    <span class="ruby-comment cmt">#return if instance_methods(false).include?(&quot;#{meth}_orig&quot;)</span>
+    <span class="ruby-identifier">advise</span>(<span class="ruby-identifier">meth</span>)
+    <span class="ruby-ivar">@added_stack</span>.<span class="ruby-identifier">pop</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

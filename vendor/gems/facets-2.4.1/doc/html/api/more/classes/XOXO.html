@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Module: XOXO</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Module</span><br />XOXO</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/xoxo_rb.html">lib/facets/xoxo.rb</a>
+        </td>
+      </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="XOXO.html">XOXO</a></h1>
+<p>
+<a href="XOXO.html">XOXO</a> is a Ruby <a href="XOXO.html">XOXO</a> parser
+and generator. <a href="It.html">It</a> provides a Ruby API similar to
+Marshal and YAML (though more specific) to <a
+href="XOXO.html#M000909">load</a> and <a href="XOXO.html#M000910">dump</a>
+<a href="http://microformats.org/wiki/xoxo">XOXO</a>, an simple, open
+outline format written in standard XHTML and suitable for embedding in
+(X)HTML, Atom, RSS, and arbitrary XML.
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000910">dump</a></li>
+  <li><a href="#M000909">load</a></li>
+  <li><a href="#M000911">make_xoxo</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000910"></a><b>dump</b>(struct, options={})
+  </div>
+  <div class="description">
+  <p>
+Return a <a href="XOXO.html">XOXO</a> string corresponding to the Ruby
+object <tt>struct</tt>, translated to the following rules:
+</p>
+<ul>
+<li>Arrays become ordered lists <tt>&lt;ol&gt;</tt>.
+
+</li>
+<li>Hashes become definition lists <tt>&lt;dl&gt;</tt>, keys are stringified
+with <tt>to_s</tt>.
+
+</li>
+<li>Everything else becomes stringified with <tt>to_s</tt> and wrapped in
+appropriate list elements (<tt>&lt;li&gt;</tt> or
+<tt>&lt;dt&gt;</tt>/<tt>&lt;dd&gt;</tt>).
+
+</li>
+</ul>
+<p>
+Additionally, you can pass these options on the <em>options</em> hash:
+</p>
+<table>
+<tr><td valign="top"><tt>:html_wrap</tt> =&gt; <tt>true</tt>:</td><td>Wrap the <a href="XOXO.html">XOXO</a> with a basic XHTML 1.0 Transitional
+header.
+
+</td></tr>
+<tr><td valign="top"><tt>:css</tt> =&gt; <em>css</em>:</td><td><a href="Reference.html">Reference</a> <em>css</em> as stylesheet for the
+wrapped <a href="XOXO.html">XOXO</a> document.
+
+</td></tr>
+</table>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000910_source')" id="l_M000910_source">show source</a> ]</p>
+  <div id="M000910_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/xoxo.rb, line 71</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dump</span>(<span class="ruby-identifier">struct</span>, <span class="ruby-identifier">options</span>={})
+    <span class="ruby-identifier">struct</span> = [<span class="ruby-identifier">struct</span>]  <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">struct</span>.<span class="ruby-identifier">kind_of?</span> <span class="ruby-constant">Array</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:html_wrap</span>]
+      <span class="ruby-identifier">result</span> = <span class="ruby-value str">&quot;&lt;!DOCTYPE html PUBLIC \&quot;-//W3C//DTD XHTML 1.0 Transitional//EN\nhttp://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\&quot;&gt;\n&lt;html xmlns=\&quot;http://www.w3.org/1999/xhtml\&quot;&gt;&lt;head profile=\&quot;\&quot;&gt;&lt;meta http-equiv=\&quot;Content-Type\&quot; content=\&quot;text/html; charset=utf-8\&quot; /&gt;\n&quot;</span>.<span class="ruby-identifier">strip</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:css</span>]
+        <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">%Q[&lt;style type=&quot;text/css&quot; &gt;@import &quot;#{options[:css]}&quot;;&lt;/style&gt;]</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;/head&gt;&lt;body&gt;&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">make_xoxo</span>(<span class="ruby-identifier">struct</span>, <span class="ruby-value str">'xoxo'</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;/body&gt;&lt;/html&gt;&quot;</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">make_xoxo</span>(<span class="ruby-identifier">struct</span>, <span class="ruby-value str">'xoxo'</span>)
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000909"></a><b>load</b>(xoxo)
+  </div>
+  <div class="description">
+  <p>
+Load and return a <a href="XOXO.html">XOXO</a> structure from the String,
+IO or StringIO or <em>xoxo</em>.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000909_source')" id="l_M000909_source">show source</a> ]</p>
+  <div id="M000909_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/xoxo.rb, line 48</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">xoxo</span>)
+    <span class="ruby-identifier">structs</span> = <span class="ruby-constant">Parser</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">xoxo</span>).<span class="ruby-identifier">parse</span>.<span class="ruby-identifier">structs</span>
+    <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">structs</span>.<span class="ruby-identifier">kind_of?</span>(<span class="ruby-constant">Array</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">structs</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">1</span>
+      <span class="ruby-identifier">structs</span> = <span class="ruby-identifier">structs</span>.<span class="ruby-identifier">first</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">structs</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Private Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000911"></a><b>make_xoxo</b>(struct, class_name=nil)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000911_source')" id="l_M000911_source">show source</a> ]</p>
+  <div id="M000911_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/xoxo.rb, line 95</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">make_xoxo</span>(<span class="ruby-identifier">struct</span>, <span class="ruby-identifier">class_name</span>=<span class="ruby-keyword kw">nil</span>)
+    <span class="ruby-identifier">s</span> = <span class="ruby-value str">''</span>
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">struct</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Array</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">class_name</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-node">%Q[&lt;ol class=&quot;#{class_name}&quot;&gt;]</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;ol&gt;&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">struct</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">item</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;li&gt;&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">make_xoxo</span>(<span class="ruby-identifier">item</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;/li&gt;&quot;</span>
+      }
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;/ol&gt;&quot;</span>
+
+    <span class="ruby-keyword kw">when</span> <span class="ruby-constant">Hash</span>
+      <span class="ruby-identifier">d</span> = <span class="ruby-identifier">struct</span>.<span class="ruby-identifier">dup</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">d</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-value str">'url'</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&lt;a href=&quot;'</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">d</span>[<span class="ruby-value str">'url'</span>].<span class="ruby-identifier">to_s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&quot; '</span>
+        <span class="ruby-identifier">text</span> = <span class="ruby-identifier">d</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value str">'text'</span>) { <span class="ruby-identifier">d</span>.<span class="ruby-identifier">fetch</span>(<span class="ruby-value str">'title'</span>, <span class="ruby-identifier">d</span>[<span class="ruby-value str">'url'</span>]) }
+        <span class="ruby-node">%w[title rel type]</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">tag</span><span class="ruby-operator">|</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">d</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-identifier">tag</span>
+            <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">tag</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'=&quot;'</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">make_xoxo</span>(<span class="ruby-identifier">d</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">tag</span>)) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&quot; '</span>
+          <span class="ruby-keyword kw">end</span>
+        }
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&gt;'</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">make_xoxo</span>(<span class="ruby-identifier">text</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'&lt;/a&gt;'</span>
+        <span class="ruby-identifier">d</span>.<span class="ruby-identifier">delete</span> <span class="ruby-value str">'text'</span>
+        <span class="ruby-identifier">d</span>.<span class="ruby-identifier">delete</span> <span class="ruby-value str">'url'</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">d</span>.<span class="ruby-identifier">empty?</span>
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;dl&gt;&quot;</span>
+        <span class="ruby-identifier">d</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">key</span>, <span class="ruby-identifier">value</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;dt&gt;&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">key</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;/dt&gt;&lt;dd&gt;&quot;</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">make_xoxo</span>(<span class="ruby-identifier">value</span>) <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;/dd&gt;&quot;</span>
+        }
+        <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">&quot;&lt;/dl&gt;&quot;</span>
+      <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">when</span> <span class="ruby-constant">String</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">struct</span>
+
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">s</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">struct</span>.<span class="ruby-identifier">to_s</span>          <span class="ruby-comment cmt"># too gentle?</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">s</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

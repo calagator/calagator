@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: interval.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />interval.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/interval.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 15:49:49 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/Interval.html">Interval</a></h1>
+<p>
+While Ruby support the Range class out of the box, is does not quite
+fullfil the role od a real <a
+href="../../../classes/Interval.html">Interval</a> class. For instance, it
+does not support excluding the front sentinel. This is because Range also
+tries to do triple duty as a simple Sequence and as a simple <a
+href="../../../classes/Tuple.html">Tuple</a>-Pair, thus limiting its
+potential as an <a href="../../../classes/Interval.html">Interval</a>. The
+<a href="../../../classes/Interval.html">Interval</a> class remedies the
+situation by commiting to interval behavior, and then extends the
+class&#8217; capabilites beyond that of the standard Range in ways that
+naturally fall out of that.
+</p>
+<p>
+Range depends on two methods: succ and #&lt;=&gt;. If numeric ranges were
+the only concern, those could just as well be #+ and #&lt;=&gt;, but
+esoteric forms make that unfeasible &#8212;the obvious example being a
+String range. But a proper <a
+href="../../../classes/Interval.html">Interval</a> class requires
+mathematical continuation, thus the <a
+href="../../../classes/Interval.html">Interval</a> depends on #+ and
+#&lt;=&gt;, as well as #- as the inverse of #+.
+</p>
+<pre>
+  i = Interval.new(1,5)
+  i.to_a       #=&gt; [1,2,3,4,5]
+
+  i = Interval[0,5]
+  i.to_a(2)    #=&gt; [0,2,4]
+
+  i = Interval[1,5]
+  i.to_a(-1)   #=&gt; [5,4,3,2,1]
+
+  i = Interval[1,3]
+  i.to_a(1,2)  #=&gt; [1.0,1.5,2.0,2.5,3.0]
+</pre>
+<h2>Authors</h2>
+<ul>
+<li>Thomas Sawyer
+
+</li>
+</ul>
+<h2>Todo</h2>
+<ul>
+<li>Still need to tie in Infinity.
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2004 Thomas Sawyer
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+  <div class="sectiontitle">Required Files</div>
+  <ul>
+  <li>facets/multiton</li>
+  <li>facets/enumerablepass</li>
+  </ul>
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

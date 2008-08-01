@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: basicobject.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />basicobject.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/basicobject.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Sat Mar 22 14:55:36 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/BasicObject.html">BasicObject</a></h1>
+<p>
+<a href="../../../classes/BasicObject.html">BasicObject</a> provides an
+abstract base class with no predefined methods, except for
+<tt>respond_to?</tt>, any method starting in <tt>__</tt> (two underscore,
+like <tt>__id__</tt>) as well as any method starting with
+&lt;tt&gt;instance_&lt;/ttr&gt;.
+</p>
+<p>
+<a href="../../../classes/BasicObject.html">BasicObject</a> is useful as a
+base class when writing classes that depend upon <tt>method_missing</tt>
+(e.g. dynamic proxies).
+</p>
+<p>
+The patterns used to reserve methods are:
+</p>
+<pre>
+   /^__/, /^instance/, /^object/, /\?$/, /^\W$/,
+   'initialize', 'initialize_copy', 'inspect', 'dup', 'clone', 'null', 'as'
+</pre>
+<p>
+By default these are the reserved methods:
+</p>
+<pre>
+  == __id__ __self__ __send__ as clone dup eql? equal? frozen?
+  initialize inspect instance_eval instance_of? instance_variable_get
+  instance_variable_set instance_variables is_a? kind_of? nil? null object_class
+  respond_to? tainted?
+</pre>
+<p>
+In practice only &#8216;as&#8217;, &#8216;clone&#8217;, &#8216;dup&#8217;
+and &#8216;null&#8217; have much chance of name clash. So be especially
+aware of these four. All the rest either begin with a &#8216;__&#8217;, end
+in a &#8217;?&#8217; mark or start with the word &#8216;instance&#8217; or
+&#8216;object&#8217;.
+</p>
+<p>
+The special method object_self allows access to the underlying object via a
+specialized Functor-style class access via as(Object). This binds the
+actual self to the subsequently called methods of Object instancea methods.
+So even though a method may no longer be defined for <a
+href="../../../classes/BasicObject.html">BasicObject</a> it can still be
+called via this interface.
+</p>
+<pre>
+  class A &lt; BasicObject
+  end
+
+  a.object_self.class  #=&gt; A
+  a.class              #=&gt; NoMethodError
+</pre>
+<p>
+Note that object_self used to be called <em>self</em>. Also provided is
+object_class.
+</p>
+<h2>Authors</h2>
+<ul>
+<li>Jim Weirich
+
+</li>
+<li>Thomas Sawyer
+
+</li>
+</ul>
+<h2>History</h2>
+<pre>
+  Thanks to Jim Weirich for BlankSlate Copyright (c) 2004 by Jim Weirich,
+  on which BasicObject is based.
+</pre>
+<h2>Todo</h2>
+<ul>
+<li>Might be nice it there were a factory method to alter which methods were
+excluded. But probably too dangerous.
+
+</li>
+</ul>
+<h2>Copying</h2>
+<p>
+Copyright (c) 2005 Thomas Sawyer, Jim Weirich
+</p>
+<p>
+Ruby License
+</p>
+<p>
+This module is free software. You may use, modify, and/or redistribute this
+software under the same terms as Ruby.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.
+</p>
+</div>
+
+  <div class="sectiontitle">Required Files</div>
+  <ul>
+  <li>facets/kernel/object</li>
+  <li>facets/kernel/as</li>
+  </ul>
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

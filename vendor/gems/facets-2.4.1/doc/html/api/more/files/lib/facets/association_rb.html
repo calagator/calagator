@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>File: association.rb</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table border='0' cellpadding='0' cellspacing='0' width="100%" class='banner'>
+  <tr><td>
+    <table width="100%" border='0' cellpadding='0' cellspacing='0'><tr>
+      <td class="file-title" colspan="2"><span class="file-title-prefix">File</span><br />association.rb</td>
+      <td align="right">
+        <table border='0' cellspacing="0" cellpadding="2">
+          <tr>
+            <td>Path:</td>
+            <td>lib/facets/association.rb
+            </td>
+          </tr>
+          <tr>
+            <td>Modified:</td>
+            <td>Tue Mar 18 20:05:16 -0400 2008</td>
+          </tr>
+        </table>
+      </td></tr>
+    </table>
+  </td></tr>
+</table><br />
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="../../../classes/Association.html">Association</a></h1>
+<p>
+General binary association allows one object to be associated with another.
+<a href="../../../classes/It.html">It</a> has a variety of uses,
+link-lists, simple ordered maps and mixed collections, among them.
+</p>
+<h2>Usage</h2>
+<p>
+Associations can be used to draw simple relationships.
+</p>
+<pre>
+  :Apple &gt;&gt; :Fruit
+  :Apple &gt;&gt; :Red
+
+  :Apple.associations #=&gt; [ :Fruit, :Red ]
+</pre>
+<p>
+<a href="../../../classes/It.html">It</a> can also be used for simple lists
+of ordered pairs.
+</p>
+<pre>
+  c = [ :a &gt;&gt; 1, :b &gt;&gt; 2 ]
+  c.each { |k,v| puts &quot;#{k} associated with #{v} }
+</pre>
+<p>
+produces
+</p>
+<pre>
+  a associated with 1
+  b associated with 2
+</pre>
+<h2>Limitations</h2>
+<p>
+The method :&gt;&gt; is used to construct the association. <a
+href="../../../classes/It.html">It</a> is a rarely used method so it is
+generally available. But you can&#8216;t use an <a
+href="../../../classes/Association.html">Association</a> while extending
+any of the following classes becuase they use #&gt;&gt; for other things.
+</p>
+<pre>
+  Bignum
+  Fixnum
+  Date
+  IPAddr
+  Process::Status
+</pre>
+<h2>Author</h2>
+<ul>
+<li>Thomas Sawyer
+
+</li>
+</ul>
+<h2>License</h2>
+<pre>
+  Copyright (c) 2005 Thomas Sawyer
+
+  Ruby License
+
+  This module is free software. You may use, modify, and/or redistribute this
+  software under the same terms as Ruby.
+
+  This program is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  FOR A PARTICULAR PURPOSE.
+</pre>
+</div>
+
+
+
+
+
+
+
+
+
+</div>
+
+  </div>
+
+    </body>
+</html>

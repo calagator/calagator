@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: IORedirect</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />IORedirect</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/ioredirect_rb.html">lib/facets/ioredirect.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="IORedirect.html">IORedirect</a></h1>
+<p>
+A class to <a href="IORedirect.html#M000006">redirect</a> $stdout, or other
+IO object, to a StringIO object, or any other object with a write() method.
+</p>
+<pre>
+  s = StringIO.new
+  r = Redirector.redirect($stdout, s) do
+    $stdout.puts &quot;this is a test&quot;
+  end
+</pre>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000003">new</a></li>
+  <li><a href="#M000006">redirect</a></li>
+  <li><a href="#M000004">start</a></li>
+  <li><a href="#M000005">stop</a></li>
+  </ul>
+
+
+
+
+
+
+<div class="sectiontitle">Public Class methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000003"></a><b>new</b>(from, to)
+  </div>
+  <div class="description">
+  <p>
+Start redirection from one IO object to any other object with a write()
+method. <tt>from</tt> is the IO object to <a
+href="IORedirect.html#M000006">redirect</a> from, and <tt>to</tt> is the
+object to <a href="IORedirect.html#M000006">redirect</a> to.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000003_source')" id="l_M000003_source">show source</a> ]</p>
+  <div id="M000003_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ioredirect.rb, line 48</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">from</span>, <span class="ruby-identifier">to</span>)
+    <span class="ruby-ivar">@from</span> = <span class="ruby-identifier">from</span>
+    <span class="ruby-ivar">@to</span> = <span class="ruby-identifier">to</span>
+    <span class="ruby-identifier">start</span>()
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000006"></a><b>redirect</b>(from, to) {|| ...}
+  </div>
+  <div class="description">
+  <p>
+An exception-safe class method for redirection
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000006_source')" id="l_M000006_source">show source</a> ]</p>
+  <div id="M000006_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ioredirect.rb, line 80</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">redirect</span>(<span class="ruby-identifier">from</span>, <span class="ruby-identifier">to</span>)
+    <span class="ruby-identifier">s</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">from</span>, <span class="ruby-identifier">to</span>)
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-keyword kw">yield</span>
+    <span class="ruby-keyword kw">ensure</span>
+      <span class="ruby-identifier">s</span>.<span class="ruby-identifier">stop</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000004"></a><b>start</b>()
+  </div>
+  <div class="description">
+  <p>
+Start redirection, if it has not already been started.
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000004_source')" id="l_M000004_source">show source</a> ]</p>
+  <div id="M000004_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ioredirect.rb, line 55</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Redirection already in progress&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@t</span>
+    <span class="ruby-identifier">tmp</span> = <span class="ruby-ivar">@from</span>.<span class="ruby-identifier">dup</span>
+    <span class="ruby-identifier">r</span>, <span class="ruby-identifier">w</span> = <span class="ruby-constant">IO</span>.<span class="ruby-identifier">pipe</span>
+    <span class="ruby-ivar">@from</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-identifier">w</span>)
+    <span class="ruby-ivar">@t</span> = <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>
+          <span class="ruby-identifier">s</span> = <span class="ruby-identifier">r</span>.<span class="ruby-identifier">read</span>(<span class="ruby-value">1</span>) <span class="ruby-comment cmt"># TODO: can I make this buffered?</span>
+          <span class="ruby-ivar">@to</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">s</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">ensure</span>
+        <span class="ruby-ivar">@from</span>.<span class="ruby-identifier">reopen</span>(<span class="ruby-identifier">tmp</span>)
+        <span class="ruby-ivar">@t</span> = <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000005"></a><b>stop</b>()
+  </div>
+  <div class="description">
+  <p>
+Stop redirection, if it is occurring
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000005_source')" id="l_M000005_source">show source</a> ]</p>
+  <div id="M000005_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/ioredirect.rb, line 74</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stop</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Redirection already stopped&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">not</span> <span class="ruby-ivar">@t</span>
+    <span class="ruby-ivar">@t</span>.<span class="ruby-identifier">kill</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>

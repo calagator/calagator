@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>Class: Logger</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+
+    <script language="JavaScript" type="text/javascript">
+    // <![CDATA[
+
+        function toggleSource( id )
+        {
+          var elem
+          var link
+
+          if( document.getElementById )
+          {
+            elem = document.getElementById( id )
+            link = document.getElementById( "l_" + id )
+          }
+          else if ( document.all )
+          {
+            elem = eval( "document.all." + id )
+            link = eval( "document.all.l_" + id )
+          }
+          else
+            return false;
+
+          if( elem.style.display == "block" )
+          {
+            elem.style.display = "none"
+            link.innerHTML = "show source"
+          }
+          else
+          {
+            elem.style.display = "block"
+            link.innerHTML = "hide source"
+          }
+        }
+
+        function openCode( url )
+        {
+          window.open( url, "SOURCE_CODE", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=480,width=750" ).focus();
+        }
+      // ]]>
+    </script>
+  </head>
+
+  <body>
+  <table width="100%" border='0' cellpadding='0' cellspacing='0' class='banner'><tr>
+  <td class="file-title"><span class="file-title-prefix">Class</span><br />Logger</td>
+  <td align="right">
+    <table cellspacing="0" cellpadding="2">
+      <tr valign="top">
+        <td>In:</td>
+        <td>
+<a href="../files/lib/facets/logger_rb.html">lib/facets/logger.rb</a>
+        </td>
+      </tr>
+    <tr>
+      <td>Parent:</td>
+      <td>
+Object
+     </td>
+   </tr>
+         </table>
+        </td>
+        </tr>
+      </table>
+ <!-- banner header -->
+
+  <div id="bodyContent">
+      <div id="content">
+
+  <div class="description"><h1><a href="Logger.html">Logger</a></h1>
+<p>
+Extended variation of Ruby&#8216;s standard <a
+href="Logger.html">Logger</a> library. Mainly for compatibility purposes
+(with what?)
+</p>
+<pre>
+  log = Logger.new
+
+  log.setup_format do |severity, timestamp, progname, msg|
+    Logger::SIMPLE_FORMAT % [severity, msg]
+  end
+</pre>
+<p>
+When using debug level logger messages always append &#8216;if $DBG&#8217;
+at the end. This hack is needed because Ruby does not support lazy
+evaluation (lisp macros).
+</p>
+<p>
+TODO: What&#8216;s all this about then?
+</p>
+</div>
+
+
+
+  <div class="sectiontitle">Methods</div>
+  <ul>
+  <li><a href="#M000048">ansicolor=</a></li>
+  <li><a href="#M000050">format_procedure</a></li>
+  <li><a href="#M000049">setup_format</a></li>
+  </ul>
+
+<div class="sectiontitle">Included Modules</div>
+<ul>
+  <li><a href="Logger/Ansicolor.html">Ansicolor</a></li>
+</ul>
+
+
+  <div class="sectiontitle">Classes and Modules</div>
+  Module <a href="Logger/Ansicolor.html" class="link">Logger::Ansicolor</a><br />
+Class <a href="Logger/LogDevice.html" class="link">Logger::LogDevice</a><br />
+
+
+  <div class="sectiontitle">Constants</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class="attr-name">SIMPLE_FORMAT</td>
+    <td>=</td>
+    <td class="attr-value">&quot;%5s: %s\n&quot;</td>
+  </tr>
+  <tr valign='top'>
+    <td>&nbsp;</td>
+    <td colspan="2" class="attr-desc">
+Some available logging formats.
+
+</td>
+  </tr>
+  <tr valign='top'>
+    <td class="attr-name">DETAILED_FORMAT</td>
+    <td>=</td>
+    <td class="attr-value">&quot;%s %5s: %s\n&quot;</td>
+  </tr>
+  </table>
+
+  <div class="sectiontitle">Attributes</div>
+  <table border='0' cellpadding='5'>
+  <tr valign='top'>
+    <td class='attr-rw'>
+[RW]
+    </td>
+    <td class='attr-name'>format_proc</td>
+    <td class='attr-desc'></td>
+  </tr>
+  </table>
+
+<div class="sectiontitle">Public Instance methods</div>
+<div class="method">
+  <div class="title">
+    <a name="M000048"></a><b>ansicolor=</b>(on)
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000048_source')" id="l_M000048_source">show source</a> ]</p>
+  <div id="M000048_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 66</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ansicolor=</span>(<span class="ruby-identifier">on</span>)
+    <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Ansicolor</span>)
+      <span class="ruby-keyword kw">class</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-keyword kw">self</span>
+        <span class="ruby-identifier">include</span> <span class="ruby-constant">Ansicolor</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-ivar">@logdev</span>.<span class="ruby-identifier">ansicolor</span> = <span class="ruby-identifier">on</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000050"></a><b>format_procedure</b>()
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000050_source')" id="l_M000050_source">show source</a> ]</p>
+  <div id="M000050_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 156</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">format_procedure</span>
+    <span class="ruby-ivar">@format_proc</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+<div class="method">
+  <div class="title">
+    <a name="M000049"></a><b>setup_format</b>(&amp;format_proc)
+  </div>
+  <div class="description">
+  <p>
+Dictate the way in which this logger should format the messages it
+displays. This method requires a block. The block should return formatted
+strings given severity, timestamp, msg, progname.
+</p>
+<h3>Example</h3>
+<p>
+logger = Logger.new logger.setup_format do |severity, timestamp, msg,
+progname|
+</p>
+<pre>
+  &quot;#{progname}@#{timestamp} - #{severity}::#{msg}&quot;
+</pre>
+<p>
+end
+</p>
+  </div>
+<div class="sourcecode">
+  <p class="source-link">[ <a href="javascript:toggleSource('M000049_source')" id="l_M000049_source">show source</a> ]</p>
+  <div id="M000049_source" class="dyn-source">
+<pre>
+<span class="ruby-comment cmt"># File lib/facets/logger.rb, line 151</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">setup_format</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">format_proc</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-value str">&quot;Formating block needed&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">format_proc</span>
+    <span class="ruby-ivar">@format_proc</span> = <span class="ruby-identifier">format_proc</span>
+  <span class="ruby-keyword kw">end</span>
+</pre>
+  </div>
+</div>
+</div>
+</div>
+
+  </div>
+
+    </body>
+</html>
