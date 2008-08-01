@@ -242,6 +242,7 @@ class Event < ActiveRecord::Base
     formatted_query = \
       %{NOT duplicate_for_solr:"1" AND (} \
       << query \
+      .gsub(/:/, '?') \
       .scan(/\S+/) \
       .map(&:escape_lucene) \
       .map{|term| %{
