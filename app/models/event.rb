@@ -245,10 +245,8 @@ class Event < ActiveRecord::Base
       :limit => limit,
     }
     solr_opts[:scores] = true if order == :score
-    response = Event.find_by_solr(formatted_query, solr_opts)
-    results = response.results
-
-    return results
+    response = Event.find_id_by_solr(formatted_query, solr_opts)
+    return Event.find(:all, :conditions => ["id in (?)", response.results], :include => [:venue, :source])
   end
 
   def self.search_grouped_by_currentness(*args)
