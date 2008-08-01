@@ -255,7 +255,7 @@ class Event < ActiveRecord::Base
       << ')'
 
     if skip_old
-      formatted_query << %{ AND (start_time:[#{Time.today.yesterday.strftime(SOLR_TIME_FORMAT)} TO #{SOLR_TIME_MAXIMUM}])}
+      formatted_query << %{ AND (start_time_for_solr:[#{Time.today.yesterday.strftime(SOLR_TIME_FORMAT)} TO #{SOLR_TIME_MAXIMUM}])}
     end
 
     solr_opts = {
