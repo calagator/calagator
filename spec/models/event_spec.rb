@@ -280,11 +280,11 @@ describe Event do
   end
 
   describe "when searching" do
-    # TODO figure out sane way to write spec for Event.search
     it "should find events" do
-      solr_response = mock_model(Object, :results => [])
-      solr_return = mock_model(Object, :response => solr_response)
-      Event.should_receive(:find_by_solr).and_return(solr_response)
+      solr_matches = []
+      solr_response = mock_model(Object, :results => solr_matches)
+      Event.should_receive(:find_id_by_solr).and_return(solr_response)
+      Event.should_receive(:find_by_id_for_solr).and_return(solr_matches)
 
       Event.search("myquery").should be_empty
     end
@@ -292,9 +292,10 @@ describe Event do
     it "should find events and group them" do
       current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
       past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
-      solr_response = mock_model(Object, :results => [current_event, past_event])
-      solr_return = mock_model(Object, :response => solr_response)
-      Event.should_receive(:find_by_solr).and_return(solr_response)
+      solr_matches = [current_event, past_event]
+      solr_response = mock_model(Object, :results => solr_matches)
+      Event.should_receive(:find_id_by_solr).and_return(solr_response)
+      Event.should_receive(:find_by_id_for_solr).and_return(solr_matches)
 
       Event.search_grouped_by_currentness("myquery").should == {
         :current => [current_event],
