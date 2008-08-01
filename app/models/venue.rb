@@ -73,6 +73,11 @@ class Venue < ActiveRecord::Base
   duplicate_checking_ignores_attributes    :source_id
   duplicate_squashing_ignores_associations :tags
 
+  # Named scopes
+  named_scope :masters,
+    :conditions => ['duplicate_of_id IS NULL'],
+    :include => [:source, :events, :tags, :taggings]
+
   #===[ Instantiators ]===================================================
 
   # Returns a new Venue created from an AbstractLocation.

@@ -17,22 +17,22 @@ describe Event do
       event.should be_valid
     end
   end
-  
+
   describe "when checking time status" do
     fixtures :events
-    
-    it "should be old if event ended before today" do 
+
+    it "should be old if event ended before today" do
       events(:old_event).should be_old
     end
-    
-    it "should be current if event is happening today" do 
+
+    it "should be current if event is happening today" do
       events(:tomorrow).should be_current
     end
-    
+
     it "should be ongoing if it began before today but ends today or later" do
       events(:ongoing_event).should be_ongoing
     end
-    
+
   end
 
   describe "dealing with tags" do
@@ -281,10 +281,7 @@ describe Event do
 
   describe "when searching" do
     it "should find events" do
-      solr_matches = []
-      solr_response = mock_model(Object, :results => solr_matches)
-      Event.should_receive(:find_id_by_solr).and_return(solr_response)
-      Event.should_receive(:find_by_id_for_solr).and_return(solr_matches)
+      Event.should_receive(:find_with_solr).and_return([])
 
       Event.search("myquery").should be_empty
     end
@@ -292,10 +289,7 @@ describe Event do
     it "should find events and group them" do
       current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
       past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
-      solr_matches = [current_event, past_event]
-      solr_response = mock_model(Object, :results => solr_matches)
-      Event.should_receive(:find_id_by_solr).and_return(solr_response)
-      Event.should_receive(:find_by_id_for_solr).and_return(solr_matches)
+      Event.should_receive(:find_with_solr).and_return([current_event, past_event])
 
       Event.search_grouped_by_currentness("myquery").should == {
         :current => [current_event],
@@ -399,7 +393,7 @@ end
     end
 
     it "should find duplicate title by any" do
-      pending "TODO: find out why this fails" 
+      pending "TODO: find out why this fails"
       pre, post = find_duplicates_create_a_clone_and_find_again(:any, {:title => @event.title, :start_time => @event.start_time} )
       post.size.should == pre.size + 2
     end

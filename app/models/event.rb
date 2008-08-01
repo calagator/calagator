@@ -4,16 +4,16 @@
 # Table name: events
 #
 #  id              :integer         not null, primary key
-#  title           :string(255)     
-#  description     :text            
-#  start_time      :datetime        
-#  venue_id        :integer         
-#  url             :string(255)     
-#  created_at      :datetime        
-#  updated_at      :datetime        
-#  source_id       :integer         
-#  duplicate_of_id :integer         
-#  end_time        :datetime        
+#  title           :string(255)
+#  description     :text
+#  start_time      :datetime
+#  venue_id        :integer
+#  url             :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  source_id       :integer
+#  duplicate_of_id :integer
+#  end_time        :datetime
 #
 
 # == Event
@@ -21,7 +21,7 @@
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
-  
+
   # Names of columns and methods to create Solr indexes for
   INDEXABLE_FIELDS = \
     %w(
@@ -31,18 +31,20 @@ class Event < ActiveRecord::Base
       duplicate_for_solr
       start_time_for_solr
       end_time_for_solr
+      event_title_for_solr
+      venue_title_for_solr
       text_for_solr
       tag_list
     ).map(&:to_sym)
-    
+
   unless RAILS_ENV == 'test'
     acts_as_solr :fields => INDEXABLE_FIELDS
   end
 
   # last Time representable in certain operating systems is Jan 18 2038, local time
-  # TODO:  if possible, change this to the last Time representable in this server's op sys
+  # TODO rewrite SQL to eliminate the need for this constant
   END_OF_TIME = Time.local(2038, 01, 18).yesterday.end_of_day.utc
-  
+
   # Associations
   belongs_to :venue
   belongs_to :source
@@ -63,24 +65,21 @@ class Event < ActiveRecord::Base
   duplicate_checking_ignores_attributes    :source_id
   duplicate_squashing_ignores_associations :tags
 
-  #---[ Overrides ]-------------------------------------------------------
+  # Named scopes
+  named_scope :masters,
+    :conditions => ["events.duplicate_of_id IS NULL"],
+    :include => [:source, :venue, :tags, :taggings]
 
-  # Index only specific events
-  def self.rebuild_solr_index
-    # Skip duplicate events
-    self.find(:all, :conditions => ['duplicate_of_id IS NULL']).each {|content| content.solr_save}
-    logger.debug self.count>0 ? "Index for #{self.name} has been rebuilt" : "Nothing to index for #{self.name}"
-  end
+  #---[ Overrides ]-------------------------------------------------------
 
   # Return the title but strip out any whitespace.
   def title
     # TODO Generalize this code so we can use it on other attributes in the different model classes. The solution should use an #alias_method_chain to make sure it's not breaking any explicit overrides for an attribute.
-    s = read_attribute(:title)
-    s.blank? ? nil : s.strip
+    return read_attribute(:title).ergo.strip
   end
 
   #---[ Queries ]---------------------------------------------------------
-  
+
   # Associate this event with the +venue+. The +venue+ can be given as a Venue
   # instance, an ID, or a title.
   def associate_with_venue(venue)
@@ -148,6 +147,7 @@ class Event < ActiveRecord::Base
   def self.find_future_events(opts={})
     order = opts[:order] || :start_time
     venue = opts[:venue]
+    # TODO eliminate need for END_OF_TIME constant
     Event.find_by_dates(Time.now.beginning_of_day.utc, END_OF_TIME, :order => order, :venue => venue)
   end
 
@@ -157,20 +157,22 @@ class Event < ActiveRecord::Base
   # * :order => How to sort events. Defaults to :start_time.
   # * :venue => Which venue to display events for. Defaults to all.
   def self.find_by_dates(start_of_range, end_of_range, opts={})
+    # TODO make it possible to set 'end_of_range' to nil, and eliminate the END_OF_TIME constant and its use in find_future_events.
     start_of_range = Time.parse(start_of_range.to_s) if start_of_range.is_a?(Date)
     end_of_range = Time.parse(end_of_range.to_s).end_of_day if end_of_range.is_a?(Date)
     order = opts [:order] || :start_time
 
-  # an event with an end_time is out of range if
-  # its start_time is after the end of range OR its end_time is before the start of the range
-  # otherwise (an event with an end_time), event is in range if its start_time is in range
-  # Query is complex because SQL has tertiary logic for NUll and end_time may be NULL
-    conditions_sql = "events.duplicate_of_id is NULL AND
+    # an event with an end_time is out of range if
+    # its start_time is after the end of range OR its end_time is before the start of the range
+    # otherwise (an event with an end_time), event is in range if its start_time is in range
+    # Query is complex because SQL has tertiary logic for NUll and end_time may be NULL
+    conditions_sql = <<-HERE
       (NOT (start_time > :end_of_range OR end_time < :start_of_range ) OR
-      (start_time >= :start_of_range AND start_time <= :end_of_range) )"
+      (start_time >= :start_of_range AND start_time <= :end_of_range) )
+    HERE
 
     conditions_vars = {
-      :start_of_range => start_of_range.utc, 
+      :start_of_range => start_of_range.utc,
       :end_of_range => end_of_range.utc }
 
     if venue = opts[:venue]
@@ -178,9 +180,8 @@ class Event < ActiveRecord::Base
       conditions_vars[:venue] = venue.id
     end
 
-    return find(:all,
+    return self.masters.find(:all,
       :conditions => [conditions_sql, conditions_vars],
-      :include => :venue,
       :order => order)
   end
 
@@ -198,6 +199,18 @@ class Event < ActiveRecord::Base
 
   #---[ Solr searching ]--------------------------------------------------
 
+  # Number of records to index at once.
+  SOLR_REBUILD_BATCH_SIZE = 100
+
+  # Index only specific events with Solr.
+  def self.rebuild_solr_index(batch_size=SOLR_REBUILD_BATCH_SIZE)
+    timer = Time.now
+    super(batch_size){|klass, opts| self.masters.find(:all, opts)}
+    elapsed = Time.now - timer
+    logger.debug(self.count>0 ? "Index for #{self.name} rebuilt in #{elapsed}s" : "Nothing to index for #{self.name}")
+    return elapsed
+  end
+
   # How similar should terms be to qualify as a match? This value should be
   # close to zero because Lucene's implementation of fuzzy matching is
   # defective, e.g., at 0.5 it can't even realize that "meetin" is similar to
@@ -207,53 +220,70 @@ class Event < ActiveRecord::Base
   # How much to boost the score of a match in the title?
   SOLR_TITLE_BOOST = 4
 
+  # Number of search matches to return by default.
+  SOLR_SEARCH_MATCHES = 50
+
   # Return an Array of non-duplicate Event instances matching the search +query+..
   #
   # Options:
-  # * :order => How to order the entries? Can be :score, :date, :name, or :venue.
-  #   Defaults to :score.
-  # * :limit => Maximum number of entries to return, defaults to 50.
+  # * :order => How to order the entries? Defaults to :score. Permitted values:
+  #   * :score => Sort with most relevant matches first
+  #   * :date => Sort by date
+  #   * :name => Sort by event title
+  #   * :title => same as :name
+  #   * :venue => Sort by venue title
+  # * :limit => Maximum number of entries to return. Defaults to SOLR_SEARCH_MATCHES.
   # * :skip_old => Return old entries? Defaults to false.
   def self.search(query, opts={})
-    order_kind = opts[:order].blank? ? :score : opts[:order].to_sym
-    order = \
-      case order_kind
-      when :date  then 'start_time asc'
-      when :name  then 'events.title asc'
-      when :venue then 'venues.title asc'
-      when :score then 'score desc'
-      else raise ArgumentError, "Unknown order: #{opts[:order]}"
-      end
     skip_old = opts[:skip_old] == true
-    limit = opts[:limit] || 50
-    
+    limit = opts[:limit] || SOLR_SEARCH_MATCHES
+    order = opts[:order].ergo.to_sym || :score
+
     formatted_query = \
       %{NOT duplicate_for_solr:"1" AND (} \
       << query \
       .scan(/\S+/) \
       .map(&:escape_lucene) \
-      .map{|term| %{title:"#{term}"~#{"%1.1f" % SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST} OR "#{term}"~#{"%1.1f" % SOLR_SIMILARITY}}} \
-      .join(" ") \
-      << %{)}
+      .map{|term| %{
+        title:"#{term}"~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
+        OR tag:"#{term}"~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
+        OR "#{term}"~#{SOLR_SIMILARITY}}
+      } \
+      .join(' ') \
+      .gsub(/^\s{2,}|\s{2,}$|\s{2,}/m, ' ') \
+      << ')'
 
     if skip_old
       formatted_query << %{ AND (start_time:[#{Time.today.yesterday.strftime(SOLR_TIME_FORMAT)} TO #{SOLR_TIME_MAXIMUM}])}
     end
 
     solr_opts = {
-      :order => order,
+      :order => "score desc",
       :limit => limit,
+      :scores => true,
     }
-    solr_opts[:scores] = true if order == :score
-    event_ids = self.find_id_by_solr(formatted_query, solr_opts).results
-    return self.find_by_id_for_solr(event_ids)
+    events_by_score = self.find_with_solr(formatted_query, solr_opts)
+    events = \
+      case order
+      when :score        then events_by_score
+      when :name, :title then events_by_score.sort_by(&:event_title_for_solr)
+      when :venue        then events_by_score.sort_by(&:venue_title_for_solr)
+      when :date         then events_by_score.sort_by(&:start_time_for_solr)
+      else raise ArgumentError, "Unknown order: #{order}"
+      end
+    return events
   end
 
-  # Return an array of event records matching the IDs with their associations preloaded.
-  def self.find_by_id_for_solr(*event_ids)
-    return self.find(:all, :conditions => ["id in (?)", event_ids.flatten], :include => [:venue, :source])
+  # Return an array of events found via Solr for the +formatted_query+ string
+  # and +solr_opts+ hash. The primary benefit of this method is that it makes
+  # it very easy to stub in specs.
+  def self.find_with_solr(formatted_query, solr_opts={})
+    return self.find_by_solr(formatted_query, solr_opts).results
   end
 
+  # Return events grouped by their currentness. Accepts the same +args+ as
+  # #search. The results hash is keyed by whether the event is current
+  # (true/false) and the values are arrays of events.
   def self.search_grouped_by_currentness(*args)
     results = self.search(*args).group_by(&:current?)
     return {:current => results[true] || [], :past => results[false] || []}
@@ -261,20 +291,23 @@ class Event < ActiveRecord::Base
 
   #---[ Solr helpers ]----------------------------------------------------
 
+  # Format to use for storing Solr dates. Must generate a number that can be meaningfully sorted by value.
   SOLR_TIME_FORMAT = '%Y%m%d%H%M'
+
+  # Maximum length of a SOLR_TIME_FORMAT string.
   SOLR_TIME_LENGTH = Time.now.strftime(SOLR_TIME_FORMAT).length
+
+  # Maximum numeric date for a Solr date string.
   SOLR_TIME_MAXIMUM = ('9' * SOLR_TIME_LENGTH).to_i
 
   # Return a purely numeric representation of the start_time
   def start_time_for_solr
-    time = self.start_time
-    time ? time.utc.strftime(SOLR_TIME_FORMAT).to_i : nil
+    self.start_time.ergo{utc.strftime(SOLR_TIME_FORMAT).to_i} || ""
   end
 
   # Return a purely numeric representation of the end_time
   def end_time_for_solr
-    time = self.end_time
-    time ? time.utc.strftime(SOLR_TIME_FORMAT).to_i : nil
+    self.end_time.ergo{utc.strftime(SOLR_TIME_FORMAT).to_i} || ""
   end
 
   # Returns value for whether the record is a duplicate or not
@@ -282,16 +315,23 @@ class Event < ActiveRecord::Base
     self.duplicate_of_id.blank? ? 0 : 1
   end
 
+  def event_title_for_solr
+    self.title.to_s
+  end
+
+  def venue_title_for_solr
+    self.venue.ergo.title.to_s
+  end
+
   # Return a string of all indexable fields, which may be useful for doing duplicate checks
   def text_for_solr
-    INDEXABLE_FIELDS.reject{|name| name == :text_for_solr}.map{|name| self.send(name)}.join("|")
+    INDEXABLE_FIELDS.reject{|name| name == :text_for_solr}.map{|name| self.send(name)}.join("|").to_s
   end
 
   #---[ Transformations ]-------------------------------------------------
 
   # Returns a new Event created from an AbstractEvent.
   def self.from_abstract_event(abstract_event, source=nil)
-
     event = Event.new
 
     event.source       = source
@@ -301,7 +341,6 @@ class Event < ActiveRecord::Base
     event.end_time     = abstract_event.end_time.blank? ? nil : Time.parse(abstract_event.end_time.to_s)
     event.url          = abstract_event.url
     event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
-
 
     duplicates = event.find_exact_duplicates
     duplicates ? duplicates.first : event
@@ -355,7 +394,7 @@ EOF
 
         description   = event.description || ""
         description  += "\n\nTags:\n#{event.tag_list}" unless event.tag_list.blank?
-        
+
         c.description   description unless description.blank?
 
         # TODO Come up with a generalized way to generate URLs for events that don't have them.
@@ -372,7 +411,7 @@ EOF
         # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
         c.dtstamp       event.created_at || event.start_time
         # TODO substitute correct environment variables for "http://calagator.org/events/"
-        c.uid         opts[:url_helper].call(event) if opts[:url_helper]
+        c.uid           opts[:url_helper].call(event) if opts[:url_helper]
         # c.uid         ("http://calagator.org/events/" + event.id.to_s)
 
 
@@ -412,12 +451,12 @@ EOF
     cutoff ||= Time.today # midnight today is the end of yesterday
     return (self.end_time || self.start_time) < cutoff
   end
-  
+
   # Did this event start before today but ends today or later?
   def ongoing?
     self.start_time < Time.today && self.end_time && self.end_time >= Time.today
   end
-  
+
 protected
 
   def end_time_later_than_start_time
