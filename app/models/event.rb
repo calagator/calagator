@@ -399,7 +399,6 @@ EOF
 
         c.description   description unless description.blank?
 
-        # TODO Come up with a generalized way to generate URLs for events that don't have them.
         # The reason for this messy URL helper business is that models can't access the route helpers,
         # and even if they could, they'd need to access the request object so they know what the server's name is and such.
         if event.url.blank?
@@ -412,7 +411,6 @@ EOF
         # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
         # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
         c.dtstamp       event.created_at || event.start_time
-        # TODO substitute correct environment variables for "http://calagator.org/events/"
         c.uid           opts[:url_helper].call(event) if opts[:url_helper]
         # c.uid         ("http://calagator.org/events/" + event.id.to_s)
 
