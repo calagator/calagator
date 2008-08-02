@@ -41,10 +41,6 @@ class Event < ActiveRecord::Base
     acts_as_solr :fields => INDEXABLE_FIELDS
   end
 
-  # last Time representable in certain operating systems is Jan 18 2038, local time
-  # TODO rewrite SQL to eliminate the need for this constant
-  END_OF_TIME = Time.local(2038, 01, 18).yesterday.end_of_day.utc
-
   # Associations
   belongs_to :venue
   belongs_to :source
@@ -112,7 +108,7 @@ class Event < ActiveRecord::Base
   #     :later => [...],
   #   }
   def self.select_for_overview
-    today = Time.today.beginning_of_day
+    today = Time.today
     tomorrow = today + 1.day
     after_tomorrow = tomorrow + 1.day
     future_cutoff = today + 2.weeks
@@ -147,8 +143,7 @@ class Event < ActiveRecord::Base
   def self.find_future_events(opts={})
     order = opts[:order] || :start_time
     venue = opts[:venue]
-    # TODO eliminate need for END_OF_TIME constant
-    Event.find_by_dates(Time.now.beginning_of_day.utc, END_OF_TIME, :order => order, :venue => venue)
+    Event.find_by_dates(Time.today.utc, nil, :order => order, :venue => venue)
   end
 
   # Returns an Array of non-duplicate Event instances in a date range
@@ -157,23 +152,29 @@ class Event < ActiveRecord::Base
   # * :order => How to sort events. Defaults to :start_time.
   # * :venue => Which venue to display events for. Defaults to all.
   def self.find_by_dates(start_of_range, end_of_range, opts={})
-    # TODO make it possible to set 'end_of_range' to nil, and eliminate the END_OF_TIME constant and its use in find_future_events.
     start_of_range = Time.parse(start_of_range.to_s) if start_of_range.is_a?(Date)
     end_of_range = Time.parse(end_of_range.to_s).end_of_day if end_of_range.is_a?(Date)
     order = opts [:order] || :start_time
 
-    # an event with an end_time is out of range if
-    # its start_time is after the end of range OR its end_time is before the start of the range
-    # otherwise (an event with an end_time), event is in range if its start_time is in range
-    # Query is complex because SQL has tertiary logic for NUll and end_time may be NULL
+    # treat nil end_of_range as having no end cutoff
+    # Otherwise event is within range if (a) its start_time is in range, or
+    #  (b) if it has an end_time, it's not out of range:
+    #  event with an end_time is out of range if
+    #  its start_time is after the end of range OR its end_time is before the start of the range
+    #  checking for NOT out of range takes care of tertiary NULL logic for NULL end_time
     conditions_sql = <<-HERE
-      (NOT (start_time > :end_of_range OR end_time < :start_of_range ) OR
-      (start_time >= :start_of_range AND start_time <= :end_of_range) )
+      (:end_of_range IS NULL AND
+        (start_time >= :start_of_range) OR
+        (end_time IS NOT NULL AND end_time >= :start_of_range) )
+      OR
+      (:end_of_range IS NOT NULL AND
+        (start_time >= :start_of_range AND start_time <= :end_of_range) OR
+        (NOT (start_time > :end_of_range OR end_time < :start_of_range) ) )
     HERE
 
     conditions_vars = {
       :start_of_range => start_of_range.utc,
-      :end_of_range => end_of_range.utc }
+      :end_of_range => end_of_range.ergo.utc }
 
     if venue = opts[:venue]
       conditions_sql << " AND venues.id == :venue"
