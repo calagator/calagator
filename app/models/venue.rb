@@ -4,23 +4,23 @@
 # Table name: venues
 #
 #  id              :integer         not null, primary key
-#  title           :string(255)     
-#  description     :text            
-#  address         :string(255)     
-#  url             :string(255)     
-#  created_at      :datetime        
-#  updated_at      :datetime        
-#  street_address  :string(255)     
-#  locality        :string(255)     
-#  region          :string(255)     
-#  postal_code     :string(255)     
-#  country         :string(255)     
-#  latitude        :decimal(, )     
-#  longitude       :decimal(, )     
-#  email           :string(255)     
-#  telephone       :string(255)     
-#  source_id       :integer         
-#  duplicate_of_id :integer         
+#  title           :string(255)
+#  description     :text
+#  address         :string(255)
+#  url             :string(255)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  street_address  :string(255)
+#  locality        :string(255)
+#  region          :string(255)
+#  postal_code     :string(255)
+#  country         :string(255)
+#  latitude        :decimal(, )
+#  longitude       :decimal(, )
+#  email           :string(255)
+#  telephone       :string(255)
+#  source_id       :integer
+#  duplicate_of_id :integer
 #
 
 class Venue < ActiveRecord::Base
@@ -93,6 +93,8 @@ class Venue < ActiveRecord::Base
 
     # if the new venue has no exact duplicate, use the new venue
     # otherwise, find the ultimate master and return it
+    # but first geocode it to compare it accurately to stored venues, which are all geocoded
+    venue.geocode
     duplicates = venue.find_exact_duplicates
     if duplicates
       venue = duplicates.first
