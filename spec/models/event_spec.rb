@@ -281,32 +281,29 @@ describe Event do
           end
 
           it "should include events that started earlier today" do
-            pending "This and related tests marked pending because venue.find.future.events not working and I don't know why"
+            pending "TODO: find out why this fails"
             @future_events_for_this_venue.should include(@started_midnight_and_continuing_after)
           end
 
           it "should include events with no end time that started today" do
-            pending "see above"
+            pending "TODO: find out why this fails"
             @future_events_for_this_venue.should include(@started_today_and_no_end_time)
           end
 
           it "should include events that started before today and ended after today" do
-            pending "see above"
+            pending "TODO: Why do these specs fail: similar specs without venue pass, and in development mode Calagator finds these events."
             @future_events_for_this_venue.should include(@started_before_today_and_ends_after_today)
           end
 
           it "should not include events that ended before today" do
-            pending "see above"
             @future_events_for_this_venue.should_not include(@started_and_ended_yesterday)
           end
 
           it "should not include events for another venue" do
-            pending "see above"
             @future_events_for_this_venue.should_not include(@future_event_another_venue)
           end
 
-           it "should not include events with no venue" do
-            pending "see above"
+          it "should not include events with no venue" do
             @future_events_for_this_venue.should_not include(@future_event_no_venue)
           end
        end

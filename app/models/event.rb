@@ -135,15 +135,21 @@ class Event < ActiveRecord::Base
     return times_to_events
   end
 
-  # Returns an Array of non-duplicate future Event instances.
+  # last Time representable in certain operating systems is Jan 18 2038, local time
+  # TODO rewrite SQL in find_by_dates to eliminate the need for this constant
+  #   also re-write call find_future_events
+  #   see r1048 which has been reverted because it broke find_future_events
+  END_OF_TIME = Time.local(2038, 01, 18).yesterday.end_of_day.utc
+
+# Returns an Array of non-duplicate future Event instances.
   # where "future" means any part of an event occurs today or later
   # Options:
   # * :order => How to sort events. Defaults to :start_time.
-  # * :venue => Which venue to display events for. Defaults to all.
+  # * :venue => Which venue to display events for. Defaults to all
   def self.find_future_events(opts={})
     order = opts[:order] || :start_time
     venue = opts[:venue]
-    Event.find_by_dates(Time.today.utc, nil, :order => order, :venue => venue)
+    Event.find_by_dates(Time.today.utc, END_OF_TIME, :order => order, :venue => venue)
   end
 
   # Returns an Array of non-duplicate Event instances in a date range
@@ -156,25 +162,18 @@ class Event < ActiveRecord::Base
     end_of_range = Time.parse(end_of_range.to_s).end_of_day if end_of_range.is_a?(Date)
     order = opts [:order] || :start_time
 
-    # treat nil end_of_range as having no end cutoff
-    # Otherwise event is within range if (a) its start_time is in range, or
-    #  (b) if it has an end_time, it's not out of range:
-    #  event with an end_time is out of range if
+    # event is in range if start_time is in range
+    # an event with an end_time is out of range if
     #  its start_time is after the end of range OR its end_time is before the start of the range
-    #  checking for NOT out of range takes care of tertiary NULL logic for NULL end_time
     conditions_sql = <<-HERE
-      (:end_of_range IS NULL AND
-        (start_time >= :start_of_range) OR
-        (end_time IS NOT NULL AND end_time >= :start_of_range) )
-      OR
-      (:end_of_range IS NOT NULL AND
-        (start_time >= :start_of_range AND start_time <= :end_of_range) OR
-        (NOT (start_time > :end_of_range OR end_time < :start_of_range) ) )
+      ( (start_time >= :start_of_range AND start_time <= :end_of_range) OR
+        (end_time IS NOT NULL AND
+          NOT (start_time > :end_of_range OR end_time < :start_of_range ) ) )
     HERE
 
     conditions_vars = {
       :start_of_range => start_of_range.utc,
-      :end_of_range => end_of_range.ergo.utc }
+      :end_of_range => end_of_range.utc }
 
     if venue = opts[:venue]
       conditions_sql << " AND venues.id == :venue"
