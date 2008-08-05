@@ -97,7 +97,8 @@ describe SourceParser, "checking duplicates when importing" do
     @hcal_content = read_sample('hcal_event_duplicates_fixture.xml')
     SourceParser::Base.stub!(:read_url).and_return(@hcal_content)
     @events = @hcal_source.to_events
-
+    @events.first.save!
+    @events = @hcal_source.to_events
     @events.first.should_not be_a_new_record
   end
 
