@@ -444,9 +444,8 @@ end
     end
 
     it "should find duplicate title by any" do
-      pending "TODO: find out why this fails"
-      pre, post = find_duplicates_create_a_clone_and_find_again(:any, {:title => @event.title, :start_time => @event.start_time} )
-      post.size.should == pre.size + 2
+      dup_title = Event.create!({:title => @event.title, :start_time => @event.start_time + 1.minute})
+      Event.find(:duplicates, :by => :any).should include(dup_title)
     end
 
     it "should not find duplicate title by url" do

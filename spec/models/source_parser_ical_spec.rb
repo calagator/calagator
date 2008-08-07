@@ -195,7 +195,7 @@ describe SourceParser::Ical, "when importing events with non-local times" do
 end
 
   it "should store time with TZID=GMT in UTC" do
-    pending "not activated - requires VPIM fix or work-around"
+    pending "not activated - requires VPIM fix or work-around. See Issue238."
     events = events_from_ical_at('ical_gmt.ics')
     events.size.should == 1
     abstract_event = events.first
