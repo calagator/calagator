@@ -82,12 +82,12 @@ describe SourceParser, "checking duplicates when importing" do
     end
 
     it "should create only one event" do
-      pending "Marked as pending because test fails."
+      pending "Fails because code checks imported calendar for duplicates against only saved objects, but not against itself. TODO: fix code. See Issue241"
       @created_events.size.should == 1
     end
 
     it "should create only one venue" do
-      pending "Marked as pending because test fails."
+      pending "Fails because code checks imported calendar for duplicates against only saved objects, but not against itself. TODO: fix code. See Issue241"
       Venue.find(:all).size.should == @venue_size_before_import + 1
     end
   end
