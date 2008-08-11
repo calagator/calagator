@@ -96,14 +96,8 @@ class Venue < ActiveRecord::Base
     # but first geocode it to compare it accurately to stored venues, which are all geocoded
     venue.geocode
     duplicates = venue.find_exact_duplicates
-    if duplicates
-      venue = duplicates.first
-      while venue.duplicate_of_id do
-        venue = Venue.find(venue.duplicate_of_id)
-      end
-    end
+    venue = duplicates.first.progenitor if duplicates
     return venue
-
   end
 
   #===[ Finders ]=========================================================

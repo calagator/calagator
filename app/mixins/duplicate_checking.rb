@@ -54,11 +54,27 @@ module DuplicateChecking
     end
   end
 
-  # Is this record a duplicate of another?
+  # Is this record a squashed duplicate of another?
   def duplicate?
     !self.duplicate_of.blank?
   end
 
+  def slave?
+    self.duplicate?
+  end
+  
+  def master?
+    !self.slave?
+  end
+  
+  # return ultimate master
+  # if object is not a slave, progenitor is the object itself
+  def progenitor
+    parent = self
+    parent = parent.class.find(parent.duplicate_of_id) until parent.master?
+    return parent
+  end
+  
   # Return either an Array of exact duplicates for this record, or nil if no exact duplicates were found.
   #
   # Note that this method requires that all associations are set before this method is called.

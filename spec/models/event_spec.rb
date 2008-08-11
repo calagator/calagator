@@ -498,4 +498,48 @@ end
     end
   end
 
+  describe "when checking for squashing" do
+    before(:all) do
+      @master = Event.create!(:title => "Master", :start_time => Time.today)
+      @slave_first = Event.create!(:title => "1st slave", :start_time => Time.today, :duplicate_of_id => @master.id)
+      @slave_second = Event.create!(:title => "2nd slave", :start_time => Time.today, :duplicate_of_id => @slave_first.id)
+    end
+    
+    it "should recognize a master" do
+      @master.should be_a_master
+    end
+    
+    it "should recognize a slave" do
+      @slave_first.should be_a_slave
+    end
+    
+    it "should not think that a slave is a master" do
+      @slave_second.should_not be_a_master
+    end
+    
+    it "should not think that a master is a slave" do
+      @master.should_not be_a_slave
+    end
+    
+     it "should return the progenitor of a child" do
+      @slave_first.progenitor.should == @master
+    end
+
+    it "should return the progenitor of a grandchild" do
+      @slave_second.progenitor.should == @master
+    end
+    
+    it "should return a master as its own progenitor" do
+      @master.progenitor.should == @master
+    end
+    
+    it "should return the progenitor if an imported event has an exact duplicate" do
+      @abstract_event = SourceParser::AbstractEvent.new
+      @abstract_event.title = @slave_second.title
+      @abstract_event.start_time = @slave_second.start_time.to_s
+
+      Event.from_abstract_event(@abstract_event).should == @master
+    end
+    
+  end
 end
