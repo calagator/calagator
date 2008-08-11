@@ -39,7 +39,7 @@ describe Venue, "when finding exact duplicates" do
   end
 end
 
-describe Venue, "with finding duplicates" do
+describe Venue, "with finding unmarked duplicates" do
   it "should find all venues with duplicate titles" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
     Venue.find(:duplicates, :by => :title )
@@ -62,7 +62,7 @@ describe Venue, "with finding duplicates" do
 
 end
 
-describe Venue, "with finding duplicates (integration test)" do
+describe Venue, "with finding unmarked duplicates (integration test)" do
   fixtures :venues
 
   before(:each) do
@@ -113,6 +113,50 @@ describe Venue, "with finding duplicates (integration test)" do
     pre, post = find_duplicates_create_a_clone_and_find_again([:title, :address], {:title => "SpaceCube", :address => @venue.address})
     post.size.should == pre.size
   end
+end
+
+describe Venue, "when checking for squashing" do
+  before(:all) do
+    @master = Venue.create!(:title => "Master")
+    @slave_first = Venue.create!(:title => "1st slave", :duplicate_of_id => @master.id)
+    @slave_second = Venue.create!(:title => "2nd slave", :duplicate_of_id => @slave_first.id)
+  end
+  
+  it "should recognize a master" do
+    @master.should be_a_master
+  end
+  
+  it "should recognize a slave" do
+    @slave_first.should be_a_slave
+  end
+  
+  it "should not think that a slave is a master" do
+    @slave_second.should_not be_a_master
+  end
+  
+  it "should not think that a master is a slave" do
+    @master.should_not be_a_slave
+  end
+  
+  it "should return the progenitor of a child" do
+    @slave_first.progenitor.should == @master
+  end
+
+  it "should return the progenitor of a grandchild" do
+    @slave_second.progenitor.should == @master
+  end
+  
+  it "should return a master as its own progenitor" do
+    @master.progenitor.should == @master
+  end
+  
+  it "should return the progenitor if an imported venue has an exact duplicate" do
+    @abstract_location = SourceParser::AbstractLocation.new
+    @abstract_location.title = @slave_second.title
+
+    Venue.from_abstract_location(@abstract_location).should == @master
+  end
+  
 end
 
 describe Venue, "when squashing duplicates" do

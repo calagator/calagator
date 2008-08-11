@@ -331,7 +331,7 @@ class Event < ActiveRecord::Base
 
   #---[ Transformations ]-------------------------------------------------
 
-  # Returns a new Event created from an AbstractEvent.
+  # Returns an Event created from an AbstractEvent.
   def self.from_abstract_event(abstract_event, source=nil)
     event = Event.new
 
@@ -344,7 +344,8 @@ class Event < ActiveRecord::Base
     event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
 
     duplicates = event.find_exact_duplicates
-    duplicates ? duplicates.first : event
+    event = duplicates.first.progenitor if duplicates
+    return event
   end
 
   # Returns an hCalendar string representing this Event.
