@@ -8,15 +8,15 @@ describe Source, "in general" do
       :url => "http://my.url/",
       :start_time => Time.now + 1.day,
       :end_time => nil,
-      :venue => nil)
+      :venue => nil,
+      :duplicate_of_id => nil)
   end
 
   it "should create events for source from URL" do
     @event.should_receive(:save!)
-
+    
     source = Source.new(:url => "http://my.url/")
     source.should_receive(:to_events).and_return([@event])
-
     source.create_events!.should == [@event]
   end
 

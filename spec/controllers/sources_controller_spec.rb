@@ -6,7 +6,8 @@ describe SourcesController do
       @venue = mock_model(Venue,
         :source => nil,
         :source= => true,
-        :save! => true)
+        :save! => true,
+        :duplicate_of_id =>nil)
 
       @event = mock_model(Event,
         :title => "Super Event",
@@ -14,7 +15,8 @@ describe SourcesController do
         :save! => true,
         :venue => @venue,
         :start_time => Time.now+1.week,
-        :end_time => nil)
+        :end_time => nil,
+        :duplicate_of_id => nil)
 
       @source = Source.new(:url => "http://my.url/")
       @source.stub!(:save!).and_return(true)
