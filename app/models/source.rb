@@ -60,8 +60,13 @@ class Source < ActiveRecord::Base
         event.start_time.localtime
         event.end_time.localtime if event.end_time
     
+        # clear duplicate_of_id field in case to_events picked up orphaned duplicate
+        event.duplicate_of_id = nil if event.duplicate_of_id
         event.save!
-        event.venue.save! if event.venue
+        if event.venue
+          event.venue.duplicate_of_id = nil if event.venue.duplicate_of_id
+          event.venue.save! if event.venue
+        end
         events << event
       end
       self.save!

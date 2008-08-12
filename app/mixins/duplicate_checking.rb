@@ -54,7 +54,12 @@ module DuplicateChecking
     end
   end
 
-  # Is this record a squashed duplicate of another?
+  # Is this record marked as a duplicate?
+  def marked_as_duplicate?
+    !self.duplicate_of_id.blank?
+  end
+  
+  # Is this record a squashed duplicate of an existing record?
   def duplicate?
     !self.duplicate_of.blank?
   end
@@ -68,7 +73,8 @@ module DuplicateChecking
   end
   
   # return ultimate master
-  # if object is not a slave, progenitor is the object itself
+  # progenitor is the record itself if: 
+  #   record is not marked as duplicate, or if parent doesn't exist
   def progenitor
     parent = self
     parent = parent.class.find(parent.duplicate_of_id) until parent.master?

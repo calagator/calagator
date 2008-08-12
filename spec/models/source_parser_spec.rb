@@ -92,7 +92,7 @@ describe SourceParser, "checking duplicates when importing" do
     end
   end
 
-  it "should not create a new event when importing an event identical to a stored event" do
+  it "an event with a stored exact duplicate should use the stored event" do
     @hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
     @hcal_content = read_sample('hcal_event_duplicates_fixture.xml')
     SourceParser::Base.stub!(:read_url).and_return(@hcal_content)
@@ -101,7 +101,21 @@ describe SourceParser, "checking duplicates when importing" do
     @events = @hcal_source.to_events
     @events.first.should_not be_a_new_record
   end
+  
+  it "an event with a orphaned exact duplicate should should remove duplicate marking" do
+    @orphan = Event.create!(:title => "orphan", :start_time => Time.parse("July 14 2008"), :duplicate_of_id => 7142008 )
+    @cal_content = (%{
+    <div class="vevent">
+    <abbr class="summary" title="orphan"></abbr>
+    <abbr class="dtstart" title="20080714"></abbr>
+    </div>})
+    SourceParser::Base.stub!(:read_url).and_return(@cal_content)
 
+    @cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+    @imported_event = @cal_source.create_events!(:skip_old => false).first
+    @imported_event.should_not be_marked_as_duplicate
+  end
+  
   describe "should create two events when importing two non-identical events" do
     # This behavior is tested under
     #  describe SourceParser::Hcal, "with hCalendar events" do
