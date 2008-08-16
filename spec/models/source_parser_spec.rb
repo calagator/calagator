@@ -57,7 +57,7 @@ end
 describe SourceParser, "checking duplicates when importing" do
   fixtures :events, :venues
 
-  describe "two identical events" do
+  describe "with two identical events" do
     before(:all) do
       @venue_size_before_import = Venue.find(:all).size
       @cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
@@ -92,28 +92,34 @@ describe SourceParser, "checking duplicates when importing" do
     end
   end
 
-  it "an event with a stored exact duplicate should use the stored event" do
-    @hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-    @hcal_content = read_sample('hcal_event_duplicates_fixture.xml')
-    SourceParser::Base.stub!(:read_url).and_return(@hcal_content)
-    @events = @hcal_source.to_events
-    @events.first.save!
-    @events = @hcal_source.to_events
-    @events.first.should_not be_a_new_record
-  end
-  
-  it "an event with a orphaned exact duplicate should should remove duplicate marking" do
-    @orphan = Event.create!(:title => "orphan", :start_time => Time.parse("July 14 2008"), :duplicate_of_id => 7142008 )
-    @cal_content = (%{
-    <div class="vevent">
-    <abbr class="summary" title="orphan"></abbr>
-    <abbr class="dtstart" title="20080714"></abbr>
-    </div>})
-    SourceParser::Base.stub!(:read_url).and_return(@cal_content)
+  describe "with an event" do
+    it "should retrieve an existing event if it's an exact duplicate" do
+      hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+      hcal_content = read_sample('hcal_event_duplicates_fixture.xml')
+      SourceParser::Base.stub!(:read_url).and_return(hcal_content)
 
-    @cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-    @imported_event = @cal_source.create_events!(:skip_old => false).first
-    @imported_event.should_not be_marked_as_duplicate
+      event = hcal_source.to_events.first
+      event.save!
+
+      event = hcal_source.to_events.first
+      event.should_not be_a_new_record
+    end
+    
+    #it "an event with a orphaned exact duplicate should should remove duplicate marking" do
+    it "an event with a orphaned exact duplicate should should remove duplicate marking" do
+      orphan = Event.create!(:title => "orphan", :start_time => Time.parse("July 14 2008"), :duplicate_of_id => 7142008 )
+      cal_content = <<-HERE
+        <div class="vevent">
+        <abbr class="summary" title="orphan"></abbr>
+        <abbr class="dtstart" title="20080714"></abbr>
+        </div>
+      HERE
+      SourceParser::Base.stub!(:read_url).and_return(cal_content)
+
+      cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+      imported_event = cal_source.create_events!(:skip_old => false).first
+      imported_event.should_not be_marked_as_duplicate
+    end
   end
   
   describe "should create two events when importing two non-identical events" do
@@ -124,22 +130,23 @@ describe SourceParser, "checking duplicates when importing" do
 
   describe "two identical events with different venues" do
     before(:each) do
-      @cal_content = (%{
-      <div class="vevent">
-        <abbr class="dtstart" title="20080714"></abbr>
-        <abbr class="summary" title="Bastille Day"></abbr>
-        <abbr class="location" title="Arc de Triomphe"></abbr>
-      </div>
-      <div class="vevent">
-        <abbr class="dtstart" title="20080714"></abbr>
-        <abbr class="summary" title="Bastille Day"></abbr>
-        <abbr class="location" title="Bastille"></abbr>
-      </div>})
-      SourceParser::Base.stub!(:read_url).and_return(@cal_content)
+      cal_content = <<-HERE
+        <div class="vevent">
+          <abbr class="dtstart" title="20080714"></abbr>
+          <abbr class="summary" title="Bastille Day"></abbr>
+          <abbr class="location" title="Arc de Triomphe"></abbr>
+        </div>
+        <div class="vevent">
+          <abbr class="dtstart" title="20080714"></abbr>
+          <abbr class="summary" title="Bastille Day"></abbr>
+          <abbr class="location" title="Bastille"></abbr>
+        </div>
+      HERE
+      SourceParser::Base.stub!(:read_url).and_return(cal_content)
 
-      @cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-      @parsed_events = @cal_source.to_events
-      @created_events = @cal_source.create_events!(:skip_old => false)
+      cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+      @parsed_events  = cal_source.to_events
+      @created_events = cal_source.create_events!(:skip_old => false)
     end
 
     it "should parse two events" do
@@ -159,7 +166,7 @@ describe SourceParser, "checking duplicates when importing" do
     end
   end
 
-  it "an event whose venue is identical to a squashed duplicate should use the master venue"  do
+  it "should use an existing venue when importing an event whose venue matches a squashed duplicate"  do
     Event.destroy_all
     Source.destroy_all
     Venue.destroy_all
@@ -170,19 +177,21 @@ describe SourceParser, "checking duplicates when importing" do
       :title => "Squashed Duplicate Venue",
       :duplicate_of_id => master_venue.id)
 
-    @cal_content = (%{
-    <div class="vevent">
-      <abbr class="dtstart" title="20090117"></abbr>
-      <abbr class="summary" title="Event with cloned venue"></abbr>
-      <abbr class="location" title="Squashed Duplicate Venue"></abbr>
-    </div>})
-    SourceParser::Base.stub!(:read_url).and_return(@cal_content)
-    @source = Source.new(
-      :title => "Event with squashed venue",
-      :url => "http://IcalEventWithSquashedVenue.com/")
+    cal_content = <<-HERE
+      <div class="vevent">
+        <abbr class="dtstart" title="20090117"></abbr>
+        <abbr class="summary" title="Event with cloned venue"></abbr>
+        <abbr class="location" title="Squashed Duplicate Venue"></abbr>
+      </div>
+    HERE
 
-    @events = @source.to_events(:skip_old => false)
-    event = @events.first
+    SourceParser::Base.stub!(:read_url).and_return(cal_content)
+
+    source = Source.new(
+      :title => "Event with squashed venue",
+      :url   => "http://IcalEventWithSquashedVenue.com/")
+
+    event = source.to_events(:skip_old => false).first
     event.venue.title.should == "Master"
   end
 end
