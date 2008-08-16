@@ -57,16 +57,11 @@
 		<div class='help'>
 			(HTML formatting allowed)
 		</div>
-    <% if false %>
-    <%# TODO implement tags %>
     <div>
-	    <%= f.label :tags %>
-      <%= f.text_field :tags %>
-		</div>
-		<div class='help'>
-			(comma separated keywords)
-		</div>
-    <% end %>
+	    <%= f.label :tag_list, "Tags" %>
+	    <span class="note">(comma separated keywords)</span><br />
+	    <%= f.text_field :tag_list %>
+	  </div>
     <% unless @venue.new_record? %>
 		<div>
 		  <%= f.label :force_geocoding, @venue.location ? "Re-geocode?" : "Geocode?" %>

@@ -47,6 +47,14 @@
     <%= upgrade_br(simple_format(auto_link(white_list(@venue.description)))) %>
   </div>
   <% end %>
+	
+	<% unless @venue.tags.blank? -%>
+  <h3>Tags</h3>
+  <div class="tags">
+      <%= @venue.tag_list %>
+  </div>
+  <% end %>
+
 
   <% if @events && @events.size > 0 %>
     <h2>Future Events Happening Here</h2>
