@@ -12,8 +12,17 @@ class EventsController < ApplicationController
               'lower(venues.title), start_time'
             end
 
-    @start_date = !params[:date].blank? ? Date.parse(params[:date][:start]) : Time.today
-    @end_date = !params[:date].blank? ? Date.parse(params[:date][:end]) : Time.today + 6.months
+    default_start_date = Time.today
+    default_end_date   = Time.today + 6.months
+    begin
+      @start_date = !params[:date].blank? ? Date.parse(params[:date][:start]) : default_start_date
+      @end_date = !params[:date].blank? ? Date.parse(params[:date][:end]) : default_end_date
+    rescue ArgumentError => e
+      @start_date = default_start_date
+      @end_date   = default_end_date
+      flash[:failure] = "Error: You tried to filter by an invalid date"
+    end
+
     @events_deferred = lambda {
       params[:date] ?
         Event.find_by_dates(@start_date, @end_date, :order => order) :
