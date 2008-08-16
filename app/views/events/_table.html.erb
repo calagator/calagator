@@ -6,7 +6,7 @@
 scores = defined?(scores) ? scores : false
 
 previous_start_time = nil
-show_year ||= false
+#show_year ||= false
 skipped = 0
 
 # calculate rowspans array for events
@@ -36,6 +36,7 @@ rowspans = calculate_rowspans(events)
 						<div class='day_of_week <%= today_tomorrow_or_weekday(event).downcase -%>'>
 							<%= today_tomorrow_or_weekday(event) %>
 						</div>
+						<% show_year = event.start_time.year != Time.now.year %>
 						<%= datetime_format(event.start_time,'%b %d') -%><%= ", "+datetime_format(event.start_time,'%Y') if show_year %>
 					</td>
 					<% end %>
