@@ -75,7 +75,6 @@ describe Event do
   describe "when parsing" do
 
     before(:each) do
-
       @basic_hcal = read_sample('hcal_basic.xml')
       @basic_venue = mock_model(Venue, :title => 'Argent Hotel, San Francisco, CA')
       @basic_event = Event.new(
@@ -165,7 +164,6 @@ describe Event do
       @today_midnight = Time.today
       @yesterday = @today_midnight.yesterday
       @tomorrow = @today_midnight.tomorrow
-
 
       @this_venue = Venue.create!(:title => "This venue")
       @started_before_today_and_ends_after_today = Event.create!(
@@ -268,20 +266,19 @@ describe Event do
 
     describe "for future events with venue" do
       before(:all) do
-
         @another_venue = Venue.create!(:title => "Another venue")
 
         @future_event_another_venue = Event.create!(
-        :title => "Starting after tomorrow",
-        :start_time => @tomorrow + 1.day,
-        :venue_id => @another_venue.id)
+          :title => "Starting after tomorrow",
+          :start_time => @tomorrow + 1.day,
+          :venue_id => @another_venue.id)
 
         @future_event_no_venue = Event.create!(
-        :title => "Starting after tomorrow",
-        :start_time => @tomorrow + 1.day)
-
+          :title => "Starting after tomorrow",
+          :start_time => @tomorrow + 1.day)
       end
 
+      # TODO Consider moving these examples elsewhere because they don't appear to relate to this scope. This comment applies to the examples from here...
       it "should include events that started earlier today" do
         @future_events_for_this_venue.should include(@started_midnight_and_continuing_after)
       end
@@ -297,6 +294,7 @@ describe Event do
       it "should not include events that ended before today" do
         @future_events_for_this_venue.should_not include(@started_and_ended_yesterday)
       end
+      # TODO ...to here.
 
       it "should not include events for another venue" do
         @future_events_for_this_venue.should_not include(@future_event_another_venue)
@@ -431,6 +429,7 @@ end
     end
 
     # Find duplicates, create another event with the given attributes, and find duplicates again
+    # TODO Refactor #find_duplicates_create_a_clone_and_find_again and its uses into something simpler, like #assert_duplicate_count.
     def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes, create_class = Event)
       before_results = create_class.find(:duplicates, :by => find_duplicates_arguments)
       clone = create_class.create!(clone_attributes)
@@ -444,6 +443,9 @@ end
     end
 
     it "should find duplicate title by any" do
+      # TODO figure out why the #find_duplicates_create_a_clone_and_find_again isn't giving expected results and a workaround was needed.
+      #pre, post = find_duplicates_create_a_clone_and_find_again(:any, {:title => @event.title, :start_time => @event.start_time} )
+      #post.size.should == pre.size + 2
       dup_title = Event.create!({:title => @event.title, :start_time => @event.start_time + 1.minute})
       Event.find(:duplicates, :by => :any).should include(dup_title)
     end
@@ -500,12 +502,11 @@ end
 
   describe "when checking for squashing" do
     before(:all) do
-      @today =Time.today
-      @master = Event.create!(:title => "Master", :start_time => @today)
-      @slave_first = Event.create!(:title => "1st slave", :start_time => @today, :duplicate_of_id => @master.id)
-      @slave_second = Event.create!(:title => "2nd slave", :start_time => @today, :duplicate_of_id => @slave_first.id)
-      @orphan = Event.create!(:title => "orphan", :start_time => Time.today, :duplicate_of_id => 999999)
-
+      @today  = Time.today
+      @master = Event.create!(:title => "Master",    :start_time => @today)
+      @slave1 = Event.create!(:title => "1st slave", :start_time => @today, :duplicate_of_id => @master.id)
+      @slave2 = Event.create!(:title => "2nd slave", :start_time => @today, :duplicate_of_id => @slave1.id)
+      @orphan = Event.create!(:title => "orphan",    :start_time => @today, :duplicate_of_id => 999999)
     end
     
     it "should recognize a master" do
@@ -513,11 +514,11 @@ end
     end
     
     it "should recognize a slave" do
-      @slave_first.should be_a_slave
+      @slave1.should be_a_slave
     end
     
     it "should not think that a slave is a master" do
-      @slave_second.should_not be_a_master
+      @slave2.should_not be_a_master
     end
     
     it "should not think that a master is a slave" do
@@ -525,11 +526,11 @@ end
     end
     
     it "should return the progenitor of a child" do
-      @slave_first.progenitor.should == @master
+      @slave1.progenitor.should == @master
     end
 
     it "should return the progenitor of a grandchild" do
-      @slave_second.progenitor.should == @master
+      @slave2.progenitor.should == @master
     end
     
     it "should return a master as its own progenitor" do
@@ -542,8 +543,8 @@ end
     
     it "should return the progenitor if an imported event has an exact duplicate" do
       @abstract_event = SourceParser::AbstractEvent.new
-      @abstract_event.title = @slave_second.title
-      @abstract_event.start_time = @slave_second.start_time.to_s
+      @abstract_event.title = @slave2.title
+      @abstract_event.start_time = @slave2.start_time.to_s
 
       Event.from_abstract_event(@abstract_event).should == @master
     end

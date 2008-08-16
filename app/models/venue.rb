@@ -80,21 +80,23 @@ class Venue < ActiveRecord::Base
 
   #===[ Instantiators ]===================================================
 
-  # Returns a new Venue created from an AbstractLocation.
+  # Returns a new Venue for the +abstract_location+ retrieved from +source+.
   def self.from_abstract_location(abstract_location, source=nil)
     venue = Venue.new
 
+    # TODO Figure out if +abstract_location+ can ever be blank. If it can be blank, rework the later code in this method so that #geocode and duplicate finders aren't called on an effectively blank record. If it can't be blank, remove this unnecessary "unless" conditional.
     unless abstract_location.blank?
-      venue.source = source
+      venue.source = source if source
       abstract_location.each_pair do |key, value|
         venue[key] = value unless value.blank?
       end
     end
 
+    # We must add geocoding information so this venue can be compared to existing ones.
+    venue.geocode
+
     # if the new venue has no exact duplicate, use the new venue
     # otherwise, find the ultimate master and return it
-    # but first geocode it to compare it accurately to stored venues, which are all geocoded
-    venue.geocode
     duplicates = venue.find_exact_duplicates
     venue = duplicates.first.progenitor if duplicates
     return venue
@@ -102,13 +104,14 @@ class Venue < ActiveRecord::Base
 
   #===[ Finders ]=========================================================
 
-  # Returns future events for this venue.
+  # Returns future events for this venue. Accepts the same +opts+ as Event.find_future_events.
   def find_future_events(opts={})
     opts[:venue] = self
     Event.find_future_events(opts)
   end
 
-  # Return Hash of Venues grouped by the +type+.
+  # Return Hash of Venues grouped by the +type+, e.g., a 'title'.
+  # TODO Consider renaming "type" in the method name and arguments to 'attribute'. ActiveRecord uses the term 'type' to mean a STI (Single Table Inheritance) class field, while 'attribute' is analogous to a table's column.
   def self.find_duplicates_by_type(type='title')
     if type == 'na'
       return { [] => self.find(:non_duplicates, :order => 'lower(title)')}
@@ -158,6 +161,7 @@ class Venue < ActiveRecord::Base
   end
 
   # Try to geocode, but don't complain if we can't.
+  # TODO Consider renaming this to #add_geocoding! to imply that this method makes destructive changes the object, rather than just returning values. Compare its name to the method called #geocode_address, which just returns values.
   def geocode
     unless location or geocode_address.blank? or duplicate_of
       geo = GeoKit::Geocoders::MultiGeocoder.geocode(geocode_address)
