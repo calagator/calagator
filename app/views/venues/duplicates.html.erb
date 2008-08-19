@@ -37,8 +37,8 @@
             </tr>
             <% for venue in group %>
               <tr class="<%= cycle('odd', 'even') %>">
-                <td><%= radio_button_tag("master_venue_id", venue.id) %></td>
-                <td><%= check_box_tag("duplicate_venue_id_#{venue.id}", venue.id) %></td>
+                <td><%= radio_button_tag("master_id", venue.id) %></td>
+                <td><%= check_box_tag("duplicate_id_#{venue.id}", venue.id) %></td>
                 <td><%= venue.events.count %></td>
                 <td>
                   <%= link_to( url_for(venue.title), venue_url(venue)) %>

@@ -1,4 +1,6 @@
 class VenuesController < ApplicationController
+  include SquashManyDuplicatesMixin # Provides squash_many_duplicates
+
   # GET /venues
   # GET /venues.xml
   def index
@@ -123,32 +125,5 @@ class VenuesController < ApplicationController
       format.html # index.html.erb
       format.xml  { render :xml => @grouped_venues }
     end
-  end
-
-  # POST /venues/squash_multiple_duplicates
-  def squash_many_duplicates
-    # TODO Extract common code between EventsController and VenuesController duplicate squasher
-    master_venue_id = params[:master_venue_id].ergo.to_i
-    duplicate_venue_ids = params.keys.grep(/^duplicate_venue_id_\d+$/){|t| params[t].to_i}
-
-    if master_venue_id.nil?
-      flash[:failure] = "A master venue must be selected."
-    elsif duplicate_venue_ids.empty?
-      flash[:failure] = "At least one duplicate venue must be selected."
-    elsif duplicate_venue_ids.include?(master_venue_id)
-      flash[:failure] = "The master venue could not be squashed into itself."
-    else
-      squashed = Venue.squash(:master => master_venue_id, :duplicates => duplicate_venue_ids)
-
-      if squashed.size > 0
-        message = "Squashed duplicates #{squashed.map {|obj| obj.title}} into master #{master_venue_id}."
-        flash[:success] = flash[:success].nil? ? message : flash[:success] + message
-      else
-        message = "No duplicates were squashed."
-        flash[:failure] = flash[:failure].nil? ? message : flash[:failure] + message
-      end
-    end
-
-    redirect_to :action => "duplicates", :type => params[:type]
   end
 end
