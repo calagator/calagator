@@ -229,3 +229,39 @@ describe EventsController, "when deleting" do
   end
 
 end
+
+describe EventsController, "when running integration test" do
+  integrate_views
+  fixtures :events, :venues
+
+  before(:each) do
+    @venue         = venues(:cubespace)
+    @event_params  = {
+      :title       => "MyEvent#{$$}",
+      :description => "Description",
+      :start_time  => Time.today.strftime("%Y-%m-%d"),
+      :end_time    => Time.today.strftime("%Y-%m-%d")
+    }
+  end
+
+  it "should create event for existing venue" do
+    post "create",
+      :event      => @event_params,
+      :venue_name => @venue.title
+
+    flash[:success].should_not be_blank
+    event = assigns[:event]
+    event.title.should == @event_params[:title]
+    event.venue.title.should == @venue.title
+  end
+
+  it "should create event for exsiting venue and add tags" do
+    post "create",
+      :event      => @event_params.merge(:tag_list => ",,foo,bar, baz,"),
+      :venue_name => @venue.title
+
+    flash[:success].should_not be_blank
+    event = assigns[:event]
+    event.tag_list.should == "bar, baz, foo"
+  end
+end

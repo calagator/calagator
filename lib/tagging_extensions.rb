@@ -82,8 +82,10 @@ class ActiveRecord::Base #:nodoc:
     
     private
     
+    # TODO Why is this called "to_string" when it returns an Array?
     def tag_cast_to_string obj #:nodoc:
-      case obj
+      tags = 
+        case obj
         when Array
           obj.map! do |item|
             case item
@@ -95,12 +97,12 @@ class ActiveRecord::Base #:nodoc:
             end
           end              
         when String
-          obj = obj.split(Tag::DELIMITER).map do |tag_name| 
-            tag_name.strip.squeeze(" ")
-          end
+          obj
         else
           raise "Invalid object of class #{obj.class} as tagging method parameter"
-      end.flatten.compact.map(&:downcase).uniq
+        end
+
+      return(self.class.parse_tags([tags]))
     end 
   
     # Check if a model is in the :taggables target list. The alternative to this check is to explicitly include a TaggingMethods module (which you would create) in each target model.  
@@ -154,9 +156,10 @@ class ActiveRecord::Base #:nodoc:
     
     def parse_tags(tags)
       return [] if tags.blank?
+      # TODO why is this discarding all but the first argument!?
       tags = Array(tags).first
       tags = tags.respond_to?(:flatten) ? tags.flatten : tags.split(Tag::DELIMITER)
-      tags.map { |tag| tag.strip.squeeze(" ") }.flatten.compact.map(&:downcase).uniq
+      tags.flatten.compact.map{|tag| tag.strip.squeeze(" ")}.reject{|tag| tag.blank?}.map(&:downcase).uniq
     end
     
   end

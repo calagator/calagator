@@ -99,6 +99,8 @@ class EventsController < ApplicationController
     @event.associate_with_venue(params[:venue_name])
     has_new_venue = @event.venue && @event.venue.new_record?
 
+    # TODO Catch parse errors in time values
+    # TODO Replace this awful control with Chronic
     @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
     @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
 
