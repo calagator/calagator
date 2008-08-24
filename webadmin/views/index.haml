@@ -4,14 +4,32 @@
     %title calagator admin console
   %body
     %h1 calagator admin console
+    %h2
+      Status
     %p
-      = `whoami`
+      %ul
+        %li
+          current user:
+          = `whoami`
+        %li
+          current branch:
+          = @branch
+        %li
+          current revision:
+          = @revision
+    %h2
+      Action
     %p
       %form{:method=>"post"}
         %label
-          %input{:type=>"radio", :name=>"action", :value=>"deploy", :checked=>"checked"}
-          deploy and migrate revision
+          %input{:type=>"radio", :name=>"action", :value=>"deploy_and_migrate_via_update", :checked=>"checked"}
+          deploy and migrate to revision
           %input{:type=>"text", :name=>"revision", :value=>"HEAD"}
+        %br
+        %label
+          %input{:type=>"radio", :name=>"action", :value=>"deploy_and_switch_via_switch"}
+          deploy and migrate to branch
+          %input{:type=>"text", :name=>"branch", :value=>@branch}
         %br
         %label
           %input{:type=>"radio", :name=>"action", :value=>"restart"}
