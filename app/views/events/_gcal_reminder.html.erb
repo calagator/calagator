@@ -1,4 +1,4 @@
-<% form_tag "http://www.google.com/calendar/event" do %>
+<% form_tag "http://www.google.com/calendar/event", :id => "add_to_google_calendar", :style => "display: none" do %>
   <%= hidden_field_tag :action, "TEMPLATE" %>
   <%= hidden_field_tag :text, @event.title %>
   <%= hidden_field_tag :dates, format_google_timespan(@event) %>
@@ -7,5 +7,6 @@
   <%= hidden_field_tag :trp, "true" %>
   <%= hidden_field_tag :sprop, url_for('/') %>
   <%= hidden_field_tag :sprop, "name:Calagator" %>
-  <%= submit_tag "Add to Google Calendar" %>
+  <%#= submit_tag "Add to Google Calendar" %>
 <% end %>
+<a href="#" onclick="$('#add_to_google_calendar').submit()">Add to Google Calendar</a>
