@@ -18,8 +18,8 @@
                                 'ui.datepicker.js',
                                 'jquery.timePicker.js',
                                 :cache => true %>
-		<%= yield :javascript_insert %>
 		<%= javascript_include_tag 'application'%>
+		<%= yield :javascript_insert %>
 		
 		<%= yield :discovery_insert %>
     <%= auto_discovery_link_tag(:atom, formatted_events_url('atom'), :title => 'Atom: All Events' )%>
