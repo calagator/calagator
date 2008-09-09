@@ -1,3 +1,4 @@
+<% focus_on '#search_field' %>
 <% cache(Cacher.daily_key_for("site_index")) do %>
 <% @times_to_events ||= @times_to_events_deferred.call %>
 <div id="project_description">
