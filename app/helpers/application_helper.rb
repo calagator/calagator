@@ -113,4 +113,19 @@ module ApplicationHelper
       block.call
     end
   end
+
+  # Focus cursor on DOM element specified by +xpath_query+ using JavaScript, e.g.:
+  #
+  #   <% focus_on '#search_field' %>
+  def focus_on(xpath_query)
+    content_for(:javascript_insert) do
+      <<-HERE
+        <script>
+          $(document).ready(function() {
+            $("#{xpath_query}").focus();
+          });
+        </script>
+      HERE
+    end
+  end
 end
