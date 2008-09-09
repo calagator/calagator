@@ -38,7 +38,7 @@
   </script>
 <% end %>
 
-<% form_for(@event) do |f| %>
+<% form_for(@event, :html => {:id => "event_form", :class => "standard_form"}) do |f| %>
 <fieldset>
   <legend><%= @event.new_record? ? "Add an Event" : "Editing: <em>#{@event.title}</em>" %></legend>
   <p>You can <%= @event.new_record? ? "enter" : "edit" %> the details of your event below.  The more information we have about your event, the easier it will be for people to find it.</p>
@@ -59,7 +59,7 @@
     Type the name of a venue to search. If it doesn't exist, we'll create it for you.
   </div>
 
-  <div id="event_times" class='no_label'>
+  <div id="event_times">
     <div id="start_time">
       <%= f.label :start_time %>
       <%= text_field_tag 'start_date', @event.start_time ? @event.start_time.to_date : '', :id => 'date_start', :class => 'date_picker' %>
@@ -72,22 +72,24 @@
     </div>
   </div>
   <div>
-    <%= f.label :url, "Web Link" %>
+    <%= f.label :url, "Website" %>
     <%= f.text_field :url %>
   </div>
 
   <div>
     <%= f.label :description %>
     <%= f.text_area :description %>
-  </div>
-  <div class='help'>
-    (HTML formatting allowed)
+    <span class='help'>
+      (HTML formatting allowed)
+    </span>
   </div>
 
   <div>
     <%= f.label :tag_list, "Tags" %>
-    <span class="note">(comma separated keywords)</span><br />
     <%= f.text_field :tag_list %>
+    <span class="help">
+      (comma-separated keywords)
+    </span>
   </div>
 
   <div class='trap'>
