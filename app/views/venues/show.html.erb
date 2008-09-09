@@ -57,7 +57,7 @@
 
 
   <% if @events && @events.size > 0 %>
-    <h2>Future Events Happening Here</h2>
+    <h2>Future events happening here</h2>
 
     <%= render :partial => 'events/list', :locals => { :events => @events } %>
   <% end %>
@@ -69,6 +69,7 @@
         or <%= link_to "delete it", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>.
       </p>
     </div>
+    <hr />
     <div class="metadata">
       <%= datestamp(@venue) %>
     </div>
