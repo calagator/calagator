@@ -1,4 +1,5 @@
-<% focus_on '#search_field' %>
+<% tabindex_on '#search_field' %>
+
 <% cache_if(@perform_caching, Cacher.daily_key_for("events_index")) do %>
 <% @events ||= @events_deferred.call %>
 <div id='list_description'>

@@ -114,18 +114,30 @@ module ApplicationHelper
     end
   end
 
-  # Focus cursor on DOM element specified by +xpath_query+ using JavaScript, e.g.:
-  #
-  #   <% focus_on '#search_field' %>
-  def focus_on(xpath_query)
+  # Insert a chunk of +javascript+ into the page, and execute it when the document is ready.
+  def insert_javascript(javascript)
     content_for(:javascript_insert) do
       <<-HERE
         <script>
           $(document).ready(function() {
-            $("#{xpath_query}").focus();
+            #{javascript}
           });
         </script>
       HERE
     end
+  end
+
+  # Focus cursor on DOM element specified by +xpath_query+ using JavaScript, e.g.:
+  #
+  #   <% focus_on '#search_field' %>
+  def focus_on(xpath_query)
+    insert_javascript "$('#{xpath_query}').focus();"
+  end
+
+  # Set the first tabindex to DOM element specified by +xpath_query+.
+  def tabindex_on(xpath_query)
+    #insert_javascript "$('#{xpath_query}')[0].tabindex = 1;"
+    #insert_javascript "$('#{xpath_query}')[0].attributes['tabindex'] = 1;"
+    # TODO Figure out how to set tabindex, because neither of these work right.
   end
 end
