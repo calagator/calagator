@@ -1,3 +1,4 @@
+<% focus_on '#search_field' %>
 <% content_for :discovery_insert do %>
 	<%= auto_discovery_link_tag(:atom, formatted_search_events_url('atom', :query => @query), :title => "Atom: Search Results for '#{@query}'" )%>
 <% end -%>

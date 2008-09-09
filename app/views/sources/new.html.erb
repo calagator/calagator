@@ -4,6 +4,7 @@
   <div>
     <%= f.label :url, "URL" %>
     <%= f.text_field :url, :size => 60, :value => params[:url] %>
+    <% focus_on '#source_url' %>
   </div>
   <div>
     <%= f.label :reimport, "Re-import?" %>
