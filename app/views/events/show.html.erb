@@ -33,7 +33,7 @@
       <% unless @event.url.blank? -%>
         <h3>Website</h3>
         <div class="website">
-          <%= link_to "#{truncate(@event.url, 128)}", @event.url -%>
+          <%= link_to "#{truncate(@event.url, 128)}", @event.url, :class => "url" -%>
         </div>
       <% end -%>
 	  <% unless @event.description.blank? -%>
