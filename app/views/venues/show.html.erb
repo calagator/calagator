@@ -22,7 +22,7 @@
         <span class="postal-code"><%=h @venue.postal_code %></span>
       <% end %>
       <% if !@venue.country.blank? %>
-        <div class='country-name'><%=h @venue.country %><div>
+        <div class='country-name'><%=h @venue.country %></div>
       <% end %>
       <% if @venue && @venue.has_full_address? %>
         (<a href='<%=google_maps_url(@venue.full_address)%>'>map</a>)
