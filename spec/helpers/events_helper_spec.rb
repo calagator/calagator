@@ -1,7 +1,9 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventsHelper do
+  # TODO Do we need a helper to return 'Today' and 'Tomorrow' at all? See app/helpers/events_helper.rb #today_tomorrow_or_weekday
   
+=begin
   it "should display today as 'Today'" do
     @event = Event.new
     @event.start_time = Time.now
@@ -13,5 +15,6 @@ describe EventsHelper do
     @event.start_time = Time.now+1.days
     helper.today_tomorrow_or_weekday(@event).should == 'Tomorrow'
   end
+=end
   
 end
