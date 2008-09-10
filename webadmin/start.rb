@@ -32,19 +32,19 @@ post '/' do
   case action
   when "deploy_and_migrate_via_update"
     if revision
-      @command = %{svn cleanup && svn update -r #{revision} && rake RAILS_ENV=production db:migrate && touch #{RESTART_TXT}}
+      @command = %{svn cleanup && svn update -r #{revision} && rake RAILS_ENV=production tmp:cache:clear db:migrate && touch #{RESTART_TXT}}
     else
       @message = "ERROR: must specify revision to deploy via update"
     end
   when "deploy_and_switch_via_switch"
     if branch
       # #{revision.ergo{'-r '+self.to_s}} 
-      @command = %{svn cleanup && svn switch #{SVN_REPO}/#{branch} && rake RAILS_ENV=production db:migrate && touch #{RESTART_TXT}}
+      @command = %{svn cleanup && svn switch #{SVN_REPO}/#{branch} && rake RAILS_ENV=production tmp:cache:clear db:migrate && touch #{RESTART_TXT}}
     else
       @message = "ERROR: must specify branch to deploy via switch"
     end
   when "restart", "start", "stop", "status"
-    @command = %{touch #{RESTART_TXT}}
+    @command = %{rake RAILS_ENV=production tmp:cache:clear && touch #{RESTART_TXT}}
   end
 
   if @command
