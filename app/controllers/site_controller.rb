@@ -14,6 +14,9 @@ class SiteController < ApplicationController
   def index
     @times_to_events_deferred = lambda { Event.select_for_overview }
   end
+  
+  # Displays the about page.
+  def about; end
 
   def style
     # check to see if the request is an allowed file, if not, 404 it
