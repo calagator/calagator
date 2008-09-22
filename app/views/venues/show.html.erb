@@ -62,11 +62,9 @@
   <% end %>
 
 
-  <% if @events && @events.size > 0 %>
-    <h2>Future events happening here</h2>
+  <h2>Future events happening here</h2>
 
-    <%= render :partial => 'events/list', :locals => { :events => @events } %>
-  <% end %>
+  <%= render :partial => 'events/list', :locals => { :events => @events } %>
 
   <div class='single_view_right sidebar'>
     <div id='edit_link'>
