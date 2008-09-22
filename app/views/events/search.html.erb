@@ -7,12 +7,16 @@
 <%= render :partial => 'search_section', :locals => {:description => "past", :events => @grouped_events[:past]} %>
 
 <div id='list_filters' class='sidebar'>
-	<h3>Subscribe</h3>
+	<h3>Subscribe to</h3>
 	<ul>
-		<li><%= link_to 'Subscribe to Atom feed', formatted_search_events_url('atom', :query => @query) %></li>
-		<li><%= link_to 'Download iCalendar file', formatted_search_events_url('ics', :query => @query) %></li>
-		<li><%= link_to "Subscribe to iCalendar feed", url_for(:action => 'search', :protocol => 'webcal', :only_path => false, :query => @query, :format => 'ics') %></li>
-		<li><%= link_to "Add to Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_search_events_url('ics', :query => @query) %></li>
-		<li><%= link_to "Add to My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_search_events_url('ics', :query => @query) %></li>
+		<li><%= link_to "iCalendar feed", url_for(:action => "search", :protocol => "webcal", :only_path => false, :query => @query, :format => "ics") %></li>
+		<li><%= link_to "Atom feed", formatted_search_events_url("atom", :query => @query) %></li>
 	</ul>
+
+  <h3>Export to</h3>
+		<li><%= link_to "iCalendar file", formatted_search_events_url("ics", :query => @query) %></li>
+		<li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_search_events_url("ics", :query => @query) %></li>
+		<li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_search_events_url("ics", :query => @query) %></li>
+  <ul>
+  </ul>
 </div>
