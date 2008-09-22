@@ -9,7 +9,7 @@ skipped = 0
 
 %>
 <ul class='event_list'>
-	<% unless events.size==0 %>
+  <% unless events.blank? %>
     	<% for event in events do %>
 	      	<% new_day = previous_start_time.nil? || (previous_start_time.to_date != event.start_time.to_date) %>
 			<li>
