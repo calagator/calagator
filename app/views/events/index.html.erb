@@ -12,21 +12,23 @@
 
 <div id='list_filters' class='sidebar'>
 	
-	<h3 class='first'>Filter by date <span class="clear_filter">[<%= link_to 'clear', events_url %>]</span></h3>
+	<h3 class='first'>Filter by date</h3>
 
 	<% form_tag events_url, :method => 'get' do  -%>
 	<div id="date_filter">
 		<div id='start_calendar'>
-			<label for='date_start'>Start</label>
-			<%= text_field_tag 'date[start]', @start_date.to_formatted_s(:long), :id => 'date_start', :class => 'date_picker' %>	
+			<label for='date_start'>From</label>
+			<%= text_field_tag 'date[start]', @start_date.strftime('%Y-%m-%d'), :id => 'date_start', :class => 'date_picker' %>
 		</div>
 		<div id='end_calendar'>
-			<label for='date_end'>End</label>
-			<%= text_field_tag 'date[end]', @end_date.to_formatted_s(:long), :id => 'date_end', :class => 'date_picker' %>
+			<label for='date_end'>To</label>
+			<%= text_field_tag 'date[end]', @end_date.strftime('%Y-%m-%d'), :id => 'date_end', :class => 'date_picker' %>
 		</div>
-	</div>
-	<div>
-	<%= submit_tag 'Filter' %>
+    <div>
+      <label for="commit">&nbsp;</label>
+      <%= submit_tag 'Filter' %>
+      <span class="clear_filter"><%= link_to 'Reset', events_url %></span>
+    </div>
 	</div>
 	<% end %>
 	

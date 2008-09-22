@@ -14,8 +14,8 @@ class EventsController < ApplicationController
               'lower(venues.title), start_time'
             end
 
-    default_start_date = Time.today
-    default_end_date   = Time.today + 6.months
+    default_start_date = Time.today - 1.month
+    default_end_date   = Time.today
     begin
       @start_date = !params[:date].blank? ? Date.parse(params[:date][:start]) : default_start_date
       @end_date = !params[:date].blank? ? Date.parse(params[:date][:end]) : default_end_date
