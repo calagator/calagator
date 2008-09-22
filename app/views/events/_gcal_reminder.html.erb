@@ -7,6 +7,6 @@
   <%= hidden_field_tag :trp, "true" %>
   <%= hidden_field_tag :sprop, url_for('/') %>
   <%= hidden_field_tag :sprop, "name:Calagator" %>
-  <%#= submit_tag "Add to Google Calendar" %>
+  <%= submit_tag "Google Calendar", :style => "display: none" %>
 <% end %>
-<a href="#" onclick="$('#add_to_google_calendar').submit()">Add to Google Calendar</a>
+<a href="#" onclick="$('#add_to_google_calendar').submit()">Google Calendar</a>

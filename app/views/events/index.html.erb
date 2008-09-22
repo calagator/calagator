@@ -30,15 +30,18 @@
 	</div>
 	<% end %>
 	
-	
-	<h3>Subscribe</h3>
+	<h3>Subscribe to</h3>
 	<ul>
-		<li><%= link_to 'Subscribe to Atom feed', formatted_events_url('atom') %></li>
-		<li><%= link_to 'Download iCalendar file', formatted_events_url('ics') %></li>
-		<li><%= link_to "Subscribe to iCalendar feed", url_for(:action => 'index', :protocol => 'webcal', :only_path => false)+".ics" %></li>
-		<li><%= link_to "Add to Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_events_url('ics') %></li>
-		<li><%= link_to "Add to My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_events_url('ics') %></li>
+		<li><%= link_to "iCalendar feed", url_for(:action => "index", :protocol => "webcal", :only_path => false)+".ics" %></li>
+		<li><%= link_to "Atom feed", formatted_events_url("atom") %></li>
 	</ul>
 
+  <h3>Export to</h3>
+  <ul>
+		<li><%= link_to "iCalendar file", formatted_events_url("ics") %></li>
+		<li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_events_url('ics') %></li>
+		<li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_events_url('ics') %></li>
+  </ul>
+	
 </div>
 <% end %>
