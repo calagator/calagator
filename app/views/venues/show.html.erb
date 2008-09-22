@@ -5,13 +5,9 @@
 <% end %>
 
 <div class="single_venue contentbar">
-<%= google_map @venue %>
-<div class="vcard">
+<div class="location vcard">
+  <%= google_map @venue %>
   <h1 class="fn org"><%= @venue.title.strip_html %></h1>
-
-  <% if !@venue.address.blank? %>
-    <div class='address'><%=h @venue.address %></div>
-  <% end %>
 
   <% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
     <div class="adr">
@@ -34,6 +30,10 @@
         (<a href='<%=google_maps_url(@venue.full_address)%>'>map</a>)
       <% end %>
     </div>
+  <% else %>
+    <% if !@venue.address.blank? %>
+      <div class='address'><%=h @venue.address %></div>
+    <% end %>
   <% end %>
 
   <% if !@venue.url.blank? %>
@@ -47,7 +47,10 @@
   <% if !@venue.telephone.blank? %>
     <div class='tel'><%=h @venue.telephone %></div>
   <% end %>
+</div>
 
+<div>
+  <h2>Description</h2>
   <% unless @venue.description.blank? %>
   <div class="description">
     <%= upgrade_br(simple_format(auto_link(white_list(@venue.description)))) %>
@@ -55,28 +58,27 @@
   <% end %>
 	
 	<% unless @venue.tags.blank? -%>
-  <h3>Tags</h3>
+  <h2>Tags</h2>
   <div class="tags">
       <%= @venue.tag_list %>
   </div>
   <% end %>
 
-
   <h2>Future events happening here</h2>
-
   <%= render :partial => 'events/list', :locals => { :events => @events } %>
+</div>
 
-  <div class='single_view_right sidebar'>
-    <div id='edit_link'>
-      <p>
-        You can <%= link_to "edit this venue", edit_venue_url(@venue) %>
-        or <%= link_to "delete it", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>.
-      </p>
-    </div>
-    <hr />
-    <div class="metadata">
-      <%= datestamp(@venue) %>
-    </div>
+<div class='single_view_right sidebar'>
+  <div id='edit_link'>
+    <p>
+      You can <%= link_to "edit", edit_venue_url(@venue) %>
+      or <%= link_to "delete", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>
+      this venue.
+    </p>
+  </div>
+  <hr />
+  <div class="metadata">
+    <%= datestamp(@venue) %>
   </div>
 </div>
 </div>
