@@ -2,6 +2,9 @@
 <fieldset>
   <legend>Import a source</legend>
   <div>
+    Import one or more events from a feed or web page in one of the following formats: iCalendar, hCalendar, Upcoming, and MeetUp (<%= link_to "learn more", "http://code.google.com/p/calagator/wiki/CalagatorImportFormats" %>).
+  </div>
+  <div>
     <%= f.label :url, "URL" %>
     <%= f.text_field :url, :size => 60, :value => params[:url] %>
     <% focus_on '#source_url' %>
@@ -9,21 +12,17 @@
   <div>
     <%= f.label :reimport, "Re-import?" %>
     <%= f.check_box :reimport %>
+    <span class="help" style="left-padding: 1em; left-margin: 1em">
+      (Regularly check this source and import new events automatically?)
+    </span>
   </div>
   <div class='no_label'>
         <%= f.submit "Import" %>
   </div>
   <div class='help'>
     <p>
-      For information about import formats, see <%= link_to "this page", "http://code.google.com/p/calagator/wiki/CalagatorImportFormats" %>.
-    </p>
-    <p>
-      <em>New!</em> Import pages faster with our bookmarklet:
+    <b>Bookmarklet</b>: Import pages faster by adding the following bookmark to your browser's bookmarks and click it when you're visiting a webpage that contains events that you'd like to import into Calagator:
       <a href="javascript:d=document;q=(d.location.href);w=window;location.href='http://<%= PRODUCTION_HOSTNAME %>/sources/new?url='+escape(q);">Add to Calagator</a>
-    </p>
-    <p>
-    Check the re-import box and we'll periodically visit this source
-      to get new events.
     </p>
   </div>
 </fieldset>
