@@ -78,6 +78,10 @@
       </span>
 		</div>
     <% end %>
+		<div class='trap'>
+	    <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
+	    <%= text_field_tag 'trap_field', params[:trap_field] %>
+	  </div>
 		<div class='no_label'>
 			<% if !params[:from_event].blank? %>
 				<%= hidden_field_tag(:from_event, params[:from_event]) %>

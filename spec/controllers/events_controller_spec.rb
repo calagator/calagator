@@ -103,6 +103,17 @@ describe EventsController, "when creating or updating events" do
   end
 
   describe "when updating events" do
+    before(:each) do
+      @event = mock_model(Event, {
+        :title          => "MyEvent",
+        :start_time=    => true,
+        :end_time=      => true,
+        :associate_with_venue => true,
+        :venue => @venue
+      })
+      Event.stub!(:find).and_return(@event)
+    end
+    
     it "should display form for editing event" do
       Event.should_receive(:find).and_return(@event)
 
@@ -153,6 +164,12 @@ describe EventsController, "when creating or updating events" do
 
       post "update", :id => 1234
       response.should render_template(:edit)
+    end
+    
+    it "should stop evil robots" do
+      put "update", :id => 1234, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+      response.should render_template(:edit)
+      flash[:failure].should match(/evil robot/i)
     end
 
   end

@@ -136,9 +136,13 @@ class EventsController < ApplicationController
 
     @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
     @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
+    
+    if evil_robot = !params[:trap_field].blank?
+      flash[:failure] = "<h3>Evil Robot</h3> We didn't update this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
+    end
 
     respond_to do |format|
-      if @event.update_attributes(params[:event])
+      if !evil_robot && @event.update_attributes(params[:event])
         flash[:success] = 'Event was successfully updated.'
         format.html {
           if has_new_venue && !params[:venue_name].blank?

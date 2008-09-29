@@ -31,4 +31,25 @@ describe VenuesController do
     response.should be_success
     response.should have_tag('.failure', :text => /omgwtfbbq/)
   end
+  
+  describe "when creating venues" do
+    it "should stop evil robots" do
+      post :create, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+      response.should render_template(:new)
+    end
+  end
+  
+  describe "when updating venues" do 
+    before(:each) do
+      @venue = stub_model(Venue)
+      Venue.stub!(:find).and_return(@venue)
+    end
+    
+    it "should stop evil robots" do
+      put :update,:id => '1', :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+      response.should render_template(:edit)
+    end
+  end
+      
+  
 end
