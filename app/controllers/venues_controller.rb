@@ -61,8 +61,12 @@ class VenuesController < ApplicationController
   def create
     @venue = Venue.new(params[:venue])
 
+    if evil_robot = !params[:trap_field].blank?
+      flash[:failure] = "<h3>Evil Robot</h3> We didn't create this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
+    end
+
     respond_to do |format|
-      if @venue.save
+      if !evil_robot && @venue.save
         flash[:success] = 'Venue was successfully created.'
         format.html { redirect_to(@venue) }
         format.xml  { render :xml => @venue, :status => :created, :location => @venue }
@@ -76,11 +80,15 @@ class VenuesController < ApplicationController
   # PUT /venues/1
   # PUT /venues/1.xml
   def update
-    params[:venue][:latitude] = params[:venue][:longitude] = nil if params[:venue][:force_geocoding]=="1"
+    params[:venue][:latitude] = params[:venue][:longitude] = nil if params[:venue][:force_geocoding]=="1" unless params[:venue].blank?
     @venue = Venue.find(params[:id])
+    
+    if evil_robot = !params[:trap_field].blank?
+      flash[:failure] = "<h3>Evil Robot</h3> We didn't update this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
+    end
 
     respond_to do |format|
-      if @venue.update_attributes(params[:venue])
+      if !evil_robot && @venue.update_attributes(params[:venue])
         flash[:success] = 'Venue was successfully updated.'
         format.html { 
           if(!params[:from_event].blank?)
