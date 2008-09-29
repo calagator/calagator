@@ -1,22 +1,22 @@
 <% tabindex_on '#search_field' %>
 
 <% content_for :discovery_insert do %>
-	<%= auto_discovery_link_tag(:atom, formatted_search_events_url('atom', :query => @query), :title => "Atom: Search Results for '#{@query}'" )%>
+  <%= auto_discovery_link_tag(:atom, formatted_search_events_url('atom', :query => @query), :title => "Atom: Search Results for '#{@query}'" )%>
 <% end -%>
 <%= render :partial => 'search_section', :locals => {:description => "current", :events => @grouped_events[:current]} %>
 <%= render :partial => 'search_section', :locals => {:description => "past", :events => @grouped_events[:past]} %>
 
 <div id='list_filters' class='sidebar'>
-	<h3>Subscribe to</h3>
-	<ul>
-		<li><%= link_to "iCalendar feed", url_for(:action => "search", :protocol => "webcal", :only_path => false, :query => @query, :format => "ics") %></li>
-		<li><%= link_to "Atom feed", formatted_search_events_url("atom", :query => @query) %></li>
-	</ul>
+  <h3>Subscribe to</h3>
+  <ul>
+    <li><%= link_to "iCalendar feed", url_for(:action => "search", :protocol => "webcal", :only_path => false, :query => @query, :format => "ics") %></li>
+    <li><%= link_to "Atom feed", formatted_search_events_url("atom", :query => @query) %></li>
+  </ul>
 
   <h3>Export to</h3>
-		<li><%= link_to "iCalendar file", formatted_search_events_url("ics", :query => @query) %></li>
-		<li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_search_events_url("ics", :query => @query) %></li>
-		<li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_search_events_url("ics", :query => @query) %></li>
+    <li><%= link_to "iCalendar file", formatted_search_events_url("ics", :query => @query) %></li>
+    <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_search_events_url("ics", :query => @query) %></li>
+    <li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_search_events_url("ics", :query => @query) %></li>
   <ul>
   </ul>
 </div>

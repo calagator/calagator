@@ -7,43 +7,43 @@
 </div>
 
 <div id='list_items'>
-	<%= render :partial => 'events/table', :locals => { :events => @events } %>
+  <%= render :partial => 'events/table', :locals => { :events => @events } %>
 </div>
 
 <div id='list_filters' class='sidebar'>
-	
-	<h3 class='first'>Filter by date</h3>
+  
+  <h3 class='first'>Filter by date</h3>
 
-	<% form_tag events_url, :method => 'get' do  -%>
-	<div id="date_filter">
-		<div id='start_calendar'>
-			<label for='date_start'>From</label>
-			<%= text_field_tag 'date[start]', @start_date.strftime('%Y-%m-%d'), :id => 'date_start', :class => 'date_picker' %>
-		</div>
-		<div id='end_calendar'>
-			<label for='date_end'>To</label>
-			<%= text_field_tag 'date[end]', @end_date.strftime('%Y-%m-%d'), :id => 'date_end', :class => 'date_picker' %>
-		</div>
+  <% form_tag events_url, :method => 'get' do  -%>
+  <div id="date_filter">
+    <div id='start_calendar'>
+      <label for='date_start'>From</label>
+      <%= text_field_tag 'date[start]', @start_date.strftime('%Y-%m-%d'), :id => 'date_start', :class => 'date_picker' %>
+    </div>
+    <div id='end_calendar'>
+      <label for='date_end'>To</label>
+      <%= text_field_tag 'date[end]', @end_date.strftime('%Y-%m-%d'), :id => 'date_end', :class => 'date_picker' %>
+    </div>
     <div>
       <label for="commit">&nbsp;</label>
       <%= submit_tag 'Filter' %>
       <span class="clear_filter"><%= link_to 'Reset', events_url %></span>
     </div>
-	</div>
-	<% end %>
-	
-	<h3>Subscribe to</h3>
-	<ul>
-		<li><%= link_to "iCalendar feed", url_for(:action => "index", :protocol => "webcal", :only_path => false)+".ics" %></li>
-		<li><%= link_to "Atom feed", formatted_events_url("atom") %></li>
-	</ul>
+  </div>
+  <% end %>
+  
+  <h3>Subscribe to</h3>
+  <ul>
+    <li><%= link_to "iCalendar feed", url_for(:action => "index", :protocol => "webcal", :only_path => false)+".ics" %></li>
+    <li><%= link_to "Atom feed", formatted_events_url("atom") %></li>
+  </ul>
 
   <h3>Export to</h3>
   <ul>
-		<li><%= link_to "iCalendar file", formatted_events_url("ics") %></li>
-		<li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_events_url('ics') %></li>
-		<li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_events_url('ics') %></li>
+    <li><%= link_to "iCalendar file", formatted_events_url("ics") %></li>
+    <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_events_url('ics') %></li>
+    <li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_events_url('ics') %></li>
   </ul>
-	
+  
 </div>
 <% end %>

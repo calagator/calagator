@@ -1,7 +1,7 @@
 <% tabindex_on '#search_field' %>
 
 <% content_for :discovery_insert do %>
-	<link rel="alternate" type="application/x-wiki" title="Edit this page" href="<%= edit_venue_url(@venue) %>" />
+  <link rel="alternate" type="application/x-wiki" title="Edit this page" href="<%= edit_venue_url(@venue) %>" />
 <% end %>
 
 <div class="single_venue contentbar">
@@ -56,8 +56,8 @@
     <%= upgrade_br(simple_format(auto_link(white_list(@venue.description)))) %>
   </div>
   <% end %>
-	
-	<% unless @venue.tags.blank? -%>
+  
+  <% unless @venue.tags.blank? -%>
   <h2>Tags</h2>
   <div class="tags">
       <%= @venue.tag_list %>

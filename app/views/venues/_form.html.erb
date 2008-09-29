@@ -3,71 +3,71 @@
   <p>You can <%= @venue.new_record? ? "enter" : "edit" %> the details of your venue below.  The more information we have about your venue, the easier it will be for people to find it.</p>
 
   <%= error_messages_for :venue %>
-		<div>
-	    <%= f.label :title, "Venue Name" %>
+    <div>
+      <%= f.label :title, "Venue Name" %>
       <%= f.text_field :title %>
     <% focus_on '#venue_title' %>
-		</div>
-		<div>
+    </div>
+    <div>
       <%= f.label :address %>
-			<%= f.text_field :address %>
-		  <span class='help'>
+      <%= f.text_field :address %>
+      <span class='help'>
         (one-line version of full address)
-		  </span>
-		</div>
-		<div> 
+      </span>
+    </div>
+    <div> 
       <%= f.label :street_address %>
       <%= f.text_field :street_address %>
-		</div>
-		<div>
+    </div>
+    <div>
       <%= f.label :locality, "City" %>
       <%= f.text_field :locality %>
-		</div>
-		<div>
+    </div>
+    <div>
       <%= f.label :region, "State" %>
       <%= f.text_field :region %>
     </div>
-		<div>
+    <div>
       <%= f.label :postal_code, "ZIP Code" %>
       <%= f.text_field :postal_code %>
-		</div>
-		<div>
+    </div>
+    <div>
       <%= f.label :latitude, "Latitude" %>
       <%= f.text_field :latitude %>
-		</div>
-		<div>
+    </div>
+    <div>
       <%= f.label :longitude, "Longitude" %>
       <%= f.text_field :longitude %>
-		</div>
-		<div>
+    </div>
+    <div>
       <%= f.label :url, "Web Link" %>
       <%= f.text_field :url%>
-		</div>
-		<div>
+    </div>
+    <div>
       <%= f.label :email %>
       <%= f.text_field :email %>
-		</div>
-		<div>
+    </div>
+    <div>
       <%= f.label :telephone %>
       <%= f.text_field :telephone %>
- 		</div>
-		<div>
-		  <%= f.label :description %>
+    </div>
+    <div>
+      <%= f.label :description %>
       <%= f.text_area :description, :rows => 4, :cols => 60 %>
       <span class='help'>
         (HTML formatting allowed)
       </span>
-		</div>
+    </div>
     <div>
-	    <%= f.label :tag_list, "Tags" %>
-	    <%= f.text_field :tag_list %>
+      <%= f.label :tag_list, "Tags" %>
+      <%= f.text_field :tag_list %>
       <span class="help adjacent">
         (comma-separated keywords)
       </span>
-	  </div>
+    </div>
     <% unless @venue.new_record? %>
-		<div>
-		  <%= f.label :force_geocoding, @venue.location ? "Re-geocode?" : "Geocode?" %>
+    <div>
+      <%= f.label :force_geocoding, @venue.location ? "Re-geocode?" : "Geocode?" %>
       <%= f.check_box :force_geocoding %>
       <span class='help'>
         <% if @venue.location %>
@@ -76,17 +76,17 @@
           (if checked, we'll try to determine a map position for this venue.)
         <% end %>
       </span>
-		</div>
+    </div>
     <% end %>
-		<div class='trap'>
-	    <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
-	    <%= text_field_tag 'trap_field', params[:trap_field] %>
-	  </div>
-		<div class='no_label'>
-			<% if !params[:from_event].blank? %>
-				<%= hidden_field_tag(:from_event, params[:from_event]) %>
-			<% end %>
-	    <%= f.submit(@venue.new_record? ? "Create" : "Update") %>
-		</div>
-		</fieldset>
-	<% end %>
+    <div class='trap'>
+      <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
+      <%= text_field_tag 'trap_field', params[:trap_field] %>
+    </div>
+    <div class='no_label'>
+      <% if !params[:from_event].blank? %>
+        <%= hidden_field_tag(:from_event, params[:from_event]) %>
+      <% end %>
+      <%= f.submit(@venue.new_record? ? "Create" : "Update") %>
+    </div>
+    </fieldset>
+  <% end %>

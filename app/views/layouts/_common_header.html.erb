@@ -10,7 +10,7 @@
     <%= stylesheet_link_tag "datepicker",
                             "timePicker",
                             :cache => true %>
-		<%= yield :css_insert %>
+    <%= yield :css_insert %>
     <%= javascript_include_tag  'jquery-1.2.3.min.js',
                                 'jquery-ui',
                                 'jquery-fx',
@@ -18,10 +18,10 @@
                                 'ui.datepicker.js',
                                 'jquery.timePicker.js',
                                 :cache => true %>
-		<%= javascript_include_tag 'application'%>
-		<%= yield :javascript_insert %>
-		
-		<%= yield :discovery_insert %>
+    <%= javascript_include_tag 'application'%>
+    <%= yield :javascript_insert %>
+    
+    <%= yield :discovery_insert %>
     <%= auto_discovery_link_tag(:atom, formatted_events_url('atom'), :title => 'Atom: All Events' )%>
   </head>
   <body>

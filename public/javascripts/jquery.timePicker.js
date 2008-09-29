@@ -18,7 +18,7 @@
   
   $.fn.timePicker = function(options) {
     // Build main options before element iteration
-	  var settings = $.extend({}, $.fn.timePicker.defaults, options);  
+    var settings = $.extend({}, $.fn.timePicker.defaults, options);  
     
     return this.each(function() {
       $.timePicker(this, settings);
@@ -182,9 +182,9 @@
     return formatNumber(hours) + settings.separator + formatNumber(minutes) + (settings.show24Hours ? '' : ((h < 12) ? ' AM' : ' PM'));
   }
   
-	function formatNumber(value) {
-		return (value < 10 ? '0' : '') + value;
-	}
+  function formatNumber(value) {
+    return (value < 10 ? '0' : '') + value;
+  }
   
   function timeStringToDate(input, settings) {
     if (input) {
@@ -198,11 +198,11 @@
   }
   
   /* Normalise time object to a common date. */
-	function normaliseTime(time) {
-		time.setFullYear(2001);
-		time.setMonth(0);
-		time.setDate(0);
-		return time;
-	}
+  function normaliseTime(time) {
+    time.setFullYear(2001);
+    time.setMonth(0);
+    time.setDate(0);
+    return time;
+  }
   
 })(jQuery);

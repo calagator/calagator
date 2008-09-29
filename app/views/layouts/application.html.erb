@@ -1,54 +1,54 @@
 <%= render :partial => 'layouts/common_header' %>
 
-	<div id="outer">
-		<div id="global_header">
-			<a href="/" id="project_title">Calagator</a>
-			
-			<div id="top_menu">
+  <div id="outer">
+    <div id="global_header">
+      <a href="/" id="project_title">Calagator</a>
+      
+      <div id="top_menu">
 
-				  <%
-					link_class = {
-							# :home =>   (controller.controller_name == 'site' ? 'active first' : 'first'),
-							# :import => (controller.controller_name == 'sources' && 'active'),
-							:events => ((	controller.controller_name == 'events' || 
-														controller.controller_name == 'sources' ||
-														controller.controller_name == 'site')  && 'active'),
-							:venues => (controller.controller_name == 'venues'  && 'active'),
-						}
-				  %>
+          <%
+          link_class = {
+              # :home =>   (controller.controller_name == 'site' ? 'active first' : 'first'),
+              # :import => (controller.controller_name == 'sources' && 'active'),
+              :events => (( controller.controller_name == 'events' || 
+                            controller.controller_name == 'sources' ||
+                            controller.controller_name == 'site')  && 'active'),
+              :venues => (controller.controller_name == 'venues'  && 'active'),
+            }
+          %>
 
-		     <div id='app_menu'>
-					<ul>
-					    <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
-					    <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
-					    <!--<li class='<%=link_class[:import]%>'><%= link_to "Add Events", sources_path %></li>-->
-					</ul>
-		    </div>
-	      <div id='project_menu'>
-					<strong>Get Involved:</strong> <%= link_to "Blog", blog_path, {:class => 'first'} %> | <%= link_to "Forum", forum_path %> | <%= link_to "Code", code_path %>
-					<br />
-					<strong>Something not right?</strong> <%= link_to "File an issue", issues_path %> or <%= link_to "get satisfaction", 'http://getsatisfaction.com/calagator' %>.
-	      </div>
-				<% form_tag '/events/search', :method => :get do %>
-					<div id='search_form'>
-						<label for="search_field">Search Events</label>
-						<% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-							<input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-						<% else %>
-							<%= text_field_tag 'query', @query, :id => 'search_field' %>
-						<% end %>
-					</div>
-				<% end -%>
-	    </div>			
-		</div>
-		
-		<% # Pick a subnav %>
-		
-		<%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
-		<%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
-		<%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
-	
-	
+         <div id='app_menu'>
+          <ul>
+              <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+              <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+              <!--<li class='<%=link_class[:import]%>'><%= link_to "Add Events", sources_path %></li>-->
+          </ul>
+        </div>
+        <div id='project_menu'>
+          <strong>Get Involved:</strong> <%= link_to "Blog", blog_path, {:class => 'first'} %> | <%= link_to "Forum", forum_path %> | <%= link_to "Code", code_path %>
+          <br />
+          <strong>Something not right?</strong> <%= link_to "File an issue", issues_path %> or <%= link_to "get satisfaction", 'http://getsatisfaction.com/calagator' %>.
+        </div>
+        <% form_tag '/events/search', :method => :get do %>
+          <div id='search_form'>
+            <label for="search_field">Search Events</label>
+            <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+              <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+            <% else %>
+              <%= text_field_tag 'query', @query, :id => 'search_field' %>
+            <% end %>
+          </div>
+        <% end -%>
+      </div>      
+    </div>
+    
+    <% # Pick a subnav %>
+    
+    <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
+    <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
+    <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+  
+  
     <div id="content">
       <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
       <%= render_flash %>

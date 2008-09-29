@@ -15,9 +15,9 @@ skipped = 0
 rowspans = calculate_rowspans(events)
 -%>
 <table class='event_table'>
-	<thead>
-		<tr>
-			<th class='date'>Sort By: <%= link_to "Date", url_for(params.merge(:order => 'date')) %></th>
+  <thead>
+    <tr>
+      <th class='date'>Sort By: <%= link_to "Date", url_for(params.merge(:order => 'date')) %></th>
       <th class='event_summary'>
         <%= link_to "Event Name", url_for(params.merge(:order => 'name')) -%>,
         <%= link_to "Location", url_for(params.merge(:order => 'venue')) -%>
@@ -25,49 +25,49 @@ rowspans = calculate_rowspans(events)
         <%= link_to "Relevance", url_for(params.merge(:order => 'score')) %>
         <% end %>
       </th>
-		</tr>
-	</thead>
-	<tbody>
-		<% unless events.size==0 %>
-			<% events.each_with_index do |event, index| %>
-				<tr class='vevent'>
-					<% if rowspans[index] > 0 %>
-					<td class='date' rowspan="<%=rowspans[index]%>">
-						<div class='day_of_week <%= today_tomorrow_or_weekday(event).downcase -%>'>
-							<%= today_tomorrow_or_weekday(event) %>
-						</div>
-						<% show_year = event.start_time.year != Time.now.year %>
-						<%= datetime_format(event.start_time,'%b %d') -%><%= ", "+datetime_format(event.start_time,'%Y') if show_year %>
-					</td>
-					<% end %>
-					<td class='event_summary'>
-						<a class='summary' href='<%= url_for event_url(event) %>'><%= h event.title %></a><br />
-						<%= normalize_time(event, :context => event.start_time.to_date) -%>
-						<% if event.venue && !event.venue.title.blank? %>
-				      <a class='location' href='<%= url_for venue_url(event.venue) %>'><%= h event.venue.title -%></a>
-				    <% end -%>
-						<% if !event.description.blank? %>
-				      <div class='description'>
-				        <%= upgrade_br(auto_link(white_list(event.description))) -%>
-				      </div>
-				    <% end -%>
-				    <% if !event.url.blank? -%>
-				      <%= link_to "Website", event.url, :class => "url" -%>
-				    <% end -%>
-					</td>
-				</tr>
-			<% end %>
-		<% else %>
-			<tr>
-				<td colspan=2>No events were found.</td>
-			</tr>
-		<% end %>
-		<% if skipped > 0 %>
-	    <tr>
-				<td colspan=2>
-		      <%= link_to "(And #{skipped} more)", events_url %>
-				</td>
-	    </tr>
-		<% end %>
-	</tbody>
+    </tr>
+  </thead>
+  <tbody>
+    <% unless events.size==0 %>
+      <% events.each_with_index do |event, index| %>
+        <tr class='vevent'>
+          <% if rowspans[index] > 0 %>
+          <td class='date' rowspan="<%=rowspans[index]%>">
+            <div class='day_of_week <%= today_tomorrow_or_weekday(event).downcase -%>'>
+              <%= today_tomorrow_or_weekday(event) %>
+            </div>
+            <% show_year = event.start_time.year != Time.now.year %>
+            <%= datetime_format(event.start_time,'%b %d') -%><%= ", "+datetime_format(event.start_time,'%Y') if show_year %>
+          </td>
+          <% end %>
+          <td class='event_summary'>
+            <a class='summary' href='<%= url_for event_url(event) %>'><%= h event.title %></a><br />
+            <%= normalize_time(event, :context => event.start_time.to_date) -%>
+            <% if event.venue && !event.venue.title.blank? %>
+              <a class='location' href='<%= url_for venue_url(event.venue) %>'><%= h event.venue.title -%></a>
+            <% end -%>
+            <% if !event.description.blank? %>
+              <div class='description'>
+                <%= upgrade_br(auto_link(white_list(event.description))) -%>
+              </div>
+            <% end -%>
+            <% if !event.url.blank? -%>
+              <%= link_to "Website", event.url, :class => "url" -%>
+            <% end -%>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan=2>No events were found.</td>
+      </tr>
+    <% end %>
+    <% if skipped > 0 %>
+      <tr>
+        <td colspan=2>
+          <%= link_to "(And #{skipped} more)", events_url %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
