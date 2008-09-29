@@ -3,8 +3,8 @@
 
 $(document).ready(function(){
     $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
-		$('.time_picker').timePicker({
-		  show24Hours:false,
-		  separator:':',
-		  step: 15});
+    $('.time_picker').timePicker({
+      show24Hours:false,
+      separator:':',
+      step: 15});
 });

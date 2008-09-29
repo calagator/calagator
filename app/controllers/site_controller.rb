@@ -29,17 +29,17 @@ class SiteController < ApplicationController
     # define colors to be used in CSS
     @colors = {
       :green =>         '#82c555',
-    	:light_green => 	'#bcf794',
-    	:dark_green => 		'#59a12d',
-    	:creme => 				'#f9ffec',
-    	:cyan => 					'#98f0f7',
-    	:light_cyan =>    '#e8fbfe',
-    	:teal =>          '#66baa9',
-    	:light_grey => 		'#aaccaa',
-    	:dark_grey => 		'#445544',
+      :light_green =>   '#bcf794',
+      :dark_green =>    '#59a12d',
+      :creme =>         '#f9ffec',
+      :cyan =>          '#98f0f7',
+      :light_cyan =>    '#e8fbfe',
+      :teal =>          '#66baa9',
+      :light_grey =>    '#aaccaa',
+      :dark_grey =>     '#445544',
 
-    	# used for emphasis blocks of creme text
-    	:white =>         '#fff'
+      # used for emphasis blocks of creme text
+      :white =>         '#fff'
     }
 
     output = render_to_string(:template => "site/styles/#{template}.css.erb")

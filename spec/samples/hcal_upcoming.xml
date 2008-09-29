@@ -151,7 +151,7 @@ You can visit <a rel="nofollow" href="http://barcamp.org/BarCampPortlandMeetups"
       
             &nbsp;
     </div> <!-- /#eventMetadata -->
-	
+  
       <div class="byline">
                   Added by 
                 
@@ -162,7 +162,7 @@ You can visit <a rel="nofollow" href="http://barcamp.org/BarCampPortlandMeetups"
     <div id="eventComments">
       <div id="eventPhotos">
         <div class="heading">Photos 
-		<span class="small" id="photos_loading_msg">(<a href="http://flickr.com/photos/tags/upcoming:event=428964" id="photos_see_all_link">loading...</a>)</span>
+    <span class="small" id="photos_loading_msg">(<a href="http://flickr.com/photos/tags/upcoming:event=428964" id="photos_see_all_link">loading...</a>)</span>
         </div> 
         <div id="photo_container"></div>
         <div id="add_photo_button_container"><a id="add_photo_link" href="javascript:void(0);">Add your own...</a></div>
@@ -180,8 +180,8 @@ You can visit <a rel="nofollow" href="http://barcamp.org/BarCampPortlandMeetups"
 
     </div> <!-- /#eventPhotos -->
 
-	  <div class="heading">Comments</div>
-      			<br /><br />
+    <div class="heading">Comments</div>
+            <br /><br />
           <div id="addcomments" class="info">
           <a href="https://login.yahoo.com/config/eval_register?.intl=us&.done=http%3A%2F%2Fupcoming.yahoo.com%2Fdetect%2F%3Fr%3D%252Fevent%252F428964%252F&.src=upcm">Sign Up</a> or <a href="https://login.yahoo.com/config/login_verify2?.pd=c%3d7VX_qHOp2e4WEc1FoX0E7L8-&.intl=us&.src=upcm&.done=http%3A%2F%2Fupcoming.yahoo.com%2Fdetect%2F%3Fr%3D%252Fevent%252F428964%252F">Sign In</a> to comment on this event!
           </div>
@@ -194,7 +194,7 @@ You can visit <a rel="nofollow" href="http://barcamp.org/BarCampPortlandMeetups"
 
           <div id="eventAttendance">
         <form method="get" id="watch_form" action="/add/watchlist/">
-		  <input type="hidden" name="_ucrumb" value="" />
+      <input type="hidden" name="_ucrumb" value="" />
           
           <div class="attend">
                           <input type="radio" name="status" value="attend" id="status_attend" onClick="document.getElementById('watch_form').submit();" /> <label for="status_attend" onClick="document.getElementById('status_attend').checked = true;document.getElementById('watch_form').submit();">
@@ -214,14 +214,14 @@ You can visit <a rel="nofollow" href="http://barcamp.org/BarCampPortlandMeetups"
       
                       <input type="hidden" name="action" value="add" />
           
-          		  	          <input type="hidden" name="event_id" value="428964" />
+                            <input type="hidden" name="event_id" value="428964" />
           <noscript>
             <input type="submit" name="submit" value="Do it!"/>
           </noscript>
-        </form>	
+        </form> 
 
       </div>
-	<br />
+  <br />
     
           <div class="userlist">
 
@@ -314,27 +314,27 @@ You can visit <a rel="nofollow" href="http://barcamp.org/BarCampPortlandMeetups"
         </div> <!-- end insetContainer -->
         
         <div id="eventTags">
-			<div class="insetTitle">
-				Tags
-			</div><!-- end insetTitle -->
-			<div class="insetBody categories">
-				<div id="tag_list">
-													<a href="/tag/technology/" rel="tag" class="category">technology</a>
-											<br />
-										<a href="/tag/portland/" rel="tag" class="category">portland</a>
-											<br />
-										<a href="/tag/software/" rel="tag" class="category">software</a>
-											<br />
-										<a href="/tag/legionoftech/" rel="tag" class="category">Legion of Tech</a>
-											<br />
-										<a href="/tag/jivesoftware/" rel="tag" class="category">Jive Software</a>
-											<br />
-										<a href="/tag/oregon/" rel="tag" class="category">oregon</a>
-											<br />
-											</div>
-				<div id="add_tag">
-														</div>
-			</div><!-- /.insetBody -->
+      <div class="insetTitle">
+        Tags
+      </div><!-- end insetTitle -->
+      <div class="insetBody categories">
+        <div id="tag_list">
+                          <a href="/tag/technology/" rel="tag" class="category">technology</a>
+                      <br />
+                    <a href="/tag/portland/" rel="tag" class="category">portland</a>
+                      <br />
+                    <a href="/tag/software/" rel="tag" class="category">software</a>
+                      <br />
+                    <a href="/tag/legionoftech/" rel="tag" class="category">Legion of Tech</a>
+                      <br />
+                    <a href="/tag/jivesoftware/" rel="tag" class="category">Jive Software</a>
+                      <br />
+                    <a href="/tag/oregon/" rel="tag" class="category">oregon</a>
+                      <br />
+                      </div>
+        <div id="add_tag">
+                            </div>
+      </div><!-- /.insetBody -->
     </div> <!-- /#eventTags -->
     
           <div id="eventGroups">
@@ -372,8 +372,8 @@ ctxt_ad_uc = 'C80D00';
   
 
 </div> <!-- End vCalendar -->
-		</div>  <!-- /#yui-main -->
-	</div>  <!-- /#bd -->
+    </div>  <!-- /#yui-main -->
+  </div>  <!-- /#bd -->
   <input type="hidden" id="_cmb" name="_cmb" value="" />
   
   <div id="footer">
