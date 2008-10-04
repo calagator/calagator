@@ -9,9 +9,9 @@
   <ul>
     <% for venue in @venues %>
       <li>
-        <%= link_to(h(venue.title), venue_url(venue)) %>
+        <%= link_to(cleanse(venue.title), venue_url(venue)) %>
         <% if venue.has_full_address? %>
-          at <%=h venue.full_address %>
+          at <%= cleanse venue.full_address %>
         <% end %>
       </li>
     <% end %>

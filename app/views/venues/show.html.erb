@@ -7,7 +7,7 @@
 <div class="single_venue contentbar">
 <div class="location vcard">
   <%= google_map @venue %>
-  <h1 class="fn org"><%= @venue.title.strip_html %></h1>
+  <h1 class="fn org"><%= cleanse @venue.title.strip_html %></h1>
 
   <% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
     <div class="adr">
@@ -37,11 +37,11 @@
   <% end %>
 
   <% if !@venue.url.blank? %>
-    <div class='url'><%= link_to(nil, url_for(@venue.url) ) %></div>
+  <div class='url'><%= link_to(nil, url_for(@venue.url), :rel => "nofollow") %></div>
   <% end %>
 
   <% if !@venue.email.blank? %>
-    <div class='email'><%= mail_to( h(@venue.email) ) %></div>
+    <div class='email'><%= mail_to( cleanse(@venue.email) ) %></div>
   <% end %>
 
   <% if !@venue.telephone.blank? %>
@@ -60,7 +60,7 @@
   <% unless @venue.tags.blank? -%>
   <h2>Tags</h2>
   <div class="tags">
-      <%= @venue.tag_list %>
+      <%= cleanse @venue.tag_list %>
   </div>
   <% end %>
 
