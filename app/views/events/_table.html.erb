@@ -41,10 +41,10 @@ rowspans = calculate_rowspans(events)
           </td>
           <% end %>
           <td class='event_summary'>
-            <a class='summary' href='<%= url_for event_url(event) %>'><%= h event.title %></a><br />
+            <a class='summary' href='<%= url_for event_url(event) %>'><%= cleanse event.title.strip_html %></a><br />
             <%= normalize_time(event, :context => event.start_time.to_date) -%>
             <% if event.venue && !event.venue.title.blank? %>
-              <a class='location' href='<%= url_for venue_url(event.venue) %>'><%= h event.venue.title -%></a>
+              <a class='location' href='<%= url_for venue_url(event.venue) %>'><%= cleanse event.venue.title.strip_html -%></a>
             <% end -%>
             <% if !event.description.blank? %>
               <div class='description'>
@@ -52,7 +52,7 @@ rowspans = calculate_rowspans(events)
               </div>
             <% end -%>
             <% if !event.url.blank? -%>
-              <%= link_to "Website", event.url, :class => "url" -%>
+              <%= link_to "Website", event.url, :class => "url", :rel => "nofollow" -%>
             <% end -%>
           </td>
         </tr>
