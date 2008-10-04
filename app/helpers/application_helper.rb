@@ -56,7 +56,6 @@ module ApplicationHelper
   # Retrun a string describing the source code version being used, or false/nil if it can't figure out how to find the version.
   def self.source_code_version_raw
     begin
-      RAILS_DEFAULT_LOGGER.info("source_code_version: computing...")
       if File.directory?(File.join(RAILS_ROOT, ".svn"))
         $svn_revision ||= \
           if s = `svn info 2>&1`
@@ -139,5 +138,13 @@ module ApplicationHelper
     #insert_javascript "$('#{xpath_query}')[0].tabindex = 1;"
     #insert_javascript "$('#{xpath_query}')[0].attributes['tabindex'] = 1;"
     # TODO Figure out how to set tabindex, because neither of these work right.
+  end
+
+  require 'htmlentities'
+  HTMLEntitiesCoder = HTMLEntities.new
+
+  # Returns a string with safely encoded entities thanks to #h, while preserving any existing HTML entities.
+  def cleanse(string)
+    return h(HTMLEntitiesCoder.decode(string))
   end
 end
