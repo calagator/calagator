@@ -1,3 +1,13 @@
+<p>
+  Version <%= select_tag("version", options_for_select(@event.versions.reverse.map { |v| ["#{v.version}: #{v.updated_at.strftime('%B %d, %Y at %I:%M %p')}", v.version]})) %>
+</p>
+<%= observe_field :version, :url => { :action => :refresh_version, :id => @event.id },
+      :frequency => 0.25,
+      :update => "edit_event_form",
+      :with => "'version=' + value"
+      %>
+
 <div id="edit_event_form">
-<%= render :partial => 'form' %>
+  <%= render :partial => 'form', :locals => {:event => @event} %>
 </div>
+
