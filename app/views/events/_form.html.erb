@@ -38,13 +38,13 @@
   </script>
 <% end %>
 
-<% form_for(@event, :html => {:id => "event_form", :class => "standard_form"}) do |f| %>
-<fieldset>
-  <legend><%= @event.new_record? ? "Add an Event" : "Editing: <em>#{@event.title}</em>" %></legend>
-  <p>You can <%= @event.new_record? ? "enter" : "edit" %> the details of your event below.  The more information we have about your event, the easier it will be for people to find it.</p>
+<% form_for(event, :html => {:id => "event_form", :class => "standard_form"}) do |f| %>
+  <fieldset>
+    <legend><% unless event.new_record? %>Editing: <em><%= event.title %></em><% end %></legend>
+    
+    <p>You can edit the details of your event below.  The more information we have about your event, the easier it will be for people to find it.</p>
 
   <%= error_messages_for :event %>
-
   <div>
     <%= f.label :title, "Event Name" %>
     <%= f.text_field :title %>
@@ -52,8 +52,8 @@
   </div>
   <div>
     <%= f.label :venue_id, "Venue" %>
-    <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !@event.venue.nil? ? @event.venue.title : params[:venue_name] %>
-    <%= hidden_field(:event, :venue_id, :value => (!@event.venue.nil? ? @event.venue.id : params[:event_venue_id])) %>
+    <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !event.venue.nil? ? event.venue.title : params[:venue_name] %>
+    <%= hidden_field(:event, :venue_id, :value => (!event.venue.nil? ? event.venue.id : params[:event_venue_id])) %>
     <%= image_tag "spinner.gif", :id=> "event_venue_loading", :style => "display: none; margin-left: 0.5em;" %>
   </div>
   <div class='help'>
@@ -63,13 +63,13 @@
   <div id="event_times">
     <div id="start_time">
       <%= f.label :start_time %>
-      <%= text_field_tag 'start_date', @event.start_time ? @event.start_time.to_date : '', :id => 'date_start', :class => 'date_picker' %>
-      <%= text_field_tag 'start_time', @event.start_time ? @event.start_time.strftime('%I:%M %p') : '', :id => 'time_start', :class => 'time_picker' %>
+      <%= text_field_tag 'start_date', event.start_time ? event.start_time.to_date : '', :id => 'date_start', :class => 'date_picker' %>
+      <%= text_field_tag 'start_time', event.start_time ? event.start_time.strftime('%I:%M %p') : '', :id => 'time_start', :class => 'time_picker' %>
     </div>
     <div id="end_time">
       <%= f.label :end_time %>
-      <%= text_field_tag 'end_date', @event.end_time ? @event.end_time.to_date : '', :id => 'date_end', :class => 'date_picker' %>
-      <%= text_field_tag 'end_time', @event.end_time ? @event.end_time.strftime('%I:%M %p') : '', :id => 'time_end', :class => 'time_picker' %>
+      <%= text_field_tag 'end_date', event.end_time ? event.end_time.to_date : '', :id => 'date_end', :class => 'date_picker' %>
+      <%= text_field_tag 'end_time', event.end_time ? event.end_time.strftime('%I:%M %p') : '', :id => 'time_end', :class => 'time_picker' %>
     </div>
   </div>
   <div>
@@ -97,6 +97,6 @@
     <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
     <%= text_field_tag 'trap_field', params[:trap_field] %>
   </div>
-  <div class='no_label'><%= f.submit(@event.new_record? ? "Create" : "Update") %></div>
-</fieldset>
+  <div class='no_label'><%= f.submit(event.new_record? ? "Create" : "Update") %></div>
+  </fieldset>
 <% end %>

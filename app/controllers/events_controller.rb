@@ -210,6 +210,12 @@ class EventsController < ApplicationController
       format.ics { ical_export(@events) }
     end
   end
+  
+  def refresh_version
+    @event = Event.find(params[:id])
+    @event.revert_to(params[:version].to_i)
+    render :partial => 'form', :locals => { :event => @event}
+  end
 
 protected
 
