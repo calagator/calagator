@@ -1,3 +1,14 @@
+<% unless @venue.versions.empty? %>
+<p>
+  Version <%= select_tag("version", options_for_select(@venue.versions.reverse.map { |v| ["#{v.version}: #{v.updated_at.strftime('%B %d, %Y at %I:%M %p')}", v.version]})) %>
+</p>
+<%= observe_field :version, :url => { :action => :refresh_version, :id => @venue.id },
+      :frequency => 0.25,
+      :update => "edit_venue_form",
+      :with => "'version=' + value"
+      %>
+<% end %>
+
 <div id="edit_venue_form">
-<%= render :partial => 'form' %>
+  <%= render :partial => 'form', :locals => {:venue => @venue} %>
 </div>

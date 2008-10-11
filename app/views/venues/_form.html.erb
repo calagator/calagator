@@ -1,6 +1,6 @@
-<% form_for(@venue, :html => {:id => "venue_form", :class => "standard_form"}) do |f| %>
-  <fieldset><legend><%= @venue.new_record? ? "New venue" : "Edit venue" %></legend>
-  <p>You can <%= @venue.new_record? ? "enter" : "edit" %> the details of your venue below.  The more information we have about your venue, the easier it will be for people to find it.</p>
+<% form_for(venue, :html => {:id => "venue_form", :class => "standard_form"}) do |f| %>
+  <fieldset><legend><%= venue.new_record? ? "New venue" : "Edit venue" %></legend>
+  <p>You can <%= venue.new_record? ? "enter" : "edit" %> the details of your venue below.  The more information we have about your venue, the easier it will be for people to find it.</p>
 
   <%= error_messages_for :venue %>
     <div>
@@ -65,13 +65,13 @@
         (comma-separated keywords)
       </span>
     </div>
-    <% unless @venue.new_record? %>
+    <% unless venue.new_record? %>
     <div>
-      <%= f.label :force_geocoding, @venue.location ? "Re-geocode?" : "Geocode?" %>
+      <%= f.label :force_geocoding, venue.location ? "Re-geocode?" : "Geocode?" %>
       <%= f.check_box :force_geocoding %>
       <span class='help'>
-        <% if @venue.location %>
-          ([<%= @venue.latitude %>, <%= @venue.longitude %>] currently; if checked, we'll try again.)
+        <% if venue.location %>
+          ([<%= venue.latitude %>, <%= venue.longitude %>] currently; if checked, we'll try again.)
         <% else %>
           (if checked, we'll try to determine a map position for this venue.)
         <% end %>
@@ -86,7 +86,7 @@
       <% if !params[:from_event].blank? %>
         <%= hidden_field_tag(:from_event, params[:from_event]) %>
       <% end %>
-      <%= f.submit(@venue.new_record? ? "Create" : "Update") %>
+      <%= f.submit(venue.new_record? ? "Create" : "Update") %>
     </div>
     </fieldset>
   <% end %>
