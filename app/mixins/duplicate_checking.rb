@@ -160,7 +160,8 @@ module DuplicateChecking
 
       if fields == :all || fields == :any
         attributes.each do |attr|
-          next if ['id','created_at','updated_at', 'duplicate_of_id'].include?(attr)
+          # TODO make find_duplicates_by(:all) pay attention to ignore fields
+          next if ['id','created_at','updated_at', 'duplicate_of_id','version'].include?(attr)
           if fields == :all
             query += " ((a.#{attr} = b.#{attr}) OR (a.#{attr} IS NULL AND b.#{attr} IS NULL)) AND"
           else
