@@ -1,3 +1,4 @@
+<% unless @event.versions.empty? %>
 <p>
   Version <%= select_tag("version", options_for_select(@event.versions.reverse.map { |v| ["#{v.version}: #{v.updated_at.strftime('%B %d, %Y at %I:%M %p')}", v.version]})) %>
 </p>
@@ -6,6 +7,8 @@
       :update => "edit_event_form",
       :with => "'version=' + value"
       %>
+<% end %>  
+    
 
 <div id="edit_event_form">
   <%= render :partial => 'form', :locals => {:event => @event} %>
