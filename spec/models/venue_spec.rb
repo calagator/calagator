@@ -310,4 +310,19 @@ describe "Venue geocode addressing" do
     @venue.attributes = {:street_address => "", :address => "address"}
     @venue.geocode_address.should == "address"
   end
+  
+  describe "acting as versioned" do
+    it "should have versions" do
+      Venue.new.versions.should==[]
+    end
+    
+    it "should increment the version number when editing" do
+      venue = Venue.create!(:title => 'My Event')
+      venue.version.should==1
+      
+      venue.title = "New Title"
+      venue.save!
+      venue.version.should==2
+    end
+  end
 end
