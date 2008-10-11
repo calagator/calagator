@@ -48,6 +48,8 @@ class Venue < ActiveRecord::Base
   unless RAILS_ENV == 'test'
     acts_as_solr :fields => INDEXABLE_FIELDS
   end
+  
+  acts_as_versioned
 
   # Associations
   has_many :events, :dependent => :nullify
@@ -70,7 +72,7 @@ class Venue < ActiveRecord::Base
 
   # Duplicates
   include DuplicateChecking
-  duplicate_checking_ignores_attributes    :source_id
+  duplicate_checking_ignores_attributes    :source_id, :version
   duplicate_squashing_ignores_associations :tags
 
   # Named scopes
