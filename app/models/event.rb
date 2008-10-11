@@ -40,6 +40,8 @@ class Event < ActiveRecord::Base
   unless RAILS_ENV == 'test'
     acts_as_solr :fields => INDEXABLE_FIELDS
   end
+  
+  acts_as_versioned
 
   # Associations
   belongs_to :venue
