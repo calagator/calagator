@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+include ApplicationHelper
 
 describe ApplicationHelper do
   describe "when escaping HTML while preserving entities (cleanse)" do

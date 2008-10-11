@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/../spec_helper'
+include TimeRangeHelper
 
 context "Time formatting" do
   before(:each) do
