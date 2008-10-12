@@ -66,7 +66,12 @@ class SourcesController < ApplicationController
   # GET /sources/1
   # GET /sources/1.xml
   def show
-    @source = Source.find(params[:id])
+    begin
+      @source = Source.find(params[:id])
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:failure] = e.to_s if params[:id] != "import"
+      return redirect_to(:action => :new)
+    end
 
     respond_to do |format|
       format.html # show.html.erb
