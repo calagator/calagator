@@ -1,9 +1,12 @@
 #===[ Standard Libraries ]==============================================
 
+require 'fileutils'
+require 'net/http'
+require 'net/https'
 require 'open-uri'
 require 'set'
 require 'uri'
-require 'fileutils'
+require 'uri'
 
 #===[ /lib ]============================================================
 
