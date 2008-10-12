@@ -15,8 +15,12 @@ class SourcesController < ApplicationController
         @sources_to_events = Source.create_sources_and_events_for!(@source.url)
         @source = @sources_to_events.keys.first
         @events = @sources_to_events.values.flatten
-      rescue OpenURI::HTTPError
-        @source.errors.add_to_base("that URL doesn't seem to be working")
+      rescue OpenURI::HTTPError => e
+        @source.errors.add_to_base("we received an error from this source")
+      rescue Errno::EHOSTUNREACH => e
+        @source.errors.add_to_base("this source is not responding")
+      rescue SocketError => e
+        @source.errors.add_to_base("hostname not found")
       end
     end
 
