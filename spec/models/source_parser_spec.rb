@@ -5,13 +5,8 @@ end
 
 describe SourceParser, "when reading content" do
   it "should read from a normal URL" do
-    uri = mock_model(URI)
-    # please retain space betwen "?" and ")" on following line; it avoids a SciTE issue
-    uri.should_receive(:respond_to? ).and_return(true)
-    uri.should_receive(:read).and_return(42)
-    URI.should_receive(:parse).and_return(uri)
-
-    SourceParser.read_url("not://a.real/~url").should == 42
+    stub_source_parser_http_response!(:body => 42)
+    SourceParser.read_url("http://a.real/~url").should == 42
   end
 
   it "should read from a wacky URL" do

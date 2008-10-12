@@ -71,10 +71,27 @@ class SourceParser
     def self.read_url(url)
       uri = URI.parse(url)
       if uri.respond_to?(:read)
-        return uri.read
+        if ['http', 'https'].include?(uri.scheme)
+          http = Net::HTTP.new(uri.host, uri.port)
+          http.use_ssl = (uri.scheme == 'https')
+          request = Net::HTTP::Get.new(uri.path.blank? ? "/" : uri.path)
+          request.basic_auth(uri.user, uri.password)
+          response = ::SourceParser::Base::http_response_for(http, request)
+          if response.code == "401"
+            raise HttpAuthenticationRequiredError.new
+          end
+          return response.body
+        else
+          return uri.read
+        end
       else
         return open(url){|h| h.read}
       end
+    end
+
+    # Return the HTTPResponse for the +http+ connection and the +request+.
+    def self.http_response_for(http, request)
+      return http.request(request)
     end
 
     # Stub which makes sure that subclasses of Base implement the #parse method.
@@ -93,4 +110,9 @@ end
 source_parser_driver_path = File.join(File.dirname(__FILE__), "source_parser")
 for entry in Dir.entries(source_parser_driver_path).select{|t| t.match(/.+\.rb$/)}
   require File.join(source_parser_driver_path, entry)
+end
+
+# Exception raised if user requests parsing of a URL that requires
+# authentication but none was provided.
+class HttpAuthenticationRequiredError < Exception
 end

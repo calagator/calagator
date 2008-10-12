@@ -203,3 +203,10 @@ def save_body
   bytes = File.open(filename, "w+"){|h| h.write(response.body)}
   return [filename, bytes]
 end
+
+def stub_source_parser_http_response!(opts={})
+  code = (opts[:code] || "200").to_s
+  body = opts[:body]
+  http_response = mock_model(Net::HTTPResponse, :code => code, :body => body)
+  SourceParser::Base.should_receive(:http_response_for).and_return(http_response)
+end
