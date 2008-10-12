@@ -32,7 +32,7 @@
 
   <% unless event.description.blank? %>
   <div class="description">
-    <%= upgrade_br(auto_link(white_list(event.description))) %>
+    <%= upgrade_br(simple_format(auto_link(white_list(event.description)))) %>
   </div>
   <% end %>
 
