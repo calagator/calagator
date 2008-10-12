@@ -1,0 +1,13 @@
+<strong><%= link_to item.title, object %></strong> : Version <%= item.version %>; 
+<%= item.updated_at.strftime('%B %d, %Y at %I:%M %p') %>
+
+<% unless item.version==1 %>
+  <ul>
+  <% 
+  object.version_diff(item.version, :prev).each do |field_name, values| 
+    next if %w(updated_at).include?(field_name)
+  %>
+    <li><%= field_name %>: <%= values[0] %> =&gt; <%= values[1] %></li>
+  <% end %>
+  </ul>
+<% end %>

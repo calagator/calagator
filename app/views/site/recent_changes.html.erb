@@ -1,0 +1,14 @@
+<% content_for :discovery_insert do %>
+  <%= auto_discovery_link_tag(:atom, formatted_recent_changes_url('atom'), :title => "Atom: Recent Changes" )%>
+<% end %>
+
+<h2>Recent Changes</h2>
+
+<ul>
+<% for item in @items %>
+<% object = item.send(item.class.parent.name.downcase) %>
+  <li>
+    <%= render :partial => 'change', :locals => {:item => item, :object => object }%>
+  </li>
+<% end %>
+</ul>

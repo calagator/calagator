@@ -17,6 +17,17 @@ class SiteController < ApplicationController
   
   # Displays the about page.
   def about; end
+  
+  def recent_changes
+    events = Event.versioned_class.find(:all, :order => 'updated_at DESC', :limit => 10)
+    venues = Venue.versioned_class.find(:all, :order => 'updated_at DESC', :limit => 10)
+    @items = events.concat(venues).sort { |a,b| b.updated_at <=> a.updated_at  }
+    
+    respond_to do |format|
+      format.html
+      format.atom
+    end
+  end
 
   def style
     # check to see if the request is an allowed file, if not, 404 it

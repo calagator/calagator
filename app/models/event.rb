@@ -58,6 +58,8 @@ class Event < ActiveRecord::Base
     :allow_blank => true,
     :allow_nil => true
 
+  include VersionDiff
+
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version
