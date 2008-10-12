@@ -3,8 +3,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 describe SourceParser::Ical, "in general" do
   it "should read http URLs as-is" do
     http_url = "http://foo.bar/"
-    uri = mock_model(URI, :read => 42)
-    URI.should_receive(:parse).with(http_url).and_return(uri)
+    stub_source_parser_http_response!(:body => 42)
 
     SourceParser::Ical.read_url(http_url).should == 42
   end
@@ -12,9 +11,7 @@ describe SourceParser::Ical, "in general" do
   it "should read webcal URLs as http" do
     webcal_url = "webcal://foo.bar/"
     http_url   = "http://foo.bar/"
-    uri = mock_model(URI, :read => 42)
-    URI.should_receive(:parse).with(http_url).and_return(uri)
-
+    stub_source_parser_http_response!(:body => 42)
     SourceParser::Ical.read_url(webcal_url).should == 42
   end
 end
