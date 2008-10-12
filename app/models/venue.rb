@@ -51,6 +51,8 @@ class Venue < ActiveRecord::Base
   
   acts_as_versioned
 
+  include VersionDiff
+
   # Associations
   has_many :events, :dependent => :nullify
   belongs_to :source
