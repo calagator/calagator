@@ -1,11 +1,15 @@
 <% unless @venue.versions.empty? %>
-<p>
-  Version <%= select_tag("version", options_for_select(@venue.versions.reverse.map { |v| ["#{v.version}: #{v.updated_at.strftime('%B %d, %Y at %I:%M %p')}", v.version]})) %>
-</p>
+<form>
+  <div>
+    Version <%= select_tag("version", options_for_select(@venue.versions.reverse.map { |v| ["#{v.version}: #{v.updated_at.strftime('%B %d, %Y at %I:%M %p')}", v.version]})) %><img alt="Spinner" id="version_loading" src="/images/spinner.gif?1214384400" style="display: none; margin-left: 0.5em;" />
+  </div>
+</form>
 <%= observe_field :version, :url => { :action => :refresh_version, :id => @venue.id },
       :frequency => 0.25,
       :update => "edit_venue_form",
-      :with => "'version=' + value"
+      :with => "'version=' + value",
+      :before => "$('#version_loading').show();",
+      :complete => "$('#version_loading').hide();"
       %>
 <% end %>
 
