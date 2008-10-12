@@ -58,13 +58,27 @@ describe SourcesController do
       flash[:success].should =~ /And #{excess} other events/si
     end
 
-    it "should give a nice error message when given a bad URL" do
-      @source.should_receive(:to_events).and_raise(OpenURI::HTTPError.new("bad_url", nil))
-      errors = ActiveRecord::Errors.new(@source)
-      errors.stub!(:full_messages).and_return(%w(bad))
-      @source.should_receive(:errors).at_least(1).times.and_return(errors)
-      post :import
-      flash[:failure].should =~ /Unable to import: bad/
+    describe "is given problematic sources" do
+      it "should fail when host responds with an error" do
+        Source.should_receive(:create_sources_and_events_for!).and_raise(OpenURI::HTTPError.new("omfg", "bbq"))
+
+        post :import, :url => "http://invalid.host"
+        flash[:failure].should =~ /error from this source/
+      end
+
+      it "should fail when host is not responding" do
+        Source.should_receive(:create_sources_and_events_for!).and_raise(Errno::EHOSTUNREACH.new("omfg"))
+
+        post :import, :url => "http://invalid.host"
+        flash[:failure].should =~ /this source is not responding/
+      end
+
+      it "should fail when host is not found" do
+        Source.should_receive(:create_sources_and_events_for!).and_raise(SocketError.new("omfg"))
+
+        post :import, :url => "http://invalid.host"
+        flash[:failure].should =~ /hostname not found/
+      end
     end
   end
   
