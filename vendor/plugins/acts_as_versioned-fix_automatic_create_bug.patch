@@ -1,0 +1,23 @@
+Index: vendor/plugins/acts_as_versioned/lib/acts_as_versioned.rb
+===================================================================
+--- vendor/plugins/acts_as_versioned/lib/acts_as_versioned.rb	(revision 1234)
++++ vendor/plugins/acts_as_versioned/lib/acts_as_versioned.rb	(working copy)
+@@ -258,7 +258,10 @@
+           versioned_class.send :include, options[:extend]         if options[:extend].is_a?(Module)
+           versioned_class.set_sequence_name version_sequence_name if version_sequence_name
+           
+-          create_versioned_table
++          # Do not try to create versioned table during startup because this
++          # raises an exception if the user hasn't populated their database yet
++          # and will prevent them from even being able to run db:migrate. Lame.
++          ### create_versioned_table
+         end
+       end
+ 
+@@ -489,4 +492,4 @@
+   end
+ end
+ 
+-ActiveRecord::Base.send :include, ActiveRecord::Acts::Versioned
+\ No newline at end of file
++ActiveRecord::Base.send :include, ActiveRecord::Acts::Versioned

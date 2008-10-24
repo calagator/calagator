@@ -258,7 +258,10 @@ module ActiveRecord #:nodoc:
           versioned_class.send :include, options[:extend]         if options[:extend].is_a?(Module)
           versioned_class.set_sequence_name version_sequence_name if version_sequence_name
           
-          create_versioned_table
+          # Do not try to create versioned table during startup because this
+          # raises an exception if the user hasn't populated their database yet
+          # and will prevent them from even being able to run db:migrate. Lame.
+          ### create_versioned_table
         end
       end
 
@@ -440,7 +443,7 @@ module ActiveRecord #:nodoc:
               self.connection.add_column versioned_table_name, :updated_at, :timestamp
             end
             
-            self.connection.create_index versioned_table_name, versioned_foreign_key
+            self.connection.add_index versioned_table_name, versioned_foreign_key
           end
 
           # Rake migration task to drop the versioned table
