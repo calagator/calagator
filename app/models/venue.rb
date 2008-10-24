@@ -72,6 +72,9 @@ class Venue < ActiveRecord::Base
     :allow_nil => true,
     :message => "must be between -180 and 180"
 
+  include ValidatesBlacklistOnMixin
+  validates_blacklist_on :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone
+
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version
