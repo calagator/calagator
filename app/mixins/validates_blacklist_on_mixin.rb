@@ -65,16 +65,17 @@ protected
     opts = { :message => ValidatesBlacklistOnMixin::BLACKLIST_DEFAULT_MESSAGE }
     opts.update(attrs.extract_options!.symbolize_keys)
     patterns = opts[:patterns] || self.class._get_blacklist_patterns_from(opts[:blacklist])
+    is_valid = true
     attrs.each do |attr|
       value = self.send(attr).to_s
       next if value.blank?
       patterns.each do |pattern|
         if value.match(pattern)
           self.errors.add(attr, opts[:message])
-          return false
+          is_valid = false
         end
       end
     end
-    return true
+    return is_valid
   end
 end
