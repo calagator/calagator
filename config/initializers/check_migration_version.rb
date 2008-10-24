@@ -8,7 +8,8 @@ highest_version = Dir.glob("#{RAILS_ROOT}/db/migrate/*.rb" ).map { |f|
 }.max
 
 abort "Database isn't the current migration version: " \
-      "expected #{highest_version}, got #{current_version}" \
+      "expected #{highest_version}, got #{current_version}\n" \
+      "You must either run 'rake db:migrate' or set environmental variable NO_MIGRATION_CHECK" \
   unless current_version == highest_version or \
   defined?(Rake) or ENV['NO_MIGRATION_CHECK'] 
 
