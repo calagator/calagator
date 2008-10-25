@@ -48,8 +48,10 @@ class SiteController < ApplicationController
       :teal =>          '#66baa9',
       :light_grey =>    '#aaccaa',
       :dark_grey =>     '#445544',
+      :red =>           '#C10F00',
+      :light_red =>     '#F5DBD7',
 
-      # used for emphasis blocks of creme text
+      # used for emphasis in blocks of creme text
       :white =>         '#fff'
     }
 

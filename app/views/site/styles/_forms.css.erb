@@ -105,27 +105,19 @@ div.time-picker li {
 .error, .failure      { background: <%= @colors[:dark_grey] %>; color: <%= @colors[:creme] %>; }
 .notice     { background: <%= @colors[:light_green] %>; }
 .success    { background: <%= @colors[:cyan] %>; color: <%= @colors[:dark_grey] %>;  }
-.error a    { color: #8a1f11; }
+.error a    { color:  <%= @colors[:red] %>; }
 .notice a   { color: #514721; }
 .success a  { color: #264409; }
 
-.flash.flash_failure {
-  color: red;
-  border: 2px solid red;
-  background: #F5DBD7;
-}
-
-/* Text describing form validation error */
-.errorExplanation {
+.flash.flash_failure, .errorExplanation {
+  color: <%= @colors[:red] %>;
+  border: 2px solid  <%= @colors[:red] %>;
+  background: <%= @colors[:light_red] %>;
   padding: 1em;
-  background: <%= @colors[:dark_grey] %>; color: <%= @colors[:creme] %>; 
 }
 
 /* A field with a validation error */
-.fieldWithErrors {}
-  .fieldWithErrors label {
-    color: #8a1f11; }
-  .fieldWithErrors input {
-    border: 2px dotted #8a1f11; }
+.fieldWithErrors label { color: <%= @colors[:red] %>; }
+.fieldWithErrors input { background: <%= @colors[:light_red] %>; }
 
 /* @end */ 
