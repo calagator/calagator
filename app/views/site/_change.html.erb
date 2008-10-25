@@ -7,7 +7,7 @@
   object.version_diff(item.version, :prev).each do |field_name, values| 
     next if %w(updated_at).include?(field_name)
   %>
-    <li><%= field_name %>: <%= values[0] %> =&gt; <%= values[1] %></li>
+    <li><%= field_name %>: <%= values[0] %> &rarr; <%= values[1] %></li>
   <% end %>
   </ul>
 <% end %>
