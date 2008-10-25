@@ -565,6 +565,26 @@ describe Event do
       event.version.should==2
     end
   end
-      
-      
+
+  describe "when normalizing line-endings in the description" do
+    before(:each) do
+      @event = Event.new
+    end
+
+    it "should not molest contents without carriage-returns" do
+      @event.description         = "foo\nbar"
+      @event.description.should == "foo\nbar"
+    end
+
+    it "should replace CRLF with LF" do
+      @event.description         = "foo\r\nbar"
+      @event.description.should == "foo\nbar"
+    end
+
+    it "should replace stand-alone CR with LF" do
+      @event.description         = "foo\rbar"
+      @event.description.should == "foo\nbar"
+    end
+  end
+
 end

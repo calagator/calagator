@@ -81,6 +81,12 @@ class Event < ActiveRecord::Base
     return read_attribute(:title).ergo.strip
   end
 
+  # Return description without those pesky carriage-returns.
+  def description
+    # TODO Generalize this code so we can reuse it on other attributes.
+    return read_attribute(:description).ergo{self.gsub("\r\n", "\n").gsub("\r", "\n")}
+  end
+
   #---[ Queries ]---------------------------------------------------------
 
   # Associate this event with the +venue+. The +venue+ can be given as a Venue
@@ -401,7 +407,7 @@ EOF
         c.created       event.created_at if event.created_at
         c.lastmod       event.updated_at if event.updated_at
 
-        description   = event.description ? event.description.gsub("\r", '') :  ""
+        description   = event.description
         description  += "\n\nTags:\n#{event.tag_list}" unless event.tag_list.blank?
 
         c.description   description unless description.blank?
