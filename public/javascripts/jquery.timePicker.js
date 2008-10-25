@@ -56,7 +56,7 @@
     // Store element offset.
     var elmOffset = $(elm).offset();
     // Append the timPicker to the body and position it.
-    $tpDiv.appendTo('body').css({'top':elmOffset.top, 'left':elmOffset.left}).hide();
+    $tpDiv.appendTo('body').css({'top':elmOffset.top + $(elm).outerHeight(), 'left':elmOffset.left, 'width':$(elm).outerWidth()}).hide();
     
     $("li", $tpList).unbind().mouseover(function() {
       $("li.selected", $tpDiv).removeClass("selected");  // TODO: only needs to run once.
@@ -188,11 +188,11 @@
   
   function timeStringToDate(input, settings) {
     if (input) {
-      var array = input.split(settings.separator);
-      var hours = parseFloat(array[0]);
-      var minutes = parseFloat(array[1]);
-      var time = new Date(0, 0, 0, hours, minutes, 0);
-      return normaliseTime(time);
+      // var array = input.split(settings.separator);
+      // var hours = parseFloat(array[0]);
+      // var minutes = parseFloat(array[1]);
+      return normaliseTime(Date.parseDate(input,Date.patterns.ShortTimePattern));
+      // return normaliseTime(time);
     }
     return null;
   }

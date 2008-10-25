@@ -1,8 +1,16 @@
+<% content_for :css_insert do %>
+  <%= stylesheet_link_tag "datepicker",
+                          "timePicker",
+                          :cache => true %>
+<% end %>
+
 <% content_for :javascript_insert do %>
-  <%= javascript_include_tag 'jquery.dimensions.min.js', 'jquery.ui.autocomplete.ext.js', 'jquery.ui.autocomplete.js' %>
+  <%= javascript_include_tag 'jquery.dimensions.min.js', 'jquery.ui.autocomplete.ext.js', 'jquery.ui.autocomplete.js', 'date-functions.js', 'ui.datepicker.js', 'jquery.timePicker.js', :cache=>true %>
   <script>
     var completed_title = '';
     $(document).ready(function(){
+      
+      // Initialize autocompletion for venues
       $("input.autocomplete").autocomplete({
         ajax: "/venues.js",
         timeout: 200,
@@ -34,7 +42,15 @@
         $("#event_venue_loading").hide();
       })
       .attr('autocomplete', 'off');
+      
+      // Initialize date and time pickers
+      $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
+      $('.time_picker').timePicker({
+        show24Hours:false,
+        separator:':',
+        step: 30});
     });
+    
   </script>
 <% end %>
 
@@ -61,16 +77,17 @@
   </div>
 
   <div id="event_times">
-    <div id="start_time">
-      <%= f.label :start_time %>
-      <%= text_field_tag 'start_date', event.start_time ? event.start_time.to_date : '', :id => 'date_start', :class => 'date_picker' %>
-      <%= text_field_tag 'start_time', event.start_time ? event.start_time.strftime('%I:%M %p') : '', :id => 'time_start', :class => 'time_picker' %>
-    </div>
-    <div id="end_time">
-      <%= f.label :end_time %>
-      <%= text_field_tag 'end_date', event.end_time ? event.end_time.to_date : '', :id => 'date_end', :class => 'date_picker' %>
-      <%= text_field_tag 'end_time', event.end_time ? event.end_time.strftime('%I:%M %p') : '', :id => 'time_end', :class => 'time_picker' %>
-    </div>
+    <%= f.label :when, "When" %>
+    <% 
+      present = Time.now 
+      event.start_time ||= present + (60.minutes - present.min.minutes) - present.sec if event.new_record?
+      event.end_time ||= present + (60.minutes - present.min.minutes) - present.sec + 1.hour if event.new_record?
+    %>
+      <%= text_field_tag 'start_date', event.start_time ? event.start_time.to_date : present.to_date, :id => 'date_start', :class => 'date_picker' %>
+      <%= text_field_tag 'start_time', event.start_time.strftime('%I:%M %p'), :id => 'time_start', :class => 'time_picker' %>
+      <span>to</span>
+      <%= text_field_tag 'end_time', event.end_time.strftime('%I:%M %p'), :id => 'time_end', :class => 'time_picker' %>
+      <%= text_field_tag 'end_date', event.end_time ? event.end_time.to_date : Time.now.to_date, :id => 'date_end', :class => 'date_picker' %>
   </div>
   <div>
     <%= f.label :url, "Website" %>

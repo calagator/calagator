@@ -7,16 +7,11 @@
     <title><%= cleanse(@page_title ? "#{@page_title} &raquo; " : "") %>Calagator: Portland's Tech Calendar</title>
     <%# Do NOT add caching to /css files, they're dynamically generated and the cacher can only read from the filesystem %>
     <%= stylesheet_link_tag "/css/base" %>
-    <%= stylesheet_link_tag "datepicker",
-                            "timePicker",
-                            :cache => true %>
     <%= yield :css_insert %>
     <%= javascript_include_tag  'jquery-1.2.3.min.js',
                                 'jquery-ui',
                                 'jquery-fx',
                                 'jrails',
-                                'ui.datepicker.js',
-                                'jquery.timePicker.js',
                                 :cache => true %>
     <%= javascript_include_tag 'application'%>
     <%= yield :javascript_insert %>

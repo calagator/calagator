@@ -65,30 +65,37 @@ input.title   { width: 300px; padding:5px; }
 input.title   { font-size:1.5em; }
 textarea      { width: <%= input_width %>px; height: 250px; padding:5px; }
 
-form.standard_form div.help {
+.standard_form div.help {
   margin: 0;
   padding: 0.25em 0 0 8em;
 }
 
-form.standard_form span.help {
+.standard_form span.help {
   margin: 0;
   padding: 0 0 0 1em;
 }
 
-form.standard_form textarea {
+.standard_form textarea {
   margin: 0px ;
 }
 
-form.standard_form input[type="text"] {
+.standard_form input[type="text"] {
   width: <%= input_width %>px;
 }
 
-form.standard_form #date_start,
-form.standard_form #time_start,
-form.standard_form #date_end,
-form.standard_form #time_end
+#event_times input, #event_times span {
+  margin-right: 1em;
+  float: left;
+}
+
+.standard_form input.date_picker
 {
-  width: <%= (input_width/2)-14 %>px;
+  width: 7em;
+} 
+
+.standard_form input.time_picker
+{
+  width: 5em;
 }
 
 div.time-picker li {
