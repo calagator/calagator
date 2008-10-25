@@ -401,7 +401,7 @@ EOF
         c.created       event.created_at if event.created_at
         c.lastmod       event.updated_at if event.updated_at
 
-        description   = event.description || ""
+        description   = event.description ? event.description.gsub("\r", '') :  ""
         description  += "\n\nTags:\n#{event.tag_list}" unless event.tag_list.blank?
 
         c.description   description unless description.blank?
