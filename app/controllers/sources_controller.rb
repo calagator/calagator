@@ -15,7 +15,7 @@ class SourcesController < ApplicationController
         @sources_to_events = Source.create_sources_and_events_for!(@source.url)
         @source = @sources_to_events.keys.first
         @events = @sources_to_events.values.flatten
-      rescue HttpAuthenticationRequiredError => e
+      rescue SourceParser::HttpAuthenticationRequiredError => e
         @source.errors.add_to_base("source requires authentication")
       rescue OpenURI::HTTPError => e
         @source.errors.add_to_base("we received an error from this source")

@@ -74,11 +74,13 @@ class SourceParser
         if ['http', 'https'].include?(uri.scheme)
           http = Net::HTTP.new(uri.host, uri.port)
           http.use_ssl = (uri.scheme == 'https')
-          request = Net::HTTP::Get.new(uri.path.blank? ? "/" : uri.path)
+          path_and_query = uri.path.blank? ? "/" : uri.path
+          path_and_query += "?#{uri.query}" if uri.query
+          request = Net::HTTP::Get.new(path_and_query)
           request.basic_auth(uri.user, uri.password)
-          response = ::SourceParser::Base::http_response_for(http, request)
+          response = SourceParser::Base::http_response_for(http, request)
           if response.code == "401"
-            raise HttpAuthenticationRequiredError.new
+            raise SourceParser::HttpAuthenticationRequiredError.new
           end
           return response.body
         else
@@ -110,9 +112,4 @@ end
 source_parser_driver_path = File.join(File.dirname(__FILE__), "source_parser")
 for entry in Dir.entries(source_parser_driver_path).select{|t| t.match(/.+\.rb$/)}
   require File.join(source_parser_driver_path, entry)
-end
-
-# Exception raised if user requests parsing of a URL that requires
-# authentication but none was provided.
-class HttpAuthenticationRequiredError < Exception
 end
