@@ -1,11 +1,19 @@
 <% content_for :css_insert do %>
-  <%= stylesheet_link_tag "datepicker",
-                          "timePicker",
-                          :cache => true %>
+  <%= stylesheet_link_tag \
+    "datepicker",
+    "timePicker"
+  %>
 <% end %>
 
 <% content_for :javascript_insert do %>
-  <%= javascript_include_tag 'jquery.dimensions.min.js', 'jquery.ui.autocomplete.ext.js', 'jquery.ui.autocomplete.js', 'date-functions.js', 'ui.datepicker.js', 'jquery.timePicker.js', :cache=>true %>
+  <%= javascript_include_tag \
+    'jquery.dimensions.min.js',
+    'jquery.ui.autocomplete.ext.js',
+    'jquery.ui.autocomplete.js',
+    'date-functions.js',
+    'ui.datepicker.js',
+    'jquery.timePicker.js'
+  %>
   <script>
     var completed_title = '';
     $(document).ready(function(){
