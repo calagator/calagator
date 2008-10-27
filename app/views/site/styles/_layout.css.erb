@@ -409,3 +409,40 @@ fieldset .help {
 }
 
 /* @end */
+
+
+
+/* @group Recent Changes Display
+----------------------------------------*/
+
+table.changeset {
+  width: 50em;
+
+  border-collapse: collapse;
+}
+
+table.changeset thead {
+  visibility: hidden;
+}
+
+table.changeset td {
+  width: 20em;
+  border: 1px solid <%= @colors[:light_grey] %>;
+}
+
+table.changeset td.field_name {
+  font-weight: bold;
+  width: 10em;
+}
+
+.changeset .added {
+  color: green;
+}
+
+.changeset .removed {
+  color: red;
+}
+
+
+
+/* @end */

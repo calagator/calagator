@@ -2,12 +2,19 @@
 <%= item.updated_at.strftime('%B %d, %Y at %I:%M %p') %>
 
 <% unless item.version==1 %>
-  <ul>
+  <table class='changeset'>
+    <thead>
+      <th class='field_name'><span>Field</span></th>
+      <th>Old</th>
+      <th>New</th>
+    </thead>
+    <tbody>
   <% 
   object.version_diff(item.version, :prev).each do |field_name, values| 
     next if %w(updated_at).include?(field_name)
   %>
-    <li><%= field_name %>: <%= values[0] %> &rarr; <%= values[1] %></li>
+    <tr><td class='field_name'><%= field_name %></td><td><%= values[0] %></td><td><%= values[1] %></td></tr>
   <% end %>
-  </ul>
+  </tbody>
+  </table>
 <% end %>
