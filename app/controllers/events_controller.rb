@@ -14,8 +14,8 @@ class EventsController < ApplicationController
               'lower(venues.title), start_time'
             end
 
-    default_start_date = Time.today - 1.month
-    default_end_date   = Time.today
+    default_start_date = Time.today
+    default_end_date   = Time.today + 3.months
     begin
       @start_date = !params[:date].blank? ? Date.parse(params[:date][:start]) : default_start_date
       @end_date = !params[:date].blank? ? Date.parse(params[:date][:end]) : default_end_date
@@ -136,7 +136,7 @@ class EventsController < ApplicationController
 
     @event.start_time = Time.parse "#{params[:start_date]} #{params[:start_time]}"
     @event.end_time = Time.parse "#{params[:end_date]} #{params[:end_time]}"
-    
+
     if evil_robot = !params[:trap_field].blank?
       flash[:failure] = "<h3>Evil Robot</h3> We didn't update this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
     end
@@ -210,7 +210,7 @@ class EventsController < ApplicationController
       format.ics { ical_export(@events) }
     end
   end
-  
+
   def refresh_version
     @event = Event.find(params[:id])
     @event.revert_to(params[:version])
