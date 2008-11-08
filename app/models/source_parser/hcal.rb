@@ -13,7 +13,10 @@ class SourceParser
     # * :url => URL String to read events from.
     # * :content => String of data to read events from 
     def self.to_hcals(opts={})
-      something = hCalendar.find(:text => content_for(opts))
+      content = content_for(opts)
+      # Workaround for Upcoming v2 invalid HTML
+      content.gsub!(/(class="venue location vcard" )class="vcard"/, '\1')
+      something = hCalendar.find(:text => content)
       return(something.is_a?(hCalendar) ? [something] : something)
     end
 
