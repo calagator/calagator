@@ -65,3 +65,90 @@ describe SourceParser::Hcal, "with hCalendar to AbstractLocation parsing" do
     abstract_location.postal_code.should == "97204"
   end
 end
+
+describe SourceParser::Hcal, 'when parsing Upcoming' do
+  def prepare(sample_filename)
+    @content = read_sample(sample_filename)
+    @events = SourceParser::Hcal.to_abstract_events(:content => @content)
+    @event = @events.first
+    @location = @event.location
+  end
+
+  describe 'shared', :shared => true do
+    it 'should have exactly one event' do
+      @events.size.should == 1
+    end
+
+    it 'should have an event' do
+      @event.should be_a_kind_of(SourceParser::AbstractEvent)
+    end
+
+    it 'should have a location' do
+      @location.should be_a_kind_of(SourceParser::AbstractLocation)
+    end
+  end
+
+  describe 'v1 data' do
+    it_should_behave_like 'shared'
+
+    before(:all) do
+      prepare 'hcal_upcoming_v1.html'
+    end
+
+    it 'should have the expected event' do
+      @event.title.should == 'February BarCamp Portland Informal Tech Meetup'
+      @event.description.should =~ /The intent is to get a group of cool people/
+      # FIXME why is start_time a Time, while end_time is a String?!
+      @event.start_time.should == Time.parse('2008-02-28 5:30PM PST').to_s
+      @event.end_time.should == Time.parse('2008-02-28 7:30PM PST')
+      @event.url.should == 'http://barcamp.org/BarCampPortlandMeetups'
+    end
+
+    it 'should have the expected location' do
+      @location.title.should == 'Jive Software Office'
+      @location.description.should be_blank
+      @location.address.should be_blank
+      @location.street_address.should == '317 SW Alder St Ste 500'
+      @location.locality.should == 'portland'
+      @location.region.should be_blank
+      @location.postal_code.should == '97204'
+      @location.latitude.should be_close(45.5191, 0.1)
+      @location.longitude.should be_close(-122.675, 0.1)
+      @location.url.should be_blank
+      @location.email.should be_blank
+      @location.telephone.should be_blank
+    end
+  end
+
+  describe 'v2 data' do
+    it_should_behave_like 'shared'
+
+    before(:all) do
+      prepare 'hcal_upcoming_v2.html'
+    end
+
+    it 'should have the expected event' do
+      @event.title.should == 'Ignite Portland 4'
+      @event.description.should =~ /Save the date! Ignite Portland 4 will happen/
+      # TODO why is start_time a Time, while end_time is a String?!
+      @event.start_time.should == Time.parse('2008-11-13 7:00PM PST').to_s
+      @event.end_time.should == Time.parse('2008-11-13 9:00PM PST')
+      @event.url.should == 'http://www.igniteportland.com'
+    end
+
+    it 'should have the expected location' do
+      @location.title.should == 'Bagdad Theater and Pub'
+      @location.description.should be_blank
+      @location.address.should be_blank
+      @location.street_address.should == '3702 S.E. Hawthorne Blvd'
+      @location.locality.should == 'Portland'
+      @location.region.should == 'Oregon'
+      @location.postal_code.should == '97214'
+      @location.latitude.should be_blank
+      @location.longitude.should be_blank
+      @location.url.should be_blank
+      @location.email.should be_blank
+      @location.telephone.should be_blank
+    end
+  end
+end
