@@ -63,13 +63,15 @@ Rails::Initializer.run do |config|
 
   # Activate observers that should always be running
   # config.active_record.observers = :cacher, :garbage_collector
-  config.active_record.observers = :janitor_observer
+  config.active_record.observers = :cache_observer
 
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
+  # FIXME Figure out why ActiveRecord hasn't been told to use UTC timezone by default.
 
   config.load_paths += %W[
     #{RAILS_ROOT}/app/mixins
+    #{RAILS_ROOT}/app/observers
   ]
 
   cache_path = "#{RAILS_ROOT}/tmp/cache/#{RAILS_ENV}"

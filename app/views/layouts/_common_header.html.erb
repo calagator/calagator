@@ -5,7 +5,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><%= cleanse(@page_title ? "#{@page_title} &raquo; " : "") %>Calagator: Portland's Tech Calendar</title>
-    <%# Do NOT add caching to /css files, they're dynamically generated and the cacher can only read from the filesystem %>
+    <%# Do NOT add caching to files within "/css" because they're dynamically-generated and cached through action caches in SiteController %>
     <%= stylesheet_link_tag "/css/base" %>
     <%= yield :css_insert %>
     <%= javascript_include_tag  'jquery-1.2.3.min.js',
