@@ -140,7 +140,7 @@ class ActiveRecord::Base #:nodoc:
       sql << "AND taggings.taggable_type = '#{ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s}' "
       sql << "AND taggings.tag_id = tags.id "
       
-      tag_list_condition = tag_list.map {|t| "'#{t}'"}.join(", ")
+      tag_list_condition = tag_list.map {|t| "'#{t}'"}.join("#{Tag::DELIMITER} ")
       
       sql << "AND (tags.name IN (#{sanitize_sql(tag_list_condition)})) "
       sql << "AND #{sanitize_sql(options[:conditions])} " if options[:conditions]
