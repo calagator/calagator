@@ -70,6 +70,15 @@ describe Event do
       @event.save
     end
 
+    it "should use tags with punctuation" do
+      tags = [".net", "foo-bar"]
+      @event.tag_list = tags.join(", ")
+      @event.save
+
+      @event.reload
+      @event.tags.map(&:name).should == tags
+    end
+
   end
 
   describe "when parsing" do

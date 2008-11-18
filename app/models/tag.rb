@@ -19,7 +19,9 @@ class Tag < ActiveRecord::Base
     validates_uniqueness_of :name, :case_sensitive => false
   
     # Change this validation if you need more complex tag names.
-    validates_format_of :name, :with => /^[a-zA-Z0-9\_\-\s]+$/, :message => "can not contain special characters"
+    validates_format_of :name,
+      :with => %r{^[^#{Tag::DELIMITER}]+$},
+      :message => "can not contain delimiter character: #{Tag::DELIMITER}"
   
     # Set up the polymorphic relationship.
     has_many_polymorphs :taggables, 
