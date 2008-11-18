@@ -1,4 +1,4 @@
-cache_if(@perform_caching, Cacher.daily_key_for("events_atom", request)) do
+cache_if(@perform_caching, CacheObserver.daily_key_for("events_atom", request)) do
   @events ||= @events_deferred.call
   atom_feed() do |feed|
     feed.title("Calagator#{': ' + @page_title if @page_title}")

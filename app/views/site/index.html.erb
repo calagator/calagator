@@ -1,6 +1,6 @@
 <% tabindex_on '#search_field' %>
 
-<% cache(Cacher.daily_key_for("site_index", request)) do %>
+<% cache(CacheObserver.daily_key_for("site_index", request)) do %>
 <% @times_to_events ||= @times_to_events_deferred.call %>
 <div id="project_description">
 <h2>Hi there.</h2>

@@ -1,6 +1,6 @@
 <% tabindex_on '#search_field' %>
 
-<% cache_if(@perform_caching, Cacher.daily_key_for("events_index", request)) do %>
+<% cache_if(@perform_caching, CacheObserver.daily_key_for("events_index", request)) do %>
 <% @events ||= @events_deferred.call %>
 <div id='list_description'>
   <h2>Viewing all <strong><%= @events.size %></strong> <%= 'future' unless params[:date] %><%= 'filtered' if params[:date] %> events.</h2>
