@@ -155,11 +155,18 @@ class ActiveRecord::Base #:nodoc:
     end
     
     def parse_tags(tags)
-      return [] if tags.blank?
-      # TODO why is this discarding all but the first argument!?
-      tags = Array(tags).first
-      tags = tags.respond_to?(:flatten) ? tags.flatten : tags.split(Tag::DELIMITER)
-      tags.flatten.compact.map{|tag| tag.strip.squeeze(" ")}.reject{|tag| tag.blank?}.map(&:downcase).uniq
+      if tags.blank?
+        []
+      else
+        [tags] \
+          .flatten \
+          .map{|tag| tag.split(Tag::DELIMITER)} \
+          .flatten \
+          .compact \
+          .map{|tag| tag.strip.squeeze(" ")} \
+          .reject{|tag| tag.blank?} \
+          .map(&:downcase).uniq
+      end
     end
     
   end
