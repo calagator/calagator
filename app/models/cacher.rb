@@ -11,13 +11,6 @@ class Cacher
 
   # Expires all cached data.
   def self.expire_all
-    unless Rails.cache.cache_path.include?(RAILS_ROOT+"/tmp/cache/"+RAILS_ENV)
-      raise ArgumentError, "Invalid cache_path: #{Rails.cache.cache_path}"
-    end
-    nodes = Dir["#{Rails.cache.cache_path}/**"]
-    unless nodes.blank?
-      RAILS_DEFAULT_LOGGER.info("Cacher.expire_all: #{nodes.inspect}")
-      FileUtils.rm_rf(nodes)
-    end
+    Rails.cache.delete_matched(//)
   end
 end
