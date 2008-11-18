@@ -140,9 +140,9 @@ class ActiveRecord::Base #:nodoc:
       sql << "AND taggings.taggable_type = '#{ActiveRecord::Base.send(:class_name_of_active_record_descendant, self).to_s}' "
       sql << "AND taggings.tag_id = tags.id "
       
-      tag_list_condition = tag_list.map {|t| "'#{t}'"}.join("#{Tag::DELIMITER} ")
+      tag_list_condition = tag_list.map {|t| connection.quote(t)}.join("#{Tag::DELIMITER} ")
       
-      sql << "AND (tags.name IN (#{sanitize_sql(tag_list_condition)})) "
+      sql << "AND (tags.name IN (#{tag_list_condition})) "
       sql << "AND #{sanitize_sql(options[:conditions])} " if options[:conditions]
       sql << "GROUP BY #{table_name}.id "
       sql << "HAVING COUNT(taggings.tag_id) = #{tag_list.size}"
