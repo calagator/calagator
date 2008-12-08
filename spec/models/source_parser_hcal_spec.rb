@@ -151,4 +151,36 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
       @location.telephone.should be_blank
     end
   end
+
+  describe 'v3 data' do
+    it_should_behave_like 'shared'
+
+    before(:all) do
+      prepare 'hcal_upcoming_v3.html'
+    end
+
+    it 'should have the expected event' do
+      @event.title.should == 'Ignite Portland 5'
+      @event.description.should =~ /Save the date! Ignite Portland 5 will happen/
+      # TODO why is start_time a Time, while end_time is a String?!
+      @event.start_time.should == Time.parse('2009-02-19 7:00PM PST').to_s
+      @event.end_time.should be_nil # This specific event has no DTEND
+      @event.url.should == 'http://www.igniteportland.com'
+    end
+
+    it 'should have the expected location' do
+      @location.title.should == 'Bagdad Theater and Pub'
+      @location.description.should be_blank
+      @location.address.should be_blank
+      @location.street_address.should == '3702 S.E. Hawthorne Blvd'
+      @location.locality.should == 'Portland'
+      @location.region.should == 'Oregon'
+      @location.postal_code.should == '97214'
+      @location.latitude.should be_blank
+      @location.longitude.should be_blank
+      @location.url.should be_blank
+      @location.email.should be_blank
+      @location.telephone.should be_blank
+    end
+  end
 end
