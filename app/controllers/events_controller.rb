@@ -23,7 +23,7 @@ class EventsController < ApplicationController
     rescue ArgumentError => e
       @start_date = default_start_date
       @end_date   = default_end_date
-      flash[:failure] = "Error: You tried to filter by an invalid date"
+      flash[:failure] = "You tried to filter by an invalid date"
     end
 
     @events_deferred = lambda {
