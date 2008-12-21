@@ -35,14 +35,7 @@ class EventsController < ApplicationController
 
     @page_title = "Events"
 
-    respond_to do |format|
-      format.html # index.html.erb
-      format.kml  # index.kml.erb
-      format.xml  { render :xml => @events_deferred.call }
-      format.json { render :json => @events_deferred.call }
-      format.ics  { ical_export() }
-      format.atom # index.atom.builder
-    end
+    render_events(@events_deferred)
   end
 
   # GET /events/1
@@ -205,11 +198,7 @@ class EventsController < ApplicationController
 
     @page_title = "Search Results for '#{@query}'"
 
-    respond_to do |format|
-      format.html
-      format.atom { render :template => 'events/index' }
-      format.ics { ical_export(@events) }
-    end
+    render_events(@events)
   end
 
   def refresh_version
@@ -224,6 +213,17 @@ protected
   def ical_export(events=nil)
     events = events || Event.find_future_events
     render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
+  end
+
+  def render_events(events)
+    respond_to do |format|
+      format.html # *.html.erb
+      format.kml  # *.kml.erb
+      format.ics  { ical_export() }
+      format.atom { render :template => 'events/index' }
+      format.xml  { render :xml  => events.respond_to?(:call) ? events.call : events }
+      format.json { render :json => events.respond_to?(:call) ? events.call : events }
+    end
   end
 
 end
