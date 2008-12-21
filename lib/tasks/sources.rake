@@ -13,13 +13,14 @@ namespace :sources do
     puts "Nothing to do" unless sources.size > 0
 
     sources.each do |source|
-      puts "Polling #{source.name}"
+      print "Polling #{source.name}: "
       begin
         events = source.create_events!
-        msg = "Got #{events.size} abstract events"
+        msg = "created #{events.size} events"
       rescue Exception => e
         msg = e.to_s
       end
+      puts msg
       source.updates.create(:status => msg)
       source.imported_at = Time.now
       source.save!
