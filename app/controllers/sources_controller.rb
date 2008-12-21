@@ -3,18 +3,13 @@ class SourcesController < ApplicationController
   
   # Import sources
   def import
-    # TODO Import many sources at once
-
-    @source = Source.new(params[:source])
-    @events = nil
-    @sources_to_events = {@source => @events}
+    @source = Source.find_or_create_from(params[:source])
+    @events = nil # nil means events were never assigned, while [] means no events were found
 
     valid = @source.valid?
     if valid
       begin
-        @sources_to_events = Source.create_sources_and_events_for!(@source.url)
-        @source = @sources_to_events.keys.first
-        @events = @sources_to_events.values.flatten
+        @events = @source.create_events!
       rescue SourceParser::HttpAuthenticationRequiredError => e
         @source.errors.add_to_base("source requires authentication")
       rescue OpenURI::HTTPError => e

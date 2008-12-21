@@ -20,19 +20,6 @@ describe Source, "in general" do
     source.create_events!.should == [@event]
   end
 
-  it "should create source and events from URL" do
-    url = "http://my.url/"
-    source = mock_model(Source, :url => url)
-    source.should_receive(:create_events!).and_return([@event])
-    source.should_receive(:save!).and_return(true)
-
-    Source.should_receive(:find_or_create_by_url).and_return(source)
-    result = Source.create_sources_and_events_for!(url)
-
-    result.keys.should == [source]
-    result.values.first.should == [@event]
-  end
-
   it "should fail to create events for invalid sources" do
     source = Source.new(:url => '\not valid/')
     lambda{ source.to_events }.should raise_error(ActiveRecord::RecordInvalid, /Url has invalid format/i)
@@ -114,3 +101,31 @@ describe Source, "when parsing URLs" do
   end
 end
 
+describe Source, "find_or_create_from" do
+  before do
+    @url = "http://foo.bar"
+  end
+
+  it "should return new, unsaved record if given no arguments" do
+    source = Source.find_or_create_from()
+
+    source.should be_a_new_record
+  end
+
+  it "should return an existing or newly-created record" do
+    record = Source.new(:url => @url)
+    Source.should_receive(:find_or_create_by_url).and_return(record)
+
+    result = Source.find_or_create_from(:url => @url)
+    record.should == result
+  end
+
+  it "should set re-import flag if given" do
+    record = Source.new(:url => @url)
+    record.should_receive(:save)
+    Source.should_receive(:find_or_create_by_url).and_return(record)
+
+    result = Source.find_or_create_from(:url => @url, :reimport => true)
+    result.reimport.should be_true
+  end
+end
