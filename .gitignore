@@ -1,5 +1,3 @@
-
-
 tags
 *.data
 *.diff
@@ -17,6 +15,7 @@ db/*.sqlite3
 db/*.sqlite3.*
 index/*
 log/*
+nbproject/*
 public/images/active_scaffold
 public/images/record_select
 public/javascripts/active_scaffold
