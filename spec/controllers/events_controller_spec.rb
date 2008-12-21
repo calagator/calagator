@@ -1,5 +1,36 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+describe EventsController, "when displaying index" do
+  integrate_views
+  fixtures :events, :venues
+
+  it "should produce HTML" do
+    get :index, :format => "html"
+
+    response.should have_tag("table.event_table")
+  end
+
+  it "should produce JSON" do
+    post :index, :format => "json"
+
+    struct = ActiveSupport::JSON.decode(response.body)
+    struct.should be_a_kind_of(Array)
+  end
+
+  it "should produce ATOM" do
+    post :index, :format => "atom"
+
+    struct = XmlSimple.xml_in_string(response.body)
+    struct["entry"].should be_a_kind_of(Array)
+  end
+
+  it "should produce ICS" do
+    post :index, :format => "ics"
+
+    response.body.should have_text(/BEGIN:VEVENT/)
+  end
+end
+
 describe EventsController, "when displaying events" do
   it "should show an event" do
     event = Event.new(:start_time => Time.now)
@@ -232,6 +263,44 @@ describe EventsController, "when searching" do
     response.should redirect_to(root_path)
   end
 
+  describe "when returning results" do
+    integrate_views
+    fixtures :events, :venues
+
+    before do
+      @results = {
+        :current => [events(:calagator_codesprint), events(:tomorrow)],
+        :past    => [events(:old_event)],
+      }
+      Event.should_receive(:search_grouped_by_currentness).and_return(@results)
+    end
+
+    it "should produce HTML" do
+      post :search, :query => "myquery", :format => "html"
+
+      response.should have_tag("table.event_table")
+    end
+
+    it "should produce JSON" do
+      post :search, :query => "myquery", :format => "json"
+
+      struct = ActiveSupport::JSON.decode(response.body)
+      struct.should be_a_kind_of(Array)
+    end
+
+    it "should produce ATOM" do
+      post :search, :query => "myquery", :format => "atom"
+
+      struct = XmlSimple.xml_in_string(response.body)
+      struct["entry"].should be_a_kind_of(Array)
+    end
+
+    it "should produce ICS" do
+      post :search, :query => "myquery", :format => "ics"
+
+      response.body.should have_text(/BEGIN:VEVENT/)
+    end
+  end
 end
 
 describe EventsController, "when deleting" do
