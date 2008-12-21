@@ -32,21 +32,20 @@ describe SourcesController do
       assigns(:source).should be_a_new_record
     end
 
-    it "should save the source object after creating events" do
-      # twice: create and save
-      @source.should_receive(:save!).twice
-      post :import
+    it "should save the source object when creating events" do
+      @source.should_receive(:save!)
+      post :import, :source => {:url => @source.url}
       flash[:success].should =~ /Imported/i
     end
 
-    it "should assign newly created events to the source" do
+    it "should assign newly-created events to the source" do
       @event.should_receive(:save!)
-      post :import
+      post :import, :source => {:url => @source.url}
     end
 
     it "should assign newly created venues to the source" do
       @venue.should_receive(:save!)
-      post :import
+      post :import, :source => {:url => @source.url}
     end
 
     it "should limit the number of created events to list in the flash" do
@@ -54,30 +53,39 @@ describe SourcesController do
       events = (1..(SourcesController::MAXIMUM_EVENTS_TO_DISPLAY_IN_FLASH+excess))\
         .inject([]){|result,i| result << @event; result}
       @source.should_receive(:to_events).and_return(events)
-      post :import
+      post :import, :source => {:url => @source.url}
       flash[:success].should =~ /And #{excess} other events/si
     end
 
     describe "is given problematic sources" do
-      it "should fail when host responds with an error" do
-        Source.should_receive(:create_sources_and_events_for!).and_raise(OpenURI::HTTPError.new("omfg", "bbq"))
+      before do
+        @source = stub_model(Source)
+        Source.should_receive(:find_or_create_from).and_return(@source)
+      end
 
-        post :import, :url => "http://invalid.host"
+      def assert_import_raises(exception)
+        @source.should_receive(:create_events!).and_raise(exception)
+        post :import, :source => {:url => "http://invalid.host"}
+      end
+
+      it "should fail when host responds with an error" do
+        assert_import_raises(OpenURI::HTTPError.new("omfg", "bbq"))
         flash[:failure].should =~ /error from this source/
       end
 
       it "should fail when host is not responding" do
-        Source.should_receive(:create_sources_and_events_for!).and_raise(Errno::EHOSTUNREACH.new("omfg"))
-
-        post :import, :url => "http://invalid.host"
+        assert_import_raises(Errno::EHOSTUNREACH.new("omfg"))
         flash[:failure].should =~ /this source is not responding/
       end
 
       it "should fail when host is not found" do
-        Source.should_receive(:create_sources_and_events_for!).and_raise(SocketError.new("omfg"))
-
-        post :import, :url => "http://invalid.host"
+        assert_import_raises(SocketError.new("omfg"))
         flash[:failure].should =~ /hostname not found/
+      end
+
+      it "should fail when host requires authentication" do
+        assert_import_raises(SourceParser::HttpAuthenticationRequiredError.new("omfg"))
+        flash[:failure].should =~ /requires authentication/
       end
     end
   end
@@ -141,6 +149,15 @@ describe SourcesController do
       @sources.should_receive(:to_xml).and_return("XML")
       do_get
       response.body.should == "XML"
+    end
+  end
+
+  describe "show" do
+    it "should redirect when asked for unknown source" do
+      Source.should_receive(:find).and_raise(ActiveRecord::RecordNotFound.new)
+      get :show, :id => "1"
+
+      response.should be_redirect
     end
   end
 

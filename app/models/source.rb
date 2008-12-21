@@ -26,19 +26,19 @@ class Source < ActiveRecord::Base
   has_many :events
   has_many :updates
 
-  # Create sources and events for the Array of +urls+. Returns a Hash of
-  # Sources and the Events created.
-  def self.create_sources_and_events_for!(*urls)
-    sources2events = {}
-    transaction do
-      urls.flatten.each do |url|
-        source = Source.find_or_create_by_url(:url => url)
-        events = source.create_events!
-        sources2events[source] = events
-        source.save! # Updates the imported_at and other fields
+  def self.find_or_create_from(opts={})
+    source = nil
+    if opts && url = opts[:url]
+      source = Source.find_or_create_by_url(url)
+      if opts[:reimport] && ! source.reimport
+        # Only ever set reimport to true, never to false. Because we try to keep each unique URL associated with a single source, we want to be able to handle the situation where the source was added with a reimport flag, and then again added without the reimport flag. Because these two sources are effectively the same, and one had the reimport flag on, then we clearly want to keep it.
+        source.reimport = true
+        source.save # Dont't throw exception, we want controller to check for validity
       end
+    else
+      source = Source.new(opts)
     end
-    return sources2events
+    return source
   end
 
   # Create events for this source. Returns the events created. URL must be set
