@@ -26,19 +26,35 @@ class Source < ActiveRecord::Base
   has_many :events
   has_many :updates
 
-  def self.find_or_create_from(opts={})
-    source = nil
-    if opts && url = opts[:url]
-      source = Source.find_or_create_by_url(url)
-      if opts[:reimport] && ! source.reimport
-        # Only ever set reimport to true, never to false. Because we try to keep each unique URL associated with a single source, we want to be able to handle the situation where the source was added with a reimport flag, and then again added without the reimport flag. Because these two sources are effectively the same, and one had the reimport flag on, then we clearly want to keep it.
-        source.reimport = true
-        source.save # Dont't throw exception, we want controller to check for validity
+  # Return a newly-created or existing Source record matching the given
+  # attributes. The +attrs+ hash is the same format as used when calling
+  # Source::new.
+  #
+  # This method is intended to supplement the import process by providing a
+  # single Source record for each unique URL, thus when multiple people import
+  # the same URL, there will only be one Source record.
+  #
+  # The :reimport flag is given special handling: If the original Source record
+  # has this set to true, it will never be set back to false by this method.
+  # The intent behind this is that if one person wants this Source reimported,
+  # the reimporting shouldn't be disabled by someone else manually importing it
+  # without setting the reimport flag. If someone really wants to turn off
+  # reimporting, they should edit the source.
+  def self.find_or_create_from(attrs={})
+    if attrs && attrs[:url]
+      source = Source.find_or_create_by_url(attrs[:url])
+      attrs.each_pair do |key, value|
+        if key.to_sym == :reimport
+          source.reimport = true if ! source.reimport && value
+        else
+          source.send("#{key}=", value) if source.send(key) != value
+        end
       end
+      source.save if source.changed?
+      return source
     else
-      source = Source.new(opts)
+      return Source.new(attrs)
     end
-    return source
   end
 
   # Create events for this source. Returns the events created. URL must be set
