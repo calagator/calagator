@@ -144,7 +144,7 @@ describe EventsController, "when creating or updating events" do
       })
       Event.stub!(:find).and_return(@event)
     end
-    
+
     it "should display form for editing event" do
       Event.should_receive(:find).and_return(@event)
 
@@ -196,7 +196,7 @@ describe EventsController, "when creating or updating events" do
       post "update", :id => 1234
       response.should render_template(:edit)
     end
-    
+
     it "should stop evil robots" do
       put "update", :id => 1234, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
       response.should render_template(:edit)
@@ -261,6 +261,18 @@ describe EventsController, "when searching" do
 
     flash[:failure].should_not be_blank
     response.should redirect_to(root_path)
+  end
+
+  it "should be able to only return current events" do
+    Event.should_receive(:search).with("myquery", :order => nil, :skip_old => true).and_return([])
+
+    post :search, :query => "myquery", :current => "1"
+  end
+
+  it "should be able to only return events matching specific tag" do
+    post :search, :exact_tag => "foo"
+
+    # TODO
   end
 
   describe "when returning results" do

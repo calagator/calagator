@@ -191,7 +191,7 @@ class EventsController < ApplicationController
       flash[:failure] = "You must enter a search query"
       return redirect_to(root_path)
     end
-    @grouped_events = Event.search_grouped_by_currentness(params[:query], :order => params[:order])
+    @grouped_events = Event.search_grouped_by_currentness(params[:query], :order => params[:order], :skip_old => (params[:current] ? true : false))
 
     # setting @events so that we can reuse the index atom builder
     @events = @grouped_events[:past] + @grouped_events[:current]
