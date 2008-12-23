@@ -187,11 +187,22 @@ class EventsController < ApplicationController
   # Search!!!
   def search
     @query = params[:query]
-    if @query.blank?
+    @tag = params[:tag]
+    @current = params[:current] ? true : false
+
+    if @query.blank? && @tag.blank?
       flash[:failure] = "You must enter a search query"
       return redirect_to(root_path)
     end
-    @grouped_events = Event.search_grouped_by_currentness(params[:query], :order => params[:order], :skip_old => (params[:current] ? true : false))
+
+    if @query && @tag
+      flash[:failure] = "You can't search by tag and query at the same time"
+      return redirect_to(root_path)
+    elsif @query
+      @grouped_events = Event.search_grouped_by_currentness(params[:query], :order => params[:order], :skip_old => @current)
+    elsif @tag
+      @grouped_events = Event.search_tag_grouped_by_currentness(@tag, :order => params[:order], :current => @current)
+    end
 
     # setting @events so that we can reuse the index atom builder
     @events = @grouped_events[:past] + @grouped_events[:current]

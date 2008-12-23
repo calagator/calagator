@@ -295,6 +295,18 @@ class Event < ActiveRecord::Base
     return self.find_by_solr(formatted_query, solr_opts).results
   end
 
+  # Return events matching given +tag+ grouped by their currentness, see
+  # ::group_by_currentness for data structure details.
+  #
+  # Options:
+  # * :current => Limit results to only current events? Defaults to false.
+  def self.search_tag_grouped_by_currentness(tag, opts={})
+    result = self.group_by_currentness(self.tagged_with(tag, opts))
+    # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
+    result[:past] = [] if opts[:current]
+    return result
+  end
+
   # Return events grouped by their currentness. Accepts the same +args+ as
   # #search. The results hash is keyed by whether the event is current
   # (true/false) and the values are arrays of events.

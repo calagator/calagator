@@ -270,9 +270,9 @@ describe EventsController, "when searching" do
   end
 
   it "should be able to only return events matching specific tag" do
-    post :search, :exact_tag => "foo"
+    Event.should_receive(:tagged_with).with("foo", :current => false, :order => nil).and_return([])
 
-    # TODO
+    post :search, :tag => "foo"
   end
 
   describe "when returning results" do
