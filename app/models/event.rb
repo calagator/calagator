@@ -299,8 +299,18 @@ class Event < ActiveRecord::Base
   # #search. The results hash is keyed by whether the event is current
   # (true/false) and the values are arrays of events.
   def self.search_grouped_by_currentness(*args)
-    results = self.search(*args).group_by(&:current?)
-    return {:current => results[true] || [], :past => results[false] || []}
+    return self.group_by_currentness(self.search(*args))
+  end
+
+  # Return +events+ grouped by currentness using a data structure like:
+  #
+  #   { 
+  #     :current => [ my_current_event, my_other_current_event ],
+  #     :past => [ my_past_event ],
+  #   }
+  def self.group_by_currentness(events)
+    grouped = events.group_by(&:current?)
+    return {:current => grouped[true] || [], :past => grouped[false] || []}
   end
 
   #---[ Solr helpers ]----------------------------------------------------
