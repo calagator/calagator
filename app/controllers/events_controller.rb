@@ -186,7 +186,6 @@ class EventsController < ApplicationController
 
   # Search!!!
   def search
-    debugger
     @query = params[:query]
     @tag = params[:tag]
     @current = params[:current] ? true : false
