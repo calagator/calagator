@@ -186,9 +186,27 @@ class EventsController < ApplicationController
 
   # Search!!!
   def search
+    debugger
     @query = params[:query]
     @tag = params[:tag]
     @current = params[:current] ? true : false
+    @show_only_current = params[:show_only_current]
+
+    # if pushed :search_tags_only radio button
+    # treat as though user supplied tag parameter instead of query
+    if params[:fields_to_search] == "tags"
+      @tag = @query
+      @query = nil
+    end
+    # radio button sets :show_only_current,
+    # so override :current if also supplied :show_only_current
+    if @show_only_current
+      if @show_only_current == "true"
+        @current = true
+      else
+        @current = false
+      end
+    end
 
     if @query.blank? && @tag.blank?
       flash[:failure] = "You must enter a search query"

@@ -3,14 +3,14 @@
   <div id="outer">
     <div id="global_header">
       <a href="/" id="project_title">Calagator</a>
-      
+
       <div id="top_menu">
 
           <%
           link_class = {
               # :home =>   (controller.controller_name == 'site' ? 'active first' : 'first'),
               # :import => (controller.controller_name == 'sources' && 'active'),
-              :events => (( controller.controller_name == 'events' || 
+              :events => (( controller.controller_name == 'events' ||
                             controller.controller_name == 'sources' ||
                             controller.controller_name == 'site')  && 'active'),
               :venues => (controller.controller_name == 'venues'  && 'active'),
@@ -31,24 +31,42 @@
         </div>
         <% form_tag '/events/search', :method => :get do %>
           <div id='search_form'>
-            <label for="search_field">Search Events</label>
-            <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-              <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-            <% else %>
-              <%= text_field_tag 'query', @query, :id => 'search_field' %>
-            <% end %>
+            <table>
+            <tr>
+              <td>
+                <label for="search_field">Search Events</label>
+              </td>
+              <td>
+                <%= radio_button_tag("fields_to_search", "all", :checked => true) %>search all fields<br/>
+                <%= radio_button_tag("fields_to_search", "tags") %>search tags only
+              </td>
+              <td>
+              </td>
+              <td>
+                <%= radio_button_tag("show_only_current", "true", :checked => true) %>show only current events<br/>
+                <%= radio_button_tag("show_only_current", "false") %>also show past events
+              </td>
+              <td>
+                <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+                  <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+                <% else %>
+                  <%= text_field_tag 'query', @query, :id => 'search_field' %>
+                <% end %>
+              </td>
+            </tr>
+            </table>
           </div>
         <% end -%>
-      </div>      
+      </div>
     </div>
-    
+
     <% # Pick a subnav %>
-    
+
     <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
     <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
     <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
-  
-  
+
+
     <div id="content">
       <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
       <%= render_flash %>
