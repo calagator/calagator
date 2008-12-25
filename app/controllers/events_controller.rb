@@ -188,8 +188,7 @@ class EventsController < ApplicationController
   def search
     @query = params[:query].with{blank? ? nil : self}
     @tag = params[:tag].with{blank? ? nil : self}
-    @current = params[:current] ? true : false
-    @show_only_current = params[:show_only_current]
+    @current = ["1", "true"].include?(params[:current].to_s) ? true : false
     @order = params[:order]
 
     # if pushed :search_tags_only radio button
@@ -197,16 +196,6 @@ class EventsController < ApplicationController
     if params[:fields_to_search] == "tags"
       @tag = @query
       @query = nil
-    end
-
-    # radio button sets :show_only_current,
-    # so override :current if also supplied :show_only_current
-    if @show_only_current
-      if @show_only_current == "true"
-        @current = true
-      else
-        @current = false
-      end
     end
 
     if @order && @order == "score" && @tag
