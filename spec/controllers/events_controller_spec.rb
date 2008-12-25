@@ -275,6 +275,13 @@ describe EventsController, "when searching" do
     post :search, :tag => "foo"
   end
 
+  it "should warn if user tries ordering tags by score" do
+    Event.should_receive(:tagged_with).with("foo", :current => false, :order => nil).and_return([])
+
+    post :search, :tag => "foo", :order => "score"
+    flash[:failure].should_not be_blank
+  end
+
   describe "when returning results" do
     integrate_views
     fixtures :events, :venues
