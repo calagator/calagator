@@ -4,10 +4,10 @@ Locals:
 * description => String description of events, e.g. "current"
 %>
 <div id='list_description'>
-  <h2>Viewing <strong><%= events.size %> <%= description %> events</strong> matching <strong><%= @query %></strong>:</h2>
+  <h2>Viewing <strong><%= events.size %> <%= description %> <%= events.size == 1 ? 'event' : 'events' %>
+</strong> matching <strong><%= @query || @tag %></strong>:</h2>
 </div>
 
 <div id='list_items'>
   <%= render :partial => 'events/table', :locals => { :events => events, :scores => true } %>
 </div>
-
