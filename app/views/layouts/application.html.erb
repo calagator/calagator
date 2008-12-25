@@ -31,6 +31,15 @@
         </div>
         <% form_tag '/events/search', :method => :get do %>
           <div id='search_form'>
+          <%# FIXME style extra search controls %>
+          <% if true %>
+            <label for="search_field">Search Events</label>
+            <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+              <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+            <% else %>
+              <%= text_field_tag 'query', @query, :id => 'search_field' %>
+            <% end %>
+          <% else %>
             <table>
             <tr>
               <td>
@@ -43,8 +52,8 @@
               <td>
               </td>
               <td>
-                <%= radio_button_tag("show_only_current", "true", :checked => true) %>show only current events<br/>
-                <%= radio_button_tag("show_only_current", "false") %>also show past events
+                <%= radio_button_tag("current", "true", :checked => true) %>show only current events<br/>
+                <%= radio_button_tag("current", "false") %>also show past events
               </td>
               <td>
                 <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
@@ -55,6 +64,7 @@
               </td>
             </tr>
             </table>
+          <% end %>
           </div>
         <% end -%>
       </div>
