@@ -44,6 +44,7 @@ class SiteController < ApplicationController
       :dark_green =>    '#59a12d',
       :creme =>         '#f9ffec',
       :cyan =>          '#98f0f7',
+      :light_blue =>    '#E5ECF9',
       :light_cyan =>    '#e8fbfe',
       :teal =>          '#66baa9',
       :light_grey =>    '#aaccaa',
