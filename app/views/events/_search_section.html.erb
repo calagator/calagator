@@ -4,7 +4,7 @@ Locals:
 * description => String description of events, e.g. "current"
 %>
 <div id='list_description'>
-  <h2>Viewing <strong><%= events.size %> <%= description %> <%= events.size == 1 ? 'event' : 'events' %>
+  <h2>Viewing <strong> <%= pluralize events.size, "#{description} event" %>
 </strong> matching <strong><%= @query || @tag %></strong>:</h2>
 </div>
 
