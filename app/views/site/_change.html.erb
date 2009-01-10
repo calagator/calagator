@@ -1,29 +1,20 @@
-<table class='changeset'>
-  <tr>
-    <td class='changed_object' colspan=3>
-      <strong><%= link_to item.title, object %></strong>: Version <%= item.version %>; 
-      <%= item.updated_at.strftime('%B %d, %Y at %I:%M %p') %>
-    </td>
-  </tr>
-  <% unless item.version==1 %>
-    <!-- commented out to hide (collapse) the header (versus merely making its text invisible)
+<strong><%= link_to item.title, object %></strong> : Version <%= item.version %>; 
+<%= item.updated_at.strftime('%B %d, %Y at %I:%M %p') %>
+
+<% unless item.version==1 %>
+  <table class='changeset'>
     <thead>
-      <tr>
-        <th class='field_name'><span>Field</span></th>
-        <th>Old</th>
-        <th>New</th>
-      </tr>
+      <th class='field_name'><span>Field</span></th>
+      <th>Old</th>
+      <th>New</th>
     </thead>
-    -->
     <tbody>
-    <% object.version_diff(item.version, :prev).each do |field_name, values| 
-        next if %w(updated_at).include?(field_name) %>
-      <tr>
-        <td class='field_name'><%= field_name %></td>
-        <td class='old_value'><%= values[0] %></td>
-        <td class='new_value'><%= values[1] %></td>
-      </tr>
-    <% end %>
-    </tbody>
+  <% 
+  object.version_diff(item.version, :prev).each do |field_name, values| 
+    next if %w(updated_at).include?(field_name)
+  %>
+    <tr><td class='field_name'><%= field_name %></td><td><%= values[0] %></td><td><%= values[1] %></td></tr>
   <% end %>
-</table>
+  </tbody>
+  </table>
+<% end %>
