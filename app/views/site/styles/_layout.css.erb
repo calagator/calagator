@@ -414,12 +414,10 @@ fieldset .help {
 
 /* @group Recent Changes Display
 ----------------------------------------*/
-h2.changeset {
-  font-weight: bold;
-}
 
 table.changeset {
-  width: 90%;
+  width: 50em;
+
   border-collapse: collapse;
 }
 
@@ -428,27 +426,13 @@ table.changeset thead {
 }
 
 table.changeset td {
-  border: 1px solid <%= @colors[:light_blue] %>;
-  width: auto;
-}
-
-table.changeset td.changed_object {
-  background-color: <%= @colors[:light_blue] %>;
+  width: 20em;
+  border: 1px solid <%= @colors[:light_grey] %>;
 }
 
 table.changeset td.field_name {
   font-weight: bold;
   width: 10em;
-}
-
-table.changeset td.new_value {
-  vertical-align: top;
-  width: 50%;
-}
-
-table.changeset td.old_value {
-  vertical-align: top;
-  width: 50%;
 }
 
 .changeset .added {
@@ -458,5 +442,7 @@ table.changeset td.old_value {
 .changeset .removed {
   color: red;
 }
+
+
 
 /* @end */
