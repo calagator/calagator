@@ -186,17 +186,13 @@ class EventsController < ApplicationController
 
   # Search!!!
   def search
+    # TODO Refactor this method and move much of it to the record-managing
+    # logic into a generalized Event::search method.
+
     @query = params[:query].with{blank? ? nil : self}
     @tag = params[:tag].with{blank? ? nil : self}
     @current = ["1", "true"].include?(params[:current].to_s) ? true : false
     @order = params[:order]
-
-    # if pushed :search_tags_only radio button
-    # treat as though user supplied tag parameter instead of query
-    if params[:fields_to_search] == "tags"
-      @tag = @query
-      @query = nil
-    end
 
     if @order && @order == "score" && @tag
       flash[:failure] = "You cannot sort tags by score"
@@ -209,13 +205,14 @@ class EventsController < ApplicationController
     end
 
     if @query && @tag
+      # TODO make it possible to search by tag and query simultaneously
       flash[:failure] = "You can't search by tag and query at the same time"
       return redirect_to(root_path)
     elsif @query
       @grouped_events = Event.search_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
     elsif @tag
       if @order
-        # TODO make it possible to order items
+        # TODO make it possible to order items when searching by tag
         flash[:failure] = "Sorry, you can't order events returned by a tag search yet"
         @order = nil
       end
