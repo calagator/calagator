@@ -31,39 +31,11 @@
         </div>
         <% form_tag '/events/search', :method => :get do %>
           <div id='search_form'>
-          <%# FIXME style extra search controls %>
-          <% if true %>
-            <label for="search_field">Search Events</label>
-            <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-              <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-            <% else %>
-              <%= text_field_tag 'query', @query, :id => 'search_field' %>
-            <% end %>
+          <label for="search_field">Search Events</label>
+          <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+            <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
           <% else %>
-            <table>
-            <tr>
-              <td>
-                <label for="search_field">Search Events</label>
-              </td>
-              <td>
-                <%= radio_button_tag("fields_to_search", "all", :checked => true) %>search all fields<br/>
-                <%= radio_button_tag("fields_to_search", "tags") %>search tags only
-              </td>
-              <td>
-              </td>
-              <td>
-                <%= radio_button_tag("current", "true", :checked => true) %>show only current events<br/>
-                <%= radio_button_tag("current", "false") %>also show past events
-              </td>
-              <td>
-                <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-                  <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-                <% else %>
-                  <%= text_field_tag 'query', @query, :id => 'search_field' %>
-                <% end %>
-              </td>
-            </tr>
-            </table>
+            <%= text_field_tag 'query', @query, :id => 'search_field' %>
           <% end %>
           </div>
         <% end -%>
