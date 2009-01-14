@@ -10,11 +10,14 @@
     <% focus_on '#source_url' %>
   </div>
   <div>
+    <%# FIXME Igal has disabled reimport UI because people are adding almost all new events with re-import, which means that they're almost all generating duplicates and I'm completely overwhelmed with having to use the horrible squashing UI to deal with them. %>
+    <% if false %>
     <%= f.label :reimport, "Re-import?" %>
     <%= f.check_box :reimport %>
     <span class="help" style="left-padding: 1em; left-margin: 1em">
       (Regularly check this source and import new events automatically?)
     </span>
+    <% end %>
   </div>
   <div class='no_label'>
         <%= f.submit "Import" %>
