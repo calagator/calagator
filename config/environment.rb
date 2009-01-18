@@ -29,13 +29,25 @@ Rails::Initializer.run do |config|
   config.gem "vpim"
   config.gem "lucene_query"
   # NOTE: There's an evil "has_many_polymorphs" 2.13 that's broken, and a "johnsbrn-has_many_polymorphs" 2.13.3 that that only works with Rails 2.2
-  config.gem "has_many_polymorphs", :version => "2.12"
+  # config.gem "has_many_polymorphs", :version => "2.12"
+  config.gem "johnsbrn-has_many_polymorphs", :lib => 'has_many_polymorphs', :source => "http://gems.github.com", :version => ">=2.13"
+
   config.gem "hpricot"
   config.gem "rubyzip", :lib =>  "zip/zip"
   config.gem 'rspec', :version => '>= 1.1.12', :lib => false
   config.gem 'rspec-rails', :version => '>= 1.1.12', :lib => false
   config.gem "facets", :version => ">=2.5.0", :lib => false
 
+  config.time_zone = "Pacific Time (US & Canada)"
+
+  # Settings in config/environments/* take precedence over those specified here.
+  # Application configuration should go into files in config/initializers
+  # -- all .rb files in that directory are automatically loaded.
+  # See Rails::Configuration for more options.
+
+  # Skip frameworks you're not going to use (only works if using vendor/rails).
+  # To use Rails without a database, you must remove the Active Record framework
+  # config.frameworks -= [ :active_record, :active_resource, :action_mailer ]
 
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
