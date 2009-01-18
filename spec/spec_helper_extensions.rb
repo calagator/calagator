@@ -39,7 +39,7 @@ class BeValidXhtml
 
 
   def matches?(response)
-    fn = response.rendered_file
+    fn = response.body
     fragment = response.body
     fragment = wrap_with_xhtml_header(fragment) if @fragment
 
