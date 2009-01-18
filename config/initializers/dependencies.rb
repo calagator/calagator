@@ -17,7 +17,6 @@ require 'ext'
 
 #===[ /vendor/gems ]====================================================
 
-$LOAD_PATH << Dir["#{RAILS_ROOT}/vendor/gems/facets-*/lib"].first
 require 'facets/boolean' # true? false?
 require 'facets/kernel/d' # Like 'p' but displays line number
 require 'facets/kernel/ergo' # Executes method only on non-nils

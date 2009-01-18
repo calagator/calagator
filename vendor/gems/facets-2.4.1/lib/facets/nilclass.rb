@@ -1,3 +1,0 @@
-require 'facets/ruby'
-
-
