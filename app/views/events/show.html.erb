@@ -39,7 +39,7 @@
       <% unless @event.url.blank? -%>
         <h3>Website</h3>
         <div class="website">
-          <%= link_to "#{truncate(@event.url, 128)}", h(@event.url), :class => "url", :rel => "nofollow" -%>
+          <%= link_to "#{truncate(@event.url, :length => 128)}", h(@event.url), :class => "url", :rel => "nofollow" -%>
         </div>
       <% end -%>
     <% unless @event.description.blank? -%>
