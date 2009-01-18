@@ -41,6 +41,7 @@ end
 class Helper
   include Singleton
   include ActionView::Helpers::UrlHelper # Provide: #link_to
+  include ActionView::Helpers::TagHelper # Provide: #escape_once (which #link_to needs)
 end
 def help
   Helper.instance
