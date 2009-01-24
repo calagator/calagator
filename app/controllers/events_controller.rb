@@ -245,7 +245,7 @@ protected
     respond_to do |format|
       format.html # *.html.erb
       format.kml  # *.kml.erb
-      format.ics  { ical_export() }
+      format.ics  { ical_export(@events) }
       format.atom { render :template => 'events/index' }
       format.xml  { render :xml  => events.respond_to?(:call) ? events.call : events }
       format.json { render :json => events.respond_to?(:call) ? events.call : events }
