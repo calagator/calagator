@@ -12,6 +12,10 @@ class ApplicationController < ActionController::Base
 
   # For vendor/plugins/exception_notification
   include ExceptionNotifiable
+
+  # Setup theme
+  layout "application"
+  theme THEME_NAME # DEPENDENCY: lib/theme_reader.rb
 end
 
 # Make it possible to use helpers in controllers
