@@ -315,10 +315,23 @@ describe EventsController, "when searching" do
       struct["entry"].should be_a_kind_of(Array)
     end
 
-    it "should produce ICS" do
-      post :search, :query => "myquery", :format => "ics"
+    describe "in ICS format" do
 
-      response.body.should have_text(/BEGIN:VEVENT/)
+      it "should produce ICS" do
+        post :search, :query => "myquery", :format => "ics"
+
+        response.body.should have_text(/BEGIN:VEVENT/)
+      end
+
+      it "should produce events matching the query" do
+        expected_results = @results[:past] + @results[:current]
+        controller.should_receive(:ical_export).with(expected_results) {
+          controller.render :text => 'test'
+        }
+
+        post :search, :query => "myquery", :format => "ics"
+      end
+
     end
   end
 end
