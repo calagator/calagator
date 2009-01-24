@@ -1,0 +1,445 @@
+/* @group Global Layout
+----------------------------------------*/
+
+body {
+  background: #fff;
+}
+
+#global_header {
+  background: #82c555;
+  position: relative;
+  height: 95px;
+}
+
+#global_header a {
+  color: #f9ffec
+}
+
+#top_footer {
+  background: #445544;
+  color: #f9ffec;
+  padding: .5em 30px .5em 40px;
+  font-size: 70%;
+  clear: both;
+}
+
+
+#project_title {
+  background: url('/images/head_calagator.gif') no-repeat;
+  height: 31px;
+  left: 40px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: -999px;
+  top: 25px;
+  width: 135px;
+}
+
+#app_menu ul {
+  font-size: 1.3em;
+  line-height: 1.3em;
+  font-weight: bold;
+  list-style: none;
+  margin: 0;
+
+  position: absolute;
+  bottom: 0;
+  left: 40px;
+}
+
+#app_menu li {
+  float: left;
+  margin-right: 1em;
+  padding-bottom: 10px
+}
+
+#app_menu li.active {
+  background: url('/images/nav_marker.gif') no-repeat center bottom;
+}
+
+#project_menu {
+  font-weight: bold;
+  text-align: right;
+  float: right;
+  position: absolute;
+  right: 30px;
+  bottom: 10px;
+}
+
+#search_form {
+  position:absolute;
+  right: 30px;
+  top: 15px;
+}
+
+.subnav {
+  font-size: 1.2em;
+  background: #bcf794;
+  padding-left: 40px;
+  height: 2em;
+  line-height: 2em;
+}
+
+.subnav ul {
+  list-style: none;
+  margin: 0;
+}
+
+.subnav li {
+  float: left;
+  margin-right: 1.5em;
+}
+
+.subnav a {
+  color: #445544;
+  padding-bottom: .42em;
+}
+
+.subnav .active {
+  background: url('/images/subnav_marker.gif') no-repeat center bottom;
+}
+
+
+
+#content {
+  min-height: 40em;
+  margin: 1em 30px 1em 40px;
+  position: relative;
+}
+
+
+.sidebar h3 {
+  font-weight: bold;
+  font-size: 1.3em;
+  margin-top: 1.5em;
+  margin-bottom: 0.25em;
+  line-height: 1;
+}
+
+.sidebar .clear_filter {
+  font-size: .7em;
+  float: right;
+  line-height: .7em
+}
+
+.sidebar h3.first {
+  margin-top: 0;
+}
+
+.copy_block {
+  width: 45em;
+}
+
+/* @end */
+
+/* @group Event Table
+----------------------------------------*/
+
+#list_description {
+  padding-top: 1em;
+}
+
+#list_items { margin-right: 20em; }
+
+.event_table .description,
+.event_table .url,
+ul.event_list .description,
+ul.event_list .url {
+  display: none;
+}
+
+.event_table .date,
+ul.event_list .list_date {
+  text-align: right;
+  padding-right: 1.5em;
+  border-right: 1px solid #e2fad2;
+  vertical-align: top;
+  width: 7em;
+}
+
+.event_table .event_summary {
+  padding-left: 1.5em
+}
+
+.event_table .day_of_week,
+ul.event_list .day_of_week {
+  color: #59a12d;
+  font-weight: bold;
+}
+
+.event_table th {
+  padding-bottom: 2em;
+}
+
+
+.sidebar {
+  background: #e8fbfe;
+  padding: 2em 30px 1em 1em;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: -1em -30px 0 0;
+  width: 200px;
+}
+
+.contentbar {
+margin-right: 200px;
+}
+
+#list_filters #date_filter label {
+  width: 3em;
+  font-weight: normal;
+  display: block;
+  float: left;
+  text-align: right;
+  margin-right: 1em;
+}
+
+#list_filters #date_filter input[type=text] {
+  width: 8em;
+}
+
+#list_filters #date_filter .clear_filter {
+  font-size: inherit;
+  float: none;
+}
+
+/* @end */
+
+/* @group Event List
+----------------------------------------*/
+
+ul.event_list {
+  list-style: none;
+  margin: 0;
+}
+
+ul.event_list li {
+  position: relative;
+  padding-left: 10em;
+  margin-bottom: 1em;
+}
+
+ul.event_list .list_date {
+  position: absolute;
+  left: 0;
+}
+
+
+/* @end */
+
+
+/* @group Single Event
+----------------------------------------*/
+
+.single_event h1 {
+  padding-top: 0.5em;
+  margin: 0;
+  line-height: 1.2em;
+}
+
+.single_event h3 {
+  padding-top: 1.0em;
+  margin-bottom: 0.5em;
+  line-height: 0.5em;
+}
+
+.single_event .date {
+  color: #82c555;
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+.single_event .location.vcard {
+  background: #e8fbfe;
+  width: 45em;
+  height: 16em;
+  padding: 1em;
+  margin: 2em 0 2em -1em;
+}
+
+.single_event .location #google_map {
+  width: 25em;
+  height: 16em;
+  float: right;
+}
+
+.single_event .location .fn {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.single_event .description {
+  width: 40em;
+}
+
+/* @end */
+
+
+/* @group Venues
+----------------------------------------*/
+
+#venues_index #google_map {
+  width: 400px;
+  height: 300px;
+  float: right;
+}
+
+/* @end */
+
+
+/* @group Single Venue
+----------------------------------------*/
+
+.single_venue .location.vcard {
+  background: #e8fbfe;
+  width: 45em;
+  height: 16em;
+  padding: 1em;
+  margin: 2em 0 2em -1em;
+}
+
+.single_venue #google_map {
+  width: 25em;
+  height: 16em;
+  float: right;
+}
+
+.single_venue h3 {
+  padding-top: 1.0em;
+  margin-bottom: 0.5em;
+  line-height: 0.5em;
+}
+
+/* @end */
+
+
+
+/* @group Forms (imported from old UI)
+----------------------------------------*/
+
+fieldset label {
+  display: block;
+  float: left;
+  width: 7em;
+  text-align: right;
+  margin-right: 1em;
+  clear: left;
+}
+
+fieldset > div, #form-contents > div {
+  clear: both;
+  padding-top: 1em;
+}
+
+#form-contents {
+  clear: none;
+}
+
+label.checkbox {
+  clear: none;
+  text-align: left;
+}
+
+fieldset input {
+  float: left;
+}
+
+fieldset .calendar_date_select {
+  border: 0;
+  width: 25em;
+}
+
+fieldset .no_label, fieldset .help {
+  padding-left: 8em;
+}
+
+fieldset .help {
+  color: #999;
+}
+
+/* @end */
+
+/* @group Front Page
+----------------------------------------*/
+
+#whats_happening {
+  margin: 1em 0 0 24em;
+}
+
+#whats_happening h1 {
+  padding-top: .2em
+}
+
+#project_description {
+  background: #e8fbfe;
+  padding: 1em;
+  width: 20em;
+  margin: 0 2em 0 -1em;
+  float: left;
+}
+
+#project_description a {
+  font-weight: bold;
+}
+
+#project_description h2 {
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+
+
+/* @end */
+
+/* @group Helper Classes
+----------------------------------------*/
+
+.right {
+  float:  right;
+}
+
+.left {
+  float: left;
+}
+
+.hidden {
+  display: none;
+}
+
+/* @end */
+
+
+
+/* @group Recent Changes Display
+----------------------------------------*/
+
+table.changeset {
+  width: 50em;
+
+  border-collapse: collapse;
+}
+
+table.changeset thead {
+  visibility: hidden;
+}
+
+table.changeset td {
+  width: 20em;
+  border: 1px solid #aaccaa;
+}
+
+table.changeset td.field_name {
+  font-weight: bold;
+  width: 10em;
+}
+
+.changeset .added {
+  color: green;
+}
+
+.changeset .removed {
+  color: red;
+}
+
+/* @end */
