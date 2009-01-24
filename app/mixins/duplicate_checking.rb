@@ -244,6 +244,13 @@ module DuplicateChecking
             RAILS_DEFAULT_LOGGER.debug(%{#{self.name}#squash: skipping assocation '#{association.name}'})
             next
           end
+
+          # Handle tags - can't simply reassign, need to be unique, and they may have some of the same tags
+          if association.name == :taggings
+            squash_tags(master, duplicate)
+            next
+          end
+
           foreign_objects = duplicate.send(association.name)
           for object in foreign_objects
             object.update_attribute(association.primary_key_name, master.id) unless object.new_record?
@@ -260,6 +267,16 @@ module DuplicateChecking
         RAILS_DEFAULT_LOGGER.debug("#{self.name}#squash: marking #{self.name}@#{duplicate.id} as duplicate of #{self.name}@{master.id}")
       end
       return squashed
+    end
+
+    # custom behavior for tags, concatentate the two objects tag strings together
+    def squash_tags(master, duplicate)
+      puts "squashed_tags running!"
+      master_tags    = master.tag_list.split(', ')
+      duplicate_tags = duplicate.tag_list.split(', ')
+      all_tags       = (master_tags + duplicate_tags).uniq
+
+      master.tag_list = all_tags.join(', ')
     end
 
   end

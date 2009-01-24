@@ -527,19 +527,17 @@ describe Event do
       @event = events(:calagator_codesprint)
     end
 
-    it "should consolidate associations" do
-      tags = "bar, foo"
-
-      @event.tag_list.should be_blank
+    it "should consolidate associations, and merge tags" do
+      @event.tag_list = "first, second" # master event contains one duplicate tag, and one unique tag
 
       clone = Event.create!(@event.attributes)
-      clone.tag_list = tags
+      clone.tag_list = "second, third" # duplicate event also contains one duplicate tag, and one unique tag
       clone.save!
       clone.reload
       clone.should_not be_duplicate
 
       Event.squash(:master => @event, :duplicates => clone)
-      @event.tag_list.should == tags
+      @event.tag_list.should == "first, second, third" # master now contains all three tags
       clone.duplicate_of.should == @event
     end
   end
