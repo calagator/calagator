@@ -1,0 +1,2 @@
+class ThemeError < StandardError
+end
