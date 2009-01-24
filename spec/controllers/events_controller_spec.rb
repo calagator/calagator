@@ -298,6 +298,7 @@ describe EventsController, "when searching" do
       post :search, :query => "myquery", :format => "html"
 
       response.should have_tag("table.event_table")
+      assigns[:events].should == @results[:past] + @results[:current]
     end
 
     it "should produce JSON" do
