@@ -24,10 +24,22 @@ describe EventsController, "when displaying index" do
     struct["entry"].should be_a_kind_of(Array)
   end
 
-  it "should produce ICS" do
-    post :index, :format => "ics"
+  describe "in ICS format" do
 
-    response.body.should have_text(/BEGIN:VEVENT/)
+    it "should produce ICS" do
+      post :index, :format => "ics"
+
+      response.body.should have_text(/BEGIN:VEVENT/)
+    end
+
+    it "should render all future events" do
+      controller.should_receive(:ical_export).with(nil) {
+        controller.render :text => 'test'
+      }
+
+      post :index, :format => "ics"
+    end
+
   end
 end
 
