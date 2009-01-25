@@ -1,6 +1,13 @@
 # Timezone to display times in:
 timezone: 'Pacific Time (US & Canada)'
 
+# Google map to display on venues page:
+venues_google_map_options:
+  # Zoom magnification level:
+  zoom: 12
+  # Center of the map, latitude and longitude:
+  center: [45.518493, -122.660737]
+
 # Project description, usually visible on homepage:
 project_description: |
   <h2>Hi there.</h2>
