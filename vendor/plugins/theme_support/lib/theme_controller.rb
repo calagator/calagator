@@ -3,15 +3,15 @@ class ThemeController < ActionController::Base
 	after_filter :cache_theme_files
   
 	def stylesheets
-		render_theme_item(:stylesheets, params[:filename].to_s, params[:theme], 'text/css')
+		render_theme_item(:stylesheets, params[:filename].join('/'), params[:theme], 'text/css')
 	end
 
 	def javascript
-		render_theme_item(:javascript, params[:filename].to_s, params[:theme], 'text/javascript')
+		render_theme_item(:javascript, params[:filename].join('/'), params[:theme], 'text/javascript')
 	end
 
 	def images
-		render_theme_item(:images, params[:filename].to_s, params[:theme])
+		render_theme_item(:images, params[:filename].join('/'), params[:theme])
 	end
 
 	def error
