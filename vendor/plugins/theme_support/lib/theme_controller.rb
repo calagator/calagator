@@ -21,8 +21,13 @@ class ThemeController < ActionController::Base
 	private
   
 	def render_theme_item(type, file, theme, mime = mime_for(file))
-		render :text => "Not Found", :status => 404 and return if file.split(%r{[\\/]}).include?("..")
-		send_file "#{Theme.path_to_theme(theme)}/#{type}/#{file}", :type => mime, :disposition => 'inline', :stream => false
+	  file_path = "#{Theme.path_to_theme(theme)}/#{type}/#{file}"
+	  if file.split(%r{[\\/]}).include?("..") || !File.exists?(file_path) || file.blank?
+      render :text => "Not Found", :status => 404
+      return
+    else
+  		send_file file_path, :type => mime, :disposition => 'inline', :stream => false
+		end
 	end
 
 	def cache_theme_files
