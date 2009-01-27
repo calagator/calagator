@@ -50,6 +50,52 @@ describe VenuesController do
       response.should render_template(:edit)
     end
   end
+
+  describe "when rendering the venues index" do
+
+    describe "in JSON format" do
+
+      it "should produce JSON" do
+        get :index, :format => "json"
+
+        struct = ActiveSupport::JSON.decode(response.body)
+        struct.should be_a_kind_of(Array)
+      end
+
+      it "should accept a JSONP callback" do
+        get :index, :format => "json", :callback => "some_function"
+
+        response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
+      end
+
+    end
+
+  end
+
+  describe "when showing venues" do
+
+    before(:each) do
+      @venue = Venue.find(:first)
+    end
+
+    describe "in JSON format" do
+
+      it "should produce JSON" do
+        get :show, :id => @venue.to_param, :format => "json"
+
+        struct = ActiveSupport::JSON.decode(response.body)
+        struct.should be_a_kind_of(Hash)
+      end
+
+      it "should accept a JSONP callback" do
+        get :show, :id => @venue.to_param, :format => "json", :callback => "some_function"
+
+        response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
+      end
+
+    end
+
+  end
       
   
 end

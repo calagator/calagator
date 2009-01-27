@@ -10,11 +10,21 @@ describe EventsController, "when displaying index" do
     response.should have_tag("table.event_table")
   end
 
-  it "should produce JSON" do
-    post :index, :format => "json"
+  describe "in JSON format" do
 
-    struct = ActiveSupport::JSON.decode(response.body)
-    struct.should be_a_kind_of(Array)
+    it "should produce JSON" do
+      post :index, :format => "json"
+
+      struct = ActiveSupport::JSON.decode(response.body)
+      struct.should be_a_kind_of(Array)
+    end
+
+    it "should accept a JSONP callback" do
+      post :index, :format => "json", :callback => "some_function"
+
+      response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
+    end
+
   end
 
   it "should produce ATOM" do
@@ -311,11 +321,21 @@ describe EventsController, "when searching" do
       assigns[:events].should == @results[:past] + @results[:current]
     end
 
-    it "should produce JSON" do
-      post :search, :query => "myquery", :format => "json"
+    describe "in JSON format" do
 
-      struct = ActiveSupport::JSON.decode(response.body)
-      struct.should be_a_kind_of(Array)
+      it "should produce JSON" do
+        post :search, :query => "myquery", :format => "json"
+
+        struct = ActiveSupport::JSON.decode(response.body)
+        struct.should be_a_kind_of(Array)
+      end
+
+      it "should accept a JSONP callback" do
+        post :search, :query => "myquery", :format => "json", :callback => "some_function"
+
+        response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
+      end
+
     end
 
     it "should produce ATOM" do
