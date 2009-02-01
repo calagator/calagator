@@ -25,7 +25,7 @@ post '/' do
   case action
   when "deploy_and_migrate_via_update"
     if revision
-      @command = %{git stash save && git pull && git checkout #{revision} && git stash apply && stash clear && #{common_deploy}}
+      @command = %{git pull && git checkout #{revision} && #{common_deploy}}
     else
       @message = "ERROR: must specify revision to deploy via update"
     end
