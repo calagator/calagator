@@ -12,11 +12,8 @@
           current user:
           = `whoami`
         %li
-          current branch:
-          = @branch
-        %li
           current revision:
-          = @revision
+          %pre= @revision
     %h2
       Action
     %p
@@ -25,11 +22,6 @@
           %input{:type=>"radio", :name=>"action", :value=>"deploy_and_migrate_via_update", :checked=>"checked"}
           deploy and migrate to revision
           %input{:type=>"text", :name=>"revision", :value=>"HEAD"}
-        %br
-        %label
-          %input{:type=>"radio", :name=>"action", :value=>"deploy_and_switch_via_switch"}
-          deploy and migrate to branch
-          %input{:type=>"text", :name=>"branch", :value=>@branch}
         %br
         %label
           %input{:type=>"radio", :name=>"action", :value=>"restart"}
