@@ -20,5 +20,7 @@
     
     <%= yield :discovery_insert %>
     <%= auto_discovery_link_tag(:atom, formatted_events_url('atom'), :title => 'Atom: All Events' )%>
+    
+    <link rel="apple-touch-icon" href="/images/site-icon.png" />
   </head>
   <body>
