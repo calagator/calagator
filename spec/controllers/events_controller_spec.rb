@@ -24,10 +24,20 @@ describe EventsController, "when displaying index" do
     struct["entry"].should be_a_kind_of(Array)
   end
 
-  it "should produce ICS" do
-    post :index, :format => "ics"
+  describe "in ICS format" do
 
-    response.body.should have_text(/BEGIN:VEVENT/)
+    it "should produce ICS" do
+      post :index, :format => "ics"
+
+      response.body.should have_text(/BEGIN:VEVENT/)
+    end
+
+    it "should render all future events" do
+      post :index, :format => "ics"
+      response.body.should =~ /SUMMARY:#{events(:tomorrow).title}/
+      response.body.should_not =~ /SUMMARY:#{events(:old_event).title}/
+    end
+
   end
 end
 
@@ -298,6 +308,7 @@ describe EventsController, "when searching" do
       post :search, :query => "myquery", :format => "html"
 
       response.should have_tag("table.event_table")
+      assigns[:events].should == @results[:past] + @results[:current]
     end
 
     it "should produce JSON" do
@@ -314,10 +325,20 @@ describe EventsController, "when searching" do
       struct["entry"].should be_a_kind_of(Array)
     end
 
-    it "should produce ICS" do
-      post :search, :query => "myquery", :format => "ics"
+    describe "in ICS format" do
 
-      response.body.should have_text(/BEGIN:VEVENT/)
+      it "should produce ICS" do
+        post :search, :query => "myquery", :format => "ics"
+
+        response.body.should have_text(/BEGIN:VEVENT/)
+      end
+
+      it "should produce events matching the query" do
+        post :search, :query => "myquery", :format => "ics"
+        response.body.should =~ /SUMMARY:#{events(:tomorrow).title}/
+        response.body.should =~ /SUMMARY:#{events(:old_event).title}/
+      end
+
     end
   end
 end
