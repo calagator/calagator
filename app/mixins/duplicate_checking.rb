@@ -271,12 +271,7 @@ module DuplicateChecking
 
     # custom behavior for tags, concatentate the two objects tag strings together
     def squash_tags(master, duplicate)
-      puts "squashed_tags running!"
-      master_tags    = master.tag_list.split(', ')
-      duplicate_tags = duplicate.tag_list.split(', ')
-      all_tags       = (master_tags + duplicate_tags).uniq
-
-      master.tag_list = all_tags.join(', ')
+      master.tag_list = master.tag_list + Tag::DELIMITER + duplicate.tag_list
     end
 
   end
