@@ -33,11 +33,9 @@ describe EventsController, "when displaying index" do
     end
 
     it "should render all future events" do
-      controller.should_receive(:ical_export).with(nil) {
-        controller.render :text => 'test'
-      }
-
       post :index, :format => "ics"
+      response.body.should =~ /SUMMARY:#{events(:tomorrow).title}/
+      response.body.should_not =~ /SUMMARY:#{events(:old_event).title}/
     end
 
   end
@@ -336,12 +334,9 @@ describe EventsController, "when searching" do
       end
 
       it "should produce events matching the query" do
-        expected_results = @results[:past] + @results[:current]
-        controller.should_receive(:ical_export).with(expected_results) {
-          controller.render :text => 'test'
-        }
-
         post :search, :query => "myquery", :format => "ics"
+        response.body.should =~ /SUMMARY:#{events(:tomorrow).title}/
+        response.body.should =~ /SUMMARY:#{events(:old_event).title}/
       end
 
     end
