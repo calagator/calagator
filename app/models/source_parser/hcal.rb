@@ -20,6 +20,17 @@ class SourceParser
       content.gsub!(/(class="venue location vcard" )class="vcard"/, '\1')
       # v3 invalid hCalendar description
       content.gsub!(%r{(<div class="description">)(</div>)(.+?)(<div class="clearb">)}m, '\1\3\2\4')
+      
+      unless content.match(/ class="description"/)
+        # v4 hCalendar description no longer contained in its own div
+        content.gsub!(/<!-- \/.venue -->(.*?)<div id="small-info">/m, %q{
+<!-- \/.venue -->
+<div class="description">\1</div>
+<div id="small-info">
+                    })
+      end
+      # ... and there is an extra 'vevent' class
+      content.gsub!(/(class="event-title") class="vevent"/, '\1')
 
       something = hCalendar.find(:text => content)
       return(something.is_a?(hCalendar) ? [something] : something)
