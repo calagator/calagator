@@ -235,21 +235,28 @@ class EventsController < ApplicationController
 
 protected
 
-  # export events to an iCalendar file
+  # Export +events+ to an iCalendar file.
   def ical_export(events=nil)
     events = events || Event.find_future_events
     render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
   end
 
+  # Render +events+ for a particular format.
   def render_events(events)
     respond_to do |format|
       format.html # *.html.erb
       format.kml  # *.kml.erb
-      format.ics  { ical_export() }
+      format.ics  { ical_export(yield_events(events)) }
       format.atom { render :template => 'events/index' }
-      format.xml  { render :xml  => events.respond_to?(:call) ? events.call : events }
-      format.json { render :json => events.respond_to?(:call) ? events.call : events }
+      format.xml  { render :xml  => yield_events(events) }
+      format.json { render :json => yield_events(events) }
     end
+  end
+
+  # Return an array of Events from a +container+, which can either be an array
+  # of Events or a lambda that returns an array of Events.
+  def yield_events(container)
+    return container.respond_to?(:call) ? container.call : container
   end
 
 end
