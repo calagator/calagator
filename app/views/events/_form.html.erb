@@ -57,8 +57,23 @@
         show24Hours:false,
         separator:':',
         step: 30});
+
+      // Store time used by duration.
+      var oldTime = $.timePicker("#time_start").getTime();
+
+      // Keep the duration between the two inputs.
+      $("#time_start").change(function() {
+        if ($("#time_end").val()) { // Only update when second input has a value.
+          // Calculate duration.
+          var duration = ($.timePicker("#time_end").getTime() - oldTime);
+          var time = $.timePicker("#time_start").getTime();
+          // Calculate and update the time in the second input.
+          $.timePicker("#time_end").setTime(new Date(new Date(time.getTime() + duration)));
+          oldTime = time;
+        }
+      });
+
     });
-    
   </script>
 <% end %>
 
