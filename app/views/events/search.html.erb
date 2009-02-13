@@ -15,8 +15,8 @@
 
   <h3>Export to</h3>
     <li><%= link_to "iCalendar file", formatted_search_events_url("ics", :query => @query) %></li>
-    <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+formatted_search_events_url("ics", :query => @query) %></li>
-    <li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+formatted_search_events_url("ics", :query => @query) %></li>
+    <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+CGI::escape(formatted_search_events_url("ics", :query => @query)) %></li>
+    <li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+CGI::escape(formatted_search_events_url("ics", :query => @query)) %></li>
   <ul>
   </ul>
 </div>

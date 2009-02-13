@@ -354,6 +354,20 @@ describe Event do
         :past    => [past_event],
       }
     end
+
+    it "should find events and sort them by event name" do
+      event_Z = Event.new(:title => "Zipadeedoodah", :start_time => (Time.now + 1.week))
+      event_A = Event.new(:title => "Antidisestablishmentarism", :start_time => (Time.now + 2.weeks))
+      event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (Time.now + 3.weeks))
+      event_o = Event.new(:title => "ommmmmmmmmmm...", :start_time => (Time.now + 4.weeks))
+
+      Event.should_receive(:find_with_solr).and_return([event_A, event_Z, event_O, event_o])
+
+      Event.search_grouped_by_currentness("myquery", :order => 'name').should == {
+        :current => [event_A, event_o, event_O, event_Z],
+        :past => []
+      }
+    end
   end
 
   describe "when associating with venues" do
@@ -404,6 +418,27 @@ describe Event do
 
     it "should raise an exception if associated with an unknown type" do
       lambda { @event.associate_with_venue(mock_model(SourceParser)) }.should raise_error(TypeError)
+    end
+
+    describe "and searching" do
+      it "should find events and sort them by venue name" do
+        event_A = Event.new(:title => "Zipadeedoodah", :start_time => (Time.now + 1.week))
+        event_o = Event.new(:title => "Antidisestablishmentarism", :start_time => (Time.now + 2.weeks))
+        event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (Time.now + 3.weeks))
+        event_Z = Event.new(:title => "ommmmmmmmmmm...", :start_time => (Time.now + 4.weeks))
+
+        event_A.venue = Venue.new(:title => "Acme Hotel")
+        event_o.venue = Venue.new(:title => "opbmusic Studios")
+        event_O.venue = Venue.new(:title => "Oz")
+        event_Z.venue = Venue.new(:title => "Zippers and Things")
+
+        Event.should_receive(:find_with_solr).and_return([event_A, event_Z, event_O, event_o])
+
+        Event.search_grouped_by_currentness("myquery", :order => 'venue').should == {
+          :current => [event_A, event_o, event_O, event_Z],
+          :past => []
+        }
+      end
     end
   end
 
@@ -492,19 +527,17 @@ describe Event do
       @event = events(:calagator_codesprint)
     end
 
-    it "should consolidate associations" do
-      tags = "bar, foo"
-
-      @event.tag_list.should be_blank
+    it "should consolidate associations, and merge tags" do
+      @event.tag_list = "first, second" # master event contains one duplicate tag, and one unique tag
 
       clone = Event.create!(@event.attributes)
-      clone.tag_list = tags
+      clone.tag_list = "second, third" # duplicate event also contains one duplicate tag, and one unique tag
       clone.save!
       clone.reload
       clone.should_not be_duplicate
 
       Event.squash(:master => @event, :duplicates => clone)
-      @event.tag_list.should == tags
+      @event.tag_list.should == "first, second, third" # master now contains all three tags
       clone.duplicate_of.should == @event
     end
   end

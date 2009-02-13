@@ -352,11 +352,11 @@ class Event < ActiveRecord::Base
   end
 
   def event_title_for_solr
-    self.title.to_s
+    self.title.to_s.downcase
   end
 
   def venue_title_for_solr
-    self.venue.ergo.title.to_s
+    self.venue.ergo.title.to_s.downcase
   end
 
   # Return a string of all indexable fields, which may be useful for doing duplicate checks

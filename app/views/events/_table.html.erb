@@ -19,10 +19,10 @@ rowspans = calculate_rowspans(events)
     <tr>
       <th class='date'>Sort By: <%= link_to "Date", url_for(params.merge(:order => 'date')) %></th>
       <th class='event_summary'>
-        <%= link_to "Event Name", url_for(params.merge(:order => 'name')) -%>,
-        <%= link_to "Location", url_for(params.merge(:order => 'venue')) -%>
+        <%= events_sort_link('name') -%>,
+        <%= events_sort_link('venue') -%>
         <%- if scores -%>,
-        <%= link_to "Relevance", url_for(params.merge(:order => 'score')) %>
+        <%= events_sort_link('score') %>
         <% end %>
       </th>
     </tr>
