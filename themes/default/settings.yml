@@ -1,6 +1,9 @@
 # Site's name:
 name: 'Calagator'
 
+# Site's URL with trailing slash:
+url: 'http://calagator.org/'
+
 # Deault timezone, run "rake time:zones:all" for options:
 timezone: 'Pacific Time (US & Canada)'
 
