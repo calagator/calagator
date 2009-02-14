@@ -92,7 +92,7 @@ module ApplicationHelper
   def datestamp(item)
     stamp = "This item was "
     if item.source.nil?
-      stamp << "added directly to Calagator"
+      stamp << "added directly to #{SETTINGS.name}"
     else
       stamp << "imported from " << link_to(truncate(item.source.name, 40), item.source.name)
     end
