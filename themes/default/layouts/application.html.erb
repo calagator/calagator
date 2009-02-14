@@ -7,12 +7,9 @@
     <title><%= cleanse(@page_title ? "#{@page_title} &raquo; " : "") %>Calagator: Portland's Tech Calendar</title>
 
     <!-- Stylesheets, static -->
-    <%= theme_stylesheet_link_tag 'reset', 
-                                  'typography', 
-                                  'forms', 
-                                  'layout', 
-                                  :media => :all, 
-                                  :cache => true %>
+    <%= theme_stylesheet_link_tag 'reset', :media => :all %>
+    <%= stylesheet_link_tag 'common', :media => :all %>
+    <%= theme_stylesheet_link_tag 'typography', 'forms', 'layout', :media => :all, :cache => true %>
     <%= theme_stylesheet_link_tag 'print', :media => :print %>
 
     <!-- Stylesheets, inserted  -->
