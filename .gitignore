@@ -4,6 +4,7 @@
 *.sql
 *.swp
 *.tmp
+*~
 .dtach
 config/geocoder_api_keys.yml
 config/mongrel_cluster.yml
