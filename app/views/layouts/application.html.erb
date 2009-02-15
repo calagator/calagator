@@ -5,18 +5,6 @@
       <a href="/" id="project_title">Calagator</a>
 
       <div id="top_menu">
-
-          <%
-          link_class = {
-              # :home =>   (controller.controller_name == 'site' ? 'active first' : 'first'),
-              # :import => (controller.controller_name == 'sources' && 'active'),
-              :events => (( controller.controller_name == 'events' ||
-                            controller.controller_name == 'sources' ||
-                            controller.controller_name == 'site')  && 'active'),
-              :venues => (controller.controller_name == 'venues'  && 'active'),
-            }
-          %>
-
          <div id='app_menu'>
           <ul>
               <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
