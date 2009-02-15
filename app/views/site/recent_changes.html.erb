@@ -1,5 +1,5 @@
 <% content_for :discovery_insert do %>
-  <%= auto_discovery_link_tag(:atom, formatted_recent_changes_url('atom'), :title => "Atom: Recent Changes" )%>
+  <%= auto_discovery_link_tag(:atom, recent_changes_url(:format => 'atom'), :title => "Atom: Recent Changes" )%>
 <% end %>
 
 <h2>Recent Changes</h2>
