@@ -15,17 +15,18 @@ describe EventsController, "when displaying index" do
     it "should produce XML" do
       post :index, :format => "xml"
 
-      struct = XmlSimple.xml_in_string(response.body)
-      struct["event"].should be_a_kind_of(Array)
+      hash = Hash.from_xml(response.body)
+      hash["events"].should be_a_kind_of(Array)
     end
 
     it "should include venue details" do
       post :index, :format => "xml"
 
-      struct = XmlSimple.xml_in_string(response.body)
-      event = struct["event"].first
-      venue = event["venue"].first
-      venue_title = venue["title"].first  # Why XML? Why?
+      hash = Hash.from_xml(response.body)
+
+      event = hash["events"].first
+      venue = event["venue"]
+      venue_title = venue["title"]  # Why XML? Why?
       venue_title.should be_a_kind_of(String)
       venue_title.length.should > 0
     end
@@ -61,8 +62,8 @@ describe EventsController, "when displaying index" do
   it "should produce ATOM" do
     post :index, :format => "atom"
 
-    struct = XmlSimple.xml_in_string(response.body)
-    struct["entry"].should be_a_kind_of(Array)
+    hash = Hash.from_xml(response.body)
+    hash["feed"]["entry"].should be_a_kind_of(Array)
   end
 
   describe "in ICS format" do
@@ -419,17 +420,17 @@ describe EventsController, "when searching" do
       it "should produce XML" do
         post :search, :query => "myquery", :format => "xml"
 
-        struct = XmlSimple.xml_in_string(response.body)
-        struct["event"].should be_a_kind_of(Array)
+        hash = Hash.from_xml(response.body)
+        hash["events"].should be_a_kind_of(Array)
       end
 
       it "should include venue details" do
         post :search, :query => "myquery", :format => "xml"
 
-        struct = XmlSimple.xml_in_string(response.body)
-        event = struct["event"].first
-        venue = event["venue"].first
-        venue_title = venue["title"].first  # Why XML? Why?
+        hash = Hash.from_xml(response.body)
+        event = hash["events"].first
+        venue = event["venue"]
+        venue_title = venue["title"]
         venue_title.should be_a_kind_of(String)
         venue_title.length.should > 0
       end
@@ -465,8 +466,8 @@ describe EventsController, "when searching" do
     it "should produce ATOM" do
       post :search, :query => "myquery", :format => "atom"
 
-      struct = XmlSimple.xml_in_string(response.body)
-      struct["entry"].should be_a_kind_of(Array)
+      hash = Hash.from_xml(response.body)
+      hash["feed"]["entry"].should be_a_kind_of(Array)
     end
 
     describe "in ICS format" do
