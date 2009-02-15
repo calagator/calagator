@@ -19,8 +19,8 @@ Rails::Initializer.run do |config|
   config.gem "has_many_polymorphs"
   config.gem "hpricot"
 
-  config.gem 'rspec',         :lib => 'spec',         :version => '1.1.12'
-  config.gem 'rspec-rails',   :lib => 'spec/rails',   :version => '1.1.12'
+  config.gem 'rspec', :version => '>= 1.1.12', :lib => false
+  config.gem 'rspec-rails', :version => '>= 1.1.12', :lib => false
 
   config.time_zone = "Pacific Time (US & Canada)"
 
