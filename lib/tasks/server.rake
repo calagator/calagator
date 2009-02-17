@@ -57,16 +57,6 @@ E.g.,
       HERE
   end
 
-  desc "Deploy"
-  task :deploy do
-    sh "ssh calagator@calagator.org 'cd app; svn update; rake restart'"
-  end
-
-  desc "Deploy and migrate database"
-  task :deploy_and_migrate do
-    sh "ssh calagator@calagator.org 'cd app; svn update; rake db:migrate restart'"
-  end
-
   desc "Clear"
   task :clear do
     for file in ['public/stylesheets/all.css', 'public/javascripts/all.js']
@@ -102,6 +92,6 @@ E.g.,
 end
 
 # Create aliases for common tasks
-for name in %w(deploy deploy_and_migrate deploy start stop restart status)
+for name in %w[start stop restart status]
   task name.to_sym => "server:#{name}"
 end
