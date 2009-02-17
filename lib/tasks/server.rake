@@ -16,6 +16,12 @@ namespace :server do
     end
   end
 
+  def thin_port
+    return @thin_port ||= begin
+      yaml_struct_for(THIN_YML)["port"]
+    end
+  end
+
   def server_rails_env
     return @server_rails_env ||= begin
       yaml_struct_for(THIN_YML)["environment"]
@@ -37,6 +43,15 @@ namespace :server do
     else
       Rake::Task['server:help'].invoke
       raise "ERROR: Couldn't find thin config."
+    end
+  end
+
+  def process_running_at_pid?(pid)
+    begin
+      Process.kill(0, pid)
+      return true
+    rescue Errno::ESRCH
+      return false
     end
   end
 
@@ -84,10 +99,23 @@ E.g.,
     manage_thin(:restart)
   end
 
-  # FIXME how to check status of thin?
   desc "Status"
   task :status do
-    sh "mongrel_rails cluster::status"
+    pid = nil
+    begin
+      pid = File.read("#{RAILS_ROOT}/tmp/pids/thin.#{thin_port}.pid").to_i
+    rescue Errno::ENOENT
+      puts "** thin server not running, pid file not found"
+      exit 1
+    end
+
+    if process_running_at_pid?(pid)
+      puts "** thin server running at ##{pid}"
+      exit 0
+    else
+      puts "** thin server not running"
+      exit 7
+    end
   end
 end
 
