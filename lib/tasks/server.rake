@@ -16,6 +16,12 @@ namespace :server do
     end
   end
 
+  def thin_port
+    return @thin_port ||= begin
+      yaml_struct_for(THIN_YML)["port"]
+    end
+  end
+
   def server_rails_env
     return @server_rails_env ||= begin
       yaml_struct_for(THIN_YML)["environment"]
@@ -40,6 +46,15 @@ namespace :server do
     end
   end
 
+  def process_running_at_pid?(pid)
+    begin
+      Process.kill(0, pid)
+      return true
+    rescue Errno::ESRCH
+      return false
+    end
+  end
+
   desc "Help configure thin"
   task :help do
       puts <<-HERE
@@ -55,16 +70,6 @@ E.g.,
   # Preview
   thin config --config #{THIN_YML} --timeout 3 --daemonize --port 20010 --servers 2 --environment preview
       HERE
-  end
-
-  desc "Deploy"
-  task :deploy do
-    sh "ssh calagator@calagator.org 'cd app; svn update; rake restart'"
-  end
-
-  desc "Deploy and migrate database"
-  task :deploy_and_migrate do
-    sh "ssh calagator@calagator.org 'cd app; svn update; rake db:migrate restart'"
   end
 
   desc "Clear"
@@ -94,14 +99,27 @@ E.g.,
     manage_thin(:restart)
   end
 
-  # FIXME how to check status of thin?
   desc "Status"
   task :status do
-    sh "mongrel_rails cluster::status"
+    pid = nil
+    begin
+      pid = File.read("#{RAILS_ROOT}/tmp/pids/thin.#{thin_port}.pid").to_i
+    rescue Errno::ENOENT
+      puts "** thin server not running, pid file not found"
+      exit 1
+    end
+
+    if process_running_at_pid?(pid)
+      puts "** thin server running at ##{pid}"
+      exit 0
+    else
+      puts "** thin server not running"
+      exit 7
+    end
   end
 end
 
 # Create aliases for common tasks
-for name in %w(deploy deploy_and_migrate deploy start stop restart status)
+for name in %w[start stop restart status]
   task name.to_sym => "server:#{name}"
 end
