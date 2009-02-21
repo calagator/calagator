@@ -11,7 +11,8 @@ class VenuesController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @venues }
-      format.js  { render :json => @venues }
+      format.json { render :json => @venues, :callback => params[:callback] }
+      format.js  { render :json => @venues, :callback => params[:callback] }
       format.kml  # index.kml.erb
     end
   end
@@ -34,7 +35,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @venue }
-      format.json  { render :json => @venue }
+      format.json  { render :json => @venue, :callback => params[:callback] }
     end
   end
 
