@@ -40,7 +40,7 @@ class SourceParser # :nodoc:
       content = content_for(opts).gsub(/\r\n/, "\n")
       content_calendars = content.scan(CALENDAR_CONTENT_RE)
 
-      # FIXME Upcoming's iCalendar no longer includes newlines, so everything gets mashed into a single, long paragraph.
+      # FIXME Upcoming's iCalendar contains double BR entries, squash them
 
       returning([]) do |events|
         for content_calendar in content_calendars

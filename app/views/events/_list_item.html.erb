@@ -23,7 +23,7 @@ show_year ||= false
     </div>
     <% if !event.description.blank? %>
       <div class='description'>
-        <%= h upgrade_br(auto_link(white_list(event.description))) -%>
+        <%= format_description(event.description) -%>
       </div>
     <% end -%>
     <% if !event.url.blank? -%>
