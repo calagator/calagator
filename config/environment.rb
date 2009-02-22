@@ -15,7 +15,8 @@ Rails::Initializer.run do |config|
   config.gem "htmlentities"
   config.gem "vpim"
   config.gem "lucene_query"
-  config.gem "has_many_polymorphs"
+  # NOTE: There's an evil "has_many_polymorphs" 2.13 that's broken, and a "johnsbrn-has_many_polymorphs" 2.13.3 that that only works with Rails 2.2
+  config.gem "has_many_polymorphs", :version => "2.12"
   config.gem "hpricot"
   config.gem "rubyzip", :lib =>  "zip/zip"
   config.gem 'rspec', :version => '>= 1.1.12', :lib => false
