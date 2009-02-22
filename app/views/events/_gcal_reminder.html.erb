@@ -6,7 +6,7 @@
   <%= hidden_field_tag :location, %{#{@event.venue ? @event.venue.title : ''}#{@event.venue ? (@event.venue.geocode_address.blank? ? '' : " #{@event.venue.geocode_address}") : ''}} %>
   <%= hidden_field_tag :trp, "true" %>
   <%= hidden_field_tag :sprop, url_for('/') %>
-  <%= hidden_field_tag :sprop, "name:Calagator" %>
+  <%= hidden_field_tag :sprop, "name:#{SETTINGS.name}" %>
   <%= submit_tag "Google Calendar", :style => "display: none" %>
 <% end %>
 <a href="#" onclick="$('#add_to_google_calendar').submit()">Google Calendar</a>

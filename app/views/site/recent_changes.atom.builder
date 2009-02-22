@@ -1,5 +1,5 @@
 atom_feed() do |feed|
-  feed.title("Calagator: Recent Changes")
+  feed.title("#{SETTINGS.name}: Recent Changes")
   unless @items.size == 0
     feed.updated(@items.sort_by(&:updated_at).last.updated_at)
 

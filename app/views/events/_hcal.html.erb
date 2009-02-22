@@ -28,7 +28,7 @@
   <% end -%>
   <% unless @event.description.blank? -%>
   <div class="description">
-    <%= upgrade_br(simple_format(auto_link(white_list(@event.description)))) %>
+    <%= format_description(@event.description) %>
   </div>
   <% end -%>
   <% unless @event.url.blank? -%>

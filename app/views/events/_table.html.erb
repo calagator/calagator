@@ -48,7 +48,7 @@ rowspans = calculate_rowspans(events)
             <% end -%>
             <% if !event.description.blank? %>
               <div class='description'>
-                <%= upgrade_br(auto_link(white_list(event.description))) -%>
+                <%= format_description(event.description) -%>
               </div>
             <% end -%>
             <% if !event.url.blank? -%>

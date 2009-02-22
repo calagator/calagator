@@ -17,7 +17,7 @@
     The font-size percentage is of 16px. (0.75 * 16px = 12px) */
 body { 
   font-size: 75%;
-  color: <%= @colors[:dark_grey] %>;
+  color: #445544;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -34,7 +34,7 @@ h3 { font-size: 1.2em; line-height: 1.25; margin-bottom: 1.25em; font-weight: bo
 h4 { font-size: 1em; font-weight: bold; margin-bottom: .5em; }
 h5 { font-size: 1em; font-weight: bold; }
 
-h1.bar { color: <%= @colors[:creme] %>; background: <%= @colors[:teal] %>;}
+h1.bar { color: #f9ffec; background: #66baa9;}
 
 h1 img, h2 img, h3 img, 
 h4 img, h5 img, h6 img {
@@ -54,11 +54,11 @@ p img.right { float: right; margin: 1.5em 0 1.5em 1.5em; }
 p img.inline{ float: none; margin: 1.5em 1.5em;}
 
 a:focus, 
-a:hover     { color: <%= @colors[:dark_grey] %>; text-decoration: underline; }
-a:link      { color: <%= @colors[:teal] %>; text-decoration: none;}
-a:visited   { color: <%= @colors[:dark_green] %>; text-decoration: none;}
+a:hover     { color: #445544; text-decoration: underline; }
+a:link      { color: #66baa9; text-decoration: none;}
+a:visited   { color: #59a12d; text-decoration: none;}
 
-.dark a     { color: <%= @colors[:white] %>; text-decoration: underline; }
+.dark a     { color: #fff; text-decoration: underline; }
 
 a.summary   { font-weight: bold; }
 
@@ -186,6 +186,5 @@ p.incr, .incr p {
   font-weight:bold;
   padding:0 2px;
 }
-
 
 /* @end */ 

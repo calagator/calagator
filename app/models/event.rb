@@ -447,8 +447,6 @@ EOF
         # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
         c.dtstamp       event.created_at || event.start_time
         c.uid           opts[:url_helper].call(event) if opts[:url_helper]
-        # c.uid         ("http://calagator.org/events/" + event.id.to_s)
-
 
         # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to
         # go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't
@@ -460,7 +458,7 @@ EOF
 
     # TODO Add calendar title support to vpim or find a prettier way to do this.
     # method added because of bug in Outlook 2003, which won't import .ics without a METHOD
-    return icalendar.encode.sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:Calagator\nMETHOD:PUBLISH")
+    return icalendar.encode.sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH")
   end
 
   def location

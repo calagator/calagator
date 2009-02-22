@@ -2,7 +2,7 @@
 <fieldset>
   <legend>Import a source</legend>
   <div>
-    Import one or more events from a feed or web page in one of the following formats: iCalendar, hCalendar, Upcoming, and MeetUp (<%= link_to "learn more", "http://code.google.com/p/calagator/wiki/CalagatorImportFormats" %>).
+    Import one or more events from a feed or web page in one of the following formats: iCalendar, hCalendar, Upcoming, and MeetUp.
   </div>
   <div>
     <%= f.label :url, "URL" %>
@@ -24,8 +24,8 @@
   </div>
   <div class='help'>
     <p>
-    <b>Bookmarklet</b>: Import pages faster by adding the following bookmark to your browser's bookmarks and click it when you're visiting a webpage that contains events that you'd like to import into Calagator:
-      <a href="javascript:d=document;q=(d.location.href);w=window;location.href='http://<%= PRODUCTION_HOSTNAME %>/sources/new?url='+escape(q);">Add to Calagator</a>
+    <b>Bookmarklet</b>: Import pages faster by adding the following bookmark to your browser's bookmarks and click it when you're visiting a webpage that contains events that you'd like to import:
+    <%= link_to "Add to #{SETTINGS.name}", "javascript:d=document;q=(d.location.href);w=window;location.href='#{new_source_url}?url='+escape(q);" %>
     </p>
   </div>
 </fieldset>

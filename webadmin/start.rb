@@ -20,7 +20,7 @@ post '/' do
   revision = params[:revision].ergo.to_s[/(\w+)/, 1]
 
   @command = nil
-  common_restart = %{rake RAILS_ENV=production server:clear tmp:cache:clear && touch #{RESTART_TXT}}
+  common_restart = %{rake RAILS_ENV=production clear && touch #{RESTART_TXT}}
   common_deploy  = %{rake RAILS_ENV=production db:migrate && #{common_restart}}
   case action
   when "deploy_and_migrate_via_update"

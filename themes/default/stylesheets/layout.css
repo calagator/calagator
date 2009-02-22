@@ -1,24 +1,23 @@
-
 /* @group Global Layout
 ----------------------------------------*/
 
 body {
-  background: <%= @colors[:white] %>;
+  background: #fff;
 }
 
 #global_header {
-  background: <%= @colors[:green] %>;
+  background: #82c555;
   position: relative;
   height: 95px;
 }
 
 #global_header a {
-  color: <%= @colors[:creme] %>
+  color: #f9ffec
 }
 
 #top_footer {
-  background: <%= @colors[:dark_grey] %>;
-  color: <%= @colors[:creme] %>;
+  background: #445544;
+  color: #f9ffec;
   padding: .5em 30px .5em 40px;
   font-size: 70%;
   clear: both;
@@ -75,7 +74,7 @@ body {
 
 .subnav {
   font-size: 1.2em;
-  background: <%= @colors[:light_green] %>;
+  background: #bcf794;
   padding-left: 40px;
   height: 2em;
   line-height: 2em;
@@ -92,7 +91,7 @@ body {
 }
 
 .subnav a {
-  color: <%= @colors[:dark_grey] %>;
+  color: #445544;
   padding-bottom: .42em;
 }
 
@@ -164,7 +163,7 @@ ul.event_list .list_date {
 
 .event_table .day_of_week,
 ul.event_list .day_of_week {
-  color: <%= @colors[:dark_green] %>;
+  color: #59a12d;
   font-weight: bold;
 }
 
@@ -172,19 +171,19 @@ ul.event_list .day_of_week {
   padding-bottom: 2em;
 }
 
-<% sidebar_width = 200 %>
+
 .sidebar {
-  background: <%= @colors[:light_cyan] %>;
+  background: #e8fbfe;
   padding: 2em 30px 1em 1em;
   position: absolute;
   top: 0;
   right: 0;
   margin: -1em -30px 0 0;
-  width: <%= sidebar_width %>px;
+  width: 200px;
 }
 
 .contentbar {
-margin-right: <%= sidebar_width %>px;
+margin-right: 200px;
 }
 
 #list_filters #date_filter label {
@@ -246,14 +245,14 @@ ul.event_list .list_date {
 }
 
 .single_event .date {
-  color: <%= @colors[:green] %>;
+  color: #82c555;
   font-size: 1.3em;
   font-weight: bold;
   margin-bottom: 1em;
 }
 
 .single_event .location.vcard {
-  background: <%= @colors[:light_cyan] %>;
+  background: #e8fbfe;
   width: 45em;
   height: 16em;
   padding: 1em;
@@ -294,7 +293,7 @@ ul.event_list .list_date {
 ----------------------------------------*/
 
 .single_venue .location.vcard {
-  background: <%= @colors[:light_cyan] %>;
+  background: #e8fbfe;
   width: 45em;
   height: 16em;
   padding: 1em;
@@ -374,7 +373,7 @@ fieldset .help {
 }
 
 #project_description {
-  background: <%= @colors[:light_cyan] %>;
+  background: #e8fbfe;
   padding: 1em;
   width: 20em;
   margin: 0 2em 0 -1em;
@@ -427,7 +426,7 @@ table.changeset thead {
 
 table.changeset td {
   width: 20em;
-  border: 1px solid <%= @colors[:light_grey] %>;
+  border: 1px solid #aaccaa;
 }
 
 table.changeset td.field_name {
@@ -442,7 +441,5 @@ table.changeset td.field_name {
 .changeset .removed {
   color: red;
 }
-
-
 
 /* @end */
