@@ -10,6 +10,28 @@ describe EventsController, "when displaying index" do
     response.should have_tag("table.event_table")
   end
 
+  describe "in XML format" do
+
+    it "should produce XML" do
+      post :index, :format => "xml"
+
+      struct = XmlSimple.xml_in_string(response.body)
+      struct["event"].should be_a_kind_of(Array)
+    end
+
+    it "should include venue details" do
+      post :index, :format => "xml"
+
+      struct = XmlSimple.xml_in_string(response.body)
+      event = struct["event"].first
+      venue = event["venue"].first
+      venue_title = venue["title"].first  # Why XML? Why?
+      venue_title.should be_a_kind_of(String)
+      venue_title.length.should > 0
+    end
+
+  end
+
   describe "in JSON format" do
 
     it "should produce JSON" do
@@ -23,6 +45,15 @@ describe EventsController, "when displaying index" do
       post :index, :format => "json", :callback => "some_function"
 
       response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
+    end
+
+    it "should include venue details" do
+      post :index, :format => "json"
+
+      struct = ActiveSupport::JSON.decode(response.body)
+      event = struct.first
+      event["venue"]["title"].should be_a_kind_of(String)
+      event["venue"]["title"].length.should > 0
     end
 
   end
@@ -321,6 +352,28 @@ describe EventsController, "when searching" do
       assigns[:events].should == @results[:past] + @results[:current]
     end
 
+    describe "in XML format" do
+
+      it "should produce XML" do
+        post :search, :query => "myquery", :format => "xml"
+
+        struct = XmlSimple.xml_in_string(response.body)
+        struct["event"].should be_a_kind_of(Array)
+      end
+
+      it "should include venue details" do
+        post :search, :query => "myquery", :format => "xml"
+
+        struct = XmlSimple.xml_in_string(response.body)
+        event = struct["event"].first
+        venue = event["venue"].first
+        venue_title = venue["title"].first  # Why XML? Why?
+        venue_title.should be_a_kind_of(String)
+        venue_title.length.should > 0
+      end
+
+    end
+
     describe "in JSON format" do
 
       it "should produce JSON" do
@@ -334,6 +387,15 @@ describe EventsController, "when searching" do
         post :search, :query => "myquery", :format => "json", :callback => "some_function"
 
         response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
+      end
+
+      it "should include venue details" do
+        post :search, :query => "myquery", :format => "json"
+
+        struct = ActiveSupport::JSON.decode(response.body)
+        event = struct.first
+        event["venue"]["title"].should be_a_kind_of(String)
+        event["venue"]["title"].length.should > 0
       end
 
     end
