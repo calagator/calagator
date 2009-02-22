@@ -1,5 +1,4 @@
 <%
-#require 'rubygems'; require 'ruby-debug'; Debugger.start; debugger; 1 # FIXME
 new_day ||= nil
 opts ||= {}
 opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
@@ -24,7 +23,7 @@ show_year ||= false
     </div>
     <% if !event.description.blank? %>
       <div class='description'>
-        <%= h upgrade_br(auto_link(white_list(event.description))) -%>
+        <%= format_description(event.description) -%>
       </div>
     <% end -%>
     <% if !event.url.blank? -%>

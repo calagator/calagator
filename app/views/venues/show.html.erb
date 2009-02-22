@@ -53,7 +53,7 @@
   <h2>Description</h2>
   <% unless @venue.description.blank? %>
   <div class="description">
-    <%= upgrade_br(simple_format(auto_link(white_list(@venue.description)))) %>
+    <%= format_description(@venue.description) %>
   </div>
   <% end %>
   

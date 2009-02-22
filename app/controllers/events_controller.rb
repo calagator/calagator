@@ -63,7 +63,7 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @event }
-      format.json { render :json => @event }
+      format.json { render :json => @event, :callback => params[:callback] }
       format.ics { ical_export([@event]) }
     end
   end
@@ -249,7 +249,7 @@ protected
       format.ics  { ical_export(yield_events(events)) }
       format.atom { render :template => 'events/index' }
       format.xml  { render :xml  => yield_events(events) }
-      format.json { render :json => yield_events(events) }
+      format.json { render :json => yield_events(events), :callback => params[:callback] }
     end
   end
 
