@@ -8,7 +8,9 @@
 .dtach
 config/geocoder_api_keys.yml
 config/mongrel_cluster.yml
+config/theme.txt
 config/thin.yml
+config/secrets.yml
 coverage/*
 db/*.sqlite3
 db/*.sqlite3.*

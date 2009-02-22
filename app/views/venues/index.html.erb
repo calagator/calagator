@@ -4,7 +4,7 @@
   <div id='list_description'>
     <h2>Viewing all <strong><%= @venues.size %></strong> venues.</h2>
   </div>
-  <%= google_map @venues, :zoom => 12, :center => [45.518493, -122.660737] %>
+  <%= google_map @venues, SETTINGS.venues_google_map_options %>
 
   <ul>
     <% for venue in @venues %>

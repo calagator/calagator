@@ -1,0 +1,15 @@
+# Site's name:
+name: 'Calagator'
+
+# Site's URL with trailing slash:
+url: 'http://calagator.org/'
+
+# Deault timezone, run "rake time:zones:all" for options:
+timezone: 'Pacific Time (US & Canada)'
+
+# Google map to display on /venues page:
+venues_google_map_options:
+  # Zoom magnification level:
+  zoom: 12
+  # Center of the map, in latitude and longitude:
+  center: [45.518493, -122.660737]

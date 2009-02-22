@@ -23,7 +23,7 @@ namespace :data do
 
   desc "Fetch state from production server and install it locally"
   task :fetch => :prepare do
-    source = "http://#{PRODUCTION_HOSTNAME}/export.data"
+    source = SETTINGS.url + "export.data"
     #IK# source = "http://localhost:3000/export.data" # Only for testing
     target = "export.data"
 

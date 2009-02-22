@@ -7,7 +7,7 @@ namespace :db do
 
     require 'lib/database_yml_reader'
     d = DatabaseYmlReader.read
-    source = "http://#{PRODUCTION_HOSTNAME}/export.sqlite3"
+    source = SETTINGS.url + "export.sqlite3"
     current = d.database
     backup = current + ".bak"
     replacement = current + ".replacement"
