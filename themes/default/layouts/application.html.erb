@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title><%= cleanse(@page_title ? "#{@page_title} &raquo; " : "") %>Calagator: Portland's Tech Calendar</title>
+    <title><%= cleanse(@page_title ? "#{@page_title} &raquo; " : "") %><%= SETTINGS.name %>: <%= SETTINGS.tagline %></title>
 
     <!-- Stylesheets, static -->
     <%= theme_stylesheet_link_tag 'reset', :media => :all %>
@@ -39,7 +39,7 @@
 
   <div id="outer">
     <div id="global_header">
-      <a href="/" id="project_title">Calagator</a>
+      <a href="/" id="project_title"><%= SETTINGS.name %></a>
 
       <div id="top_menu">
          <div id='app_menu'>
@@ -81,7 +81,8 @@
     </div>
 
     <div id="top_footer">
-      Calagator.org <%= source_code_version %>
+      <%= URI.parse(SETTINGS.url).host %>
+      <%= source_code_version %>
     </div>
 
 </div> <% # outer %>

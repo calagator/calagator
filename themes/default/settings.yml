@@ -1,6 +1,9 @@
 # Site's name:
 name: 'Calagator'
 
+# Site's tagline:
+tagline: "Portland's Tech Calendar"
+
 # Site's URL with trailing slash:
 url: 'http://calagator.org/'
 
