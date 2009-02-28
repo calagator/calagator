@@ -54,7 +54,7 @@ body {
 }
 
 #app_menu li.active {
-  background: url('/images/nav_marker.png') no-repeat center bottom;
+  background: url('/images/nav_marker.gif') no-repeat center bottom;
 }
 
 #project_menu {
@@ -96,7 +96,7 @@ body {
 }
 
 .subnav .active {
-  background: url('/images/subnav_marker.png') no-repeat center bottom;
+  background: url('/images/subnav_marker.gif') no-repeat center bottom;
 }
 
 
