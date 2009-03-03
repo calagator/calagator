@@ -139,6 +139,26 @@ describe SourceParser::Ical, "with iCalendar events" do
     event.venue.longitude.should == BigDecimal.new("-122.626")
   end
 
+  it "should parse Upcoming iCalendar v2 format and associate the event with a venue" do
+    events = events_from_ical_at('ical_upcoming_v2.ics')
+    events.size.should == 1
+    event = events.first
+
+    event.title.should == "Demolicious - Portland Web Innovators"
+    event.start_time.should == Time.parse('Wed Apr 01 19:00:00 -0700 2009')
+    event.end_time.should   == Time.parse('Wed Apr 01 19:00:00 -0700 2009') # No end_time provided
+    event.description.should == "[Full details at http://upcoming.yahoo.com/event/1908530/ ] Come see the great stuff your fellow Portlanders have been working on. Several ten minute demos of new products and side projects.          Confirmed lineup:     * I Need to Read This! (Benjamin Stover)     * MioWorks (David Abramowski)     * Black Tonic (Jason Glaspey)     * Avatari (Sam Grover)     * You?          Find out more about showing off *your* project here:     http://www.pdxwi.com/demolicious"
+
+    event.venue.should_not be_blank
+    event.venue.title.should == "Jive Software"
+    event.venue.street_address.should == "915 SW Stark"
+    event.venue.locality.should == "Portland"
+    event.venue.country.should == "United States"
+    event.venue.postal_code.should be_nil # No postal_code provided
+    event.venue.latitude.should == BigDecimal.new("45.5219")
+    event.venue.longitude.should == BigDecimal.new("-122.68")
+  end
+
   it "should parse Google iCalendar feed with multiple events" do
     events = events_from_ical_at('ical_google.ics')
     # TODO add specs for venues/locations
