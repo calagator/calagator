@@ -8,6 +8,13 @@ class SourceParser
   # * :url - URL string to read as parser input.
   # * :content - String to read as parser input.
   def self.to_abstract_events(opts)
+    # Upcoming consistently breaks their hCalendar content and I can't keep fixing the parser. The following horrible hack rewrites Upcoming's hCalendar URLs into iCalendar URLs in hopes that they're paying more attention to iCalendar's validity and so that we've only got one single set of Upcoming parser hacks. Here's what the two types of URLs look like:
+    # hCalendar: http://upcoming.yahoo.com/event/1366250/
+    # iCalendar: webcal://upcoming.yahoo.com/calendar/v2/event/1366250
+    if matcher = opts[:url].ergo.match(%r{http://upcoming.yahoo.com/event/(\w+)})
+      opts[:url] = "http://upcoming.yahoo.com/calendar/v2/event/#{matcher[1]}"
+    end
+
     content = self.content_for(opts)
 
     returning([]) do |events|
