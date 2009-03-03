@@ -1,0 +1,43 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+X-WR-CALNAME:Upcoming Event: Demolicious - Portland Web Innovators
+PRODID:-//Upcoming.org/Upcoming ICS//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+DTSTART:20090401T190000
+DURATION:PT0S
+GEO:-122.68;45.5219
+TRANSP:TRANSPARENT
+SUMMARY:Demolicious - Portland Web Innovators
+DESCRIPTION: [Full details at http://upcoming.yahoo.com/event/1908530/ ] Come see the great stuff your fellow Portlanders have been working on. Several ten minute demos of new products and side projects.
+      
+      Confirmed lineup:
+      * I Need to Read This! (Benjamin Stover)
+      * MioWorks (David Abramowski)
+      * Black Tonic (Jason Glaspey)
+      * Avatari (Sam Grover)
+      * You?
+      
+      Find out more about showing off *your* project here:
+      http://www.pdxwi.com/demolicious
+URL;VALUE=URI:http://upcoming.yahoo.com/event/1908530/
+UID:http://upcoming.yahoo.com/event/1908530/
+DTSTAMP:20090225T171352
+LAST-UPDATED:20090225T171352
+CATEGORIES:Social
+ORGANIZER;CN=duvander:X-ADDR:http://upcoming.yahoo.com/user/48972/
+LOCATION;VENUE-UID="http://upcoming.yahoo.com/venue/179065/":Jive Software @ 915 SW Stark\, Portland\, Oregon US
+END:VEVENT
+BEGIN:VVENUE
+X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
+NAME:Jive Software
+ADDRESS:915 SW Stark
+CITY:Portland
+REGION;X-ABBREV=or:Oregon
+COUNTRY;X-ABBREV=us:United States
+POSTALCODE:
+GEO:45.5219;-122.68
+URL;X-LABEL=Venue Info:http://jivesoftware.com
+END:VVENUE
+END:VCALENDAR
