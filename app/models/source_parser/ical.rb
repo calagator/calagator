@@ -25,6 +25,7 @@ class SourceParser # :nodoc:
     VENUE_CONTENT_RE       = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
     VENUE_CONTENT_BEGIN_RE = /^BEGIN:VVENUE$/m
     VENUE_CONTENT_END_RE   = /^END:VVENUE$/m
+    IS_UPCOMING_RE         = /^PRODID:\W+Upcoming/m
 
     # Return an Array of AbstractEvent instances extracted from an iCalendar input.
     #
@@ -38,9 +39,20 @@ class SourceParser # :nodoc:
       cutoff = Time.now.yesterday
 
       content = content_for(opts).gsub(/\r\n/, "\n")
-      content_calendars = content.scan(CALENDAR_CONTENT_RE)
 
-      # FIXME Upcoming's iCalendar contains double BR entries, squash them
+      # Provide special handling for Upcoming's broken implementation of iCalendar
+      if content.match(IS_UPCOMING_RE)
+        # Strip out superflous self-referential Upcoming link
+        content.sub!(%r{\s*\[\s*Full details at http://upcoming.yahoo.com/event/\d+/?\s*\]\s*}m, '')
+
+        # Fix newlines in DESCRIPTION, replace them with escaped '\n' strings.
+        matches = content.scan(/^(DESCRIPTION:.+?)(?:^\w+[:;])/m)
+        matches.each do |match|
+          content.sub!(match[0], match[0].strip.gsub(/\n/, '\n')+"\r\n")
+        end
+      end
+
+      content_calendars = content.scan(CALENDAR_CONTENT_RE)
 
       returning([]) do |events|
         for content_calendar in content_calendars
