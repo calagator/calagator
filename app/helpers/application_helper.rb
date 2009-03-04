@@ -146,11 +146,8 @@ module ApplicationHelper
     # TODO Figure out how to set tabindex, because neither of these work right.
   end
 
-  require 'htmlentities'
-  HTMLEntitiesCoder = HTMLEntities.new
-
   # Returns a string with safely encoded entities thanks to #h, while preserving any existing HTML entities.
   def cleanse(string)
-    return h(HTMLEntitiesCoder.decode(string))
+    return escape_once(string)
   end
 end
