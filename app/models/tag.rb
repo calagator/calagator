@@ -24,17 +24,21 @@ class Tag < ActiveRecord::Base
       :message => "can not contain delimiter character: #{Tag::DELIMITER}"
   
     # Set up the polymorphic relationship.
-    has_many_polymorphs :taggables, 
-      :from => [:events, :venues, :sources], 
-      :through => :taggings, 
-      :dependent => :destroy,
-      :skip_duplicates => false, 
-      :parent_extend => proc {
-        # Defined on the taggable models, not on Tag itself. Return the tagnames associated with this record as a string.
-        def to_s
-          self.map(&:name).sort.join("#{Tag::DELIMITER} ")
-        end
-      }
+    begin
+      has_many_polymorphs :taggables, 
+        :from => [:events, :venues, :sources], 
+        :through => :taggings, 
+        :dependent => :destroy,
+        :skip_duplicates => false, 
+        :parent_extend => proc {
+          # Defined on the taggable models, not on Tag itself. Return the tagnames associated with this record as a string.
+          def to_s
+            self.map(&:name).sort.join("#{Tag::DELIMITER} ")
+          end
+        }
+    rescue NoMethodError => e
+      raise e unless $rails_gem_installer
+    end
     
     # Callback to strip extra spaces from the tagname before saving it. If you allow tags to be renamed later, you might want to use the <tt>before_save</tt> callback instead.
   

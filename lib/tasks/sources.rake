@@ -1,5 +1,4 @@
 namespace :sources do
-  Rake::Task[:environment].invoke
   # How old should a source be before it needs to be refreshed?
   SOURCE_STALE = Time.now - 1.hour
 
@@ -7,7 +6,7 @@ namespace :sources do
   UPDATE_STALE = Time.now - 2.weeks
 
   desc 'Get updates from our sources'
-  task :update do
+  task :update => :environment do
     sources = Source.find(:all, :order => "imported_at",
       :conditions => ['reimport = ? and imported_at < ?', true, SOURCE_STALE])
     puts "Nothing to do" unless sources.size > 0
@@ -33,7 +32,7 @@ namespace :sources do
   end
 
   desc 'Show update status for each source'
-  task :status do
+  task :status => :environment do
     sources = Source.find(:all, :conditions => {:reimport => true})
     sources.each do |source|
       puts "#{source.name}"
@@ -47,7 +46,7 @@ namespace :sources do
   end
 
   desc "Reset source import_at dates to force full reimport"
-  task :reset do
+  task :reset => :environment do
     puts "Resetting source imported_at dates:"
     Source.find(:all, :conditions => {:reimport => true}).each do |source|
       puts "- #{source.name}"

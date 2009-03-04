@@ -6,7 +6,6 @@ require 'net/https'
 require 'open-uri'
 require 'set'
 require 'uri'
-require 'uri'
 
 #===[ /lib ]============================================================
 
@@ -17,13 +16,17 @@ require 'ext'
 
 #===[ /vendor/gems ]====================================================
 
-require 'facets/boolean' # true? false?
-require 'facets/kernel/d' # Like 'p' but displays line number
-require 'facets/kernel/ergo' # Executes method only on non-nils
-require 'facets/kernel/in' # Does self contain one of the arguments?
-require 'facets/kernel/instance_exec' # Like instance_eval but can pass arguments
-require 'facets/kernel/not_nil' # Provides #not_nil?
-require 'facets/kernel/populate' # Assign multiple values to object via #populate and #set_from
-require 'facets/kernel/try' # Executes method only if object responds to it
-require 'facets/kernel/val' # Object has a value?
-require 'facets/kernel/with' # Like #returning but using #instance_eval.
+begin
+  require 'facets/boolean' # true? false?
+  require 'facets/kernel/d' # Like 'p' but displays line number
+  require 'facets/kernel/ergo' # Executes method only on non-nils
+  require 'facets/kernel/in' # Does self contain one of the arguments?
+  require 'facets/kernel/instance_exec' # Like instance_eval but can pass arguments
+  require 'facets/kernel/not_nil' # Provides #not_nil?
+  require 'facets/kernel/populate' # Assign multiple values to object via #populate and #set_from
+  require 'facets/kernel/try' # Executes method only if object responds to it
+  require 'facets/kernel/val' # Object has a value?
+  require 'facets/kernel/with' # Like #returning but using #instance_eval.
+rescue LoadError => e
+  raise e unless $rails_gem_installer 
+end
