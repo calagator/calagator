@@ -1,5 +1,5 @@
 namespace :data do
-  task :prepare do
+  task :prepare => [:environment] do
     require 'lib/data_marshal'
     require 'open-uri'
   end
