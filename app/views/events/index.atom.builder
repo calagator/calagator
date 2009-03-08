@@ -7,7 +7,7 @@ cache_if(@perform_caching, CacheObserver.daily_key_for("events_atom", request)) 
 
       for event in @events
         feed.entry(event) do |entry|
-          summary = "#{normalize_time(event.start_time)} on #{event.start_time.to_date.to_s(:long_ordinal)}"
+          summary = "#{normalize_time(event.start_time, event.end_time, :format => :text)}"
           summary += " at #{event.venue.title}" if event.venue && !event.venue.title.blank?
 
           entry.title(event.title)
