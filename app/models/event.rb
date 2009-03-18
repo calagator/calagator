@@ -87,6 +87,57 @@ class Event < ActiveRecord::Base
     return read_attribute(:description).ergo{self.gsub("\r\n", "\n").gsub("\r", "\n")}
   end
 
+  # XXX Horrible hack to materialize the #start_time= and #end_time= methods so they can be aliased by #start_time_with_smarter_setter= and #end_time_with_smarter_setter=.
+  Event.new(:start_time => Time.now, :end_time => Time.now)
+
+  # Set the start_time from one of a number of time values, a string, or an
+  # array of strings.
+  def start_time_with_smarter_setter=(value)
+    return self.class.set_time_on(self, :start_time, value)
+  end
+  alias_method_chain :start_time=, :smarter_setter
+
+  # Set the end_time to the given +value+, which could be a Time, Date,
+  # DateTime, String, Array of Strings, etc.
+  def end_time_with_smarter_setter=(value)
+    return self.class.set_time_on(self, :end_time, value)
+  end
+  alias_method_chain :end_time=, :smarter_setter
+
+  # Set the time in Event +record+ instance for an +attribute+ (e.g.,
+  # :start_time) to +value+ (e.g., a Time).
+  def self.set_time_on(record, attribute, value)
+    result = self.time_for(value)
+    case result
+    when Exception
+      record.errors.add(attribute, "is invalid")
+      return record.send("#{attribute}_without_smarter_setter=", nil)
+    else
+      return record.send("#{attribute}_without_smarter_setter=", result)
+    end
+  end
+
+  # Return the time for the +value+, which could be a Time, Date, DateTime,
+  # String, Array of Strings, etc.
+  def self.time_for(value)
+    value = value.join(' ') if value.kind_of?(Array)
+    case value
+    when NilClass
+      return nil
+    when String
+      return nil if value.blank?
+      begin
+        return Time.parse(value)
+      rescue Exception => e
+        return e
+      end
+    when Date, Time, DateTime, ActiveSupport::TimeWithZone
+      return value # Accept as-is.
+    else
+      raise TypeError, "Unknown type #{value.class.to_s.inspect} with value #{value.inspect}"
+    end
+  end
+
   #---[ Queries ]---------------------------------------------------------
 
   # Associate this event with the +venue+. The +venue+ can be given as a Venue
@@ -493,7 +544,8 @@ EOF
 protected
 
   def end_time_later_than_start_time
-    errors.add(:end_time, "End cannot be before start") \
-      unless end_time.nil? or end_time >= start_time
+    if start_time && end_time && end_time < start_time
+      errors.add(:end_time, "End cannot be before start")
+    end
   end
 end

@@ -454,6 +454,8 @@ describe EventsController, "when running integration test" do
 
   it "should create event for existing venue" do
     post "create",
+      :start_time => @event_params[:start_time],
+      :end_time   => @event_params[:end_time],
       :event      => @event_params,
       :venue_name => @venue.title
 
@@ -465,6 +467,8 @@ describe EventsController, "when running integration test" do
 
   it "should create event for exsiting venue and add tags" do
     post "create",
+      :start_time => @event_params[:start_time],
+      :end_time   => @event_params[:end_time],
       :event      => @event_params.merge(:tag_list => ",,foo,bar, baz,"),
       :venue_name => @venue.title
 
