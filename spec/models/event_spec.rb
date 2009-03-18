@@ -146,6 +146,9 @@ describe Event do
   end
 
   describe "when processing date" do
+    before(:each) do
+      @event = Event.new(:title => "MyEvent")
+    end
 
     # TODO: write integration specs for the following 2 tests
     it "should find all events with duplicate titles" do
@@ -165,6 +168,45 @@ describe Event do
       @event.should have(1).error_on(:end_time)
     end
 
+    it "should fail to validate if start time is set to invalid value" do
+      @event.start_time = "0/0/0"
+      @event.should_not be_valid
+      @event.should have(1).error_on(:start_time)
+    end
+
+  end
+
+  describe "time_for" do
+    before(:each) do
+      @date = "2009-01-02"
+      @time = "03:45"
+      @date_time = "#{@date} #{@time}"
+      @value = Time.parse(@date_time)
+    end
+
+    it "should return nil for a NilClass" do
+      Event.time_for(nil).should be_nil
+    end
+
+    it "should return time for a String" do
+      Event.time_for(@date_time).should == @value
+    end
+
+    it "should return time for an Array of Strings" do
+      Event.time_for([@date, @time]).should == @value
+    end
+
+    it "should return time for a Time" do
+      Event.time_for(@value).should == @value
+    end
+
+    it "should return exception for an invalid date expressed as a String" do
+      Event.time_for("0/0/0").should be_a_kind_of(Exception)
+    end
+
+    it "should raise exception for an invalid type" do
+      lambda { Event.time_for(Event) }.should raise_error(TypeError)
+    end
   end
 
   describe "when finding by dates" do
