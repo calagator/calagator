@@ -62,32 +62,30 @@ class Source < ActiveRecord::Base
   def create_events!(opts={})
     cutoff = Time.now.yesterday # All events before this date will be skipped
     events = []
-    transaction do
-      for event in self.to_events(opts)
-        if opts[:skip_old]
-          next if event.title.blank? && event.description.blank? && event.url.blank?
-          next if event.old?
-        end
-        
-        # Skip invalid events that start after they end
-        next if event.end_time && event.end_time < event.start_time
-        
-        # convert to local time, because time zone is simply discarded when event is saved
-        event.start_time.localtime
-        event.end_time.localtime if event.end_time
-    
-        # clear duplicate_of_id field in case to_events picked up orphaned duplicate
-        # TODO clear the duplicate_of_id at the point where the object is created, not down here
-        event.duplicate_of_id = nil if event.duplicate_of_id
-        event.save!
-        if event.venue
-          event.venue.duplicate_of_id = nil if event.venue.duplicate_of_id
-          event.venue.save! if event.venue
-        end
-        events << event
+    for event in self.to_events(opts)
+      if opts[:skip_old]
+        next if event.title.blank? && event.description.blank? && event.url.blank?
+        next if event.old?
       end
-      self.save!
+
+      # Skip invalid events that start after they end
+      next if event.end_time && event.end_time < event.start_time
+
+      # convert to local time, because time zone is simply discarded when event is saved
+      event.start_time.localtime
+      event.end_time.localtime if event.end_time
+
+      # clear duplicate_of_id field in case to_events picked up orphaned duplicate
+      # TODO clear the duplicate_of_id at the point where the object is created, not down here
+      event.duplicate_of_id = nil if event.duplicate_of_id
+      event.save!
+      if event.venue
+        event.venue.duplicate_of_id = nil if event.venue.duplicate_of_id
+        event.venue.save! if event.venue
+      end
+      events << event
     end
+    self.save!
     return events
   end
 
