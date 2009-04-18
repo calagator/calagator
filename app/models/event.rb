@@ -87,22 +87,28 @@ class Event < ActiveRecord::Base
     return read_attribute(:description).ergo{self.gsub("\r\n", "\n").gsub("\r", "\n")}
   end
 
-  # XXX Horrible hack to materialize the #start_time= and #end_time= methods so they can be aliased by #start_time_with_smarter_setter= and #end_time_with_smarter_setter=.
-  Event.new(:start_time => Time.now, :end_time => Time.now)
+  begin
+    # XXX Horrible hack to materialize the #start_time= and #end_time= methods so they can be aliased by #start_time_with_smarter_setter= and #end_time_with_smarter_setter=.
+    Event.new(:start_time => Time.now, :end_time => Time.now)
 
-  # Set the start_time from one of a number of time values, a string, or an
-  # array of strings.
-  def start_time_with_smarter_setter=(value)
-    return self.class.set_time_on(self, :start_time, value)
-  end
-  alias_method_chain :start_time=, :smarter_setter
+    # Set the start_time from one of a number of time values, a string, or an
+    # array of strings.
+    def start_time_with_smarter_setter=(value)
+      return self.class.set_time_on(self, :start_time, value)
+    end
+    alias_method_chain :start_time=, :smarter_setter
 
-  # Set the end_time to the given +value+, which could be a Time, Date,
-  # DateTime, String, Array of Strings, etc.
-  def end_time_with_smarter_setter=(value)
-    return self.class.set_time_on(self, :end_time, value)
+    # Set the end_time to the given +value+, which could be a Time, Date,
+    # DateTime, String, Array of Strings, etc.
+    def end_time_with_smarter_setter=(value)
+      return self.class.set_time_on(self, :end_time, value)
+    end
+    alias_method_chain :end_time=, :smarter_setter
+  rescue ActiveRecord::StatementInvalid => e
+    msg = "WARNING: Unable to wrap Event's time setters, this should only happen if you're setting up the database for the first time. Raw error: #{e}"
+    puts msg
+    Rails.logger.warn(msg)
   end
-  alias_method_chain :end_time=, :smarter_setter
 
   # Set the time in Event +record+ instance for an +attribute+ (e.g.,
   # :start_time) to +value+ (e.g., a Time).
