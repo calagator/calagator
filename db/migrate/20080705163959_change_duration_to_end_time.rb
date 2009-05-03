@@ -3,7 +3,7 @@ class ChangeDurationToEndTime < ActiveRecord::Migration
     add_column :events, :end_time, :datetime
     
     # convert events that have a duration
-    events = Event.find(:all, :conditions => "duration NOT NULL")
+    events = Event.find(:all, :conditions => "duration IS NOT NULL")
     for event in events
       event.write_attribute(:end_time, event.start_time + (event.duration * 1.minute) )
       event.save!
@@ -17,7 +17,7 @@ class ChangeDurationToEndTime < ActiveRecord::Migration
     add_column :events, :duration, :integer
 
   # convert events that have an end time
-    events = Event.find(:all, :conditions => "end_time NOT NULL")
+    events = Event.find(:all, :conditions => "end_time IS NOT NULL")
     for event in events
       raise "Events ends before it starts" if (event.read_attribute(:end_time) < event.start_time)
       event.duration = ( (event.read_attribute(:end_time) - event.start_time) / 1.minute).ceil
@@ -33,7 +33,7 @@ class ChangeDurationToEndTime < ActiveRecord::Migration
     add_column :events, :end_time, :datetime
     
     # convert events that have a duration
-    events = Event.find(:all, :conditions => "duration NOT NULL")
+    events = Event.find(:all, :conditions => "duration IS NOT NULL")
     for event in events
       event.write_attribute(:end_time, event.start_time + (event.duration * 1.minute) )
       event.save!
@@ -47,7 +47,7 @@ class ChangeDurationToEndTime < ActiveRecord::Migration
     add_column :events, :duration, :integer
 
   # convert events that have an end time
-    events = Event.find(:all, :conditions => "end_time NOT NULL")
+    events = Event.find(:all, :conditions => "end_time IS NOT NULL")
     for event in events
       raise "Events ends before it starts" if (event.read_attribute(:end_time) < event.start_time)
       event.duration = ( (event.read_attribute(:end_time) - event.start_time) / 1.minute).ceil
