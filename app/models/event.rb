@@ -242,7 +242,7 @@ class Event < ActiveRecord::Base
       :end_of_range => end_of_range.utc }
 
     if venue = opts[:venue]
-      conditions_sql << " AND venues.id == :venue"
+      conditions_sql << " AND venues.id = :venue"
       conditions_vars[:venue] = venue.id
     end
 
