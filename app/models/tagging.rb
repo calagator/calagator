@@ -13,7 +13,7 @@
 # The Tagging join model. This model is automatically generated and added to your app if you run the tagging generator included with has_many_polymorphs.
 
 class Tagging < ActiveRecord::Base 
-  if table_exists?
+  if (table_exists? rescue nil)
     belongs_to :tag
     belongs_to :taggable, :polymorphic => true
 
