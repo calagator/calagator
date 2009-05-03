@@ -87,7 +87,7 @@ class Event < ActiveRecord::Base
     return read_attribute(:description).ergo{self.gsub("\r\n", "\n").gsub("\r", "\n")}
   end
 
-  begin
+  if (table_exists? rescue nil)
     # XXX Horrible hack to materialize the #start_time= and #end_time= methods so they can be aliased by #start_time_with_smarter_setter= and #end_time_with_smarter_setter=.
     Event.new(:start_time => Time.now, :end_time => Time.now)
 
@@ -104,10 +104,6 @@ class Event < ActiveRecord::Base
       return self.class.set_time_on(self, :end_time, value)
     end
     alias_method_chain :end_time=, :smarter_setter
-  rescue ActiveRecord::StatementInvalid => e
-    msg = "WARNING: Unable to wrap Event's time setters, this should only happen if you're setting up the database for the first time. Raw error: #{e}"
-    puts msg
-    Rails.logger.warn(msg)
   end
 
   # Set the time in Event +record+ instance for an +attribute+ (e.g.,

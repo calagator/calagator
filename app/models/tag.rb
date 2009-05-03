@@ -11,7 +11,7 @@
 # The Tag model. This model is automatically generated and added to your app if you run the tagging generator included with has_many_polymorphs.
 
 class Tag < ActiveRecord::Base
-  if table_exists?
+  if (table_exists? rescue nil)
     DELIMITER = "," # Controls how to split and join tagnames from strings. You may need to change the <tt>validates_format_of parameters</tt> if you change this.
 
     # If database speed becomes an issue, you could remove these validations and rescue the ActiveRecord database constraint errors instead.
