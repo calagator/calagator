@@ -109,8 +109,12 @@ Rails::Initializer.run do |config|
     }
   )
 
-  # Set timezone
+  # Set timezone for Rails
   config.time_zone = SETTINGS.timezone
+
+  # Set timezone for OS
+  # FIXME this is an evil temporary workaround, in future SETTINGS.timezone will be enough
+  ENV['TZ'] = SETTINGS.tz if SETTINGS.tz
 
   # Set cookie session
   config.action_controller.session = {
