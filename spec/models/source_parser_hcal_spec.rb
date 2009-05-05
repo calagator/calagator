@@ -99,8 +99,9 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
       @event.title.should == 'February BarCamp Portland Informal Tech Meetup'
       @event.description.should =~ /The intent is to get a group of cool people/
       # FIXME why is start_time a Time, while end_time is a String?!
-      @event.start_time.should == Time.parse('2008-02-28 5:30PM PST').to_s
-      @event.end_time.should == Time.parse('2008-02-28 7:30PM PST')
+      # NOTE: Source does not include timezone?!
+      @event.start_time.should == Time.parse('2008-02-28 5:30PM').to_s
+      @event.end_time.should == Time.parse('2008-02-28 7:30PM')
       @event.url.should == 'http://barcamp.org/BarCampPortlandMeetups'
     end
 
@@ -131,8 +132,9 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
       @event.title.should == 'Ignite Portland 4'
       @event.description.should =~ /Save the date! Ignite Portland 4 will happen/
       # TODO why is start_time a Time, while end_time is a String?!
-      @event.start_time.should == Time.parse('2008-11-13 7:00PM PST').to_s
-      @event.end_time.should == Time.parse('2008-11-13 9:00PM PST')
+      # NOTE: Source does not include timezone?!
+      @event.start_time.should == Time.parse('2008-11-13 7:00PM').to_s
+      @event.end_time.should == Time.parse('2008-11-13 9:00PM')
       @event.url.should == 'http://www.igniteportland.com'
     end
 
@@ -163,7 +165,8 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
       @event.title.should == 'Ignite Portland 5'
       @event.description.should =~ /Save the date! Ignite Portland 5 will happen/
       # TODO why is start_time a Time, while end_time is a String?!
-      @event.start_time.should == Time.parse('2009-02-19 7:00PM PST').to_s
+      # NOTE: Source does not include timezone?!
+      @event.start_time.should == Time.parse('2009-02-19 7:00PM').to_s
       @event.end_time.should be_nil # This specific event has no DTEND
       @event.url.should == 'http://www.igniteportland.com'
     end
@@ -195,7 +198,8 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
       @event.title.should == 'Lunch 2.0 Party Train to OTBC'
       @event.description.should =~ /Here('|&#39;)s the scoop: Meet up at Pioneer Square/
       # TODO why is start_time a Time, while end_time is a String?!
-      @event.start_time.should == Time.parse('2009-01-14 11:00AM PST').to_s
+      # NOTE: Source does not include timezone?!
+      @event.start_time.should == Time.parse('2009-01-14 11:00').to_s
       @event.end_time.should be_nil # This specific event has no DTEND
       @event.url.should be_nil
     end
