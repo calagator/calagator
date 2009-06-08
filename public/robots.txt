@@ -2,4 +2,16 @@
 
 # Allow visits to all pages, except the edit forms
 User-Agent: *
-Disallow: /*/*/edit
+Disallow: /omfg
+Disallow: /recent_changes
+Disallow: /sources
+Disallow: /sources/import
+Disallow: /events/search
+Disallow: /sources/new
+Disallow: /events/new
+Disallow: /venues/new
+Disallow: /events/duplicates
+Disallow: /venues/duplicates
+Disallow: /events/*/edit
+Disallow: /venues/*/edit
+Disallow: /sources/*/edit
