@@ -5,3 +5,4 @@
 \btamiflu\b
 \bnude\b
 \bsex\s+tape\b
+\bmichael\s+jackson\s+died\b
