@@ -148,6 +148,37 @@ describe EventsController, "when creating or updating events" do
       response.should redirect_to(event_path(@event))
     end
 
+    it "should associate a venue based on a given venue id" do
+      @params[:event]["venue_id"] = @venue.id.to_s
+      Event.should_receive(:new).with(@params[:event]).and_return(@event)
+      @event.should_receive(:associate_with_venue).with(@venue.id)
+      @event.stub!(:venue).and_return(@venue)
+      @event.should_receive(:save).and_return(true)
+
+      post "create", @params
+    end
+
+    it "should associate a venue based on a given venue name" do
+      @params[:venue_name] = "Some Event"
+      Event.should_receive(:new).with(@params[:event]).and_return(@event)
+      @event.should_receive(:associate_with_venue).with("Some Event")
+      @event.stub!(:venue).and_return(@venue)
+      @event.should_receive(:save).and_return(true)
+
+      post "create", @params
+    end
+
+    it "should associate a venue by id when both an id and a name are provided" do
+      @params[:event]["venue_id"] = @venue.id.to_s
+      @params[:venue_name] = "Some Event"
+      Event.should_receive(:new).with(@params[:event]).and_return(@event)
+      @event.should_receive(:associate_with_venue).with(@venue.id)
+      @event.stub!(:venue).and_return(@venue)
+      @event.should_receive(:save).and_return(true)
+
+      post "create", @params
+    end
+
     it "should create a new event for an existing venue" do
       @params[:venue_name] = "Old Venue"
       Event.should_receive(:new).with(@params[:event]).and_return(@event)
@@ -212,6 +243,37 @@ describe EventsController, "when creating or updating events" do
 
       put "update", @params
       response.should redirect_to(event_path(@event))
+    end
+
+    it "should associate a venue based on a given venue id" do
+      @params[:event]["venue_id"] = @venue.id.to_s
+      Event.should_receive(:find).and_return(@event)
+      @event.should_receive(:associate_with_venue).with(@venue.id)
+      @event.stub!(:venue).and_return(@venue)
+      @event.should_receive(:update_attributes).and_return(true)
+
+      post "update", @params
+    end
+
+    it "should associate a venue based on a given venue name" do
+      @params[:venue_name] = "Some Event"
+      Event.should_receive(:find).and_return(@event)
+      @event.should_receive(:associate_with_venue).with("Some Event")
+      @event.stub!(:venue).and_return(@venue)
+      @event.should_receive(:update_attributes).and_return(true)
+
+      post "update", @params
+    end
+
+    it "should associate a venue by id when both an id and a name are provided" do
+      @params[:event]["venue_id"] = @venue.id.to_s
+      @params[:venue_name] = "Some Event"
+      Event.should_receive(:find).and_return(@event)
+      @event.should_receive(:associate_with_venue).with(@venue.id)
+      @event.stub!(:venue).and_return(@venue)
+      @event.should_receive(:update_attributes).and_return(true)
+
+      post "update", @params
     end
 
     it "should update an event and associate it with an existing venue" do
