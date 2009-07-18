@@ -289,6 +289,9 @@ class Event < ActiveRecord::Base
   # Number of search matches to return by default.
   SOLR_SEARCH_MATCHES = 50
 
+  # Default search sort order
+  DEFAULT_SEARCH_ORDER = :score
+
   # Return an Array of non-duplicate Event instances matching the search +query+..
   #
   # Options:
@@ -303,7 +306,7 @@ class Event < ActiveRecord::Base
   def self.search(query, opts={})
     skip_old = opts[:skip_old] == true
     limit = opts[:limit] || SOLR_SEARCH_MATCHES
-    order = opts[:order].ergo.to_sym || :score
+    order = opts[:order].ergo.to_sym || DEFAULT_SEARCH_ORDER
 
     formatted_query = \
       %{NOT duplicate_for_solr:"1" AND (} \

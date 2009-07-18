@@ -55,6 +55,6 @@ module EventsHelper
   end
 
   def events_sort_label(key)
-    " by <strong>#{(FRIENDLY_SORT_LABELS[key] || "date").downcase}.</strong>"
+    " by <strong>#{(FRIENDLY_SORT_LABELS[key] || Event::DEFAULT_SEARCH_ORDER).to_s.downcase}.</strong>"
   end
 end
