@@ -366,8 +366,12 @@ class Event < ActiveRecord::Base
   # Return events grouped by their currentness. Accepts the same +args+ as
   # #search. The results hash is keyed by whether the event is current
   # (true/false) and the values are arrays of events.
-  def self.search_grouped_by_currentness(*args)
-    return self.group_by_currentness(self.search(*args))
+  def self.search_grouped_by_currentness(query, opts={})
+    events = self.group_by_currentness(self.search(query, opts))
+    if events[:past] && opts[:order].to_s == "date"
+      events[:past].reverse!
+    end
+    return events
   end
 
   # Return +events+ grouped by currentness using a data structure like:
