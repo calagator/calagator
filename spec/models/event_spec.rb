@@ -413,9 +413,10 @@ describe Event do
   end
 
   describe "when associating with venues" do
+    fixtures :venues
 
     before(:each) do
-      @venue = mock_model(Venue, :title => "MyVenue", :duplicate? => false)
+      @venue = venues(:cubespace)
     end
 
     it "should not change a venue to a nil venue" do
@@ -427,16 +428,9 @@ describe Event do
     end
 
     it "should change an existing venue to a different one" do
-      @event.venue = mock_model(Venue, :title => "OtherVenue")
+      @event.venue = venues(:duplicate_venue)
 
       @event.associate_with_venue(@venue).should == @venue
-    end
-
-    it "should not change a venue if associated with one of same name" do
-      venue2 = mock_model(Venue, :title => "MyVenue")
-      @event.venue = venue2
-
-      @event.associate_with_venue(@venue).should == venue2
     end
 
     it "should clear an existing venue if given a nil venue" do
@@ -453,9 +447,23 @@ describe Event do
     end
 
     it "should associate venue by id" do
-      Venue.should_receive(:find).and_return(@venue)
+      @event.associate_with_venue(@venue.id).should == @venue
+    end
 
-      @event.associate_with_venue(1234).should == @venue
+    it "should raise an exception if there's a loop in the duplicates chain" do
+      venue1 = stub_model(Venue, :id => 123)
+      venue2 = stub_model(Venue, :id => 321, :duplicate_of => venue1)
+      venue1.stub!(:duplicate_of => venue2)
+
+      Venue.should_receive(:find).and_return do |key|
+        case key
+        when 123 then venue1
+        when 321 then venue2
+        else raise ArgumentError, "Unknown key: #{key.inspect}"
+        end
+      end
+
+      lambda { @event.associate_with_venue(venue1.id) }.should raise_error(DuplicateCheckingError)
     end
 
     it "should raise an exception if associated with an unknown type" do

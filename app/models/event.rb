@@ -154,9 +154,9 @@ class Event < ActiveRecord::Base
       else raise TypeError, "Unknown type: #{venue.class}"
       end
 
-    if venue && ((self.venue && self.venue.title != venue.title) || (!self.venue))
-      # Set venue if it was nil or had a different title
-      self.venue = venue.duplicate? ? venue.duplicate_of : venue
+    if venue && ((self.venue && self.venue != venue) || (!self.venue))
+      # Set venue if one is provided and it's different than the current, or no venue is currently set.
+      self.venue = venue.progenitor
     elsif !venue && self.venue
       # Clear the event's venue field
       self.venue = nil
