@@ -7,9 +7,12 @@
    
 -------------------------------------------------------------- */
 
+
 /* Make sure the layout is centered in IE5 */
+/* FIXME this doesn't actually work
 body { text-align: center; }
 .container { text-align: left; }
+*/
 
 /* Fixes IE margin bugs */
 * html .column { overflow-x: hidden; }
@@ -33,3 +36,11 @@ html>body p code { *white-space: normal; }
 
 /* IE 6&7 has problems with setting proper <hr> margins. */
 hr  { margin: -8px auto 11px; }
+
+/*---[ Overrides ]----------------------------------------------------*/
+
+ul.event_list .list_date {
+  top: 0px;
+  margin-left: -10em;
+  margin-top: 1.5em;
+}
