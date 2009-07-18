@@ -72,13 +72,23 @@ module DuplicateChecking
     !self.slave?
   end
   
-  # return ultimate master
-  # progenitor is the record itself if: 
-  #   record is not marked as duplicate, or if parent doesn't exist
+  # Return the ultimate master for a record, which may be the record itself.
   def progenitor
     parent = self
-    parent = parent.class.find(parent.duplicate_of_id) until parent.master?
-    return parent
+    seen = Set.new
+
+    while true
+      if parent.master?
+        return parent
+      else
+        if seen.include?(parent)
+          raise DuplicateCheckingError, "Loop detected in duplicates chain at #{parent.class}##{parent.id}"
+        else
+          seen << parent
+          parent = parent.duplicate_of
+        end
+      end
+    end
   end
   
   # Return either an Array of exact duplicates for this record, or nil if no exact duplicates were found.
@@ -275,4 +285,7 @@ module DuplicateChecking
     end
 
   end
+end
+
+class DuplicateCheckingError < Exception
 end
