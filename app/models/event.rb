@@ -311,6 +311,7 @@ class Event < ActiveRecord::Base
     formatted_query = \
       %{NOT duplicate_for_solr:"1" AND (} \
       << query \
+      .downcase \
       .gsub(/:/, '?') \
       .scan(/\S+/) \
       .map(&:escape_lucene) \
@@ -419,9 +420,10 @@ class Event < ActiveRecord::Base
     self.venue.ergo.title.to_s.downcase
   end
 
-  # Return a string of all indexable fields, which may be useful for doing duplicate checks
+  # Return a string containing the text of all the indexable fields joined together.
   def text_for_solr
-    INDEXABLE_FIELDS.reject{|name| name == :text_for_solr}.map{|name| self.send(name)}.join("|").to_s
+    # NOTE: The #text_for_solr method is one of the INDEXABLE_FIELDS, so don't indexing it to avoid an infinite loop. Some fields are methods, not database columns, so use #send rather than read_attribute.
+    (INDEXABLE_FIELDS - [:text_for_solr]).map{|name| self.send(name).to_s.downcase}.join("|").to_s
   end
 
   #---[ Transformations ]-------------------------------------------------
