@@ -35,7 +35,8 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'hello', :controller => 'site', :action => 'hello'
   map.connect 'about', :controller => 'site', :action => 'about'
   
-  map.recent_changes 'recent_changes.:format', :controller => 'site', :action => 'recent_changes'
+  map.recent_changes 'recent_changes.:format', :controller => 'changes', :action => 'show'
+  map.rollback_to 'recent_changes/rollback_to/:version', :controller => 'changes', :action => 'rollback_to', :conditions => { :method => :post }
 
   # Normal controllers
   map.resources :events, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'search' => :get}

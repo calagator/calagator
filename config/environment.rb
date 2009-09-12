@@ -32,6 +32,7 @@ Rails::Initializer.run do |config|
   # config.gem "has_many_polymorphs", :version => "2.12"
   config.gem "johnsbrn-has_many_polymorphs", :lib => 'has_many_polymorphs', :source => "http://gems.github.com", :version => ">=2.13.4"
   config.gem 'airblade-paper_trail', :lib => 'paper_trail', :source => 'http://gems.github.com'
+  config.gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com'
 
   config.gem "hpricot"
   config.gem "rubyzip", :lib =>  "zip/zip"
