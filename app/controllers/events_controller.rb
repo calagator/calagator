@@ -155,8 +155,6 @@ class EventsController < ApplicationController
   # DELETE /events/1
   # DELETE /events/1.xml
   def destroy
-    raise "Sorry, you can't delete right now." # FIXME
-
     @event = Event.find(params[:id])
     @event.destroy
 

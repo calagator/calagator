@@ -109,8 +109,6 @@ class VenuesController < ApplicationController
   # DELETE /venues/1
   # DELETE /venues/1.xml
   def destroy
-    raise "Sorry, you can't delete right now." # FIXME
-
     @venue = Venue.find(params[:id])
     @venue.destroy
 
