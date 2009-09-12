@@ -1,7 +1,7 @@
 <% unless @event.versions.empty? %>
 <form>
   <div>
-    Version <%= select_tag("version", options_for_select(@event.versions.reverse.map { |v| ["#{v.version}: #{v.updated_at.strftime('%B %d, %Y at %I:%M %p')}", v.version]})) %><img alt="Spinner" id="version_loading" src="/images/spinner.gif?1214384400" style="display: none; margin-left: 0.5em;" />
+    Version <%= select_tag("version", options_for_select([['Current', -1]] + @event.versions.reverse.map { |v| ["#{v.id}: #{v.created_at.strftime('%B %d, %Y at %I:%M %p')}", v.id]})) %><img alt="Spinner" id="version_loading" src="/images/spinner.gif?1214384400" style="display: none; margin-left: 0.5em;" />
   </div>
 </form>
 <%= observe_field :version, :url => { :action => :refresh_version, :id => @event.id },

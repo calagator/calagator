@@ -228,8 +228,12 @@ class EventsController < ApplicationController
   end
 
   def refresh_version
-    @event = Event.find(params[:id])
-    @event.revert_to(params[:version])
+    @event = \
+      if params[:version] == '-1'
+        Event.find(params[:id])
+      else
+        Version.find(params[:version]).reify
+      end
     render :partial => 'form', :locals => { :event => @event}
   end
 
