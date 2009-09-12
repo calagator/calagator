@@ -49,7 +49,7 @@ class Venue < ActiveRecord::Base
     acts_as_solr :fields => INDEXABLE_FIELDS
   end
   
-  acts_as_versioned
+  has_paper_trail
 
   include VersionDiff
 

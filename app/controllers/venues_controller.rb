@@ -139,8 +139,12 @@ class VenuesController < ApplicationController
   end
   
   def refresh_version
-    @venue = Venue.find(params[:id])
-    @venue.revert_to(params[:version])
+    @venue = \
+      if params[:version] == '-1'
+        Venue.find(params[:id])
+      else
+        Version.find(params[:version]).reify
+      end
     render :partial => 'form', :locals => { :venue => @venue}
   end
 end
