@@ -643,18 +643,18 @@ describe Event do
 
   end
 
-  describe "acting as versioned" do
+  describe "when versioning" do
     it "should have versions" do
-      Event.new.versions.should==[]
+      Event.new.versions.should == []
     end
     
-    it "should increment the version number when editing" do
+    it "should create a new version after updating" do
       event = Event.create!(:title => "Event title", :start_time => Time.parse('2008.04.12'))
-      event.version.should==1
+      event.versions.count.should == 1
       
       event.title = "New Title"
       event.save!
-      event.version.should==2
+      event.versions.count.should == 2
     end
   end
 

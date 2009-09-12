@@ -311,18 +311,25 @@ describe "Venue geocode addressing" do
     @venue.geocode_address.should == "address"
   end
   
-  describe "acting as versioned" do
+  describe "when versioning" do
     it "should have versions" do
-      Venue.new.versions.should==[]
+      Venue.new.versions.should == []
     end
     
-    it "should increment the version number when editing" do
+    it "should create a new version after updating" do
       venue = Venue.create!(:title => 'My Event')
-      venue.version.should==1
+      venue.versions.count.should == 1
       
       venue.title = "New Title"
       venue.save!
-      venue.version.should==2
+      venue.versions.count.should == 2
+    end
+
+    it "should store old content in past versions" do
+      venue = Venue.create!(:title => "Original title")
+      venue.title = "New Title"
+      venue.save!
+      venue.versions.last.reify.title.should == "Original title"
     end
   end
 end
