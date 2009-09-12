@@ -13,6 +13,7 @@ require 'rexml-expansion-fix' # TODO Remove this after switching to a patched Ru
 require 'metaclass'
 require 'tagging_extensions'
 require 'ext'
+require 'defer_proxy'
 
 #===[ /vendor/gems ]====================================================
 
