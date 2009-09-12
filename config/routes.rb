@@ -53,7 +53,11 @@ ActionController::Routing::Routes.draw do |map|
   # Site root
   map.root :controller => "site"
 
-  # See how all your routes lay out with "rake routes"
+  # Manually added routes for theme_support since the routing included in the plugin doesn't seem to included at any point.
+  # vendor/plugins/theme_support/lib/patches/routeset_ex.rb
+  map.theme_images '/themes/:theme/images/*filename', :action => 'images', :controller => 'theme'
+  map.theme_stylesheets '/themes/:theme/stylesheets/*filename', :action => 'stylesheets', :controller => 'theme'
+  map.theme_javascript '/themes/:theme/javascript/*filename', :action => 'javascript', :controller => 'theme'
 
   # Install the default routes as the lowest priority.
   map.connect ':controller/:action/:id'
