@@ -3,9 +3,9 @@
 <html>
    <head>
       <title></title>
-      <link href="{% themeitem %} <%= file_name %>.css {% endthemeitem %}" media="screen" rel="Stylesheet" type="text/css" />
+      <%%= theme_stylesheet_link_tag '<%= file_name %>' %>
    </head>
    <body>
-      {{ content_for_layout }}
+      <%= yield %>
    </body>
 </html>

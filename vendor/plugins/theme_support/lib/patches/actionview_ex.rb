@@ -1,42 +1,19 @@
 module ActionView
+  class Base
 
-	class Base
+    alias_method :theme_support_old_view_paths, :view_paths
 
-		alias_method :theme_support_old_render_file, :render_file
+    def view_paths
+      paths = theme_support_old_view_paths
 
-		def render_file(template_path, use_full_path = false, local_assigns = {})
-			search_path = [
-				"#{RAILS_ROOT}/themes/#{controller.current_theme}/views",
-				"#{RAILS_ROOT}/themes/#{controller.current_theme}",
-			]
-			@finder.prepend_view_path(search_path)
-			local_assigns['active_theme'] = get_current_theme(local_assigns)
-			theme_support_old_render_file(template_path, use_full_path, local_assigns)
-		end
+      if controller and controller.current_theme
+        theme_path = File.join(RAILS_ROOT, "themes", controller.current_theme, "views")
+        if File.exists?(theme_path) and ! paths.include?(theme_path)
+          paths.unshift(theme_path)
+        end
+      end
 
-		private
-   
-		def force_liquid?
-			unless controller.nil?
-				if controller.respond_to?('force_liquid_template')
-					controller.force_liquid_template
-				end
-			else
-				false
-			end
-		end
-
-		def get_current_theme(local_assigns)
-			unless controller.nil?
-				if controller.respond_to?('current_theme')
-					return controller.current_theme || false
-				end
-			end
-			if local_assigns.include? :current_theme
-				return local_assigns.delete :current_theme
-			end
-		end
-
-	end
-
+      paths
+    end
+  end
 end

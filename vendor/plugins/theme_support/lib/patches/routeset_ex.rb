@@ -1,20 +1,20 @@
-class ActionController::Routing::RouteSet
+module ThemeSupport
+  module RoutingExtensions
+    def themeing
+      @set.with_options :controller => 'theme' do |theme|
+        theme.add_named_route 'theme_images',
+          '/themes/:theme/images/*filename', :action => 'images'
 
-	alias_method :__draw, :draw
+        theme.add_named_route 'theme_stylesheets',
+          '/themes/:theme/stylesheets/*filename', :action => 'stylesheets'
 
-	def draw
-		clear!
-		map = Mapper.new(self)
-		create_theme_routes(map)
-		yield map
-		named_routes.install
-	end
+        theme.add_named_route 'theme_javascript',
+          '/themes/:theme/javascript/*filename', :action => 'javascript'
 
-	def create_theme_routes(map)
-		map.theme_images "/themes/:theme/images/*filename", :controller=>'theme', :action=>'images'
-		map.theme_stylesheets "/themes/:theme/stylesheets/*filename", :controller=>'theme', :action=>'stylesheets'
-		map.theme_javascript "/themes/:theme/javascript/*filename", :controller=>'theme', :action=>'javascript'
-		map.connect "/themes/*whatever", :controller=>'theme', :action=>'error'
-	end
-
+        theme.add_route '/themes/*whatever', :action => 'error'
+      end
+    end
+  end
 end
+
+ActionController::Routing::RouteSet::Mapper.send :include, ThemeSupport::RoutingExtensions
