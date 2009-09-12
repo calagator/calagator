@@ -28,9 +28,9 @@
 
     <!-- JavaScripts, inserted -->
     <%= yield :javascript_insert %>
-    
+
     <!-- Auto-discovery, static -->
-    <%= auto_discovery_link_tag(:atom, formatted_events_url('atom'), :title => 'Atom: All Events' )%>
+    <%= auto_discovery_link_tag(:atom, events_url(:format => 'atom'), :title => 'Atom: All Events' )%>
 
     <!-- Auto-discovery, inserted -->
     <%= yield :discovery_insert %>
@@ -101,6 +101,6 @@
         pageTracker._trackPageview();
       </script>
     <% end %>
-    
+
   </body>
 </html>
