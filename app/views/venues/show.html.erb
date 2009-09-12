@@ -72,10 +72,7 @@
   <div id='edit_link'>
     <p>
       You can <%= link_to "edit", edit_venue_url(@venue) %>
-      <%# FIXME temporarily hiding delete %>
-      <% if false %>
       or <%= link_to "delete", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>
-      <% end %>
       this venue.
     </p>
   </div>
