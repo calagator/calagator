@@ -31,6 +31,7 @@ Rails::Initializer.run do |config|
   # NOTE: There's an evil "has_many_polymorphs" 2.13 that's broken, and a "johnsbrn-has_many_polymorphs" 2.13.3 that that only works with Rails 2.2
   # config.gem "has_many_polymorphs", :version => "2.12"
   config.gem "johnsbrn-has_many_polymorphs", :lib => 'has_many_polymorphs', :source => "http://gems.github.com", :version => ">=2.13.4"
+  config.gem 'airblade-paper_trail', :lib => 'paper_trail', :source => 'http://gems.github.com'
 
   config.gem "hpricot"
   config.gem "rubyzip", :lib =>  "zip/zip"
