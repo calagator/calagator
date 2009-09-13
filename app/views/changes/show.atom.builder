@@ -3,8 +3,8 @@ atom_feed do |feed|
   feed.title("#{SETTINGS.name} detailed changes")
   feed.updated(@versions.ergo{|v| v.first.created_at } || Time.at(0))
 
-  @versions.each_with_index do |version, i|
-    feed.entry(version, :url => url_for(:controller => version.item_type.tableize, :action => "show", :id => version.item_id)) do |entry|
+  @versions.each do |version|
+    feed.entry(version, :url => recent_changes_path(:anchor => "#{version.id}")) do |entry|
       changes = changes_for(version)
       user = Member.find(version.whodunnit) rescue nil
 

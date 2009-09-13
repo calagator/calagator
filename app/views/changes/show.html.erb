@@ -16,13 +16,15 @@
       </td>
       <td class="change_details">
         <p class="change_detail_description">
-          <b><%= version.event.titleize %></b>
-          <%= link_to "#{version.item_type}##{version.item_id}", url_for(:controller => version.item_type.tableize, :action => "show", :id => version.item_id) %> - <%= link_to "Rollback to this version.", rollback_to_path(:version => version.id), :method => :post %>
-          <% if version.whodunnit %>
-          <% if user = Member.find(version.whodunnit) rescue nil %>
-          by <%= link_to h(user.name), member_path(user) %>
-          <% end %>
-          <% end %>
+            <a name="<%= version.id %>">
+            <b><%= version.event.titleize %></b>
+            <%= link_to "#{version.item_type}##{version.item_id}", url_for(:controller => version.item_type.tableize, :action => "show", :id => version.item_id) %> &mdash; <%= link_to "Rollback this change", rollback_to_path(:version => version.id), :method => :post, :confirm => 'Are you sure?' %>
+            <% if version.whodunnit %>
+              <% if user = Member.find(version.whodunnit) rescue nil %>
+                by <%= link_to h(user.name), member_path(user) %>
+              <% end %>
+            <% end %>
+          </a>
         </p>
 
         <% changes = changes_for(version) %>
