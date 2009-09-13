@@ -19,21 +19,25 @@ module RecentChangesHelper
   def changes_for(version)
     changes = {}
 
-    a = version.item_type.constantize.find(version.item_id) rescue nil
-    b = version.reify
+    current = version.item_type.constantize.find(version.item_id) rescue nil
+    previous = version.reify
 
-    # TODO Why does this work?
-    if a.nil? && b.nil?
-      b = version.next.reify
+    if version.event == "destroy"
+      current = version.item_type.constantize.new rescue nil
     end
 
-    (a or b).attribute_names.each do |name|
+    # TODO Why does this work?
+    if current.nil? && previous.nil?
+      previous = version.next.reify
+    end
+
+    (current or previous).attribute_names.each do |name|
       next if name == "updated_at"
       next if name == "created_at"
-      avalue = a.read_attribute(name) if a
-      bvalue = b.read_attribute(name) if b
-      unless avalue == bvalue
-        changes[name] = [avalue, bvalue]
+      current_value = current.read_attribute(name) if current
+      previous_value = previous.read_attribute(name) if previous
+      unless current_value == previous_value
+        changes[name] = [current_value, previous_value]
       end
     end
 
