@@ -6,13 +6,16 @@
 <table cellspacing="0" id="changes_table">
   <tr>
     <th class="change_time">Time</th>
-    <th class="change_details">Details with Current/Previous</th>
+    <th class="change_details">Details with current and previous values</th>
   </tr>
   <% @versions.each do |version| %>
-    <tr>
+    <tr class="change_row">
       <td class="change_time">
-        #<%= version.id %>
-        <%= version.created_at %>
+        Version #<%= version.id %>
+        <br>
+        <%= version.created_at.strftime('%Y-%m-%d') %>
+        <br>
+        <%= version.created_at.strftime('%H:%M:%S') %>
       </td>
       <td class="change_details">
         <p class="change_detail_description">
@@ -31,7 +34,7 @@
 
         <table cellspacing="0" class="changes_details_table">
           <% changes.keys.sort.each do |key| %>
-            <tr>
+            <tr class="<%= cycle('odd', 'even', :name => 'change_detail') %>">
               <td class="change_detail_key">
                 <b><%= key %></b>
               </td>
@@ -44,6 +47,7 @@
               </td>
             </tr>
           <% end %>
+          <% reset_cycle('change_detail') %>
         </table>
       </td>
     </tr>

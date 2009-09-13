@@ -414,32 +414,72 @@ fieldset .help {
 /* @group Recent Changes Display
 ----------------------------------------*/
 
-table.changeset {
-  width: 50em;
-
-  border-collapse: collapse;
+#changes_table th,
+#changes_table td,
+#changes_table tr {
+  padding: 0.1em;
+  margin: 0;
+  line-height: 1;
 }
 
-table.changeset thead {
-  visibility: hidden;
+#changes_table th {
+  font-size: 125%;
 }
 
-table.changeset td {
-  width: 20em;
-  border: 1px solid #aaccaa;
+#changes_table tr.change_row {
+  /* wtf!? */
+  border-top: 10px solid red;
+  padding: 10em;
+  margin: 10em;
 }
 
-table.changeset td.field_name {
+#changes_table,
+.changes_details_table {
+  width: 100%;
+}
+
+#changes_table .change_time {
+  width: 10%;
+  white-space: nowrap;
+}
+
+#changes_table .change_details {
+  width: 90%;
+}
+
+#changes_table .change_time,
+#changes_table .change_details {
+  padding-bottom: 1em;
+  vertical-align: top;
+}
+
+#changes_table .change_detail_description {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 0.25em;
+  font-style: italic;
+  background-color: #E6E6E6;
+  font-size: 110%;
+}
+
+#changes_table .changes_details_table tr.even td {
+  background-color: #F2F2F2;
+}
+
+#changes_table .changes_details_table tr.odd td {
+  background-color: white;
+}
+
+#changes_table .changes_details_table td.change_detail_value {
+  width: 40%;
+}
+
+#changes_table .changes_details_table td.change_detail_spacer {
+  width: 10%;
+  text-align: center;
+  vertical-align: middle;
   font-weight: bold;
-  width: 10em;
-}
-
-.changeset .added {
-  color: green;
-}
-
-.changeset .removed {
-  color: red;
+  font-size: 200%;
 }
 
 /* @end */
