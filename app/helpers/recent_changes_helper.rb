@@ -18,17 +18,19 @@ module RecentChangesHelper
   #   }
   def changes_for(version)
     changes = {}
-
-    current = version.item_type.constantize.find(version.item_id) rescue nil
+    current = version.next.ergo.reify
     previous = version.reify
+    record = version.item_type.constantize.find(version.item_id) rescue nil
 
-    if version.event == "destroy"
-      current = version.item_type.constantize.new rescue nil
-    end
-
-    # TODO Why does this work?
-    if current.nil? && previous.nil?
-      previous = version.next.reify
+    case version.event
+    when "create"
+      current ||= record
+    when "update"
+      current ||= record
+    when "destroy"
+      previous ||= record
+    else
+      raise ArgumentError, "Unknown event: #{version.event}"
     end
 
     (current or previous).attribute_names.each do |name|
