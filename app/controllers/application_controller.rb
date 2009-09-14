@@ -12,6 +12,12 @@ class ApplicationController < ActionController::Base
 
   # For vendor/plugins/exception_notification
   include ExceptionNotifiable
+  NOTIFY_ON_EXCEPTIONS = ['preview', 'production'].include?(RAILS_ENV) || ENV['NOTIFY_ON_EXCEPTIONS']
+  if NOTIFY_ON_EXCEPTIONS
+    Rails.configuration.action_controller.consider_all_requests_local = false
+    Rails.configuration.action_mailer.raise_delivery_errors = true
+    local_addresses.clear
+  end
 
   # Setup theme
   layout "application"
