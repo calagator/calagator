@@ -27,6 +27,7 @@ public/javascripts/record_select
 public/stylesheets/active_scaffold
 public/stylesheets/all.css
 public/stylesheets/record_select
+public/themes/
 tags
 tmp/*
 tmp/cache/*
