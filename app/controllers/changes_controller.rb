@@ -6,15 +6,28 @@ class ChangesController < ApplicationController
       format.atom # changes.atom.builder
     end
   end
-  
+
   def rollback_to
-    version = Version.find(params[:version])
-    @record = version.reify
-    if @record.save
-      redirect_to url_for(:controller => version.item_type.tableize, :action => "show", :id => version.item_id)
+    begin
+      @version = Version.find(params[:version])
+    rescue ActiveRecord::RecordNotFound
+      flash[:failure] = "No such version."
+      return(redirect_to(:action => :show))
+    end
+
+    if @version.event == "create"
+      @record = @version.item_type.constantize.find(@version.item_id)
+      @result = @record.destroy
     else
-      flash[:error] = "Couldn't rollback. Sorry."
-      redirect_to :action => :show
+      @record = @version.reify
+      @result = @record.save
+    end
+
+    if @result
+      redirect_to url_for(:controller => @version.item_type.tableize, :action => "show", :id => @version.item_id)
+    else
+      flash[:failure] = "Couldn't rollback. Sorry."
+      return(redirect_to(:action => :show))
     end
   end
 end
