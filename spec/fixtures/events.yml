@@ -38,7 +38,7 @@ ongoing_event:
   id: <%= n+=1 %>
   title: Ongoing Event
   description: "It's going on all week"
-  start_time: <%= Time.today.yesterday %>
+  start_time: <%= Time.today.yesterday + 1.hour %>
   end_time: <%= Time.today.tomorrow + 1.day %>
   venue_id: 1
   url: http://foo.com/ongoing_event

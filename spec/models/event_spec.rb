@@ -33,6 +33,15 @@ describe Event do
       events(:ongoing_event).should be_ongoing
     end
 
+    it "should be considered an all day event for a given day if all of that day is contained within it" do
+      events(:ongoing_event).should be_all_day_for Date.today
+    end
+
+    it "should not be considered an all day event for a given day if it only spans part of the day" do
+      events(:ongoing_event).should_not be_all_day_for Date.yesterday
+    end
+
+
   end
 
   describe "dealing with tags" do
