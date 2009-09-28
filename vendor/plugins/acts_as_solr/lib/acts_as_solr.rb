@@ -22,6 +22,7 @@ require 'active_record'
 require 'rexml/document'
 require 'net/http'
 require 'yaml'
+require 'erb'
 
 require File.dirname(__FILE__) + '/solr'
 require File.dirname(__FILE__) + '/acts_methods'
@@ -37,7 +38,7 @@ module ActsAsSolr
     def self.execute(request)
       begin
         if File.exists?(RAILS_ROOT+'/config/solr.yml')
-          config = YAML::load_file(RAILS_ROOT+'/config/solr.yml')
+          config = YAML::load(ERB.new(File.read(RAILS_ROOT+'/config/solr.yml')).result)
           url = config[RAILS_ENV]['url']
           # for backwards compatibility
           url ||= "http://#{config[RAILS_ENV]['host']}:#{config[RAILS_ENV]['port']}/#{config[RAILS_ENV]['servlet_path']}"
