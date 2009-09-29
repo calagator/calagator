@@ -22,6 +22,8 @@
 class Event < ActiveRecord::Base
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
 
+  MIN_MULTIDAY_DURATION = 20.hours
+
   # Names of columns and methods to create Solr indexes for
   INDEXABLE_FIELDS = \
     %w(
@@ -484,49 +486,52 @@ EOF
 
     for event in events
       next if event.start_time.nil?
-      event.dates.each_with_index do |date, i|
-        icalendar.add_event do |c|
-          if event.all_day_for?(date)
-            c.dtstart     date
-            c.dtend       date + 1.day
-          else
-            c.dtstart(    ( event.start_time < date.to_time ) ? date.to_time : event.start_time )
-
-            event_end_time = event.end_time || event.start_time + 1.hour
-            end_of_day = (date.to_time + 1.day)
-
-            c.dtend(      ( event_end_time > end_of_day ) ? end_of_day : event_end_time )
-          end
-
-          c.summary       event.title || 'Untitled Event'
-          c.created       event.created_at if event.created_at
-          c.lastmod       event.updated_at if event.updated_at
-
-          description   = event.description || ""
-          description  += "\n\nTags:\n#{event.tag_list}" unless event.tag_list.blank?
-
-          c.description   description unless description.blank?
-
-          # The reason for this messy URL helper business is that models can't access the route helpers,
-          # and even if they could, they'd need to access the request object so they know what the server's name is and such.
-          if event.url.blank?
-            c.url         opts[:url_helper].call(event) if opts[:url_helper]
-          else
-            c.url         event.url
-          end
-
-          # dtstamp and uid added because of a bug in Outlook;
-          # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
-          # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
-          c.dtstamp       event.created_at || event.start_time
-          c.uid           "#{opts[:url_helper].call(event)}?seq=#{i}" if opts[:url_helper]
-
-          # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to
-          # go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't
-          # recognize location, priority, and a couple of other things that are included as modules in the Vevent class itself.
-          # This seems like a bug in Vpim.
-          #c.location     !event.venue.nil? ? event.venue.title : ''
+      icalendar.add_event do |c|
+        if event.multiday?
+          c.dtstart     event.dates.first
+          c.dtend       event.dates.last + 1.day
+        else
+          c.dtstart     event.start_time
+          c.dtend       event.end_time || event.start_time + 1.hour
         end
+
+        c.summary       event.title || 'Untitled Event'
+        c.created       event.created_at if event.created_at
+        c.lastmod       event.updated_at if event.updated_at
+
+        description = returning String.new do |d|
+
+          if event.multiday?
+            d << "This event runs from #{TimeRange.new(event.start_time, event.end_time, :format => :text).to_s}."
+            d << "\n\n Description:\n"
+          end
+
+          d << Hpricot(event.description).to_plain_text unless event.description.blank?
+          d << "\n\nTags:\n#{event.tag_list}" unless event.tag_list.blank?
+
+        end
+
+        c.description   description unless description.blank?
+
+        # The reason for this messy URL helper business is that models can't access the route helpers,
+        # and even if they could, they'd need to access the request object so they know what the server's name is and such.
+        if event.url.blank?
+          c.url         opts[:url_helper].call(event) if opts[:url_helper]
+        else
+          c.url         event.url
+        end
+
+        # dtstamp and uid added because of a bug in Outlook;
+        # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
+        # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
+        c.dtstamp       event.created_at || event.start_time
+        c.uid           "#{opts[:url_helper].call(event)}" if opts[:url_helper]
+
+        # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to
+        # go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't
+        # recognize location, priority, and a couple of other things that are included as modules in the Vevent class itself.
+        # This seems like a bug in Vpim.
+        #c.location     !event.venue.nil? ? event.venue.title : ''
       end
     end
 
@@ -598,9 +603,16 @@ EOF
     self.start_time < Time.today && self.end_time && self.end_time >= Time.today
   end
 
-  # Is this an all day event on the given day?
-  def all_day_for?(date)
-    self.time_range.ergo.include?(date.to_datetime) && self.time_range.ergo.include?((date + 1.day).to_datetime)
+  def multiday?
+    ( self.dates.size > 1 ) && ( self.duration.seconds > MIN_MULTIDAY_DURATION )
+  end
+
+  def duration
+    if self.end_time && self.start_time
+      return (self.end_time - self.start_time)
+    else
+      return 0
+    end
   end
 
 protected

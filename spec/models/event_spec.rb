@@ -33,15 +33,17 @@ describe Event do
       events(:ongoing_event).should be_ongoing
     end
 
-    it "should be considered an all day event for a given day if all of that day is contained within it" do
-      events(:ongoing_event).should be_all_day_for Date.today
+    it "should be considered a multi-day event if it spans multiple days" do
+      events(:ongoing_event).should be_multiday
     end
 
-    it "should not be considered an all day event for a given day if it only spans part of the day" do
-      events(:ongoing_event).should_not be_all_day_for Date.yesterday
+    it "should be considered a multi-day event if it crosses a day boundry and is longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
+      Event.new(:start_time => Date.today - 1.second, :end_time => Date.today + Event::MIN_MULTIDAY_DURATION).should be_multiday
     end
 
-
+    it "should not be considered a multi-day event if it crosses a day boundry, but is not longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
+      Event.new(:start_time => Date.today - 1.second, :end_time => Date.today - 1.second + Event::MIN_MULTIDAY_DURATION).should_not be_multiday
+    end
   end
 
   describe "dealing with tags" do
