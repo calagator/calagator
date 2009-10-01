@@ -39,7 +39,7 @@ ActionController::Routing::Routes.draw do |map|
   map.rollback_to 'recent_changes/rollback_to/:version', :controller => 'changes', :action => 'rollback_to', :conditions => { :method => :post }
 
   # Normal controllers
-  map.resources :events, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'search' => :get}
+  map.resources :events, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'search' => :get}, :member => {'clone' => :get}
   map.resources :sources, :collection => { :import => :put }
   map.resources :venues, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post}
 

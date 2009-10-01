@@ -679,4 +679,33 @@ describe Event do
     end
   end
 
+  describe "when cloning" do
+    fixtures :events, :venues
+
+    before(:each) do
+      @original = events(:calagator_codesprint)
+      @clone = @original.to_clone
+    end
+
+    it "should be a new record" do
+      @clone.should be_a_new_record
+    end
+
+    it "should not have an id" do
+      @clone.id.should be_nil
+    end
+
+    it "should not have start or end time" do
+      @clone.start_time.should be_nil
+      @clone.end_time.should be_nil
+    end
+
+    it "should duplicate title, description, venue, url and tag_list" do
+      @clone.title.should       == @original.title
+      @clone.description.should == @original.description
+      @clone.url.should         == @original.url
+      @clone.venue.should       == @original.venue
+      @clone.tag_list.should    == @original.tag_list
+    end
+  end
 end

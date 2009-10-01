@@ -235,6 +235,20 @@ class EventsController < ApplicationController
     render :partial => 'form', :locals => { :event => @event}
   end
 
+  # Display a new event form pre-filled with the contents of an existing record.
+  def clone
+    @event = Event.find(params[:id]).to_clone
+    @page_title = "Clone an existing Event"
+
+    respond_to do |format|
+      format.html {
+        flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
+        render "new.html.erb"
+      }
+      format.xml  { render :xml => @event }
+    end
+  end
+
 protected
 
   # Export +events+ to an iCalendar file.

@@ -73,7 +73,8 @@
   <div id='edit_link'>
     <p>
       You can 
-      <%= link_to "edit", edit_event_url(@event) %>
+      <%= link_to "edit", edit_event_url(@event) %>,
+      <%= link_to "clone", clone_event_url(@event) %>,
       or 
       <%= link_to "delete", event_url(@event), :method => :delete, :confirm => "Are you sure?" %>
       this event.

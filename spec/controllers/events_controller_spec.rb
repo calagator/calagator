@@ -318,6 +318,30 @@ describe EventsController, "when creating or updating events" do
     end
 
   end
+
+  describe "when cloning event" do
+    fixtures :events, :venues
+    before(:each) do
+      @event = events(:calagator_codesprint)
+      Event.stub!(:find).and_return(@event)
+      get "clone", :id => 1
+    end
+
+    it "should use the cloned object" do
+      record = assigns[:event]
+      record.should be_a_new_record
+      record.id.should be_nil
+    end
+
+    it "should display a new event form" do
+      response.should be_success
+      response.should render_template(:new)
+    end
+
+    it "should have notice with cloning instructions" do
+      flash[:success].should =~ /clone/i
+    end
+  end
 end
 
 describe EventsController, "managing duplicates" do

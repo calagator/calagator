@@ -533,6 +533,18 @@ EOF
     end
   end
 
+  # Array of attributes that should be cloned by #to_clone.
+  CLONE_ATTRIBUTES = [:title, :description, :venue_id, :url, :tag_list]
+
+  # Return a new record with fields selectively copied from the original.
+  def to_clone
+    clone = self.class.new
+    for attribute in CLONE_ATTRIBUTES
+      clone.send("#{attribute}=", self.send(attribute))
+    end
+    return clone
+  end
+
   #---[ Date related ]----------------------------------------------------
 
   # Is this event current? Default cutoff is today
