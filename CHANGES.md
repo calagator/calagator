@@ -14,6 +14,9 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
+  * Next
+    * Added feature to "clone", create a new event based on an existing one, to the event's sidebar.
+    * Improved recent changes, added title for each record and reorganized columns to read from left-to-right.
   * v0.20090928
     * [DEPENDENCY] + [MIGRATION] Implemented new data versioning and management system that can track and rollback deletes and more, replaces `acts_as_versioned` with `PaperTrail`.
     * Fixed how Solr determines what port to connect to, it will now always check the `config/solr.yml`.
