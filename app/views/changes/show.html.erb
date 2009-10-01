@@ -6,7 +6,7 @@
 <table cellspacing="0" id="changes_table">
   <tr>
     <th class="change_time">Time</th>
-    <th class="change_details">Details with current and previous values</th>
+    <th class="change_details">Details with previous and current values</th>
   </tr>
   <% @versions.each do |version| %>
     <tr class="change_row">
@@ -42,11 +42,11 @@
                 <b><%= key %></b>
               </td>
               <td class="change_detail_value">
-                <%= text_or_nil(changes[key][0]) %>
-              </td>
-              <td class="change_detail_spacer">&larr;</td>
-              <td class="change_detail_value">
                 <%= text_or_nil(changes[key][1]) %>
+              </td>
+              <td class="change_detail_spacer">&rarr;</td>
+              <td class="change_detail_value">
+                <%= text_or_nil(changes[key][0]) %>
               </td>
             </tr>
           <% end %>

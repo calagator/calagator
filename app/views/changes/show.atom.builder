@@ -17,9 +17,9 @@ atom_feed do |feed|
           changes.keys.sort.each do |key|
             xm.tr {
               xm.td { xm.b key }
-              xm.td changes[key][0].inspect
-              xm.td { xm.span << "&larr;" }
               xm.td changes[key][1].inspect
+              xm.td { xm.span << "&rarr;" }
+              xm.td changes[key][0].inspect
             }
           end
         }
