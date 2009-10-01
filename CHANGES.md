@@ -14,7 +14,10 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
-  * Next
+  * v0.20090928
+    * [DEPENDENCY] + [MIGRATION] Implemented new data versioning and management system that can track and rollback deletes and more, replaces `acts_as_versioned` with `PaperTrail`.
+    * Fixed how Solr determines what port to connect to, it will now always check the `config/solr.yml`.
+  * v0.20090914
     * [DEPENDENCY] Upgraded to Ruby on Rails 2.3.x and updated many gems.
     * [THEME] Upgraded theme_support, which expects layouts to be in `MYTHEME/views/layouts` rather than `MYTHEME/layouts`.
     * [SETTING] Added `SECRETS.administrator_email` with email to send errors, extracted it from `config/initalizer/exception_notification_setup.rb`.
@@ -25,7 +28,7 @@ List of Calagator stable releases and changes, with the latest at the top:
     * [SETTING] Fixed timezone handling so that the application, added new `timezone` setting.
     * [THEME] Fixed layout and added an `ie.6` stylesheet.
     * Fixed duplicate checking to eliminate infinite loops and link items to their progenitor.
-    * Fixed times in Upcoming imports, which violate the iCalendar standard. 
+    * Fixed times in Upcoming imports, which violate the iCalendar standard.
     * Fixed search sort labels.
   * v0.20090503
     * Fixed error caused by removal of Time.today from RubyGems 1.3.2 and above.
