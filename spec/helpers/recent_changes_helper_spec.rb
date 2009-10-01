@@ -45,9 +45,9 @@ describe RecentChangesHelper do
       changes['title'].should == ['My Venue', 'Venue']
     end
 
-    it "should extract the updated title" do
+    it "should extract the previous title" do
       version = @item.versions[1]
-      title_for(version).should == 'My Venue'
+      title_for(version).should == 'Venue'
     end
   end
 

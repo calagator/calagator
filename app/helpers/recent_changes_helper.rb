@@ -54,7 +54,7 @@ module RecentChangesHelper
     #IK# record = version.item rescue nil
     record = version.item_type.constantize.find(version.item_id) rescue nil
 
-    title = current.ergo.title || record.ergo.title || previous.ergo.title
+    title = previous.ergo.title || current.ergo.title || record.ergo.title
     return h(title)
   end
 end
