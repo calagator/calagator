@@ -10,10 +10,17 @@ module RecentChangesHelper
 
   # Return an hash of changes for the given +Version+ record. The resulting
   # data structure is a hash whose keys are the names of changed columns and
-  # values containing an array with the current and previous value. E.g.,:
+  # values containing a hash with current and previous value. E.g.,:
   #
   #   {
-  #     "my_column_name" => ["current_value", "past value"],
+  #     "my_column_name" => {
+  #       :previous => "past value",
+  #       :current  => "current_value",
+  #     },
+  #     "title" => {
+  #       :previous => "puppies",
+  #       :current  => "kittens",
+  #     },
   #     ...
   #   }
   def changes_for(version)
@@ -40,7 +47,10 @@ module RecentChangesHelper
       current_value = current.read_attribute(name) if current
       previous_value = previous.read_attribute(name) if previous
       unless current_value == previous_value
-        changes[name] = [current_value, previous_value]
+        changes[name] = {
+          :previous => previous_value,
+          :current => current_value,
+        }
       end
     end
 

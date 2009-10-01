@@ -42,11 +42,11 @@
                 <b><%= key %></b>
               </td>
               <td class="change_detail_value">
-                <%= text_or_nil(changes[key][1]) %>
+                <%= text_or_nil(changes[key][:previous]) %>
               </td>
               <td class="change_detail_spacer">&rarr;</td>
               <td class="change_detail_value">
-                <%= text_or_nil(changes[key][0]) %>
+                <%= text_or_nil(changes[key][:current]) %>
               </td>
             </tr>
           <% end %>

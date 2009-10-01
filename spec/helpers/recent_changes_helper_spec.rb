@@ -14,7 +14,7 @@ describe RecentChangesHelper do
     it "should describe create" do
       version = @item.versions[0]
       changes = changes_for(version)
-      changes['title'].should == ['Venue', nil]
+      changes['title'].should == {:current => 'Venue', :previous => nil}
     end
 
     it "should extract the created title" do
@@ -36,13 +36,13 @@ describe RecentChangesHelper do
     it "should describe create" do
       version = @item.versions[0]
       changes = changes_for(version)
-      changes['title'].should == ['Venue', nil]
+      changes['title'].should == {:current => 'Venue', :previous => nil}
     end
 
     it "should describe update" do
       version = @item.versions[1]
       changes = changes_for(version)
-      changes['title'].should == ['My Venue', 'Venue']
+      changes['title'].should == {:current => 'My Venue', :previous => 'Venue'}
     end
 
     it "should extract the previous title" do
@@ -65,19 +65,19 @@ describe RecentChangesHelper do
     it "should describe create" do
       version = @item.versions[0]
       changes = changes_for(version)
-      changes['title'].should == ['Venue', nil]
+      changes['title'].should == {:current => 'Venue', :previous => nil}
     end
 
     it "should describe update" do
       version = @item.versions[1]
       changes = changes_for(version)
-      changes['title'].should == ['My Venue', 'Venue']
+      changes['title'].should == {:current => 'My Venue', :previous => 'Venue'}
     end
 
     it "should describe destroy" do
       version = @item.versions[2]
       changes = changes_for(version)
-      changes['title'].should == [nil, 'My Venue']
+      changes['title'].should == {:current => nil, :previous => 'My Venue'}
     end
 
     it "should extract the final title" do
