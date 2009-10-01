@@ -20,6 +20,7 @@ module RecentChangesHelper
     changes = {}
     current = version.next.ergo.reify
     previous = version.reify
+    #IK# record = version.item rescue nil
     record = version.item_type.constantize.find(version.item_id) rescue nil
 
     case version.event
@@ -44,5 +45,16 @@ module RecentChangesHelper
     end
 
     return changes
+  end
+
+  # Returns string title for the versioned record.
+  def title_for(version)
+    current = version.next.ergo.reify
+    previous = version.reify
+    #IK# record = version.item rescue nil
+    record = version.item_type.constantize.find(version.item_id) rescue nil
+
+    title = current.ergo.title || record.ergo.title || previous.ergo.title
+    return h(title)
   end
 end

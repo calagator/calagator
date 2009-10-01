@@ -8,7 +8,7 @@ atom_feed do |feed|
       changes = changes_for(version)
       user = Member.find(version.whodunnit) rescue nil
 
-      entry.title "#{version.event.titleize} #{version.item_type}##{version.item_id} #{user ? 'by '+user.name : ''}"
+      entry.title "#{version.event.titleize} #{version.item_type} «#{title_for(version)}» #{user ? 'by '+user.name : ''}"
       entry.updated version.created_at.utc.xmlschema
 
       xm = ::Builder::XmlMarkup.new

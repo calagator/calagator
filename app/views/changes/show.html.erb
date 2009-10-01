@@ -21,7 +21,10 @@
         <p class="change_detail_description">
             <a name="<%= version.id %>">
             <b><%= version.event.titleize %></b>
-            <%= link_to "#{version.item_type}##{version.item_id}", url_for(:controller => version.item_type.tableize, :action => "show", :id => version.item_id) %> &mdash; <%= link_to "Rollback this change", rollback_to_path(:version => version.id), :method => :post, :confirm => 'Are you sure?' %>
+            <%= version.item_type %>
+            <%= link_to "&laquo;#{title_for(version)}&raquo;", url_for(:controller => version.item_type.tableize, :action => "show", :id => version.item_id) %>
+            &mdash;
+            <%= link_to "(Rollback)", rollback_to_path(:version => version.id), :method => :post, :confirm => 'Are you sure?' %>
             <% if version.whodunnit %>
               <% if user = Member.find(version.whodunnit) rescue nil %>
                 by <%= link_to h(user.name), member_path(user) %>

@@ -16,6 +16,11 @@ describe RecentChangesHelper do
       changes = changes_for(version)
       changes['title'].should == ['Venue', nil]
     end
+
+    it "should extract the created title" do
+      version = @item.versions[0]
+      title_for(version).should == 'Venue'
+    end
   end
 
   describe "when updating a created item" do
@@ -38,6 +43,11 @@ describe RecentChangesHelper do
       version = @item.versions[1]
       changes = changes_for(version)
       changes['title'].should == ['My Venue', 'Venue']
+    end
+
+    it "should extract the updated title" do
+      version = @item.versions[1]
+      title_for(version).should == 'My Venue'
     end
   end
 
@@ -68,6 +78,11 @@ describe RecentChangesHelper do
       version = @item.versions[2]
       changes = changes_for(version)
       changes['title'].should == [nil, 'My Venue']
+    end
+
+    it "should extract the final title" do
+      version = @item.versions[2]
+      title_for(version).should == 'My Venue'
     end
   end
 
