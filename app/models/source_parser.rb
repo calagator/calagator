@@ -8,30 +8,26 @@ class SourceParser
   # * :url - URL string to read as parser input.
   # * :content - String to read as parser input.
   def self.to_abstract_events(opts)
-    # Upcoming consistently breaks their hCalendar content and I can't keep fixing the parser. The following horrible hack rewrites Upcoming's hCalendar URLs into iCalendar URLs in hopes that they're paying more attention to iCalendar's validity and so that we've only got one single set of Upcoming parser hacks. Here's what the two types of URLs look like:
-    # hCalendar: http://upcoming.yahoo.com/event/1366250/
-    # iCalendar: webcal://upcoming.yahoo.com/calendar/v2/event/1366250
-    if matcher = opts[:url].ergo.match(%r{http://upcoming.yahoo.com/event/(\w+)})
-      opts[:url] = "http://upcoming.yahoo.com/calendar/v2/event/#{matcher[1]}"
-    end
-
+    # Cache the content
     content = self.content_for(opts)
 
-    returning([]) do |events|
-      parsers.each do |parser|
-        begin
-          events.concat(parser.to_abstract_events(opts.merge(:content => content)))
-        rescue Exception => e
-          RAILS_DEFAULT_LOGGER.info("SourceParser.to_abstract_events : Can't parse with #{parser.name} because -- #{e}")
-          :ignore # Leave this line for rcov's code coverage
-        end
+    # Return events from the first parser that suceeds.
+    parsers.each do |parser|
+      begin
+        events = parser.to_abstract_events(opts.merge(:content => content))
+        return events if not events.blank?
+      rescue Exception => e
+        # Ignore
       end
     end
+
+    # Return empty set if no matches
+    return []
   end
 
   # Returns an Array of parser classes for the various formats
   def self.parsers
-    $SourceParserImplementations.map{|parser| parser}.uniq
+    $SourceParserImplementations
   end
 
   # Return content for the arguments
@@ -53,9 +49,7 @@ class SourceParser
       # Add class-wide ::_label accessor to subclasses.
       subclass.meta_eval {attr_accessor :_label}
 
-      # Use global because it's the only data structure that survives a Rails #reload!
-      $SourceParserImplementations ||= Set.new
-      $SourceParserImplementations << subclass
+      $SourceParserImplementations << subclass unless $SourceParserImplementations.include?(subclass)
     end
 
     # Gets or sets the human-readable label for this parser.
@@ -115,8 +109,8 @@ class SourceParser
   end
 end
 
-# Load all the format-specific drivers in the "source_parser" directory
-source_parser_driver_path = File.join(File.dirname(__FILE__), "source_parser")
-for entry in Dir.entries(source_parser_driver_path).select{|t| t.match(/.+\.rb$/)}
-  require File.join(source_parser_driver_path, entry)
-end
+# Load format-specific drivers in the following order:
+$SourceParserImplementations = []
+SourceParser::Upcoming
+SourceParser::Ical
+SourceParser::Hcal

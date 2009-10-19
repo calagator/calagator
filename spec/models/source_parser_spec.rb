@@ -39,10 +39,21 @@ describe SourceParser, "when subclassing" do
 end
 
 describe SourceParser, "when parsing events" do
-  it "should skip past parsing errors" do
+  it "should have expected parsers plus FakeParser" do
+    SourceParser.parsers.should == [
+      SourceParser::Upcoming,
+      SourceParser::Ical,
+      SourceParser::Hcal,
+      SourceParser::FakeParser,
+    ]
+  end
+
+  it "should use first successful parser's results" do
     events = [mock_model(SourceParser::AbstractEvent)]
-    SourceParser::FakeParser.should_receive(:to_abstract_events).and_raise(NotImplementedError)
+    SourceParser::Upcoming.should_receive(:to_abstract_events).and_return(false)
+    SourceParser::Ical.should_receive(:to_abstract_events).and_raise(NotImplementedError)
     SourceParser::Hcal.should_receive(:to_abstract_events).and_return(events)
+    SourceParser::FakeParser.should_not_receive(:to_abstract_events)
     SourceParser::Base.should_receive(:content_for).and_return("fake content")
 
     SourceParser.to_abstract_events(:fake => :argument).should == events
