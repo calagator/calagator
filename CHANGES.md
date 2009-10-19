@@ -14,7 +14,7 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
-  * Next
+  * v0.20091001
     * Added feature to "clone", create a new event based on an existing one, to the event's sidebar.
     * Improved recent changes, added title for each record and reorganized columns to read from left-to-right.
   * v0.20090928
