@@ -36,8 +36,8 @@ Rails::Initializer.run do |config|
 
   config.gem "hpricot"
   config.gem "rubyzip", :lib =>  "zip/zip"
-  config.gem 'rspec', :version => '>= 1.1.12', :lib => false
-  config.gem 'rspec-rails', :version => '>= 1.1.12', :lib => false
+  config.gem 'rspec', :version => '>= 1.2.0', :lib => false
+  config.gem 'rspec-rails', :version => '>= 1.2.0', :lib => false
   config.gem "facets", :version => ">=2.5.0", :lib => false
 
   config.time_zone = "Pacific Time (US & Canada)"
