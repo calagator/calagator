@@ -33,7 +33,7 @@ To configure Calagator:
 
   1. Follow the **Checkout** instructions above.
   2. Initialize your database, run `rake db:migrate db:test:prepare`
-  3. Optionally add a geocoding key so maps will display, follow the instructions in the checkout at `config/geocoder_api_keys.yml.example` and get the key from http://code.google.com/apis/maps/signup.html
+  3. Optionally setup API keys so that maps display and such, see 'API Keys'.
 
 
 Development
@@ -59,6 +59,16 @@ Security
 --------
 
 This application runs with insecure settings by default to make it easy to get started. These default settings include publicly-known cryptography keys that can allow attackers to gain admin privileges to your application. You should create a `config/secrets.yml` file with your secret settings if you intend to run this application on a server that can be accessed by untrusted users, read the [config/secrets.yml.sample](config/secrets.yml.sample) file for details.
+
+
+API Keys
+--------
+
+The application uses a number of API keys to communicate with external services.
+
+* Yahoo! Upcoming: To import events from Upcoming, the application can use a public key, but for production use, you should really get and use your own API key. See the `config/secrets.yml.sample` file's "upcoming_api_key" section for details.
+
+* Google Maps: To display Google maps, you must get an API key. For details, see the `config/geocoder_api_keys.yml.example` for details.
 
 
 Production
