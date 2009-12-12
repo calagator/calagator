@@ -90,6 +90,14 @@ describe Event do
       @event.tags.map(&:name).should == tags
     end
 
+    it "should not interpret numeric tags as IDs" do
+      tag = "123"
+      @event.tag_list = tag
+      @event.save
+
+      @event.reload
+      @event.tags.first.name.should == "123"
+    end
   end
 
   describe "when parsing" do
