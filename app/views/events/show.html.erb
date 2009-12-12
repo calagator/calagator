@@ -60,7 +60,7 @@
 <div class='single_view_right sidebar'>
   <h3 class='first'>Export to</h3>
   <ul>
-    <li><%= render :partial=>'gcal_reminder'%></li>
+    <li><%= link_to "Google Calendar", google_event_export_link(@event), :id => "google_calendar_export" %></li>
     <li><%= link_to 'iCalendar file', "#{event_url(@event)}.ics" %></li>
     <li>
       <%= link_to_function 'hCalendar markup', '$("#hcal_field").toggle()' %>

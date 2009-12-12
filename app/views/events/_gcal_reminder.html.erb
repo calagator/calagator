@@ -1,12 +1,1 @@
-<% form_tag "http://www.google.com/calendar/event", :id => "add_to_google_calendar", :style => "display: none" do %>
-  <%= hidden_field_tag :action, "TEMPLATE" %>
-  <%= hidden_field_tag :text, @event.title %>
-  <%= hidden_field_tag :dates, format_google_timespan(@event) %>
-  <%= hidden_field_tag :details, @event.description %>
-  <%= hidden_field_tag :location, %{#{@event.venue ? @event.venue.title : ''}#{@event.venue ? (@event.venue.geocode_address.blank? ? '' : " #{@event.venue.geocode_address}") : ''}} %>
-  <%= hidden_field_tag :trp, "true" %>
-  <%= hidden_field_tag :sprop, url_for('/') %>
-  <%= hidden_field_tag :sprop, "name:#{SETTINGS.name}" %>
-  <%= submit_tag "Google Calendar", :style => "display: none" %>
-<% end %>
-<a href="#" onclick="$('#add_to_google_calendar').submit()">Google Calendar</a>
+<%= link_to "Google Calendar", google_event_export_link(@event) %>
