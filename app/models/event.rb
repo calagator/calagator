@@ -22,6 +22,8 @@
 class Event < ActiveRecord::Base
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
 
+  MIN_MULTIDAY_DURATION = 20.hours
+
   # Names of columns and methods to create Solr indexes for
   INDEXABLE_FIELDS = \
     %w(
@@ -485,14 +487,29 @@ EOF
     for event in events
       next if event.start_time.nil?
       icalendar.add_event do |c|
-        c.dtstart       event.start_time
-        c.dtend         event.end_time || event.start_time+1.hour
+        if event.multiday?
+          c.dtstart     event.dates.first
+          c.dtend       event.dates.last + 1.day
+        else
+          c.dtstart     event.start_time
+          c.dtend       event.end_time || event.start_time + 1.hour
+        end
+
         c.summary       event.title || 'Untitled Event'
         c.created       event.created_at if event.created_at
         c.lastmod       event.updated_at if event.updated_at
 
-        description   = event.description || ""
-        description  += "\n\nTags:\n#{event.tag_list}" unless event.tag_list.blank?
+        description = returning String.new do |d|
+
+          if event.multiday?
+            d << "This event runs from #{TimeRange.new(event.start_time, event.end_time, :format => :text).to_s}."
+            d << "\n\n Description:\n"
+          end
+
+          d << Hpricot(event.description).to_plain_text unless event.description.blank?
+          d << "\n\nTags:\n#{event.tag_list}" unless event.tag_list.blank?
+
+        end
 
         c.description   description unless description.blank?
 
@@ -508,7 +525,7 @@ EOF
         # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
         # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
         c.dtstamp       event.created_at || event.start_time
-        c.uid           opts[:url_helper].call(event) if opts[:url_helper]
+        c.uid           "#{opts[:url_helper].call(event)}" if opts[:url_helper]
 
         # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to
         # go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't
@@ -547,6 +564,28 @@ EOF
 
   #---[ Date related ]----------------------------------------------------
 
+  # Returns a range of time spanned by the event.
+  def time_range
+    if self.start_time && self.end_time
+      self.start_time..self.end_time
+    elsif self.start_time
+      self.start_time..(self.start_time + 1.hour)
+    else
+      raise ArgumentError, "can't get a time range for an event with no start time"
+    end
+  end
+
+  # Returns an array of the dates spanned by the event.
+  def dates
+    if self.start_time && self.end_time
+      return (self.start_time.to_date..self.end_time.to_date).to_a
+    elsif self.start_time
+      return [self.start_time.to_date]
+    else
+      raise ArgumentError, "can't get dates for an event with no start time"
+    end
+  end
+
   # Is this event current? Default cutoff is today
   def current?(cutoff=nil)
     cutoff ||= Time.today
@@ -562,6 +601,18 @@ EOF
   # Did this event start before today but ends today or later?
   def ongoing?
     self.start_time < Time.today && self.end_time && self.end_time >= Time.today
+  end
+
+  def multiday?
+    ( self.dates.size > 1 ) && ( self.duration.seconds > MIN_MULTIDAY_DURATION )
+  end
+
+  def duration
+    if self.end_time && self.start_time
+      return (self.end_time - self.start_time)
+    else
+      return 0
+    end
   end
 
 protected
