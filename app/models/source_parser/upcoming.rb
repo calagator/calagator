@@ -22,7 +22,7 @@ class SourceParser # :nodoc:
         event_id = self._upcoming_url_to_event_id(opts[:url])
         return false unless event_id # Give up unless we can extract the Upcoming event_id.
 
-        api_key = "f12d0c34c0" # FIXME Extract this API key into instance-specific config file.
+        api_key = SECRETS.upcoming_api_key # FIXME Extract this API key into instance-specific config file.
         api_url = "http://upcoming.yahooapis.com/services/rest/?api_key=#{api_key}&method=event.getInfo&event_id=#{event_id}"
 
         # Dup and alter `opts` for call to #content_for, without polluting it for other drivers.
