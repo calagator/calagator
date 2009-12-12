@@ -3,7 +3,7 @@ require 'erb'
 require 'ostruct'
 
 require 'rubygems'
-require 'activesupport'
+require 'active_support'
 
 # = SecretsReader
 #
@@ -43,7 +43,7 @@ class SecretsReader
     elsif object = self.filename_to_ostruct(File.join(rails_root, normal_file))
       message << "loaded '#{normal_file}'"
     elsif object = self.filename_to_ostruct(File.join(rails_root, sample_file))
-      message << "WARNING! Using insecure '#{sample_file}' settings, see README.txt"
+      message << "WARNING! Using insecure '#{sample_file}' settings, see 'Security' in INSTALL.md"
       error = true
     else
       raise Errno::ENOENT, "Couldn't find '#{normal_file}'"
