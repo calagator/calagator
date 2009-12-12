@@ -188,3 +188,9 @@ p.incr, .incr p {
 }
 
 /* @end */ 
+
+a.view_more {
+  display: block;
+  font-weight: bold;
+  margin: 2em 0 2em 10em;
+}

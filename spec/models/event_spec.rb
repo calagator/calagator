@@ -305,6 +305,18 @@ describe Event do
           @overview[:tomorrow].should_not include(@starts_after_tomorrow)
         end
       end
+
+      describe "determining if we should show the more link" do
+        it "should set :more? to true if there are events past the future cutoff" do
+          Event.should_receive(:count).with(:conditions => ["start_time > ?", Time.today + 2.weeks]).and_return(10)
+          Event.select_for_overview[:more?].should be_true
+        end
+
+        it "should set :more? to false if there are not events past the future cutoff" do
+          Event.should_receive(:count).with(:conditions => ["start_time > ?", Time.today + 2.weeks]).and_return(0)
+          Event.select_for_overview[:more?].should be_false
+        end
+      end
     end
 
     describe "for future events" do

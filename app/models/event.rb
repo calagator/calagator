@@ -200,6 +200,8 @@ class Event < ActiveRecord::Base
       end
     end
 
+    times_to_events[:more?] = Event.count(:conditions => ["start_time > ?", future_cutoff]) > 0
+
     return times_to_events
   end
 
