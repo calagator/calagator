@@ -57,4 +57,13 @@ module EventsHelper
   def events_sort_label(key)
     " by <strong>#{(FRIENDLY_SORT_LABELS[key] || Event::DEFAULT_SEARCH_ORDER).to_s.downcase}.</strong>"
   end
+  
+  def google_event_export_link(event)
+    title = CGI::escape(event.title.strip_html)
+    dates = format_google_timespan(event)
+    details = CGI::escape(event.description || "")
+    venue = CGI::escape(event.venue ? (event.venue.geocode_address.blank? ? '' : event.venue.geocode_address) : '')
+    "http://www.google.com/calendar/event?action=TEMPLATE&text=#{title}&dates=#{dates}&details=#{details}&location=#{venue}&trp=true&sprop=#{event.url}&sprop=name:"
+  end
+  
 end

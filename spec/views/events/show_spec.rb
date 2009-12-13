@@ -41,12 +41,9 @@ describe 'Google Calendar Integration for Venue with Multi-Line Address' do
   end
 
   it "should should render Google Calendar reminder link" do
-    render "/events/show"
-    response.should have_tag('form[action=http://www.google.com/calendar/event]')
-  end
-  
-  it "should export address to Google Calendar" do
-    render "/events/show"
-    assert_select('form input[name=location]').first["value"].strip.should == "CubeSpace2 622 SE Grand Ave., Portland OR 97204"
+    url = "http://www.google.com/calendar/event?action=TEMPLATE&text="
+    
+    render "/events/show"    
+    response.should have_tag('#google_calendar_export[href^="http://www.google.com/calendar/event?action=TEMPLATE"]')
   end
 end

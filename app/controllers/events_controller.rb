@@ -101,7 +101,7 @@ class EventsController < ApplicationController
     end
 
     respond_to do |format|
-      if !evil_robot && @event.save
+      if !evil_robot && params[:preview].nil? && @event.save
         flash[:success] = 'Your event was successfully created. '
         format.html {
           if has_new_venue && !params[:venue_name].blank?
@@ -113,6 +113,7 @@ class EventsController < ApplicationController
         }
         format.xml  { render :xml => @event, :status => :created, :location => @event }
       else
+        @event.valid? if params[:preview]
         format.html { render :action => "new" }
         format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }
       end
@@ -134,7 +135,7 @@ class EventsController < ApplicationController
     end
 
     respond_to do |format|
-      if !evil_robot && @event.update_attributes(params[:event])
+      if !evil_robot && params[:preview].nil? && @event.update_attributes(params[:event])
         flash[:success] = 'Event was successfully updated.'
         format.html {
           if has_new_venue && !params[:venue_name].blank?
@@ -146,6 +147,10 @@ class EventsController < ApplicationController
         }
         format.xml  { head :ok }
       else
+        if params[:preview]
+          @event.attributes = params[:event]
+          @event.valid?
+        end
         format.html { render :action => "edit" }
         format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }
       end

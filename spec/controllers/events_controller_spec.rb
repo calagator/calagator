@@ -111,6 +111,8 @@ describe EventsController, "when displaying events" do
 end
 
 describe EventsController, "when creating or updating events" do
+  fixtures :events, :venues
+
   before(:each) do
     # Fields marked with "###" may be filled in by examples to alter behavior
     @params = {
@@ -214,6 +216,17 @@ describe EventsController, "when creating or updating events" do
       response.should render_template(:new)
       flash[:failure].should match(/evil robot/i)
     end
+    
+    it "should allow the user to preview the event" do
+      event = Event.new(:title => "Awesomeness")
+      Event.should_receive(:new).and_return(event)
+
+      event.should_not_receive(:save)
+      
+      post "create", :event => { :title => "Awesomeness" }, :start_time => Time.now, :start_date => Date.today, :preview => "Preview"
+      response.should render_template(:new)
+      event.should be_valid
+    end
   end
 
   describe "when updating events" do
@@ -315,6 +328,16 @@ describe EventsController, "when creating or updating events" do
       put "update", :id => 1234, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
       response.should render_template(:edit)
       flash[:failure].should match(/evil robot/i)
+    end
+
+    it "should allow the user to preview the event" do
+      Event.should_receive(:find).and_return(@event)
+      @event.should_not_receive(:update_attributes)
+      @event.should_receive(:attributes=)
+      @event.should_receive(:valid?).and_return(true)
+
+      put "update", @params.merge(:preview => "Preview")
+      response.should render_template(:edit)
     end
 
   end

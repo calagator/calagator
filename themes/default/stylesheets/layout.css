@@ -276,6 +276,19 @@ ul.event_list .list_date {
 
 /* @end */
 
+/* Event Preview */
+
+#event_preview .single_event {
+  background-color: #EEE;
+  padding: 1em;
+  margin-bottom: 2em;
+}
+
+#event_preview .single_event .location {
+  margin: 2em 0 2em 0em;
+  background-color: #DDD;
+}
+
 
 /* @group Venues
 ----------------------------------------*/
