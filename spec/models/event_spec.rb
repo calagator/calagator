@@ -1,6 +1,13 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe Event do
+  def valid_event_attributes
+    {
+      :start_time => Time.now,
+      :title => "A newfangled event"
+    }
+  end
+
   before(:each) do
     @event = Event.new
   end
@@ -737,6 +744,81 @@ describe Event do
       @clone.url.should         == @original.url
       @clone.venue.should       == @original.venue
       @clone.tag_list.should    == @original.tag_list
+    end
+  end
+
+  describe "when converting to iCal" do
+    fixtures :events
+
+    def ical_roundtrip(events, opts = {})
+      parsed_events = Vpim::Icalendar.decode( Event.to_ical(events, opts) ).first.events
+      if events.is_a?(Event)
+        parsed_events.first
+      else
+        parsed_events
+      end
+    end
+
+    it "should produce parsable iCal output" do
+      lambda { ical_roundtrip( events(:tomorrow) ) }.should_not raise_error
+    end
+
+    it "should represent an event without an end time as a 1-hour block" do
+      ical_roundtrip( events(:tomorrow) ).duration.should == 1.hours
+    end
+
+    it "should set the appropriate end time if one is given" do
+      event = Event.new(valid_event_attributes)
+      event.end_time = event.start_time + 2.hours
+
+      ical_roundtrip( event ).duration.should == 2.hours
+    end
+
+    { :summary => :title,
+      :created => :created_at,
+      :lastmod => :updated_at,
+      :description => :description,
+      :url => :url,
+      :dtstart => :start_time,
+      :dtstamp => :created_at
+    }.each do |ical_attribute, model_attribute|
+      it "should map the Event's #{model_attribute} attribute to '#{ical_attribute}' in the iCalendar output" do
+        events(:tomorrow).send(model_attribute).should == ical_roundtrip( events(:tomorrow) ).send(ical_attribute)
+      end
+    end
+
+    it "should call the URL helper to generate a UID" do
+      ical_roundtrip( Event.new(valid_event_attributes), :url_helper => lambda {|e| "UID'D!" }).uid.should == "UID'D!"
+    end
+
+    it "should strip HTML from the description" do
+      ical_roundtrip(
+        Event.new(valid_event_attributes.merge( :description => "<blink>OMFG HTML IS TEH AWESOME</blink>") )
+      ).description.should_not include "<blink>"
+    end
+
+    it "should include tags in the description" do
+      event = events(:tomorrow)
+      event.tag_list = "tags, folksonomy, categorization"
+      ical_roundtrip(event).description.should include event.tag_list
+    end
+
+    it "should use the event's URL on Calagator if no URL is provided (and a url helper is given)" do
+      ical_roundtrip( Event.create( valid_event_attributes ), :url_helper => lambda{|e| "FAKE"} ).url.should == "FAKE"
+    end
+
+    it "should create multi-day entries for multi-day events" do
+      event = Event.create( valid_event_attributes.merge(:end_time => valid_event_attributes[:start_time] + 4.days) )
+      parsed_event = ical_roundtrip( event )
+
+      # UTC is used here because we're currently outputting _all_ iCalendar times as UTC.
+      # We really need to make it so that isn't happening.
+      #
+      # FIXME: Time zone data should be included in iCalendar output. Really.
+
+      start_time = Time.today.utc + Time.today.gmtoff
+      parsed_event.dtstart.should == start_time
+      parsed_event.dtend.should == start_time + 5.days
     end
   end
 end
