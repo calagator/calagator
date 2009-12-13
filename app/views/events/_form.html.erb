@@ -77,6 +77,14 @@
   </script>
 <% end %>
 
+<% if params[:preview] && event.valid? -%>
+<div id="event_preview">
+    <h2>Preview your event</h2>
+
+    <%= render :partial => "preview", :locals => { :event => event } %>
+</div>
+<% end -%>
+
 <% form_for(event, :html => {:id => "event_form", :class => "standard_form"}) do |f| %>
   <fieldset>
     <legend><% unless event.new_record? %>Editing: <em><%= event.title %></em><% end %></legend>
@@ -140,6 +148,6 @@
     <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
     <%= text_field_tag 'trap_field', params[:trap_field] %>
   </div>
-  <div class='no_label'><%= f.submit(event.new_record? ? "Create" : "Update") %></div>
+  <div class='no_label'><%= f.submit "Preview", :name => "preview" %> <%= f.submit(event.new_record? ? "Create" : "Update") %></div>
   </fieldset>
 <% end %>
