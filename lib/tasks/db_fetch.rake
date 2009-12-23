@@ -1,6 +1,6 @@
 namespace :db do
   desc "Download a copy of the remote production database and replace the loca development database"
-  task :fetch do
+  task :fetch => :environment do
     # FIXME display warnings??
     
     def bn(v); File.basename(v); end
