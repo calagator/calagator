@@ -14,6 +14,15 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
+  * Next
+    * [SECRETS] Added entry for setting custom Upcoming API key.
+    * Added Upcoming API-based event importer, hopefully resolving long-standing problems caused by them frequently changing their invalid iCalendar output.
+    * Fixed export to Google Calendar.
+    * Fixed to support tags that start with numbers.
+    * Fixed recent changes to not fail if showing create AND delete on same page.
+    * Improved iCalendar export to mark very long events as all-day events.
+    * Added "preview" feature to the event add and edit forms.
+    * Added "more events" link to bottom of site's events overview.
   * v0.20091001
     * Added feature to "clone", create a new event based on an existing one, to the event's sidebar.
     * Improved recent changes, added title for each record and reorganized columns to read from left-to-right.
