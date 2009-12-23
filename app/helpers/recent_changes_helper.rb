@@ -27,8 +27,10 @@ module RecentChangesHelper
     changes = {}
     current = version.next.ergo.reify
     previous = version.reify
-    #IK# record = version.item rescue nil
     record = version.item_type.constantize.find(version.item_id) rescue nil
+
+    # Bail out if no changes are available
+    return changes unless record
 
     case version.event
     when "create"
