@@ -167,13 +167,13 @@ class Event < ActiveRecord::Base
     return self.venue
   end
 
-  # Returns groups of records for the overview screen.
+  # Returns groups of records for the site overview screen in the following format:
   #
-  # The data structure returned maps time names to arrays of event records:
   #   {
-  #     :today => [...],
-  #     :tomorrow => [...],
-  #     :later => [...],
+  #     :today => [...],    # Events happening today or empty array
+  #     :tomorrow => [...], # Events happening tomorrow or empty array
+  #     :later => [...],    # Events happening within two weeks or empty array
+  #     :more => ...,       # First event after the two week window or nil
   #   }
   def self.select_for_overview
     today = Time.today
@@ -185,9 +185,10 @@ class Event < ActiveRecord::Base
       :today    => [],
       :tomorrow => [],
       :later    => [],
+      :more     => nil,
     }
 
-    # find all events between today and future_cutoff, sorted by start_time
+    # Find all events between today and future_cutoff, sorted by start_time
     # includes events any part of which occurs on or after today through on or after future_cutoff
     overview_events = Event.find_by_dates(today.utc, future_cutoff, :order => :start_time)
     overview_events.each do |event|
@@ -200,7 +201,8 @@ class Event < ActiveRecord::Base
       end
     end
 
-    times_to_events[:more?] = Event.count(:conditions => ["start_time > ?", future_cutoff]) > 0
+    # Find next item beyond the future_cuttoff for use in making links to it:
+    times_to_events[:more] = Event.first(:conditions => ["start_time > ?", future_cutoff])
 
     return times_to_events
   end
@@ -211,7 +213,7 @@ class Event < ActiveRecord::Base
   #   see r1048 which has been reverted because it broke find_future_events
   END_OF_TIME = Time.local(2038, 01, 18).yesterday.end_of_day.utc
 
-# Returns an Array of non-duplicate future Event instances.
+  # Returns an Array of non-duplicate future Event instances.
   # where "future" means any part of an event occurs today or later
   # Options:
   # * :order => How to sort events. Defaults to :start_time.

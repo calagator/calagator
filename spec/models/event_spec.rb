@@ -314,14 +314,18 @@ describe Event do
       end
 
       describe "determining if we should show the more link" do
-        it "should set :more? to true if there are events past the future cutoff" do
-          Event.should_receive(:count).with(:conditions => ["start_time > ?", Time.today + 2.weeks]).and_return(10)
-          Event.select_for_overview[:more?].should be_true
+        it "should provide :more item if there are events past the future cutoff" do
+          event = stub_model(Event)
+          Event.should_receive(:first).with(:conditions => ["start_time > ?", Time.today + 2.weeks]).and_return(event)
+
+          Event.select_for_overview[:more].should == event
         end
 
-        it "should set :more? to false if there are not events past the future cutoff" do
-          Event.should_receive(:count).with(:conditions => ["start_time > ?", Time.today + 2.weeks]).and_return(0)
-          Event.select_for_overview[:more?].should be_false
+        it "should set :more item if there are no events past the future cutoff" do
+          event = stub_model(Event)
+          Event.should_receive(:first).with(:conditions => ["start_time > ?", Time.today + 2.weeks]).and_return(event)
+
+          Event.select_for_overview[:more?].should be_blank
         end
       end
     end
@@ -638,23 +642,23 @@ describe Event do
       @slave2 = Event.create!(:title => "2nd slave", :start_time => @today, :duplicate_of_id => @slave1.id)
       @orphan = Event.create!(:title => "orphan",    :start_time => @today, :duplicate_of_id => 999999)
     end
-    
+
     it "should recognize a master" do
       @master.should be_a_master
     end
-    
+
     it "should recognize a slave" do
       @slave1.should be_a_slave
     end
-    
+
     it "should not think that a slave is a master" do
       @slave2.should_not be_a_master
     end
-    
+
     it "should not think that a master is a slave" do
       @master.should_not be_a_slave
     end
-    
+
     it "should return the progenitor of a child" do
       @slave1.progenitor.should == @master
     end
@@ -662,15 +666,15 @@ describe Event do
     it "should return the progenitor of a grandchild" do
       @slave2.progenitor.should == @master
     end
-    
+
     it "should return a master as its own progenitor" do
       @master.progenitor.should == @master
     end
-    
+
     it "should return a marked duplicate as progenitor if it is orphaned"  do
       @orphan.progenitor.should == @orphan
     end
-    
+
     it "should return the progenitor if an imported event has an exact duplicate" do
       @abstract_event = SourceParser::AbstractEvent.new
       @abstract_event.title = @slave2.title
@@ -685,11 +689,11 @@ describe Event do
     it "should have versions" do
       Event.new.versions.should == []
     end
-    
+
     it "should create a new version after updating" do
       event = Event.create!(:title => "Event title", :start_time => Time.parse('2008.04.12'))
       event.versions.count.should == 1
-      
+
       event.title = "New Title"
       event.save!
       event.versions.count.should == 2
