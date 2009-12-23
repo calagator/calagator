@@ -202,7 +202,7 @@ class Event < ActiveRecord::Base
     end
 
     # Find next item beyond the future_cuttoff for use in making links to it:
-    times_to_events[:more] = Event.first(:conditions => ["start_time > ?", future_cutoff])
+    times_to_events[:more] = Event.first(:conditions => ["start_time >= ?", future_cutoff], :order => 'start_time asc')
 
     return times_to_events
   end
