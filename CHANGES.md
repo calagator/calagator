@@ -6,6 +6,7 @@ Key
 
   * [THEME] - Changed theme structure, see `themes/README.txt` for details.
   * [SETTING] - Changed setting structure, see `themes/README.txt` for details.
+  * [SECRETS] - Changed secrets structure, see `INSTALL.md` for details.
   * [MIGRATION] - Change schema, run `rake db:migrate` to apply.
   * [DEPENDENCY] - Changed dependencies.
 
@@ -14,7 +15,7 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
-  * Next
+  * v0.20091223
     * [SECRETS] Added entry for setting custom Upcoming API key.
     * Added Upcoming API-based event importer, hopefully resolving long-standing problems caused by them frequently changing their invalid iCalendar output.
     * Fixed export to Google Calendar.
