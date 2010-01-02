@@ -1,0 +1,10 @@
+A <%= @exception.class %> occurred in <%= @controller_name %>#<%= @controller_action_name %>:
+
+  <%= @exception.message %>
+  <%= @backtrace.first %>
+
+<% if @data[:info] -%>
+  <%=@data[:info].to_yaml%>
+<% end -%>
+
+<%= @sections.map { |section| render_section(section) }.join %>
