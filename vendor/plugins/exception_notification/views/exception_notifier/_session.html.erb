@@ -1,0 +1,6 @@
+<%
+  @request.session.instance_variable_set(:@session_id, @request.session_options[:id]) if @request.session.instance_variable_get(:@session_id).nil?
+  @request.session.instance_variable_set(:@data, @request.session.to_hash) if @request.session.instance_variable_get(:@data).nil?
+%>
+* session id: <%= @request.session.instance_variable_get(:@session_id).inspect %>
+* data: <%= PP.pp(@request.session.instance_variable_get(:@data),"").gsub(/\n/, "\n  ").strip %>

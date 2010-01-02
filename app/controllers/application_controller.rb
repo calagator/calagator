@@ -11,12 +11,10 @@ class ApplicationController < ActionController::Base
   layout "application"
 
   # For vendor/plugins/exception_notification
-  include ExceptionNotifiable
-  NOTIFY_ON_EXCEPTIONS = ['preview', 'production'].include?(RAILS_ENV) || ENV['NOTIFY_ON_EXCEPTIONS']
-  if NOTIFY_ON_EXCEPTIONS
-    Rails.configuration.action_controller.consider_all_requests_local = false
-    Rails.configuration.action_mailer.raise_delivery_errors = true
+  if ['preview', 'production'].include?(RAILS_ENV) || ENV['NOTIFY_ON_EXCEPTIONS']
+    include ExceptionNotifiable
     local_addresses.clear
+    (self.exception_notifiable_silent_exceptions ||= []) << ActionController::InvalidAuthenticityToken if ActionController.const_defined?(:InvalidAuthenticityToken)
   end
 
   # Setup theme

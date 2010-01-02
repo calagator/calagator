@@ -1,0 +1,12 @@
+2009-12-30 v2.0.7
+- cite /rails/app/views/exception_notifiable/500.html in Rakefile (oops!)
+
+2009-12-30 v2.0.6
+- cite /rails/app/views/exception_notifiable/500.html in gemspec (oops!)
+
+2009-12-30 v2.0.5
+- use blank? instead of empty? so nils won't cause an error
+
+2009-11-04
+* Fixing Typos in Comments and Readme
+* General Readme cleanup

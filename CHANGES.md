@@ -15,6 +15,9 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
+  * Next
+    * Eliminated alert emails notifying admin that a form was submitted without a valid authentication token, which is almost always a spam bot.
+
   * v0.20091223
     * [SECRETS] Added entry for setting custom Upcoming API key.
     * Added Upcoming API-based event importer, hopefully resolving long-standing problems caused by them frequently changing their invalid iCalendar output.
