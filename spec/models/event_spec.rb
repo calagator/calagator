@@ -316,14 +316,14 @@ describe Event do
       describe "determining if we should show the more link" do
         it "should provide :more item if there are events past the future cutoff" do
           event = stub_model(Event)
-          Event.should_receive(:first).with(:conditions => ["start_time > ?", Time.today + 2.weeks]).and_return(event)
+          Event.should_receive(:first).with(:order=>"start_time asc", :conditions => ["start_time >= ?", Time.today + 2.weeks]).and_return(event)
 
           Event.select_for_overview[:more].should == event
         end
 
         it "should set :more item if there are no events past the future cutoff" do
           event = stub_model(Event)
-          Event.should_receive(:first).with(:conditions => ["start_time > ?", Time.today + 2.weeks]).and_return(event)
+          Event.should_receive(:first).with(:order=>"start_time asc", :conditions => ["start_time >= ?", Time.today + 2.weeks]).and_return(event)
 
           Event.select_for_overview[:more?].should be_blank
         end
