@@ -27,7 +27,12 @@ module RecentChangesHelper
     changes = {}
     current = version.next.ergo.reify
     previous = version.reify
-    record = version.item_type.constantize.find(version.item_id) rescue nil
+    record = \
+      begin
+        version.item_type.constantize.find(version.item_id)
+      rescue ActiveRecord::RecordNotFound
+        previous || current
+      end
 
     # Bail out if no changes are available
     return changes unless record
