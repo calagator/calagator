@@ -726,6 +726,8 @@ describe Event do
 
     before(:each) do
       @original = events(:calagator_codesprint)
+      @original.start_time = Time.parse("2008-01-19 10:00 PST")
+      @original.end_time = Time.parse("2008-01-19 17:00 PST")
       @clone = @original.to_clone
     end
 
@@ -737,9 +739,9 @@ describe Event do
       @clone.id.should be_nil
     end
 
-    it "should not have start or end time" do
-      @clone.start_time.should be_nil
-      @clone.end_time.should be_nil
+    it "should set start and end time to original time of day for today" do
+      @clone.start_time.should == Time.today + 10.hours
+      @clone.end_time.should   == Time.today + 17.hours
     end
 
     it "should duplicate title, description, venue, url and tag_list" do
