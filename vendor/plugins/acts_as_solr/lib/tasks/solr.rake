@@ -13,6 +13,7 @@ namespace :solr do
 
     begin
       n = Net::HTTP.new('localhost', SOLR_PORT)
+      n.start
       n.request_head('/').value
 
     rescue Net::HTTPServerException #responding
