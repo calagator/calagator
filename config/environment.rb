@@ -44,8 +44,6 @@ Rails::Initializer.run do |config|
 
   require 'fileutils'
 
-  config.time_zone = "Pacific Time (US & Canada)"
-
   # Settings in config/environments/* take precedence over those specified here.
   # Application configuration should go into files in config/initializers
   # -- all .rb files in that directory are automatically loaded.
@@ -123,7 +121,7 @@ Rails::Initializer.run do |config|
   require 'settings_reader'
   SETTINGS = SettingsReader.read(
     theme_file("settings.yml"), {
-      'timezone'                 => 'Pacific Time (US & Canada)',
+      'timezone' => 'Pacific Time (US & Canada)',
     }
   )
 
@@ -131,7 +129,6 @@ Rails::Initializer.run do |config|
   config.time_zone = SETTINGS.timezone
 
   # Set timezone for OS
-  # FIXME this is an evil temporary workaround, in future SETTINGS.timezone will be enough
   ENV['TZ'] = SETTINGS.tz if SETTINGS.tz
 
   # Set cookie session
