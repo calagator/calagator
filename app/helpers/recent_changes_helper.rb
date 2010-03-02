@@ -26,7 +26,8 @@ module RecentChangesHelper
   def changes_for(version)
     changes = {}
     current = version.next.ergo.reify
-    previous = version.reify
+    # FIXME #reify randomly throws "ArgumentError Exception: syntax error on line 13, col 30:" -- why?
+    previous = version.reify rescue nil
     record = \
       begin
         version.item_type.constantize.find(version.item_id)
@@ -67,8 +68,8 @@ module RecentChangesHelper
   # Returns string title for the versioned record.
   def title_for(version)
     current = version.next.ergo.reify
-    previous = version.reify
-    #IK# record = version.item rescue nil
+    # FIXME #reify randomly throws "ArgumentError Exception: syntax error on line 13, col 30:" -- why?
+    previous = version.reify rescue nil
     record = version.item_type.constantize.find(version.item_id) rescue nil
 
     title = previous.ergo.title || current.ergo.title || record.ergo.title
