@@ -757,7 +757,7 @@ describe Event do
     fixtures :events
 
     def ical_roundtrip(events, opts = {})
-      parsed_events = Vpim::Icalendar.decode( Event.to_ical(events, opts) ).first.events
+      parsed_events = Vpim::Icalendar.decode( Event.to_ical(events, opts) ).first.events.to_a
       if events.is_a?(Event)
         parsed_events.first
       else
