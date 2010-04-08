@@ -515,6 +515,8 @@ EOF
             dtend   item.end_time || item.start_time + 1.hour
           end
 
+          # The reason for this messy URL helper business is that models can't access the route helpers,
+          # and even if they could, they'd need to access the request object so they know what the server's name is and such.
           if item.url.blank?
             url opts[:url_helper].call(item) if opts[:url_helper]
           else
@@ -532,62 +534,7 @@ EOF
       end
     end
     
-    # icalendar = Vpim::Icalendar.create2
-    # 
-    # for event in events
-    #   next if event.start_time.nil?
-    #   icalendar.add_event do |c|
-    #     if event.multiday?
-    #       c.dtstart     event.dates.first
-    #       c.dtend       event.dates.last + 1.day
-    #     else
-    #       c.dtstart     event.start_time
-    #       c.dtend       event.end_time || event.start_time + 1.hour
-    #     end
-    # 
-    #     c.summary       event.title || 'Untitled Event'
-    #     c.created       event.created_at if event.created_at
-    #     c.lastmod       event.updated_at if event.updated_at
-    # 
-    #     description = returning String.new do |d|
-    # 
-    #       if event.multiday?
-    #         d << "This event runs from #{TimeRange.new(event.start_time, event.end_time, :format => :text).to_s}."
-    #         d << "\n\n Description:\n"
-    #       end
-    # 
-    #       d << Hpricot(event.description).to_plain_text unless event.description.blank?
-    #       d << "\n\nTags:\n#{event.tag_list}" unless event.tag_list.blank?
-    # 
-    #     end
-    # 
-    #     c.description   description unless description.blank?
-    # 
-    #     # The reason for this messy URL helper business is that models can't access the route helpers,
-    #     # and even if they could, they'd need to access the request object so they know what the server's name is and such.
-    #     if event.url.blank?
-    #       c.url         opts[:url_helper].call(event) if opts[:url_helper]
-    #     else
-    #       c.url         event.url
-    #     end
-    # 
-    #     # dtstamp and uid added because of a bug in Outlook;
-    #     # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
-    #     # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
-    #     c.dtstamp       event.created_at || event.start_time
-    #     c.uid           "#{opts[:url_helper].call(event)}" if opts[:url_helper]
-    # 
-    #     # TODO Figure out how to encode a venue. Remember that Vpim can't handle Vvenue itself and our parser had to
-    #     # go through many hoops to extract venues from the source data. Also note that the Vevent builder here doesn't
-    #     # recognize location, priority, and a couple of other things that are included as modules in the Vevent class itself.
-    #     # This seems like a bug in Vpim.
-    #     #c.location     !event.venue.nil? ? event.venue.title : ''
-    #   end
-    # end
-    # 
-    # TODO Add calendar title support to vpim or find a prettier way to do this.
-    # method added because of bug in Outlook 2003, which won't import .ics without a METHOD
-    return icalendar.export #.encode.sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH")
+    return icalendar.export.sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH")
   end
 
   def location
