@@ -15,10 +15,14 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
-  * Next
+  * v0.20100302
+    * Fixed "rake gems:install", some required gems weren't being installed.
+    * Fixed "rake solr:start", the Net::HTTP syntax changed in recent versions of Ruby.
+    * Fixed "rake db:dump" and "rake db:restore", the environment changed in recent versions of Rails.
+    * Fixed the recent_changes listing to display changes made to deleted record.
     * Eliminated alert emails notifying admin that a form was submitted without a valid authentication token, which is almost always a spam bot.
     * Improved event form so that the end date is set to the start date if the start date is changed to be after the end date, and displayed highlight to alert user of the modification.
-    * Improved event form so that the end time is offset from the start time if the start time is changed, and displayed highlighted to alert the user of the modification 
+    * Improved event form so that the end time is offset from the start time if the start time is changed, and displayed highlighted to alert the user of the modification
 
   * v0.20091223
     * [SECRETS] Added entry for setting custom Upcoming API key.
