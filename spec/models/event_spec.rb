@@ -813,7 +813,7 @@ describe Event do
       event = Event.create( valid_event_attributes.merge(:end_time => valid_event_attributes[:start_time] + 4.days) )
       parsed_event = ical_roundtrip( event )
 
-      start_time = Time.today + Time.today
+      start_time = Time.today.utc.at_midnight
       parsed_event.dtstart.should == start_time
       parsed_event.dtend.should == start_time + 5.days
     end
