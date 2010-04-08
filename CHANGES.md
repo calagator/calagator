@@ -15,6 +15,10 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
+  * Next
+    * Fixed iCalendar exports, they now include timezone and location.
+    * [DEPENDENCY] Added RiCal library.
+
   * v0.20100302
     * Fixed "rake gems:install", some required gems weren't being installed.
     * Fixed "rake solr:start", the Net::HTTP syntax changed in recent versions of Ruby.
