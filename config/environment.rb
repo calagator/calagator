@@ -41,6 +41,7 @@ Rails::Initializer.run do |config|
   config.gem 'rspec', :version => '>= 1.2.0', :lib => false
   config.gem 'rspec-rails', :version => '>= 1.2.0', :lib => false
   config.gem "facets", :version => ">=2.5.0", :lib => false
+  config.gem "rubyredrick-ri_cal", :lib => "ri_cal", :source => "http://gems.github.com", :version => ">=0.8.4"
 
   require 'fileutils'
 

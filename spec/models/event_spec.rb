@@ -147,9 +147,7 @@ describe Event do
       abstract_event.title.should == @basic_event.title
       abstract_event.url.should == @basic_event.url
 
-      # TODO implement venue generation
-      #abstract_event.location.title.should == @basic_event.venue.title
-      abstract_event.location.should be_nil
+      abstract_event.location.title.should == @basic_event.venue.title
     end
 
     it "should parse an Event into an iCalendar without a URL and generate it" do
@@ -164,9 +162,7 @@ describe Event do
       abstract_event.title.should == @basic_event.title
       abstract_event.url.should == generated_url
 
-      # TODO implement venue generation
-      #abstract_event.location.title.should == @basic_event.venue.title
-      abstract_event.location.should be_nil
+      abstract_event.location.title.should == @basic_event.venue.title
     end
 
   end
@@ -817,12 +813,7 @@ describe Event do
       event = Event.create( valid_event_attributes.merge(:end_time => valid_event_attributes[:start_time] + 4.days) )
       parsed_event = ical_roundtrip( event )
 
-      # UTC is used here because we're currently outputting _all_ iCalendar times as UTC.
-      # We really need to make it so that isn't happening.
-      #
-      # FIXME: Time zone data should be included in iCalendar output. Really.
-
-      start_time = Time.today.utc + Time.today.gmtoff
+      start_time = Time.today + Time.today
       parsed_event.dtstart.should == start_time
       parsed_event.dtend.should == start_time + 5.days
     end
