@@ -8,10 +8,6 @@
   <%= events_sort_label(params[:order]) %></h2>
 </div>
 
-<div id='list_items'>
-  <%= render :partial => 'events/table', :locals => { :events => @events } %>
-</div>
-
 <div id='list_filters' class='sidebar'>
   
   <h3 class='first'>Filter by date</h3>
@@ -47,5 +43,9 @@
     <li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+events_url(:format => 'ics') %></li>
   </ul>
   
+</div>
+
+<div id='list_items'>
+  <%= render :partial => 'events/table', :locals => { :events => @events } %>
 </div>
 <% end %>
