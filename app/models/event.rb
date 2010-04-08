@@ -487,10 +487,10 @@ EOF
   def self.to_ical(events, opts={})
     events = [events].flatten
     
-    icalendar = RiCal.Calendar do
+    icalendar = RiCal.Calendar do |calendar|
       for item in events
-        event do
-          summary item.title || 'Untitled Event'
+        calendar.event do |entry|
+          entry.summary(item.title || 'Untitled Event')
           
           desc = returning String.new do |d|
             if item.multiday?
@@ -502,34 +502,34 @@ EOF
             d << "\n\nTags:\n#{item.tag_list}" unless item.tag_list.blank?
           end
           
-          description desc unless desc.blank?
+          entry.description(desc) unless desc.blank?
           
-          created       item.created_at if item.created_at
-          last_modified item.updated_at if item.updated_at
+          entry.created       item.created_at if item.created_at
+          entry.last_modified item.updated_at if item.updated_at
           
           if item.multiday?
-            dtstart item.dates.first
-            dtend   item.dates.last + 1.day
+            entry.dtstart item.dates.first
+            entry.dtend   item.dates.last + 1.day
           else
-            dtstart item.start_time
-            dtend   item.end_time || item.start_time + 1.hour
+            entry.dtstart item.start_time
+            entry.dtend   item.end_time || item.start_time + 1.hour
           end
 
           # The reason for this messy URL helper business is that models can't access the route helpers,
           # and even if they could, they'd need to access the request object so they know what the server's name is and such.
           if item.url.blank?
-            url opts[:url_helper].call(item) if opts[:url_helper]
+            entry.url opts[:url_helper].call(item) if opts[:url_helper]
           else
-            url item.url
+            entry.url item.url
           end
 
-          location item.venue.title if item.venue
+          entry.location item.venue.title if item.venue
           
           # dtstamp and uid added because of a bug in Outlook;
           # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
           # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
-          dtstamp item.created_at || item.start_time
-          uid     "#{opts[:url_helper].call(item)}" if opts[:url_helper]
+          entry.dtstamp item.created_at || item.start_time
+          entry.uid     "#{opts[:url_helper].call(item)}" if opts[:url_helper]
         end
       end
     end
