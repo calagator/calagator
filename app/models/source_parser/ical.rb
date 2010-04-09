@@ -52,60 +52,43 @@ class SourceParser # :nodoc:
         end
       end
 
-      content_calendars = content.scan(CALENDAR_CONTENT_RE)
+      content_calendar = RiCal.parse_string(content).first
+      require 'rubygems'; require 'ruby-debug'; Debugger.start; debugger; 1 # FIXME
+      
+      events = []
+      for component in content_calendar.events
+        next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
+        event             = AbstractEvent.new
+        event.start_time  = component.dtstart
+        event.title       = component.summary
+        event.description = component.description
+        event.end_time    = component.dtend
+        event.url         = component.url
 
-      returning([]) do |events|
-        for content_calendar in content_calendars
-          content_venues = content_calendar.scan(VENUE_CONTENT_RE)
+        # content_venue = \
+        # begin
+        #   if content_calendar.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
+        #     # Special handling for Upcoming, where each event maps 1:1 to a venue
+        #     content_venues[index]
+        #   else
+        #     begin
+        #       location_field = component.fields.find{|t| t.respond_to?(:name) && t.name.upcase == "LOCATION"}
+        #       venue_values   = location_field ? location_field.pvalues("VVENUE") : nil
+        #       venue_uid      = venue_values ? venue_values.first : venue_values
+        #       venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
+        #     rescue Exception => e
+        #       # Ignore
+        #       RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
+        #       nil
+        #     end
+        #   end
+        # end
 
-          content_calendar.scan(EVENT_CONTENT_RE).each_with_index do |content_event, index|
-            # Skip old events before handing them to VPIM
-            if opts[:skip_old]
-              if start_match = content_event.match(EVENT_DTSTART_RE)
-                start_time = Time.parse(start_match[1])
-
-                end_match = content_event.match(EVENT_DTEND_RE)
-                end_time = end_match ? Time.parse(end_match[1]) : nil
-
-                next if (end_time || start_time) < cutoff
-              end
-            end
-
-            components = Vpim::Icalendar.decode(%{BEGIN:VCALENDAR\n#{content_event}\nEND:VCALENDAR\n}).first.components
-            raise TypeError, "Got multiple components for a single event" unless components.size == 1
-            component = components.first
-
-            event             = AbstractEvent.new
-            event.start_time  = component.dtstart
-            event.title       = component.summary
-            event.description = component.description
-            event.end_time    = component.dtend
-            event.url         = component.url
-
-            content_venue = \
-              begin
-                if content_calendar.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
-                  # Special handling for Upcoming, where each event maps 1:1 to a venue
-                  content_venues[index]
-                else
-                  begin
-                    location_field = component.fields.find{|t| t.respond_to?(:name) && t.name.upcase == "LOCATION"}
-                    venue_values   = location_field ? location_field.pvalues("VVENUE") : nil
-                    venue_uid      = venue_values ? venue_values.first : venue_values
-                    venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
-                  rescue Exception => e
-                    # Ignore
-                    RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
-                    nil
-                  end
-                end
-              end
-
-            event.location = to_abstract_location(content_venue, :fallback => component.location)
-            events << event
-          end
-        end
+        event.location = to_abstract_location(component.location, :fallback => component.location)
+        events << event
       end
+
+      return events
     end
 
     # Return an AbstractLocation extracted from an iCalendar input.

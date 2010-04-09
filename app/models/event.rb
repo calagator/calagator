@@ -508,11 +508,11 @@ EOF
           last_modified item.updated_at if item.updated_at
           
           if item.multiday?
-            dtstart item.dates.first
-            dtend   item.dates.last + 1.day
+            dtstart  item.dates.first
+            dtend    item.dates.last + 1.day
           else
-            dtstart item.start_time
-            dtend   item.end_time || item.start_time + 1.hour
+            dtstart  item.start_time
+            dtend    item.end_time || item.start_time + 1.hour
           end
 
           # The reason for this messy URL helper business is that models can't access the route helpers,

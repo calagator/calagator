@@ -32,7 +32,7 @@ class SourceParser
 
   # Return content for the arguments
   def self.content_for(*args)
-    ::SourceParser::Base.content_for(*args)
+    ::SourceParser::Base.content_for(*args).strip
   end
 
   # Return content for a URL

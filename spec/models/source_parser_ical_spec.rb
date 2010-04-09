@@ -99,15 +99,15 @@ describe SourceParser::Ical, "with iCalendar events" do
     return source.to_events(:skip_old => false)
   end
 
-  it "should parse Apple iCalendar format" do
-    events = events_from_ical_at('ical_apple.ics')
+  it "should parse Apple iCalendar v3 format" do
+    events = events_from_ical_at('ical_apple_v3.ics')
 
     events.size.should == 1
     event = events.first
     event.title.should == "Coffee with Jason"
     # NOTE Source data does not contain a timezone!?
-    event.start_time.should == Time.parse('2002-11-28 14:00:00')
-    event.end_time.should == Time.parse('2002-11-28 15:00:00')
+    event.start_time.should == Time.zone.parse('2010-04-08 00:00:00')
+    event.end_time.should == Time.zone.parse('2010-04-08 01:00:00')
     event.venue.should be_nil
   end
 
@@ -117,7 +117,7 @@ describe SourceParser::Ical, "with iCalendar events" do
     events.size.should == 1
     event = events.first
     event.title.should be_blank
-    event.start_time.should == Time.parse('Wed Jan 17 00:00:00 UTC 2007')
+    event.start_time.should == Time.parse('Wed Jan 17 00:00:00 2007')
     event.venue.should be_nil
   end
 
@@ -127,8 +127,8 @@ describe SourceParser::Ical, "with iCalendar events" do
     event = events.first
 
     event.title.should == "Ignite Portland"
-    event.start_time.should == Time.parse('2008-02-05 18:00:00')
-    event.end_time.should == Time.parse('2008-02-05 21:00:00')
+    event.start_time.should == Time.zone.parse('2008-02-05 18:00:00')
+    event.end_time.should == Time.zone.parse('2008-02-05 21:00:00')
     event.description.should == "If you had five minutes to talk to Portland what would you say? What if you only got 20 slides and they rotated automatically after 15 seconds? Launch a web site? Teach a hack? Talk about recent learnings, successes, failures?\n      \n      Come join us for the second Ignite Portland! It's free to attend or present. We hope to have food and drinks, but we need sponsors for that, so check out http://www.igniteportland.com for details on attending, presenting, or sponsoring!\n      \n      What is Ignite Portland? A bunch of fast-paced, interesting presentations - 20 slides for 15 seconds each. Our mantra is \"share burning ideas\" - just about any topic will do, as long as it's interesting. From tech to crafts to business to just plain fun! There will be time to network and chat after each series of presentations."
 
     event.venue.should_not be_blank
@@ -147,8 +147,8 @@ describe SourceParser::Ical, "with iCalendar events" do
 
     event.title.should == "Demolicious - Portland Web Innovators"
     # NOTE Source data does not contain a timezone!?
-    event.start_time.utc.should == Time.parse('2009-04-01 19:00:00').utc
-    event.end_time.utc.should   == Time.parse('2009-04-01 19:00:00').utc # No end_time provided
+    event.start_time.should == Time.zone.parse('2009-04-01 19:00:00')
+    event.end_time.should   == Time.zone.parse('2009-04-01 19:00:00') # No end_time provided
     event.description.should == "Come see the great stuff your fellow Portlanders have been working on. Several ten minute demos of new products and side projects.\n      \n      Confirmed lineup:\n      * I Need to Read This! (Benjamin Stover)\n      * MioWorks (David Abramowski)\n      * Black Tonic (Jason Glaspey)\n      * Avatari (Sam Grover)\n      * You?\n      \n      Find out more about showing off *your* project here:\n      http://www.pdxwi.com/demolicious"
 
     event.venue.should_not be_blank
