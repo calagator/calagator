@@ -52,17 +52,25 @@ class SourceParser # :nodoc:
         end
       end
 
-      content_calendar = RiCal.parse_string(content).first
-      require 'rubygems'; require 'ruby-debug'; Debugger.start; debugger; 1 # FIXME
-      
+      content_calendar = RiCal.parse_string(content).first      
       events = []
       for component in content_calendar.events
         next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
         event             = AbstractEvent.new
-        event.start_time  = component.dtstart
         event.title       = component.summary
         event.description = component.description
-        event.end_time    = component.dtend
+        if component.dtstart_property.tzid.nil?
+          event.start_time  = Time.parse(component.dtstart_property.value)
+          if component.dtend_property.nil?
+            # FIXME Skip, maybe check duration? Please refactor this whole section!
+          else
+            event.end_time    = Time.parse(component.dtend_property.value)
+          end
+        else
+          event.start_time  = component.dtstart
+          event.end_time    = component.dtend
+        end
+
         event.url         = component.url
 
         # content_venue = \
