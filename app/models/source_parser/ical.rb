@@ -17,6 +17,11 @@ class SourceParser # :nodoc:
     def self.read_url(url)
       super(url.gsub(/^webcal:/, 'http:'))
     end
+    
+    # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
+    def dates_for_tz(component)
+      
+    end
 
     CALENDAR_CONTENT_RE    = /^BEGIN:VCALENDAR.*?^END:VCALENDAR/m
     EVENT_CONTENT_RE       = /^BEGIN:VEVENT.*?^END:VEVENT/m
@@ -54,45 +59,48 @@ class SourceParser # :nodoc:
 
       content_calendar = RiCal.parse_string(content).first      
       events = []
-      for component in content_calendar.events
+      content_calendar.events.each_with_index do |component, index|
         next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
         event             = AbstractEvent.new
         event.title       = component.summary
         event.description = component.description
+        event.url         = component.url
+        
         if component.dtstart_property.tzid.nil?
           event.start_time  = Time.parse(component.dtstart_property.value)
           if component.dtend_property.nil?
-            # FIXME Skip, maybe check duration? Please refactor this whole section!
+            event.end_time = event.start_time
+            # FIXME check duration? Please refactor this whole section!
           else
-            event.end_time    = Time.parse(component.dtend_property.value)
+            event.end_time = Time.parse(component.dtend_property.value)
           end
         else
           event.start_time  = component.dtstart
           event.end_time    = component.dtend
         end
 
-        event.url         = component.url
+        content_venues = content_calendar.to_s.scan(VENUE_CONTENT_RE)
+        
+        content_venue = \
+        begin
+          if content_calendar.to_s.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
+            # Special handling for Upcoming, where each event maps 1:1 to a venue
+            content_venues[index]
+          else
+            begin
+              location_field = component.fields.find{|t| t.respond_to?(:name) && t.name.upcase == "LOCATION"}
+              venue_values   = location_field ? location_field.pvalues("VVENUE") : nil
+              venue_uid      = venue_values ? venue_values.first : venue_values
+              venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
+            rescue Exception => e
+              # Ignore
+              RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
+              nil
+            end
+          end
+        end
 
-        # content_venue = \
-        # begin
-        #   if content_calendar.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
-        #     # Special handling for Upcoming, where each event maps 1:1 to a venue
-        #     content_venues[index]
-        #   else
-        #     begin
-        #       location_field = component.fields.find{|t| t.respond_to?(:name) && t.name.upcase == "LOCATION"}
-        #       venue_values   = location_field ? location_field.pvalues("VVENUE") : nil
-        #       venue_uid      = venue_values ? venue_values.first : venue_values
-        #       venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
-        #     rescue Exception => e
-        #       # Ignore
-        #       RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
-        #       nil
-        #     end
-        #   end
-        # end
-
-        event.location = to_abstract_location(component.location, :fallback => component.location)
+        event.location = to_abstract_location(content_venue, :fallback => component.location)
         events << event
       end
 
