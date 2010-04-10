@@ -19,8 +19,22 @@ class SourceParser # :nodoc:
     end
     
     # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-    def dates_for_tz(component)
-      
+    def self.dates_for_tz(component, event)
+      if component.dtstart_property.tzid.nil?
+        event.start_time  = Time.parse(component.dtstart_property.value)
+        if component.dtend_property.nil?
+          if component.duration
+            event.end_time = component.duration_property.add_to_date_time_value(event.start_time)
+          else
+            event.end_time = event.start_time
+          end
+        else
+          event.end_time = Time.parse(component.dtend_property.value)
+        end
+      else
+        event.start_time  = component.dtstart
+        event.end_time    = component.dtend
+      end
     end
 
     CALENDAR_CONTENT_RE    = /^BEGIN:VCALENDAR.*?^END:VCALENDAR/m
@@ -66,18 +80,7 @@ class SourceParser # :nodoc:
         event.description = component.description
         event.url         = component.url
         
-        if component.dtstart_property.tzid.nil?
-          event.start_time  = Time.parse(component.dtstart_property.value)
-          if component.dtend_property.nil?
-            event.end_time = event.start_time
-            # FIXME check duration? Please refactor this whole section!
-          else
-            event.end_time = Time.parse(component.dtend_property.value)
-          end
-        else
-          event.start_time  = component.dtstart
-          event.end_time    = component.dtend
-        end
+        SourceParser::Ical.dates_for_tz(component, event)
 
         content_venues = content_calendar.to_s.scan(VENUE_CONTENT_RE)
         

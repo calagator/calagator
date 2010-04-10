@@ -22,9 +22,9 @@ describe SourceParser, "when reading content" do
   it "should unescape ATOM feeds" do
     content = mock_model(String, :content_type => "application/atom+xml")
     SourceParser::Base.should_receive(:read_url).and_return(content)
-    CGI.should_receive(:unescapeHTML).and_return(42)
+    CGI.should_receive(:unescapeHTML).and_return("42")
 
-    SourceParser.content_for(:fake => :argument).should == 42
+    SourceParser.content_for(:fake => :argument).should == "42"
   end
 end
 
