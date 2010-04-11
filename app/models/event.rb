@@ -534,7 +534,12 @@ EOF
       end
     end
     
-    return icalendar.export.sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH")
+    # Add the calendar name, normalize line-endings to UNIX LF, then replace them with DOS CF-LF.
+    return icalendar.
+      export.
+      sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH").
+      gsub(/\r\n/,"\n").
+      gsub(/\n/,"\r\n")
   end
 
   def location
