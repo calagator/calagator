@@ -1,5 +1,12 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+def events_from_ical_at(filename)
+  url = "http://foo.bar/"
+  source = Source.new(:title => "Calendar event feed", :url => url)
+  SourceParser::Base.should_receive(:read_url).and_return(read_sample(filename))
+  return source.to_events(:skip_old => false)
+end
+
 describe SourceParser::Ical, "in general" do
   it "should read http URLs as-is" do
     http_url = "http://foo.bar/"
@@ -96,12 +103,6 @@ describe SourceParser::Ical, "when parsing multiple items in an Eventful feed" d
 end
 
 describe SourceParser::Ical, "with iCalendar events" do
-  def events_from_ical_at(filename)
-    url = "http://foo.bar/"
-    source = Source.new(:title => "Calendar event feed", :url => url)
-    SourceParser::Base.should_receive(:read_url).and_return(read_sample(filename))
-    return source.to_events(:skip_old => false)
-  end
 
   it "should parse Apple iCalendar v3 format" do
     events = events_from_ical_at('ical_apple_v3.ics')
@@ -225,11 +226,10 @@ describe SourceParser::Ical, "when importing events with non-local times" do
     e = Event.find(event)
     e.start_time.should == Time.parse('Thu Jul 01 08:00:00 +0000 2010')
     e.end_time.should == Time.parse('Thu Jul 01 09:00:00 +0000 2010')
-
-end
+  end
 
   it "should store time with TZID=GMT in UTC" do
-    pending "not activated - requires VPIM fix or work-around. See Issue238."
+    pending "RiCal doesn't consider the time zone data in this file valid"
     events = events_from_ical_at('ical_gmt.ics')
     events.size.should == 1
     abstract_event = events.first

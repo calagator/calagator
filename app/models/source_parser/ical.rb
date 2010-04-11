@@ -35,6 +35,9 @@ class SourceParser # :nodoc:
         event.start_time  = component.dtstart
         event.end_time    = component.dtend
       end
+    rescue RiCal::InvalidTimezoneIdentifier
+      event.start_time = Time.parse(component.dtstart_property.to_s)
+      event.end_time = Time.parse(component.dtend_property.to_s)
     end
 
     CALENDAR_CONTENT_RE    = /^BEGIN:VCALENDAR.*?^END:VCALENDAR/m
