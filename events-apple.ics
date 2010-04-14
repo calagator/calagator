@@ -1,0 +1,2452 @@
+BEGIN:VCALENDAR
+METHOD:PUBLISH
+X-WR-TIMEZONE:US/Pacific
+PRODID:-//Apple Inc.//iCal 3.0//EN
+CALSCALE:GREGORIAN
+X-WR-CALNAME:events
+VERSION:2.0
+X-WR-RELCALID:9BF5E0EA-7445-451B-8961-E3B7C0E93EEF
+X-APPLE-CALENDAR-COLOR:#F57802
+BEGIN:VTIMEZONE
+TZID:America/Los_Angeles
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+DTSTART:20070311T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU
+TZNAME:PDT
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+DTSTART:20071104T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU
+TZNAME:PST
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:The Oracle Development Upgrade team will be delivering this 
+ seminar to provide best practices and helpful tips to make your Oracle D
+ atabase upgrades quick and successful.\n\nBreakfast and lunch will be se
+ rved.  Must be registered to attend -- follow Website link to register.\
+ n\nTags:\n11g\, database\, oracle
+UID:http://calagator.org/events/1250458464
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oracle.com/dm/10q4field/46458_11gr2_portland.ht
+ ml
+DTSTART;TZID=America/Los_Angeles:20100415T080000
+DTSTAMP:20100321T054108Z
+SUMMARY:Oracle 11g Database Upgrade Seminar
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100415T133000
+LOCATION:The Nines Hotel
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Details to come...\n\nTags:\nfunctionalprogramming\, pdxscal
+ a\, scala
+UID:http://calagator.org/events/1250458266
+TRANSP:OPAQUE
+URL;VALUE=URI:http://groups.google.com/group/pdxscala
+DTSTART;TZID=America/Los_Angeles:20100520T190000
+DTSTAMP:20100201T060925Z
+SUMMARY:PDXScala Meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100520T220000
+LOCATION:AboutUs
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for our monthly event! More details to come ...\n\nI
+ xDA Portland is the local chapter of the Interaction Design Association 
+ (http://www.ixda.org/local/ixda-portland).
+UID:http://calagator.org/events/1250458426
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458426
+DTSTART;TZID=America/Los_Angeles:20101019T180000
+DTSTAMP:20100311T035047Z
+SUMMARY:IxDA Portland: Monthly Event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20101019T200000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:In this fun and provocative session\, you will learn to bett
+ er harness your intellectual strengths when asked to join forces with di
+ fferent personalities\, varying capabilities and a myriad of work habits
+  and opinions. Learn to better analyze people and assess interactions an
+ d relationships. Enhance your ability to collaborate and make your proje
+ cts successful.\n\nTags:\nbusiness relationships\, communicating\, soft 
+ skills
+UID:http://calagator.org/events/1250458495
+TRANSP:OPAQUE
+URL;VALUE=URI:http://oregontrainingnetwork.com/soft-skills-for-geeks-com
+ munication-2-0/
+DTSTART;TZID=America/Los_Angeles:20100429T090000
+DTSTAMP:20100330T043947Z
+SUMMARY:Soft Skills for Geeks: Communicating 2.0
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100429T170000
+LOCATION:Doubletree Hotel & Executive Meeting Center Portland - Lloyd Ce
+ nter 
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Electrogals 2010 - Call & Response\nAll Women - All Electron
+ ic\n\nThe concert will showcase female electronic music performers from 
+ Portland and the West Coast\, featuring synthesists\, sonic explorers\, 
+ deep listeners\, circuit benders\, and beat manglers. The performances w
+ ill cover a wide range of styles\, from beat-heavy song forms to abstrac
+ t noise-generated soundscapes. Some of the performances will also includ
+ e the audience\, in ways that will definitely surprise and delight - and
+  no\, there won't be any embarrassing sing-alongs. Probably.\n\nAbout th
+ e Electrogals series\n\nAlthough there is nothing inherently manly about
+  creating or performing electronic music\, the female electronic musicia
+ n is something of a rare bird. Electrogals 2010 will be the fourth in th
+ is series of showcases for women who have immersed themselves in this ar
+ t form.\n\nThe first Electrogals show happened in 1995 at Mills College 
+ in Oakland\, when composer Heather Perkins gathered a group of female el
+ ectronic musicians for a show at the Mills Concert Hall. In 2004\, Heath
+ er put on another Electrogals concert as part of the Sound/Craft music s
+ eries at the Portland Museum of Contemporary Craft. In the spring of 200
+ 8\, Heather Perkins\, Mary Wright and Christi Denton put on an Electroga
+ ls concert at Holocene\, filling both stages with an amazing lineup.\n\n
+ All compositions for Electrogals 2010 will be written by Portland compos
+ er and performer Heather Perkins\, and performed by an all-star roster o
+ f female electronic music performers.\n\nNOTE: The time isn't listed on 
+ the website\, it could be inaccurate.\n\nTags:\nart\, electronic\, music
+ 
+UID:http://calagator.org/events/1250458503
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.electrogals.com/
+DTSTART;TZID=America/Los_Angeles:20100627T120000
+DTSTAMP:20100331T185035Z
+SUMMARY:Electrogals 2010
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100627T170000
+LOCATION:Disjecta
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Monday\, May 24\, 2010 at 9am through W
+ ednesday\, May 26\, 2010 at 5:30pm.\n\n Description:\nJoin Colleen Wrigh
+ t of the Search Engine Academy of Oregon as she teaches the latest searc
+ h engine marketing tips and tactics. In this 3-day course you will learn
+  advanced strategies to capture your target market through the power of 
+ the search engines and the strength of compelling content. \n\nSEO Train
+ ing Course Day 1\n\n    * Review the 6-step optimization process taught 
+ in the Essentials class to help you retain this important information.\n
+     * Work on advanced keyword research strategies.\n    * Learn techniq
+ ues that will help you write effective sales copy that gets results.\n  
+   * Understand how the personalization of search results is changing the
+  rules.\n    * Find out the best approaches for setting up a blog and le
+ arn about the art of blogging.\n    * Creative ideas for implementing us
+ er generated content (UGC).\n    * More custom website reviews.\n\nSEO T
+ raining Course Day 2\n\n    * What is Latent Semantic Indexing and how c
+ an it help my website?\n    * How to develop a unique selling propositio
+ n that retains your visitor's interest and gets them digging deeper into
+  our web sites.\n    * Why are database driven sites unique when it come
+ s to SEO and how can we make sure we get maximum advantage from SEO?\n  
+   * What is Social Media Marketing and how can it help boost sales?\n   
+  * How to quickly gain exposure in Google\, Yahoo!\, and others within 2
+ 4 to 48 hours\n    * What is Pay Per Click and who are the players?\n   
+  * Learn how to implement Google Analytics on your website and why this 
+ is a must!\n    * Find out about the tools offered by the search engines
+  to increase your web site's success\n\nSEO Training Course Day 3\n\n   
+  * Learn about competitive intelligence and multi-variate analysis and h
+ ow these tools can help increase your website's rankings\n    * Learn ab
+ out web analytics and how to analyze your progress with ClickTracks\n   
+  * Learn the power of article marketing\n    * What problems might your 
+ site run in to and how can they be fixed? Will talk about technical issu
+ es that come up.\n    * Sure fire strategies to build your SEO business\
+ n    * Group Q&A\n    * Final Exam\n    * Wrap-up and awards\n\nSee the 
+ website for information on the 5-day Comprehensive course that combines 
+ the 2-day Essentials and the 3-day Advanced course material.\n\nContact:
+ \nColleen Wright\nPhone: 503-530-8178\nEmail: info@sea-oregon.com\nWebsi
+ te: http://www.sea-oregon.com\n\nTags:\ninternet marketing training\, se
+ arch engine optimization classes\, search engine optimization seminar\, 
+ search engine optimization training\, search engine optimization worksho
+ ps\, seo training
+UID:http://calagator.org/events/1250458442
+TRANSP:OPAQUE
+URL;VALUE=URI:http://sea-oregon.com/upcoming-workshops/
+DTSTART;VALUE=DATE:20100524
+DTSTAMP:20100312T012558Z
+SUMMARY:Ultimate SEO Mastery Workshop - 3-Day Advanced
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100527
+LOCATION:MacForce
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:BarCamp is an ad-hoc gathering born from the desire for peop
+ le to share and learn in an open environment. It is an intense event wit
+ h discussions\, demos\, and interaction from attendees.\n\nWe will be po
+ sting updates via our twitter account @beaverbarcamp\, and don't forget 
+ to join the Google group to get important notifications about the event!
+  Connect on live chat via IRC - irc.freenode.net\, #BeaverBarCamp (click
+  here if you don't have an IRC client)\n\nTags:\nbarcamp\, beaverbarcamp
+ \, corvallis
+UID:http://calagator.org/events/1250458193
+TRANSP:OPAQUE
+URL;VALUE=URI:http://beaverbarcamp.org
+DTSTART;TZID=America/Los_Angeles:20100417T100000
+DTSTAMP:20100119T171100Z
+SUMMARY:Beaver BarCamp 5
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100417T190000
+LOCATION:Kelley Engineering Center (OSU)
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Wednesday\, May 5\, 2010 at 9am through
+  Thursday\, May 6\, 2010 at 4:30pm.\n\n Description:\nThe eMarketing Sum
+ mit is the region's most comprehensive internet marketing event.  It is 
+ back with even more innovative strategies for your business.  This year'
+ s eMarketing Summit focuses on maximizing the internet marketing strateg
+ ies you already have in place while demonstrating the latest tools and t
+ echniques being used successfully by the region's top companies.  \n\nCh
+ risti Day\, Online Spokesperson & Emerging Media Specialist\, Southwest 
+ Airlines is the featured AMA-Portland Chapter luncheon speaker.\n\nTags:
+ \nemarketing\, marketing\, online\, oregon\, portland\, search\, social 
+ media\, summit
+UID:http://calagator.org/events/1250458293
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.emarketingsummit.com
+DTSTART;VALUE=DATE:20100505
+DTSTAMP:20100206T045804Z
+SUMMARY:eMarketing Summit @ InnoTech
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100507
+LOCATION:Oregon Convention Center
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Meeting agenda:\n- TBD\n\nWe meet the 4th Wednesday of every
+  month from 6:30-8:00 PM at OpenSourcery in NW Portland. No need to RSVP
+ \, all are welcome- our group ranges from the geo-curious to the überhac
+ kers. [Please arrive no more than 10 minutes early\, as the developers a
+ t OpenSourcery are working up until the meeting time.]\n\nOpenSourcery\n
+ 1636 NW Lovejoy St.\nPortland\, OR 97209\n[Or\, if you prefer: 45.529986
+ \, -122.688206]\n\nTags:\ngeo\, geospatial\, gis\, open source\, os\, pd
+ x\, portland
+UID:http://calagator.org/events/1250458535
+TRANSP:OPAQUE
+DTSTART;TZID=America/Los_Angeles:20100422T183000
+DTSTAMP:20100409T054031Z
+SUMMARY:PDX Open Source Geospatial User Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100422T200000
+LOCATION:OpenSourcery
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:The PDXPHP user groups meets every 3rd Tuesday.\n\nThis Meet
+ ing topic is still to be determined.  Typically this posting will be upd
+ ated with the meeting details a few weeks before the meeting\n\nOur Miss
+ ion:The Portland PHP Users Group is a community forum for people to shar
+ e\, meet and learn about PHP and Open Source technologies. The group str
+ ives to be a valuable resource for anyone interested in PHP regardless o
+ f their skill level or background. Through sharing and communication we 
+ believe we can foster a creative and successful community of PHP develop
+ ers.\n\nTags:\npdxphp
+UID:http://calagator.org/events/1250458492
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxphp.org/
+DTSTART;TZID=America/Los_Angeles:20100720T183000
+DTSTAMP:20100329T183216Z
+SUMMARY:PDXPHP - Monthy Meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100720T200000
+LOCATION:NedSpace Old Town
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:WHO: Corrina Black\nCorrina Black grew up sketching pictures
+  and cartoons\, but didn’t turn to design until she discovered the Web a
+ nd taught herself to design and code simple websites. She focused instin
+ ctively on user flow\, interaction\, and attractive solutions. Corrina i
+ s currently a UX Designer on the Microsoft Developer Division team. To b
+ roaden her impact\, Corrina pursued a software engineering degree to com
+ bine with her passion for user experience design. For Corrina\, user exp
+ erience is what matters. A product that doesn’t solve a problem\, is dif
+ ficult to use\, and doesn’t draw the user in\, regardless of how amazing
+  the technology\, will fail.\n\nTOPIC: Creating Great UX with Expression
+  Blend\nCorrina will do an intro to Blend and walkthrough the process of
+  creating a great user experience\; this will involve SketchFlow because
+  detailing and iterating on user flow\, layout\, and animations and tran
+ sitions prior to full-scale implementation is key to great UX design and
+  this is done in tools like SketchFlow. She will also likely walkthrough
+  the process of building a simple application in Blend to show the core 
+ functionality of Blend (maybe create a phone application).\n\nWarmup - T
+ he Reactive Framework (Rx) in Silverlight\nAt the beginning of the meeti
+ ng (6pm) our own Eric Sterling of Vertigo will be giving a short introdu
+ ction to Rx. Have you had trouble writing asynchronous code (including u
+ nit testing code)? If so\, Rx offers a compelling and syntactically attr
+ active way of handling events.\n\nTags:\nexpression blend\, padnug\, sil
+ verlight\, sketchflow\, ui\, ux
+UID:http://calagator.org/events/1250458518
+TRANSP:OPAQUE
+URL;VALUE=URI:http://padnug.org/meetings.aspx?ID=210
+DTSTART;TZID=America/Los_Angeles:20100413T180000
+DTSTAMP:20100405T205720Z
+SUMMARY:Creating Great UX with Expression Blend
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100413T210000
+LOCATION:Webtrends
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Monday\, July 19\, 2010 at midnight thr
+ ough Friday\, July 23\, 2010 at midnight.\n\n Description:\nIf the first
+  years of OSCON were about opening the minds of big business to the phil
+ osophy of open source\, are the years ahead about opening the minds of t
+ he open source community to the possibilities of its future? As open sou
+ rce becomes fully integrated into the corporate environment\, OSCON help
+ s to define\, maintain\, and extend the identity of what it means to be 
+ open source.\n\nOSCON focuses on the substance of technology\, not the s
+ hadow\, filtering the information that most merits attention and prepari
+ ng participants for curves and challenges in the coming year and beyond.
+  OSCON is the place to be inspired and challenged\, renew bonds to commu
+ nity\, make new connections\, and find ways to give back to the open sou
+ rce movement. OSCON has also become one of the most important places to 
+ make open source related announcements\, and to unveil projects and prod
+ ucts.\n\nOpen source is a fundamental principle at the core of many esta
+ blished and emerging technologies\, driving the future of the computer i
+ ndustry. OSCON explores the open source technologies that are here to st
+ ay\, what will broaden the foundation\, and what will lead the way to un
+ expected places and innovations.\n\n"For those who have not been to OSCO
+ N\, it's a great technical conference covering the whole spectrum of ope
+ n source\, including Linux\, MySQL\, the LAMP stack\, Perl\, Python\, Ru
+ by on Rails\, middleware\, applications\, cloud computing\, and more. OS
+ CON always has great keynotes\, tutorials\, and evening Birds-of-a-Feath
+ er sessions. As with many conferences\, a lot of the meat takes place in
+  hallway conversations and impromptu sessions."\n- Zack Urlocker\, InfoW
+ orld
+UID:http://calagator.org/events/1250458472
+TRANSP:OPAQUE
+URL;VALUE=URI:http://en.oreilly.com/oscon2010
+DTSTART;VALUE=DATE:20100719
+DTSTAMP:20100325T213707Z
+SUMMARY:OSCON
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100724
+LOCATION:Oregon Convention Center
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Are you writing for the internet?\nWhether you are writing w
+ ebsite copy or blog postings\, your goal is to resonate with an invisibl
+ e audience.\n\nWrite it Rich! Real-World Writing Tips for Reluctant Writ
+ ers is a fast-paced workshop covers:\n\n    * How to organize your thoug
+ hts and pick a key message\n    * Ingredients for memorable online conte
+ nt (both written and video)\n    * Tips and tricks to capture your targe
+ t market’s attention *Q & A – strongly encouraged!\n\nSusan Rich has ear
+ ned a degree in journalism…which led to a career writing for newspapers 
+ and magazines. Along the way she joined several major companies\, includ
+ ing Boeing and Tektronix. She learned how airplanes fly (and why they cr
+ ash)\, and what goes on inside a logic analyzer (it isn’t logical if you
+ ’re not an engineer). To that end\, Susan managed PR and marketing campa
+ igns\, developed materials for product launches\, and fought the good fi
+ ght with Excel. She lost — which only goes to show that she writse bette
+ r than she can build a spreadsheet. After two decades in the corporate s
+ ector\, Susan left in 2004 to start her own business… Welcome Susan!\n\n
+ You can learn more about Susan\, her services\, classes and events\, and
+  her company RichWriting here: RichWriting.com\n\nTags:\nbusiness\, coac
+ h\, consultant\, free lance\, freelance\, internet\, marketing small bus
+ iness\, photographer\, self-employed\, writer
+UID:http://calagator.org/events/1250458531
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.iasecp.com/events/
+DTSTART;TZID=America/Los_Angeles:20100422T140000
+DTSTAMP:20100408T175146Z
+SUMMARY:Writing for an Invisible Audience | Susan Rich of RichWriting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100422T153000
+LOCATION:IASECP Webinar
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:"How can I better predict if my business will likely survive
+  or fail? Is it possible to know in advance whether I'm going to beat th
+ e competition? How can I shape my business into a strategy that is more 
+ likely to succeed?" \n\nAs it turns out\, relatively quiet empirical mod
+ els have surfaced that begin to answer these questions with astonishing 
+ results. Pioneering this research\, first at Intel and then at Harvard\,
+  Thomas Thurston has offered to share this fascinating work\, the result
+ s\, and the actionable implications for managers. \n\nThomas Thurston is
+  President and Managing Director of Growth Science International\, LLC. 
+ - www.growthsci.com \n\nOutline: 2 hours \n1 hour\, 15 minutes - lecture
+  (including Q&A and discussions) \n30 min group activity \n15 minutes - 
+ wrap up\n\nTags:\neducation\, networking\, oen events\, portland
+UID:http://calagator.org/events/1250458510
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oen.org/events.aspx?id=142
+DTSTART;TZID=America/Los_Angeles:20101007T160000
+DTSTAMP:20100331T214042Z
+SUMMARY:OEN Workshop - What if we're doing it all wrong? Predicting if y
+ our business will survive or fail
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20101007T180000
+LOCATION:Lane Powell 
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Interested in user experience in all of its forms? Enjoy rea
+ ding? Want to combine the two in a social setting with other smart\, lik
+ e-minded people\, and maybe drink a beer?\n\nJoin us for Portland's 7th 
+ UX Book Club meeting. At this session\, we're reading "Neuro Web Design:
+  What Makes Them Click?".\n(http://www.whatmakesthemclick.net/the-book/)
+ \n\nThe exact location will be posted a few days prior.\n\nFollow us on 
+ Twitter: http://twitter.com/uxbookclubpdx\nWebsite: http://groups.google
+ .com/group/uxbookclubpdx
+UID:http://calagator.org/events/1250458534
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458534
+DTSTART;TZID=America/Los_Angeles:20100525T190000
+DTSTAMP:20100409T033805Z
+SUMMARY:UX Book Club PDX: "Neuro Web Design: What Makes Them Click?"
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100525T203000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:You are invited to join us at the 3rd Gorge Angel Conference
+  2010. This is an event that will match up the Columbia Gorge’s brightes
+ t emerging companies with qualified investors.\n\nCome enjoy lunch\, a k
+ eynote presentation and network with entrepreneurs and members of the lo
+ cal business community. Watch companies compete for an investment prize 
+ of at least $100\,000 and enjoy the one-minute pitch competition where c
+ ompanies compete for additional exposure. To date a total of $205\,000 h
+ as been invested in Pistil Designs and eProduce Sales\, both in Hood Riv
+ er. Get a glimpse of the trends of emerging business at this fun event t
+ hat celebrates the entrepreneurial nature of the Gorge. We hope to see y
+ ou at the event on April 27\, 2010.\n\nEvent Details\nDate and Time: Apr
+ il 27th\, 2010\, 11:30 AM - 4:30 PM\nLocation: Best Western Hood River I
+ nn\, 1108 E. Marina Way Hood River\, OR\nPrices: Participant Registratio
+ ns @ $75 per person ($100 after April 22nd\, 2010)\n\nBusiness Presenter
+ s must register by contacting Nick Kraemer at Hood River County (nick.kr
+ aemer@co.hood-river.or.us).\n\nTags:\nangel\, gorge\, investor\, launch\
+ , oen\, pitch\, seed\, tvg
+UID:http://calagator.org/events/1250458437
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oen.org/events.aspx?id=120
+DTSTART;TZID=America/Los_Angeles:20100427T113000
+DTSTAMP:20100311T175044Z
+SUMMARY:Gorge Angel Conference
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100427T163000
+LOCATION:Hood River Inn 
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for our monthly event! More details to come ...\n\nI
+ xDA Portland is the local chapter of the Interaction Design Association 
+ (http://www.ixda.org/local/ixda-portland).
+UID:http://calagator.org/events/1250458427
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458427
+DTSTART;TZID=America/Los_Angeles:20101116T180000
+DTSTAMP:20100311T035109Z
+SUMMARY:IxDA Portland: Monthly Event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20101116T200000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:EPISODE #7!\n\nGet up early and work on your side projects w
+ ith some like-minded geeks!\n\nTechCoffee is part running club\, part kn
+ itting bee\, and part hackathon. It's hard to work on all of your amazin
+ g ideas after a long workday\, so instead we get up early. And we get to
+ gether\, so we have the reinforcement of other people up early\, too. A 
+ couple hours a week can make a big difference.\n\nSo bring your laptops 
+ and your work ethic to the 3rd weekly PDX TechCoffee. One commit a week 
+ is all we ask.\n\nNOTE: We've had some wifi problems in the past\, so i 
+ recommend having what you need to work locally on your laptop before you
+  come by.\n\nTags:\ncoffee\, geeks\, northeast
+UID:http://calagator.org/events/1250458514
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxtechcoffee.org/
+DTSTART;TZID=America/Los_Angeles:20100412T063000
+DTSTAMP:20100405T135044Z
+SUMMARY:PDX TechCoffee
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100412T090000
+LOCATION:Random Order Coffeehouse
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for our monthly event! More details to come ...\n\nI
+ xDA Portland is the local chapter of the Interaction Design Association 
+ (http://www.ixda.org/local/ixda-portland).
+UID:http://calagator.org/events/1250458419
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458419
+DTSTART;TZID=America/Los_Angeles:20100518T180000
+DTSTAMP:20100311T034748Z
+SUMMARY:IxDA Portland: Monthly Event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100518T200000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Tim Bruce will be speaking at the next PDXPUG meeting at Fre
+ eGeek (at\n7:00pm - 1731 SE 10th Avenue\, Portland\, OR).\n\n-----\n\nAn
+  Introduction to Managing and Troubleshooting PostgreSQL on Windows\n\nT
+ his talk will be for entry-level to mid-level Windows Administrators who
+ \nhave to support PostgreSQL on Windows (Windows Server or Windows\nDesk
+ tops).  I'll touch on managing the service(s) and checking the Windows\n
+ logs\, as well as some quick ways to look for performance of the Operati
+ ng\nSystem and PostgreSQL with the built-in tools on Microsoft Windows.\
+ n\nTim Bruce is a Database Administrator for Fiserv Enterprise Technolog
+ y.\nHe is spread between Microsoft SQL Server on Windows and PostgreSQL\
+ nrunning on SuSE Linux.  In his spare time\, he supports several Emergen
+ cy\nService organizations including the Washington County Composite Squa
+ dron\nof the Civil Air Patrol.\n\nLooking forward to seeing everyone the
+ re....and of course\, drinks at\nthe Lucky Lab (http://www.luckylab.com/
+  ) at 915 SE Hawthorne Blvd.\nafterward.\n\nTags:\npostgresql postgres p
+ dxpug
+UID:http://calagator.org/events/1250458528
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pugs.postgresql.org/pdx/
+DTSTART;TZID=America/Los_Angeles:20100415T190000
+DTSTAMP:20100408T030931Z
+SUMMARY:PDXPUG: An Introduction to Managing and Troubleshooting PostgreS
+ QL on Windows
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100415T200000
+LOCATION:Free Geek
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Thursday\, April 15\, 2010 at 9am throu
+ gh Friday\, April 16\, 2010 at 5pm.\n\n Description:\nIn today’s busines
+ s environment\, Information Technology (IT) is not an option. The outsou
+ rcing of IT infrastructure is quickly becoming a critical decision for m
+ any businesses that are challenged to reduce costs\, while maintaining t
+ heir competitive advantage and planning for the future. \n\nCompanies su
+ ch as Amazon\, Google and Microsoft are building massive data centers to
+  provide for the needs of most businesses. While some of this is work in
+  progress\, today there are already many choices available to outsource 
+ your IT infrastructure. \n\nThis course will give you the most practical
+ \, vendor-neutral perspective to make decisions on what is right for you
+ r business now and in terms of future choices for hosting your computing
+  infrastructure externally.\n\nTags:\ncommunications\, teams\, virtual a
+ ssistant\, virtual office
+UID:http://calagator.org/events/1250458402
+TRANSP:OPAQUE
+URL;VALUE=URI:http://oregontrainingnetwork.com/training-topics/external-
+ hosting/
+DTSTART;VALUE=DATE:20100415
+DTSTAMP:20100309T031005Z
+SUMMARY:Strategies For IT Sourcing
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100417
+LOCATION:Doubletree Hotel & Executive Meeting Center Portland - Lloyd Ce
+ nter 
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:EcoTuesday is committed to changing the way people do busine
+ ss. The monthly event provides a structured environment where sustainabl
+ e business leaders network with one another and gain insight from indust
+ ry thought–leaders and trendsetters. Everyone in the room quickly learns
+  about everyone else during the “introduction circle”. EcoTuesday.com co
+ nnects participants between events\, serves as a hub for conversations a
+ nd showcases local businesses.\n \nThe vision of EcoTuesday is for busin
+ ess people to share ideas and collaborate so that companies develop prod
+ ucts and services that have a positive impact on the marketplace and pla
+ net.\n\nEcoTuesday takes place in cities across the country on the fourt
+ h Tuesday of each month. Go to www.ecotuesday.com for more information a
+ nd to sign up for the mailing list.\n\nTags:\nbusiness\, green\, leaders
+ \, networking\, sustainable\, trendsetters
+UID:http://calagator.org/events/1250458408
+TRANSP:OPAQUE
+URL;VALUE=URI:https://www.ecotuesday.com/civicrm/event/info?id=145&reset
+ =1
+DTSTART;TZID=America/Los_Angeles:20100427T180000
+DTSTAMP:20100309T215224Z
+SUMMARY:EcoTuesday - Portland
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100427T200000
+LOCATION:souk
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Meeting agenda:\n- TBD\n\nWe meet the 4th Wednesday of every
+  month from 6:30-8:00 PM at OpenSourcery in NW Portland. No need to RSVP
+ \, all are welcome- our group ranges from the geo-curious to the überhac
+ kers. [Please arrive no more than 10 minutes early\, as the developers a
+ t OpenSourcery are working up until the meeting time.]\n\nOpenSourcery\n
+ 1636 NW Lovejoy St.\nPortland\, OR 97209\n[Or\, if you prefer: 45.529986
+ \, -122.688206]\n\nTags:\ngeo\, geospatial\, gis\, open source\, os\, pd
+ x\, portland
+UID:http://calagator.org/events/1250458537
+TRANSP:OPAQUE
+DTSTART;TZID=America/Los_Angeles:20100623T183000
+DTSTAMP:20100409T054114Z
+SUMMARY:PDX Open Source Geospatial User Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100623T200000
+LOCATION:OpenSourcery
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:SQL Saturday is a training event for SQL Server professional
+ s and those wanting to learn about SQL Server. Admittance to this event 
+ is free\, all costs are covered by donations and sponsorships. Please re
+ gister soon as seating is limited\, and let friends and colleages know a
+ bout the event.
+UID:http://calagator.org/events/1250458474
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458474
+DTSTART;TZID=America/Los_Angeles:20100522T080000
+DTSTAMP:20100325T214142Z
+SUMMARY:SQL Saturday #27
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100522T110000
+LOCATION:University of Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Attend the first-ever angel investor conference to hit the E
+ ugene community. If you've never attended an angel investor conference y
+ ou're not going to want to miss this opportunity. The day (May 13th | 7:
+ 30am - 5pm) is filled with excitement\, education\, competition\, and fu
+ n. The winning company will walk away with a minimum investment prize of
+  $125\,000.\n\nTags:\nangel investor\, entrepreneur\, ostartupskey\, sta
+ rtup
+UID:http://calagator.org/events/1250458307
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.willametteconference.com/
+DTSTART;TZID=America/Los_Angeles:20100513T073000
+DTSTAMP:20100210T215805Z
+SUMMARY:Willamette Angel Conference
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100513T170000
+LOCATION:McDonald Theatre
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Wednesday\, May 19\, 2010 at 8:30am thr
+ ough Friday\, May 21\, 2010 at 5pm.\n\n Description:\n[img:http://www.we
+ bvisionsevent.com/userfiles/image/wv_2010c.jpg]\n\nWebVisions (http://ww
+ w.webvisionsevent.com [http://www.webvisionsevent.com]) is a nationally 
+ recognized conference that explores the future of Web design\, technolog
+ y\, user experience and business strategy from May 19 - 21\, 2010 at the
+  Oregon Convention Center.\n\nAttend workshops with the experts\, chill 
+ out in the WebVisions lounge\, and network\, share ideas and be inspired
+  by an all-star lineup of speakers.\n\nSince 2001\, WebVisions has built
+  a loyal audience of designers\, technologists and industry leaders. I i
+ nvite you to join us for an event that's seen as "the creative conferenc
+ e for the Web."\n\nCheers\,\n\nBrad M. Smith\nExecutive Director\n\nTags
+ :\nbusiness strategy\, convention\, design\, event\, meetings\, networki
+ ng\, oregon\, portland\, technology\, user experience\, washington\, web
+ 
+UID:http://calagator.org/events/1250458167
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.webvisionsevent.com
+DTSTART;VALUE=DATE:20100519
+DTSTAMP:20100114T202533Z
+SUMMARY:WebVisions 2010
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100522
+LOCATION:Oregon Convention Center
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Perkins & Company\n1211 SW Fifth Ave\, Suite 1000\nPortland\
+ , OR 97204-\n\nWhile Oregon and Southwest Washington economies have endu
+ red huge recessionary turmoil\, signs are beginning to indicate that it 
+ is time to think future\, not past. Business owners and HR professionals
+  now need to think longer term\, with an emphasis on hiring the right in
+ dividuals as they lay out a roadmap for ongoing success. With so many pe
+ ople looking for work\, the question becomes\, "How do I make the right 
+ choice or choices?" This seminar is designed to help you do just that! \
+ n\nToo often\, well-intentioned interviewers believe that asking the rig
+ ht questions will lead to hearing or not hearing the right answers. This
+  seminar is designed to focus on both the questions and the answers. If 
+ you’ve ever thought you made the perfect hire only to be led astray\, th
+ is seminar is for you. \n•Improve your own interviewing communication sk
+ ills \n\n•Identify what questions you would like your candidates to ask 
+ \n\n•Know what you’re listening for when you ask\, “Do you have any ques
+ tions?” \n\n•Uncover how serious your candidates are about your job offe
+ ring\n\nSpeaker: Kathy Maixner \nKathy Maixner is a nationally-recognize
+ d consultant and trainer who specializes in improving communication effe
+ ctiveness and sales performance. With a strong background in staffing\, 
+ she works with companies to ensure that their communication processes su
+ rrounding hiring and coaching their employees is done with an eye on per
+ formance improvement and staff retention. www.sellingsmartonline.com. \n
+ \nWhen: Tuesday\, May 4\, 2010 \nTime: 4:00 - 5:30 pm \nWhere: Perkins &
+  Co.\, 1211 SW Fifth Ave\, Ste. 1000\, Portland\, OR 97204 \nWhat: Hirin
+ g Right: Asking the Right Questions (seminar and discussion) \nCost: FRE
+ E to OEN members\, $30 for non-members\n\nTags:\neducation\, networking\
+ , oen events\, portland
+UID:http://calagator.org/events/1250458508
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oen.org/events.aspx?id=141
+DTSTART;TZID=America/Los_Angeles:20100525T160000
+DTSTAMP:20100331T213252Z
+SUMMARY:OEN HR Outreach Event - Hiring Right: Asking the Right Questions
+ 
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100525T173000
+LOCATION:Perkins & Company
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for our monthly event! More details to come ...\n\nI
+ xDA Portland is the local chapter of the Interaction Design Association 
+ (http://www.ixda.org/local/ixda-portland).
+UID:http://calagator.org/events/1250458420
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458420
+DTSTART;TZID=America/Los_Angeles:20100615T180000
+DTSTAMP:20100311T034847Z
+SUMMARY:IxDA Portland: Monthly Event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100615T200000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Friday\, October 22\, 2010 at 6pm throu
+ gh Saturday\, October 23\, 2010 at 8pm.\n\n Description:\n
+UID:http://calagator.org/events/1250458519
+TRANSP:OPAQUE
+URL;VALUE=URI:http://barcampportland.org
+DTSTART;VALUE=DATE:20101022
+DTSTAMP:20100406T022946Z
+SUMMARY:BarCamp Portland 4 (tentative)
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20101024
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Meeting agenda:\n- TBD\n\nWe meet the 4th Wednesday of every
+  month from 6:30-8:00 PM at OpenSourcery in NW Portland. No need to RSVP
+ \, all are welcome- our group ranges from the geo-curious to the überhac
+ kers. [Please arrive no more than 10 minutes early\, as the developers a
+ t OpenSourcery are working up until the meeting time.]\n\nOpenSourcery\n
+ 1636 NW Lovejoy St.\nPortland\, OR 97209\n[Or\, if you prefer: 45.529986
+ \, -122.688206]\n\nTags:\ngeo\, geospatial\, gis\, open source\, os\, pd
+ x\, portland
+UID:http://calagator.org/events/1250458536
+TRANSP:OPAQUE
+DTSTART;TZID=America/Los_Angeles:20100526T183000
+DTSTAMP:20100409T054056Z
+SUMMARY:PDX Open Source Geospatial User Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100526T200000
+LOCATION:OpenSourcery
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Friday\, July 2\, 2010 at 6pm through S
+ unday\, July 4\, 2010 at midnight.\n\n Description:\nThe first 30 hour d
+ ay--the livestreaming Web-based telethon we put together to raise money 
+ for charities in the Portland area--brought in around $7000 for Free Gee
+ k\, the Oregon Food Bank\, and Toys for Tots\, a couple of barrels of fo
+ od\, and at least one overflowing barrel of toys. Not to mention generat
+ ing 30 consecutive hours of entertainment from awesome local artists for
+  more than 70\,000 people who tuned in to watch.\n\nNot bad for roughly 
+ six weeks from concept to completion.\n\nNow\, we're hard at work on 30 
+ hour day 2. And it promises to be bigger and better than the first.\n\nM
+ ark your calendars! We'll see you on July 2\, 2010.
+UID:http://calagator.org/events/1250458146
+TRANSP:OPAQUE
+URL;VALUE=URI:http://30hourday.org
+DTSTART;VALUE=DATE:20100702
+DTSTAMP:20100108T232407Z
+SUMMARY:30 hour day 2
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100705
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:speaker: Robert Buels\n\nRob will give an introduction to an
+ d overview of DBIx::Class [http://search.cpan.org/dist/DBIx-Class]. It's
+  an object-relational mapping framework\, much better than the old Class
+ ::DBI\, and it will make your life easier if you are currently writing a
+  lot of SQL in your Perl.\n\nAs always\, the meeting will be followed by
+  social hour at the Lucky Lab.\n\nTags:\norm\, perl\, sql
+UID:http://calagator.org/events/1250458526
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdx.pm.org
+DTSTART;TZID=America/Los_Angeles:20100414T185300
+DTSTAMP:20100407T204431Z
+SUMMARY:Portland Perl Mongers -- The Amazing Miracle of DBIx::Class
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100414T203000
+LOCATION:Free Geek
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:The silo is open to any interested parties who want to hack 
+ or check out the space. This is an Open House meeting\n\nNOTE: The entra
+ nce for the space is on the backside of the building in the alley -- NOT
+  at the mailing address. See this satellite view for clarification: http
+ ://bit.ly/8Arvpt\n\nThe outside door is at the top of a set of stairs. T
+ he space is marked with a small sticker that is labeled "BrainSilo"\n\nT
+ ags:\nbrainsilo\, hackfest
+UID:http://calagator.org/events/1250458533
+TRANSP:OPAQUE
+URL;VALUE=URI:http://brainsilo.org
+DTSTART;TZID=America/Los_Angeles:20100415T190000
+DTSTAMP:20100409T021000Z
+SUMMARY:Brain Silo Hackfest/Open House
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100415T200000
+LOCATION:bRainSilo
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:EcoTuesday is committed to changing the way people do busine
+ ss. The monthly event provides a structured environment where sustainabl
+ e business leaders network with one another and gain insight from indust
+ ry thought–leaders and trendsetters. Everyone in the room quickly learns
+  about everyone else during the “introduction circle”. EcoTuesday.com co
+ nnects participants between events\, serves as a hub for conversations a
+ nd showcases local businesses.\n \nThe vision of EcoTuesday is for busin
+ ess people to share ideas and collaborate so that companies develop prod
+ ucts and services that have a positive impact on the marketplace and pla
+ net.\n\nEcoTuesday takes place in cities across the country on the fourt
+ h Tuesday of each month. Go to www.ecotuesday.com for more information a
+ nd to sign up for the mailing list.\n\nTags:\nbusiness\, green\, leaders
+ \, networking\, sustainable\, trendsetters
+UID:http://calagator.org/events/1250458410
+TRANSP:OPAQUE
+URL;VALUE=URI:https://www.ecotuesday.com/civicrm/event/info?id=145&reset
+ =1
+DTSTART;TZID=America/Los_Angeles:20100622T180000
+DTSTAMP:20100309T215322Z
+SUMMARY:EcoTuesday - Portland
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100622T200000
+LOCATION:souk
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Friday\, October 8\, 2010 at 5:30pm thr
+ ough Sunday\, October 10\, 2010 at 9pm.\n\n Description:\nBuilding off t
+ he amazing success of the past 2 Startup Weekends\, get ready for it to 
+ get even bigger and better. Look for pre-weekend bootcamps and info sess
+ ions that are sure to be an amazing value for attendees.\n\nTags:\n#pdxs
+ w\, nedspace\, portland\, startup\, startup weekend\, startupweekend
+UID:http://calagator.org/events/1250458393
+TRANSP:OPAQUE
+URL;VALUE=URI:http://portland.startupweekend.org
+DTSTART;VALUE=DATE:20101008
+DTSTAMP:20100306T194855Z
+SUMMARY:Startup Weekend #PDXSW
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20101011
+LOCATION:NedSpace Old Town
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This month's topic: TBD\n\n----------\n\nPJUG meetings start
+  with some time to eat and socialize (pizza and beverages are provided)\
+ , followed by the featured speaker\, then Q&A\, discussion\, sometimes a
+  drawing to give away swag. :)\n\nThough we like knowing how many people
+  to expect\, you don't *have* to RSVP\, on Upcoming or otherwise. Go ahe
+ ad and just show up!\n\nMany people also go for a drink and further disc
+ ussion following the meeting\, at a location determined ad hoc (lately\,
+  the Market Street Pub at 10th and Market: http://mcmenamins.com/index.p
+ hp?loc=24 ).\n\nhttp://twitter.com/pjug\nhttp://pjug.org/\n(join our mai
+ ling list\, linked from the website!)\n\nTags:\njava\, oracle\, pjug\, p
+ ortland\, sun\, user group
+UID:http://calagator.org/events/1250458187
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pjug.org/
+DTSTART;TZID=America/Los_Angeles:20100720T183000
+DTSTAMP:20100119T020542Z
+SUMMARY:Portland Java User Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100720T203000
+LOCATION:Oracle (Downtown Campus)
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:* Mailing list: http://mail.python.org/mailman/listinfo/port
+ land\n* IRC: #pdxpython on Freenode\n* Twitter: http://twitter.com/pdxpy
+ thon\n\nTags:\nportland\, python\, pythoneers
+UID:http://calagator.org/events/1250458499
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxpython.org/
+DTSTART;TZID=America/Los_Angeles:20100413T183000
+DTSTAMP:20100331T153740Z
+SUMMARY:Portland Python User Group April Meetup
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100413T203000
+LOCATION:Webtrends
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:309 SW Sixth Avenue\n(Ironstone Bank Conference Room)\nPortl
+ and\, OR 97204-\n\nFrank Helle\, CEO of Axian\, Inc.\, will lead an inte
+ ractive discussion that will help entrepreneurs gain some insightful per
+ spectives on Business Models. Come share your challenges\, observations 
+ and successes with other CEOs of emerging businesses. \n\nWe all talk ab
+ out business models but do we really understand what they are? In this s
+ ession of the OEN CEO Roundtable\, the group will discuss the different 
+ types of business models and delve into understanding which type may be 
+ the best fit for your company. You will also receive a high-level recap 
+ of the discussion from Frank. \n\nOpen only to CEOs or Presidents of cur
+ rently operating companies that have employees. Boxed lunch will be serv
+ ed. This program is limited to 12 participants\, and is available on a f
+ irst-come\, first-served basis. \n\nSpeaker: Frank Helle\, Axian\, Inc. 
+ - www.axian.com \n\nFrank Helle is CEO of Axian\, Inc.\, a 20-year old p
+ rivately-held web-services company creating collaboration portals and bu
+ siness intelligence (software & data). Prior to 2002 he was a senior glo
+ bal manager at Monsanto Company. During that career he lived in Brussels
+  Belgium for 5 years managing manufacturing\, engineering\, and supply c
+ hain for Europe\, Middle East\, and Africa. He then lived in Singapore f
+ or 5 years as Asia-Pacific Managing Director for 3 Monsanto Divisions. \
+ n\nFrank's leadership helps organizations realize more of their full pot
+ ential\, and often focuses on turnarounds and turbo-charging growth. \n\
+ nAside from positioning Axian to be "built to last\," Frank mentors and 
+ coaches local CXOs to help them compete in the global marketplace and cr
+ eate more jobs in Oregon. Frank is an active Board Director of Oregon's 
+ Association for Corporate Growth as Chair Emeritus & Past-President\, is
+  an active Board Director of Oregon’s high tech trade association\,Tech 
+ America\, and is an active volunteer with the Oregon Entrepreneurs Netwo
+ rk - chairing the CEO Roundtable.\n\nTags:\neducation\, networking\, oen
+  events\, portland
+UID:http://calagator.org/events/1250458509
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oen.org/events.aspx?id=123
+DTSTART;TZID=America/Los_Angeles:20100721T113000
+DTSTAMP:20100331T213720Z
+SUMMARY:OEN CEO Roundtable with Frank Helle: Business Models
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100721T133000
+LOCATION:Ironstone Bank Conference Room
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Multnomah Athletic Club\n1849 SW Salmon St.\nPortland\, OR 9
+ 7 -\n\nThe Oregon Entrepreneurs Network (OEN)\, Software Association of 
+ Oregon (SAO)\, Oregon Business Association (OBA) and the Portland Busine
+ ss Alliance are presenting the 2010 Gubernatorial Candidate Forums. Tech
+  America will be a supporting organization for the forums \n\nOregon’s e
+ conomy is facing great challenges. The state is struggling with serious 
+ budgetary shortfalls and that is exacerbated by an unemployment rate tha
+ t is hovering above 10 percent. With the recent passage of measures 66 &
+  67 many Oregonians question what the impact will be for Oregon business
+ es. Policies that support and encourage business growth and economic dev
+ elopment are a top-of-mind priority for many Oregonians. These candidate
+  forums are intended to provide an opportunity for members of the busine
+ ss community to ask the candidates from each party what they would do to
+  help support business and economic growth in Oregon. \n\nThe Democratic
+  Gubernatorial Candidate forum will take place on Wednesday\, April 7 at
+  Portland General Electric’s auditorium located at 121 SW Salmon St\, 2W
+ TC in Portland. It will feature Democratic candidates Bill Bradbury (www
+ .bradburyfororegon.com) and John Kitzhaber\, (www.johnkitzhaber.com). \n
+ \nThe Republican Gubernatorial Candidate forum will take place on Tuesda
+ y\, April 27 at 1849 SW Salmon St. in Portland. It will feature Republic
+ an candidates Allen Alley (www.allenalley.com and Chris Dudley (www.chri
+ sdudley.com). \n\nTickets are required for onsite attendees and individu
+ al live stream access. Registration is recommended for satellite venues.
+  \n\nThe gubernatorial candidate forum will be held prior to the primari
+ es and will be moderated by Laural Porter of KGW News (twitter.com/laura
+ lkgw). Check-in begins at 4:00PM. The program will begin at 4:30 PM and 
+ will run to 6:00 PM. Tickets are $20 for members of presenting or suppor
+ ting organizations and $40 for non-members. We encourage attendees to pr
+ e-register online using the link below. \n\nThe forums will be streamed 
+ live over the web. Individual web stream tickets can be purchased for $1
+ 0 in advance\, but business community members outside of the Portland ar
+ ea may attend a satellite event in their local area at no charge. \n\nFo
+ r more information about the forums\, or to register for either of these
+  events\, please go to: \n\nDemocratic Candidates Forum: www.sao.org/eve
+ nt/dgp \n\nRepublican Candidates Forum: www.sao.org/event/rgp \n\nFollow
+  the discussions on twitter: #pdxGDP & #pdxRGP.\n\nTags:\ncommunity even
+ ts\, education\, networking\, oen events\, portland
+UID:http://calagator.org/events/1250458507
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oen.org/events.aspx?id=139
+DTSTART;TZID=America/Los_Angeles:20100427T160000
+DTSTAMP:20100331T212840Z
+SUMMARY:Gubernatorial Candidate Forum - Republican Candidates
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100427T180000
+LOCATION:Multnomah Athletic Club (MAC)
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:The PDXPHP user groups meets every 3rd Tuesday.\n\nThis Meet
+ ing topic is still to be determined.  Typically this posting will be upd
+ ated with the meeting details a few weeks before the meeting\n\nOur Miss
+ ion:The Portland PHP Users Group is a community forum for people to shar
+ e\, meet and learn about PHP and Open Source technologies. The group str
+ ives to be a valuable resource for anyone interested in PHP regardless o
+ f their skill level or background. Through sharing and communication we 
+ believe we can foster a creative and successful community of PHP develop
+ ers.\n\nTags:\npdxphp
+UID:http://calagator.org/events/1250458491
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxphp.org/
+DTSTART;TZID=America/Los_Angeles:20100615T183000
+DTSTAMP:20100329T183158Z
+SUMMARY:PDXPHP - Monthy Meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100615T200000
+LOCATION:NedSpace Old Town
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:GROUP: The Portland Ruby Brigade is a user group for Ruby pr
+ ogrammers in the Portland Oregon area. Join other developers for present
+ ations and discussions about Ruby and its uses.\n\nVENUE: This meeting’s
+  space is kindly provided by Robert Half Technology at their 2nd Floor C
+ onference Room. Enter the KOIN Tower from SW Columbia between 2nd and 3r
+ d Avenue\, take the back elevators to the 2nd floor\, and then follow th
+ e pdxruby signs.\n\nTags:\npdxruby\, programming\, ruby
+UID:http://calagator.org/events/1250458280
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxruby.org/
+DTSTART;TZID=America/Los_Angeles:20100504T190000
+DTSTAMP:20100204T115049Z
+SUMMARY:Portland Ruby Brigade monthly meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100504T210000
+LOCATION:Robert Half Technology\, 2nd Floor Conference Room
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:In today’s rapidly changing business environment\, managers 
+ and employees alike are increasingly challenged to find new ways to get 
+ things done – better\, faster\, and cheaper. More and more companies tod
+ ay are embracing the concept of the virtual team work environment to inc
+ rease the effectiveness and efficiency of their people who often work re
+ motely\, whether from across town or on the other side of the world.\n\n
+ Using technology effectively is critical to the success of virtual teams
+ . Knowing why\, when and how to employ the right tools\, at the right ti
+ me\, for the right need\, and how the virtual team environment impacts y
+ our business processes makes all the difference. This course will give y
+ ou a vendor and product neutral perspective of what it means to work in 
+ a virtual environment and provide real-world experience and best practic
+ es from a people\, process and technology perspective.\n\nTags:\ncommuni
+ cations\, virtual office\, virtual team
+UID:http://calagator.org/events/1250458403
+TRANSP:OPAQUE
+URL;VALUE=URI:http://oregontrainingnetwork.com/training-topics/virtual-t
+ eams/
+DTSTART;TZID=America/Los_Angeles:20100421T210000
+DTSTAMP:20100309T040122Z
+SUMMARY:Working On A Virtual Team
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100422T170000
+LOCATION:Doubletree Hotel & Executive Meeting Center Portland - Lloyd Ce
+ nter 
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Are you really engaging your fans on your Facebook fan page?
+  Just having a fan page on Facebook isn't enough to put business through
+  your door\, if you aren't creating meaningful relationships with your f
+ ans. If your marketing plan doesn't include building a viable Facebook p
+ resence\, let me give you an interesting number.\n\nDid you know that "P
+ ortland\, Or"\, a Facebook Fan page has 38\,571 fans? That means there a
+ re at least 38\,571 people in Portland on Facebook\, and many more in th
+ e rest of Oregon and Vancouver\, WA.\n\nHow would it affect your busines
+ s to have that many more potential clients?\n\nTaylor Ellwood of Imagine
+  Your Reality Business and Social Media Coaching is holding a 3-hour liv
+ e hands on Facebook Fanpage class.\n\n3-hour hands on workshop. April 20
+ th 2010\, Portland\, 2-5 pm. $89.95\n\nHere's what you'll learn and achi
+ eve by the end of the class:\n\n    * Set up an Optimized Facebook Profi
+ le and Fan Page\n    * Learn how to edit your Facebook Fan page\n    * L
+ earn what Facebook applications you should be using to stand out to your
+  fans.\n    * Understand and set up Privacy Settings\n    * How to devel
+ op closer relationships with your fans and get your posts in the top new
+ s feed.\n    * How to create customized Facebook fan page tabs to promot
+ e your services.\n    * How to get more clients in your door and generat
+ e more sales for your business.\n\nPre Registration is required. Worksho
+ p is $89.95. Workshop is limited to 12 people! RSVP at http://www.imagin
+ eyourreality.com/workshops.html\n\nBring with you:\n\n    * Laptop\n    
+ * Logo\n    * Images - Business Headshot\, Photos of your business\n    
+ * Any Videos you want to use\n    * Text about your business\n    * Logi
+ n information for other sites on the Internet where you have accounts: T
+ witter\, Blog\, etc.\n    * Any other information you want on your Fan P
+ age\n\nCome join me and learn how to use social media to build closer bu
+ siness relationships\, while growing your bottom line!
+UID:http://calagator.org/events/1250458493
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.imagineyourreality.com/workshops.html
+DTSTART;TZID=America/Los_Angeles:20100420T140000
+DTSTAMP:20100329T204803Z
+SUMMARY:How to turn your fan-page into a business page
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100420T170000
+LOCATION:George Fox University
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This month's topic: TBD\n\n----------\n\nPJUG meetings start
+  with some time to eat and socialize (pizza and beverages are provided)\
+ , followed by the featured speaker\, then Q&A\, discussion\, sometimes a
+  drawing to give away swag. :)\n\nThough we like knowing how many people
+  to expect\, you don't *have* to RSVP\, on Upcoming or otherwise. Go ahe
+ ad and just show up!\n\nMany people also go for a drink and further disc
+ ussion following the meeting\, at a location determined ad hoc (lately\,
+  the Market Street Pub at 10th and Market: http://mcmenamins.com/index.p
+ hp?loc=24 ).\n\nhttp://twitter.com/pjug\nhttp://pjug.org/\n(join our mai
+ ling list\, linked from the website!)\n\nTags:\njava\, oracle\, pjug\, p
+ ortland\, sun\, user group
+UID:http://calagator.org/events/1250458185
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pjug.org/
+DTSTART;TZID=America/Los_Angeles:20100518T183000
+DTSTAMP:20100119T015056Z
+SUMMARY:Portland Java User Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100518T203000
+LOCATION:Oracle (Downtown Campus)
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This seminar reviews all components of an effective\, compel
+ ling business plan. You'll learn from two seasoned OEN experts why certa
+ in information is important and how your audience will evaluate what you
+  present. Besides learning what is critical to include in an effective b
+ usiness\, you'll take away valuable handouts and a listing of key resour
+ ces.\n\nRegistration is required\, and space is limited to 15 entreprene
+ urs.\n\nWhen: Thursday\, April 29th\nTime: 4:00 - 6:15 PM\nWhere: Beaver
+ ton Library\, 12375 SW 5th St\, Meeting Room B\, Beaverton\, Oregon 9700
+ 5 (corner of SW 5th St. and SW Hall Blvd)\n\nTags:\nbusiness plan\, deve
+ lopment\, entrepreneurs\, learning\, library\, oen\, seminar
+UID:http://calagator.org/events/1250458438
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oen.org/events.aspx?id=129
+DTSTART;TZID=America/Los_Angeles:20100429T160000
+DTSTAMP:20100311T175438Z
+SUMMARY:Business Plan Development Seminar - April
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100429T170000
+LOCATION:Beaverton City Library
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Come join us for an evening of socializing\, talking about o
+ dd hacks and poking around with other people toys. Bring things for show
+  and tell if you like\, or just bring a willingness to share your intere
+ sts. We'll be the kids with all the coolest stuff on the table. Hope to 
+ see you there.\n\nTags:\narduino\, artists\, avr\, dorkbot\, dorkbotpdx\
+ , dorks\, geeks\, hacking
+UID:http://calagator.org/events/1250458217
+TRANSP:OPAQUE
+URL;VALUE=URI:http://dorkbotpdx.org
+DTSTART;TZID=America/Los_Angeles:20100426T190000
+DTSTAMP:20100121T235922Z
+SUMMARY:DorkbotPDX Meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100426T230000
+LOCATION:Backspace
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for a design jam session! We start with a descriptio
+ n of the design problem followed by work in small groups on design ideat
+ ion and solution sketches. At the end\, the small groups present their i
+ deas and sketches back to the larger group.\n\nThis is a casual\, non-sp
+ onsored workshop. Bring snacks or drinks to share!\n\nIxDA Portland is t
+ he local chapter of the Interaction Design Association: http://www.ixda.
+ org/local/ixda-portland
+UID:http://calagator.org/events/1250458417
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458417
+DTSTART;TZID=America/Los_Angeles:20100420T180000
+DTSTAMP:20100311T034549Z
+SUMMARY:IxDA Portland: Design Jam Session
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100420T200000
+LOCATION:AboutUs
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Kaya Singer | Awakening Business Solutions\n\nThese days man
+ y people want to write “Their book!” It feels like getting something in 
+ print is one way to help build your business.\nThis is true\, however\, 
+ how you write it\, what you write about\, who you write it to\, what you
+  want to accomplish and how you publish it makes a big difference in ter
+ ms of meeting your goals.\n\nKaya Singer (AwakeningBusiness.com) is the 
+ author of the newly published book\, “Clear Your Focus\, Grow Your Busin
+ ess: 7 Simple Steps to Empower Your Business and Bring Your Money and Fr
+ eedom.” She helps successful small and solo business owners get clarity 
+ on what they need to do to overcome obstacles and take their business to
+  the next level through her coaching programs\, tools and seminars.\n\nK
+ aya has also recently launched a new online community for solo business 
+ owners who want real community. Awake Business TeaHouse.\nYou are invite
+ d to come and have a peek.\n\nTags:\nbusiness\, coach\, consultant\, fre
+ e lance\, freelance\, internet\, marketing\, photographer\, self-employe
+ d\, small business\, writer
+UID:http://calagator.org/events/1250458532
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.iasecp.com/events/
+DTSTART;TZID=America/Los_Angeles:20100520T140000
+DTSTAMP:20100408T175515Z
+SUMMARY:5 Important strategies for self publishing your nonfiction book 
+ as a business building tool
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100520T153000
+LOCATION:IASECP Webinar
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:InnoTech is the region's largest business to business techno
+ logy conference and expo happening May 6.  Over 1500 business and techno
+ logy professionals will attend this year.  Special events include the NW
+  CIO Summit\, NW ISSA Security Symposium\, Microsoft Technology Symposiu
+ m\, eMarketing Summit\, Mobile Track and much more.\n\nTags:\ncio\, clou
+ d\, education\, internet\, oregon\, security\, technology
+UID:http://calagator.org/events/1250458292
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.innotechoregon.com
+DTSTART;TZID=America/Los_Angeles:20100506T080000
+DTSTAMP:20100206T044551Z
+SUMMARY:InnoTech Oregon Technology Conference & Expo
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100506T163000
+LOCATION:Oregon Convention Center
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Tuesday\, June 1\, 2010 at 9am through 
+ Friday\, June 4\, 2010 at 5:30pm.\n\n Description:\nOpen Source Bridge i
+ s an open source developers conference\, focused on bringing people from
+  a range of technology backgrounds together to share their knowledge and
+  explore what it means to be an open source citizen.\n\nTags:\nopen sour
+ ce\, opensourcebridge\, osbridge\, tvg
+UID:http://calagator.org/events/1250458282
+TRANSP:OPAQUE
+URL;VALUE=URI:http://opensourcebridge.org
+DTSTART;VALUE=DATE:20100601
+DTSTAMP:20100204T121635Z
+SUMMARY:Open Source Bridge 2010
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100605
+LOCATION:Portland Art Museum\, Mark Building
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Wednesday\, August 4\, 2010 at 9am thro
+ ugh Saturday\, August 7\, 2010 at 6pm.\n\n Description:\nEach year\, bet
+ ween 600 and 800 design practitioners\, educators\, students\, business 
+ leaders and vendors working with designers from all over the world gathe
+ r for IDSA's International Conference and Education Symposium. These eve
+ nts combine provocative speakers with practical information and solution
+ s\, as well as plenty of time for building personal and professional con
+ nections.\n\nTags:\nconference\, design\, industria
+UID:http://calagator.org/events/1250458523
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.idsa.org/absolutenm/templates/?a=4861
+DTSTART;VALUE=DATE:20100804
+DTSTAMP:20100406T201443Z
+SUMMARY:Industrial Designers Society of America (IDSA) Annual Internatio
+ nal Conference
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100808
+LOCATION:Hilton Portland and Executive Tower
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Details to come...\n\nTags:\nfunctionalprogramming\, pdxscal
+ a\, scala
+UID:http://calagator.org/events/1250458265
+TRANSP:OPAQUE
+URL;VALUE=URI:http://groups.google.com/group/pdxscala
+DTSTART;TZID=America/Los_Angeles:20100415T190000
+DTSTAMP:20100201T060907Z
+SUMMARY:PDXScala Meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100415T220000
+LOCATION:Jive Software
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for our monthly event! More details to come ...\n\nI
+ xDA Portland is the local chapter of the Interaction Design Association 
+ (http://www.ixda.org/local/ixda-portland).
+UID:http://calagator.org/events/1250458429
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458429
+DTSTART;TZID=America/Los_Angeles:20110118T180000
+DTSTAMP:20100311T035200Z
+SUMMARY:IxDA Portland: Monthly Event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20110118T200000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Get your electroluminescent wire costume out because it's ti
+ me for the midnight release of TRON: Legacy in IMAX3D!\n\nHere's a cool 
+ instructables article on how to make your own costume:\n\nhttp://www.ins
+ tructables.com/id/how-to-add-EL-wire-to-a-coat-or-other-garment/\n\nTags
+ :\ncostume party\, electroluminescent wire\, movie\, tron
+UID:http://calagator.org/events/1250458505
+TRANSP:OPAQUE
+URL;VALUE=URI:http://disney.go.com/tron/
+DTSTART;TZID=America/Los_Angeles:20101217T000000
+DTSTAMP:20100331T191941Z
+SUMMARY:TRON: Legacy Midnight Showing in IMAX3D
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20101217T023000
+LOCATION:Regal Cinemas Bridgeport Village Stadium 18 & IMAX
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:The PDXPHP user groups meets every 3rd Tuesday.\n\nThis Meet
+ ing topic is still to be determined.  Typically this posting will be upd
+ ated with the meeting details a few weeks before the meeting\n\nOur Miss
+ ion:The Portland PHP Users Group is a community forum for people to shar
+ e\, meet and learn about PHP and Open Source technologies. The group str
+ ives to be a valuable resource for anyone interested in PHP regardless o
+ f their skill level or background. Through sharing and communication we 
+ believe we can foster a creative and successful community of PHP develop
+ ers.\n\nTags:\npdxphp
+UID:http://calagator.org/events/1250458490
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxphp.org/
+DTSTART;TZID=America/Los_Angeles:20100518T183000
+DTSTAMP:20100329T183127Z
+SUMMARY:PDXPHP - Monthy Meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100518T200000
+LOCATION:NedSpace Old Town
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Failure isn’t always a bad thing as long as you learn from i
+ t. SplashCast\, launched in 2007\, was originally founded around the not
+ ion of helping consumers put together videos\, text\, graphics and music
+  embedded in broadcast "channels." Despite raising over $4 million in fu
+ nding\, SplashCast was unable to survive and closed its doors in 2009. \
+ n\nPlease join OEN for the April 14th PubTalk to hear what happened\, an
+ d what the team learned from failure. You will hear from one of the Foun
+ ders of SplashCast\, as well as a few investors in the company. This pan
+ el discussion will highlight the positive moves the company made\, as we
+ ll as share some valuable lessons of what to avoid. Learning from their 
+ insights and knowledge will undoubtedly help you in your decision making
+  processes so that your company may avoid the same pitfalls. \n\nSpeaker
+ s: Tom Turnbull\; Investors: Angela Jackson and Jon Karl\; Moderator: Da
+ ve deFiebre \n\nTom Turnbull \nTom Turnbull is a lawyer and entrepreneur
+ . He has worked in business development\, product\, and legal roles at t
+ hree venture backed startups. Of the three startups\, one was a success 
+ (Internet Brands\, Inc. NASDAQ: INET)\, one a soft landing (BizBuyer.com
+ )\, and the last a sad ending (SplashCast Media). Tom also headed up new
+  media strategy and business development for the LA Times and business d
+ evelopment for Knowledge Learning Corporation. Additionally\, he was a c
+ onsulting manager at Andersen and a transactional lawyer. He received a 
+ law degree from the University of Washington and an M.B.A. from New York
+  University with an emphasis in finance and entrepreneurial studies. \n\
+ nJon Karl \nJon is an experienced entrepreneur who co-founded two Portla
+ nd companies\, ieLogic and iovation. As Vice President of Corporate Deve
+ lopment for iovation\, Jon plays a role in defining the company's busine
+ ss strategy\, and is responsible for the creation of strategic partnersh
+ ips\, technology alliances and mergers or acquisitions. At ieLogic\, Jon
+  was instrumental in creating and driving the company brand and technolo
+ gy innovation that led to the company's successful sale in just five yea
+ rs. \n\nAn expert in the areas of Internet security and fraud management
+ \, Jon is a frequent speaker at industry trade shows\, where he speaks o
+ n various topics including online fraud management\, online privacy\, an
+ d emerging technologies that protect online environments against fraud a
+ nd abuse. \n\nJon holds a B.S. in Economics from Oregon State University
+ \, and has been an active investor over the last 5 years in a diverse ra
+ nge of start-up ventures. He lives in Tualatin with his wife\, two boys\
+ , a dozen chickens and a dog. \n\nOEN member registration is $15.00\nNon
+  OEN member registration is $25.00\n\nPlease visit the OEN Website [http
+ ://www.oen.org/events.aspx?id=140] to register for this event\n\nTags:\n
+ education\, networking\, oen events\, portland\, tvg
+UID:http://calagator.org/events/1250458478
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oen.org/events.aspx?id=140%20
+DTSTART;TZID=America/Los_Angeles:20100414T171500
+DTSTAMP:20100326T215457Z
+SUMMARY:OEN Pub Talk- SplashCast- What Happened?
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100414T190000
+LOCATION:Backspace
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for our monthly event! More details to come ...\n\nI
+ xDA Portland is the local chapter of the Interaction Design Association 
+ (http://www.ixda.org/local/ixda-portland).
+UID:http://calagator.org/events/1250458428
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458428
+DTSTART;TZID=America/Los_Angeles:20101214T180000
+DTSTAMP:20100311T035136Z
+SUMMARY:IxDA Portland: Monthly Event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20101214T200000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Each year\, in conjunction with the conference\, WebVisions 
+ [http://www.webvisionsevent.com] honors the most visionary\, daring\, an
+ d curious talent on the web by awarding them with a miniature robot. We 
+ wanted to make this award show different in every way\, other than the w
+ inners receiving an award part.\n\nThis year\, we have a comedian for a 
+ host\, a killer DJ to supply the beat\, and presentation karaoke to kick
+  it off.\n\nAn 'A-list' group of robot lovin' luminaries will judge the 
+ awards\, including typography icon Roger Black\, Mark Frauenfelder of MA
+ KE Magazine and BoingBoing.net\, Merlin Mann of 43folders.com\, Molly Ho
+ lzschlag of Molly.com\, Renny Gleeson of Weiden+Kennedy\, Armin Vit of U
+ nderConsideration\, Scott Porad of LOLCATS and many others.\n\nOh\, and 
+ did we mention that WebVisions attendees get a special 2-for-1 deal? Wha
+ t are you waiting for? The deadline is April 15th.\n\nThe Webvisionary A
+ wards are sponsored by WebTrends [http://www.webtrends.com]\, 52 Ltd [ht
+ tp://www.52ltd.com] and Hot Pepper Studios [http://www.hotpepper.com].\n
+ \nFor more information visit:\nhttp://www.webvisionaryawards.com\nhttp:/
+ /www.webvisionsevent.com\n\nTags:\nawards\, design\, interactive\, mobil
+ e\, motion\, programming\, technology\, video\, web\, webvisionary\, web
+ visions
+UID:http://calagator.org/events/1250458468
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.webvisionaryawards.com/
+DTSTART;TZID=America/Los_Angeles:20100520T190000
+DTSTAMP:20100322T193849Z
+SUMMARY:Webvisionary Awards
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100520T210000
+LOCATION:Someday Lounge
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:ABOUT: Join programmers\, researchers and enthusiasts to dis
+ cuss functional programming. pdxfunc is a study/user group exploring the
+  world of functional programming based in Portland\, Oregon. The group w
+ elcomes programmers interested in all functional languages\, including H
+ askell\, Erlang\, OCaml\, Scala\, and others. The group meets regularly 
+ and provides presentations\, demos and discussions applicable to all ski
+ ll levels\, from newbies and experts. The meetings are usually on the se
+ cond Monday of the month.\n\nTags:\nfunctional programming\, pdxfunc
+UID:http://calagator.org/events/1250458327
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxfunc.org/
+DTSTART;TZID=America/Los_Angeles:20100412T190000
+DTSTAMP:20100218T160816Z
+SUMMARY:Portland Functional Programming Study Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100412T210000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This month's topic: TBD\n\n----------\n\nPJUG meetings start
+  with some time to eat and socialize (pizza and beverages are provided)\
+ , followed by the featured speaker\, then Q&A\, discussion\, sometimes a
+  drawing to give away swag. :)\n\nThough we like knowing how many people
+  to expect\, you don't *have* to RSVP\, on Upcoming or otherwise. Go ahe
+ ad and just show up!\n\nMany people also go for a drink and further disc
+ ussion following the meeting\, at a location determined ad hoc (lately\,
+  the Market Street Pub at 10th and Market: http://mcmenamins.com/index.p
+ hp?loc=24 ).\n\nhttp://twitter.com/pjug\nhttp://pjug.org/\n(join our mai
+ ling list\, linked from the website!)\n\nTags:\njava\, oracle\, pjug\, p
+ ortland\, sun\, user group
+UID:http://calagator.org/events/1250458188
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pjug.org/
+DTSTART;TZID=America/Los_Angeles:20100817T183000
+DTSTAMP:20100119T021348Z
+SUMMARY:Portland Java User Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100817T203000
+LOCATION:Oracle (Downtown Campus)
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This course was designed to be vendor and product neutral. I
+ t will give you hands-on knowledge about IT delivery models and how to m
+ ake smart decisions that will provide a competitive advantage for your b
+ usiness. \n\nIt is led by two world class IT practitioners who will help
+  you understand the key players in outsourced IT delivery\, how to evalu
+ ate the value of available options\, how IT delivery models impact your 
+ business\, and how to establish specific action items for moving forward
+  with confidence.\n\nTags:\nit\, strategic planning
+UID:http://calagator.org/events/1250458530
+TRANSP:OPAQUE
+URL;VALUE=URI:http://oregontrainingnetwork.com/it-strategic-planning-bui
+ lding-a-partnership-between-it-and-your-business/
+DTSTART;TZID=America/Los_Angeles:20100513T090000
+DTSTAMP:20100408T161857Z
+SUMMARY:IT Strategic Planning – Building a Partnership Between IT and Yo
+ ur Business
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100513T170000
+LOCATION:Doubletree Hotel & Executive Meeting Center Portland - Lloyd Ce
+ nter 
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:The PDXPHP user groups meets every 3rd Tuesday.\n\nThis Meet
+ ing topic is still to be determined.  Typically this posting will be upd
+ ated with the meeting details a few weeks before the meeting\n\nOur Miss
+ ion:The Portland PHP Users Group is a community forum for people to shar
+ e\, meet and learn about PHP and Open Source technologies. The group str
+ ives to be a valuable resource for anyone interested in PHP regardless o
+ f their skill level or background. Through sharing and communication we 
+ believe we can foster a creative and successful community of PHP develop
+ ers.\n\nTags:\npdxphp
+UID:http://calagator.org/events/1250458248
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxphp.org/
+DTSTART;TZID=America/Los_Angeles:20100420T183000
+DTSTAMP:20100128T162641Z
+SUMMARY:PDXPHP - Monthy Meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100420T200000
+LOCATION:NedSpace Old Town
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:ADDITIONAL EVENT INFO\nSchedule & Topics\n\nWorkshops are he
+ ld January 28- April 16\,2010\, on Tuesdays 2-4 pm and Thursdays 6-8 pm 
+ at NedSpace Old Town– for a full schedule of workshops & topics: http://
+ www.portlandten.com/skills\n\nPricing\n\nPasses can be purchased at the 
+ door-- cash or check at the door only\, please. If you need to pay by cr
+ edit card\, please let a staff member know.\n\n* 1 Workshop Pass: $20\n*
+  1 Track Pass (3 sessions in one topic): $45\n* Unlimited Pass (up to 24
+  sessions): $150\n\nSpecials\n\nUpgrade: if you purchase a pass and woul
+ d like to upgrade to another package\, we’ll pro-rate it and you’ll pay 
+ only the difference between the passes.\n\nPortland Ten: current partici
+ pants & alumni attend free.\n\nSix Week Sprint: current participants & a
+ lumni may purchase an unlimited pass for $20.
+UID:http://calagator.org/events/1250458483
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.portlandten.com/skills
+DTSTART;TZID=America/Los_Angeles:20100415T180000
+DTSTAMP:20100327T194453Z
+SUMMARY:Portland Ten Skill Development Workshop: Product Management with
+  Amy Winkelman
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100415T210000
+LOCATION:NedSpace Old Town
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Upcoming Social Media Workshops\n\nHow to turn your fan-page
+  into a business page\n\nAre you really engaging your fans on your Faceb
+ ook fan page? Just having a fan page on Facebook isn't enough to put bus
+ iness through your door\, if you aren't creating meaningful relationship
+ s with your fans. If your marketing plan doesn't include building a viab
+ le Facebook presence\, let me give you an interesting number.\n\nDid you
+  know that "Portland\, Or"\, a Facebook Fan page has 38\,571 fans? That 
+ means there are at least 38\,571 people in Portland on Facebook\, and ma
+ ny more in the rest of Oregon and Vancouver\, WA.\n\nHow would it affect
+  your business to have that many more potential clients?\n\nTaylor Ellwo
+ od of Imagine Your Reality Business and Social Media Coaching is holding
+  a 3-hour live hands on Facebook Fanpage class.\n\n3-hour hands on works
+ hop. April 20th 2010\, Portland\, 2-5 pm. $89.95\n\nHere's what you'll l
+ earn and achieve by the end of the class:\n\n    * Set up an Optimized F
+ acebook Profile and Fan Page\n    * Learn how to edit your Facebook Fan 
+ page\n    * Learn what Facebook applications you should be using to stan
+ d out to your fans.\n    * Understand and set up Privacy Settings\n    *
+  How to develop closer relationships with your fans and get your posts i
+ n the top news feed.\n    * How to create customized Facebook fan page t
+ abs to promote your services.\n    * How to get more clients in your doo
+ r and generate more sales for your business.\n\nPre Registration is requ
+ ired. Workshop is $89.95. Workshop is limited to 12 people!\n\nBring wit
+ h you:\n\n    * Laptop\n    * Logo\n    * Images - Business Headshot\, P
+ hotos of your business\n    * Any Videos you want to use\n    * Text abo
+ ut your business\n    * Login information for other sites on the Interne
+ t where you have accounts: Twitter\, Blog\, etc.\n    * Any other inform
+ ation you want on your Fan Page\n\nCome join me and learn how to use soc
+ ial media to build closer business relationships\, while growing your bo
+ ttom line!\nHow to use Linkedin to link in your business to your network
+ \n\nAre you really Linked in to your network of fellow professionals? Ju
+ st having a profile on Linkedin isn't enough to get business through you
+ r door\, if you aren't creating meaningful relationships with your netwo
+ rk.\n\nDo you know to optimize your Linkedin profile and presence? Or ho
+ w to invite more people to join your network and stay visible to them? W
+ hat Linkedin features should you be using to engage your network?\n\nTay
+ lor Ellwood of Imagine Your Reality Business and Social Media Coaching i
+ s holding a 3-hour live hands on Linkedin for Business class.\n\n3-hour 
+ hands on workshop. April 27th 2010\, Portland\, 2-5 pm. $89.95\n\nHere's
+  what you'll learn and achieve by the end of the class:\n\n    * Set up 
+ an Optimized Linkedin profile.\n    * Learn how to use the Q and A forum
+  on Linkedin\n    * Learn what Linkedin applications you should be using
+  to reach out to your network.\n    * Understand how invites work and ho
+ w to create a memorable one.\n    * How to develop closer relationships 
+ with your Network.\n    * How to create a Linkedin group and participate
+  meaningfully in other groups.\n    * How to get more clients in your do
+ or and generate more sales for your business.\n\nPre Registration is req
+ uired. Workshop is $89.95 Workshop is limited to 12 people! RSVP at http
+ ://www.imagineyourreality.com/workshops.html\n\nBring with you:\n\n    *
+  Laptop\n    * Logo\n    * Images - Business Headshot\, Photos of your b
+ usiness\n    * Any Videos you want to use\n    * Text about your busines
+ s\n    * Login information for other sites on the Internet where you hav
+ e accounts: Twitter\, Blog\, etc.\n    * Any other information you want 
+ for your Linkedin Profile\n\nCome join me and learn how to use social me
+ dia to build closer business relationships\, while growing your bottom l
+ ine!
+UID:http://calagator.org/events/1250458494
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.imagineyourreality.com/workshops.html
+DTSTART;TZID=America/Los_Angeles:20100427T140000
+DTSTAMP:20100329T205118Z
+SUMMARY:How to use Linkedin to link in your business to your network
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100427T170000
+LOCATION:George Fox University
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This month's topic: TBD\n\n----------\n\nPJUG meetings start
+  with some time to eat and socialize (pizza and beverages are provided)\
+ , followed by the featured speaker\, then Q&A\, discussion\, sometimes a
+  drawing to give away swag. :)\n\nThough we like knowing how many people
+  to expect\, you don't *have* to RSVP\, on Upcoming or otherwise. Go ahe
+ ad and just show up!\n\nMany people also go for a drink and further disc
+ ussion following the meeting\, at a location determined ad hoc (lately\,
+  the Market Street Pub at 10th and Market: http://mcmenamins.com/index.p
+ hp?loc=24 ).\n\nhttp://twitter.com/pjug\nhttp://pjug.org/\n(join our mai
+ ling list\, linked from the website!)\n\nTags:\njava\, oracle\, pjug\, p
+ ortland\, sun\, user group
+UID:http://calagator.org/events/1250458189
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pjug.org/
+DTSTART;TZID=America/Los_Angeles:20100921T183000
+DTSTAMP:20100119T021812Z
+SUMMARY:Portland Java User Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100921T203000
+LOCATION:Oracle (Downtown Campus)
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for our monthly event! More details to come ...\n\nI
+ xDA Portland is the local chapter of the Interaction Design Association 
+ (http://www.ixda.org/local/ixda-portland).
+UID:http://calagator.org/events/1250458422
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458422
+DTSTART;TZID=America/Los_Angeles:20100817T180000
+DTSTAMP:20100311T034932Z
+SUMMARY:IxDA Portland: Monthly Event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100817T200000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Let's do this again for the ninth time. See igniteportland.c
+ om for all the details\, and to submit your talk idea!\n\nTags:\nignite\
+ , igniteportland\, ip9\, legionoftech
+UID:http://calagator.org/events/1250458380
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.igniteportland.com
+DTSTART;TZID=America/Los_Angeles:20100923T190000
+DTSTAMP:20100303T235715Z
+SUMMARY:Ignite Portland 9
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100923T220000
+LOCATION:Bagdad Theater and Pub
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Scott Hanselman\, a Principal Program Manager at Microsoft\,
+  will be speaking on .NET and other technology topics. \n\nMany of you k
+ now Scott or have heard him speak. He is always both informative and ent
+ ertaining. If you don't already subscribe to his blog\, you should.\n\nW
+ ebMD is hosting this event and will be providing lunch. It would really 
+ help our planning if you could send a quick e-mail to rgarrison@webmd.ne
+ t if you plan to attend. This will help us plan for lunch.\n\nThe meetin
+ g will be in the large ballroom on the first floor. Parking is available
+  on the west side of the building. Carpooling is encouraged.\n\nGeneral 
+ Schedule:\n9:00 - start\n10:00 - break\n10:15 - restart\n11:15 - end tal
+ k\, open for questions\n11:45 - break for lunch\n1:00 - done and out\n\n
+ Tags:\n.net\, hanselman\, microsoft
+UID:http://calagator.org/events/1250458456
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.hanselman.com/blog/AboutMe.aspx
+DTSTART;TZID=America/Los_Angeles:20100413T090000
+DTSTAMP:20100319T154136Z
+SUMMARY:Scott Hanselman on .NET
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100413T130000
+LOCATION:Montgomery Park
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:ADDITIONAL EVENT INFO\nSchedule & Topics\n\nWorkshops are he
+ ld January 28- April 16\,2010\, on Tuesdays 2-4 pm and Thursdays 6-8 pm 
+ at NedSpace Old Town– for a full schedule of workshops & topics: http://
+ www.portlandten.com/skills\n\nPricing\n\nPasses can be purchased at the 
+ door-- cash or check at the door only\, please. If you need to pay by cr
+ edit card\, please let a staff member know.\n\n* 1 Workshop Pass: $20\n*
+  1 Track Pass (3 sessions in one topic): $45\n* Unlimited Pass (up to 24
+  sessions): $150\n\nSpecials\n\nUpgrade: if you purchase a pass and woul
+ d like to upgrade to another package\, we’ll pro-rate it and you’ll pay 
+ only the difference between the passes.\n\nPortland Ten: current partici
+ pants & alumni attend free.\n\nSix Week Sprint: current participants & a
+ lumni may purchase an unlimited pass for $20
+UID:http://calagator.org/events/1250458482
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.portlandten.com/skills
+DTSTART;TZID=America/Los_Angeles:20100413T140000
+DTSTAMP:20100327T194138Z
+SUMMARY:Portland Ten Skill Development Workshop: Sales for Startups with
+  the Olsen Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100413T170000
+LOCATION:NedSpace Old Town
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Portland Code Camp and SQL Saturday are combining and coordi
+ nating efforts to bring 700-800 regional software development profession
+ als together for the opportunity to immerse themselves in seminars\, pre
+ sentations\, group exploration\, and networking. Participants will be ab
+ le to engage in their preferred technology\, as well as to sample other 
+ options\, with a focus on extending information exchange and enhancing t
+ he cross pollination of ideas. Mark your calendar! Portland Code Camp an
+ d SQL Saturday 2010 is scheduled for May 22\, 2010\, at the University o
+ f Portland campus. The event is scheduled from 8:00 AM until 10:00 PM. T
+ he University of Portland facility offers a great venue –including large
+  fully equipped and air conditioned meeting rooms\, excellent parking\, 
+ access to public transportation\, and easy bike commuting. A few deep di
+ ve sessions (2.5 hour) will be scheduled for 7:00 PM –after evening snac
+ ks and refreshments. \n\nThis year\, Portland Code Camp is encouraging p
+ resentations in the areas of Mobile\, Social\, Cloud\, and Gaming. Of co
+ urse\, other informative topics will be considered. A hallmark of ‘code 
+ camp’ is that we encourage presenters to keep their presentations within
+  the realm of ‘code’\; a few sessions may have such informative value th
+ at they will be permitted without code. Visit http://portlandcodecamp.or
+ g to submit a CodeCamp related session.\n\nPortland SQLSaturday is encou
+ raging presentations related to interoperability of any of the SQL platf
+ orms\, including T-SQL (SQL Server)\, PL/SQL\, PostgreSQL\, and MySQL. A
+ bstracts for platform specific sessions are also encouraged. Visit http:
+ //www.sqlsaturday.com/27/eventhome.aspx to submit a SQL related session 
+ abstract.\n\nAdmission to this event is free\, all costs are covered by 
+ donations and sponsorships. \n\nPlease register soon as seating is limit
+ ed –and tell you friends and colleagues about the event.\n\nTo Register\
+ , visit: http://devsat.eventbrite.com
+UID:http://calagator.org/events/1250458294
+TRANSP:OPAQUE
+URL;VALUE=URI:http://portlandcodecamp.org
+DTSTART;TZID=America/Los_Angeles:20100522T080000
+DTSTAMP:20100208T053112Z
+SUMMARY:Portland Code Camp
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100522T220000
+LOCATION:University of Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:ABOUT: Join programmers\, researchers and enthusiasts to dis
+ cuss functional programming. pdxfunc is a study/user group exploring the
+  world of functional programming based in Portland\, Oregon. The group w
+ elcomes programmers interested in all functional languages\, including H
+ askell\, Erlang\, OCaml\, Scala\, and others. The group meets regularly 
+ and provides presentations\, demos and discussions applicable to all ski
+ ll levels\, from newbies and experts. The meetings are usually on the se
+ cond Monday of the month.\n\nTags:\nfunctional programming\, pdxfunc
+UID:http://calagator.org/events/1250458405
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxfunc.org/
+DTSTART;TZID=America/Los_Angeles:20100510T190000
+DTSTAMP:20100309T164058Z
+SUMMARY:Portland Functional Programming Study Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100510T210000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Come join us for an evening of socializing\, talking about o
+ dd hacks and poking around with other people toys. Bring things for show
+  and tell if you like\, or just bring a willingness to share your intere
+ sts. We'll be the kids with all the coolest stuff on the table. Hope to 
+ see you there.\n\nTags:\narduino\, artists\, avr\, dorkbot\, dorkbotpdx\
+ , dorks\, geeks\, hacking
+UID:http://calagator.org/events/1250458216
+TRANSP:OPAQUE
+URL;VALUE=URI:http://dorkbotpdx.org
+DTSTART;TZID=America/Los_Angeles:20100412T190000
+DTSTAMP:20100121T235909Z
+SUMMARY:DorkbotPDX Meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100412T230000
+LOCATION:Backspace
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Our regular monthly meeting.  Topic TBD.\n\nTags:\nagile\, a
+ gilepdx\, extreme programming\, kanban\, lean\, scrum\, xp
+UID:http://calagator.org/events/1250458367
+TRANSP:OPAQUE
+URL;VALUE=URI:http://tech.groups.yahoo.com/group/xpportland/
+DTSTART;TZID=America/Los_Angeles:20100421T183000
+DTSTAMP:20100301T024741Z
+SUMMARY:AgilePDX meeting
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100421T210000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Friday\, April 16\, 2010 at 9am through
+  Saturday\, April 17\, 2010 at 4pm.\n\n Description:\nHosted by the Port
+ land Open Source GIS Users Group\, this "unconference" will follow a 2-d
+ ay traditional GIS conference\, GIS In Action(GIA)\, which will also inc
+ lude some open source tracks--mostly concentrated on Thursday.\n\nPlease
+  register in advance at the website!\n\nTags:\ngeo\, geography\, gis\, u
+ nconference
+UID:http://calagator.org/events/1250458511
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxosgis2010.eventbrite.com/
+DTSTART;VALUE=DATE:20100416
+DTSTAMP:20100402T182005Z
+SUMMARY:PDX Open Source GIS Unconference
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100418
+LOCATION:PSU Urban Plaza
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Launch: Silicon Valley 2010 is designed to uncover and showc
+ ase products and services from the most exciting of the newest startups 
+ in Information Technology\, Mobility\, Digital Media\, Next Generation I
+ nternet\, Life Sciences and Clean Energy. As in previous years\, Launch:
+  Silicon Valley 2010 will feature new companies that are ready for launc
+ h\, but are not yet well known. These are companies that have a product 
+ or service available (as of June 8\, 2010)\, but have not been out in th
+ e marketplace for more than a few months.\n \nCompanies that are interes
+ ted in presenting their products at Launch: Silicon Valley 2010 should s
+ end an Executive Summary of no more than 2 pages to Launchsv@svase.org b
+ y latest  Friday May 7\, 2010. Up to 30 of the most interesting companie
+ s will be invited to leverage Launch: Silicon Valley 2010 as the springb
+ oard to launch their product or service\, and to network with the audien
+ ce of Silicon Valley’s top movers and shakers at the Pre-L:SV Event Part
+ y on the evening of June 7\, as well as at the event itself on June 8. T
+ he registration fees for participating companies (once their submissions
+  have been selected) will be SVASE members ($595) and Non-Members ($750)
+  respectively.\n\nThe registration fees for audience varies for SVASE me
+ mbers ($195) and Non-Members ($245). To get a fee waiver of up to 50%\, 
+ register early as only the first 25 registrants get 50% off. for more de
+ tails\, visit http://launchsiliconvalley.org/agenda\n\nRegistration URL\
+ nhttp://www.acteva.com/booking.cfm?bevaid=193912\n\nTags:\nbusiness\, ev
+ ent\, launch: silicon valley 2010\, svase\, svase event
+UID:http://calagator.org/events/1250458386
+TRANSP:OPAQUE
+URL;VALUE=URI:http://launchsiliconvalley.org%20
+DTSTART;TZID=America/Los_Angeles:20100608T073000
+DTSTAMP:20100304T094212Z
+SUMMARY:Launch: Silicon Valley 2010
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100608T130000
+LOCATION:Microsoft Building 1\,
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:After skipping a year\, CyborgCamp is back! We're looking fo
+ rward to a conference full of fascinating people\, ideas and projects. \
+ n\nCyborgCamp http://portland.cyborgcamp.com/ is a hybrid unconference o
+ n the future of humans and technology. Half of the conference will be or
+ ganized BarCamp style\, and the other half will have structured experts 
+ on various topics. \n\nWhat is a cyborg? A cyborg (shorthand for “cybern
+ etic organism”) is a symbiotic fusion of human and machine. Join in our 
+ pre-conference discussion and help organize the event at https://cyborgc
+ amp.pbwiki.com/ and faster updates on Twitter at http://www.twitter.com/
+ cyborgcamp.\n\nCyborgCamp's aim is to have many communication channels s
+ uch as Twitter\, Flickr\, UstreamTV\, Video and Audio recordings and liv
+ e chats displayed on the screen. Classrooms\, individuals and businesses
+  are encouraged to attend the event remotely. It will be livestreamed th
+ rough multiple channels and will be archived and tagged for future viewi
+ ng. Details on remote conference access will be available a week before 
+ the conference begins. \n\nCyborgCamp is open to sponsors. We're interes
+ ted in cutting edge companies or non-profits who are interested in educa
+ tion/technological development. Please E-mail caseorganic@gmail.com if y
+ ou or your organization/business is interested in this. Your logo will b
+ e added to any paper brochures\, the website\, and will be included in l
+ ive Twitter streams during the event.
+UID:http://calagator.org/events/1250458538
+TRANSP:OPAQUE
+URL;VALUE=URI:http://portland.cyborgcamp.com/
+DTSTART;TZID=America/Los_Angeles:20101002T090000
+DTSTAMP:20100409T084849Z
+SUMMARY:CyborgCamp 2010 - A Conference of the Future of Humans and Techn
+ ology
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20101002T180000
+LOCATION:Webtrends
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Thursday\, April 22\, 2010 at 9am throu
+ gh Friday\, April 23\, 2010 at 5pm.\n\n Description:\nSolutionsIQ Certif
+ ied ScrumMaster Training gives you all the tools and information you nee
+ d to get started with Scrum and Agile. Delivered by SolutionsIQ’s world-
+ renowned Certified ScrumMaster Trainers\, this course shares time-tested
+  practices for managing Product Backlogs\, planning your releases and it
+ erations (Sprints)\, and tracking and reporting progress. \n\nYou’ll lea
+ rn how to lead Sprint Planning meetings\, Daily Scrum meetings\, Sprint 
+ Review meetings\, Sprint Retrospectives\, and much more.\n\nContact:\nRa
+ chel Kjack\n503.867.0742\n\nTags:\nagile\, scrum\, scrum certification\,
+  scrum master
+UID:http://calagator.org/events/1250458439
+TRANSP:OPAQUE
+URL;VALUE=URI:http://oregontrainingnetwork.com/training-topics/agile-scr
+ um-master/
+DTSTART;VALUE=DATE:20100422
+DTSTAMP:20100311T211327Z
+SUMMARY:Certified ScrumMaster Training
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100424
+LOCATION:Doubletree Hotel & Executive Meeting Center Portland - Lloyd Ce
+ nter 
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Who: Springboard Innovation hosts its monthly Social Innovat
+ ion Forum on Wednesday\, March 14th 2010\, from 6-9pm. There is limited 
+ space for this month’s event\, so RSVP is REQUIRED.\n\nWhat: Join us as 
+ we explore the concepts of impact investing. From socially responsible i
+ nvesting to micro-finance to seed funding social ventures\, these strate
+ gies have experienced new interest and attention. What's working\, what 
+ have we learned\, and what are the new ideas being brought to the table-
+ -we'll dig in to all of this and more?\n\nExperts will help explain the 
+ variations on this theme and deconstruct the lingo. Speakers include Mal
+ aika Maphalala\, Fincancial Advisor with Natural Investments\, LLC\, who
+  will provide an overview of the field of Socially Responsible and Green
+  Investing. If you are involved in change\, impact investing is somethin
+ g you need to understand.\n\nCome join us and find out how to fund solut
+ ions to the social and environmental challenges of our time while genera
+ ting healthy returns.\n\nMark your calendars now and RSVP today! Space i
+ s limited. Learn more about the Forum at www.springboardinnovation.org/f
+ orum.php\n\nWhen: April 14\, 2010 5:30 Doors Open\; appetizers\, drinks 
+ and networking 6:00 – 9:00 p.m. Discussion and Workshops\n\nWhere: Surpr
+ ise Location! TBD\n\nCost: $10\, snacks and drinks included\n\nRSVP and 
+ Contact: Please contact Mary Grace at (503) 452- 6898 or marygrace@sprin
+ gboardinnovation.org for more information about this event and to RSVP.\
+ n\nAbout The Social Innovation Forum: The Springboard Social Innovation 
+ Forum offers a monthly event designed to support those interested in cre
+ ating a better future. Our focus is to help practitioners or potential p
+ ractitioners of social projects push beyond discussion and debate into a
+ ction. Each Forum will inspire and teach with ideas\, powerful role mode
+ ls\, and stories. Speakers\, content experts\, panels\, and workshops wi
+ ll help you improve your strategies for planning and launching effective
+  social ventures. The Forum will create a context to connect\, learn\, a
+ nd take action around ideas that lead to tangible change—all in a venue 
+ designed for building community. The Forum is intended to attract people
+  with a wide range of experience and backgrounds\, but with a common int
+ erest—making a difference. If you are getting tired of waiting for someo
+ ne else to step up to take on issues you care about\, come see how this 
+ can be a place to make a difference\, here or around the world. We invit
+ e people from both the business and non-profit community—investors and a
+ ctivists—to join in\, work together\, and make this a model for other ci
+ ties to adopt. Learn more about the Forum at www.springboardinnovation.o
+ rg/forum.php\n\nAbout Springboard Innovation Springboard Innovation (www
+ .springboardinnovation.org) is a not-for-profit headquartered in Portlan
+ d\, Oregon. Through a process of “innovation incubation” we help communi
+ ty members launch social change organizations and programs. We invite yo
+ u to be involved in our newest initiative for change.\n\nTags:\nimpact i
+ nvesting\, social innovation\, springboard
+UID:http://calagator.org/events/1250458515
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.springboardinnovation.org/forum.html
+DTSTART;TZID=America/Los_Angeles:20100414T180000
+DTSTAMP:20100405T182023Z
+SUMMARY:Springboard Social Innovation Forum: Exploring Impact Investing
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100414T210000
+LOCATION:Olympic Mills Commerce Center
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This month's topic: TBD\n\n----------\n\nPJUG meetings start
+  with some time to eat and socialize (pizza and beverages are provided)\
+ , followed by the featured speaker\, then Q&A\, discussion\, sometimes a
+  drawing to give away swag. :)\n\nThough we like knowing how many people
+  to expect\, you don't *have* to RSVP\, on Upcoming or otherwise. Go ahe
+ ad and just show up!\n\nMany people also go for a drink and further disc
+ ussion following the meeting\, at a location determined ad hoc (lately\,
+  the Market Street Pub at 10th and Market: http://mcmenamins.com/index.p
+ hp?loc=24 ).\n\nhttp://twitter.com/pjug\nhttp://pjug.org/\n(join our mai
+ ling list\, linked from the website!)\n\nTags:\njava\, oracle\, pjug\, p
+ ortland\, sun\, user group
+UID:http://calagator.org/events/1250458184
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pjug.org/
+DTSTART;TZID=America/Los_Angeles:20100420T183000
+DTSTAMP:20100119T014429Z
+SUMMARY:Portland Java User Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100420T203000
+LOCATION:Oracle (Downtown Campus)
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Come hang out\, drink beer\, and write code every Monday nig
+ ht.\n\nThe meetings are extremely informal\, and everyone is welcome!\n\
+ nTags:\ncoders\, coding\, iphone\, mac\, north\, portland\, programming\
+ , python
+UID:http://calagator.org/events/1250458524
+TRANSP:OPAQUE
+URL;VALUE=URI:http://nopoconi.tumblr.com/
+DTSTART;TZID=America/Los_Angeles:20100412T183000
+DTSTAMP:20100406T210013Z
+SUMMARY:North Portland Coders' Night
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100412T220000
+LOCATION:Lucky Labrador Overlook Tap Room
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:The Portland Development Commission (PDC) [http://www.pdc.us
+ /] will be hosting Lunch 2.0 on May 19.\n\nAre you vegan or vegetarian? 
+ Please leave a comment so we can plan food accordingly. Thanks.\n\nWonde
+ ring what Lunch 2.0 is?\n\nLunch 2.0 is a phenomenon that began in Silic
+ on Valley. You can read about their current events and the history behin
+ d Lunch 2.0 at lunch20.com [http://lunch20.com/].\n\nWe imported the con
+ cept to Portland in 2007\, and you can follow all things Portland Lunch 
+ 2.0 at the Silicon Florist [http://siliconflorist.com/tags/lunch20].
+UID:http://calagator.org/events/1250458488
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458488
+DTSTART;TZID=America/Los_Angeles:20100519T120000
+DTSTAMP:20100329T025704Z
+SUMMARY:Lunch 2.0 at the Portland Development Commission
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100519T150000
+LOCATION:Portland Development Commission
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:*** NOTE: Due to a scheduling conflict we are not on our nor
+ mal night ***\n\nJoin us for Portland Werewolf's 3rd anniversary. It's g
+ oing to be a great night\, expect tricks and treats!\n\nCome out and pla
+ y at our monthly game of werewolf at the Lucky Lab on Hawthorne. Check o
+ ut the site for details (http://www.portlandwerewolf.com).\n\nEvent star
+ ts at 6p. Game starts at 7p.\n\nIf you are planning on coming and want t
+ o play please respond with "attending". That way we know who is coming a
+ nd you are guaranteed to play.
+UID:http://calagator.org/events/1250458477
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.portlandwerewolf.com
+DTSTART;TZID=America/Los_Angeles:20100420T180000
+DTSTAMP:20100326T040305Z
+SUMMARY:Portland Werewolf - 3rd Anniversary - April Gathering
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100420T210000
+LOCATION:Lucky Labrador Brew Pub
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:WebVisions [http://webvisionsevent.com] will be hosting Lunc
+ h 2.0 at Hot Pepper Studios in SE on April 14.\n\nAre you vegan or veget
+ arian? Please leave a comment so we can plan food accordingly. Thanks.\n
+ \nWondering what Lunch 2.0 is?\n\nLunch 2.0 is a phenomenon that began i
+ n Silicon Valley. You can read about their current events and the histor
+ y behind Lunch 2.0 at lunch20.com [http://lunch20.com/].\n\nWe imported 
+ the concept to Portland in 2007\, and you can follow all things Portland
+  Lunch 2.0 at the Silicon Florist [http://siliconflorist.com/tags/lunch2
+ 0].
+UID:http://calagator.org/events/1250458461
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458461
+DTSTART;TZID=America/Los_Angeles:20100414T120000
+DTSTAMP:20100320T190051Z
+SUMMARY:PDX Lunch 2.0 Hosted by WebVisions
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100414T150000
+LOCATION:Hot Pepper Studios
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join Colleen Wright of the Search Engine Academy of Oregon a
+ nd get some search engine marketing tips and tactics that you can implem
+ ent immediately at this free seminar. \n\nYou will learn:\n\n*The differ
+ ence between on-page and off-page factors and how to take advantage of t
+ hem\n\n*Usability Tips that will keep your visitors on your site\n\n*Wha
+ t tools you can use to help determine the best course of action for opti
+ mizing your website\n\n*Why it is important to understand search and whe
+ re search is heading in the future\n\n*Basic Actionable steps to impleme
+ nt immediately\n\nWhile introducing these marketing nuggets\, she will a
+ lso give you a brief overview of what you will learn in the "Ultimate SE
+ O Mastery Workshop" coming in May. If you have been thinking about takin
+ g the class or just want information on SEO basics\, this is one hour yo
+ u don't want to miss.\n\nRegister for this free event at http://www.sea-
+ oregon.com/upcoming-workshops/\n\nTags:\ninternet marketing training\, s
+ earch engine optimization classes\, search engine optimization seminar\,
+  search engine optimization training\, search engine optimization worksh
+ ops\, seo training
+UID:http://calagator.org/events/1250458497
+TRANSP:OPAQUE
+URL;VALUE=URI:http://sea-oregon.com/upcoming-workshops/
+DTSTART;TZID=America/Los_Angeles:20100421T160000
+DTSTAMP:20100330T213541Z
+SUMMARY:Search Engine Marketing Tips and Tactics – a free event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100421T173000
+LOCATION:MacForce
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:It's time for another Portland Data Visualization Meetup. Th
+ e last one occurred on November 3rd\, 2009. A number of things have happ
+ ened since then\, like Marshall Kikpatrick's coverage of #pdxboom\, the 
+ release of Lee Byron's Stacked Graph Source Code\, Ben Stabler's develop
+ ment of a Flex/Flash data visualization platform and R visualizations\, 
+ and Aaron Parecki's continued GPS visualization experiments.\n\nWe'll ha
+ ve four main presentations from members of the Portland tech community a
+  bunch of networking time. Webtrends will again graciously host us on th
+ eir top floor.\n\nThe event is open to everyone interested in or working
+  in the field of data visualization. This means designers\, programmers\
+ , information architects\, data miners\, anthropologists\, ect. We're ex
+ pecting a similar amount of people to last time (probably around 20-30 p
+ eople).\n\nBring a passion for data visualization\, and a mind open to e
+ xploring new ideas and concepts.
+UID:http://calagator.org/events/1250458527
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458527
+DTSTART;TZID=America/Los_Angeles:20100429T183000
+DTSTAMP:20100407T235902Z
+SUMMARY:Portland Data Visualization Group #3
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100429T213000
+LOCATION:Webtrends
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:The Southwest Washington Workforce Development Council (SWWD
+ C) is partnering with the Oregon Entrepreneurs Network (OEN) to bring a 
+ vital connection with the world of entrepreneurship to Southwest WA. We 
+ are leveraging the network and expertise of OEN to support innovation an
+ d growth.\n\nOEN entrepreneurs tell good stories. They have to if they w
+ ant their business to succeed. They also need access to information\, co
+ ntacts and capital. The OEN PubTalk™ is a great starting place for entre
+ preneurs to find just that.\n\nOEN's PubTalk™\, held the second Wednesda
+ y of every month (except July and December)\, is a unique mix of educati
+ onal panel discussions delivered by successful entrepreneurs\, investors
+  or business experts combined with opportunities for entrepreneurs to ga
+ in expertise in delivering investment pitches. Entrepreneurs can present
+  as a featured company at a monthly PubTalk or they can compete in OEN's
+  Seed Oregon PubTalk™ competition.\n\nDuring the monthly PubTalk's™\, OE
+ N selects two emerging entrepreneurs to present their five-minute pitch 
+ on who they are\, and what they do in front of a live audience of experi
+ enced entrepreneurs. Presenting Northwest business entrepreneurs receive
+  feedback on their products\, services\, business model\, marketing stra
+ tegy\, or other integral component of their business. The objective is t
+ o leverage the strength and experience of the community\, providing an i
+ nvaluable learning opportunity for young entrepreneurs.\n\nTags:\neducat
+ ion\, oen\, pitch\, pubtalk\, vancouver\, washington
+UID:http://calagator.org/events/1250458435
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oen.org/events.aspx?id=127
+DTSTART;TZID=America/Los_Angeles:20100421T170000
+DTSTAMP:20100311T174743Z
+SUMMARY:SW Washington PubTalk™
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100421T190000
+LOCATION:TBD Vancouver
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Friday\, June 25\, 2010 at 8am through 
+ Sunday\, June 27\, 2010 at 5pm.\n\n Description:\nWelcome to the North A
+ merican Organic Brewers Festival\, where we aim to save the planet\, one
+  beer at a time! The 6th annual event will take place June 25 - 27\, 201
+ 0 in Overlook Park in Portland\, Oregon.\n\nTwo of Portland's beloved in
+ dustries - organic beer and sustainability - come together in an annual 
+ celebration designed to raise awareness about organic beer and sustainab
+ le living. We serve up organic beers and ciders from around the world\, 
+ accompanied by live music\, organic food\, sustainability-oriented vendo
+ rs\, non-profits and a children's area - all in a beautiful tree lined s
+ etting that overlooks downtown Portland. Come visit the North American O
+ rganic Brewers Festival and see why we're Portland's best kept secret of
+  beer fests!\n\nTags:\norganic beer
+UID:http://calagator.org/events/1250458447
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.naobf.org/
+DTSTART;VALUE=DATE:20100625
+DTSTAMP:20100316T162348Z
+SUMMARY:North American Organic Brewers Festival
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100628
+LOCATION:Overlook Park
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for our monthly event! More details to come ...\n\nI
+ xDA Portland is the local chapter of the Interaction Design Association 
+ (http://www.ixda.org/local/ixda-portland).
+UID:http://calagator.org/events/1250458421
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458421
+DTSTART;TZID=America/Los_Angeles:20100720T180000
+DTSTAMP:20100311T034909Z
+SUMMARY:IxDA Portland: Monthly Event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100720T200000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This month's topic: TBD\n\n----------\n\nPJUG meetings start
+  with some time to eat and socialize (pizza and beverages are provided)\
+ , followed by the featured speaker\, then Q&A\, discussion\, sometimes a
+  drawing to give away swag. :)\n\nThough we like knowing how many people
+  to expect\, you don't *have* to RSVP\, on Upcoming or otherwise. Go ahe
+ ad and just show up!\n\nMany people also go for a drink and further disc
+ ussion following the meeting\, at a location determined ad hoc (lately\,
+  the Market Street Pub at 10th and Market: http://mcmenamins.com/index.p
+ hp?loc=24 ).\n\nhttp://twitter.com/pjug\nhttp://pjug.org/\n(join our mai
+ ling list\, linked from the website!)\n\nTags:\njava\, oracle\, pjug\, p
+ ortland\, sun\, user group
+UID:http://calagator.org/events/1250458186
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pjug.org/
+DTSTART;TZID=America/Los_Angeles:20100615T183000
+DTSTAMP:20100119T015719Z
+SUMMARY:Portland Java User Group
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100615T203000
+LOCATION:Oracle (Downtown Campus)
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Portland’s most popular arcade honors some of the most popul
+ ar video game companies ever with a celebration sure to warp you back in
+  time: the Nintendo Party!\n\nNot just limited to Nintendo\, play classi
+ c Nintendo Entertainment System\, Super Nintendo Entertainment System an
+ d Sega Genesis games on our stage! Who knows what else we'll dig out of 
+ the attic?\n\nFlex your nerd knowledge in trivia\, and win some cool pri
+ zes!\n\nWe’ll also have cleaned & refurbished systems and games availabl
+ e to purchase so the pixelated action can continue in your own home!\n\n
+ 21+\, no cover\n\nTags:\narcade\, drinks\, nintendo\, trivia\, video gam
+ es
+UID:http://calagator.org/events/1250458504
+TRANSP:OPAQUE
+URL;VALUE=URI:http://groundkontrol.com/events/cal_event.php?id=3450
+DTSTART;TZID=America/Los_Angeles:20100429T190000
+DTSTAMP:20100331T190227Z
+SUMMARY:Nintendo Party: Trivia & Free Play
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100429T233000
+LOCATION:Ground Kontrol Classic Arcade
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:TECHAMERICA OREGON TECHNOLOGY AWARDS PROGRAM\n\nThursday\, M
+ ay 6\, 2010 \n5:30 pm – 9:00 pm \n\nPortland Art Museum\, Kridel Grand B
+ allroom \n1219 SW Park Ave\, Portland\, Oregon 97205\n\nTHE AWARDS PROGR
+ AM\nThis premier event celebrates excellence and achievement in the regi
+ on’s technology industry and honors one outstanding Technology Executive
+  of the Year. In addition\, five individual industry segment and product
+  awards will be presented during the evening\, recognizing recipients fo
+ r their accomplishments\, leadership and commitment to the community and
+  industry. The Technology Executive of the Year will be announced in ear
+ ly February\, 2010. Three finalists in the individual award categories w
+ ill be announced prior to the event.\n\nTags:\ntvg
+UID:http://calagator.org/events/1250458175
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oregontechawards.com/
+DTSTART;TZID=America/Los_Angeles:20100506T173000
+DTSTAMP:20100116T003646Z
+SUMMARY:Oregon Technology Awards
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100506T203000
+LOCATION:Portland Art Museum: Kridel Grand Ballroom
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:This event runs from Monday\, May 17\, 2010 at 9am through T
+ uesday\, May 18\, 2010 at 5:30pm.\n\n Description:\nJoin Colleen Wright 
+ of the Search Engine Academy of Oregon as she teaches the latest search 
+ engine marketing tips and tactics. In this 2-day course you will learn t
+ he essentials of getting your website indexed appropriately and quickly.
+ \n\nSEO Training Course Day 1\n\n    * 2-Day Beginner's Class Discover a
+  complete 6-step system for performing effective search engine marketing
+ \n    * Learn how to perform keyword research that will attract your tar
+ get market\n    * Write content that will turn visitors into customers\n
+     * Find out the importance of keyword placement on your web pages and
+  where to actually place the keywords\n    * Discover how to improve you
+ r Click-through Ratios\n\nSEO Training Course Day 2\n\n    * Learn optim
+ al techniques to get your pages indexed by the Search Engines.\n    * Fi
+ nd out what it takes to monitor your progress and the tools to help you.
+ \n    * Understand the benefits of working with ranges of pages.\n    * 
+ Discover what it takes to stay out of trouble with the search engines by
+  learning about anti-spamming guidelines.\n    * Learn why submitting yo
+ ur site to directories is important and how to choose the correct direct
+ ories.\n    * What is Link Popularity and why is it important.\n    * Re
+ ceive internal and external link building strategies that will make it e
+ asier for the search engines to find your web pages.\n    * Learn about 
+ the missing element in SEO: Creativity and find out how you too can get 
+ your creative juices flowing!\n    * Get your site reviewed and walk awa
+ y with a customized action-plan to get your website optimized for maximu
+ m performance.\n    * Learn about technologies that can improve your con
+ version rates and capture phone calls right from your web site.\n\nSee t
+ he website for information on the 5-day Comprehensive course that combin
+ es the 2-day Essentials and the 3-day Advanced course material.\n\nConta
+ ct:\nColleen Wright\nPhone: 503-530-8178\nEmail: info@sea-oregon.com\nWe
+ bsite: http://www.sea-oregon.com\n\nTags:\ninternet marketing training\,
+  search engine optimization classes\, search engine optimization seminar
+ \, search engine optimization training\, search engine optimization work
+ shops\, seo training
+UID:http://calagator.org/events/1250458441
+TRANSP:OPAQUE
+URL;VALUE=URI:http://sea-oregon.com/upcoming-workshops/
+DTSTART;VALUE=DATE:20100517
+DTSTAMP:20100312T012315Z
+SUMMARY:Ultimate SEO Mastery Workshop - 2-Day Essentials
+CREATED:20100411T221115Z
+DTEND;VALUE=DATE:20100519
+LOCATION:MacForce
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Come do strange things with computers amongst others whilst 
+ drinking fine Portland beer. Look for the row of geeks with computers in
+  the back of the main room.\n\nAll programming languages welcome. Come w
+ ork on your own projects\, work on others participants' projects\, get a
+ dvice\, have fun\, etc.\n\nYou're encouraged to bring a computer\, but c
+ an team up with others that brought one too.\n\nAfterwards\, the group d
+ escends on the 12th and Hawthorne foodcart pod for additional nourishmen
+ t.\n\nAlso\, many people meet up at the pub during the same time as the 
+ hackathon to play boardgames they bring which you're welcomed to play.\n
+ \nTags:\nbeer\, code\, hack\, pdxhackathon\, shenanigans\, whiffies
+UID:http://calagator.org/events/1250458487
+TRANSP:OPAQUE
+URL;VALUE=URI:http://groups.google.com/group/pdx-weekly-hackathon%20
+DTSTART;TZID=America/Los_Angeles:20100415T183000
+DTSTAMP:20100328T012749Z
+SUMMARY:PDX Weekly Hackathon
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100415T220000
+LOCATION:Lucky Labrador Brew Pub
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:EcoTuesday is committed to changing the way people do busine
+ ss. The monthly event provides a structured environment where sustainabl
+ e business leaders network with one another and gain insight from indust
+ ry thought–leaders and trendsetters. Everyone in the room quickly learns
+  about everyone else during the “introduction circle”. EcoTuesday.com co
+ nnects participants between events\, serves as a hub for conversations a
+ nd showcases local businesses.\n \nThe vision of EcoTuesday is for busin
+ ess people to share ideas and collaborate so that companies develop prod
+ ucts and services that have a positive impact on the marketplace and pla
+ net.\n\nEcoTuesday takes place in cities across the country on the fourt
+ h Tuesday of each month. Go to www.ecotuesday.com for more information a
+ nd to sign up for the mailing list.\n\nTags:\nbusiness\, green\, leaders
+ \, networking\, sustainable\, trendsetters
+UID:http://calagator.org/events/1250458409
+TRANSP:OPAQUE
+URL;VALUE=URI:https://www.ecotuesday.com/civicrm/event/info?id=145&reset
+ =1
+DTSTART;TZID=America/Los_Angeles:20100525T180000
+DTSTAMP:20100309T215253Z
+SUMMARY:EcoTuesday - Portland
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100525T200000
+LOCATION:souk
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Frank Helle\, CEO of Axian\, Inc.\, will lead an interactive
+  discussion that will help entrepreneurs gain some insightful perspectiv
+ es on Boards of Directors. Come share your challenges\, observations and
+  successes with other CEOs of emerging businesses. The group will discus
+ s strategies for selecting\, structuring and making your board more effe
+ ctive. You will also receive a high-level recap of the discussion from F
+ rank.\n\nOpen only to CEOs or Presidents of currently operating companie
+ s that have employees. Box lunch will be served. This program is limited
+  to 12 participants\, and is available on a first-come\, first-served ba
+ sis.\n\nSpeaker: Frank Helle\, Axian\, Inc. - www.axian.com\n\nFrank Hel
+ le is CEO of Axian\, Inc.\, a 20-year old privately-held web-services co
+ mpany creating collaboration portals and business intelligence (software
+  & data). Prior to 2002 he was a senior global manager at Monsanto Compa
+ ny. During that career he lived in Brussels Belgium for 5 years managing
+  manufacturing\, engineering\, and supply chain for Europe\, Middle East
+ \, and Africa. He then lived in Singapore for 5 years as Asia-Pacific Ma
+ naging Director for 3 Monsanto Divisions.\n\nFrank's leadership helps or
+ ganizations realize more of their full potential\, and often focuses on 
+ turnarounds and turbo-charging growth.\n\nAside from positioning Axian t
+ o be "built to last\," Frank mentors and coaches local CXOs to help them
+  compete in the global marketplace and create more jobs in Oregon. Frank
+  is an active Board Director of Oregon's Association for Corporate Growt
+ h as Chair Emeritus & Past-President\, is an active Board Director of Or
+ egon’s high tech trade association\,Tech America\, and is an active volu
+ nteer with the Oregon Entrepreneurs Network - chairing the CEO Roundtabl
+ e.\n\nTags:\nboard of directors\, ceo\, oen\, round table\, tvg
+UID:http://calagator.org/events/1250458434
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.oen.org/events.aspx?id=122
+DTSTART;TZID=America/Los_Angeles:20100421T113000
+DTSTAMP:20100311T174404Z
+SUMMARY:OEN CEO Roundtable with Frank Helle: Perspectives on Boards of D
+ irectors
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100421T133000
+LOCATION:IronStone Bank 
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Please join us this Thursday at Webtrends where Michael Fiel
+ ds [http://mfields.org/] will be speaking on the topic of Custom Taxonom
+ ies for your WordPress powered website. The purpose of the presentation 
+ is two-fold: to inform WordPress users that this functionality exists an
+ d inspire them to use custom taxonomies on their own sites by providing 
+ a series of use cases.\n\nPlease bear in mind that there will be absolut
+ ely no code to learn. All examples can be reproduced by a beginner with 
+ the aid of freely available\, open-source plugins.\n\nTags:\nmfields\, m
+ ichael fields\, plugin\, presentation\, taxonomy\, wordpress
+UID:http://calagator.org/events/1250458520
+TRANSP:OPAQUE
+URL;VALUE=URI:http://pdxwp.com/2010/04/april-15-taxonomies-are-a-wonderf
+ ul-thing/
+DTSTART;TZID=America/Los_Angeles:20100415T180000
+DTSTAMP:20100406T050421Z
+SUMMARY:Portland WordPress User Group: "Taxonomies Are a Wonderful Thing
+ "
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100415T210000
+LOCATION:Webtrends
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:Join us for our monthly event! More details to come ...\n\nI
+ xDA Portland is the local chapter of the Interaction Design Association 
+ (http://www.ixda.org/local/ixda-portland).
+UID:http://calagator.org/events/1250458425
+TRANSP:OPAQUE
+URL;VALUE=URI:http://calagator.org/events/1250458425
+DTSTART;TZID=America/Los_Angeles:20100921T180000
+DTSTAMP:20100311T035029Z
+SUMMARY:IxDA Portland: Monthly Event
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100921T200000
+LOCATION:TBD Portland
+END:VEVENT
+BEGIN:VEVENT
+SEQUENCE:0
+DESCRIPTION:CocktailCamp is an informal day-long gathering for people wh
+ o enjoy making\, drinking\, and discussing cocktails. It is a community-
+ focused event organized by a small group of cocktail enthusiasts whose p
+ rimary goal is to ensure attendees have a good time\, learn a few things
+ \, and meet some interesting people.\n\nBoth hobbyists and professionals
+  will give fun and informative presentations. There will also be space f
+ or smaller informal discussions among attendees.\n\nTickets are only 10 
+ dollars and are available at our website.\n\nTags:\ncamp\, cocktails
+UID:http://calagator.org/events/1250458252
+TRANSP:OPAQUE
+URL;VALUE=URI:http://www.cocktailcamp.net/
+DTSTART;TZID=America/Los_Angeles:20100411T100000
+DTSTAMP:20100129T221321Z
+SUMMARY:Cocktail Camp
+CREATED:20100411T221115Z
+DTEND;TZID=America/Los_Angeles:20100411T170000
+LOCATION:New Deal distillery
+END:VEVENT
+END:VCALENDAR

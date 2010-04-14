@@ -74,7 +74,8 @@ class SourceParser # :nodoc:
         end
       end
 
-      content_calendar = RiCal.parse_string(content).first      
+      content_calendars = RiCal.parse_string(content)
+      content_calendar = content_calendars.first
       events = []
       content_calendar.events.each_with_index do |component, index|
         next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
