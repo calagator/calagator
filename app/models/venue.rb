@@ -181,7 +181,9 @@ class Venue < ActiveRecord::Base
         self.postal_code    = geo.zip            if self.postal_code.blank?
         self.country        = geo.country_code   if self.country.blank?
       end
-      # puts "Geocoding #{geo.success ? "successful" : "failed"}: #{geo.inspect}"
+
+      msg = 'Venue#add_geocoding for ' + (self.new_record? ? 'new record' : "record #{self.id}") + ' ' + (geo.success ? 'was successful' : 'failed') + ', response was: ' + geo.inspect
+      Rails.logger.info(msg)
     end
 
     return true
