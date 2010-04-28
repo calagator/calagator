@@ -510,6 +510,13 @@ EOF
           
           entry.created       item.created_at if item.created_at
           entry.last_modified item.updated_at if item.updated_at
+
+          # Set the iCalendar SEQUENCE, which should be increased each time an
+          # event is updated. If an admin needs to forcefully increment the
+          # SEQUENCE for all events, they can edit the "config/secrets.yml"
+          # file and set the "icalendar_sequence_offset" value to something
+          # greater than 0.
+          entry.sequence((SECRETS.icalendar_sequence_offset || 0) + item.versions.count)
           
           if item.multiday?
             entry.dtstart item.dates.first

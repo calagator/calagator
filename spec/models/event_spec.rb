@@ -817,5 +817,31 @@ describe Event do
       parsed_event.dtstart.should == start_time
       parsed_event.dtend.should == start_time + 5.days
     end
+
+    describe "sequence" do
+      def event_to_ical(event)
+        return Vpim::Icalendar.decode(Event.to_ical([event])).first.events.to_a.first
+      end
+
+      it "should set an initial sequence on a new event" do
+        event = Event.create(valid_event_attributes)
+        ical = event_to_ical(event)
+        ical.sequence.should == 1
+      end
+
+      it "should increment the sequence if it is updated" do
+        event = Event.create(valid_event_attributes)
+        event.update_attribute(:title, "Update 1")
+        ical = event_to_ical(event)
+        ical.sequence.should == 2
+      end
+
+      # it "should offset the squence based the global SECRETS.icalendar_sequence_offset" do
+        # SECRETS.should_receive(:icalendar_sequence_offset).and_return(41)
+        # event = Event.create(valid_event_attributes)
+        # ical = event_to_ical(event)
+        # ical.sequence.should == 42
+      # end
+    end
   end
 end
