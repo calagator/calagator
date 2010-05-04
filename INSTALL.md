@@ -11,7 +11,7 @@ To use Calagator, you'll need to:
   2. [Install Ruby](http://www.ruby-lang.org/), a programming language. You can use MRI Ruby 1.8.6, MRI Ruby 1.8.7, or [Phusion REE (Ruby Enterprise Edition)](http://rubyenterpriseedition.com/). Your operating system may already have Ruby installed or offer it as a prebuilt package.
   3. [Install RubyGems](http://rubyforge.org/projects/rubygems/) 1.3.x, a tool for managing software packages for Ruby. If you already have `rubygems` installed, you may need to update it by running `gem update --system` as root or an administrator.
   4. [Install SQLite3](http://www.sqlite.org/), a database engine. Your operating system may already have Ruby installed or offer it as a prebuilt package.
-  5. [Install Ruby on Rails](http://rubyonrails.org/), a web development framework. You should run `gem install rails -v 2.3.4 --no-ri --no-rdoc` as root or an administrator.
+  5. [Install Ruby on Rails](http://rubyonrails.org/), a web development framework. You should run `gem install rails -v '~> 2.3.5' --no-ri --no-rdoc` as root or an administrator.
   6. [Install Java](http://www.java.com/getjava) 1.6.x, a programming language used to run the Solr search server.
 
 Additional, but out of date, instructions can be found at http://code.google.com/p/calagator/wiki/DevelopmentSoftware
@@ -66,7 +66,7 @@ API Keys
 
 The application uses a number of API keys to communicate with external services.
 
-* Yahoo! Upcoming: To import events from Upcoming, the application can use a public key, but for production use, you should really get and use your own API key. See the `config/secrets.yml.sample` file's "upcoming_api_key" section for details.
+* Yahoo! Upcoming: To import events from Upcoming, the application can use a public key, but for production use, you should really get and use your own API key. See the `config/secrets.yml.sample` file's `upcoming_api_key` section for details.
 
 * Google Maps: To display Google maps, you must get an API key. For details, see the `config/geocoder_api_keys.yml.example` for details.
 
