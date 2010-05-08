@@ -28,6 +28,7 @@ begin
   require 'facets/kernel/try' # Executes method only if object responds to it
   require 'facets/kernel/val' # Object has a value?
   require 'facets/kernel/with' # Like #returning but using #instance_eval.
+  require 'facets/enumerable/mash' # builds hashes from arrays
 rescue LoadError => e
   raise e unless $rails_gem_installer 
 end

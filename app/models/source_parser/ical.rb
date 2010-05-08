@@ -129,22 +129,32 @@ class SourceParser # :nodoc:
       # The Vpim libary doesn't understand that Vvenue entries are just Vcards,
       # so transform the content to trick it into treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
-        vcard_content.gsub!(VENUE_CONTENT_BEGIN_RE, 'BEGIN:VCARD')
-        vcard_content.gsub!(VENUE_CONTENT_END_RE,   'END:VCARD')
 
         begin
-          vcards = Vpim::Vcard.decode(vcard_content)
+          vcards = RiCal.parse_string(vcard_content)
           raise ArgumentError, "Wrong number of vcards" unless vcards.size == 1
           vcard = vcards.first
+          vcard_lines = vcard.export_properties_to(STDOUT)
+          
+          vcard_hash = vcard_lines.mash do |line|
+            if line.match(/^([^:]+?):(.+)$/)
+              key = $1
+              value = $2
+              key = key.split(';').first
+            else
+              key = ""; value = ""
+            end
+            [key, value]
+          end
 
-          a.title          = vcard['name']
-          a.street_address = vcard['address']
-          a.locality       = vcard['city']
-          a.region         = vcard['region']
-          a.postal_code    = vcard['postalcode']
-          a.country        = vcard['country']
+          a.title          = vcard_hash['NAME']
+          a.street_address = vcard_hash['ADDRESS']
+          a.locality       = vcard_hash['CITY']
+          a.region         = vcard_hash['REGION']
+          a.postal_code    = vcard_hash['POSTALCODE']
+          a.country        = vcard_hash['COUNTRY']
 
-          a.latitude, a.longitude = vcard['geo'].split(/;/).map(&:to_f)
+          a.latitude, a.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
 
           return a
         rescue Vpim::InvalidEncodingError, ArgumentError, RuntimeError

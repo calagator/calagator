@@ -24,15 +24,6 @@ describe SourceParser::Ical, "in general" do
 end
 
 describe SourceParser::Ical, "when parsing locations" do
-  it "should fallback on VPIM errors" do
-    invalid_hcard = <<-HERE
-BEGIN:VVENUE
-omgwtfbbq
-END:VVENUE
-    HERE
-
-    SourceParser::Ical.to_abstract_location(invalid_hcard, :fallback => "mytitle").title.should == "mytitle"
-  end
 end
 
 describe SourceParser::Ical, "when parsing multiple items in an Upcoming feed" do
