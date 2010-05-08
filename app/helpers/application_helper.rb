@@ -150,4 +150,23 @@ module ApplicationHelper
   def cleanse(string)
     return escape_once(string)
   end
+
+  def tag_links_for(model)
+    model.tags.map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ')
+  end
+
+  def tag_link(type, tag)
+    internal_url = \
+      case type
+      when :event then search_events_path(:tag => tag.name)
+      when :venue then venues_path(:tag => tag.name)
+      end
+
+    link_class = \
+      tag.machine_tag[:url] ?
+      "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" :
+      nil
+
+    link_to cleanse(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_class 
+  end
 end

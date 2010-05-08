@@ -60,7 +60,7 @@
   <% unless @venue.tags.blank? -%>
   <h2>Tags</h2>
   <div class="tags">
-      <%= cleanse @venue.tag_list %>
+      <%= tag_links_for @venue %>
   </div>
   <% end %>
 

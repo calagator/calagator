@@ -13,10 +13,23 @@
 class Tag < ActiveRecord::Base
   MACHINE_TAG_URLS = {
     'upcoming' => {
-      'event' => "http://upcoming.yahoo.com/event/[value]"
+      'event' => "http://upcoming.yahoo.com/event/[value]",
+      'venue' => "http://upcoming.yahoo.com/venue/[value]"
     },
     'plancast' => {
       'activity' => "http://plancast.com/a/[value]"
+    },
+    'yelp' => {
+      'biz' => "http://www.yelp.com/biz/[value]"
+    },
+    'foursquare' => {
+      'venue' => "http://foursquare.com/venue/[value]"
+    },
+    'gowalla' => {
+      'spot' => "http://gowalla.com/spots/[value]"
+    },
+    'shizzow' => {
+      'place' => "http://www.shizzow.com/places/[value]"
     }
   }
 
