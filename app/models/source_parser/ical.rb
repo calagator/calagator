@@ -94,10 +94,10 @@ class SourceParser # :nodoc:
               # Special handling for Upcoming, where each event maps 1:1 to a venue
               content_venues[index]
             else
-              begin
-                location_field = component.fields.find{|t| t.respond_to?(:name) && t.name.upcase == "LOCATION"}
-                venue_values   = location_field ? location_field.pvalues("VVENUE") : nil
-                venue_uid      = venue_values ? venue_values.first : venue_values
+              begin                
+                # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
+                venue_uid = component.location_property.params["VVENUE"]
+                # finding in the content_venues array an item matching the uid
                 venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
               rescue Exception => e
                 # Ignore

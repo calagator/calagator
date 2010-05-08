@@ -84,21 +84,18 @@ describe SourceParser::Ical, "when parsing multiple items in an Eventful feed" d
   end
 
   it "should match each event with its venue" do
-    pending "I can't tell why this worked before" do
-      # the venues aren't structured VCARDs, so I'd expect only the venue title to be set, which is what's happening
-      event_titles_and_street_addresses = [
-        ["iMovie and iDVD Workshop", "7293 SW Bridgeport Road"],
-        ["Portland Macintosh Users Group (PMUG)", "Jean Vollum Natural Capital Center"],
-        ["Morning Meetings: IT", "622 SE Grand Avenue"]
-      ]
+    event_titles_and_street_addresses = [
+      ["iMovie and iDVD Workshop", "7293 SW Bridgeport Road"],
+      ["Portland Macintosh Users Group (PMUG)", "Jean Vollum Natural Capital Center"],
+      ["Morning Meetings: IT", "622 SE Grand Avenue"]
+    ]
 
-      # Make sure each of the above events has the expected street address
-      event_titles_and_street_addresses.each do |event_title, street_address|
-        @events.find { |event|
-          event.title == event_title && event.location.street_address == street_address
-          }.should_not be_nil
+    # Make sure each of the above events has the expected street address
+    event_titles_and_street_addresses.each do |event_title, street_address|
+      @events.find { |event|
+        event.title == event_title && event.location.street_address == street_address
+        }.should_not be_nil
       end
-    end
   end
 end
 
