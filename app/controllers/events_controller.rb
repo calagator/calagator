@@ -194,7 +194,7 @@ class EventsController < ApplicationController
 
     @query = params[:query].with{blank? ? nil : self}
     @tag = params[:tag].with{blank? ? nil : self}
-    @current = ["1", "true"].include?(params[:current].to_s) ? true : false
+    @current = ["1", "true"].include?(params[:current])
     @order = params[:order]
 
     if @order && @order == "score" && @tag
