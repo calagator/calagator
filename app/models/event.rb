@@ -22,6 +22,10 @@
 class Event < ActiveRecord::Base
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
 
+  # Treat any event with a duration of at least this many hours as a multiday
+  # event. This constant is used by the #multiday? method and is primarily
+  # meant to make iCalendar exports display this event as covering a range of
+  # days, rather than hours.
   MIN_MULTIDAY_DURATION = 20.hours
 
   # Names of columns and methods to create Solr indexes for
@@ -487,10 +491,10 @@ EOF
   def self.to_ical(events, opts={})
     events = [events].flatten
     
-    icalendar = RiCal.Calendar do
+    icalendar = RiCal.Calendar do |calendar|
       for item in events
-        event do
-          summary item.title || 'Untitled Event'
+        calendar.event do |entry|
+          entry.summary(item.title || 'Untitled Event')
           
           desc = returning String.new do |d|
             if item.multiday?
@@ -502,39 +506,51 @@ EOF
             d << "\n\nTags:\n#{item.tag_list}" unless item.tag_list.blank?
           end
           
-          description desc unless desc.blank?
+          entry.description(desc) unless desc.blank?
           
-          created       item.created_at if item.created_at
-          last_modified item.updated_at if item.updated_at
+          entry.created       item.created_at if item.created_at
+          entry.last_modified item.updated_at if item.updated_at
+
+          # Set the iCalendar SEQUENCE, which should be increased each time an
+          # event is updated. If an admin needs to forcefully increment the
+          # SEQUENCE for all events, they can edit the "config/secrets.yml"
+          # file and set the "icalendar_sequence_offset" value to something
+          # greater than 0.
+          entry.sequence((SECRETS.icalendar_sequence_offset || 0) + item.versions.count)
           
           if item.multiday?
-            dtstart  item.dates.first
-            dtend    item.dates.last + 1.day
+            entry.dtstart item.dates.first
+            entry.dtend   item.dates.last + 1.day
           else
-            dtstart  item.start_time
-            dtend    item.end_time || item.start_time + 1.hour
+            entry.dtstart item.start_time
+            entry.dtend   item.end_time || item.start_time + 1.hour
           end
 
           # The reason for this messy URL helper business is that models can't access the route helpers,
           # and even if they could, they'd need to access the request object so they know what the server's name is and such.
           if item.url.blank?
-            url opts[:url_helper].call(item) if opts[:url_helper]
+            entry.url opts[:url_helper].call(item) if opts[:url_helper]
           else
-            url item.url
+            entry.url item.url
           end
 
-          location item.venue.title if item.venue
+          entry.location item.venue.title if item.venue
           
           # dtstamp and uid added because of a bug in Outlook;
           # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
           # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
-          dtstamp item.created_at || item.start_time
-          uid     "#{opts[:url_helper].call(item)}" if opts[:url_helper]
+          entry.dtstamp item.created_at || item.start_time
+          entry.uid     "#{opts[:url_helper].call(item)}" if opts[:url_helper]
         end
       end
     end
     
-    return icalendar.export.sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH")
+    # Add the calendar name, normalize line-endings to UNIX LF, then replace them with DOS CF-LF.
+    return icalendar.
+      export.
+      sub(/CALSCALE:Gregorian/, "CALSCALE:Gregorian\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH").
+      gsub(/\r\n/,"\n").
+      gsub(/\n/,"\r\n")
   end
 
   def location
