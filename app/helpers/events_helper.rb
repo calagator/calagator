@@ -55,7 +55,7 @@ module EventsHelper
   end
 
   def events_sort_label(key)
-    " by <strong>#{(FRIENDLY_SORT_LABELS[key] || key || Event::DEFAULT_SEARCH_ORDER).to_s.downcase}.</strong>"
+    " by <strong>#{(FRIENDLY_SORT_LABELS[key] || key || (@tag ? :date : :score)).to_s.downcase}.</strong>"
   end
   
   def google_event_export_link(event)
