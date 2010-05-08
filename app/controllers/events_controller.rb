@@ -225,7 +225,7 @@ class EventsController < ApplicationController
     # setting @events so that we can reuse the index atom builder
     @events = @grouped_events[:past] + @grouped_events[:current]
 
-    @page_title = "Search Results for '#{@query}'"
+    @page_title = @tag ? "Events tagged with '#{@tag}'" : "Search Results for '#{@query}'"
 
     render_events(@events)
   end
