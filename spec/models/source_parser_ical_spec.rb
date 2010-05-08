@@ -206,6 +206,12 @@ describe SourceParser::Ical, "with iCalendar events" do
     events = events_from_ical_at('ical_google.ics')
     events.first.venue.title.should == 'CubeSpace'
   end
+  
+  it "should parse a calendar file with multiple calendars" do
+    events = events_from_ical_at('ical_multiple_calendars.ics')
+    events.size.should == 3
+    events.map(&:title).should == ["Coffee with Jason", "Coffee with Mike", "Coffee with Kim"]
+  end
 
 end
 
