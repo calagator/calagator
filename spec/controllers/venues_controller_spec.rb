@@ -52,6 +52,10 @@ describe VenuesController do
   end
 
   describe "when rendering the venues index" do
+    it "should be able to return events matching specific tag" do
+      Venue.should_receive(:tagged_with).with("foo").and_return([])
+      get :index, :tag => "foo"
+    end
 
     describe "in JSON format" do
 

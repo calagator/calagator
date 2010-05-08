@@ -2,7 +2,11 @@
 
 <div id="venues_index">
   <div id='list_description'>
-    <h2>Viewing all <strong><%= @venues.size %></strong> venues.</h2>
+    <% if @tag %>
+      <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%=h @tag %></strong></h2>
+    <% else -%>
+      <h2>Viewing all <strong><%= @venues.size %></strong> venues.</h2>
+    <% end -%>
   </div>
   <%= google_map @venues, SETTINGS.venues_google_map_options %>
 
