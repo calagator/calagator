@@ -214,11 +214,6 @@ class EventsController < ApplicationController
     elsif @query
       @grouped_events = Event.search_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
     elsif @tag
-      if @order
-        # TODO make it possible to order items when searching by tag
-        flash[:failure] = "Sorry, you can't order events returned by a tag search yet"
-        @order = nil
-      end
       @grouped_events = Event.search_tag_grouped_by_currentness(@tag, :order => @order, :current => @current)
     end
 
