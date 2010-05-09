@@ -57,6 +57,7 @@ class SourceParser # :nodoc:
     # * :skip_old -- Should old events be skipped? Default is true.
     def self.to_abstract_events(opts={})
       # Skip old events by default
+      
       opts[:skip_old] = true unless opts[:skip_old] == false
       cutoff = Time.now.yesterday
 
@@ -126,23 +127,37 @@ class SourceParser # :nodoc:
       value = "" if value.nil?
       a = AbstractLocation.new
 
-      # The Vpim libary doesn't understand that Vvenue entries are just Vcards,
-      # so transform the content to trick it into treating them as such.
+
+      # Vvenue entries are considered just Vcards,
+      # treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
 
         begin
           vcards = RiCal.parse_string(vcard_content)
           raise ArgumentError, "Wrong number of vcards" unless vcards.size == 1
           vcard = vcards.first
+          # this is an interesting call here
+          # RiCal export of nonstandard-outside-of-RFC2445
+          # VVENUE into lines
           vcard_lines = vcard.export_properties_to(STDOUT)
-          
           vcard_hash = vcard_lines.mash do |line|
-            if line.match(/^([^:]+?):(.+)$/)
+            # predeclare key, value in case no match
+            key = ''
+            value = ''
+            # if line is of the form key:value
+            # where the line has at least one colon
+            # do a non-greedy capture of chars not colon
+            # followed by a promiscuous match of remaining chars 
+            if line.match(/^([^:]+?):(.*)$/)
               key = $1
               value = $2
+              # if the key has a semi-colon, it is, by spec, 
+              # followed by a meta-qualifier;  
+              # in all cases, we only want the key and not the qualifier
+              # split always at least returns one item
+              # which will always be the item we want
+              # we only want the first: drop the second on match semi-colon
               key = key.split(';').first
-            else
-              key = ""; value = ""
             end
             [key, value]
           end
@@ -157,6 +172,7 @@ class SourceParser # :nodoc:
           a.latitude, a.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
 
           return a
+        # we should be able to remove the Vpim exceptions?
         rescue Vpim::InvalidEncodingError, ArgumentError, RuntimeError
           # Exceptional state will be handled below
           :ignore # Leave this line in for rcov's code coverage
