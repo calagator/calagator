@@ -17,9 +17,10 @@ class SourceParser # :nodoc:
     # * :content -- String of iCalendar data to import
     # * :skip_old -- Should old events be skipped? Default is true.
     def self.to_abstract_events(opts={})
+      event_id = self._upcoming_url_to_event_id(opts[:url])
+
       # If we don't already have an Upcoming API response, setup `opts` so #content_for will fetch it.
       if opts[:content].nil? or opts[:content] !~ /<rsp stat="ok" version="1.0"/m
-        event_id = self._upcoming_url_to_event_id(opts[:url])
         return false unless event_id # Give up unless we can extract the Upcoming event_id.
 
         api_key = SECRETS.upcoming_api_key # FIXME Extract this API key into instance-specific config file.
@@ -45,6 +46,7 @@ class SourceParser # :nodoc:
       event.description = leaf['description']
       event.end_time    = Time.parse(leaf['utc_end'])
       event.url         = leaf['url']
+      event.tags        = ["upcoming:event=#{event_id}"]
 
       location = AbstractLocation.new
       location.title          = leaf['venue_name']

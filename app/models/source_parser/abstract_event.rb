@@ -5,5 +5,13 @@ class SourceParser
     :start_time,
     :end_time,
     :url,
-    :location)
+    :location,
+    :tags)
+
+  class AbstractEvent
+    def initialize(*args)
+      super
+      self.tags ||= []
+    end
+  end
 end
