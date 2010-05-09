@@ -105,6 +105,12 @@ describe Event do
       @event.reload
       @event.tags.first.name.should == "123"
     end
+
+    it "should return a collection of events for a given tag" do
+      @event.tag_list = @tags
+      @event.save
+      Event.tagged_with('tags').should == [@event]
+    end
   end
 
   describe "when parsing" do
