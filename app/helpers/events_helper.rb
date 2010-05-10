@@ -1,8 +1,6 @@
 module EventsHelper
   include TimeRangeHelper # provides normalize_time
 
-  GOOGLE_TIME_FORMAT = "%Y%m%dT%H%M%SZ"
-
   FRIENDLY_SORT_LABELS = {'name' => 'Event Name', 'venue' => 'Location', 'score' => 'Relevance'}
 
   def today_tomorrow_or_weekday(record)
@@ -45,17 +43,21 @@ module EventsHelper
     return "http://maps.google.com/maps?q=#{CGI::escape(address)}"
   end
 
-  def format_google_timespan( event)
-    end_time = event.end_time || event.start_time
-    "#{event.start_time.utc.strftime(GOOGLE_TIME_FORMAT)}/#{end_time.utc.strftime(GOOGLE_TIME_FORMAT)}"
-  end
-
   def events_sort_link(key)
     link_to FRIENDLY_SORT_LABELS[key], url_for(params.merge(:order => key))
   end
 
   def events_sort_label(key)
     " by <strong>#{(FRIENDLY_SORT_LABELS[key] || key || (@tag ? :date : :score)).to_s.downcase}.</strong>"
+  end
+
+  #---[ Google Calendar exporting ]-----------------------------------------
+
+  GOOGLE_TIME_FORMAT = "%Y%m%dT%H%M%SZ"
+
+  def format_google_timespan( event)
+    end_time = event.end_time || event.start_time
+    "#{event.start_time.utc.strftime(GOOGLE_TIME_FORMAT)}/#{end_time.utc.strftime(GOOGLE_TIME_FORMAT)}"
   end
   
   def google_event_export_link(event)
