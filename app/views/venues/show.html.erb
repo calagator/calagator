@@ -5,80 +5,81 @@
 <% end %>
 
 <div class="single_venue contentbar">
-<div class="location vcard">
-  <%= google_map @venue %>
-  <h1 class="fn org"><%= cleanse @venue.title.strip_html %></h1>
+  <div class="location vcard">
+    <%= google_map @venue %>
 
-  <% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
-    <div class="adr">
-      <% if !@venue.street_address.blank? %>
-        <div class="street-address"><%=h @venue.street_address %></div>
+    <h1 class="fn org"><%= cleanse @venue.title.strip_html %></h1>
+
+    <% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
+      <div class="adr">
+        <% if !@venue.street_address.blank? %>
+          <div class="street-address"><%=h @venue.street_address %></div>
+        <% end %>
+        <% if !@venue.locality.blank? %>
+          <span class="locality"><%=h @venue.locality %></span>
+        <% end %>
+        <% if !@venue.region.blank? %>
+          <span class="region"><%=h @venue.region %></span>
+        <% end %>
+        <% if !@venue.postal_code.blank? %>
+          <span class="postal-code"><%=h @venue.postal_code %></span>
+        <% end %>
+        <% if !@venue.country.blank? %>
+          <div class='country-name'><%=h @venue.country %></div>
+        <% end %>
+        <% if @venue && @venue.has_full_address? %>
+          (<a href='<%=google_maps_url(@venue.full_address)%>'>map</a>)
+        <% end %>
+      </div>
+    <% else %>
+      <% if !@venue.address.blank? %>
+        <div class='address'><%=h @venue.address %></div>
       <% end %>
-      <% if !@venue.locality.blank? %>
-        <span class="locality"><%=h @venue.locality %></span>
-      <% end %>
-      <% if !@venue.region.blank? %>
-        <span class="region"><%=h @venue.region %></span>
-      <% end %>
-      <% if !@venue.postal_code.blank? %>
-        <span class="postal-code"><%=h @venue.postal_code %></span>
-      <% end %>
-      <% if !@venue.country.blank? %>
-        <div class='country-name'><%=h @venue.country %></div>
-      <% end %>
-      <% if @venue && @venue.has_full_address? %>
-        (<a href='<%=google_maps_url(@venue.full_address)%>'>map</a>)
-      <% end %>
-    </div>
-  <% else %>
-    <% if !@venue.address.blank? %>
-      <div class='address'><%=h @venue.address %></div>
     <% end %>
-  <% end %>
 
-  <% if !@venue.url.blank? %>
-  <div class='url'><%= link_to(nil, url_for(@venue.url), :rel => "nofollow") %></div>
-  <% end %>
+    <% if !@venue.url.blank? %>
+    <div class='url'><%= link_to(nil, url_for(@venue.url), :rel => "nofollow") %></div>
+    <% end %>
 
-  <% if !@venue.email.blank? %>
-    <div class='email'><%= mail_to( cleanse(@venue.email) ) %></div>
-  <% end %>
+    <% if !@venue.email.blank? %>
+      <div class='email'><%= mail_to( cleanse(@venue.email) ) %></div>
+    <% end %>
 
-  <% if !@venue.telephone.blank? %>
-    <div class='tel'><%=h @venue.telephone %></div>
-  <% end %>
-</div>
-
-<div>
-  <% unless @venue.description.blank? %>
-  <h2>Description</h2>
-  <div class="description">
-    <%= format_description(@venue.description) %>
+    <% if !@venue.telephone.blank? %>
+      <div class='tel'><%=h @venue.telephone %></div>
+    <% end %>
   </div>
-  <% end %>
-  
-  <% unless @venue.tags.blank? -%>
-  <h2>Tags</h2>
-  <div class="tags">
-      <%= tag_links_for @venue %>
-  </div>
-  <% end %>
 
-  <h2>Future events happening here</h2>
-  <%= render :partial => 'events/list', :locals => { :events => @events } %>
-</div>
+  <div>
+    <% unless @venue.description.blank? %>
+      <h2>Description</h2>
+      <div class="description">
+        <%= format_description(@venue.description) %>
+      </div>
+    <% end %>
 
-<div class='single_view_right sidebar'>
-  <div id='edit_link'>
-    <p>
-      You can <%= link_to "edit", edit_venue_url(@venue) %>
-      or <%= link_to "delete", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>
-      this venue.
-    </p>
+    <% unless @venue.tags.blank? -%>
+      <h2>Tags</h2>
+      <div class="tags">
+          <%= tag_links_for @venue %>
+      </div>
+    <% end %>
+
+    <h2>Future events happening here</h2>
+    <%= render :partial => 'events/list', :locals => { :events => @events } %>
   </div>
-  <hr />
-  <div class="metadata">
-    <%= datestamp(@venue) %>
+
+  <div class='single_view_right sidebar'>
+    <div id='edit_link'>
+      <p>
+        You can <%= link_to "edit", edit_venue_url(@venue) %>
+        or <%= link_to "delete", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>
+        this venue.
+      </p>
+    </div>
+    <hr />
+    <div class="metadata">
+      <%= datestamp(@venue) %>
+    </div>
   </div>
-</div>
 </div>
