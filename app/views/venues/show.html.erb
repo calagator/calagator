@@ -10,21 +10,21 @@
 
     <h1 class="fn org"><%= cleanse @venue.title.strip_html %></h1>
 
-    <% if !@venue.street_address.blank? or !@venue.locality.blank? or !@venue.region.blank? or !@venue.postal_code.blank? or !@venue.country.blank? %>
+    <% if @venue.has_full_address? %>
       <div class="adr">
-        <% if !@venue.street_address.blank? %>
+        <% if @venue.street_address.present? %>
           <div class="street-address"><%=h @venue.street_address %></div>
         <% end %>
-        <% if !@venue.locality.blank? %>
+        <% if @venue.locality.present? %>
           <span class="locality"><%=h @venue.locality %></span>
         <% end %>
-        <% if !@venue.region.blank? %>
+        <% if @venue.region.present? %>
           <span class="region"><%=h @venue.region %></span>
         <% end %>
-        <% if !@venue.postal_code.blank? %>
+        <% if @venue.postal_code.present? %>
           <span class="postal-code"><%=h @venue.postal_code %></span>
         <% end %>
-        <% if !@venue.country.blank? %>
+        <% if @venue.country.present? %>
           <div class='country-name'><%=h @venue.country %></div>
         <% end %>
         <% if @venue && @venue.has_full_address? %>
@@ -32,33 +32,33 @@
         <% end %>
       </div>
     <% else %>
-      <% if !@venue.address.blank? %>
+      <% if @venue.address.present? %>
         <div class='address'><%=h @venue.address %></div>
       <% end %>
     <% end %>
 
-    <% if !@venue.url.blank? %>
+    <% if @venue.url.present? %>
     <div class='url'><%= link_to(nil, url_for(@venue.url), :rel => "nofollow") %></div>
     <% end %>
 
-    <% if !@venue.email.blank? %>
+    <% if @venue.email.present? %>
       <div class='email'><%= mail_to( cleanse(@venue.email) ) %></div>
     <% end %>
 
-    <% if !@venue.telephone.blank? %>
+    <% if @venue.telephone.present? %>
       <div class='tel'><%=h @venue.telephone %></div>
     <% end %>
   </div>
 
   <div>
-    <% unless @venue.description.blank? %>
+    <% if @venue.description.present? %>
       <h2>Description</h2>
       <div class="description">
         <%= format_description(@venue.description) %>
       </div>
     <% end %>
 
-    <% unless @venue.tags.blank? -%>
+    <% if @venue.tags.present? -%>
       <h2>Tags</h2>
       <div class="tags">
           <%= tag_links_for @venue %>
