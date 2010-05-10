@@ -110,9 +110,10 @@ class Tag < ActiveRecord::Base
   MACHINE_TAG_PATTERN = /([^:]+):([^=]+)=(.+)/
 
   # Return a machine tag hash for this tag, or an empty hash if this isn't a
-  # machine tag.
+  # machine tag. The hash will always contain :namespace, :predicate and :value
+  # key-value pairs. It may also contain an :url if one is known.
   #
-  # Machine tags describe references to remote resource. For example, a
+  # Machine tags describe references to remote resources. For example, a
   # Calagator event imported from an Upcoming event may have a machine
   # linking it back to the Upcoming event.
   #
@@ -126,20 +127,18 @@ class Tag < ActiveRecord::Base
   def machine_tag
     if components = self.name.match(MACHINE_TAG_PATTERN)
       namespace, predicate, value = components.captures
-      url = \
-        if url_pattern = MACHINE_TAG_URLS[namespace].try(:[], predicate)
-          sprintf(url_pattern, value)
-        else
-          # TODO If a machine tag has no URL, isn't this an error because it's useless?
-          nil
-        end
 
-      return {
+      result = {
         :namespace => namespace,
         :predicate => predicate,
         :value     => value,
-        :url       => url,
       }
+
+      if url_template = MACHINE_TAG_URLS[namespace].try(:[], predicate)
+        result[:url] = sprintf(url_template, value)
+      end
+
+      return result
     else
       return {}
     end
