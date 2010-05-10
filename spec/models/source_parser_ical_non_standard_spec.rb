@@ -41,6 +41,7 @@ END:VVENUE
     @location.locality == 'Portland'
   end
   #etcetera: the above cases work sufficiently
+
 end
 
 
@@ -72,7 +73,8 @@ CATEGORIES:apple applecom appleinc technology
     HERE
 
   end
-  
+
+## tbd  
   it "should" do
     
   end

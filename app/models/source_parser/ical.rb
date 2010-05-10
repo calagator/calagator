@@ -116,6 +116,7 @@ class SourceParser # :nodoc:
       return events
     end
 
+
     # Return an AbstractLocation extracted from an iCalendar input.
     #
     # Arguments:
@@ -126,59 +127,25 @@ class SourceParser # :nodoc:
     def self.to_abstract_location(value, opts={})
       value = "" if value.nil?
       a = AbstractLocation.new
-
-
-      # Vvenue entries are considered just Vcards,
+     
+      # VVENUE entries are considered just Vcards,
       # treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
+        
+        vcard_hash = parse_vcard_content(vcard_content)
 
-        begin
-          vcards = RiCal.parse_string(vcard_content)
-          raise ArgumentError, "Wrong number of vcards" unless vcards.size == 1
-          vcard = vcards.first
-          # this is an interesting call here
-          # RiCal export of nonstandard-outside-of-RFC2445
-          # VVENUE into lines
-          vcard_lines = vcard.export_properties_to(STDOUT)
-          vcard_hash = vcard_lines.mash do |line|
-            # predeclare key, value in case no match
-            key = ''
-            value = ''
-            # if line is of the form key:value
-            # where the line has at least one colon
-            # do a non-greedy capture of chars not colon
-            # followed by a promiscuous match of remaining chars 
-            if line.match(/^([^:]+?):(.*)$/)
-              key = $1
-              value = $2
-              # if the key has a semi-colon, it is, by spec, 
-              # followed by a meta-qualifier;  
-              # in all cases, we only want the key and not the qualifier
-              # split always at least returns one item
-              # which will always be the item we want
-              # we only want the first: drop the second on match semi-colon
-              key = key.split(';').first
-            end
-            [key, value]
-          end
+        a.title          = vcard_hash['NAME']
+        a.street_address = vcard_hash['ADDRESS']
+        a.locality       = vcard_hash['CITY']
+        a.region         = vcard_hash['REGION']
+        a.postal_code    = vcard_hash['POSTALCODE']
+        a.country        = vcard_hash['COUNTRY']
 
-          a.title          = vcard_hash['NAME']
-          a.street_address = vcard_hash['ADDRESS']
-          a.locality       = vcard_hash['CITY']
-          a.region         = vcard_hash['REGION']
-          a.postal_code    = vcard_hash['POSTALCODE']
-          a.country        = vcard_hash['COUNTRY']
+        a.latitude, a.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
 
-          a.latitude, a.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
-
-          return a
-        # we should be able to remove the Vpim exceptions?
-        rescue Vpim::InvalidEncodingError, ArgumentError, RuntimeError
-          # Exceptional state will be handled below
-          :ignore # Leave this line in for rcov's code coverage
-        end
+        return a
       end
-
+  
       if opts[:fallback].blank?
         return nil
       else
@@ -186,6 +153,67 @@ class SourceParser # :nodoc:
         return a
       end
     end
+  
+
+
+    # Return a vcard_hash from vcard content.
+    #
+    # Arguments:
+    # * value - String with content
+    #
+    #
+    
+    def self.parse_vcard_content(value)
+      vcards = RiCal.parse_string(value)
+     #constrain to 1 vcard per vvenue
+      vcard = vcards.first
+      # this is an interesting call here
+      # RiCal export of nonstandard-outside-of-RFC2445
+      # VVENUE into lines
+     
+      vcard_lines = vcard.export_properties_to(STDOUT)
+      # munges vcard lines  
+      vcard_hash = v_card_munge(vcard_lines)
+
+      return vcard_hash    
+    end
+
+
+    # Return a vcard_hash from vcard_lines.
+    #
+    # Arguments:
+    # * value - vcard_lines
+    #
+    # 
+    # 
+
+    def self.v_card_munge(value)
+      vcard_hash = value.mash do |line|
+        # predeclare key, value in case no match
+        key = ''
+        value = ''
+        # if line is of the form key:value
+        # where the line has at least one colon
+        # do a non-greedy capture of chars not colon
+        # followed by a promiscuous match of remaining chars 
+        if line.match(/^([^:]+?):(.*)$/)
+          key = $1
+          value = $2
+          # if the key has a semi-colon, it is, by spec, 
+          # followed by a meta-qualifier;  
+          # in all cases, we only want the key and not the qualifier
+          # split always at least returns one item
+          # which will always be the item we want
+          # we only want the first: drop the second on match semi-colon
+          key = key.split(';').first
+        end
+        [key, value]
+      end
+      return vcard_hash
+    end
+
+    #
   end
 end
+
 
