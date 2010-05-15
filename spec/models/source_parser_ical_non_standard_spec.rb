@@ -24,7 +24,6 @@ END:VVENUE
 
   end
 
-
   it "should have a street_address" do
     @location.street_address.should_not be_nil
   end
@@ -33,11 +32,11 @@ END:VVENUE
     @location.street_address == '700 Southwest Fifth Avenue Suite #1035'
   end
 
-   it "should have a locality" do
+  it "should have a locality" do
     @location.locality.should_not be_nil
   end
 
-   it "should have the locality as is" do
+  it "should have the locality as is" do
     @location.locality == 'Portland'
   end
   #etcetera: the above cases work sufficiently
@@ -71,38 +70,26 @@ GEO:45.518798;-122.677583
 URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
 CATEGORIES:apple applecom appleinc technology 
     HERE
-
   end
 
-
   it "should have a NAME" do
-   @vcard_hash['NAME'].should_not be_nil 
+    @vcard_hash['NAME'].should_not be_nil 
   end
 
   it "should have a COUNTRY" do
-   @vcard_hash['COUNTRY'].should_not be_nil 
+    @vcard_hash['COUNTRY'].should_not be_nil 
   end
 
   it "should find proper COUNTRY value even w\multiple semi-colon meta-qualifiers " do
-   @vcard_hash['COUNTRY'] == 'United States'
-   
+    @vcard_hash['COUNTRY'] == 'United States'
   end
-
 
   it "should have a REGION" do
-   @vcard_hash['REGION'].should_not be_nil 
+    @vcard_hash['REGION'].should_not be_nil 
   end
-
-
 
   it "should return proper REGION value even w\edge case meta-data" do
-   @vcard_hash['REGION'] == 'Oregon'
-   
+    @vcard_hash['REGION'] == 'Oregon'
   end
 
-
-
-
-
 end
-
