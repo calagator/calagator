@@ -37,6 +37,8 @@ class Tag < ActiveRecord::Base
   if (table_exists? rescue nil)
     DELIMITER = "," # Controls how to split and join tagnames from strings. You may need to change the <tt>validates_format_of parameters</tt> if you change this.
 
+    has_many :taggings
+
     # If database speed becomes an issue, you could remove these validations and rescue the ActiveRecord database constraint errors instead.
     validates_presence_of :name
     validates_uniqueness_of :name, :case_sensitive => false
