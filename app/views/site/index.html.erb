@@ -2,8 +2,23 @@
 
 <% cache(CacheObserver.daily_key_for("site_index", request)) do %>
 <% @times_to_events ||= @times_to_events_deferred.call %>
-<div id="project_description">
-  <%= render :partial => "description" %>
+<div id="homepage_sidebar">
+  <div id="project_description">
+    <%= render :partial => "description" %>
+  </div>
+
+  <div id="tagcloud">
+    <h2>Popular tags</h2>
+    <%- @tagcloud_items_deferred.call.tap do |items| -%>
+      <%- items.each_with_index do |item, i| -%>
+        <%# Clicking a tag does a tag-specific search: %>
+        <%= tag_link(:event, item[:tag], "tagcloud_level_#{item[:level]}") -%>
+        <%# Or clicking a tag does a normal search that happens to rank tags highly, but may return fuzzy matches: %>
+        <%#= link_to(item[:tag].name, search_events_path(:query => item[:tag].name), :class => "tagcloud_level_#{item[:level]}") %>
+        <%- unless i == items.length-1 -%><span class="spacer">&middot;</span><%- end -%>
+      <%- end -%>
+    <%- end -%>
+  </div>
 </div>
 
 <div id="whats_happening">

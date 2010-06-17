@@ -11,6 +11,7 @@ class SiteController < ApplicationController
 
   def index
     @times_to_events_deferred = lambda { Event.select_for_overview }
+    @tagcloud_items_deferred = lambda { Tag.for_tagcloud }
   end
   
   # Displays the about page.
