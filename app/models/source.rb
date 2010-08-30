@@ -24,6 +24,7 @@ class Source < ActiveRecord::Base
   validate :assert_url
 
   has_many :events
+  has_many :venues
   has_many :updates
 
   # Return a newly-created or existing Source record matching the given
