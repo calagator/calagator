@@ -16,12 +16,7 @@ namespace :db do
     cp current, backup
 
     puts "Downloading '#{source}' to '#{bn replacement}'..."
-    open(replacement, "w+") do |writer|
-      require 'open-uri'
-      open(source) do |reader|
-        writer.write(reader.read)
-      end
-    end
+    Downloader.download(source, replacement)
 
     puts "Swapping '#{bn replacement}' to '#{bn current}'..."
     mv replacement, current
