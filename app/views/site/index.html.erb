@@ -2,8 +2,17 @@
 
 <% cache(CacheObserver.daily_key_for("site_index", request)) do %>
 <% @times_to_events ||= @times_to_events_deferred.call %>
-<div id="project_description">
-  <%= render :partial => "description" %>
+<div id="homepage_sidebar">
+  <div id="project_description">
+    <%= render :partial => "description" %>
+  </div>
+
+  <div id="tagcloud">
+    <h2>Popular tags</h2>
+    <%= @tagcloud_items_deferred.call.map{ |item| 
+          tag_link(:event, item[:tag], "tagcloud_level_#{item[:level]}") 
+        }.join('<span class="spacer"> &middot; </span>') -%>
+  </div>
 </div>
 
 <div id="whats_happening">
