@@ -273,6 +273,31 @@ class Event < ActiveRecord::Base
     end
   end
 
+  #---[ Sort labels ]-------------------------------------------
+
+  # Labels displayed for sorting options:
+  SORTING_LABELS = {
+    'name'  => 'Event Name',
+    'venue' => 'Location',
+    'score' => 'Relevance',
+    'date'  => 'Date'
+  }
+
+  # Return the label for the +sorting_key+ (e.g. 'score'). Optionally set the
+  # +is_searching_by_tag+, to constrain options available for tag searches.
+  def self.sorting_label_for(sorting_key=nil, is_searching_by_tag=false)
+    if SORTING_LABELS.has_key?(sorting_key)
+      SORTING_LABELS[sorting_key]
+    elsif sorting_key.present?
+      # TODO Should we only show labels for known keys?
+      sorting_key
+    elsif is_searching_by_tag
+      SORTING_LABELS['date']
+    else
+      SORTING_LABELS['score']
+    end
+  end
+
   #---[ Solr searching ]--------------------------------------------------
 
   # Number of records to index at once.

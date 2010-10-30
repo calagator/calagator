@@ -1,10 +1,6 @@
 module EventsHelper
   include TimeRangeHelper # provides normalize_time
 
-  GOOGLE_TIME_FORMAT = "%Y%m%dT%H%M%SZ"
-
-  FRIENDLY_SORT_LABELS = {'name' => 'Event Name', 'venue' => 'Location', 'score' => 'Relevance'}
-
   def today_tomorrow_or_weekday(record)
     # TODO Figure out if there's any need for this method beyond having a way of conditionally displaying the 'Started' information. As far as I can tell, there's no need to display the 'Today' or 'Tomorrow' rather than the weekday because each event already has a header to its left that can say 'Today' or 'Tomorrow'.
 #    if record.start_time.to_date == Time.today.to_date
@@ -45,20 +41,29 @@ module EventsHelper
     return "http://maps.google.com/maps?q=#{CGI::escape(address)}"
   end
 
+  #---[ Event sorting ]----------------------------------------------------
+
+  # Return a link for sorting by +key+ (e.g., "name").
+  def events_sort_link(key)
+    link_to(Event::sorting_label_for(key, @tag.present?), url_for(params.merge(:order => key)))
+  end
+
+  # Return a human-readable label describing what the sorting +key+ is.
+  def events_sort_label(key)
+    " by <strong>#{Event::sorting_label_for(key, @tag.present?)}.</strong>"
+  end
+
+  #---[ Google Calendar exporting ]-----------------------------------------
+
+  GOOGLE_TIME_FORMAT = "%Y%m%dT%H%M%SZ"
+
   def format_google_timespan( event)
     end_time = event.end_time || event.start_time
     "#{event.start_time.utc.strftime(GOOGLE_TIME_FORMAT)}/#{end_time.utc.strftime(GOOGLE_TIME_FORMAT)}"
   end
-
-  def events_sort_link(key)
-    link_to FRIENDLY_SORT_LABELS[key], url_for(params.merge(:order => key))
-  end
-
-  def events_sort_label(key)
-    " by <strong>#{(FRIENDLY_SORT_LABELS[key] || key || (@tag ? :date : :score)).to_s.downcase}.</strong>"
-  end
   
   def google_event_export_link(event)
+    # TODO trim
     title = CGI::escape(event.title.strip_html)
     dates = format_google_timespan(event)
     details = CGI::escape(event.description || "")
