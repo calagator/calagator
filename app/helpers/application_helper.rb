@@ -42,7 +42,8 @@ module ApplicationHelper
   # it's likely to hide some of our markers, so it's off by default.
   def google_map(locatable_items, options={})
     return nil if defined?(GoogleMap::GOOGLE_APPLICATION_ID) == nil
-    options[:controls] = [:zoom, :scale, :type] # the default, minus :overview
+    options[:controls] ||= [:zoom, :scale, :type] # the default, minus :overview
+    options[:zoom] ||= 14
 
     # Make the map and our marker(s)
     map = GoogleMap.new(options)
