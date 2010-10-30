@@ -51,7 +51,7 @@
     <% unless @event.tags.blank? -%>
     <h3>Tags</h3>
     <div class="tags">
-        <%= cleanse @event.tag_list %>
+        <%= tag_links_for @event %>
     </div>
     <% end %>
   </div>

@@ -10,5 +10,5 @@ Locals:
 </div>
 
 <div id='list_items'>
-  <%= render :partial => 'events/table', :locals => { :events => events, :scores => true } %>
+  <%= render :partial => 'events/table', :locals => { :events => events, :scores => @query.present? } %>
 </div>

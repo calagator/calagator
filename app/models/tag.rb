@@ -11,6 +11,29 @@
 # The Tag model. This model is automatically generated and added to your app if you run the tagging generator included with has_many_polymorphs.
 
 class Tag < ActiveRecord::Base
+  MACHINE_TAG_URLS = {
+    'upcoming' => {
+      'event' => "http://upcoming.yahoo.com/event/[value]",
+      'venue' => "http://upcoming.yahoo.com/venue/[value]"
+    },
+    'plancast' => {
+      'activity' => "http://plancast.com/a/[value]"
+    },
+    'yelp' => {
+      'biz' => "http://www.yelp.com/biz/[value]"
+    },
+    'foursquare' => {
+      'venue' => "http://foursquare.com/venue/[value]"
+    },
+    'gowalla' => {
+      'spot' => "http://gowalla.com/spots/[value]"
+    },
+    'shizzow' => {
+      'place' => "http://www.shizzow.com/places/[value]"
+    }
+  }
+
+
   if (table_exists? rescue nil)
     DELIMITER = "," # Controls how to split and join tagnames from strings. You may need to change the <tt>validates_format_of parameters</tt> if you change this.
 
@@ -45,7 +68,21 @@ class Tag < ActiveRecord::Base
     def before_create 
       self.name = name.downcase.strip.squeeze(" ")
     end
-  
+
+    def machine_tag
+      machine_tag = {}
+      if components = self.name.match(/([^:]+):([^=]+)=(.+)/)
+        namespace, predicate, value = components.captures
+        url = MACHINE_TAG_URLS[namespace].try(:[], predicate).try(:gsub, '[value]', value)
+
+        machine_tag = { :namespace => namespace,
+                        :predicate => predicate,
+                        :value => value,
+                        :url => url }
+      end
+
+      machine_tag
+    end
 
     # Tag::Error class. Raised by ActiveRecord::Base::TaggingExtensions if something goes wrong.
     class Error < StandardError

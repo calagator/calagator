@@ -194,7 +194,7 @@ class EventsController < ApplicationController
 
     @query = params[:query].with{blank? ? nil : self}
     @tag = params[:tag].with{blank? ? nil : self}
-    @current = ["1", "true"].include?(params[:current].to_s) ? true : false
+    @current = ["1", "true"].include?(params[:current])
     @order = params[:order]
 
     if @order && @order == "score" && @tag
@@ -214,18 +214,13 @@ class EventsController < ApplicationController
     elsif @query
       @grouped_events = Event.search_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
     elsif @tag
-      if @order
-        # TODO make it possible to order items when searching by tag
-        flash[:failure] = "Sorry, you can't order events returned by a tag search yet"
-        @order = nil
-      end
       @grouped_events = Event.search_tag_grouped_by_currentness(@tag, :order => @order, :current => @current)
     end
 
     # setting @events so that we can reuse the index atom builder
     @events = @grouped_events[:past] + @grouped_events[:current]
 
-    @page_title = "Search Results for '#{@query}'"
+    @page_title = @tag ? "Events tagged with '#{@tag}'" : "Search Results for '#{@query}'"
 
     render_events(@events)
   end

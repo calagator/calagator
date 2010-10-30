@@ -368,6 +368,16 @@ class Event < ActiveRecord::Base
   # Options:
   # * :current => Limit results to only current events? Defaults to false.
   def self.search_tag_grouped_by_currentness(tag, opts={})
+    case opts[:order]
+      when 'name', 'title'
+        opts[:order] = 'events.title'
+      when 'date'
+        opts[:order] = 'events.start_time'
+      when 'venue'
+        opts[:order] = 'venues.title'
+        opts[:include] = :venue
+    end
+
     result = self.group_by_currentness(self.tagged_with(tag, opts))
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
@@ -449,6 +459,7 @@ class Event < ActiveRecord::Base
     event.end_time     = abstract_event.end_time.blank? ? nil : Time.parse(abstract_event.end_time.to_s)
     event.url          = abstract_event.url
     event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
+    event.tag_list     = abstract_event.tags.join(',')
 
     duplicates = event.find_exact_duplicates
     event = duplicates.first.progenitor if duplicates
