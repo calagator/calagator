@@ -171,7 +171,7 @@ class SourceParser # :nodoc:
       # RiCal export of nonstandard-outside-of-RFC2445
       # VVENUE into lines
      
-      vcard_lines = vcard.export_properties_to(STDOUT)
+      vcard_lines = vcard.export_properties_to(StringIO.new(''))
       # munges vcard lines  
       vcard_hash = v_card_munge(vcard_lines)
 
