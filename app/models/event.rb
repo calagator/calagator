@@ -343,17 +343,19 @@ class Event < ActiveRecord::Base
     order = opts[:order].ergo.to_sym || DEFAULT_SEARCH_ORDER
 
     formatted_query = \
-      %{NOT duplicate_for_solr:"1" AND (} \
+      'NOT duplicate_for_solr:"1" AND (' \
       << query.downcase.gsub(/:/, '?').scan(/\S+/).map(&:escape_lucene).map{|term|
           <<-HERE
             event_title_for_solr:#{term}^#{SOLR_TITLE_BOOST}
               OR event_title_for_solr:#{term}~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
             OR tag_list_for_solr:#{term}^#{SOLR_TITLE_BOOST}
               OR tag_list_for_solr:#{term}~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
+            OR title:#{term}^#{SOLR_TITLE_BOOST}
+              OR title:#{term}~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
             OR #{term}~#{SOLR_SIMILARITY}
               OR #{term}
           HERE
-        }.map(&:strip).join(' ').gsub(/^\s{2,}|\s{2,}$|\s{2,}/m, ' ') << ')'
+        }.map(&:strip).join(' ').gsub(/\s{2,}/m, ' ') << ')'
 
     if skip_old
       formatted_query << " AND (start_time_for_solr:[#{Time.today.yesterday.strftime(SOLR_TIME_FORMAT)} TO #{SOLR_TIME_MAXIMUM}])"
