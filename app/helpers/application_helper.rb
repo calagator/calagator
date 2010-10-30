@@ -155,18 +155,16 @@ module ApplicationHelper
     model.tags.map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ')
   end
 
-  def tag_link(type, tag)
+  def tag_link(type, tag, link_class=nil)
     internal_url = \
       case type
       when :event then search_events_path(:tag => tag.name)
       when :venue then venues_path(:tag => tag.name)
       end
 
-    link_class = \
-      tag.machine_tag[:url] ?
-      "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" :
-      nil
+    link_classes = [link_class]
+    link_classes << "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" if tag.machine_tag[:url]
 
-    link_to cleanse(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_class 
+    link_to cleanse(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
   end
 end
