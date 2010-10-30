@@ -30,18 +30,17 @@ class Event < ActiveRecord::Base
 
   # Names of columns and methods to create Solr indexes for
   INDEXABLE_FIELDS = \
-    %w(
-      title
-      description
+    %w[
       url
       duplicate_for_solr
       start_time_for_solr
       end_time_for_solr
       event_title_for_solr
       venue_title_for_solr
+      description_for_solr
+      tag_list_for_solr
       text_for_solr
-      tag_list
-    ).map(&:to_sym)
+    ].map(&:to_sym)
 
   unless RAILS_ENV == 'test'
     acts_as_solr :fields => INDEXABLE_FIELDS
@@ -344,24 +343,25 @@ class Event < ActiveRecord::Base
     order = opts[:order].ergo.to_sym || DEFAULT_SEARCH_ORDER
 
     formatted_query = \
-      %{NOT duplicate_for_solr:"1" AND (} \
-      << query \
-      .downcase \
-      .gsub(/:/, '?') \
-      .scan(/\S+/) \
-      .map(&:escape_lucene) \
-      .map{|term| %{
-        title:"#{term}"~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
-        OR tag:"#{term}"~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
-        OR "#{term}"~#{SOLR_SIMILARITY}}
-      } \
-      .join(' ') \
-      .gsub(/^\s{2,}|\s{2,}$|\s{2,}/m, ' ') \
-      << ')'
+      'NOT duplicate_for_solr:"1" AND (' \
+      << query.downcase.gsub(/:/, '?').scan(/\S+/).map(&:escape_lucene).map{|term|
+          <<-HERE
+            event_title_for_solr:#{term}^#{SOLR_TITLE_BOOST}
+              OR event_title_for_solr:#{term}~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
+            OR tag_list_for_solr:#{term}^#{SOLR_TITLE_BOOST}
+              OR tag_list_for_solr:#{term}~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
+            OR title:#{term}^#{SOLR_TITLE_BOOST}
+              OR title:#{term}~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
+            OR #{term}~#{SOLR_SIMILARITY}
+              OR #{term}
+          HERE
+        }.map(&:strip).join(' ').gsub(/\s{2,}/m, ' ') << ')'
 
     if skip_old
-      formatted_query << %{ AND (start_time_for_solr:[#{Time.today.yesterday.strftime(SOLR_TIME_FORMAT)} TO #{SOLR_TIME_MAXIMUM}])}
+      formatted_query << " AND (start_time_for_solr:[#{Time.today.yesterday.strftime(SOLR_TIME_FORMAT)} TO #{SOLR_TIME_MAXIMUM}])"
     end
+
+    logger.info("Event::search, formatted_query: #{formatted_query}")
 
     solr_opts = {
       :order => "score desc",
@@ -458,17 +458,29 @@ class Event < ActiveRecord::Base
   end
 
   def event_title_for_solr
-    self.title.to_s.downcase
+    self.class.sanitize_for_solr(self.title)
   end
 
   def venue_title_for_solr
-    self.venue.ergo.title.to_s.downcase
+    self.class.sanitize_for_solr(self.venue.ergo.title)
+  end
+
+  def tag_list_for_solr
+    self.class.sanitize_for_solr(self.tag_list)
+  end
+
+  def description_for_solr
+    self.class.sanitize_for_solr(self.description)
   end
 
   # Return a string containing the text of all the indexable fields joined together.
   def text_for_solr
     # NOTE: The #text_for_solr method is one of the INDEXABLE_FIELDS, so don't indexing it to avoid an infinite loop. Some fields are methods, not database columns, so use #send rather than read_attribute.
-    (INDEXABLE_FIELDS - [:text_for_solr]).map{|name| self.send(name).to_s.downcase}.join("|").to_s
+    (INDEXABLE_FIELDS - [:text_for_solr]).map{|name| self.class.sanitize_for_solr(self.send(name))}.join("|").to_s
+  end
+
+  def self.sanitize_for_solr(text)
+    return text.to_s.downcase.gsub(/[^[:alnum:]]/, ' ').gsub(/\s{2,}/, ' ')
   end
 
   #---[ Transformations ]-------------------------------------------------
