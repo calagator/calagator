@@ -98,17 +98,17 @@ class Tag < ActiveRecord::Base
     # * :count => The count of matching taggings for this tag.
     # * :level => The tag cloud level, the higher the count, the higher the level.
     def self.for_tagcloud(type=Event, minimum_taggings=20, levels=5)
-      tags_and_counts = []
+      exclusions = SETTINGS.tagcloud_exclusions || ['']
+      counts_and_tags = []
       benchmark("Tag::for_tagcloud") do
-        for tag in Tag.find_by_sql ['SELECT tags.name, count(taggings.id) as counter FROM tags, taggings WHERE tags.id = taggings.tag_id AND taggings.taggable_type = ? GROUP BY taggings.tag_id HAVING counter > ? ORDER BY lower(tags.name) asc', type.name, minimum_taggings]
-          next if %w[ostartupskey tvg].include?(tag.name)
+        for tag in Tag.find_by_sql ['SELECT tags.name, count(taggings.id) as counter FROM tags, taggings WHERE tags.id = taggings.tag_id AND taggings.taggable_type = ? AND tags.name NOT IN (?) GROUP BY taggings.tag_id HAVING counter > ? ORDER BY lower(tags.name) asc', type.name, exclusions, minimum_taggings]
           count = tag.counter.to_i
-          tags_and_counts << [tag, count]
+          counts_and_tags << [count, tag]
         end
       end
 
-      max_count = tags_and_counts.sort_by(&:last).last.last.to_f
-      return tags_and_counts.map do |tag, count|
+      max_count = counts_and_tags.map(&:first).max.to_f
+      return counts_and_tags.map do |count, tag|
           {:tag => tag, :count => count, :level => ((count / max_count) * (levels - 1)).round}
       end
     end
