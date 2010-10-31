@@ -90,7 +90,8 @@ class Tag < ActiveRecord::Base
       'venue' => "http://upcoming.yahoo.com/venue/%s"
     },
     'plancast' => {
-      'activity' => "http://plancast.com/a/%s"
+      'activity' => "http://plancast.com/a/%s",
+      'plan' => "http://plancast.com/p/%s"
     },
     'yelp' => {
       'biz' => "http://www.yelp.com/biz/%s"
