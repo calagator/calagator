@@ -849,6 +849,27 @@ describe Event do
         # ical.sequence.should == 42
       # end
     end
+
+    describe "- the headers" do
+      fixtures :events
+
+      before(:each) do
+        @data = Event.to_ical(events(:tomorrow))
+      end
+
+      it "should include the calendar name" do
+        @data.should =~ /\sX-WR-CALNAME:#{SETTINGS.name}\s/
+      end
+
+      it "should include the method" do
+        @data.should =~ /\sMETHOD:PUBLISH\s/
+      end
+
+      it "should include the scale" do
+        @data.should =~ /\sCALSCALE:Gregorian\s/i
+      end
+    end
+
   end
 
   describe "sorting labels" do
