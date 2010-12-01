@@ -510,3 +510,35 @@ fieldset .help {
 }
 
 /* @end */
+
+/* @group Event Attendees
+----------------------------------------*/
+
+.attendees {
+  overflow: auto;}
+  
+.attendees h3 {
+  display: inline;
+}
+  
+.attendees ul {
+  clear: both;
+  margin: 0;
+  padding: 0;
+  float: left;}
+
+.attendees li {
+  list-style-type: none;
+  float: left; 
+  margin: 0px 8px 8px 0px; 
+  padding: 0; }
+  
+  .attendees li .avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+.plancast-rsvp {
+  font-size: 11px;
+}
+/* @end */

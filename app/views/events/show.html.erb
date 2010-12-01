@@ -4,17 +4,43 @@
   <link rel="alternate" type="application/x-wiki" title="Edit this page" href="<%= edit_event_url(@event) %>" />
 <% end %>
 
+<% content_for :javascript_insert do %>
+  <script src="/javascripts/mustache.js" type="text/javascript"></script> 
+  <script type='text/javascript'>
+    $(function() {
+      var plan = $('.external.plancast.plan:first');
+      if (plan.length > 0) {
+        var plan_id = parseInt(plan.text().split('=')[1]).toString(36);
+        $.ajax({
+          url: "http://jsonpify.heroku.com",
+          dataType: 'jsonp',
+          data: {
+            resource: "http://api.plancast.com/02/plans/show.json",
+            extensions: "attendees",
+            plan_id: plan_id
+          },
+          success: function(data) {
+            if (data.attendees.length > 0) {
+              $('.attendees').append(Mustache.to_html($('#attendees-template').html(), data));
+            }
+          }
+        });
+      }
+    })
+  </script>
+<% end %>
+
 <div class="single_event contentbar">
   <div class="vevent">
     <h1 class="summary"><%= cleanse @event.title.strip_html %></h1>
     <div class='date'><%= normalize_time(@event) -%></div>
       <% unless @event.venue.blank? %>
       <div class="location vcard">
-      <%= google_map @event %>
-          <a class="url" href='<%= url_for venue_url(@event.venue) %>'>
-            <span class='fn org'><%= cleanse @event.venue.title.strip_html -%></span>
-          </a>
-          <div class="adr">
+        <%= google_map @event %>
+        <a class="url" href='<%= url_for venue_url(@event.venue) %>'>
+          <span class='fn org'><%= cleanse @event.venue.title.strip_html -%></span>
+        </a>
+        <div class="adr">
           <% if !@event.venue.street_address.blank? -%>
           <div class="street-address"><%= cleanse @event.venue.street_address -%></div>
           <% end %>
@@ -33,15 +59,31 @@
             <% if @event.venue && @event.venue.has_full_address? -%>
             (<a href='<%=google_maps_url(@event.venue.full_address) -%>'>map</a>)
             <% end -%>
-      </div>
-    </div>
-    <% end -%>
-      <% unless @event.url.blank? -%>
-        <h3>Website</h3>
-        <div class="website">
-          <%= link_to "#{truncate(@event.url, :length => 128)}", h(@event.url), :class => "url", :rel => "nofollow" -%>
         </div>
-      <% end -%>
+      </div>
+    <% end -%>
+    <div class="attendees">
+      <script id="attendees-template" type="text/mustache">
+        <h3>Attendees</h3>
+        <span class='plancast-rsvp'>(<a href="{{plan_url}}">RSVP on Plancast</a>)</span>
+        <br />
+        <ul>
+          {{#attendees}}
+            <li>
+              <a href='http://plancast.com/{{username}}'>
+                <img class='avatar' src='{{pic_square}}'/>
+              </a>
+            </li> 
+          {{/attendees}}
+        </ul>
+      </script>
+    </div>
+    <% unless @event.url.blank? -%>
+      <h3>Website</h3>
+      <div class="website">
+        <%= link_to "#{truncate(@event.url, :length => 128)}", h(@event.url), :class => "url", :rel => "nofollow" -%>
+      </div>
+    <% end -%>
     <% unless @event.description.blank? -%>
     <h3>Description</h3>
     <div class="description">
@@ -56,7 +98,7 @@
     <% end %>
   </div>
 </div>
-        
+
 <div class='single_view_right sidebar'>
   <h3 class='first'>Export to</h3>
   <ul>
