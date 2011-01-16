@@ -38,6 +38,18 @@ protected
   end
   helper_method :link_class
 
+  #---[ Misc ]------------------------------------------------------------
+
+  # Set or append flash +message+ (e.g. "OMG!") to flash key with the name
+  # +kind+ (e.g. :failure).
+  def append_flash(kind, message)
+    kind = kind.to_sym
+    if leaf = flash[kind]
+      flash[kind] = "#{leaf} #{message}"
+    else
+      flash[kind] = "#{message}"
+    end
+  end
 end
 
 # Make it possible to use helpers in controllers
