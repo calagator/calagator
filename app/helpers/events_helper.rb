@@ -50,7 +50,11 @@ module EventsHelper
 
   # Return a human-readable label describing what the sorting +key+ is.
   def events_sort_label(key)
-    " by <strong>#{Event::sorting_label_for(key, @tag.present?)}.</strong>"
+    if key.present? or @tag.present?
+      " by <strong>#{Event::sorting_label_for(key, @tag.present?)}.</strong>"
+    else
+      nil
+    end
   end
 
   #---[ Google Calendar exporting ]-----------------------------------------
