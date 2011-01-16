@@ -15,9 +15,16 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
-  * Next
-    * Fixed iCalendar exports, they now include timezone and location.
+  * v0.20101108
+    * [!] Fixed searching, run `rake solr:rebuild_index` to rebuild your search index to take advantage of the improvements for matching by: exact words, fuzzy word match, words that had punctuation in or adjacent to them, and tags.
     * [DEPENDENCY] Added RiCal library.
+    * [DEPENDENCY] Fixed "environment.rb" to specify exact versions of known-good gems, because new versions of gems have been released that have bugs or aren't backwards compatible.
+    * Fixed search sorting and improved title displays.
+    * Fixed iCalendar exports, they now include timezone and location.
+    * Improved iCalendar exports, they now include a sequence field.
+    * Improved `rake data:fetch` to display download progress if programs like `curl` and `wget` are installed.
+    * Added machine tags, to link Calagator entries to those on external services.
+    * Added tag cloud for displaying popular tags.
 
   * v0.20100302
     * Fixed "rake gems:install", some required gems weren't being installed.
