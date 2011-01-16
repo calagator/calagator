@@ -35,8 +35,8 @@ Rails::Initializer.run do |config|
 
   config.gem 'hpricot', :version => '0.8.1'
   config.gem 'rubyzip', :lib =>  'zip/zip', :version => '0.9.1'
-  config.gem 'rspec', :version => '1.2.9', :lib => false
-  config.gem 'rspec-rails', :version => '1.2.9', :lib => false
+  config.gem 'rspec', :version => '1.3.1', :lib => false
+  config.gem 'rspec-rails', :version => '1.3.3', :lib => false
   config.gem 'facets', :version => '2.5.2', :lib => false
   config.gem 'ri_cal', :version => '0.8.5'
 
