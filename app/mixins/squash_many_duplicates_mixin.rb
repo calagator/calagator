@@ -7,7 +7,7 @@ module SquashManyDuplicatesMixin
         # Derive model class from controller name
         model_class = self.controller_name.singularize.titleize.constantize
 
-        master_id = params[:master_id].ergo.to_i
+        master_id = params[:master_id].try(:to_i)
         duplicate_ids = params.keys.grep(/^duplicate_id_\d+$/){|t| params[t].to_i}
         singular = model_class.name.singularize.downcase
         plural = model_class.name.pluralize.downcase

@@ -83,13 +83,13 @@ class Event < ActiveRecord::Base
   # Return the title but strip out any whitespace.
   def title
     # TODO Generalize this code so we can use it on other attributes in the different model classes. The solution should use an #alias_method_chain to make sure it's not breaking any explicit overrides for an attribute.
-    return read_attribute(:title).ergo.strip
+    return read_attribute(:title).to_s.strip
   end
 
   # Return description without those pesky carriage-returns.
   def description
     # TODO Generalize this code so we can reuse it on other attributes.
-    return read_attribute(:description).ergo{self.gsub("\r\n", "\n").gsub("\r", "\n")}
+    return read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
   end
 
   if (table_exists? rescue nil)
@@ -342,7 +342,7 @@ class Event < ActiveRecord::Base
   def self.search(query, opts={})
     skip_old = opts[:skip_old] == true
     limit = opts[:limit] || SOLR_SEARCH_MATCHES
-    order = opts[:order].ergo.to_sym || DEFAULT_SEARCH_ORDER
+    order = opts[:order].try(:to_sym) || DEFAULT_SEARCH_ORDER
 
     formatted_query = \
       'NOT duplicate_for_solr:"1" AND (' \
@@ -446,12 +446,16 @@ class Event < ActiveRecord::Base
 
   # Return a purely numeric representation of the start_time
   def start_time_for_solr
-    self.start_time.ergo{utc.strftime(SOLR_TIME_FORMAT).to_i} || ""
+    self.start_time ?
+      self.start_time.utc.strftime(SOLR_TIME_FORMAT).to_i :
+      ''
   end
 
   # Return a purely numeric representation of the end_time
   def end_time_for_solr
-    self.end_time.ergo{utc.strftime(SOLR_TIME_FORMAT).to_i} || ""
+    self.end_time ?
+      self.end_time.utc.strftime(SOLR_TIME_FORMAT).to_i :
+      ''
   end
 
   # Returns value for whether the record is a duplicate or not
@@ -464,7 +468,7 @@ class Event < ActiveRecord::Base
   end
 
   def venue_title_for_solr
-    self.class.sanitize_for_solr(self.venue.ergo.title)
+    self.class.sanitize_for_solr(self.venue.try(:title))
   end
 
   def tag_list_for_solr

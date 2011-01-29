@@ -20,7 +20,6 @@ require 'defer_proxy'
 begin
   require 'facets/boolean' # true? false?
   require 'facets/kernel/d' # Like 'p' but displays line number
-  require 'facets/kernel/ergo' # Executes method only on non-nils
   require 'facets/kernel/in' # Does self contain one of the arguments?
   require 'facets/kernel/instance_exec' # Like instance_eval but can pass arguments
   require 'facets/kernel/not_nil' # Provides #not_nil?
