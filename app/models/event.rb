@@ -546,7 +546,7 @@ EOF
         calendar.event do |entry|
           entry.summary(item.title || 'Untitled Event')
           
-          desc = returning String.new do |d|
+          desc = String.new.tap do |d|
             if item.multiday?
               d << "This event runs from #{TimeRange.new(item.start_time, item.end_time, :format => :text).to_s}."
               d << "\n\n Description:\n"
