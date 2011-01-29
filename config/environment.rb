@@ -22,7 +22,7 @@ Rails::Initializer.run do |config|
 
   # Specify gems that this application depends on. 
   # They can then be installed with "rake gems:install" on new installations.
-  config.gem 'htmlentities', :version => '4.0.0'
+  config.gem 'htmlentities', :version => '4.2.3'
   config.gem 'vpim', :version => '0.695'
   config.gem 'lucene_query' # bundled
   # NOTE: There's an evil 'has_many_polymorphs' 2.13 that's broken, and a 'johnsbrn-has_many_polymorphs' 2.13.3 that that only works with Rails 2.2
