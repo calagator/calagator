@@ -183,8 +183,8 @@ class EventsController < ApplicationController
     # TODO Refactor this method and move much of it to the record-managing
     # logic into a generalized Event::search method.
 
-    @query = params[:query].with{blank? ? nil : self}
-    @tag = params[:tag].with{blank? ? nil : self}
+    @query = params[:query].presence
+    @tag = params[:tag].presence
     @current = ["1", "true"].include?(params[:current])
     @order = params[:order]
 

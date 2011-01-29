@@ -27,7 +27,6 @@ begin
   require 'facets/kernel/populate' # Assign multiple values to object via #populate and #set_from
   require 'facets/kernel/try' # Executes method only if object responds to it
   require 'facets/kernel/val' # Object has a value?
-  require 'facets/kernel/with' # Like #returning but using #instance_eval.
 rescue LoadError => e
   raise e unless $rails_gem_installer 
 end
