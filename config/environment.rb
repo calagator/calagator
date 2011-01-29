@@ -35,7 +35,7 @@ Rails::Initializer.run do |config|
   config.gem 'hpricot', :version => '0.8.3'
   config.gem 'rubyzip', :lib =>  'zip/zip', :version => '0.9.4'
   config.gem 'facets', :version => '2.5.2', :lib => false
-  config.gem 'ri_cal', :version => '0.8.5'
+  config.gem 'ri_cal', :version => '0.8.7'
 
   case RAILS_ENV
   when "test", "development"
