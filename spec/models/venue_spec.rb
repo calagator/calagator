@@ -41,12 +41,12 @@ end
 
 describe Venue, "with finding unmarked duplicates" do
   it "should find all venues with duplicate titles" do
-    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
+    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title )")
     Venue.find(:duplicates, :by => :title )
   end
 
   it "should find all venues with duplicate titles and urls" do
-    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url ) ORDER BY a.title,a.url")
+    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
     Venue.find(:duplicates, :by => [:title,:url])
   end
 
