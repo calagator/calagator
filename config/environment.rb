@@ -38,7 +38,7 @@ Rails::Initializer.run do |config|
   config.gem 'ri_cal', :version => '0.8.5'
 
   case RAILS_ENV
-  when "production", "development"
+  when "test", "development"
     config.gem 'rspec', :version => '1.3.1', :lib => false
     config.gem 'rspec-rails', :version => '1.3.3', :lib => false
   end
