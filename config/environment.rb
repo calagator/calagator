@@ -36,6 +36,10 @@ Rails::Initializer.run do |config|
   config.gem 'rubyzip', :lib =>  'zip/zip', :version => '0.9.4'
   config.gem 'facets', :version => '2.5.2', :lib => false
   config.gem 'ri_cal', :version => '0.8.7'
+  config.gem 'annotate-models', :version => '1.0.4', :lib => false
+  # NOTE: mofo 0.2.9 and above are evil, defining their own defective Object#try method and are unable to extract "postal-code" address fields from hCalendar. Mofo is used in Calagator's SourceParser::Hcal and throughout for String#strip_html. The library has been abandoned and its author recommends switching to the incompatible "prism" gem.
+  config.gem 'mofo', :version => '0.2.8'
+  config.gem 'geokit', :version => '1.5.0'
 
   case RAILS_ENV
   when "test", "development"

@@ -108,8 +108,11 @@ class SourceParser
 
           if raw.respond_to?(:adr)
             for field in %w(street_address locality region country_name postal_code)
-              if field =='country_name'
+              case field
+              when 'country_name'
                 a[:country] = raw.adr.send(field) if raw.adr.respond_to?(field)
+              when 'postal_code'
+                a[:postal_code] = raw.adr.send(field).to_s if raw.adr.respond_to?(field)
               else
                 a[field] = raw.adr.send(field) if raw.adr.respond_to?(field)
               end
