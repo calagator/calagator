@@ -91,7 +91,7 @@ Rails::Initializer.run do |config|
 
   #---[ Custom ]----------------------------------------------------------
 
-  config.load_paths += %W[
+  config.autoload_paths += %W[
     #{RAILS_ROOT}/app/mixins
     #{RAILS_ROOT}/app/observers
   ]
