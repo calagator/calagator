@@ -164,6 +164,30 @@ class Venue < ActiveRecord::Base
 
   #===[ Geocoding helpers ]===============================================
 
+  @@_is_geocoding = true
+
+  # Should geocoding be performed?
+  def self.perform_geocoding?
+    return @@_is_geocoding
+  end
+
+  # Set whether to perform geocoding to the boolean +value+.
+  def self.perform_geocoding=(value)
+    return @@_is_geocoding = value
+  end
+
+  # Run the block with geocoding enabled, then reset the geocoding back to the
+  # previous state. This is typically used in tests.
+  def self.with_geocoding(&block)
+    original = self.perform_geocoding?
+    begin
+      self.perform_geocoding = true
+      block.call
+    ensure
+      self.perform_geocoding = original
+    end
+  end
+
   # Get an address we can use for geocoding
   def geocode_address
     full_address or address
@@ -188,7 +212,7 @@ class Venue < ActiveRecord::Base
   # Try to geocode, but don't complain if we can't.
   # TODO Consider renaming this to #add_geocoding! to imply that this method makes destructive changes the object, rather than just returning values. Compare its name to the method called #geocode_address, which just returns values.
   def geocode
-    unless location or geocode_address.blank? or duplicate_of
+    if self.class.perform_geocoding? && location.blank? && geocode_address.present? && duplicate_of.blank?
       geo = GeoKit::Geocoders::MultiGeocoder.geocode(geocode_address)
       if geo.success
         self.latitude       = geo.lat
