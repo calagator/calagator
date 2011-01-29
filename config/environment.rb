@@ -30,7 +30,7 @@ Rails::Initializer.run do |config|
   config.gem 'johnsbrn-has_many_polymorphs', :lib => 'has_many_polymorphs', :source => 'http://gems.github.com', :version => '>=2.13.4'
   config.gem 'paper_trail', :version => '1.6.4'
   config.gem 'will_paginate', :version => '2.3.15'
-  config.gem 'columnize', :version => '0.3.0'
+  config.gem 'columnize', :version => '0.3.2'
   config.gem 'linecache', :version => '0.43'
   config.gem 'hpricot', :version => '0.8.1'
   config.gem 'rubyzip', :lib =>  'zip/zip', :version => '0.9.1'
