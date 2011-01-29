@@ -162,7 +162,7 @@ class EventsController < ApplicationController
 
   # GET /events/duplicates
   def duplicates
-    @type = params[:type] || 'title'
+    @type = params[:type]
     begin
       @grouped_events = Event.find_duplicates_by_type(@type)
     rescue ArgumentError => e
