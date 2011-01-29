@@ -5,6 +5,9 @@ describe "/venues/duplicates" do
   
   before(:each) do
     @cubespace = venues(:cubespace)
+    def @cubespace.events_count 
+      self.events.count
+    end
     assigns[:grouped_venues] = [[nil, [@cubespace]]]
   end
   

@@ -261,8 +261,9 @@ class Event < ActiveRecord::Base
   end
 
   # Return Hash of Events grouped by the +type+.
-  def self.find_duplicates_by_type(type='title')
-    if type == 'na'
+  def self.find_duplicates_by_type(type='na')
+    case type
+    when 'na', nil
       return { [] => self.find_future_events }
     else
       kind = %w[all any].include?(type) ? type.to_sym : type.split(',')

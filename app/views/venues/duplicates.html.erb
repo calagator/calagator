@@ -39,9 +39,9 @@
               <tr class="<%= cycle('odd', 'even') %>">
                 <td><%= radio_button_tag("master_id", venue.id) %></td>
                 <td><%= check_box_tag("duplicate_id_#{venue.id}", venue.id) %></td>
-                <td><%= venue.events.count %></td>
+                <td><%= venue.events_count %></td>
                 <td>
-                  <%= link_to( url_for(venue.title), venue_url(venue)) %>
+                  <%= link_to(venue.title, venue_url(venue)) %>
                   <% if venue.has_full_address? %>
                     at <%=h venue.full_address %>
                   <% end %>

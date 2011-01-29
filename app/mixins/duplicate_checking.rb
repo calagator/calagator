@@ -160,9 +160,15 @@ module DuplicateChecking
     # Options:
     # * :grouped => Return Hash of events grouped by commonality, rather than returning an Array. Defaults to false.
     # * :where => String that specifies additional arguments to add to the WHERE clause.
+    # * :select => String that specified additional arguments to add to the SELECT clause.
+    # * :from => String that specifies additional arguments to add to the FROM clause
+    # * :joins => String that specifies additional argument to add to a JOINS clause.
     def find_duplicates_by(fields, options={})
       grouped = options[:grouped] || false
-      query = "SELECT DISTINCT a.* from #{table_name} a, #{table_name} b WHERE"
+      selections = ['a.*', options[:select]].compact.join(', ')
+      froms = ["#{table_name} a", "#{table_name} b", options[:from]].compact.join(', ')
+      froms << " #{options[:joins]}" if options[:joins]
+      query = "SELECT DISTINCT #{selections} from #{froms} WHERE"
       query << " #{options[:where]} AND " if options[:where]
       query << " a.id <> b.id AND ("
       attributes = new.attribute_names
@@ -189,12 +195,12 @@ module DuplicateChecking
             raise ArgumentError, "Unknow fields: #{fields.inspect}"
           end
         end
-        order = fields.join(',a.')
         matched_fields = lambda {|r| fields.map {|f| r.read_attribute(f.to_sym) }}
       end
-      order ||= 'id'
-      # Remove last word from the query, e.g., "AND", and specify the order
-      query.sub!(/\s+\S+\s*$/, " ) ORDER BY a.#{order}")
+      # Remove last word from the query, e.g., "AND"
+      query.sub!(/\s+\S+\s*$/, " )")
+
+      query << " GROUP BY #{options[:group_by]}" if options[:group_by]
 
       RAILS_DEFAULT_LOGGER.debug("find_duplicates_by: SQL -- #{query}")
       records = find_by_sql(query) || []

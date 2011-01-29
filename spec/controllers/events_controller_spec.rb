@@ -460,7 +460,7 @@ describe EventsController, "managing duplicates" do
   fixtures :events, :venues
 
   it "should find new duplicates and not old duplicates" do
-    get 'duplicates'
+    get 'duplicates', :type => 'title'
 
     # New duplicates
     web3con = assigns[:grouped_events].select{|keys,values| keys.include?("Web 3.0 Conference")}
