@@ -75,7 +75,6 @@ it through the Task Manager.
 
   desc 'Remove Solr index'
   task :destroy_index do
-    raise "In production mode.  I'm not going to delete the index, sorry." if ENV['RAILS_ENV'] == "production"
     index_dir = "#{SOLR_PATH}/solr/data/#{ENV['RAILS_ENV']}"
     if File.exists?(index_dir)
       rm_rf index_dir
