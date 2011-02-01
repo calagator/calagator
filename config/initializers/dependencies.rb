@@ -9,7 +9,6 @@ require 'uri'
 
 #===[ /lib ]============================================================
 
-require 'rexml-expansion-fix' # TODO Remove this after switching to a patched Ruby or Rails version
 require 'metaclass'
 require 'tagging_extensions'
 require 'ext'
