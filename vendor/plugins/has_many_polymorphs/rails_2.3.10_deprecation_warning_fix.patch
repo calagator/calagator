@@ -1,0 +1,35 @@
+diff --git a/lib/has_many_polymorphs/base.rb b/lib/has_many_polymorphs/base.rb
+index 9513039..f705572 100644
+--- a/lib/has_many_polymorphs/base.rb
++++ b/lib/has_many_polymorphs/base.rb
+@@ -35,7 +35,7 @@ module ActiveRecord
+           end.flatten]
+
+           # allocate and assign values
+-          returning(klass.allocate) do |obj|
++          klass.allocate.tap do |obj|
+             obj.instance_variable_set("@attributes", record)
+             obj.instance_variable_set("@attributes_cache", Hash.new)
+
+diff --git a/lib/has_many_polymorphs/class_methods.rb b/lib/has_many_polymorphs/class_methods.rb
+index e1a9b30..de9cd4a 100644
+--- a/lib/has_many_polymorphs/class_methods.rb
++++ b/lib/has_many_polymorphs/class_methods.rb
+@@ -340,7 +340,7 @@ Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQ
+         options[:parent_extend] = spiked_create_extension_module(association_id, Array(options[:parent_extend]), "Parent")
+
+         # create the reflection object
+-        returning(create_reflection(:has_many_polymorphs, association_id, options, self)) do |reflection|
++        create_reflection(:has_many_polymorphs, association_id, options, self).tap do |reflection|
+           # set up the other related associations
+           create_join_association(association_id, reflection)
+           create_has_many_through_associations_for_parent_to_children(association_id, reflection)
+@@ -355,7 +355,7 @@ Be aware, however, that <tt>NULL != 'Spot'</tt> returns <tt>false</tt> due to SQ
+
+       def build_table_aliases(from)
+         # for the targets
+-        returning({}) do |aliases|
++        {}.tap do |aliases|
+           from.map(&:to_s).sort.map(&:to_sym).each_with_index do |plural, t_index|
+             begin
+               table = plural._as_class.table_name
