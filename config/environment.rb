@@ -25,9 +25,6 @@ Rails::Initializer.run do |config|
   config.gem 'htmlentities', :version => '4.2.3'
   config.gem 'vpim', :version => '0.695'
   config.gem 'lucene_query' # bundled
-  # NOTE: There's an evil 'has_many_polymorphs' 2.13 that's broken, and a 'johnsbrn-has_many_polymorphs' 2.13.3 that that only works with Rails 2.2
-  # config.gem 'has_many_polymorphs', :version => '2.12'
-  config.gem 'johnsbrn-has_many_polymorphs', :lib => 'has_many_polymorphs', :source => 'http://gems.github.com', :version => '>=2.13.4'
   config.gem 'paper_trail', :version => '1.6.4'
   config.gem 'will_paginate', :version => '2.3.15'
   config.gem 'columnize', :version => '0.3.2'

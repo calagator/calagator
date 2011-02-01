@@ -1,0 +1,16 @@
+
+defaults: &defaults
+  adapter: <%= ENV['DB'] || 'mysql' %>
+  host: localhost
+  database: hmp_development
+  username: root
+  password:
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
