@@ -134,7 +134,7 @@ Rails::Initializer.run do |config|
 
   # Set cookie session
   config.action_controller.session = {
-    :session_key => SECRETS.session_name || "calagator",
+    :key => SECRETS.session_name || "calagator",
     :secret => SECRETS.session_secret,
   }
 end
