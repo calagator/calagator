@@ -4,6 +4,8 @@
 # for Calagator.
 #
 # Parts:
+# * SearchEngine: This class is used to activate search engines, query their
+#   capabilities and add searching to models.
 # * SearchEngine implementation: E.g. SearchEngine::Sunspot describes the
 #   behavior of the `sunspot` search engine.
 # * Secrets: The `search_engine` setting in the `config/secets.yml` specifies the
