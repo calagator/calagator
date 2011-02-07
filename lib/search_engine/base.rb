@@ -1,9 +1,10 @@
 class SearchEngine::Base
-  def self.inherited(subclass)
-    subclass.class_eval do
+  # TODO is the cattr_accessor properly inheritable on its own?
+  # def self.inherited(subclass)
+    # subclass.class_eval do
       cattr_accessor :_score
-    end
-  end
+    # end
+  # end
 
   # Does this search engine provide a score?
   def self.score?
