@@ -286,8 +286,8 @@ class Event < ActiveRecord::Base
 
   #---[ Searching ]------------------------------------------------------- 
   
-  # NOTE: The `Event.search` method is implemented elsewhere! For example, if
-  # using :acts_as_solr, it's added by SearchEngine::ActsAsSolr::Event.
+  # NOTE: The `Event.search` method is implemented elsewhere! For example, it's
+  # added by SearchEngine::ActsAsSolr if you're using that search engine.
 
   # Return events matching given +tag+ grouped by their currentness, see
   # ::group_by_currentness for data structure details.
