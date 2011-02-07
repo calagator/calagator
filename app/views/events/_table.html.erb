@@ -41,7 +41,6 @@ rowspans = calculate_rowspans(events)
           </td>
           <% end %>
           <td class='event_summary'>
-            <%#= event.score if event.respond_to?(:score) %>
             <a class='summary' href='<%= url_for event_url(event) %>' name='<%= "event-#{event.id}" %>' id='<%= "event-#{event.id}" %>'><%= cleanse event.title.strip_html %></a><br />
             <%= normalize_time(event, :context => event.start_time.to_date) -%>
             <% if event.venue && !event.venue.title.blank? %>
