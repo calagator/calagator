@@ -264,7 +264,8 @@ class Event < ActiveRecord::Base
     'name'  => 'Event Name',
     'venue' => 'Location',
     'score' => 'Relevance',
-    'date'  => 'Date'
+    'date'  => 'Date',
+    ''      => 'Default',
   }
 
   # Return the label for the +sorting_key+ (e.g. 'score'). Optionally set the

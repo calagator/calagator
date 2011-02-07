@@ -186,7 +186,7 @@ class EventsController < ApplicationController
     @query = params[:query].presence
     @tag = params[:tag].presence
     @current = ["1", "true"].include?(params[:current])
-    @order = params[:order]
+    @order = params[:order].presence
 
     if @order && @order == "score" && @tag
       flash[:failure] = "You cannot sort tags by score"
