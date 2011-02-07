@@ -208,11 +208,11 @@
          maxTime - oldest uncommited update (in ms) is this long ago
          Instead of enabling autoCommit, consider using "commitWithin"
          when adding documents. http://wiki.apache.org/solr/UpdateXmlMessages
+    -->
     <autoCommit> 
       <maxDocs>10000</maxDocs>
       <maxTime>1000</maxTime> 
     </autoCommit>
-    -->
     <!-- The RunExecutableListener executes an external command from a
       hook such as postCommit or postOptimize.
          exe - the name of the executable to run
