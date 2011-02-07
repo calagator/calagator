@@ -76,8 +76,11 @@ class ActiveRecord::Base #:nodoc:
     end
     
     def tag_list=(value)
-      tag_with value unless new_record?
-      @cached_tags = value if new_record?
+      if new_record?
+        @cached_tags = value
+      else
+        tag_with value
+      end
     end
     
     private
