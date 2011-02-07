@@ -1,7 +1,7 @@
 class SearchEngine
   # Return default kind of search engine to use.
   def self.default_kind
-    return :acts_as_solr
+    return :sql
   end
 
   # Kind of search engine to use?
@@ -14,7 +14,7 @@ class SearchEngine
 
   # Activate the specified kind of search engine.
   def self.activate!(kind)
-    self._kind = kind.to_sym
+    self._kind = kind.try(:to_sym) || self.default_kind
   end
 
   # Add searching to the specified class.
