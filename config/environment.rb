@@ -160,6 +160,12 @@ Rails::Initializer.run do |config|
   when :acts_as_solr
     config.plugins << :acts_as_solr
     require 'search_engine/acts_as_solr'
+  when :sunspot
+    # The +require+ calls are needed to load Sunspot for its Rake tasks to work
+    config.gem 'sunspot', :lib => 'sunspot', :version => '1.2.1'
+    require 'sunspot'
+    config.gem 'sunspot_rails', :lib => 'sunspot/rails', :version => '1.2.1'
+    require 'sunspot/rails'
   end
 end
 

@@ -8,3 +8,6 @@ require 'rake/testtask'
 require 'rake/rdoctask'
 
 require 'tasks/rails'
+
+# Try to load `sunspot_rails` gem's tasks if available
+require 'sunspot/rails/tasks' rescue nil

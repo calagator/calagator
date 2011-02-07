@@ -13,6 +13,7 @@ config/newrelic.yml
 config/theme.txt
 config/thin.yml
 config/secrets.yml
+config/sunspot.yml
 coverage.info
 coverage/*
 db/*.sqlite3
@@ -31,6 +32,7 @@ public/stylesheets/all.css
 public/stylesheets/record_select
 public/themes/
 tags
+solr/data/*
 tmp/*
 tmp/cache/*
 tmp/pids/*
