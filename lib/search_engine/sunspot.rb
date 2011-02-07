@@ -24,29 +24,14 @@ class SearchEngine::Sunspot < SearchEngine::Base
           skip_old = opts[:skip_old] == true
           limit = opts[:limit] || 50
 
-          ordering = \
-            case opts[:order].try(:to_sym)
-            when :date, nil, ''
-              [:start_time, :desc]
-            when :venue, :location
-              [:venue_title_for_solr, :asc]
-            when :name, :title
-              [:title, :asc]
-            else
-              [:score, :desc]
-            end
-
           # Sunspot 1.2.1 seems to ignore pagination, e.g.:
           ### paginate(:page => 1, :per_page => 100)
-          Sunspot.config.pagination.default_per_page = 50
+          Sunspot.config.pagination.default_per_page = 100
 
           searcher = Sunspot.search(self) do
-            keywords(query) do
-              boost_fields :title => 3.0
-              boost_fields :tag_list => 3.0
-            end
+            keywords(query)
 
-            order_by(*ordering)
+            order_by(:start_time, :desc)
 
             with(:duplicate_for_solr, false)
 
@@ -54,7 +39,35 @@ class SearchEngine::Sunspot < SearchEngine::Base
               with(:start_time).greater_than(Date.yesterday.to_time)
             end
           end
-          return Event.all(:conditions => ['events.id in (?)', searcher.hits.map(&:primary_key)], :include => [:venue])
+
+          # Sort using Ruby to provide more meaningful results, by fetching the
+          # most recent events that match and then sorting them. In contrast,
+          # if Solr were to sort the results, it would do so globally and there
+          # are many cases where no current events would be shown.
+          hits = searcher.hits
+          event_ids = hits.map(&:primary_key)
+          events = Event.all(:conditions => ['events.id in (?)', event_ids], :include => [:venue])
+          return \
+            case opts[:order].try(:to_sym)
+            when :date
+              events.sort_by(&:start_time)
+            when :venue, :location
+              events.sort_by(&:location)
+            when :name, :title
+              events.sort_by(&:title)
+            else # :score, nil, ''
+              ids_to_hits = {}
+              for hit in hits
+                ids_to_hits[hit.primary_key.to_i] = hit
+              end
+
+              for event in events
+                event.class_eval { attr_accessor :score }
+                event.score = ids_to_hits[event.id].score
+              end
+
+              events.sort_by(&:score).reverse
+            end
         end
 
         def venue_title_for_solr
@@ -69,12 +82,13 @@ class SearchEngine::Sunspot < SearchEngine::Base
           Sunspot::Adapters::DataAccessor.register(Sunspot::Rails::Adapters::ActiveRecordDataAccessor, self)
 
           searchable do
-            text :title, :default_boost => 3.0
+            text :title, :default_boost => 10
             string :title
 
             text :description
 
-            text :tag_list, :default_boost => 3.0
+            text :tag_list, :default_boost => 10
+
 
             text :url
 
