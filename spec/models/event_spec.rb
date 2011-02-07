@@ -425,7 +425,7 @@ describe Event do
 
   describe "when searching" do
     it "should find events" do
-      Event.should_receive(:find_with_solr).and_return([])
+      Event.should_receive(:search).and_return([])
 
       Event.search("myquery").should be_empty
     end
@@ -433,24 +433,24 @@ describe Event do
     it "should find events and group them" do
       current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
       past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
-      Event.should_receive(:find_with_solr).and_return([current_event, past_event])
+      Event.should_receive(:search).and_return([current_event, past_event])
 
-      Event.search_grouped_by_currentness("myquery").should == {
+      Event.search_keywords_grouped_by_currentness("myquery").should == {
         :current => [current_event],
         :past    => [past_event],
       }
     end
 
-    it "should find events and sort them by event name" do
+    it "should find events" do
       event_Z = Event.new(:title => "Zipadeedoodah", :start_time => (Time.now + 1.week))
       event_A = Event.new(:title => "Antidisestablishmentarism", :start_time => (Time.now + 2.weeks))
       event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (Time.now + 3.weeks))
       event_o = Event.new(:title => "ommmmmmmmmmm...", :start_time => (Time.now + 4.weeks))
 
-      Event.should_receive(:find_with_solr).and_return([event_A, event_Z, event_O, event_o])
+      Event.should_receive(:search).and_return([event_A, event_Z, event_O, event_o])
 
-      Event.search_grouped_by_currentness("myquery", :order => 'name').should == {
-        :current => [event_A, event_o, event_O, event_Z],
+      Event.search_keywords_grouped_by_currentness("myquery", :order => 'name').should == {
+        :current => [event_A, event_Z, event_O, event_o],
         :past => []
       }
     end
@@ -515,7 +515,7 @@ describe Event do
     end
 
     describe "and searching" do
-      it "should find events and sort them by venue name" do
+      it "should find events" do
         event_A = Event.new(:title => "Zipadeedoodah", :start_time => (Time.now + 1.week))
         event_o = Event.new(:title => "Antidisestablishmentarism", :start_time => (Time.now + 2.weeks))
         event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (Time.now + 3.weeks))
@@ -526,10 +526,10 @@ describe Event do
         event_O.venue = Venue.new(:title => "Oz")
         event_Z.venue = Venue.new(:title => "Zippers and Things")
 
-        Event.should_receive(:find_with_solr).and_return([event_A, event_Z, event_O, event_o])
+        Event.should_receive(:search).and_return([event_A, event_Z, event_O, event_o])
 
-        Event.search_grouped_by_currentness("myquery", :order => 'venue').should == {
-          :current => [event_A, event_o, event_O, event_Z],
+        Event.search_keywords_grouped_by_currentness("myquery", :order => 'venue').should == {
+          :current => [event_A, event_Z, event_O, event_o],
           :past => []
         }
       end

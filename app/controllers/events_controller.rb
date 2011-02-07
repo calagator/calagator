@@ -203,7 +203,7 @@ class EventsController < ApplicationController
       flash[:failure] = "You can't search by tag and query at the same time"
       return redirect_to(root_path)
     elsif @query
-      @grouped_events = Event.search_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
+      @grouped_events = Event.search_keywords_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
     elsif @tag
       @grouped_events = Event.search_tag_grouped_by_currentness(@tag, :order => @order, :current => @current)
     end

@@ -20,6 +20,8 @@
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
+  SearchEngine.add_searching_to(self)
+
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
 
   # Treat any event with a duration of at least this many hours as a multiday
@@ -28,24 +30,6 @@ class Event < ActiveRecord::Base
   # days, rather than hours.
   MIN_MULTIDAY_DURATION = 20.hours
 
-  # Names of columns and methods to create Solr indexes for
-  INDEXABLE_FIELDS = \
-    %w[
-      url
-      duplicate_for_solr
-      start_time_for_solr
-      end_time_for_solr
-      event_title_for_solr
-      venue_title_for_solr
-      description_for_solr
-      tag_list_for_solr
-      text_for_solr
-    ].map(&:to_sym)
-
-  unless RAILS_ENV == 'test'
-    acts_as_solr :fields => INDEXABLE_FIELDS
-  end
-  
   has_paper_trail
 
   # Associations
@@ -299,95 +283,10 @@ class Event < ActiveRecord::Base
     end
   end
 
-  #---[ Solr searching ]--------------------------------------------------
-
-  # Number of records to index at once.
-  SOLR_REBUILD_BATCH_SIZE = 100
-
-  # Index only specific events with Solr.
-  def self.rebuild_solr_index(batch_size=SOLR_REBUILD_BATCH_SIZE)
-    timer = Time.now
-    super(batch_size){|klass, opts| self.masters.find(:all, opts)}
-    elapsed = Time.now - timer
-    logger.debug(self.count>0 ? "Index for #{self.name} rebuilt in #{elapsed}s" : "Nothing to index for #{self.name}")
-    return elapsed
-  end
-
-  # How similar should terms be to qualify as a match? This value should be
-  # close to zero because Lucene's implementation of fuzzy matching is
-  # defective, e.g., at 0.5 it can't even realize that "meetin" is similar to
-  # "meeting".
-  SOLR_SIMILARITY = 0.3
-
-  # How much to boost the score of a match in the title?
-  SOLR_TITLE_BOOST = 4
-
-  # Number of search matches to return by default.
-  SOLR_SEARCH_MATCHES = 50
-
-  # Default search sort order
-  DEFAULT_SEARCH_ORDER = :score
-
-  # Return an Array of non-duplicate Event instances matching the search +query+..
-  #
-  # Options:
-  # * :order => How to order the entries? Defaults to :score. Permitted values:
-  #   * :score => Sort with most relevant matches first
-  #   * :date => Sort by date
-  #   * :name => Sort by event title
-  #   * :title => same as :name
-  #   * :venue => Sort by venue title
-  # * :limit => Maximum number of entries to return. Defaults to SOLR_SEARCH_MATCHES.
-  # * :skip_old => Return old entries? Defaults to false.
-  def self.search(query, opts={})
-    skip_old = opts[:skip_old] == true
-    limit = opts[:limit] || SOLR_SEARCH_MATCHES
-    order = opts[:order].try(:to_sym) || DEFAULT_SEARCH_ORDER
-
-    formatted_query = \
-      'NOT duplicate_for_solr:"1" AND (' \
-      << query.downcase.gsub(/:/, '?').scan(/\S+/).map(&:escape_lucene).map{|term|
-          <<-HERE
-            event_title_for_solr:#{term}^#{SOLR_TITLE_BOOST}
-              OR event_title_for_solr:#{term}~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
-            OR tag_list_for_solr:#{term}^#{SOLR_TITLE_BOOST}
-              OR tag_list_for_solr:#{term}~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
-            OR title:#{term}^#{SOLR_TITLE_BOOST}
-              OR title:#{term}~#{SOLR_SIMILARITY}^#{SOLR_TITLE_BOOST}
-            OR #{term}~#{SOLR_SIMILARITY}
-              OR #{term}
-          HERE
-        }.map(&:strip).join(' ').gsub(/\s{2,}/m, ' ') << ')'
-
-    if skip_old
-      formatted_query << " AND (start_time_for_solr:[#{Time.today.yesterday.strftime(SOLR_TIME_FORMAT)} TO #{SOLR_TIME_MAXIMUM}])"
-    end
-
-    logger.info("Event::search, formatted_query: #{formatted_query}")
-
-    solr_opts = {
-      :order => "score desc",
-      :limit => limit,
-      :scores => true,
-    }
-    events_by_score = self.find_with_solr(formatted_query, solr_opts)
-    events = \
-      case order
-      when :score        then events_by_score
-      when :name, :title then events_by_score.sort_by(&:event_title_for_solr)
-      when :venue        then events_by_score.sort_by(&:venue_title_for_solr)
-      when :date         then events_by_score.sort_by(&:start_time_for_solr)
-      else raise ArgumentError, "Unknown order: #{order}"
-      end
-    return events
-  end
-
-  # Return an array of events found via Solr for the +formatted_query+ string
-  # and +solr_opts+ hash. The primary benefit of this method is that it makes
-  # it very easy to stub in specs.
-  def self.find_with_solr(formatted_query, solr_opts={})
-    return self.find_by_solr(formatted_query, solr_opts).results
-  end
+  #---[ Searching ]------------------------------------------------------- 
+  
+  # NOTE: The `Event.search` method is implemented elsewhere! For example, if
+  # using :acts_as_solr, it's added by SearchEngine::ActsAsSolr::Event.
 
   # Return events matching given +tag+ grouped by their currentness, see
   # ::group_by_currentness for data structure details.
@@ -414,7 +313,7 @@ class Event < ActiveRecord::Base
   # Return events grouped by their currentness. Accepts the same +args+ as
   # #search. The results hash is keyed by whether the event is current
   # (true/false) and the values are arrays of events.
-  def self.search_grouped_by_currentness(query, opts={})
+  def self.search_keywords_grouped_by_currentness(query, opts={})
     events = self.group_by_currentness(self.search(query, opts))
     if events[:past] && opts[:order].to_s == "date"
       events[:past].reverse!
@@ -424,69 +323,13 @@ class Event < ActiveRecord::Base
 
   # Return +events+ grouped by currentness using a data structure like:
   #
-  #   { 
+  #   {
   #     :current => [ my_current_event, my_other_current_event ],
   #     :past => [ my_past_event ],
   #   }
   def self.group_by_currentness(events)
     grouped = events.group_by(&:current?)
     return {:current => grouped[true] || [], :past => grouped[false] || []}
-  end
-
-  #---[ Solr helpers ]----------------------------------------------------
-
-  # Format to use for storing Solr dates. Must generate a number that can be meaningfully sorted by value.
-  SOLR_TIME_FORMAT = '%Y%m%d%H%M'
-
-  # Maximum length of a SOLR_TIME_FORMAT string.
-  SOLR_TIME_LENGTH = Time.now.strftime(SOLR_TIME_FORMAT).length
-
-  # Maximum numeric date for a Solr date string.
-  SOLR_TIME_MAXIMUM = ('9' * SOLR_TIME_LENGTH).to_i
-
-  # Return a purely numeric representation of the start_time
-  def start_time_for_solr
-    self.start_time ?
-      self.start_time.utc.strftime(SOLR_TIME_FORMAT).to_i :
-      ''
-  end
-
-  # Return a purely numeric representation of the end_time
-  def end_time_for_solr
-    self.end_time ?
-      self.end_time.utc.strftime(SOLR_TIME_FORMAT).to_i :
-      ''
-  end
-
-  # Returns value for whether the record is a duplicate or not
-  def duplicate_for_solr
-    self.duplicate_of_id.blank? ? 0 : 1
-  end
-
-  def event_title_for_solr
-    self.class.sanitize_for_solr(self.title)
-  end
-
-  def venue_title_for_solr
-    self.class.sanitize_for_solr(self.venue.try(:title))
-  end
-
-  def tag_list_for_solr
-    self.class.sanitize_for_solr(self.tag_list)
-  end
-
-  def description_for_solr
-    self.class.sanitize_for_solr(self.description)
-  end
-
-  # Return a string containing the text of all the indexable fields joined together.
-  def text_for_solr
-    # NOTE: The #text_for_solr method is one of the INDEXABLE_FIELDS, so don't indexing it to avoid an infinite loop. Some fields are methods, not database columns, so use #send rather than read_attribute.
-    (INDEXABLE_FIELDS - [:text_for_solr]).map{|name| self.class.sanitize_for_solr(self.send(name))}.join("|").to_s
-  end
-
-  def self.sanitize_for_solr(text)
-    return text.to_s.downcase.gsub(/[^[:alnum:]]/, ' ').gsub(/\s{2,}/, ' ')
   end
 
   #---[ Transformations ]-------------------------------------------------

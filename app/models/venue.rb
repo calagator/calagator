@@ -24,31 +24,10 @@
 #
 
 class Venue < ActiveRecord::Base
+  SearchEngine.add_searching_to(self)
+
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
 
-  # Names of columns and methods to create Solr indexes for
-  INDEXABLE_FIELDS = \
-    %w(
-      title
-      description
-      address
-      url
-      street_address
-      locality
-      region
-      postal_code
-      country
-      latitude
-      longitude
-      email
-      telephone
-      tag_list
-    ).map(&:to_sym)
-
-  unless RAILS_ENV == 'test'
-    acts_as_solr :fields => INDEXABLE_FIELDS
-  end
-  
   has_paper_trail
 
   include VersionDiff

@@ -89,21 +89,36 @@ Rails::Initializer.run do |config|
   # config.active_record.default_timezone = :utc
   # FIXME Figure out why ActiveRecord hasn't been told to use UTC timezone by default.
 
-  #---[ Custom ]----------------------------------------------------------
+  #---[ Plugins ]---------------------------------------------------------
+
+  config.plugins = [
+    :catch_cookie_exception,
+    :exception_notification,
+    :gmaps_on_rails,
+    :has_many_polymorphs,
+    :jrails,
+    :theme_support,
+    :white_list,
+  ]
+
+  #---[ Path -------------------------------------------------------------
 
   config.autoload_paths += %W[
     #{RAILS_ROOT}/app/mixins
     #{RAILS_ROOT}/app/observers
   ]
 
+  config.eager_load_paths += %W[
+    #{RAILS_ROOT}/lib
+  ]
+
+  #---[ Caching ]---------------------------------------------------------
+
   cache_path = "#{RAILS_ROOT}/tmp/cache/#{RAILS_ENV}"
   config.cache_store = :file_store, cache_path
   FileUtils.mkdir_p(cache_path)
   
-  #---[ Custom libraries ]------------------------------------------------
-
-  # Load custom libraries before "config/initializers" run.
-  $LOAD_PATH.unshift("#{RAILS_ROOT}/lib")
+  #---[ Secrets and settings ]--------------------------------------------
 
   # Read secrets
   require 'secrets_reader'
@@ -137,6 +152,15 @@ Rails::Initializer.run do |config|
     :key => SECRETS.session_name || "calagator",
     :secret => SECRETS.session_secret,
   }
+
+  # Activate search engine
+  require 'lib/search_engine'
+  SearchEngine.activate!(SECRETS.search_engine)
+  case SearchEngine.kind
+  when :acts_as_solr
+    config.plugins << :acts_as_solr
+    require 'search_engine/acts_as_solr'
+  end
 end
 
 # NOTE: See config/initializers/ directory for additional code loaded at start-up
