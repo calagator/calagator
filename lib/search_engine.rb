@@ -33,16 +33,16 @@ class SearchEngine
   #     SearchEngine.add_searching_to(self)
   #   end
   def self.add_searching_to(model)
-    return search_engine_implementation.add_searching_to(model)
+    return implementation.add_searching_to(model)
   end
 
   # Return class to use as search engine.
-  def self.search_engine_implementation
+  def self.implementation
     return "SearchEngine::#{self.kind.to_s.classify}".constantize
   end
 
   # Does the current search engine provide a score?
   def self.score?
-    return self.search_engine_implementation.score?
+    return self.implementation.score?
   end
 end
