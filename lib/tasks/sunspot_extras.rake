@@ -1,4 +1,10 @@
 namespace :sunspot do
+  desc "Optimize index and compress it to a smaller size"
+  task :optimize => :environment do
+    Sunspot.optimize
+    Sunspot.commit
+  end
+
   namespace :reindex do
     desc "Reindex Calagator's models with Sunspot"
     task :calagator => :environment do
