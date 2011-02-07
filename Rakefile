@@ -10,4 +10,8 @@ require 'rake/rdoctask'
 require 'tasks/rails'
 
 # Try to load `sunspot_rails` gem's tasks if available
-require 'sunspot/rails/tasks' rescue nil
+begin
+  require 'sunspot/rails/tasks' rescue nil
+rescue LoadError => e
+  # Ignore
+end

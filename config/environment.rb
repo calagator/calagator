@@ -163,9 +163,17 @@ Rails::Initializer.run do |config|
   when :sunspot
     # The +require+ calls are needed to load Sunspot for its Rake tasks to work
     config.gem 'sunspot', :lib => 'sunspot', :version => '1.2.1'
-    require 'sunspot'
+    begin
+      require 'sunspot'
+    rescue LoadError => e
+      # Ignore
+    end
     config.gem 'sunspot_rails', :lib => 'sunspot/rails', :version => '1.2.1'
-    require 'sunspot/rails'
+    begin
+      require 'sunspot/rails'
+    rescue LoadError => e
+      # Ignore
+    end
   end
 end
 
