@@ -13,19 +13,21 @@
 # * Environment: The `config/environment.rb` loads the specified search
 # 	engine's plugins and libraries, and configures them.
 class SearchEngine
-  # Return default kind of search engine to use.
-  def self.default_kind
-    return :sql
+  # Set kind of search engine to use, e.g. :acts_as_solr.
+  def self.kind=(value)
+    case value
+    when nil, ''
+      @@kind = :sql
+    else
+      @@kind = value.to_s.underscore.to_sym
+    end
+
+    return @@kind
   end
 
   # Return kind of search engine to use, e.g. :acts_as_solr.
   def self.kind
-    return(@@_kind.presence || self.default_kind)
-  end
-
-  # Activate the specified kind of search engine.
-  def self.activate!(kind)
-    @@_kind = kind.try(:to_sym) || self.default_kind
+    return @@kind
   end
 
   # Add searching to the specified class.
@@ -40,7 +42,11 @@ class SearchEngine
 
   # Return class to use as search engine.
   def self.implementation
-    return "SearchEngine::#{self.kind.to_s.classify}".constantize
+    begin
+      return "SearchEngine::#{self.kind.to_s.classify}".constantize
+    rescue NameError
+      raise ArgumentError, "Invalid search engine specified in 'config/secrets.yml': #{self.kind}"
+    end
   end
 
   # Does the current search engine provide a score?

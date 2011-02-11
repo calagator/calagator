@@ -155,13 +155,14 @@ Rails::Initializer.run do |config|
 
   # Activate search engine
   require 'lib/search_engine'
-  SearchEngine.activate!(SECRETS.search_engine)
+  SearchEngine.kind = SECRETS.search_engine
   case SearchEngine.kind
   when :acts_as_solr
     config.plugins << :acts_as_solr
-    require 'search_engine/acts_as_solr'
   when :sunspot
-    # The +require+ calls are needed to load Sunspot for its Rake tasks to work
+    # The +require+ calls below are needed to make Sunspot available to Rake.
+    # The +rescue+ calls below are needed so that `rake gems:install` can
+    # install Sunspot.
     config.gem 'sunspot', :lib => 'sunspot', :version => '1.2.1'
     begin
       require 'sunspot'
