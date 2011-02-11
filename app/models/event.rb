@@ -265,18 +265,14 @@ class Event < ActiveRecord::Base
     'venue' => 'Location',
     'score' => 'Relevance',
     'date'  => 'Date',
-    ''      => 'Default',
   }
 
   # Return the label for the +sorting_key+ (e.g. 'score'). Optionally set the
   # +is_searching_by_tag+, to constrain options available for tag searches.
   def self.sorting_label_for(sorting_key=nil, is_searching_by_tag=false)
     sorting_key = sorting_key.to_s
-    if SORTING_LABELS.has_key?(sorting_key)
+    if sorting_key.present? and SORTING_LABELS.has_key?(sorting_key)
       SORTING_LABELS[sorting_key]
-    elsif sorting_key.present?
-      # TODO Should we only show labels for known keys?
-      sorting_key
     elsif is_searching_by_tag
       SORTING_LABELS['date']
     else

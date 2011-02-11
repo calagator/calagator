@@ -881,11 +881,6 @@ describe Event do
       Event::sorting_label_for('name').should == 'Event Name'
     end
 
-    it "should display raw label for unknown value" do
-      # TODO Should we only show labels for known keys?
-      Event::sorting_label_for('kitten').should == 'kitten'
-    end
-
     it "should display a default label" do
       Event::sorting_label_for(nil).should == 'Relevance'
     end

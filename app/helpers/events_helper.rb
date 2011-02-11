@@ -45,7 +45,11 @@ module EventsHelper
 
   # Return a link for sorting by +key+ (e.g., "name").
   def events_sort_link(key)
-    link_to(Event::sorting_label_for(key, @tag.present?), url_for(params.merge(:order => key)))
+    if key.present?
+      link_to(Event::sorting_label_for(key, @tag.present?), url_for(params.merge(:order => key)))
+    else
+      link_to('Default', url_for(params.tap { |o| o.delete :order }))
+    end
   end
 
   # Return a human-readable label describing what the sorting +key+ is.

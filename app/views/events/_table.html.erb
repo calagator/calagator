@@ -24,7 +24,7 @@ rowspans = calculate_rowspans(events)
         <%- if scores -%>,
         <%= events_sort_link('score') -%>
         <%- end -%>, 
-        <%= events_sort_link('') -%>
+        <%= events_sort_link(nil) -%>
       </th>
     </tr>
   </thead>
