@@ -24,11 +24,13 @@ class VenuesController < ApplicationController
         if params[:query].present?
 
       @venues = scoped_venues.find(:non_duplicates, :order => 'lower(title)', :conditions => conditions)
-    elsif request.format.html? # default html view
-      @most_active_venues = scoped_venues.find(:non_duplicates, :limit => 10, :order => 'events_count DESC')
-      @newest_venues = scoped_venues.find(:non_duplicates, :limit => 10, :order => 'created_at DESC')
-    else # default for all other response types
-      @venues = scoped_venues.all
+    else # default view
+      if request.format.html? # default html view
+        @most_active_venues = scoped_venues.find(:non_duplicates, :limit => 10, :order => 'events_count DESC')
+        @newest_venues = scoped_venues.find(:non_duplicates, :limit => 10, :order => 'created_at DESC')
+      else # default for all other response types
+        @venues = scoped_venues.find(:non_duplicates, :order => 'lower(title)')
+      end
     end
 
     @page_title = "Venues"
