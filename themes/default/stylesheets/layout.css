@@ -366,6 +366,11 @@ ul.event_list .list_date {
   margin-bottom: .5em;
 }
 
+#venues_map #google_map {
+  width: 100%;
+  height: 650px;
+}
+
 /* @end */
 
 

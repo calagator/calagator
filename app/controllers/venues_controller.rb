@@ -42,6 +42,11 @@ class VenuesController < ApplicationController
     end
   end
 
+  # GET /venues/map
+  def map
+    @venues = Venue.in_business
+  end
+
   # GET /venues/1
   # GET /venues/1.xml
   def show

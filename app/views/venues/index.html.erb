@@ -1,5 +1,4 @@
 <% tabindex_on '#search_field' %>
-<%#= google_map @venues, SETTINGS.venues_google_map_options %>
 <div id="venues_index">
 <h1>Venues</h1>
 <div id='venues_search'>
@@ -74,6 +73,7 @@
       </ul>
     </div>
     <div id="exports">
+      <h3><%= link_to 'View a big map', map_venues_path %></h3>
       <h3>Export venues</h3>
       <ul>
         <li><%= link_to 'KML', '/venues.kml' %></li>
