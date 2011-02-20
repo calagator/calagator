@@ -9,36 +9,38 @@
     <% focus_on '#venue_title' %>
     </div>
     <div>
-      <%= f.label :address %>
+      <%= f.label :address, "Full Address" %>
       <%= f.text_field :address %>
       <span class='help'>
         (one-line version of full address)
       </span>
     </div>
-    <div> 
-      <%= f.label :street_address %>
-      <%= f.text_field :street_address %>
-    </div>
-    <div>
-      <%= f.label :locality, "City" %>
-      <%= f.text_field :locality %>
-    </div>
-    <div>
-      <%= f.label :region, "State" %>
-      <%= f.text_field :region %>
-    </div>
-    <div>
-      <%= f.label :postal_code, "ZIP Code" %>
-      <%= f.text_field :postal_code %>
-    </div>
-    <div>
-      <%= f.label :latitude, "Latitude" %>
-      <%= f.text_field :latitude %>
-    </div>
-    <div>
-      <%= f.label :longitude, "Longitude" %>
-      <%= f.text_field :longitude %>
-    </div>
+    <% unless venue.new_record? %>
+      <div>
+        <%= f.label :street_address %>
+        <%= f.text_field :street_address %>
+      </div>
+      <div>
+        <%= f.label :locality, "City" %>
+        <%= f.text_field :locality %>
+      </div>
+      <div>
+        <%= f.label :region, "State" %>
+        <%= f.text_field :region %>
+      </div>
+      <div>
+        <%= f.label :postal_code, "ZIP Code" %>
+        <%= f.text_field :postal_code %>
+      </div>
+      <div>
+        <%= f.label :latitude, "Latitude" %>
+        <%= f.text_field :latitude %>
+      </div>
+      <div>
+        <%= f.label :longitude, "Longitude" %>
+        <%= f.text_field :longitude %>
+      </div>
+    <% end %>
     <div>
       <%= f.label :url, "Web Link" %>
       <%= f.text_field :url%>
