@@ -3,25 +3,38 @@
 <div id="venues_index">
 <h1>Venues</h1>
 <div id='venues_search'>
-  <h2>Find a venue</h2>
+  <h2>Find a venue:</h2>
   <% form_tag venues_path, :method => 'get' do %>
-    <%= label_tag :query, "Keywords" %>
-    <%= text_field_tag :query, params[:query] %>
+    <div class='keywords'>
+      <%= label_tag :query, "Keywords" %>
+      <%= text_field_tag :query, params[:query] %>
+    </div>
+    <div class='wifi'>
+      <%= check_box_tag :wifi, '1', params[:wifi] %>
+      <%= label_tag :wifi, "Public WiFi" %>
+    </div>
 
-    <%= check_box_tag :wifi, '1', params[:wifi] %>
-    <%= label_tag :wifi, "Public WiFi" %>
-
-    <%= submit_tag "Search" %>
+    <div class='submit'>
+      <%= submit_tag "Search" %>
+    </div>
   <% end %>
 </div>
 
 <% if @venues %>
-  <div id='venues_search'>
+  <div id='venues_search_results'>
     <div id='list_description'>
       <% if @tag %>
         <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%=h @tag %></strong></h2>
       <% else -%>
-        <h2>Viewing all <strong><%= @venues.size %></strong> venues.</h2>
+        <h2>
+          <% if @venues.size == 0 %>
+            Sorry, there are no venues
+          <% else %>
+            Showing <strong><%= @venues.size %></strong> venue<%= @venues.size == 1 ? '' : 's' %>
+          <% end %>
+          <%= "matching &#8220;#{params[:query]}&#8221;" if params[:query].present? %>
+          <%= "with public WiFi" if params[:wifi] %>
+        </h2>
       <% end -%>
     </div>
 
@@ -30,7 +43,7 @@
         <li>
           <%= link_to(cleanse(venue.title), venue_url(venue)) %>
           <% if venue.has_full_address? %>
-            at <%= cleanse venue.full_address %>
+            <p class='detail'><%= cleanse venue.full_address %></p>
           <% end %>
         </li>
       <% end %>

@@ -303,10 +303,42 @@ ul.event_list .list_date {
   margin-bottom: .25em;
 }
 
+#venues_index p.detail {
+  margin-bottom: 0;
+  color: #aaa;
+}
+
+#venues_index ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+#venues_index li {
+  margin-bottom: .25em
+}
+
+#venues_index li a {
+  font-weight: bold;
+}
+
+#venues_search_results li {
+  margin-bottom: .5em;
+}
+
 #venues_search {
   background: #e8fbfe;
-  padding: 1em 1em 2em 1em;
+  padding: 1em;
   border-bottom: 1px solid #e9e9e9;
+}
+
+#venues_search h2 {
+  float: left;
+  margin: 0 1em 0 0;
+}
+
+#venues_search form div {
+  display: inline-block;
+  margin-right: 1em;
 }
 
 #venue_portal {
@@ -328,20 +360,6 @@ ul.event_list .list_date {
 
 #venue_portal #exports {
 
-}
-
-#venue_portal ul {
-  list-style-type: none;
-  margin: 0;
-}
-
-#venue_portal li {
-  margin-bottom: .25em
-}
-
-#venue_portal p.detail {
-  margin-bottom: 0;
-  color: #ccc;
 }
 
 #venue_portal h3 {
