@@ -86,7 +86,7 @@ describe Venue, "with finding unmarked duplicates (integration test)" do
 
   it "should find duplicate title by any" do
     pre, post = find_duplicates_create_a_clone_and_find_again(:any, :title => @venue.title)
-    post.size.should == pre.size + 2
+    post.size.should == pre.size + 1
   end
 
   it "should not find duplicate title by address" do

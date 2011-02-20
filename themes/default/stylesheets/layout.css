@@ -306,17 +306,34 @@ ul.event_list .list_date {
 ----------------------------------------*/
 
 .single_venue .location.vcard {
-  background: #e8fbfe;
-  width: 45em;
-  height: 16em;
+  /* background: #e8fbfe;*/
+  /* width: 45em;*/
+  /* height: 16em;*/
   padding: 1em;
-  margin: 2em 0 2em -1em;
+  margin: 2em 2em 2em -1em;
+}
+
+.single_venue .closed h1.org {
+  text-decoration: line-through;
+  color: #999;
+  margin-bottom: 0;
+}
+
+.single_venue .closed_callout {
+  margin-top: 0;
+  color: #CE421D;
+  font-weight: bold;
+}
+
+.single_venue .location.vcard .adr {
+  margin-bottom: 1em;
 }
 
 .single_venue #google_map {
-  width: 25em;
-  height: 16em;
+  width: 30em;
+  height: 20em;
   float: right;
+  border: 1px solid #222;
 }
 
 .single_venue h3 {
@@ -353,6 +370,18 @@ fieldset > div, #form-contents > div {
 label.checkbox {
   clear: none;
   text-align: left;
+}
+
+form div.checkbox {
+  padding-left: 8em
+}
+
+form div.checkbox label {
+  clear: none;
+  text-align: left;
+  float: none;
+  font-weight: normal;
+  width: auto;
 }
 
 fieldset input {

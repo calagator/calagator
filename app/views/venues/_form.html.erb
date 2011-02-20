@@ -58,6 +58,10 @@
         (HTML formatting allowed)
       </span>
     </div>
+    <div class='checkbox'>
+      <%= f.check_box :closed %>
+      <%= f.label :closed, "This venue is no longer open for business", :class => 'checkbox' %>
+    </div>
     <div>
       <%= f.label :tag_list, "Tags" %>
       <%= f.text_field :tag_list %>

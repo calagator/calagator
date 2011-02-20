@@ -64,6 +64,9 @@ class Venue < ActiveRecord::Base
     :conditions => ['duplicate_of_id IS NULL'],
     :include => [:source, :events, :tags, :taggings]
 
+  named_scope :in_business, :conditions      => { :closed => false }
+  named_scope :out_of_business, :conditions  => { :closed  => true }
+
   #===[ Instantiators ]===================================================
 
   # Returns a new Venue for the +abstract_location+ retrieved from +source+.
