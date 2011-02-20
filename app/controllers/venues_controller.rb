@@ -4,6 +4,7 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
+    # Pick a subset of venues (we want in_business by default)
     if params[:include_closed]
       scoped_venues = Venue
     elsif params[:closed]
@@ -13,20 +14,21 @@ class VenuesController < ApplicationController
     end
 
     @tag = nil
-    if params[:tag].present?
+    if params[:tag].present? # searching by tag
       @tag = params[:tag]
       @venues = scoped_venues.tagged_with(@tag)
-    elsif params.has_key?(:query)
+    elsif params.has_key?(:query) # searching by query
       scoped_venues = scoped_venues.with_public_wifi if params[:wifi]
 
       conditions = ["title LIKE :query OR description LIKE :query", {:query => "%#{params[:query]}%"}] \
         if params[:query].present?
 
       @venues = scoped_venues.find(:non_duplicates, :order => 'lower(title)', :conditions => conditions)
-    else
-      @not_searching = true
+    elsif request.format.html? # default html view
       @most_active_venues = scoped_venues.find(:non_duplicates, :limit => 10, :order => 'events_count DESC')
       @newest_venues = scoped_venues.find(:non_duplicates, :limit => 10, :order => 'created_at DESC')
+    else # default for all other response types
+      @venues = scoped_venues.all
     end
 
     @page_title = "Venues"
