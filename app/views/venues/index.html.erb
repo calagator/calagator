@@ -26,10 +26,10 @@
         <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%=h @tag %></strong></h2>
       <% else -%>
         <h2>
-          <% if @venues.size == 0 %>
+          <% if @venues.size == 0 -%>
             Sorry, there are no venues
-          <% else %>
-            Showing <strong><%= @venues.size %></strong> venue<%= @venues.size == 1 ? '' : 's' %>
+          <% else -%>
+            Showing <%= "all " if params[:all] %><strong><%= @venues.size %></strong> venue<%= @venues.size == 1 ? '' : 's' %>
           <% end %>
           <%= "matching &#8220;#{params[:query]}&#8221;" if params[:query].present? %>
           <%= "with public WiFi" if params[:wifi] %>
@@ -73,7 +73,10 @@
       </ul>
     </div>
     <div id="exports">
-      <h3><%= link_to 'View a big map', map_venues_path %></h3>
+      <ul>
+        <li><%= link_to 'List all venues', venues_path(:all => 1) %></li>
+        <li><%= link_to 'View a big map', map_venues_path %></li>
+      </ul>
       <h3>Export venues</h3>
       <ul>
         <li><%= link_to 'KML', '/venues.kml' %></li>

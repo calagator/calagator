@@ -358,8 +358,8 @@ ul.event_list .list_date {
   margin-right: 2em;
 }
 
-#venue_portal #exports {
-
+#venue_portal #exports h3 {
+  margin-top: .5em;
 }
 
 #venue_portal h3 {

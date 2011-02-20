@@ -17,7 +17,7 @@ class VenuesController < ApplicationController
     if params[:tag].present? # searching by tag
       @tag = params[:tag]
       @venues = scoped_venues.tagged_with(@tag)
-    elsif params.has_key?(:query) # searching by query
+    elsif params.has_key?(:query) || params[:all] # searching by query
       scoped_venues = scoped_venues.with_public_wifi if params[:wifi]
 
       conditions = ["title LIKE :query OR description LIKE :query", {:query => "%#{params[:query]}%"}] \
