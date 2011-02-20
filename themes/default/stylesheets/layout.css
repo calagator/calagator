@@ -319,6 +319,60 @@ ul.event_list .list_date {
   margin-bottom: 0;
 }
 
+.single_venue .location .adr,
+.single_venue .location .address,
+.single_venue .location .info {
+  font-size: 14px;
+}
+
+.single_venue .location.vcard .adr,
+.single_venue .location.vcard .address {
+  margin-bottom: 1em;
+  float: left;
+  width: 300px;
+}
+
+.single_venue .location .info {
+  float: left;
+}
+
+.single_venue .description,
+.single_venue .tags,
+.single_venue #future_events {
+  float: left;
+  clear: left;
+  width: 500px;
+}
+
+/* .single_venue .access_notes {*/
+/*   border: 1px solid #456FC9;*/
+/*   padding: .75em;*/
+/*   background: #e8fbfe;*/
+/* }*/
+.single_venue .access_notes h3 {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  margin-right: .5em;
+  color: #456FC9;
+  font-size: 1em;
+  font-weight: bold;
+  padding-left: 20px;
+  line-height: 16px;
+  background: url('/images/information.png') no-repeat;
+}
+
+.single_venue .description {
+  background: #e8fbfe;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.single_venue #future_events,
+.single_venue .tags {
+  margin-top: 1em;
+}
+
 .single_venue .closed_callout {
   margin-top: 0;
   color: #CE421D;
@@ -333,9 +387,6 @@ ul.event_list .list_date {
   color: #6098E6
 }
 
-.single_venue .location.vcard .adr {
-  margin-bottom: 1em;
-}
 
 .single_venue #google_map {
   width: 30em;

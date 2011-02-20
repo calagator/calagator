@@ -34,48 +34,49 @@
         <div class='address'><%=h @venue.address %></div>
       <% end %>
     <% end %>
+    <div class='info'>
+      <% if @venue.url.present? %>
+      <div class='url'><%= link_to(nil, url_for(@venue.url), :rel => "nofollow") %></div>
+      <% end %>
 
-    <% if @venue.url.present? %>
-    <div class='url'><%= link_to(nil, url_for(@venue.url), :rel => "nofollow") %></div>
-    <% end %>
+      <% if @venue.email.present? %>
+        <div class='email'><%= mail_to( cleanse(@venue.email) ) %></div>
+      <% end %>
 
-    <% if @venue.email.present? %>
-      <div class='email'><%= mail_to( cleanse(@venue.email) ) %></div>
-    <% end %>
+      <% if @venue.telephone.present? %>
+        <div class='tel'><%=h @venue.telephone %></div>
+      <% end %>
 
-    <% if @venue.telephone.present? %>
-      <div class='tel'><%=h @venue.telephone %></div>
-    <% end %>
-
-    <% if @venue.wifi? %>
-      <div class='wifi_callout'>Public WiFi</div>
-    <% end %>
+      <% if @venue.wifi? %>
+        <div class='wifi_callout'>Public WiFi</div>
+      <% end %>
+    </div>
   </div>
 
   <div>
-    <% if @venue.description.present? %>
-      <h2>Description</h2>
+    <% if @venue.description.present? || @venue.access_notes.present? %>
       <div class="description">
         <%= format_description(@venue.description) %>
-      </div>
-    <% end %>
-
-    <% if @venue.access_notes.present? %>
-      <h2>Access Notes</h2>
-      <div class="description">
-        <%= h @venue.access_notes %>
+        <% if @venue.access_notes.present? %>
+          <div class="access_notes">
+            <h3>Access Notes</h3>
+            <%= h @venue.access_notes %>
+          </div>
+        <% end %>
       </div>
     <% end %>
 
     <% if @venue.tags.present? -%>
-      <h2>Tags</h2>
       <div class="tags">
-          <%= tag_links_for @venue %>
+        <h2>Tags</h2>
+        <%= tag_links_for @venue %>
       </div>
     <% end %>
 
-    <h2>Future events happening here</h2>
-    <%= render :partial => 'events/list', :locals => { :events => @events } %>
+    <div id='future_events'>
+      <h2>Future events happening here</h2>
+      <%= render :partial => 'events/list', :locals => { :events => @events } %>
+    </div>
   </div>
 
   <div class='single_view_right sidebar'>
