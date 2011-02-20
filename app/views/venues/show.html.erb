@@ -36,7 +36,7 @@
     <% end %>
     <div class='info'>
       <% if @venue.url.present? %>
-      <div class='url'><%= link_to(nil, url_for(@venue.url), :rel => "nofollow") %></div>
+      <div class='url'><%= link_to(truncate(url_for(@venue.url), 60), url_for(@venue.url), :rel => "nofollow") %></div>
       <% end %>
 
       <% if @venue.email.present? %>
