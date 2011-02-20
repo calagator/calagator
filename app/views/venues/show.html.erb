@@ -60,6 +60,13 @@
       </div>
     <% end %>
 
+    <% if @venue.access_notes.present? %>
+      <h2>Access Notes</h2>
+      <div class="description">
+        <%= h @venue.access_notes %>
+      </div>
+    <% end %>
+
     <% if @venue.tags.present? -%>
       <h2>Tags</h2>
       <div class="tags">

@@ -64,10 +64,19 @@
         (HTML formatting allowed)
       </span>
     </div>
+    <div>
+      <%= f.label :access_notes %>
+      <%= f.text_area :access_notes, :rows => 2, :cols => 60 %>
+      <span class='help'>
+          (Details about how to access the space, and any accessibility restrictions that visitors may want to know about.)
+      </span>
+    </div>
+    <% unless venue.new_record? %>
     <div class='checkbox'>
       <%= f.check_box :closed %>
       <%= f.label :closed, "This venue is no longer open for business", :class => 'checkbox' %>
     </div>
+    <% end %>
     <div>
       <%= f.label :tag_list, "Tags" %>
       <%= f.text_field :tag_list %>
