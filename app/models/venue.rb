@@ -64,6 +64,7 @@ class Venue < ActiveRecord::Base
     :conditions => ['duplicate_of_id IS NULL'],
     :include => [:source, :events, :tags, :taggings]
 
+  named_scope :with_public_wifi, :conditions => { :wifi   => true }
   named_scope :in_business, :conditions      => { :closed => false }
   named_scope :out_of_business, :conditions  => { :closed  => true }
 

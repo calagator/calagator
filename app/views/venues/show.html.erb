@@ -46,6 +46,10 @@
     <% if @venue.telephone.present? %>
       <div class='tel'><%=h @venue.telephone %></div>
     <% end %>
+
+    <% if @venue.wifi? %>
+      <div class='wifi_callout'>Public WiFi</div>
+    <% end %>
   </div>
 
   <div>

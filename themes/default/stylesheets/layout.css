@@ -325,6 +325,14 @@ ul.event_list .list_date {
   font-weight: bold;
 }
 
+.single_venue .wifi_callout {
+  margin-top: .5em;
+  padding-left: 20px;
+  background: url('/images/transmit_blue.png') no-repeat;
+  font-weight: bold;
+  color: #6098E6
+}
+
 .single_venue .location.vcard .adr {
   margin-bottom: 1em;
 }

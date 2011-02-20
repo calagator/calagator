@@ -51,6 +51,10 @@
       <%= f.label :telephone %>
       <%= f.text_field :telephone %>
     </div>
+    <div class='checkbox'>
+      <%= f.check_box :wifi %>
+      <%= f.label :wifi, "This venue has public wireless internet access", :class => 'checkbox' %>
+    </div>
     <div>
       <%= f.label :description %>
       <%= f.text_area :description, :rows => 4, :cols => 60 %>
