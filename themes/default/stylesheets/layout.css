@@ -299,6 +299,46 @@ ul.event_list .list_date {
   float: right;
 }
 
+#venues_index h1 {
+  margin-bottom: .25em;
+}
+
+#venues_search {
+  background: #e8fbfe;
+  padding: 1em 1em 2em 1em;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+#venue_portal {
+}
+
+#venue_portal #most_active,
+#venue_portal #newest {
+  width: 300px;
+  float: left;
+  border-right: 1px solid #e9e9e9;
+  margin-right: 2em;
+  padding: 1em 1em 2em 0;
+}
+
+#venue_portal ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+#venue_portal li {
+  margin-bottom: .25em
+}
+
+#venue_portal p.detail {
+  margin-bottom: 0;
+  color: #ccc;
+}
+
+#venue_portal h3 {
+  margin-bottom: .5em;
+}
+
 /* @end */
 
 

@@ -4,14 +4,29 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
+    if params[:include_closed]
+      scoped_venues = Venue
+    elsif params[:closed]
+      scoped_venues = Venue.out_of_business
+    else
+      scoped_venues = Venue.in_business
+    end
+
     @tag = nil
     if params[:tag].present?
       @tag = params[:tag]
-      @venues = Venue.tagged_with(@tag)
-    elsif params[:val].present?
-      @venues = Venue.find(:non_duplicates, :order => 'lower(title)', :conditions => ["title LIKE ?", "%#{params[:val]}%"])
+      @venues = scoped_venues.tagged_with(@tag)
+    elsif params.has_key?(:query)
+      scoped_venues = scoped_venues.with_public_wifi if params[:wifi]
+
+      conditions = ["title LIKE :query OR description LIKE :query", {:query => "%#{params[:query]}%"}] \
+        if params[:query].present?
+
+      @venues = scoped_venues.find(:non_duplicates, :order => 'lower(title)', :conditions => conditions)
     else
-      @venues = Venue.find(:non_duplicates, :order => 'lower(title)')
+      @not_searching = true
+      @most_active_venues = scoped_venues.find(:non_duplicates, :limit => 10, :order => 'events_count DESC')
+      @newest_venues = scoped_venues.find(:non_duplicates, :limit => 10, :order => 'created_at DESC')
     end
 
     @page_title = "Venues"

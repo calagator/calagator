@@ -1,23 +1,65 @@
 <% tabindex_on '#search_field' %>
-
+<%#= google_map @venues, SETTINGS.venues_google_map_options %>
 <div id="venues_index">
-  <div id='list_description'>
-    <% if @tag %>
-      <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%=h @tag %></strong></h2>
-    <% else -%>
-      <h2>Viewing all <strong><%= @venues.size %></strong> venues.</h2>
-    <% end -%>
-  </div>
-  <%= google_map @venues, SETTINGS.venues_google_map_options %>
+<h1>Venues</h1>
+<div id='venues_search'>
+  <h2>Find a venue</h2>
+  <% form_tag venues_path, :method => 'get' do %>
+    <%= label_tag :query, "Keywords" %>
+    <%= text_field_tag :query, params[:query] %>
 
-  <ul>
-    <% for venue in @venues %>
-      <li>
-        <%= link_to(cleanse(venue.title), venue_url(venue)) %>
-        <% if venue.has_full_address? %>
-          at <%= cleanse venue.full_address %>
+    <%= check_box_tag :wifi, '1', params[:wifi] %>
+    <%= label_tag :wifi, "Public WiFi" %>
+
+    <%= submit_tag "Search" %>
+  <% end %>
+</div>
+
+<% if @venues %>
+  <div id='venues_search'>
+    <div id='list_description'>
+      <% if @tag %>
+        <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%=h @tag %></strong></h2>
+      <% else -%>
+        <h2>Viewing all <strong><%= @venues.size %></strong> venues.</h2>
+      <% end -%>
+    </div>
+
+    <ul>
+      <% for venue in @venues %>
+        <li>
+          <%= link_to(cleanse(venue.title), venue_url(venue)) %>
+          <% if venue.has_full_address? %>
+            at <%= cleanse venue.full_address %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <div id='venue_portal'>
+    <div id='most_active'>
+      <h3>Most Active</h3>
+      <ul>
+        <% for venue in @most_active_venues %>
+          <li>
+            <%= link_to(cleanse(venue.title), venue_url(venue)) %>
+            <p class='detail'><%= venue.events_count %> events</p>
+          </li>
         <% end %>
-      </li>
-    <% end %>
-  </ul>
+      </ul>
+    </div>
+    <div id='newest'>
+      <h3>Newest</h3>
+      <ul>
+        <% for venue in @newest_venues %>
+          <li>
+            <%= link_to(cleanse(venue.title), venue_url(venue)) %>
+            <p class='detail'>Added <%= time_ago_in_words(venue.created_at) %> ago</p>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+  <% end %>
 </div>
