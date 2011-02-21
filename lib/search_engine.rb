@@ -37,7 +37,9 @@ class SearchEngine
   #     SearchEngine.add_searching_to(self)
   #   end
   def self.add_searching_to(model)
-    return implementation.add_searching_to(model)
+    if ActiveRecord::Base.connection.tables.include?(model.table_name)
+      return implementation.add_searching_to(model)
+    end
   end
 
   # Return class to use as search engine.
