@@ -19,11 +19,14 @@ class VenuesController < ApplicationController
     if params[:tag].present? # searching by tag
       @tag = params[:tag]
       @venues = scoped_venues.tagged_with(@tag)
-    elsif params.has_key?(:query) || params[:all] == '1' # searching by query
+    elsif params.has_key?(:query) || params.has_key?(:val) || params[:all] == '1' # searching by query
       scoped_venues = scoped_venues.with_public_wifi if params[:wifi]
 
-      conditions = ["title LIKE :query OR description LIKE :query", {:query => "%#{params[:query]}%"}] \
-        if params[:query].present?
+      if params[:val].present? # for the ajax autocomplete widget
+        conditions = ["title LIKE :query", {:query => "%#{params[:val]}%"}]
+      elsif params[:query].present?
+        conditions = ["title LIKE :query OR description LIKE :query", {:query => "%#{params[:query]}%"}]
+      end
 
       @venues = scoped_venues.find(:all, :order => 'lower(title)', :conditions => conditions)
     else # default view
