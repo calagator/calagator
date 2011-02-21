@@ -35,10 +35,10 @@ class VenuesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml  => @venues || scoped_venues.non_duplicates }
-      format.json { render :json => @venues || scoped_venues.non_duplicates, :callback => params[:callback] }
-      format.js   { render :json => @venues || scoped_venues.non_duplicates, :callback => params[:callback] }
-      format.kml  { @venues ||= scoped_venues.non_duplicates; render } # index.kml.erb
+      format.xml  { render :xml  => @venues || scoped_venues }
+      format.json { render :json => @venues || scoped_venues, :callback => params[:callback] }
+      format.js   { render :json => @venues || scoped_venues, :callback => params[:callback] }
+      format.kml  { @venues ||= scoped_venues; render } # index.kml.erb
     end
   end
 
