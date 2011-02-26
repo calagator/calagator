@@ -3,16 +3,48 @@
 # The SearchEngine class and associated logic provide a pluggable search engine
 # for Calagator.
 #
-# Parts:
-# * SearchEngine: This class is used to activate search engines, query their
-#   capabilities and add searching to models.
-# * SearchEngine implementation: E.g. SearchEngine::Sunspot describes the
-#   behavior of the `sunspot` search engine.
-# * Secrets: The `search_engine` setting in the `config/secets.yml` specifies the
-#   particular search engine to use, such as `sunspot`.
-# * Environment: The `config/environment.rb` loads the specified search
-# 	engine's plugins and libraries, and configures them.
-class SearchEngine
+# If you're administering a Calagator instance and are looking for instructions
+# on configuring search, see the `INSTALL.md` file's "Search engine" section.
+#
+# == Things related to searching
+#
+# === Secrets
+#
+# Administrators of a Calagator instance can specify which search engine to use
+# by setting the `search_engine` field in the `config/secets.yml` to the name
+# of the search engine to use, e.g. `sunspot`. If one isn't set, a sensible
+# default search engine is used.
+#
+# === SearchEngine
+#
+# This module activates a search engine implementation, queries its
+# capabilities, and adds searching to models, e.g.:
+#
+#   class MyModel < ActiveRecord::Base
+#     include SearchEngine
+#   end
+#
+# ===  SearchEngine::Base
+#
+# Base class for search engine implementations.
+#
+# === SearchEngine implementations, e.g. SearchEngine::Sunspot
+#
+# These classes describe the behavior of a particular search engine. These
+# inject code into models that `include SearchEngine`.
+#
+# == Environment
+#
+# The `config/environment.rb` activates a search engine implementation, and
+# specifies, loads and configures any libraries it requires.
+module SearchEngine
+  # Add searching to the ActiveRecord +model+ class, e.g. Event.
+  def self.included(model)
+    if ActiveRecord::Base.connection.tables.include?(model.table_name)
+      return implementation.add_searching_to(model)
+    end
+  end
+
   # Set kind of search engine to use, e.g. :acts_as_solr.
   def self.kind=(value)
     case value
@@ -28,18 +60,6 @@ class SearchEngine
   # Return kind of search engine to use, e.g. :acts_as_solr.
   def self.kind
     return @@kind
-  end
-
-  # Add searching to the specified class.
-  #
-  # Example:
-  #   class User < ActiveRecord::Base
-  #     SearchEngine.add_searching_to(self)
-  #   end
-  def self.add_searching_to(model)
-    if ActiveRecord::Base.connection.tables.include?(model.table_name)
-      return implementation.add_searching_to(model)
-    end
   end
 
   # Return class to use as search engine.

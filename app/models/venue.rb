@@ -24,7 +24,7 @@
 #
 
 class Venue < ActiveRecord::Base
-  SearchEngine.add_searching_to(self)
+  include SearchEngine
 
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
 

@@ -1,3 +1,23 @@
+require 'lib/search_engine'
+
+# = SearchEngine::Base
+#
+# This class describes common behavior for search engine implementations, e.g.
+# the Sunspot search engine implementation would subclass this.
+#
+# == Usage
+#
+# Create a subclass to describe your search engine, indicate whether the search
+# engine provides a ::score to rank the relevance of matches, and
+# ::add_searching_to method for adding this search engine's logic to the model.
+#
+#   class SearchEngine::Foo < SearchEngine::Base
+#     score true
+#
+#     def self.add_searching_to(model)
+#       ...
+#     end
+#   end
 class SearchEngine::Base
   def self.inherited(subclass)
     subclass.class_eval do
