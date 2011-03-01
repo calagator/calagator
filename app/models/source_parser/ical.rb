@@ -54,7 +54,7 @@ class SourceParser # :nodoc:
 
       content_calendars = content.scan(CALENDAR_CONTENT_RE)
 
-      returning([]) do |events|
+      [].tap do |events|
         for content_calendar in content_calendars
           content_venues = content_calendar.scan(VENUE_CONTENT_RE)
 

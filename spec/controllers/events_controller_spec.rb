@@ -500,7 +500,7 @@ end
 describe EventsController, "when searching" do
 
   it "should search" do
-    Event.should_receive(:search_grouped_by_currentness).and_return({:current => [], :past => []})
+    Event.should_receive(:search_keywords_grouped_by_currentness).and_return({:current => [], :past => []})
 
     post :search, :query => "myquery"
   end
@@ -540,7 +540,7 @@ describe EventsController, "when searching" do
         :current => [events(:calagator_codesprint), events(:tomorrow)],
         :past    => [events(:old_event)],
       }
-      Event.should_receive(:search_grouped_by_currentness).and_return(@results)
+      Event.should_receive(:search_keywords_grouped_by_currentness).and_return(@results)
     end
 
     it "should produce HTML" do

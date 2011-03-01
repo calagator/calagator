@@ -16,11 +16,10 @@
 #
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
 class Source < ActiveRecord::Base
+  include SearchEngine
+
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
   
-  unless RAILS_ENV == 'test'
-      acts_as_solr
-  end
   validate :assert_url
 
   has_many :events
@@ -110,7 +109,7 @@ class Source < ActiveRecord::Base
     self.imported_at = Time.now
     if valid?
       opts[:url] ||= self.url
-      returning([]) do |events|
+      [].tap do |events|
         SourceParser.to_abstract_events(opts).each do |abstract_event|
           event = Event.from_abstract_event(abstract_event, self)
 

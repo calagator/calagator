@@ -5,7 +5,7 @@
 # ENV['RAILS_ENV'] ||= 'production'
 
 # Specifies gem version of Rails to use when vendor/rails is not present
-RAILS_GEM_VERSION = '2.3.5' unless defined? RAILS_GEM_VERSION
+RAILS_GEM_VERSION = '2.3.10' unless defined? RAILS_GEM_VERSION
 
 # Bootstrap the Rails environment, frameworks, and default configuration
 require File.join(File.dirname(__FILE__), 'boot')
@@ -22,20 +22,20 @@ Rails::Initializer.run do |config|
 
   # Specify gems that this application depends on. 
   # They can then be installed with "rake gems:install" on new installations.
-  config.gem 'htmlentities', :version => '4.0.0'
+  config.gem 'htmlentities', :version => '4.2.3'
   config.gem 'vpim', :version => '0.695'
   config.gem 'lucene_query' # bundled
-  # NOTE: There's an evil 'has_many_polymorphs' 2.13 that's broken, and a 'johnsbrn-has_many_polymorphs' 2.13.3 that that only works with Rails 2.2
-  # config.gem 'has_many_polymorphs', :version => '2.12'
-  config.gem 'johnsbrn-has_many_polymorphs', :lib => 'has_many_polymorphs', :source => 'http://gems.github.com', :version => '>=2.13.4'
-  config.gem 'airblade-paper_trail', :lib => 'paper_trail', :source => 'http://gems.github.com', :version => '1.1.1'
-  config.gem 'mislav-will_paginate', :lib => 'will_paginate', :source => 'http://gems.github.com', :version => '2.3.11'
-  config.gem 'columnize', :version => '0.3.0'
+  config.gem 'paper_trail', :version => '1.6.4'
+  config.gem 'will_paginate', :version => '2.3.15'
+  config.gem 'columnize', :version => '0.3.2'
   config.gem 'linecache', :version => '0.43'
-  config.gem 'hpricot', :version => '0.8.1'
-  config.gem 'rubyzip', :lib =>  'zip/zip', :version => '0.9.1'
-  config.gem 'facets', :version => '2.5.2', :lib => false
-  config.gem 'ri_cal', :version => '0.8.5'
+  config.gem 'hpricot', :version => '0.8.3'
+  config.gem 'rubyzip', :lib =>  'zip/zip', :version => '0.9.4'
+  config.gem 'ri_cal', :version => '0.8.7'
+  config.gem 'annotate-models', :version => '1.0.4', :lib => false
+  # NOTE: mofo 0.2.9 and above are evil, defining their own defective Object#try method and are unable to extract "postal-code" address fields from hCalendar. Mofo is used in Calagator's SourceParser::Hcal and throughout for String#strip_html. The library has been abandoned and its author recommends switching to the incompatible "prism" gem.
+  config.gem 'mofo', :version => '0.2.8'
+  config.gem 'geokit', :version => '1.5.0'
 
   case RAILS_ENV
   when "test", "development"
@@ -89,21 +89,36 @@ Rails::Initializer.run do |config|
   # config.active_record.default_timezone = :utc
   # FIXME Figure out why ActiveRecord hasn't been told to use UTC timezone by default.
 
-  #---[ Custom ]----------------------------------------------------------
+  #---[ Plugins ]---------------------------------------------------------
 
-  config.load_paths += %W[
+  config.plugins = [
+    :catch_cookie_exception,
+    :exception_notification,
+    :gmaps_on_rails,
+    :has_many_polymorphs,
+    :jrails,
+    :theme_support,
+    :white_list,
+  ]
+
+  #---[ Path -------------------------------------------------------------
+
+  config.autoload_paths += %W[
     #{RAILS_ROOT}/app/mixins
     #{RAILS_ROOT}/app/observers
   ]
+
+  config.eager_load_paths += %W[
+    #{RAILS_ROOT}/lib
+  ]
+
+  #---[ Caching ]---------------------------------------------------------
 
   cache_path = "#{RAILS_ROOT}/tmp/cache/#{RAILS_ENV}"
   config.cache_store = :file_store, cache_path
   FileUtils.mkdir_p(cache_path)
   
-  #---[ Custom libraries ]------------------------------------------------
-
-  # Load custom libraries before "config/initializers" run.
-  $LOAD_PATH.unshift("#{RAILS_ROOT}/lib")
+  #---[ Secrets and settings ]--------------------------------------------
 
   # Read secrets
   require 'secrets_reader'
@@ -134,9 +149,33 @@ Rails::Initializer.run do |config|
 
   # Set cookie session
   config.action_controller.session = {
-    :session_key => SECRETS.session_name || "calagator",
+    :key => SECRETS.session_name || "calagator",
     :secret => SECRETS.session_secret,
   }
+
+  # Activate search engine
+  require 'lib/search_engine'
+  SearchEngine.kind = SECRETS.search_engine
+  case SearchEngine.kind
+  when :acts_as_solr
+    config.plugins << :acts_as_solr
+  when :sunspot
+    # The +require+ calls below are needed to make Sunspot available to Rake.
+    # The +rescue+ calls below are needed so that `rake gems:install` can
+    # install Sunspot.
+    config.gem 'sunspot', :lib => 'sunspot', :version => '1.2.1'
+    begin
+      require 'sunspot'
+    rescue LoadError => e
+      # Ignore
+    end
+    config.gem 'sunspot_rails', :lib => 'sunspot/rails', :version => '1.2.1'
+    begin
+      require 'sunspot/rails'
+    rescue LoadError => e
+      # Ignore
+    end
+  end
 end
 
 # NOTE: See config/initializers/ directory for additional code loaded at start-up

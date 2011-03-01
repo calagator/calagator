@@ -17,7 +17,7 @@ describe EventsHelper do
 
 it "should return special string when using a tag" do
       assigns[:tag] = Tag.new
-      helper.events_sort_label(nil).should =~ / by .+#{Event::SORTING_LABELS['date']}.+/
+      helper.events_sort_label(nil).should =~ / by .+#{Event::SORTING_LABELS['default']}.+/
     end
   end
 

@@ -1,7 +1,11 @@
 cache "changes-show-atom" do
 atom_feed do |feed|
   feed.title("#{SETTINGS.name} detailed changes")
-  feed.updated(@versions.ergo{|v| v.first.created_at } || Time.at(0))
+  date = \
+    @versions ?
+      @versions.first.created_at :
+      Time.at(0)
+  feed.updated(date)
 
   @versions.each do |version|
     feed.entry(version, :url => recent_changes_path(:anchor => "#{version.id}")) do |entry|
