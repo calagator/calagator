@@ -47,7 +47,7 @@ class VenuesController < ApplicationController
 
   # GET /venues/map
   def map
-    @venues = Venue.in_business
+    @venues = Venue.non_duplicates.in_business
   end
 
   # GET /venues/1
