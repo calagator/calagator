@@ -1,4 +1,20 @@
 namespace :data do
+  def restart_search_service
+    case SearchEngine.kind
+    when :acts_as_solr
+      puts "* Restarting acts_as_solr's solr..."
+      Rake::Task['solr:restart'].invoke
+    when :sunspot
+      puts "* Restarting sunspot's solr..."
+      begin
+        Rake::Task['sunspot:solr:stop'].invoke
+      rescue Sunspot::Server::NotRunningError:
+        # Ignore
+      end
+      Rake::Task['sunspot:solr:start'].invoke
+    end
+  end
+
   task :prepare => [:environment] do
     require 'lib/data_marshal'
     require 'lib/downloader'
@@ -16,8 +32,8 @@ namespace :data do
     DataMarshal.restore(filename)
     puts "* Restored state from #{filename}"
 
-    Rake::Task['solr:restart'].invoke
-    
+    restart_search_service
+
     puts "* Done"
   end
 
@@ -33,8 +49,9 @@ namespace :data do
     puts "* Replacing data..."
     DataMarshal.restore(target)
 
-    Rake::Task['solr:restart'].invoke
+    restart_search_service
 
+    puts "* Migrating database..."
     Rake::Task['db:migrate'].invoke
 
     puts "* Done"
