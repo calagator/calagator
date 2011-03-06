@@ -41,7 +41,7 @@ ActionController::Routing::Routes.draw do |map|
   # Normal controllers
   map.resources :events, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'search' => :get}, :member => {'clone' => :get}
   map.resources :sources, :collection => { :import => :put }
-  map.resources :venues, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post}
+  map.resources :venues, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'map' => :get}
 
   # Export action
   map.connect 'export', :controller => 'site', :action => 'export'

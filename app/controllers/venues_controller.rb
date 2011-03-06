@@ -4,25 +4,50 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
-    @tag = nil
-    if params[:tag].present?
-      @tag = params[:tag]
-      @venues = Venue.tagged_with(@tag)
-    elsif params[:val].present?
-      @venues = Venue.find(:non_duplicates, :order => 'lower(title)', :conditions => ["title LIKE ?", "%#{params[:val]}%"])
+    scoped_venues = Venue.non_duplicates
+
+    # Pick a subset of venues (we want in_business by default)
+    if params[:include_closed]
+      scoped_venues = scoped_venues
+    elsif params[:closed]
+      scoped_venues = scoped_venues.out_of_business
     else
-      @venues = Venue.find(:non_duplicates, :order => 'lower(title)')
+      scoped_venues = scoped_venues.in_business
+    end
+
+    @tag = nil
+    if params[:tag].present? # searching by tag
+      @tag = params[:tag]
+      @venues = scoped_venues.tagged_with(@tag)
+    elsif params.has_key?(:query) || params.has_key?(:val) || params[:all] == '1' # searching by query
+      scoped_venues = scoped_venues.with_public_wifi if params[:wifi]
+
+      if params[:val].present? # for the ajax autocomplete widget
+        conditions = ["title LIKE :query", {:query => "%#{params[:val]}%"}]
+      elsif params[:query].present?
+        conditions = ["title LIKE :query OR description LIKE :query", {:query => "%#{params[:query]}%"}]
+      end
+
+      @venues = scoped_venues.find(:all, :order => 'lower(title)', :conditions => conditions)
+    else # default view
+      @most_active_venues = scoped_venues.find(:all, :limit => 10, :order => 'events_count DESC')
+      @newest_venues = scoped_venues.find(:all, :limit => 10, :order => 'created_at DESC')
     end
 
     @page_title = "Venues"
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @venues }
-      format.json { render :json => @venues, :callback => params[:callback] }
-      format.js   { render :json => @venues, :callback => params[:callback] }
-      format.kml  # index.kml.erb
+      format.xml  { render :xml  => @venues || scoped_venues }
+      format.json { render :json => @venues || scoped_venues, :callback => params[:callback] }
+      format.js   { render :json => @venues || scoped_venues, :callback => params[:callback] }
+      format.kml  { @venues ||= scoped_venues; render } # index.kml.erb
     end
+  end
+
+  # GET /venues/map
+  def map
+    @venues = Venue.non_duplicates.in_business
   end
 
   # GET /venues/1

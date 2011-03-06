@@ -33,7 +33,7 @@ class Event < ActiveRecord::Base
   has_paper_trail
 
   # Associations
-  belongs_to :venue
+  belongs_to :venue, :counter_cache => true
   belongs_to :source
 
   # Triggers

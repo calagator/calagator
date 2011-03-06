@@ -44,3 +44,7 @@ ul.event_list .list_date {
   margin-left: -10em;
   margin-top: 1.5em;
 }
+
+#venues_search form div {
+  *display: inline;
+}

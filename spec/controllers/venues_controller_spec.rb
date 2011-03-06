@@ -52,13 +52,97 @@ describe VenuesController do
   end
 
   describe "when rendering the venues index" do
+    before(:all) do
+      @open_venue = Venue.create!(:title => 'Open Town', :description => 'baz')
+      @closed_venue = Venue.create!(:title => 'Closed Down', :closed => true)
+      @wifi_venue = Venue.create!(:title => "Internetful", :wifi => true)
+    end
+
+    describe "with no parameters" do
+      before do
+        get :index
+      end
+
+      it "should assign @most_active_venues and @newest_venues by default" do
+        get :index
+        assigns[:most_active_venues].should_not be_nil
+        assigns[:newest_venues].should_not be_nil
+      end
+
+      it "should not included closed venues" do
+        assigns[:newest_venues].should_not include @closed_venue
+      end
+    end
+
+    describe "and showing all venues" do
+      it "should include closed venues when asked to with the include_closed parameter" do
+        get :index, :all => '1', :include_closed => '1'
+        assigns[:venues].should include @closed_venue
+      end
+
+      it "should include ONLY closed venues when asked to with the closed parameter" do
+        get :index, :all => '1', :closed => '1'
+        assigns[:venues].should include @closed_venue
+        assigns[:venues].should_not include @open_venue
+      end
+    end
+
+    describe "when searching" do
+      describe "for public wifi (and no keyword)" do
+        before do
+          get :index, :query => '', :wifi => '1'
+        end
+
+        it "should only include results with public wifi" do
+          assigns[:venues].should include @wifi_venue
+          assigns[:venues].should_not include @open_venue
+        end
+      end
+
+      describe "when searching by keyword" do
+        it "should find venues by title" do
+          get :index, :query => 'Open Town'
+          assigns[:venues].should include @open_venue
+          assigns[:venues].should_not include @wifi_venue
+        end
+        it "should find venues by description" do
+          get :index, :query => 'baz'
+          assigns[:venues].should include @open_venue
+          assigns[:venues].should_not include @wifi_venue
+        end
+
+        describe "and requiring public wifi" do
+          it "should not find venues without public wifi" do
+            get :index, :query => 'baz', :wifi => '1'
+            assigns[:venues].should_not include @open_venue
+            assigns[:venues].should_not include @wifi_venue
+          end
+        end
+      end
+
+      describe "when searching by title (for the ajax selector)" do
+        it "should find venues by title" do
+          get :index, :val => 'Open Town'
+          assigns[:venues].should include @open_venue
+          assigns[:venues].should_not include @wifi_venue
+        end
+        it "should NOT find venues by description" do
+          get :index, :val => 'baz'
+          assigns[:venues].should_not include @open_venue
+        end
+        it "should NOT find closed venues" do
+          get :index, :val => 'closed'
+          assigns[:venues].should_not include @closed_venue
+        end
+      end
+    end
+
     it "should be able to return events matching specific tag" do
       Venue.should_receive(:tagged_with).with("foo").and_return([])
       get :index, :tag => "foo"
     end
 
     describe "in JSON format" do
-
       it "should produce JSON" do
         get :index, :format => "json"
 
@@ -71,7 +155,6 @@ describe VenuesController do
 
         response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
       end
-
     end
 
   end

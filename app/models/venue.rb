@@ -56,13 +56,17 @@ class Venue < ActiveRecord::Base
 
   # Duplicates
   include DuplicateChecking
-  duplicate_checking_ignores_attributes    :source_id, :version
+  duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi
   duplicate_squashing_ignores_associations :tags
 
   # Named scopes
   named_scope :masters,
     :conditions => ['duplicate_of_id IS NULL'],
     :include => [:source, :events, :tags, :taggings]
+
+  named_scope :with_public_wifi, :conditions => { :wifi   => true }
+  named_scope :in_business, :conditions      => { :closed => false }
+  named_scope :out_of_business, :conditions  => { :closed  => true }
 
   #===[ Instantiators ]===================================================
 

@@ -9,11 +9,12 @@
     <h1 class="summary"><%= cleanse @event.title.strip_html %></h1>
     <div class='date'><%= normalize_time(@event) -%></div>
       <% unless @event.venue.blank? %>
-      <div class="location vcard">
+      <div class="clearfix location vcard<%= " closed" if @event.venue.closed? %>">
       <%= google_map @event %>
           <a class="url" href='<%= url_for venue_url(@event.venue) %>'>
             <span class='fn org'><%= cleanse @event.venue.title.strip_html -%></span>
           </a>
+          <% if @event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
           <div class="adr">
           <% if !@event.venue.street_address.blank? -%>
           <div class="street-address"><%= cleanse @event.venue.street_address -%></div>
@@ -33,6 +34,19 @@
             <% if @event.venue && @event.venue.has_full_address? -%>
             (<a href='<%=google_maps_url(@event.venue.full_address) -%>'>map</a>)
             <% end -%>
+
+            <% if @event.venue.wifi? %>
+              <div class='wifi_callout'>Public WiFi</div>
+            <% end %>
+
+
+            <% if @event.venue.access_notes.present? %>
+              <div class="access_notes">
+                <h3>Access Notes</h3>
+                <%= h @event.venue.access_notes %>
+              </div>
+            <% end %>
+
       </div>
     </div>
     <% end -%>
