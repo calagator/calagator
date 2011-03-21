@@ -18,8 +18,6 @@
 class Source < ActiveRecord::Base
   include SearchEngine
 
-  Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
-  
   validate :assert_url
 
   has_many :events,  :dependent => :destroy
