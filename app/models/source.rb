@@ -22,9 +22,9 @@ class Source < ActiveRecord::Base
   
   validate :assert_url
 
-  has_many :events
-  has_many :venues
-  has_many :updates
+  has_many :events,  :dependent => :destroy
+  has_many :venues,  :dependent => :destroy
+  has_many :updates, :dependent => :destroy
 
   # Return a newly-created or existing Source record matching the given
   # attributes. The +attrs+ hash is the same format as used when calling
