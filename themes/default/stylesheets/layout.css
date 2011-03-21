@@ -701,6 +701,7 @@ fieldset .help {
 
 .sources_index td {
   vertical-align: top;
+  white-space: nowrap;
 }
 
 .sources_index tr.odd td {

@@ -3,10 +3,14 @@
 <% end %>
 
 <p>
-  <b>Url:</b>
+  <b>URL:</b>
   <%=h @source.url %>
 </p>
 
+<p>
+   <b>Events:</b>
+   <%= render :partial => 'events/list', :locals => { :events =>  @source.events } %>
+</p>
 
-<%= link_to 'Edit', edit_source_path(@source) %> |
-<%= link_to 'Back', sources_path %>
+<%= link_to 'Back', sources_path %> |
+<%= link_to 'Destroy', @source, :confirm => 'Are you sure?', :method => :delete %>

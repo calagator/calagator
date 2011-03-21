@@ -8,8 +8,11 @@
 
   <% for source in @sources %>
   <tr class="<%= cycle 'odd', 'even' %>">
-    <td><%= link_to 'Destroy', source, :confirm => 'Are you sure?', :method => :delete %></td>
-    <td nowrap="true"><%=h source.url %></td>
+    <td>
+      <%= link_to 'Show', source %> | 
+      <%= link_to 'Destroy', source, :confirm => 'Are you sure?', :method => :delete %>
+    </td>
+    <td><%=h source.url %></td>
   </tr>
   <% end %>
 </table>
