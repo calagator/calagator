@@ -26,6 +26,8 @@ class Source < ActiveRecord::Base
 
   named_scope :listing, :order => 'created_at DESC'
 
+  has_paper_trail
+
   # Return a newly-created or existing Source record matching the given
   # attributes. The +attrs+ hash is the same format as used when calling
   # Source::new.
