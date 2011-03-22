@@ -18,13 +18,15 @@
 class Source < ActiveRecord::Base
   include SearchEngine
 
-  Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
-  
   validate :assert_url
 
-  has_many :events
-  has_many :venues
-  has_many :updates
+  has_many :events,  :dependent => :destroy
+  has_many :venues,  :dependent => :destroy
+  has_many :updates, :dependent => :destroy
+
+  named_scope :listing, :order => 'created_at DESC'
+
+  has_paper_trail
 
   # Return a newly-created or existing Source record matching the given
   # attributes. The +attrs+ hash is the same format as used when calling
