@@ -1,4 +1,4 @@
-class ChangesController < ApplicationController
+class VersionsController < ApplicationController
   def index
     @versions = Defer { ::Version.paginate(:page => params[:page], :order => 'created_at desc', :per_page => 50) }
     respond_to do |format|

@@ -1,4 +1,4 @@
-module RecentChangesHelper
+module VersionsHelper
   # Return HTML representing the +object+, which is either its text or a stylized "nil".
   def text_or_nil(object)
     if object.nil?

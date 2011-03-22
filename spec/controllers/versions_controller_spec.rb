@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe ChangesController do
+describe VersionsController do
   integrate_views
 
   describe "history" do
