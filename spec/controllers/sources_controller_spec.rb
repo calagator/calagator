@@ -183,7 +183,7 @@ describe SourcesController do
     end
   
     it "should find the source requested" do
-      Source.should_receive(:find).with("1").and_return(@source)
+      Source.should_receive(:find).with("1", :include => [:events, :venues]).and_return(@source)
       do_get
     end
   
@@ -211,7 +211,7 @@ describe SourcesController do
     end
   
     it "should find the source requested" do
-      Source.should_receive(:find).with("1").and_return(@source)
+      Source.should_receive(:find).with("1", :include => [:events, :venues]).and_return(@source)
       do_get
     end
   

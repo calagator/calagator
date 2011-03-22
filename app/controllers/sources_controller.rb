@@ -64,7 +64,7 @@ class SourcesController < ApplicationController
   # GET /sources/1.xml
   def show
     begin
-      @source = Source.find(params[:id])
+      @source = Source.find(params[:id], :include => [:events, :venues])
     rescue ActiveRecord::RecordNotFound => e
       flash[:failure] = e.to_s if params[:id] != "import"
       return redirect_to(:action => :new)

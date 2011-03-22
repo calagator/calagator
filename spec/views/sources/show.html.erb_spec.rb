@@ -6,6 +6,7 @@ describe "/sources/show.html.erb" do
   before(:each) do
     @source = mock_model(Source)
     @source.stub!(:url).and_return("MyString")
+    @source.stub!(:events).and_return([])
 
     assigns[:source] = @source
   end
