@@ -1,0 +1,45 @@
+<tr class="change_row">
+  <td class="change_time">
+    Version #<%= version.id %>
+    <br>
+    <%= version.created_at.strftime('%Y-%m-%d') %>
+    <br>
+    <%= version.created_at.strftime('%H:%M:%S') %>
+  </td>
+  <td class="change_details">
+    <p class="change_detail_description">
+        <a name="<%= version.id %>">
+        <b><%= version.event.titleize %></b>
+        <%= version.item_type %>
+        <%= link_to "&laquo;#{title_for(version)}&raquo;", url_for(:controller => version.item_type.tableize, :action => "show", :id => version.item_id) %>
+        &mdash;
+        <%= link_to "(Rollback)", version, :method => :put, :confirm => 'Are you sure?' %>
+        <% if version.whodunnit %>
+          <% if user = Member.find(version.whodunnit) rescue nil %>
+            by <%= link_to h(user.name), member_path(user) %>
+          <% end %>
+        <% end %>
+      </a>
+    </p>
+
+    <% changes = changes_for(version) %>
+
+    <table cellspacing="0" class="changes_details_table">
+      <% changes.keys.sort.each do |key| %>
+        <tr class="<%= cycle('odd', 'even', :name => 'change_detail') %>">
+          <td class="change_detail_key">
+            <b><%= key %></b>
+          </td>
+          <td class="change_detail_value">
+            <%= text_or_nil(changes[key][:previous]) %>
+          </td>
+          <td class="change_detail_spacer">&rarr;</td>
+          <td class="change_detail_value">
+            <%= text_or_nil(changes[key][:current]) %>
+          </td>
+        </tr>
+      <% end %>
+      <% reset_cycle('change_detail') %>
+    </table>
+  </td>
+</tr>
