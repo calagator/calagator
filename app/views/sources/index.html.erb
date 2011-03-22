@@ -12,7 +12,7 @@
       <%= link_to 'Show', source %> | 
       <%= link_to 'Destroy', source, :confirm => 'Are you sure?', :method => :delete %>
     </td>
-    <td><%=h source.url %></td>
+    <td><%= source_url_link source %></td>
   </tr>
   <% end %>
 </table>
