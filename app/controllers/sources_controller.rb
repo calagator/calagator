@@ -143,7 +143,7 @@ class SourcesController < ApplicationController
 protected
 
   def disable_imports
-    flash[:error] = "Importing has been disabled because it's being abused to create thousands of spammy, unrelated events."
+    flash[:failure] = "The ability to import events has been temporarily disabled because it's being abused to create thousands of spammy, unwanted events. If you have a solution, please join the discussion at the <a href='http://groups.google.com/group/pdx-tech-calendar/'>Forum</a>."
     redirect_to root_path
   end
 
