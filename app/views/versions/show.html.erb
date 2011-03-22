@@ -1,0 +1,13 @@
+<% cache "changes-show,#{@version.id}" do %>
+<h1>Changes</h1>
+
+<%= link_to "Changes feed", versions_url(:format => "atom") %>
+
+<table cellspacing="0" id="changes_table">
+  <tr>
+    <th class="change_time">Time</th>
+    <th class="change_details">Details with previous and current values</th>
+  </tr>
+  <%= render :partial => 'version', :object => @version %>
+</table>
+<% end %>

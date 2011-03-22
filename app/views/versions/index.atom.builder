@@ -8,7 +8,7 @@ atom_feed do |feed|
   feed.updated(date)
 
   @versions.each do |version|
-    feed.entry(version, :url => recent_changes_path(:anchor => "#{version.id}")) do |entry|
+    feed.entry(version, :url => version_url(version)) do |entry|
       changes = changes_for(version)
       user = Member.find(version.whodunnit) rescue nil
 
