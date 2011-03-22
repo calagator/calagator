@@ -1,6 +1,8 @@
 class SourcesController < ApplicationController
   MAXIMUM_EVENTS_TO_DISPLAY_IN_FLASH = 5
-  
+
+  before_filter :disable_imports, :only => [:new, :import]
+
   # Import sources
   def import
     @source = Source.find_or_create_from(params[:source])
@@ -137,4 +139,12 @@ class SourcesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+
+protected
+
+  def disable_imports
+    flash[:error] = "Importing has been disabled because it's being abused to create thousands of spammy, unrelated events."
+    redirect_to root_path
+  end
+
 end
