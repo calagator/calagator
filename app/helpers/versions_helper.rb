@@ -72,7 +72,12 @@ module VersionsHelper
     previous = version.reify rescue nil
     record = version.item_type.constantize.find(version.item_id) rescue nil
 
-    title = previous.try(:title) || current.try(:title) || record.try(:title)
+    object = [previous, current, record].find { |o| o.present? }
+    method = case object
+             when Source then :url
+             else :title
+             end
+    title =  truncate(object.send(method), :length => 100)
     return h(title)
   end
 end
