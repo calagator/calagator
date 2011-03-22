@@ -24,10 +24,16 @@ class ChangesController < ApplicationController
     end
 
     if @result
-      redirect_to url_for(:controller => @version.item_type.tableize, :action => "show", :id => @version.item_id)
+      if @version.event == "create"
+        flash[:success] = "Rolled back to destroy record."
+        redirect_to :action => :show
+      else
+        flash[:success] = "Rolled back record to earlier state."
+        redirect_to url_for(:controller => @version.item_type.tableize, :action => "show", :id => @version.item_id)
+      end
     else
       flash[:failure] = "Couldn't rollback. Sorry."
-      return(redirect_to(:action => :show))
+      redirect_to :action => :show
     end
   end
 end
