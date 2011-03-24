@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
-include RecentChangesHelper
+include VersionsHelper
 
-describe RecentChangesHelper do
+describe VersionsHelper do
   describe "when creating item" do
     before(:each) do
       @item = Venue.create!(:title => "Venue")

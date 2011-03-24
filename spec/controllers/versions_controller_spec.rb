@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
-describe ChangesController do
+describe VersionsController do
   integrate_views
 
   describe "history" do
@@ -17,9 +17,9 @@ describe ChangesController do
       @venue.destroy
     end
 
-    describe "show" do
+    describe "index" do
       before(:each) do
-        get :show
+        get :index
         @versions = assigns[:versions].__value # Use #__value to extract data from DeferProxy
         @create_version  = @versions.find{|version| version.item_id == @venue.id && version.event == "create"}
         @update_version  = @versions.find{|version| version.item_id == @venue.id && version.event == "update"}
@@ -49,7 +49,10 @@ describe ChangesController do
       end
     end
 
-    describe "rollback_to" do
+    describe "show" do
+    end
+
+    describe "update" do
       before(:each) do
         @versions = Version.all
         @create_version  = @versions.find{|version| version.item_id == @venue.id && version.event == "create"}
@@ -61,30 +64,34 @@ describe ChangesController do
         Venue.should_receive(:find).and_return(@venue)
         @venue.should_receive(:destroy).and_return(true)
 
-        post :rollback_to, :version => @create_version.id
+        put :update, :id => @create_version.id
+
+        response.should redirect_to(versions_path)
       end
 
       it "should rollback an update" do
         lambda { Venue.find(@venue.id) }.should raise_error(ActiveRecord::RecordNotFound)
 
-        post :rollback_to, :version => @update_version.id
+        put :update, :id => @update_version.id
 
         Venue.find(@venue.id).title.should == "Venue"
+        response.should redirect_to(venue_path @venue)
       end
 
       it "should rollback a destroy" do
         lambda { Venue.find(@venue.id) }.should raise_error(ActiveRecord::RecordNotFound)
 
-        post :rollback_to, :version => @destroy_version.id
+        put :update, :id => @destroy_version.id
 
         Venue.find(@venue.id).title.should == "My Venue"
+        response.should redirect_to(venue_path @venue)
       end
 
       it "should fail on invalid version" do
-        post :rollback_to, :version => "-1"
+        put :update, :id => "-1"
 
         flash[:failure].should_not be_blank
-        response.should redirect_to(recent_changes_path)
+        response.should redirect_to(versions_path)
       end
 
       it "should fail on invalid rollback" do
@@ -92,10 +99,10 @@ describe ChangesController do
         Venue.stub!(:find).and_return(venue)
         venue.should_receive(:save).and_return(false)
 
-        post :rollback_to, :version => @destroy_version.id
+        put :update, :id => @destroy_version.id
 
         flash[:failure].should_not be_blank
-        response.should redirect_to(recent_changes_path)
+        response.should redirect_to(versions_path)
       end
     end
   end
