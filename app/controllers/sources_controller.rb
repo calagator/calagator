@@ -143,7 +143,7 @@ class SourcesController < ApplicationController
 protected
 
   def disable_imports
-    flash[:failure] = "The ability to import events has been temporarily disabled because it's being abused to create thousands of spammy, unwanted events. If you have a solution, please join the discussion at the <a href='http://groups.google.com/group/pdx-tech-calendar/'>Forum</a>."
+    flash[:failure] = %{Importing events has been temporarily disabled due to abusive imports of thousands of inappropriate events, so please use the "<a href="/events/new">add an event</a>" form instead to add only events relvant to the Portland tech community. If you have ideas on dealing with inappropriate imports, please join the discussion at the <a href='http://groups.google.com/group/pdx-tech-calendar/'>Forum</a>.}
     redirect_to root_path
   end
 
