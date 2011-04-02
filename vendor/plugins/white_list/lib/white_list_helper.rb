@@ -56,7 +56,7 @@ module WhiteListHelper
     attrs   = Set.new(options[:attributes]).merge(white_listed_attributes)
     tags    = Set.new(options[:tags]      ).merge(white_listed_tags)
     block ||= lambda { |node, bad| white_listed_bad_tags.include?(bad) ? nil : node.to_s.gsub(/</, '&lt;') }
-    returning [] do |new_text|
+    [].tap do |new_text|
       tokenizer = HTML::Tokenizer.new(html)
       bad       = nil
       while token = tokenizer.next

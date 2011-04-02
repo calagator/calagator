@@ -14,7 +14,10 @@ class ActiveRecord::Base #:nodoc:
     end
     
     def apply_cached_tags
-      tag_with @cached_tags if taggable? && !@cached_tags.blank?
+      if taggable? && !@cached_tags.blank?
+        tag_with @cached_tags 
+        @cached_tags = ""
+      end
     end
     
     # Add tags to <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, an array of ids, or an array of Tags.
@@ -76,8 +79,11 @@ class ActiveRecord::Base #:nodoc:
     end
     
     def tag_list=(value)
-      tag_with value unless new_record?
-      @cached_tags = value if new_record?
+      if new_record?
+        @cached_tags = value
+      else
+        tag_with value
+      end
     end
     
     private

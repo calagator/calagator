@@ -254,15 +254,27 @@ ul.event_list .list_date {
 .single_event .location.vcard {
   background: #e8fbfe;
   width: 45em;
-  height: 16em;
+  /* height: 16em;*/
   padding: 1em;
   margin: 2em 0 2em -1em;
+}
+
+.single_event .location.vcard.closed {
+  background: #eee
 }
 
 .single_event .location #google_map {
   width: 25em;
   height: 16em;
   float: right;
+}
+
+.single_event .location .access_notes {
+  margin-top: 1em
+}
+
+.single_event .location .access_notes h3 {
+  display: block;
 }
 
 .single_event .location .fn {
@@ -299,6 +311,78 @@ ul.event_list .list_date {
   float: right;
 }
 
+#venues_index h1 {
+  margin-bottom: .25em;
+}
+
+#venues_index p.detail {
+  margin-bottom: 0;
+  color: #aaa;
+}
+
+#venues_index ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+#venues_index li {
+  margin-bottom: .25em
+}
+
+#venues_index li a {
+  font-weight: bold;
+}
+
+#venues_search_results li {
+  margin-bottom: .5em;
+}
+
+#venues_search {
+  background: #e8fbfe;
+  padding: 1em;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+#venues_search h2 {
+  float: left;
+  margin: 0 1em 0 0;
+}
+
+#venues_search form div {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+#venue_portal {
+}
+
+#venue_portal #most_active,
+#venue_portal #newest,
+#venue_portal #exports {
+  float: left;
+  padding: 1em 1em 2em 0;
+}
+
+#venue_portal #most_active,
+#venue_portal #newest {
+  width: 300px;
+  border-right: 1px solid #e9e9e9;
+  margin-right: 2em;
+}
+
+#venue_portal #exports h3 {
+  margin-top: .5em;
+}
+
+#venue_portal h3 {
+  margin-bottom: .5em;
+}
+
+#venues_map #google_map {
+  width: 100%;
+  height: 650px;
+}
+
 /* @end */
 
 
@@ -306,17 +390,88 @@ ul.event_list .list_date {
 ----------------------------------------*/
 
 .single_venue .location.vcard {
-  background: #e8fbfe;
-  width: 45em;
-  height: 16em;
+  /* background: #e8fbfe;*/
+  /* width: 45em;*/
+  /* height: 16em;*/
   padding: 1em;
-  margin: 2em 0 2em -1em;
+  margin: 2em 2em 2em -1em;
+}
+
+.location.closed .org {
+  text-decoration: line-through;
+  color: #999;
+  margin-bottom: 0;
+}
+
+.location .closed_callout {
+  margin-top: 0;
+  color: #CE421D;
+  font-weight: bold;
+}
+
+.location .wifi_callout {
+  margin-top: .5em;
+  padding-left: 20px;
+  background: url('/images/transmit_blue.png') no-repeat;
+  font-weight: bold;
+  color: #6098E6
+}
+
+.location .access_notes h3,
+.single_venue .access_notes h3 {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  margin-right: .5em;
+  color: #456FC9;
+  font-size: 1em;
+  font-weight: bold;
+  padding-left: 20px;
+  line-height: 16px;
+  background: url('/images/information.png') no-repeat;
+}
+
+.single_venue .location .adr,
+.single_venue .location .address,
+.single_venue .location .info {
+  font-size: 14px;
+}
+
+.single_venue .location.vcard .adr,
+.single_venue .location.vcard .address {
+  margin-bottom: 1em;
+  float: left;
+  width: 300px;
+}
+
+.single_venue .location .info {
+  float: left;
+}
+
+.single_venue .description,
+.single_venue .tags,
+.single_venue #future_events {
+  float: left;
+  clear: left;
+  width: 500px;
+}
+
+.single_venue .description {
+  background: #e8fbfe;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.single_venue #future_events,
+.single_venue .tags {
+  margin-top: 1em;
 }
 
 .single_venue #google_map {
-  width: 25em;
-  height: 16em;
+  width: 30em;
+  height: 20em;
   float: right;
+  border: 1px solid #222;
 }
 
 .single_venue h3 {
@@ -326,7 +481,6 @@ ul.event_list .list_date {
 }
 
 /* @end */
-
 
 
 /* @group Forms (imported from old UI)
@@ -353,6 +507,18 @@ fieldset > div, #form-contents > div {
 label.checkbox {
   clear: none;
   text-align: left;
+}
+
+form div.checkbox {
+  padding-left: 8em
+}
+
+form div.checkbox label {
+  clear: none;
+  text-align: left;
+  float: none;
+  font-weight: normal;
+  width: auto;
 }
 
 fieldset input {
@@ -510,3 +676,38 @@ fieldset .help {
 }
 
 /* @end */
+
+
+/* float clearing for IE6 */
+* html .clearfix{
+  height: 1%;
+  overflow: visible;
+}
+
+/* float clearing for IE7 */
+*+html .clearfix{
+  min-height: 1%;
+}
+
+/* float clearing for everyone else */
+.clearfix:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+}
+
+.sources_index td {
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.sources_index tr.odd td {
+  background-color: #F2F2F2;
+}
+
+.sources_index tr.even td {
+  background-color: white;
+}

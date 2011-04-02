@@ -9,7 +9,7 @@ describe "/sources/index.html.erb" do
     source_99 = stub_model(Source)
     source_99.should_receive(:url).any_number_of_times.and_return("MyString")
 
-    assigns[:sources] = [source_98, source_99]
+    assigns[:sources] = [source_98, source_99].paginate
   end
 
   it "should render list of sources" do

@@ -24,31 +24,10 @@
 #
 
 class Venue < ActiveRecord::Base
+  include SearchEngine
+
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
 
-  # Names of columns and methods to create Solr indexes for
-  INDEXABLE_FIELDS = \
-    %w(
-      title
-      description
-      address
-      url
-      street_address
-      locality
-      region
-      postal_code
-      country
-      latitude
-      longitude
-      email
-      telephone
-      tag_list
-    ).map(&:to_sym)
-
-  unless RAILS_ENV == 'test'
-    acts_as_solr :fields => INDEXABLE_FIELDS
-  end
-  
   has_paper_trail
 
   include VersionDiff
@@ -77,13 +56,17 @@ class Venue < ActiveRecord::Base
 
   # Duplicates
   include DuplicateChecking
-  duplicate_checking_ignores_attributes    :source_id, :version
+  duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi
   duplicate_squashing_ignores_associations :tags
 
   # Named scopes
   named_scope :masters,
     :conditions => ['duplicate_of_id IS NULL'],
     :include => [:source, :events, :tags, :taggings]
+
+  named_scope :with_public_wifi, :conditions => { :wifi   => true }
+  named_scope :in_business, :conditions      => { :closed => false }
+  named_scope :out_of_business, :conditions  => { :closed  => true }
 
   #===[ Instantiators ]===================================================
 
@@ -117,14 +100,32 @@ class Venue < ActiveRecord::Base
     Event.find_future_events(opts)
   end
 
-  # Return Hash of Venues grouped by the +type+, e.g., a 'title'.
-  # TODO Consider renaming "type" in the method name and arguments to 'attribute'. ActiveRecord uses the term 'type' to mean a STI (Single Table Inheritance) class field, while 'attribute' is analogous to a table's column.
-  def self.find_duplicates_by_type(type='title')
-    if type == 'na'
-      return { [] => self.find(:non_duplicates, :order => 'lower(title)')}
+  # Return Hash of Venues grouped by the +type+, e.g., a 'title'. Each Venue
+  # record will include an <tt>events_count</tt> field containing the number of
+  # events at the venue, which improves performance for displaying these.
+  def self.find_duplicates_by_type(type='na')
+    case type
+    when 'na', nil, ''
+      # The LEFT OUTER JOIN makes sure that venues without any events are also returned.
+      return { [] => \
+        self.all(
+          :select     => 'venues.*, COUNT(DISTINCT events.id) AS events_count',
+          :joins      => 'LEFT OUTER JOIN events ON events.venue_id = venues.id',
+          :group      => 'venues.id',
+          :conditions => 'venues.duplicate_of_id IS NULL',
+          :order      => 'LOWER(venues.title)'
+        )
+      }
     else
       kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
-      return self.find_duplicates_by(kind, :grouped => true)
+
+      return self.find_duplicates_by(kind, 
+        :grouped  => true, 
+        :select   => 'COUNT(DISTINCT events.id) AS events_count',
+        :joins    => 'LEFT OUTER JOIN events ON events.venue_id = a.id',
+        :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL',
+        :group_by => 'a.id'
+      )
     end
   end
 
@@ -145,6 +146,30 @@ class Venue < ActiveRecord::Base
   end
 
   #===[ Geocoding helpers ]===============================================
+
+  @@_is_geocoding = true
+
+  # Should geocoding be performed?
+  def self.perform_geocoding?
+    return @@_is_geocoding
+  end
+
+  # Set whether to perform geocoding to the boolean +value+.
+  def self.perform_geocoding=(value)
+    return @@_is_geocoding = value
+  end
+
+  # Run the block with geocoding enabled, then reset the geocoding back to the
+  # previous state. This is typically used in tests.
+  def self.with_geocoding(&block)
+    original = self.perform_geocoding?
+    begin
+      self.perform_geocoding = true
+      block.call
+    ensure
+      self.perform_geocoding = original
+    end
+  end
 
   # Get an address we can use for geocoding
   def geocode_address
@@ -170,7 +195,7 @@ class Venue < ActiveRecord::Base
   # Try to geocode, but don't complain if we can't.
   # TODO Consider renaming this to #add_geocoding! to imply that this method makes destructive changes the object, rather than just returning values. Compare its name to the method called #geocode_address, which just returns values.
   def geocode
-    unless location or geocode_address.blank? or duplicate_of
+    if self.class.perform_geocoding? && location.blank? && geocode_address.present? && duplicate_of.blank?
       geo = GeoKit::Geocoders::MultiGeocoder.geocode(geocode_address)
       if geo.success
         self.latitude       = geo.lat

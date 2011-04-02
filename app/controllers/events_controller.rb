@@ -15,17 +15,8 @@ class EventsController < ApplicationController
           'lower(venues.title), start_time'
         end
 
-    default_start_date = Time.today
-    default_end_date   = Time.today + 3.months
-    begin
-      @start_date = !params[:date].blank? ? Date.parse(params[:date][:start]) : default_start_date
-      @end_date = !params[:date].blank? ? Date.parse(params[:date][:end]) : default_end_date
-    rescue ArgumentError => e
-      @start_date = default_start_date
-      @end_date   = default_end_date
-      flash[:failure] = "You tried to filter by an invalid date"
-    end
-
+    @start_date = date_or_default_for(:start)
+    @end_date = date_or_default_for(:end)
     @events_deferred = lambda {
       params[:date] ?
         Event.find_by_dates(@start_date, @end_date, :order => order) :
@@ -171,7 +162,7 @@ class EventsController < ApplicationController
 
   # GET /events/duplicates
   def duplicates
-    @type = params[:type] || 'title'
+    @type = params[:type]
     begin
       @grouped_events = Event.find_duplicates_by_type(@type)
     rescue ArgumentError => e
@@ -192,10 +183,10 @@ class EventsController < ApplicationController
     # TODO Refactor this method and move much of it to the record-managing
     # logic into a generalized Event::search method.
 
-    @query = params[:query].with{blank? ? nil : self}
-    @tag = params[:tag].with{blank? ? nil : self}
+    @query = params[:query].presence
+    @tag = params[:tag].presence
     @current = ["1", "true"].include?(params[:current])
-    @order = params[:order]
+    @order = params[:order].presence
 
     if @order && @order == "score" && @tag
       flash[:failure] = "You cannot sort tags by score"
@@ -212,7 +203,7 @@ class EventsController < ApplicationController
       flash[:failure] = "You can't search by tag and query at the same time"
       return redirect_to(root_path)
     elsif @query
-      @grouped_events = Event.search_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
+      @grouped_events = Event.search_keywords_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
     elsif @tag
       @grouped_events = Event.search_tag_grouped_by_currentness(@tag, :order => @order, :current => @current)
     end
@@ -290,4 +281,39 @@ protected
     end
   end
 
+  # Return the default start date.
+  def default_start_date
+    Time.today
+  end
+
+  # Return the default end date.
+  def default_end_date
+    Time.today + 3.months
+  end
+
+  # Return a date parsed from user arguments or a default date. The +kind+
+  # is a value like :start, which refers to the `params[:date][+kind+]` value.
+  # If there's an error, set an error message to flash.
+  def date_or_default_for(kind)
+    if params[:date].present?
+      if params[:date].respond_to?(:has_key?)
+        if params[:date].has_key?(kind)
+          if params[:date][kind].present?
+            begin
+              return Date.parse(params[:date][kind])
+            rescue ArgumentError => e
+              append_flash :failure, "Can't filter by an invalid #{kind} date."
+            end
+          else
+            append_flash :failure, "Can't filter by an empty #{kind} date."
+          end
+        else
+          append_flash :failure, "Can't filter by a missing #{kind} date."
+        end
+      else
+        append_flash :failure, "Can't filter by a malformed #{kind} date."
+      end
+    end
+    return self.send("default_#{kind}_date")
+  end
 end

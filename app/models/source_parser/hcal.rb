@@ -53,7 +53,7 @@ class SourceParser
       hcals = to_hcals(opts)
       
       hcals.map do |hcal|
-        returning(AbstractEvent.new) do |event|
+        AbstractEvent.new.tap do |event|
           ABSTRACT_EVENT_TO_HCALENDAR_FIELD_MAP.each do |abstract_field, mofo_field|
             mofo_field = abstract_field if mofo_field == true
             next unless hcal.respond_to?(mofo_field)
@@ -88,7 +88,7 @@ class SourceParser
     # Options:
     # * :value -- hCard or string location
     def self.to_abstract_location(opts)
-      returning AbstractLocation.new do |a|
+      AbstractLocation.new.tap do |a|
         raw = opts[:value]
 
         case raw
@@ -108,8 +108,11 @@ class SourceParser
 
           if raw.respond_to?(:adr)
             for field in %w(street_address locality region country_name postal_code)
-              if field =='country_name'
+              case field
+              when 'country_name'
                 a[:country] = raw.adr.send(field) if raw.adr.respond_to?(field)
+              when 'postal_code'
+                a[:postal_code] = raw.adr.send(field).to_s if raw.adr.respond_to?(field)
               else
                 a[field] = raw.adr.send(field) if raw.adr.respond_to?(field)
               end

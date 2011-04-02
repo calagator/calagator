@@ -90,7 +90,8 @@ class Tag < ActiveRecord::Base
       'venue' => "http://upcoming.yahoo.com/venue/%s"
     },
     'plancast' => {
-      'activity' => "http://plancast.com/a/%s"
+      'activity' => "http://plancast.com/a/%s",
+      'plan' => "http://plancast.com/p/%s"
     },
     'yelp' => {
       'biz' => "http://www.yelp.com/biz/%s"
@@ -134,8 +135,10 @@ class Tag < ActiveRecord::Base
         :value     => value,
       }
 
-      if url_template = MACHINE_TAG_URLS[namespace].try(:[], predicate)
-        result[:url] = sprintf(url_template, value)
+      if machine_tag = MACHINE_TAG_URLS[namespace]
+        if url_template = machine_tag[predicate]
+          result[:url] = sprintf(url_template, value)
+        end
       end
 
       return result

@@ -8,6 +8,8 @@ cubespace:
   url: http://www.cubespacepdx.com/
   latitude: 45.518493
   longitude: -122.660737
+  closed: true
+  wifi: false
 
 duplicate_venue:
   id: 2
@@ -16,6 +18,8 @@ duplicate_venue:
   locality: Portland 
   region: OR
   postal_code: 97204
+  closed: true
+  wifi: false
 
   # many venues
   <%
@@ -35,6 +39,8 @@ venue_<%= id %>:
   region: OR
   postal_code: 97214
   url: http://www.calagator.org
+  closed: false
+  wifi: <%= rand(2) == 1 %>
   <% 
   id += 1
   end 

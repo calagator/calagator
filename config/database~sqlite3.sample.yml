@@ -3,7 +3,7 @@
 
 common: &common
   adapter: sqlite3
-  timeout: 5000
+  timeout: 15000
 
 development:
   database: db/development.sqlite3

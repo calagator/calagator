@@ -4,6 +4,7 @@ Changes
 Key
 ---
 
+  * [!] - Important note regarding some change.
   * [THEME] - Changed theme structure, see `themes/README.txt` for details.
   * [SETTING] - Changed setting structure, see `themes/README.txt` for details.
   * [SECRETS] - Changed secrets structure, see `INSTALL.md` for details.
@@ -15,9 +16,27 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
-  * Next
-    * Fixed iCalendar exports, they now include timezone and location.
+  * v0.20110301
+    * [!] This version adds support for specifying the search engine to use for local data. The new default is `sql`, which requires no configuration or setup to work. If you have an existing Calagator instance and want to continue using ActsAsSolr, edit your `config/secrets.yml` file and specify `search_engine: acts_as_solr`. See the "Search engine" section of the `INSTALL.md` file for details.
+    * [SECRETS] Added `search_engine` field for specifying search engine.
+    * [DEPENDENCY] Upgraded to latest stable releases of Ruby on Rails and other libraries. Use `rake gems:install` to install them.
+    * [DEPENDENCY] Added optional `sunspot` search engine, which provides the best search results and is more reliable, efficient and speedy than `acts_as_solr`.
+    * Fixed importing to support Upcoming's mobile site, the only one many users can now use.
+    * Fixed performance of duplicate checking and squashing interfaces.
+    * Fixed exceptions thrown when filtering events by invalid dates.
+    * Improved dependencies so production environment doesn't need testing libraries.
+    * Added `sql` search engine, which is used by default and requires no configuration or setup.
+
+  * v0.20101108
+    * [!] Fixed searching, run `rake solr:rebuild_index` to rebuild your search index to take advantage of the improvements for matching by: exact words, fuzzy word match, words that had punctuation in or adjacent to them, and tags.
     * [DEPENDENCY] Added RiCal library.
+    * [DEPENDENCY] Fixed "environment.rb" to specify exact versions of known-good gems, because new versions of gems have been released that have bugs or aren't backwards compatible.
+    * Fixed search sorting and improved title displays.
+    * Fixed iCalendar exports, they now include timezone and location.
+    * Improved iCalendar exports, they now include a sequence field.
+    * Improved `rake data:fetch` to display download progress if programs like `curl` and `wget` are installed.
+    * Added machine tags, to link Calagator entries to those on external services.
+    * Added tag cloud for displaying popular tags.
 
   * v0.20100302
     * Fixed "rake gems:install", some required gems weren't being installed.

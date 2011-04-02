@@ -52,10 +52,10 @@ class SourcesController < ApplicationController
   # GET /sources
   # GET /sources.xml
   def index
-    @sources = Source.find(:all)
+    @sources = Source.listing
 
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { @sources = @sources.paginate(:page => params[:page], :per_page => params[:per_page]) }
       format.xml  { render :xml => @sources }
     end
   end
@@ -64,7 +64,7 @@ class SourcesController < ApplicationController
   # GET /sources/1.xml
   def show
     begin
-      @source = Source.find(params[:id])
+      @source = Source.find(params[:id], :include => [:events, :venues])
     rescue ActiveRecord::RecordNotFound => e
       flash[:failure] = e.to_s if params[:id] != "import"
       return redirect_to(:action => :new)

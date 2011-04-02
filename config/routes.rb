@@ -35,13 +35,12 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'hello', :controller => 'site', :action => 'hello'
   map.connect 'about', :controller => 'site', :action => 'about'
   
-  map.recent_changes 'recent_changes.:format', :controller => 'changes', :action => 'show'
-  map.rollback_to 'recent_changes/rollback_to/:version', :controller => 'changes', :action => 'rollback_to', :conditions => { :method => :post }
 
   # Normal controllers
   map.resources :events, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'search' => :get}, :member => {'clone' => :get}
   map.resources :sources, :collection => { :import => :put }
-  map.resources :venues, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post}
+  map.resources :venues, :collection => {'duplicates' => :get, 'squash_multiple_duplicates' => :post, 'map' => :get}
+  map.resources :versions, :as => 'recent_changes'
 
   # Export action
   map.connect 'export', :controller => 'site', :action => 'export'

@@ -57,7 +57,7 @@ class SourceParser # :nodoc:
     # * :skip_old -- Should old events be skipped? Default is true.
     def self.to_abstract_events(opts={})
       # Skip old events by default
-      
+
       opts[:skip_old] = true unless opts[:skip_old] == false
       cutoff = Time.now.yesterday
 
@@ -75,41 +75,42 @@ class SourceParser # :nodoc:
         end
       end
 
-      events = []
-      content_calendars = RiCal.parse_string(content)
-      content_calendars.each do |content_calendar|
-        content_calendar.events.each_with_index do |component, index|
-          next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
-          event             = AbstractEvent.new
-          event.title       = component.summary
-          event.description = component.description
-          event.url         = component.url
+      [].tap do |events|
+        content_calendars = RiCal.parse_string(content)
+        content_calendars.each do |content_calendar|
+          content_calendar.events.each_with_index do |component, index|
+            next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
+            event             = AbstractEvent.new
+            event.title       = component.summary
+            event.description = component.description
+            event.url         = component.url
 
-          SourceParser::Ical.dates_for_tz(component, event)
+            SourceParser::Ical.dates_for_tz(component, event)
 
-          content_venues = content_calendar.to_s.scan(VENUE_CONTENT_RE)
+            content_venues = content_calendar.to_s.scan(VENUE_CONTENT_RE)
 
-          content_venue = \
-          begin
-            if content_calendar.to_s.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
-              # Special handling for Upcoming, where each event maps 1:1 to a venue
-              content_venues[index]
-            else
-              begin                
-                # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
-                venue_uid = component.location_property.params["VVENUE"]
-                # finding in the content_venues array an item matching the uid
-                venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
-              rescue Exception => e
-                # Ignore
-                RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
-                nil
+            content_venue = \
+            begin
+              if content_calendar.to_s.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
+                # Special handling for Upcoming, where each event maps 1:1 to a venue
+                content_venues[index]
+              else
+                begin                
+                  # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
+                  venue_uid = component.location_property.params["VVENUE"]
+                  # finding in the content_venues array an item matching the uid
+                  venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
+                rescue Exception => e
+                  # Ignore
+                  RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
+                  nil
+                end
               end
             end
-          end
 
-          event.location = to_abstract_location(content_venue, :fallback => component.location)
-          events << event
+            event.location = to_abstract_location(content_venue, :fallback => component.location)
+            events << event
+          end
         end
       end
 

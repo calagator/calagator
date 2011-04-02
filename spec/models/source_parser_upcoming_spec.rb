@@ -15,6 +15,10 @@ describe SourceParser::Upcoming do
     it "should extract from truncated URL" do
       SourceParser::Upcoming._upcoming_url_to_event_id('http://upcoming.yahoo.com/event/3082817').should == '3082817'
     end
+
+    it "should extract from mobile URL" do
+      SourceParser::Upcoming._upcoming_url_to_event_id('http://m.upcoming.yahoo.com/event/3082817').should == '3082817'
+    end
   end
 
   it "should parse" do

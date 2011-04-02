@@ -81,6 +81,94 @@ describe EventsController, "when displaying index" do
     end
 
   end
+
+  describe "and filtering by date range" do
+    [:start, :end].each do |date_kind|
+      describe "for #{date_kind} date" do
+        before :all do
+          @date_kind = date_kind
+          @date_kind_other = \
+            case date_kind
+            when :start then :end
+            when :end then :start
+            else raise ArgumentError, "Unknown date_kind: #{date_kind}"
+            end
+        end
+
+        it "should use the default if not given the parameter" do
+          get :index, :date => {}
+          assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
+          flash[:failure].should be_nil
+        end
+
+        it "should use the default if given a malformed parameter" do
+          get :index, :date => "omgkittens"
+          assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
+          response.should have_tag(".flash_failure", /malformed.+#{@date_kind}/)
+        end
+
+        it "should use the default if given a missing parameter" do
+          get :index, :date => {:foo => "bar"}
+          assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
+          response.should have_tag(".flash_failure", /missing.+#{@date_kind}/)
+        end
+
+        it "should use the default if given an empty parameter" do
+          get :index, :date => {@date_kind => ""}
+          assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
+          response.should have_tag(".flash_failure", /empty.+#{@date_kind}/)
+        end
+
+        it "should use the default if given an invalid parameter" do
+          get :index, :date => {@date_kind => "omgkittens"}
+          assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
+          response.should have_tag(".flash_failure", /invalid.+#{@date_kind}/)
+        end
+
+        it "should use the value if valid" do
+          expected = Date.yesterday
+          get :index, :date => {@date_kind => expected.to_s("%Y-%m-%d")}
+          assigns["#{@date_kind}_date"].should == expected
+        end
+      end
+    end
+
+    it "should return matching events" do
+      # Given
+      matching = [
+        Event.create!(
+          :title => "matching1",
+          :start_time => Time.parse("2010-01-16 00:00"),
+          :end_time => Time.parse("2010-01-16 01:00")
+        ),
+        Event.create!(:title => "matching2",
+          :start_time => Time.parse("2010-01-16 23:00"),
+          :end_time => Time.parse("2010-01-17 00:00")
+        ),
+      ]
+
+      non_matching = [
+        Event.create!(
+          :title => "nonmatchingbefore",
+          :start_time => Time.parse("2010-01-15 23:00"),
+          :end_time => Time.parse("2010-01-15 23:59")
+        ),
+        Event.create!(
+          :title => "nonmatchingafter",
+          :start_time => Time.parse("2010-01-17 00:01"),
+          :end_time => Time.parse("2010-01-17 01:00")
+        ),
+      ]
+
+      # When
+      get :index, :date => {:start => "2010-01-16", :end => "2010-01-16"}
+      results = assigns[:events_deferred].call
+
+      # Then
+      results.size.should == 2
+      results.should == matching
+    end
+  end
 end
 
 describe EventsController, "when displaying events" do
@@ -372,7 +460,7 @@ describe EventsController, "managing duplicates" do
   fixtures :events, :venues
 
   it "should find new duplicates and not old duplicates" do
-    get 'duplicates'
+    get 'duplicates', :type => 'title'
 
     # New duplicates
     web3con = assigns[:grouped_events].select{|keys,values| keys.include?("Web 3.0 Conference")}
@@ -412,7 +500,7 @@ end
 describe EventsController, "when searching" do
 
   it "should search" do
-    Event.should_receive(:search_grouped_by_currentness).and_return({:current => [], :past => []})
+    Event.should_receive(:search_keywords_grouped_by_currentness).and_return({:current => [], :past => []})
 
     post :search, :query => "myquery"
   end
@@ -452,7 +540,7 @@ describe EventsController, "when searching" do
         :current => [events(:calagator_codesprint), events(:tomorrow)],
         :past    => [events(:old_event)],
       }
-      Event.should_receive(:search_grouped_by_currentness).and_return(@results)
+      Event.should_receive(:search_keywords_grouped_by_currentness).and_return(@results)
     end
 
     it "should produce HTML" do

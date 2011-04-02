@@ -9,36 +9,38 @@
     <% focus_on '#venue_title' %>
     </div>
     <div>
-      <%= f.label :address %>
+      <%= f.label :address, "Full Address" %>
       <%= f.text_field :address %>
       <span class='help'>
         (one-line version of full address)
       </span>
     </div>
-    <div> 
-      <%= f.label :street_address %>
-      <%= f.text_field :street_address %>
-    </div>
-    <div>
-      <%= f.label :locality, "City" %>
-      <%= f.text_field :locality %>
-    </div>
-    <div>
-      <%= f.label :region, "State" %>
-      <%= f.text_field :region %>
-    </div>
-    <div>
-      <%= f.label :postal_code, "ZIP Code" %>
-      <%= f.text_field :postal_code %>
-    </div>
-    <div>
-      <%= f.label :latitude, "Latitude" %>
-      <%= f.text_field :latitude %>
-    </div>
-    <div>
-      <%= f.label :longitude, "Longitude" %>
-      <%= f.text_field :longitude %>
-    </div>
+    <% unless venue.new_record? %>
+      <div>
+        <%= f.label :street_address %>
+        <%= f.text_field :street_address %>
+      </div>
+      <div>
+        <%= f.label :locality, "City" %>
+        <%= f.text_field :locality %>
+      </div>
+      <div>
+        <%= f.label :region, "State" %>
+        <%= f.text_field :region %>
+      </div>
+      <div>
+        <%= f.label :postal_code, "ZIP Code" %>
+        <%= f.text_field :postal_code %>
+      </div>
+      <div>
+        <%= f.label :latitude, "Latitude" %>
+        <%= f.text_field :latitude %>
+      </div>
+      <div>
+        <%= f.label :longitude, "Longitude" %>
+        <%= f.text_field :longitude %>
+      </div>
+    <% end %>
     <div>
       <%= f.label :url, "Web Link" %>
       <%= f.text_field :url%>
@@ -51,6 +53,10 @@
       <%= f.label :telephone %>
       <%= f.text_field :telephone %>
     </div>
+    <div class='checkbox'>
+      <%= f.check_box :wifi %>
+      <%= f.label :wifi, "This venue has public wireless internet access", :class => 'checkbox' %>
+    </div>
     <div>
       <%= f.label :description %>
       <%= f.text_area :description, :rows => 4, :cols => 60 %>
@@ -58,6 +64,19 @@
         (HTML formatting allowed)
       </span>
     </div>
+    <div>
+      <%= f.label :access_notes %>
+      <%= f.text_area :access_notes, :rows => 2, :cols => 60 %>
+      <span class='help'>
+          (Details about how to access the space, and any accessibility restrictions that visitors may want to know about.)
+      </span>
+    </div>
+    <% unless venue.new_record? %>
+    <div class='checkbox'>
+      <%= f.check_box :closed %>
+      <%= f.label :closed, "This venue is no longer open for business", :class => 'checkbox' %>
+    </div>
+    <% end %>
     <div>
       <%= f.label :tag_list, "Tags" %>
       <%= f.text_field :tag_list %>

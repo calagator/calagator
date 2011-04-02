@@ -41,12 +41,12 @@ end
 
 describe Venue, "with finding unmarked duplicates" do
   it "should find all venues with duplicate titles" do
-    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title ) ORDER BY a.title")
+    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title )")
     Venue.find(:duplicates, :by => :title )
   end
 
   it "should find all venues with duplicate titles and urls" do
-    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url ) ORDER BY a.title,a.url")
+    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
     Venue.find(:duplicates, :by => [:title,:url])
   end
 
@@ -86,7 +86,7 @@ describe Venue, "with finding unmarked duplicates (integration test)" do
 
   it "should find duplicate title by any" do
     pre, post = find_duplicates_create_a_clone_and_find_again(:any, :title => @venue.title)
-    post.size.should == pre.size + 2
+    post.size.should == pre.size + 1
   end
 
   it "should not find duplicate title by address" do
@@ -245,41 +245,53 @@ describe "Venue geocoding" do
   end
 
   it "should geocode automatically on save" do
-    GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
-    @venue.save
+    Venue.with_geocoding do
+      GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
+      @venue.save
+    end
   end
 
   it "shouldn't geocode automatically unless there's an address" do
-    @venue.address = ""
-    GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
-    @venue.save
+    Venue.with_geocoding do
+      @venue.address = ""
+      GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
+      @venue.save
+    end
   end
 
   it "shouldn't geocode automatically if already geocoded" do
-    @venue.latitude = @venue.longitude = 0.0
-    GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
-    @venue.save
+    Venue.with_geocoding do
+      @venue.latitude = @venue.longitude = 0.0
+      GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
+      @venue.save
+    end
   end
 
   it "shouldn't fail if the geocoder returns failure" do
-    GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_failure)
-    @venue.save
+    Venue.with_geocoding do
+      GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_failure)
+      @venue.save
+    end
   end
 
   it "should fill in empty addressing fields" do
-    GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
-    @venue.save
-    @venue.street_address.should == @geo_success.street_address
-    @venue.locality.should == @geo_success.city
-    @venue.region.should == @geo_success.state
-    @venue.postal_code.should == @geo_success.zip
+    Venue.with_geocoding do
+      GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
+      @venue.save
+      @venue.street_address.should == @geo_success.street_address
+      @venue.locality.should == @geo_success.city
+      @venue.region.should == @geo_success.state
+      @venue.postal_code.should == @geo_success.zip
+    end
   end
 
   it "should leave non-empty addressing fields alone" do
-    @venue.locality = "Cleveland"
-    GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
-    @venue.save
-    @venue.locality.should == "Cleveland"
+    Venue.with_geocoding do
+      @venue.locality = "Cleveland"
+      GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
+      @venue.save
+      @venue.locality.should == "Cleveland"
+    end
   end
 
   it "should strip location when geocoding is forced" do

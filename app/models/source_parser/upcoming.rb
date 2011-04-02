@@ -7,7 +7,9 @@ class SourceParser # :nodoc:
 
     # Return the Upcoming event_id string extracted from an Upcoming Event URL.
     def self._upcoming_url_to_event_id(url)
-      return url.ergo[%r{http://upcoming.yahoo.com/event/(\d+)}, 1]
+      url.present? ?
+        url[%r{http://(?:m\.)?upcoming.yahoo.com/event/(\d+)}, 1] :
+        nil
     end
 
     # Return an Array of AbstractEvent instances extracted from input.
