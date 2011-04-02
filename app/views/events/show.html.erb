@@ -10,7 +10,7 @@
     $(function() {
       var plan = $('.external.plancast.plan:first');
       if (plan.length > 0) {
-        var plan_id = parseInt(plan.text().split('=')[1]).toString(36);
+        var plan_id = plan.text().split('=')[1];
         $.ajax({
           url: "http://jsonpify.heroku.com",
           dataType: 'jsonp',
@@ -74,7 +74,9 @@
             <% end %>
 
       </div>
-    <% end -%>
+  </div>
+  <% end -%>
+
     <div class="attendees">
       <script id="attendees-template" type="text/mustache">
         <h3>Attendees</h3>
@@ -91,6 +93,7 @@
         </ul>
       </script>
     </div>
+
     <% unless @event.url.blank? -%>
       <h3>Website</h3>
       <div class="website">
@@ -139,5 +142,4 @@
   <div id='metadata'>
       <%= datestamp(@event) %>
   </div>
-</div>
 </div>
