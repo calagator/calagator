@@ -75,7 +75,7 @@ class SourceParser # :nodoc:
         end
       end
 
-      [].tap do |events|
+      events = [].tap do |events|
         content_calendars = RiCal.parse_string(content)
         content_calendars.each do |content_calendar|
           content_calendar.events.each_with_index do |component, index|
@@ -189,7 +189,7 @@ class SourceParser # :nodoc:
     # 
 
     def self.v_card_munge(value)
-      vcard_hash = value.mash do |line|
+      vcard_hash = Hash[*value.map { |line|
         # predeclare key, value in case no match
         key = ''
         value = ''
@@ -209,7 +209,7 @@ class SourceParser # :nodoc:
           key = key.split(';').first
         end
         [key, value]
-      end
+      }.flatten]
       return vcard_hash
     end
 
