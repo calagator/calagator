@@ -74,8 +74,21 @@
             <% end %>
 
       </div>
+      <% end -%>
   </div>
-  <% end -%>
+
+    <% unless @event.url.blank? -%>
+      <h3>Website</h3>
+      <div class="website">
+        <%= link_to "#{truncate(@event.url, :length => 128)}", h(@event.url), :class => "url", :rel => "nofollow" -%>
+      </div>
+    <% end -%>
+    <% unless @event.description.blank? -%>
+    <h3>Description</h3>
+    <div class="description">
+      <%= format_description(@event.description) %>
+    </div>
+    <% end -%>
 
     <div class="attendees">
       <script id="attendees-template" type="text/mustache">
@@ -94,18 +107,6 @@
       </script>
     </div>
 
-    <% unless @event.url.blank? -%>
-      <h3>Website</h3>
-      <div class="website">
-        <%= link_to "#{truncate(@event.url, :length => 128)}", h(@event.url), :class => "url", :rel => "nofollow" -%>
-      </div>
-    <% end -%>
-    <% unless @event.description.blank? -%>
-    <h3>Description</h3>
-    <div class="description">
-      <%= format_description(@event.description) %>
-    </div>
-    <% end -%>
     <% unless @event.tags.blank? -%>
     <h3>Tags</h3>
     <div class="tags">
