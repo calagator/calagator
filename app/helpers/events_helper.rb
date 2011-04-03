@@ -63,20 +63,46 @@ module EventsHelper
 
   #---[ Google Calendar exporting ]-----------------------------------------
 
+  # Time format used for Google Calendar exports
   GOOGLE_TIME_FORMAT = "%Y%m%dT%H%M%SZ"
 
-  def format_google_timespan( event)
+  # Return a time span using Google Calendar's export format.
+  def format_google_timespan(event)
     end_time = event.end_time || event.start_time
     "#{event.start_time.utc.strftime(GOOGLE_TIME_FORMAT)}/#{end_time.utc.strftime(GOOGLE_TIME_FORMAT)}"
   end
-  
+
+  # Maximum characters in a Google Calendar export string.
+  GOOGLE_EVENT_EXPORT_LIMIT = 2048
+
+  # Return a Google Calendar export URL.
   def google_event_export_link(event)
-    # TODO trim
-    title = CGI::escape(event.title.strip_html)
-    dates = format_google_timespan(event)
-    details = CGI::escape(event.description || "")
-    venue = CGI::escape(event.venue ? (event.venue.geocode_address.blank? ? '' : event.venue.geocode_address) : '')
-    "http://www.google.com/calendar/event?action=TEMPLATE&text=#{title}&dates=#{dates}&details=#{details}&location=#{venue}&trp=true&sprop=#{event.url}&sprop=name:"
+    result = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&text=" << CGI::escape(event.title.strip_html)
+
+    result << "&dates=" << format_google_timespan(event)
+
+    if event.venue
+      result << "&location=" << CGI::escape(event.venue.title)
+      if event.venue.geocode_address.present?
+        result << CGI::escape(", " + event.venue.geocode_address)
+      end
+    end
+
+    if event.url.present?
+      result << "&sprop=website:" << CGI::escape(event.url.sub(/^http.?:\/\//, ''))
+    end
+
+    if event.description.present?
+      details = "&details=" + CGI::escape(event.description)
+      details_suffix = "..."
+      overflow = GOOGLE_EVENT_EXPORT_LIMIT - result.length
+      if overflow > 0
+        details = "#{details[0..(overflow - details.size - details_suffix.size - 1)]}#{details_suffix}"
+      end
+      result << details
+    end
+
+    return result
   end
-  
+
 end
