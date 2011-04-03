@@ -201,6 +201,7 @@ a.external {
   border-bottom: 1px dashed #ccc;
   background-image: url("/images/external_sites/external.gif")
 }
+a.external.epdx       { background-image: url("/images/external_sites/epdx.png"); }
 a.external.plancast   { background-image: url("/images/external_sites/plancast.png"); }
 a.external.upcoming   { background-image: url("/images/external_sites/upcoming.png"); }
 a.external.yelp       { background-image: url("/images/external_sites/yelp.png"); }

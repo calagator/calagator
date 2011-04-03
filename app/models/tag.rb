@@ -85,6 +85,12 @@ class Tag < ActiveRecord::Base
   # Structure of machine tag namespaces and predicates to their URLs. See
   # #machine_tag for details.
   MACHINE_TAG_URLS = {
+    'epdx' => {
+      'company' => 'http://epdx.org/companies/%s',
+      'group' => 'http://epdx.org/groups/%s',
+      'person' => 'http://epdx.org/people/%s',
+      'project' => 'http://epdx.org/projects/%s',
+    },
     'upcoming' => {
       'event' => "http://upcoming.yahoo.com/event/%s",
       'venue' => "http://upcoming.yahoo.com/venue/%s"
