@@ -22,19 +22,77 @@ it "should return special string when using a tag" do
   end
 
   # TODO Do we need a helper to return 'Today' and 'Tomorrow' at all? See app/helpers/events_helper.rb #today_tomorrow_or_weekday
-  
+
 =begin
   it "should display today as 'Today'" do
     @event = Event.new
     @event.start_time = Time.now
     helper.today_tomorrow_or_weekday(@event).should == 'Today'
   end
-  
+
   it "should display tomorrow as 'Tomorrow'" do
     @event = Event.new
     @event.start_time = Time.now+1.days
     helper.today_tomorrow_or_weekday(@event).should == 'Tomorrow'
   end
 =end
-  
+
+  describe "google_event_export_link" do
+    def escape(string)
+      return Regexp.escape(CGI.escape(string))
+    end
+
+    shared_examples_for "exported event" do
+      before do
+        @venue = Venue.new(:title => "My venue", :address => "1930 SW 4th Ave, Portland, Oregon 97201")
+        @event = Event.new(:title => "My event", :start_time => Time.now - 1.hour, :end_time => Time.now, :venue => @venue, :description => event_description)
+        @export = helper.google_event_export_link(@event)
+      end
+
+      it "should have title" do
+        @export.should =~ /\&text=#{escape(@event.title)}/
+      end
+
+      it "should have time range" do
+        @export.should =~ /\&dates=#{helper.format_google_timespan(@event)}/
+      end
+
+      it "should have venue title" do
+        @export.should =~ /\&location=#{escape(@event.venue.title)}/
+      end
+
+      it "should have venue address" do
+        @export.should =~ /\&location=.+?#{escape(@event.venue.geocode_address)}/
+      end
+    end
+
+    context "an event's text doesn't need truncation" do
+      let(:event_description) { "My event description." }
+
+      it_should_behave_like "exported event"
+
+      it "should have a complete event description" do
+        @export.should =~ /\&details=#{escape(event_description)}/
+      end
+    end
+
+    context "an event's text needs truncation" do
+      let(:event_description) { "My event description. " * 100 }
+
+      it_should_behave_like "exported event"
+
+      it "should have a truncated event description" do
+        @export.should =~ /\&details=#{escape(event_description[0..100])}/
+      end
+
+      it "should have a truncated URL" do
+        @export.size.should == EventsHelper::GOOGLE_EVENT_EXPORT_LIMIT
+      end
+    end
+  end
+
+  describe "format_google_timespan" do
+    # TODO
+  end
+
 end
