@@ -17,7 +17,7 @@ class SourceParser # :nodoc:
     def self.read_url(url)
       super(url.gsub(/^webcal:/, 'http:'))
     end
-    
+
     # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
     def self.dates_for_tz(component, event)
       if component.dtstart_property.tzid.nil?
@@ -75,7 +75,7 @@ class SourceParser # :nodoc:
         end
       end
 
-      events = [].tap do |events|
+      return [].tap do |events|
         content_calendars = RiCal.parse_string(content)
         content_calendars.each do |content_calendar|
           content_calendar.events.each_with_index do |component, index|
@@ -95,7 +95,7 @@ class SourceParser # :nodoc:
                 # Special handling for Upcoming, where each event maps 1:1 to a venue
                 content_venues[index]
               else
-                begin                
+                begin
                   # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
                   venue_uid = component.location_property.params["VVENUE"]
                   # finding in the content_venues array an item matching the uid
@@ -113,27 +113,23 @@ class SourceParser # :nodoc:
           end
         end
       end
-
-      return events
     end
-
 
     # Return an AbstractLocation extracted from an iCalendar input.
     #
     # Arguments:
-    # * value - String with iCalendar data to parse which contains a Vvenue item.
+    # * value - String with iCalendar data to parse which contains a VVENUE item.
     #
     # Options:
-    # * :fallback - String to use as the title for the location if the +value+ doesn't contain a Vvenue.
+    # * :fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
     def self.to_abstract_location(value, opts={})
       value = "" if value.nil?
       a = AbstractLocation.new
-     
+
       # VVENUE entries are considered just Vcards,
       # treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
-        
-        vcard_hash = parse_vcard_content(vcard_content)
+        vcard_hash = self.hash_from_vcard_string(vcard_content)
 
         a.title          = vcard_hash['NAME']
         a.street_address = vcard_hash['ADDRESS']
@@ -146,7 +142,7 @@ class SourceParser # :nodoc:
 
         return a
       end
-  
+
       if opts[:fallback].blank?
         return nil
       else
@@ -154,66 +150,51 @@ class SourceParser # :nodoc:
         return a
       end
     end
-  
 
-
-    # Return a vcard_hash from vcard content.
+    # Return hash parsed from the contents of first VCARD found in the iCalendar data.
+    #
+    # Properties with meta-qualifiers are treated specially. When a property with a meta-qualifier is parsed (e.g. "FOO;BAR"), it will also set a value for the key (e.g. "FOO") if one isn't specified. This makes it possible to retrieve a value for a key like "DTSTART" when only a key with a qualifier like "DTSTART;TZID=..." is specified in the data.
     #
     # Arguments:
-    # * value - String with content
-    #
-    #
-    
-    def self.parse_vcard_content(value)
-      vcards = RiCal.parse_string(value)
-     #constrain to 1 vcard per vvenue
-      vcard = vcards.first
-      # this is an interesting call here
-      # RiCal export of nonstandard-outside-of-RFC2445
-      # VVENUE into lines
-     
+    # * data - String of iCalendar data containing a VCARD.
+    def self.hash_from_vcard_string(data)
+      # Only use first vcard of a VVENUE
+      vcard = RiCal.parse_string(data).first
+
+      # Extract all properties, including non-standard ones, into an array of "KEY;meta-qualifier:value" strings
       vcard_lines = vcard.export_properties_to(StringIO.new(''))
-      # munges vcard lines  
-      vcard_hash = v_card_munge(vcard_lines)
 
-      return vcard_hash    
+      return self.hash_from_vcard_lines(vcard_lines)
     end
 
-
-    # Return a vcard_hash from vcard_lines.
+    # Return hash parsed from VCARD lines.
     #
     # Arguments:
-    # * value - vcard_lines
-    #
-    # 
-    # 
+    # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
+    def self.hash_from_vcard_lines(vcard_lines)
+      return {}.tap do |vcard_hash|
+        vcard_lines.each do |vcard_line|
+          if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
+            key = matcher[1]
+            qualifier = matcher[2]
+            value = matcher[3]
 
-    def self.v_card_munge(value)
-      vcard_hash = Hash[*value.map { |line|
-        # predeclare key, value in case no match
-        key = ''
-        value = ''
-        # if line is of the form key:value
-        # where the line has at least one colon
-        # do a non-greedy capture of chars not colon
-        # followed by a promiscuous match of remaining chars 
-        if line.match(/^([^:]+?):(.*)$/)
-          key = $1
-          value = $2
-          # if the key has a semi-colon, it is, by spec, 
-          # followed by a meta-qualifier;  
-          # in all cases, we only want the key and not the qualifier
-          # split always at least returns one item
-          # which will always be the item we want
-          # we only want the first: drop the second on match semi-colon
-          key = key.split(';').first
+            if qualifier
+              # Add entry for a key and its meta-qualifier
+              vcard_hash["#{key}#{qualifier}"] = value
+
+              # Add fallback entry for a key from the matching meta-qualifier, e.g. create key "foo" from contents of key with meta-qualifier "foo;bar".
+              unless vcard_hash.has_key?(key)
+                vcard_hash[key] = value
+              end
+            else
+              # Add entry for a key without a meta-qualifier.
+              vcard_hash[key] = value
+            end
+          end
         end
-        [key, value]
-      }.flatten]
-      return vcard_hash
+      end
     end
-
-    #
   end
 end
 
