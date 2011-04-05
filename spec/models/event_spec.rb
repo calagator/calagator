@@ -828,7 +828,7 @@ describe Event do
 
     describe "sequence" do
       def event_to_ical(event)
-        return Vpim::Icalendar.decode(Event.to_ical([event])).first.events.to_a.first
+        return RiCal.parse_string(Event.to_ical([event])).first.events.first
       end
 
       it "should set an initial sequence on a new event" do

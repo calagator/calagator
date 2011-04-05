@@ -23,7 +23,6 @@ Rails::Initializer.run do |config|
   # Specify gems that this application depends on. 
   # They can then be installed with "rake gems:install" on new installations.
   config.gem 'htmlentities', :version => '4.2.3'
-  config.gem 'vpim', :version => '0.695'
   config.gem 'lucene_query' # bundled
   config.gem 'paper_trail', :version => '1.6.4'
   config.gem 'will_paginate', :version => '2.3.15'
