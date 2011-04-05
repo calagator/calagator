@@ -93,7 +93,7 @@
 <div id="event_preview">
     <h2>Preview your event</h2>
 
-    <%= render :partial => "preview", :locals => { :event => event } %>
+    <%= render :partial => "item", :locals => { :event => event, :has_contentbar => false } %>
 </div>
 <% end -%>
 
