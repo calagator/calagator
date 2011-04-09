@@ -419,10 +419,14 @@ describe EventsController, "when creating or updating events" do
     end
 
     it "should allow the user to preview the event" do
+      tags = []
+      tags.should_receive(:reload)
+
       Event.should_receive(:find).and_return(@event)
       @event.should_not_receive(:update_attributes)
       @event.should_receive(:attributes=)
       @event.should_receive(:valid?).and_return(true)
+      @event.should_receive(:tags).and_return(tags)
 
       put "update", @params.merge(:preview => "Preview")
       response.should render_template(:edit)

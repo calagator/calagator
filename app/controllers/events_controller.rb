@@ -141,6 +141,7 @@ class EventsController < ApplicationController
         if params[:preview]
           @event.attributes = params[:event]
           @event.valid?
+          @event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
         end
         format.html { render :action => "edit" }
         format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }
