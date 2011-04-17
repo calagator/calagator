@@ -15,7 +15,7 @@ html_classes << " contentbar" if has_contentbar
       <% unless event.venue.blank? %>
       <div class="clearfix location vcard<%= " closed" if event.venue.closed? %>">
       <%= google_map event %>
-          <a class="url" href='<%= url_for venue_url(event.venue) %>'>
+          <a class="url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
             <span class='fn org'><%= cleanse event.venue.title.strip_html -%></span>
           </a>
           <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
