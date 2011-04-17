@@ -89,6 +89,9 @@ Rails::Initializer.run do |config|
   # config.active_record.default_timezone = :utc
   # FIXME Figure out why ActiveRecord hasn't been told to use UTC timezone by default.
 
+  # Deliver email using sendmail by default
+  config.action_mailer.delivery_method = :sendmail
+
   #---[ Plugins ]---------------------------------------------------------
 
   config.plugins = [
