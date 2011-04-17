@@ -62,7 +62,7 @@ class EventsController < ApplicationController
   # GET /events/new
   # GET /events/new.xml
   def new
-    @event = Event.new
+    @event = Event.new(params[:event])
     @page_title = "Add an Event"
 
     respond_to do |format|
