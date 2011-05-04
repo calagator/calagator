@@ -183,6 +183,94 @@ describe VenuesController do
     end
 
   end
-      
+
+  describe "DELETE" do
+    describe "when deleting a venue without events" do
+      before do
+        @venue = Venue.create!(:title => "My Venue")
+      end
+
+      shared_examples_for "destroying a Venue record without events" do
+        it "should destroy the Venue record" do
+          lambda { Venue.find(@venue.id) }.should raise_error(ActiveRecord::RecordNotFound)
+        end
+      end
+
+      describe "and rendering HTML" do
+        before do
+          delete :destroy, :id => @venue.id
+        end
+
+        it_should_behave_like "destroying a Venue record without events"
+
+        it "should display a success message" do
+          flash[:success].should be_present
+        end
+
+        it "should redirect to the venues listing" do
+          response.should redirect_to(venues_path)
+        end
+      end
+
+      describe "and rendering XML" do
+        integrate_views
+
+        before do
+          delete :destroy, :id => @venue.id, :format => "xml"
+        end
+
+        it_should_behave_like "destroying a Venue record without events"
+
+        it "should return a success status" do
+          response.should be_success
+        end
+      end
+    end
+
+    describe "when deleting a venue with events" do
+      before do
+        @venue = Venue.create!(:title => "My Venue")
+        @event = @venue.events.create!(:title => "My Event", :start_time => Time.now, :end_time => Time.now+1.hour)
+      end
+
+      shared_examples_for "destroying a Venue record with events" do
+        it "should not destroy the Venue record" do
+          Venue.find(@venue.id).should be_present
+        end
+      end
+
+      describe "and rendering HTML" do
+        before do
+          delete :destroy, :id => @venue.id
+        end
+
+        it_should_behave_like "destroying a Venue record with events"
+
+        it "should display a failure message" do
+          flash[:failure].should be_present
+        end
+
+        it "should redirect to the venue page" do
+          response.should redirect_to(venue_path(@venue))
+        end
+      end
+
+      describe "and rendering XML" do
+        before do
+          delete :destroy, :id => @venue.id, :format => "xml"
+        end
+
+        it_should_behave_like "destroying a Venue record with events"
+
+        it "should return unprocessable entity status" do
+          response.code.to_i.should == 422
+        end
+
+        it "should describing the problem" do
+          response.body.should =~ /cannot/i
+        end
+      end
+    end
+  end
   
 end
