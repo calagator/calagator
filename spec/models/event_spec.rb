@@ -173,12 +173,7 @@ describe Event do
 
   end
 
-  describe "when processing date" do
-    before(:each) do
-      @event = Event.new(:title => "MyEvent")
-    end
-
-    # TODO: write integration specs for the following 2 tests
+  describe "when finding duplicates" do 
     it "should find all events with duplicate titles" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
       Event.find_duplicates_by(:title)
@@ -187,6 +182,48 @@ describe Event do
     it "should find all events with duplicate titles and urls" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
       Event.find_duplicates_by([:title,:url])
+    end
+  end
+
+  describe "when finding duplicates by type" do
+    def assert_default_find_duplicates_by_type(type)
+      Event.should_receive(:find_future_events).and_return(42)
+      Event.find_duplicates_by_type(type).should == { [] => 42 }
+    end
+
+    it "should find all future events if called with nil" do
+      assert_default_find_duplicates_by_type(nil)
+    end
+
+    it "should find all future events if called with empty string" do
+      assert_default_find_duplicates_by_type('')
+    end
+
+    it "should find all future events if called with 'na'" do
+      assert_default_find_duplicates_by_type('na')
+    end
+
+    def assert_specific_find_by_duplicates_by(type, queried)
+      Event.should_receive(:find_duplicates_by).with(queried, {:grouped => true, :where => anything()})
+      Event.find_duplicates_by_type(type)
+    end
+
+    it "should find events with all duplicate fields if called with 'all'" do
+      assert_specific_find_by_duplicates_by('all', :all)
+    end
+
+    it "should find events with any duplicate fields if called with 'any'" do
+      assert_specific_find_by_duplicates_by('any', :any)
+    end
+
+    it "should find events with duplicate titles if called with 'title'" do
+      assert_specific_find_by_duplicates_by('title', ['title'])
+    end
+  end
+
+  describe "when processing date" do
+    before(:each) do
+      @event = Event.new(:title => "MyEvent")
     end
 
     it "should fail to validate if end_time is earlier than start time " do
