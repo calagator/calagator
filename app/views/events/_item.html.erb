@@ -76,10 +76,8 @@ html_classes << " contentbar" if has_contentbar
         <ul>
           {{#attendees}}
             <li>
-              {{#username}}<a href='http://plancast.com/{{username}}'>{{/username}}
-              {{^username}}<a href='http://plancast.com/user/{{id}}'>{{/username}}
-                <img class='avatar' src='{{pic_square}}'/>
-              </a>
+              {{#username}}<a href='http://plancast.com/{{username}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
+              {{^username}}<a href='http://plancast.com/user/{{id}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
             </li>
           {{/attendees}}
         </ul>
