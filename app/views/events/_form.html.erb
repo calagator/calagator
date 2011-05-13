@@ -101,8 +101,6 @@
   <fieldset>
     <legend><% unless event.new_record? %>Editing: <em><%= event.title %></em><% end %></legend>
     
-    <p>You can edit the details of your event below.  The more information we have about your event, the easier it will be for people to find it.</p>
-
   <%= error_messages_for :event %>
   <div>
     <%= f.label :title, "Event Name" %>
