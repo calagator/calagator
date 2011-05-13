@@ -130,6 +130,12 @@ body {
   width: 45em;
 }
 
+.appropriateness_message {
+  background: #e8fbfe;
+  padding: 1em;
+  margin: 1em 0;
+}
+
 /* @end */
 
 /* @group Event Table
