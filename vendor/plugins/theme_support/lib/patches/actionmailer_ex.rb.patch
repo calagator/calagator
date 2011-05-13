@@ -1,0 +1,29 @@
+diff --git a/vendor/plugins/theme_support/lib/patches/actionmailer_ex.rb b/vendor/plugins/theme_support/lib/patches/actionmailer_ex.rb
+index 0e3708b..aee393b 100755
+--- a/vendor/plugins/theme_support/lib/patches/actionmailer_ex.rb
++++ b/vendor/plugins/theme_support/lib/patches/actionmailer_ex.rb
+@@ -24,8 +24,15 @@ module ActionMailer
+         theme_template_roots[path] = ActionView::Base.process_view_paths(File.dirname(path)).first
+       end
+ 
+-      tpaths << File.join(RAILS_ROOT, template_path)
+-      theme_template_roots[File.join(RAILS_ROOT, template_path)] = template_root
++      # NOTE: Fixed use of #template_path, because plugins apparently return an absolute path, whereas normal views have relative paths, and the original, commented-out code didn't distinguish between these:
++      #IK# tpaths << File.join(RAILS_ROOT, template_path)
++      #IK# theme_template_roots[File.join(RAILS_ROOT, template_path)] = template_root
++      absolute_template_path =
++        Pathname.new(template_path).absolute? ?
++          template_path :
++          File.join(RAILS_ROOT, template_path)
++      tpaths << absolute_template_path
++      theme_template_roots[absolute_template_path] = template_root
+ 
+       # If an explicit, textual body has not been set, we check assumptions.
+       unless String === @body
+@@ -88,4 +95,4 @@ module ActionMailer
+       @mail = create_mail
+     end
+   end
+-end
+\ No newline at end of file
++end
