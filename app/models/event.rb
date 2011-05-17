@@ -21,6 +21,7 @@
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
   include SearchEngine
+  require 'sanitize'
 
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
 
@@ -74,6 +75,10 @@ class Event < ActiveRecord::Base
   def description
     # TODO Generalize this code so we can reuse it on other attributes.
     return read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
+  end
+
+  def description=(val)
+    write_attribute(:description, Sanitize.clean(val, Sanitize::Config::BASIC))
   end
 
   if (table_exists? rescue nil)
