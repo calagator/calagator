@@ -21,7 +21,6 @@
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
   include SearchEngine
-  require 'sanitize'
 
   Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
 
