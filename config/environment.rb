@@ -148,7 +148,9 @@ Rails::Initializer.run do |config|
   config.time_zone = SETTINGS.timezone
 
   # Set timezone for OS
-  ENV['TZ'] = SETTINGS.tz if SETTINGS.tz
+  config.after_initialize do
+    ENV['TZ'] = Time.zone.tzinfo.identifier
+  end
 
   # Set cookie session
   config.action_controller.session = {

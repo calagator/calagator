@@ -7,12 +7,8 @@ tagline: "Portland's Tech Calendar"
 # Site's URL with trailing slash:
 url: 'http://calagator.org/'
 
-# Default timezone for Rails, run "rake time:zones:all" for options:
+# Default timezone, run "rake -D time" for information on how to display known timezones:
 timezone: 'Pacific Time (US & Canada)'
-
-# Default timezone for OS:
-# FIXME this is an evil temporary workaround, in future the "timezone" setting above will be enough
-tz: 'PST8PDT'
 
 # Google map to display on /venues page:
 venues_google_map_options:
