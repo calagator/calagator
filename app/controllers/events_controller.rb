@@ -62,7 +62,7 @@ class EventsController < ApplicationController
   # GET /events/new
   # GET /events/new.xml
   def new
-    @event = Event.new
+    @event = Event.new(params[:event])
     @page_title = "Add an Event"
 
     respond_to do |format|
@@ -87,7 +87,7 @@ class EventsController < ApplicationController
     @event.start_time = params[:start_date], params[:start_time]
     @event.end_time = params[:end_date], params[:end_time]
 
-    if evil_robot = !params[:trap_field].blank?
+    if evil_robot = params[:trap_field].present?
       flash[:failure] = "<h3>Evil Robot</h3> We didn't create this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
     end
 
@@ -141,6 +141,7 @@ class EventsController < ApplicationController
         if params[:preview]
           @event.attributes = params[:event]
           @event.valid?
+          @event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
         end
         format.html { render :action => "edit" }
         format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }

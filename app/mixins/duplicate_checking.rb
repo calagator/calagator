@@ -177,22 +177,31 @@ module DuplicateChecking
       attributes = new.attribute_names
       matched_fields = nil
 
+      if fields.nil? || (fields.respond_to?(:blank?) && fields.blank?)
+        fields = :all
+      end
+
       if fields == :all || fields == :any
+        matched = false
         attributes.each do |attr|
           # TODO make find_duplicates_by(:all) pay attention to ignore fields
           next if ['id','created_at','updated_at', 'duplicate_of_id','version'].include?(attr)
           if fields == :all
-            query += " ((a.#{attr} = b.#{attr}) OR (a.#{attr} IS NULL AND b.#{attr} IS NULL)) AND"
+            query << " AND" if matched
+            query << " ((a.#{attr} = b.#{attr}) OR (a.#{attr} IS NULL AND b.#{attr} IS NULL))"
           else
-            query += " (a.#{attr} = b.#{attr} AND (a.#{attr} != '' AND a.#{attr} != 0 AND a.#{attr} IS NOT NULL)) OR "
+            query << " OR" if matched
+            query << " (a.#{attr} = b.#{attr} AND (a.#{attr} != '' AND a.#{attr} != 0 AND a.#{attr} IS NOT NULL))"
           end
+          matched = true
         end
       else
         matched = false
         fields = [fields].flatten
         fields.each do |attr|
           if attributes.include?(attr.to_s)
-            query += " a.#{attr} = b.#{attr} AND"
+            query << " AND" if matched
+            query << " a.#{attr} = b.#{attr}"
             matched = true
           else
             raise ArgumentError, "Unknow fields: #{fields.inspect}"
@@ -200,8 +209,8 @@ module DuplicateChecking
         end
         matched_fields = lambda {|r| fields.map {|f| r.read_attribute(f.to_sym) }}
       end
-      # Remove last word from the query, e.g., "AND"
-      query.sub!(/\s+\S+\s*$/, " )")
+
+      query << " )"
 
       query << " GROUP BY #{options[:group_by]}" if options[:group_by]
 

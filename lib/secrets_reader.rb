@@ -1,9 +1,7 @@
 require 'yaml'
 require 'erb'
 require 'ostruct'
-
-require 'rubygems'
-require 'active_support'
+require 'set'
 
 # = SecretsReader
 #
@@ -26,14 +24,16 @@ class SecretsReader
   #
   # Options:
   # * :verbose => Print status to screen on error. Defaults to true.
+  # * :silent => Display nothing, not even errors. Defaults to false.
   def self.read(*args)
-    opts = args.extract_options!
+    given_file = args.first.kind_of?(String) ? args.first : nil
+    opts = args.last.kind_of?(Hash) ? args.last : {}
     verbose = opts[:verbose] != false
-    given_file = args.first
+    silent = opts[:silent] == true
 
     normal_file = "config/secrets.yml"
     sample_file = "config/secrets.yml.sample"
-    rails_root = RAILS_ROOT rescue File.dirname(File.dirname(__FILE__))
+    rails_root = defined?(RAILS_ROOT) ? RAILS_ROOT : File.dirname(File.dirname(__FILE__))
 
     message = "** SecretsReader - "
     error = false
@@ -49,14 +49,22 @@ class SecretsReader
       raise Errno::ENOENT, "Couldn't find '#{normal_file}'"
     end
 
-    puts message if error
-    RAILS_DEFAULT_LOGGER.info(message) rescue nil
+    unless silent
+      puts message if error
+      if defined?(RAILS_DEFAULT_LOGGER)
+        RAILS_DEFAULT_LOGGER.info(message)
+      end
+    end
 
     return object
   end
 
   # Return an OpenStruct object by reading the +filename+ and parsing it with ERB and YAML.
   def self.filename_to_ostruct(filename)
-    return OpenStruct.new(YAML.load(ERB.new(File.read(filename)).result)) rescue nil
+    if filename.nil? or not File.exist?(filename)
+      return nil
+    else
+      return OpenStruct.new(YAML.load(ERB.new(File.read(filename)).result))
+    end
   end
 end

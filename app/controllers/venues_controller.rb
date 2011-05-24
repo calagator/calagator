@@ -143,11 +143,27 @@ class VenuesController < ApplicationController
   # DELETE /venues/1.xml
   def destroy
     @venue = Venue.find(params[:id])
-    @venue.destroy
 
-    respond_to do |format|
-      format.html { redirect_to(venues_url) }
-      format.xml  { head :ok }
+    if @venue.events.count > 0
+      message = "Cannot destroy venue that has associated events, you must reassociate all its events first."
+      respond_to do |format|
+        format.html {
+          flash[:failure] = message
+          redirect_to(@venue)
+        }
+        format.xml {
+          render :xml => message, :status => :unprocessable_entity
+        }
+      end
+    else
+      @venue.destroy
+      respond_to do |format|
+        format.html {
+          flash[:success] = "Destroyed venue."
+          redirect_to(venues_url)
+        }
+        format.xml { head :ok }
+      end
     end
   end
 

@@ -1,0 +1,94 @@
+<%
+# VARIABLES:
+# * event: An Event instance.
+# * has_contentbar: Should room be left to display a contentbar on the side? Defaults to true.
+
+has_contentbar = local_assigns.has_key?(:has_contentbar) ? local_assigns[:has_contentbar] : true
+
+html_classes = "single_event"
+html_classes << " contentbar" if has_contentbar
+%>
+<div class="<%= html_classes %>">
+  <div class="vevent">
+    <h1 class="summary"><%= cleanse event.title.strip_html %></h1>
+    <div class='date'><%= normalize_time(event) -%></div>
+      <% unless event.venue.blank? %>
+      <div class="clearfix location vcard<%= " closed" if event.venue.closed? %>">
+      <%= google_map event %>
+          <a class="url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
+            <span class='fn org'><%= cleanse event.venue.title.strip_html -%></span>
+          </a>
+          <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
+          <div class="adr">
+          <% if !event.venue.street_address.blank? -%>
+          <div class="street-address"><%= cleanse event.venue.street_address -%></div>
+          <% end %>
+          <% if !event.venue.locality.blank? -%>
+            <span class="locality"><%= cleanse event.venue.locality -%></span>
+            <% end -%>
+            <% if !event.venue.region.blank? -%>
+            <span class="region"><%= cleanse event.venue.region -%></span>
+            <% end -%>
+            <% if !event.venue.postal_code.blank? -%>
+            <span class="postal-code"><%= cleanse event.venue.postal_code -%></span>
+            <% end -%>
+            <% if !event.venue.country.blank? -%>
+            <div class='country-name'><%= cleanse event.venue.country -%></div>
+            <% end -%>
+            <% if event.venue && event.venue.has_full_address? -%>
+            (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
+            <% end -%>
+
+            <% if event.venue.wifi? %>
+              <div class='wifi_callout'>Public WiFi</div>
+            <% end %>
+
+
+            <% if event.venue.access_notes.present? %>
+              <div class="access_notes">
+                <h3>Access Notes</h3>
+                <%= h event.venue.access_notes %>
+              </div>
+            <% end %>
+
+      </div>
+      <% end -%>
+  </div>
+
+    <% unless event.url.blank? -%>
+      <h3>Website</h3>
+      <div class="website">
+        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow" -%>
+      </div>
+    <% end -%>
+    <% unless event.description.blank? -%>
+    <h3>Description</h3>
+    <div class="description">
+      <%= format_description(event.description) %>
+    </div>
+    <% end -%>
+
+    <div class="attendees">
+      <script id="attendees-template" type="text/mustache">
+        <h3>Attendees</h3>
+        <span class='plancast-rsvp'>(<a href="{{plan_url}}">RSVP on Plancast</a>)</span>
+        <br />
+        <ul>
+          {{#attendees}}
+            <li>
+              {{#username}}<a href='http://plancast.com/{{username}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
+              {{^username}}<a href='http://plancast.com/user/{{id}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
+            </li>
+          {{/attendees}}
+        </ul>
+      </script>
+    </div>
+
+    <% unless event.tags.blank? -%>
+    <h3>Tags</h3>
+    <div class="tags">
+        <%= tag_links_for event %>
+    </div>
+    <% end %>
+  </div>
+</div>

@@ -223,6 +223,8 @@ describe EventsController, "when creating or updating events" do
   end
 
   describe "when creating events" do
+    integrate_views
+
     it "should display form for creating new event" do
       get "new"
       response.should be_success
@@ -311,8 +313,13 @@ describe EventsController, "when creating or updating events" do
 
       event.should_not_receive(:save)
       
-      post "create", :event => { :title => "Awesomeness" }, :start_time => Time.now, :start_date => Date.today, :preview => "Preview"
+      post "create", :event => { :title => "Awesomeness" },
+                       :start_time => Time.now, :start_date => Date.today,
+                       :end_time => Time.now, :end_date => Date.today,
+                       :preview => "Preview",
+                       :venue_name => "This venue had better not exist"
       response.should render_template(:new)
+      response.should have_tag('#event_preview')
       event.should be_valid
     end
   end
@@ -419,10 +426,14 @@ describe EventsController, "when creating or updating events" do
     end
 
     it "should allow the user to preview the event" do
+      tags = []
+      tags.should_receive(:reload)
+
       Event.should_receive(:find).and_return(@event)
       @event.should_not_receive(:update_attributes)
       @event.should_receive(:attributes=)
       @event.should_receive(:valid?).and_return(true)
+      @event.should_receive(:tags).and_return(tags)
 
       put "update", @params.merge(:preview => "Preview")
       response.should render_template(:edit)

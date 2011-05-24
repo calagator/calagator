@@ -93,7 +93,7 @@
 <div id="event_preview">
     <h2>Preview your event</h2>
 
-    <%= render :partial => "preview", :locals => { :event => event } %>
+    <%= render :partial => "item", :locals => { :event => event, :has_contentbar => false } %>
 </div>
 <% end -%>
 
@@ -101,8 +101,6 @@
   <fieldset>
     <legend><% unless event.new_record? %>Editing: <em><%= event.title %></em><% end %></legend>
     
-    <p>You can edit the details of your event below.  The more information we have about your event, the easier it will be for people to find it.</p>
-
   <%= error_messages_for :event %>
   <div>
     <%= f.label :title, "Event Name" %>
@@ -143,17 +141,18 @@
   <div>
     <%= f.label :description %>
     <%= f.text_area :description %>
-    <span class='help'>
-      (HTML formatting allowed)
-    </span>
+    <div class='help'>
+      (HTML formatting allowed: <%= WhiteListHelper.tags.sort.join(', ') %>)
+    </div>
   </div>
 
   <div>
     <%= f.label :tag_list, "Tags" %>
     <%= f.text_field :tag_list %>
-    <span class="help">
-      (comma-separated keywords)
-    </span>
+    <div class="clearfix"></div>
+    <div class="help">
+      (Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>plancast:plan=ABCD</code> to associate this with a particular <a href="http://plancast.com/">Plancast</a> event, or a tag like <code>epdx:group=1234</code> to associate the event with a particular <a href="http://epdx.org/">ePDX</a> group)
+    </div>
   </div>
 
   <div class='trap'>

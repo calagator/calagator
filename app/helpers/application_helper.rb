@@ -17,7 +17,6 @@ module ApplicationHelper
     result = ""
     for name in FLASH_TYPES
       result += "<div class='flash #{name} flash_#{name}'>#{name == :failure ? 'ERROR: ' : ''}#{flash[name]}</div>" if flash[name]
-      flash[name] = nil
     end
     return(result.blank? ? nil : "<div id='flash'>#{result}</div>")
   end
