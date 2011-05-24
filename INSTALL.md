@@ -121,4 +121,23 @@ You can stop the Solr search service a command like:
 Production
 ----------
 
+Be sure to do the following when setting up your production server:
+
+* Run the server in Rails `production` mode, which is much, much faster than the default `development` mode. See the Ruby on Rails documentation for details.
+* Run `rake clear` to clear the cache after deploying new code.
+* If you're using a search engine service, like Solr, add a command to start it automatically when your server boots. See the "Search engine" section of this document for details.
+* Create a `config/themes.txt` file to tell the server what theme to use. See the "Customization" section of this document for details.
+* Create a `config/secrets.yml` file to tell the server what cryptographic keys, email addresses and other secret information to use. The default settings are NOT secure, you must change them. See the "Security and secrets.yml" section of this document for details.
+* Create and set the credentials to use for connecting to 3rd party services. See the "API Keys" section of this document for details.
+
+
+Recommended production stack
+----------------------------
+
 Calagator.org runs on [Ubuntu Linux](http://ubuntu.com/), [Phusion REE (Ruby Enterprise Edition)](http://rubyenterpriseedition.com/) and [Phusion Passenger](http://www.modrails.com/).
+
+
+Feedback wanted
+---------------
+
+Please contribute documentation patches to help make this documentation better!
