@@ -19,6 +19,7 @@ coverage/*
 db/*.sqlite3
 db/*.sqlite3.*
 db/schema.rb
+Gemfile.lock
 index/*
 log/*
 nbproject/*
