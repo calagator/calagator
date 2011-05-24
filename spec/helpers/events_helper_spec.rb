@@ -44,8 +44,8 @@ it "should return special string when using a tag" do
 
     shared_examples_for "exported event" do
       before do
-        @venue = Venue.new(:title => "My venue", :address => "1930 SW 4th Ave, Portland, Oregon 97201")
-        @event = Event.new(:title => "My event", :start_time => Time.now - 1.hour, :end_time => Time.now, :venue => @venue, :description => event_description)
+        @venue = Venue.create!(:title => "My venue", :address => "1930 SW 4th Ave, Portland, Oregon 97201")
+        @event = Event.create!(:title => "My event", :start_time => Time.now - 1.hour, :end_time => Time.now, :venue => @venue, :description => event_description)
         @export = helper.google_event_export_link(@event)
       end
 
@@ -72,7 +72,7 @@ it "should return special string when using a tag" do
       it_should_behave_like "exported event"
 
       it "should have a complete event description" do
-        @export.should =~ /\&details=#{escape(event_description)}/
+        @export.should =~ /\&details=.*#{escape(event_description)}/
       end
     end
 
@@ -82,11 +82,11 @@ it "should return special string when using a tag" do
       it_should_behave_like "exported event"
 
       it "should have a truncated event description" do
-        @export.should =~ /\&details=#{escape(event_description[0..100])}/
+        @export.should =~ /\&details=.*#{escape(event_description[0..100])}/
       end
 
       it "should have a truncated URL" do
-        @export.size.should == EventsHelper::GOOGLE_EVENT_EXPORT_LIMIT
+        @export.size.should < event_description.size
       end
     end
   end

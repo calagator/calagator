@@ -72,9 +72,6 @@ module EventsHelper
     "#{event.start_time.utc.strftime(GOOGLE_TIME_FORMAT)}/#{end_time.utc.strftime(GOOGLE_TIME_FORMAT)}"
   end
 
-  # Maximum characters in a Google Calendar export string.
-  GOOGLE_EVENT_EXPORT_LIMIT = 2048
-
   # Return a Google Calendar export URL.
   def google_event_export_link(event)
     result = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&text=" << CGI::escape(event.title.strip_html)
@@ -93,13 +90,13 @@ module EventsHelper
     end
 
     if event.description.present?
-      details = "&details=" + CGI::escape(event.description)
-      details_suffix = "..."
-      overflow = GOOGLE_EVENT_EXPORT_LIMIT - result.length
+      details = "Imported from: #{event_url(event)} \n\n#{event.description}"
+      details_suffix = "...[truncated]"
+      overflow = 1024 - result.length
       if overflow > 0
         details = "#{details[0..(overflow - details.size - details_suffix.size - 1)]}#{details_suffix}"
       end
-      result << details
+      result << "&details=" << CGI::escape(details)
     end
 
     return result
