@@ -41,6 +41,8 @@ end
 describe SourceParser, "when parsing events" do
   it "should have expected parsers plus FakeParser" do
     SourceParser.parsers.should == [
+      SourceParser::Plancast,
+      SourceParser::Meetup,
       SourceParser::Upcoming,
       SourceParser::Ical,
       SourceParser::Hcal,
