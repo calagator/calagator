@@ -103,14 +103,61 @@ class SourceParser
     end
 
     # Stub which makes sure that subclasses of Base implement the #parse method.
+    #
+    # Options:
+    # * :url -- URL of iCalendar data to import
+    # * :content -- String of iCalendar data to import
     def self.to_abstract_events(opts={})
       raise NotImplementedError, "Do not use #{self.class}.to_abstract_events method directly"
+    end
+
+    # Wrapper for invoking a driver from another, e.g. if given a Plancast URL,
+    # fetch another URL and parse it with the iCalendar driver.
+    #
+    # Arguments:
+    # * opts: Hash with <tt>to_abstract_events</tt> options.
+    # * driver: Driver that should parse the results. Should be a subclass of SourceParser::Base.
+    # * source: Regular expression for extracting the event id from the URL.
+    # * target: Lambda for generating the URL that the +driver+ should parse. It's called with a Regexp matcher for the +source+ and emits a string URL that the +driver+ should parse.
+    #
+    # Example:
+    #
+    #   class SourceParser
+    #     class Plancast < Base
+    #       label :Plancast
+    #       def self.to_abstract_events(opts={})
+    #         # Invoke the wrapper
+    #         self.to_abstract_events_wrapper(
+    #           # Pass along the opts
+    #           opts,
+    #           # Parse using the Ical driver
+    #           SourceParser::Ical,
+    #           # Regexp describing how to extract an event identifier from the
+    #           # URL. So if given "http://plancast.com/p/5ivg", the event
+    #           # identifier will be "5ivg".
+    #           %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?},
+    #           # Lambda that generates a string URL based on the match above
+    #           lambda { |matcher| "http://plancast.com/p/#{matcher[1]}?feed=ical" }
+    #         )
+    #       end
+    #     end
+    #   end
+    def self.to_abstract_events_wrapper(opts, driver, source, target)
+      if matcher = opts[:url].match(source)
+        driver.to_abstract_events(opts.merge(
+          :content => self.read_url(target.call(matcher)
+        )))
+      else
+        return nil
+      end
     end
   end
 end
 
 # Load format-specific drivers in the following order:
 $SourceParserImplementations = []
+SourceParser::Plancast
+SourceParser::Meetup
 SourceParser::Upcoming
 SourceParser::Ical
 SourceParser::Hcal
