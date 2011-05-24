@@ -9,6 +9,6 @@ require 'socket'
 # YAML file.
 class SettingsReader
   def self.read(filename, defaults={})
-    return OpenStruct.new(YAML.load(ERB.new(File.read(filename)).result).reverse_merge!(defaults))
+    return OpenStruct.new(defaults.merge(YAML.load(ERB.new(File.read(filename)).result)))
   end
 end
