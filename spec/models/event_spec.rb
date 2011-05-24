@@ -796,7 +796,7 @@ describe Event do
     fixtures :events
 
     def ical_roundtrip(events, opts = {})
-      parsed_events = Vpim::Icalendar.decode( Event.to_ical(events, opts) ).first.events.to_a
+      parsed_events = RiCal.parse_string(Event.to_ical(events, opts)).first.events
       if events.is_a?(Event)
         parsed_events.first
       else
@@ -809,19 +809,21 @@ describe Event do
     end
 
     it "should represent an event without an end time as a 1-hour block" do
-      ical_roundtrip( events(:tomorrow) ).duration.should == 1.hours
+      rt = ical_roundtrip(events(:tomorrow))
+      (rt.dtend - rt.dtstart).should == 1.hour
     end
 
     it "should set the appropriate end time if one is given" do
       event = Event.new(valid_event_attributes)
       event.end_time = event.start_time + 2.hours
 
-      ical_roundtrip( event ).duration.should == 2.hours
+      rt = ical_roundtrip(event)
+      (rt.dtend - rt.dtstart).should == 2.hours
     end
 
     { :summary => :title,
       :created => :created_at,
-      :lastmod => :updated_at,
+      :last_modified => :updated_at,
       :description => :description,
       :url => :url,
       :dtstart => :start_time,
@@ -856,14 +858,14 @@ describe Event do
       event = Event.create( valid_event_attributes.merge(:end_time => valid_event_attributes[:start_time] + 4.days) )
       parsed_event = ical_roundtrip( event )
 
-      start_time = Time.today.utc.at_midnight
+      start_time = Date.today
       parsed_event.dtstart.should == start_time
       parsed_event.dtend.should == start_time + 5.days
     end
 
     describe "sequence" do
       def event_to_ical(event)
-        return Vpim::Icalendar.decode(Event.to_ical([event])).first.events.to_a.first
+        return RiCal.parse_string(Event.to_ical([event])).first.events.first
       end
 
       it "should set an initial sequence on a new event" do

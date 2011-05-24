@@ -18,6 +18,28 @@ class SourceParser # :nodoc:
       super(url.gsub(/^webcal:/, 'http:'))
     end
 
+    # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
+    def self.dates_for_tz(component, event)
+      if component.dtstart_property.tzid.nil?
+        event.start_time  = Time.parse(component.dtstart_property.value)
+        if component.dtend_property.nil?
+          if component.duration
+            event.end_time = component.duration_property.add_to_date_time_value(event.start_time)
+          else
+            event.end_time = event.start_time
+          end
+        else
+          event.end_time = Time.parse(component.dtend_property.value)
+        end
+      else
+        event.start_time  = component.dtstart
+        event.end_time    = component.dtend
+      end
+    rescue RiCal::InvalidTimezoneIdentifier
+      event.start_time = Time.parse(component.dtstart_property.to_s)
+      event.end_time = Time.parse(component.dtend_property.to_s)
+    end
+
     CALENDAR_CONTENT_RE    = /^BEGIN:VCALENDAR.*?^END:VCALENDAR/m
     EVENT_CONTENT_RE       = /^BEGIN:VEVENT.*?^END:VEVENT/m
     EVENT_DTSTART_RE       = /^DTSTART.*?:([^\r\n$]+)/m
@@ -35,6 +57,7 @@ class SourceParser # :nodoc:
     # * :skip_old -- Should old events be skipped? Default is true.
     def self.to_abstract_events(opts={})
       # Skip old events by default
+
       opts[:skip_old] = true unless opts[:skip_old] == false
       cutoff = Time.now.yesterday
 
@@ -52,54 +75,38 @@ class SourceParser # :nodoc:
         end
       end
 
-      content_calendars = content.scan(CALENDAR_CONTENT_RE)
-
-      [].tap do |events|
-        for content_calendar in content_calendars
-          content_venues = content_calendar.scan(VENUE_CONTENT_RE)
-
-          content_calendar.scan(EVENT_CONTENT_RE).each_with_index do |content_event, index|
-            # Skip old events before handing them to VPIM
-            if opts[:skip_old]
-              if start_match = content_event.match(EVENT_DTSTART_RE)
-                start_time = Time.parse(start_match[1])
-
-                end_match = content_event.match(EVENT_DTEND_RE)
-                end_time = end_match ? Time.parse(end_match[1]) : nil
-
-                next if (end_time || start_time) < cutoff
-              end
-            end
-
-            components = Vpim::Icalendar.decode(%{BEGIN:VCALENDAR\n#{content_event}\nEND:VCALENDAR\n}).first.components
-            raise TypeError, "Got multiple components for a single event" unless components.size == 1
-            component = components.first
-
+      return [].tap do |events|
+        content_calendars = RiCal.parse_string(content)
+        content_calendars.each do |content_calendar|
+          content_calendar.events.each_with_index do |component, index|
+            next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
             event             = AbstractEvent.new
-            event.start_time  = component.dtstart
             event.title       = component.summary
             event.description = component.description
-            event.end_time    = component.dtend
             event.url         = component.url
 
+            SourceParser::Ical.dates_for_tz(component, event)
+
+            content_venues = content_calendar.to_s.scan(VENUE_CONTENT_RE)
+
             content_venue = \
-              begin
-                if content_calendar.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
-                  # Special handling for Upcoming, where each event maps 1:1 to a venue
-                  content_venues[index]
-                else
-                  begin
-                    location_field = component.fields.find{|t| t.respond_to?(:name) && t.name.upcase == "LOCATION"}
-                    venue_values   = location_field ? location_field.pvalues("VVENUE") : nil
-                    venue_uid      = venue_values ? venue_values.first : venue_values
-                    venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
-                  rescue Exception => e
-                    # Ignore
-                    RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
-                    nil
-                  end
+            begin
+              if content_calendar.to_s.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
+                # Special handling for Upcoming, where each event maps 1:1 to a venue
+                content_venues[index]
+              else
+                begin
+                  # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
+                  venue_uid = component.location_property.params["VVENUE"]
+                  # finding in the content_venues array an item matching the uid
+                  venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
+                rescue Exception => e
+                  # Ignore
+                  RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
+                  nil
                 end
               end
+            end
 
             event.location = to_abstract_location(content_venue, :fallback => component.location)
             events << event
@@ -111,39 +118,29 @@ class SourceParser # :nodoc:
     # Return an AbstractLocation extracted from an iCalendar input.
     #
     # Arguments:
-    # * value - String with iCalendar data to parse which contains a Vvenue item.
+    # * value - String with iCalendar data to parse which contains a VVENUE item.
     #
     # Options:
-    # * :fallback - String to use as the title for the location if the +value+ doesn't contain a Vvenue.
+    # * :fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
     def self.to_abstract_location(value, opts={})
       value = "" if value.nil?
       a = AbstractLocation.new
 
-      # The Vpim libary doesn't understand that Vvenue entries are just Vcards,
-      # so transform the content to trick it into treating them as such.
+      # VVENUE entries are considered just Vcards,
+      # treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
-        vcard_content.gsub!(VENUE_CONTENT_BEGIN_RE, 'BEGIN:VCARD')
-        vcard_content.gsub!(VENUE_CONTENT_END_RE,   'END:VCARD')
+        vcard_hash = self.hash_from_vcard_string(vcard_content)
 
-        begin
-          vcards = Vpim::Vcard.decode(vcard_content)
-          raise ArgumentError, "Wrong number of vcards" unless vcards.size == 1
-          vcard = vcards.first
+        a.title          = vcard_hash['NAME']
+        a.street_address = vcard_hash['ADDRESS']
+        a.locality       = vcard_hash['CITY']
+        a.region         = vcard_hash['REGION']
+        a.postal_code    = vcard_hash['POSTALCODE']
+        a.country        = vcard_hash['COUNTRY']
 
-          a.title          = vcard['name']
-          a.street_address = vcard['address']
-          a.locality       = vcard['city']
-          a.region         = vcard['region']
-          a.postal_code    = vcard['postalcode']
-          a.country        = vcard['country']
+        a.latitude, a.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
 
-          a.latitude, a.longitude = vcard['geo'].split(/;/).map(&:to_f)
-
-          return a
-        rescue Vpim::InvalidEncodingError, ArgumentError, RuntimeError
-          # Exceptional state will be handled below
-          :ignore # Leave this line in for rcov's code coverage
-        end
+        return a
       end
 
       if opts[:fallback].blank?
@@ -153,6 +150,52 @@ class SourceParser # :nodoc:
         return a
       end
     end
+
+    # Return hash parsed from the contents of first VCARD found in the iCalendar data.
+    #
+    # Properties with meta-qualifiers are treated specially. When a property with a meta-qualifier is parsed (e.g. "FOO;BAR"), it will also set a value for the key (e.g. "FOO") if one isn't specified. This makes it possible to retrieve a value for a key like "DTSTART" when only a key with a qualifier like "DTSTART;TZID=..." is specified in the data.
+    #
+    # Arguments:
+    # * data - String of iCalendar data containing a VCARD.
+    def self.hash_from_vcard_string(data)
+      # Only use first vcard of a VVENUE
+      vcard = RiCal.parse_string(data).first
+
+      # Extract all properties, including non-standard ones, into an array of "KEY;meta-qualifier:value" strings
+      vcard_lines = vcard.export_properties_to(StringIO.new(''))
+
+      return self.hash_from_vcard_lines(vcard_lines)
+    end
+
+    # Return hash parsed from VCARD lines.
+    #
+    # Arguments:
+    # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
+    def self.hash_from_vcard_lines(vcard_lines)
+      return {}.tap do |vcard_hash|
+        vcard_lines.each do |vcard_line|
+          if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
+            key = matcher[1]
+            qualifier = matcher[2]
+            value = matcher[3]
+
+            if qualifier
+              # Add entry for a key and its meta-qualifier
+              vcard_hash["#{key}#{qualifier}"] = value
+
+              # Add fallback entry for a key from the matching meta-qualifier, e.g. create key "foo" from contents of key with meta-qualifier "foo;bar".
+              unless vcard_hash.has_key?(key)
+                vcard_hash[key] = value
+              end
+            else
+              # Add entry for a key without a meta-qualifier.
+              vcard_hash[key] = value
+            end
+          end
+        end
+      end
+    end
   end
 end
+
 

@@ -1,5 +1,12 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
+def events_from_ical_at(filename)
+  url = "http://foo.bar/"
+  source = Source.new(:title => "Calendar event feed", :url => url)
+  SourceParser::Base.should_receive(:read_url).and_return(read_sample(filename))
+  return source.to_events(:skip_old => false)
+end
+
 describe SourceParser::Ical, "in general" do
   it "should read http URLs as-is" do
     http_url = "http://foo.bar/"
@@ -16,16 +23,19 @@ describe SourceParser::Ical, "in general" do
   end
 end
 
-describe SourceParser::Ical, "when parsing locations" do
-  it "should fallback on VPIM errors" do
-    invalid_hcard = <<-HERE
-BEGIN:VVENUE
-omgwtfbbq
-END:VVENUE
-    HERE
+describe SourceParser::Ical, "when parsing events and their locations" do
 
-    SourceParser::Ical.to_abstract_location(invalid_hcard, :fallback => "mytitle").title.should == "mytitle"
+  before(:all) do
+    SourceParser::Base.should_receive(:read_url).and_return(read_sample('ical_upcoming_many.ics'))
+    @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
   end
+  
+   it "locations should be" do
+    @events.each do |event|
+      event.location.should_not be_nil
+    end
+  end
+
 end
 
 describe SourceParser::Ical, "when parsing multiple items in an Upcoming feed" do
@@ -80,34 +90,29 @@ describe SourceParser::Ical, "when parsing multiple items in an Eventful feed" d
     event_titles_and_street_addresses = [
       ["iMovie and iDVD Workshop", "7293 SW Bridgeport Road"],
       ["Portland Macintosh Users Group (PMUG)", "Jean Vollum Natural Capital Center"],
-      ["Morning Meetings: IT", "622 SE Grand Avenue"],
+      ["Morning Meetings: IT", "622 SE Grand Avenue"]
     ]
 
     # Make sure each of the above events has the expected street address
     event_titles_and_street_addresses.each do |event_title, street_address|
-      @events.find{|event|
+      @events.find { |event|
         event.title == event_title && event.location.street_address == street_address
-      }.should_not be_nil
-    end
+        }.should_not be_nil
+      end
   end
 end
-describe SourceParser::Ical, "with iCalendar events" do
-  def events_from_ical_at(filename)
-    url = "http://foo.bar/"
-    source = Source.new(:title => "Calendar event feed", :url => url)
-    SourceParser::Base.should_receive(:read_url).and_return(read_sample(filename))
-    return source.to_events(:skip_old => false)
-  end
 
-  it "should parse Apple iCalendar format" do
-    events = events_from_ical_at('ical_apple.ics')
+describe SourceParser::Ical, "with iCalendar events" do
+
+  it "should parse Apple iCalendar v3 format" do
+    events = events_from_ical_at('ical_apple_v3.ics')
 
     events.size.should == 1
     event = events.first
     event.title.should == "Coffee with Jason"
     # NOTE Source data does not contain a timezone!?
-    event.start_time.should == Time.parse('2002-11-28 14:00:00')
-    event.end_time.should == Time.parse('2002-11-28 15:00:00')
+    event.start_time.should == Time.zone.parse('2010-04-08 00:00:00')
+    event.end_time.should == Time.zone.parse('2010-04-08 01:00:00')
     event.venue.should be_nil
   end
 
@@ -117,7 +122,18 @@ describe SourceParser::Ical, "with iCalendar events" do
     events.size.should == 1
     event = events.first
     event.title.should be_blank
-    event.start_time.should == Time.parse('Wed Jan 17 00:00:00 UTC 2007')
+    event.start_time.should == Time.parse('Wed Jan 17 00:00:00 2007')
+    event.venue.should be_nil
+  end
+  
+  it "should parse basic iCalendar format with a duration and set the correct end time" do
+    events = events_from_ical_at('ical_basic_with_duration.ics')
+
+    events.size.should == 1
+    event = events.first
+    event.title.should be_blank
+    event.start_time.should == Time.zone.parse('2010-04-08 00:00:00')
+    event.end_time.should == Time.zone.parse('2010-04-08 01:00:00')
     event.venue.should be_nil
   end
 
@@ -127,8 +143,8 @@ describe SourceParser::Ical, "with iCalendar events" do
     event = events.first
 
     event.title.should == "Ignite Portland"
-    event.start_time.should == Time.parse('2008-02-05 18:00:00')
-    event.end_time.should == Time.parse('2008-02-05 21:00:00')
+    event.start_time.should == Time.zone.parse('2008-02-05 18:00:00')
+    event.end_time.should == Time.zone.parse('2008-02-05 21:00:00')
     event.description.should == "If you had five minutes to talk to Portland what would you say? What if you only got 20 slides and they rotated automatically after 15 seconds? Launch a web site? Teach a hack? Talk about recent learnings, successes, failures?\n      \n      Come join us for the second Ignite Portland! It's free to attend or present. We hope to have food and drinks, but we need sponsors for that, so check out http://www.igniteportland.com for details on attending, presenting, or sponsoring!\n      \n      What is Ignite Portland? A bunch of fast-paced, interesting presentations - 20 slides for 15 seconds each. Our mantra is \"share burning ideas\" - just about any topic will do, as long as it's interesting. From tech to crafts to business to just plain fun! There will be time to network and chat after each series of presentations."
 
     event.venue.should_not be_blank
@@ -147,8 +163,8 @@ describe SourceParser::Ical, "with iCalendar events" do
 
     event.title.should == "Demolicious - Portland Web Innovators"
     # NOTE Source data does not contain a timezone!?
-    event.start_time.utc.should == Time.parse('2009-04-01 19:00:00').utc
-    event.end_time.utc.should   == Time.parse('2009-04-01 19:00:00').utc # No end_time provided
+    event.start_time.should == Time.zone.parse('2009-04-01 19:00:00')
+    event.end_time.should   == Time.zone.parse('2009-04-01 19:00:00') # No end_time provided
     event.description.should == "Come see the great stuff your fellow Portlanders have been working on. Several ten minute demos of new products and side projects.\n      \n      Confirmed lineup:\n      * I Need to Read This! (Benjamin Stover)\n      * MioWorks (David Abramowski)\n      * Black Tonic (Jason Glaspey)\n      * Avatari (Sam Grover)\n      * You?\n      \n      Find out more about showing off *your* project here:\n      http://www.pdxwi.com/demolicious"
 
     event.venue.should_not be_blank
@@ -190,6 +206,12 @@ describe SourceParser::Ical, "with iCalendar events" do
     events = events_from_ical_at('ical_google.ics')
     events.first.venue.title.should == 'CubeSpace'
   end
+  
+  it "should parse a calendar file with multiple calendars" do
+    events = events_from_ical_at('ical_multiple_calendars.ics')
+    events.size.should == 3
+    events.map(&:title).should == ["Coffee with Jason", "Coffee with Mike", "Coffee with Kim"]
+  end
 
 end
 
@@ -210,11 +232,10 @@ describe SourceParser::Ical, "when importing events with non-local times" do
     e = Event.find(event)
     e.start_time.should == Time.parse('Thu Jul 01 08:00:00 +0000 2010')
     e.end_time.should == Time.parse('Thu Jul 01 09:00:00 +0000 2010')
-
-end
+  end
 
   it "should store time with TZID=GMT in UTC" do
-    pending "not activated - requires VPIM fix or work-around. See Issue238."
+    pending "RiCal doesn't consider the time zone data in this file valid"
     events = events_from_ical_at('ical_gmt.ics')
     events.size.should == 1
     abstract_event = events.first
