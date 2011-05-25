@@ -4,20 +4,20 @@ Themes let you customize the appearance of your Calagator instance. This directo
 
 == Setup
 
-You need to do a few things to tell your server what theme it's using:
+You need to do a few things to tell your server what theme to use:
 
 1. Pick a name for your theme, such as "mysite".
-2. Tell your server what theme it should use by creating a configuration file, e.g. put "mysite" into the "config/theme.txt" file. This file will not exist unless you create it. You probably shouldn't add this file to version control because it's a run-time server setting like your secrets file. Don't forget to deploy this file to your production server too.
-3. You can also set or override the theme used through the "THEME" environment variable, e.g. "THEME=mysite script/server". You will typically not want to do this because creating the "config/theme.txt" file is so easy.
-4. Restart your Calagator instance if you created or changed the "config/theme.txt" file. However, once it's restarted, any changes you make within your theme will be reloaded automatically if you're using the default Rails "development" environment.
+2. Create a theme configuration file at "config/theme.txt" containing only your theme name. This tells Calagator which theme it should use.  You probably shouldn't add this file to version control because it's a run-time server setting like your secrets file, but don't forget to deploy this file to your production server.
+3. You can also set or override this setting through the "THEME" environment variable, e.g. "THEME=mysite script/server". This should be used for testing other themes during development, not for setting your theme in production.
+4. You'll need to restart your Calagator instance after creating or changing the "config/theme.txt" file. However, once it's restarted, any changes you make within your theme will be reloaded automatically if you're using the default Rails "development" environment.
 
 == Creating a theme
 
 You need to create the actual theme:
 
-1. Copy the default theme to create your own, e.g. copy "themes/default" to "themes/mysite" to create a new "mysite" theme. You should add the files in this directory to version control for your Calagtor instance's fork.
-2. Edit the theme's settings to specify where your server is, what it's called and such, e.g. edit the "themes/mysite/settings.yml" file. The default theme's settings file is full of comments that will explain how to change it.
-3. Your Calagator instance loads the theme's settings on startup, so if you change them, you will need to restart the instance.
+1. Copy the default theme to create your own (e.g. copy "themes/default" to "themes/mysite" to create a new "mysite" theme). You should add the files in this directory to version control for your Calagtor instance's fork.
+2. Edit the theme's settings file (e.g. "themes/mysite/settings.yml") to specify where your server is, what it's called and such. The default theme's settings file is full of comments that will explain how to change it.
+3. Your Calagator instance loads the theme's settings on startup, so if you change them, you will need to restart.
 
 == Customizing content
 
