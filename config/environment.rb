@@ -56,7 +56,7 @@ Rails::Initializer.run do |config|
 
   #---[ Caching ]---------------------------------------------------------
 
-  cache_path = "#{RAILS_ROOT}/tmp/cache/#{RAILS_ENV}"
+  cache_path = "#{RAILS_ROOT}/tmp/cache/#{Rails.env}"
   config.cache_store = :file_store, cache_path
   FileUtils.mkdir_p(cache_path)
 

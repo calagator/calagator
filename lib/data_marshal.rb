@@ -48,7 +48,7 @@ class DataMarshal
   end
 
   def filename_or_default
-    self.filename || %{#{RAILS_ENV}.#{Time.now.strftime('%Y-%m-%d@%H%M%S')}.data}
+    self.filename || %{#{Rails.env}.#{Time.now.strftime('%Y-%m-%d@%H%M%S')}.data}
   end
   
   def dump_cached(filename=nil)

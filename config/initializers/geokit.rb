@@ -40,7 +40,7 @@ keys_path = "#{RAILS_ROOT}/config/geocoder_api_keys.yml"
 if File.exist? keys_path
   geocoder_api_keys = YAML.load_file(keys_path)
   GeoKit::Geocoders::google = GOOGLE_APPLICATION_ID = \
-    geocoder_api_keys.fetch(RAILS_ENV,{})['google']
+    geocoder_api_keys.fetch(Rails.env,{})['google']
 end
 
 # This is your username and password for geocoder.us.

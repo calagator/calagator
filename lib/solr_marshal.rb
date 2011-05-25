@@ -42,11 +42,11 @@ class SolrMarshal
 
   def initialize(opts={})
     self.filename  = opts[:filename]
-    self.index_dir = opts[:index_dir] || %{#{RAILS_ROOT}/vendor/plugins/acts_as_solr/solr/solr/data/#{RAILS_ENV}/index}
+    self.index_dir = opts[:index_dir] || %{#{RAILS_ROOT}/vendor/plugins/acts_as_solr/solr/solr/data/#{Rails.env}/index}
   end
 
   def filename_or_default
-    self.filename || %{#{RAILS_ENV}.#{Time.now.strftime('%Y-%m-%d@%H%M%S')}.solr}
+    self.filename || %{#{Rails.env}.#{Time.now.strftime('%Y-%m-%d@%H%M%S')}.solr}
   end
 
   def dump(filename=nil)

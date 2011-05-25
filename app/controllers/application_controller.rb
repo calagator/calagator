@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
   layout "application"
 
   # For vendor/plugins/exception_notification
-  if ['preview', 'production'].include?(RAILS_ENV) || ENV['NOTIFY_ON_EXCEPTIONS']
+  if ['preview', 'production'].include?(Rails.env) || ENV['NOTIFY_ON_EXCEPTIONS']
     include ExceptionNotifiable
     local_addresses.clear
     (self.exception_notifiable_silent_exceptions ||= []) << ActionController::InvalidAuthenticityToken if ActionController.const_defined?(:InvalidAuthenticityToken)
