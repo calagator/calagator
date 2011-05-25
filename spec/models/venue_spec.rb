@@ -63,7 +63,7 @@ describe Venue, "with finding unmarked duplicates" do
 end
 
 describe Venue, "with finding unmarked duplicates (integration test)" do
-  fixtures :venues
+  fixtures :all
 
   before(:each) do
     @venue = venues(:cubespace)
@@ -121,23 +121,23 @@ describe Venue, "when checking for squashing" do
     @slave_first = Venue.create!(:title => "1st slave", :duplicate_of_id => @master.id)
     @slave_second = Venue.create!(:title => "2nd slave", :duplicate_of_id => @slave_first.id)
   end
-  
+
   it "should recognize a master" do
     @master.should be_a_master
   end
-  
+
   it "should recognize a slave" do
     @slave_first.should be_a_slave
   end
-  
+
   it "should not think that a slave is a master" do
     @slave_second.should_not be_a_master
   end
-  
+
   it "should not think that a master is a slave" do
     @master.should_not be_a_slave
   end
-  
+
   it "should return the progenitor of a child" do
     @slave_first.progenitor.should == @master
   end
@@ -145,25 +145,22 @@ describe Venue, "when checking for squashing" do
   it "should return the progenitor of a grandchild" do
     @slave_second.progenitor.should == @master
   end
-  
+
   it "should return a master as its own progenitor" do
     @master.progenitor.should == @master
   end
-  
+
   it "should return the progenitor if an imported venue has an exact duplicate" do
     @abstract_location = SourceParser::AbstractLocation.new
     @abstract_location.title = @slave_second.title
 
     Venue.from_abstract_location(@abstract_location).should == @master
   end
-  
+
 end
 
 describe Venue, "when squashing duplicates" do
-  before(:each) do
-    Venue.destroy_all
-    Event.destroy_all
-
+  before :each do
     @master_venue    = Venue.create!(:title => "Master")
     @submaster_venue = Venue.create!(:title => "Submaster")
     @child_venue     = Venue.create!(:title => "Child", :duplicate_of => @submaster_venue)
@@ -322,16 +319,16 @@ describe "Venue geocode addressing" do
     @venue.attributes = {:street_address => "", :address => "address"}
     @venue.geocode_address.should == "address"
   end
-  
+
   describe "when versioning" do
     it "should have versions" do
       Venue.new.versions.should == []
     end
-    
+
     it "should create a new version after updating" do
       venue = Venue.create!(:title => 'My Event')
       venue.versions.count.should == 1
-      
+
       venue.title = "New Title"
       venue.save!
       venue.versions.count.should == 2

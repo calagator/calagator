@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventsController, "when displaying index" do
   integrate_views
-  fixtures :events, :venues
+  fixtures :all
 
   it "should produce HTML" do
     get :index, :format => "html"
@@ -199,7 +199,7 @@ describe EventsController, "when displaying events" do
 end
 
 describe EventsController, "when creating or updating events" do
-  fixtures :events, :venues
+  fixtures :all
 
   before(:each) do
     # Fields marked with "###" may be filled in by examples to alter behavior
@@ -442,7 +442,7 @@ describe EventsController, "when creating or updating events" do
   end
 
   describe "when cloning event" do
-    fixtures :events, :venues
+    fixtures :all
     before(:each) do
       @event = events(:calagator_codesprint)
       Event.stub!(:find).and_return(@event)
@@ -468,7 +468,7 @@ end
 
 describe EventsController, "managing duplicates" do
   integrate_views
-  fixtures :events, :venues
+  fixtures :all
 
   it "should find new duplicates and not old duplicates" do
     get 'duplicates', :type => 'title'
@@ -544,7 +544,7 @@ describe EventsController, "when searching" do
 
   describe "when returning results" do
     integrate_views
-    fixtures :events, :venues
+    fixtures :all
 
     before do
       @results = {
@@ -649,7 +649,7 @@ end
 
 describe EventsController, "when running integration test" do
   integrate_views
-  fixtures :events, :venues
+  fixtures :all
 
   before(:each) do
     @venue         = venues(:cubespace)

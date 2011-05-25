@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/site/index" do
-  fixtures :events
+  fixtures :all
 
   before(:each) do
     @codesprint         = events(:calagator_codesprint)

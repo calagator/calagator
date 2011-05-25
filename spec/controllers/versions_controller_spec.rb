@@ -5,9 +5,7 @@ describe VersionsController do
 
   describe "history" do
     before :all do
-      Venue.destroy_all
-      Event.destroy_all
-      Version.destroy_all
+      @versions_count_before = Version.count
 
       @venue = Venue.create!(:title => "Venue")
 
@@ -32,7 +30,7 @@ describe VersionsController do
       end
 
       it "should have versions" do
-        @versions.size.should == 3
+        Version.count.should == @versions_count_before + 3
       end
 
       it "should include create for item" do

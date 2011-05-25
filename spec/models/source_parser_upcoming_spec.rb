@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SourceParser::Upcoming do
-  fixtures :events, :venues
+  fixtures :all
 
   describe "when extracting Upcoming event id" do
     it 'should extract from verbose URL' do

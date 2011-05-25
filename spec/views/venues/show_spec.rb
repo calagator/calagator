@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/venues/show" do
-  fixtures :venues
+  fixtures :all
   
   before(:each) do
     @cubespace = venues(:cubespace)

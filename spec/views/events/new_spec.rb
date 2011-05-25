@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/events/new" do
-  fixtures :events
+  fixtures :all
   
   before(:each) do
     assigns[:event] = Event.new
