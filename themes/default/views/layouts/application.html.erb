@@ -67,7 +67,7 @@
           <br />
           <strong>Something not right?</strong> <%= link_to "File an issue", "http://code.google.com/p/calagator/issues/list" %> or <%= link_to "get satisfaction", 'http://getsatisfaction.com/calagator' %>.
         </div>
-        <% form_tag '/events/search', :method => :get do %>
+        <%= form_tag '/events/search', :method => :get do %>
           <div id='search_form'>
           <label for="search_field">Search Events</label>
           <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>

@@ -3,7 +3,7 @@
 <h1>Venues</h1>
 <div id='venues_search'>
   <h2>Find a venue:</h2>
-  <% form_tag venues_path, :method => 'get' do %>
+  <%= form_tag venues_path, :method => 'get' do %>
     <div class='keywords'>
       <%= label_tag :query, "Keywords" %>
       <%= text_field_tag :query, params[:query] %>
