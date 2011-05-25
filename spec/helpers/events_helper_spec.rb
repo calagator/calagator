@@ -66,7 +66,7 @@ it "should return special string when using a tag" do
       end
     end
 
-    context "an event's text doesn't need truncation" do
+    describe "an event's text doesn't need truncation" do
       let(:event_description) { "My event description." }
 
       it_should_behave_like "exported event"
@@ -76,7 +76,7 @@ it "should return special string when using a tag" do
       end
     end
 
-    context "an event's text needs truncation" do
+    describe "an event's text needs truncation" do
       let(:event_description) { "My event description. " * 100 }
 
       it_should_behave_like "exported event"
