@@ -216,7 +216,7 @@ module DuplicateChecking
 
       query << " GROUP BY #{options[:group_by]}" if options[:group_by]
 
-      RAILS_DEFAULT_LOGGER.debug("find_duplicates_by: SQL -- #{query}")
+      Rails.logger.debug("find_duplicates_by: SQL -- #{query}")
       records = find_by_sql(query) || []
 
       # Reject known duplicates
@@ -263,7 +263,7 @@ module DuplicateChecking
 
         # Transfer any venues that use this now duplicate venue as a master
         unless duplicate.duplicates.blank?
-          RAILS_DEFAULT_LOGGER.debug("#{self.name}#squash: recursively squashing children of #{self.name}@#{duplicate.id}")
+          Rails.logger.debug("#{self.name}#squash: recursively squashing children of #{self.name}@#{duplicate.id}")
           squash(:master => master, :duplicates => duplicate.duplicates)
         end
 
@@ -271,7 +271,7 @@ module DuplicateChecking
         self.reflect_on_all_associations(:has_many).each do |association|
           next if association.name == :duplicates
           if self.duplicate_squashing_ignores_associations.include?(association.name.to_sym)
-            RAILS_DEFAULT_LOGGER.debug(%{#{self.name}#squash: skipping assocation '#{association.name}'})
+            Rails.logger.debug(%{#{self.name}#squash: skipping assocation '#{association.name}'})
             next
           end
 
@@ -284,7 +284,7 @@ module DuplicateChecking
           foreign_objects = duplicate.send(association.name)
           for object in foreign_objects
             object.update_attribute(association.primary_key_name, master.id) unless object.new_record?
-            RAILS_DEFAULT_LOGGER.debug(%{#{self.name}#squash: transferring foreign object "#{object.class.name}##{object.id}" from duplicate "#{self.name}##{duplicate.id}" to master "#{self.name}##{master.id}" via association "#{association.name}" using attribute "#{association.primary_key_name}"})
+            Rails.logger.debug(%{#{self.name}#squash: transferring foreign object "#{object.class.name}##{object.id}" from duplicate "#{self.name}##{duplicate.id}" to master "#{self.name}##{master.id}" via association "#{association.name}" using attribute "#{association.primary_key_name}"})
           end
         end
 
@@ -294,7 +294,7 @@ module DuplicateChecking
         duplicate.duplicate_of = master
         duplicate.update_attribute(:duplicate_of, master) unless duplicate.new_record?
         squashed << duplicate
-        RAILS_DEFAULT_LOGGER.debug("#{self.name}#squash: marking #{self.name}@#{duplicate.id} as duplicate of #{self.name}@{master.id}")
+        Rails.logger.debug("#{self.name}#squash: marking #{self.name}@#{duplicate.id} as duplicate of #{self.name}@{master.id}")
       end
       return squashed
     end

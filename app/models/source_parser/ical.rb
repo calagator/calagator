@@ -102,7 +102,7 @@ class SourceParser # :nodoc:
                   venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
                 rescue Exception => e
                   # Ignore
-                  RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
+                  Rails.logger.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
                   nil
                 end
               end

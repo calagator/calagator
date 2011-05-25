@@ -51,8 +51,8 @@ class SecretsReader
 
     unless silent
       puts message if error
-      if defined?(RAILS_DEFAULT_LOGGER)
-        RAILS_DEFAULT_LOGGER.info(message)
+      if defined?(Rails.logger)
+        Rails.logger.info(message)
       end
     end
 

@@ -38,9 +38,9 @@ class Object
   # Log a +message+ using Rails. Optional +level+ (e.g. "info"). See
   # #logmsg for details on log format.
   def logit(message="Hello world", level=:info, depth=2)
-    return false unless RAILS_DEFAULT_LOGGER.send("#{level}?")
+    return false unless Rails.logger.send("#{level}?")
     output = self.logmsg(message, depth)
-    RAILS_DEFAULT_LOGGER.send(level, output)
+    Rails.logger.send(level, output)
     return output
   end
 end
