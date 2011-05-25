@@ -1,7 +1,17 @@
 source :rubygems
 
+# Load additional gems from "Gemfile.local" if it exists, has same format as this file.
+begin
+  data = File.read('Gemfile.local')
+rescue Errno::ENOENT
+  # Ignore
+end
+eval data if data
+
+# Database driver
 gem 'sqlite3'
 
+# Run-time dependencies
 gem 'rails', '2.3.11'
 gem 'columnize', '0.3.2'
 gem 'geokit', '1.5.0'
@@ -17,7 +27,7 @@ gem 'will_paginate', '2.3.15'
 gem 'mofo', '0.2.8'
 
 # Some dependencies are only needed for test and development environments. On
-# production servers, you can skip their installation by running: 
+# production servers, you can skip their installation by running:
 #   bundle install --without development test
 group :development, :test do
   gem 'rspec', '1.3.1', :require => false
