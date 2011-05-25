@@ -67,13 +67,13 @@ class Venue < ActiveRecord::Base
   duplicate_squashing_ignores_associations :tags
 
   # Named scopes
-  named_scope :masters,
+  scope :masters,
     :conditions => ['duplicate_of_id IS NULL'],
     :include => [:source, :events, :tags, :taggings]
 
-  named_scope :with_public_wifi, :conditions => { :wifi   => true }
-  named_scope :in_business, :conditions      => { :closed => false }
-  named_scope :out_of_business, :conditions  => { :closed  => true }
+  scope :with_public_wifi, :conditions => { :wifi   => true }
+  scope :in_business, :conditions      => { :closed => false }
+  scope :out_of_business, :conditions  => { :closed  => true }
 
   #===[ Instantiators ]===================================================
 

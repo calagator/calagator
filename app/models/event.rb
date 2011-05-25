@@ -63,7 +63,7 @@ class Event < ActiveRecord::Base
   duplicate_squashing_ignores_associations :tags
 
   # Named scopes
-  named_scope :masters,
+  scope :masters,
     :conditions => ["events.duplicate_of_id IS NULL"],
     :include => [:source, :venue, :tags, :taggings]
 
