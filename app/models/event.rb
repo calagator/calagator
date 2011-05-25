@@ -244,9 +244,7 @@ class Event < ActiveRecord::Base
       conditions_vars[:venue] = venue.id
     end
 
-    return self.masters.find(:all,
-      :conditions => [conditions_sql, conditions_vars],
-      :order => order)
+    return self.masters.where([conditions_sql, conditions_vars]).order(order)
   end
 
   # Return Hash of Events grouped by the +type+.

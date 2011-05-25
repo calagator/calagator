@@ -101,7 +101,7 @@ module DuplicateChecking
     matchable_attributes = self.attributes.reject { |key, value|
       self.class.duplicate_checking_ignores_attributes.include?(key.to_sym)
     }
-    duplicates = self.class.find(:all, :conditions => matchable_attributes).reject{|t| t.id == self.id}
+    duplicates = self.class.where(matchable_attributes).reject{|t| t.id == self.id}
     return duplicates.blank? ? nil : duplicates
   end
 

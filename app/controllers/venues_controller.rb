@@ -28,10 +28,10 @@ class VenuesController < ApplicationController
         conditions = ["title LIKE :query OR description LIKE :query", {:query => "%#{params[:query]}%"}]
       end
 
-      @venues = scoped_venues.find(:all, :order => 'lower(title)', :conditions => conditions)
+      @venues = scoped_venues.order('lower(title)').where(conditions)
     else # default view
-      @most_active_venues = scoped_venues.find(:all, :limit => 10, :order => 'events_count DESC')
-      @newest_venues = scoped_venues.find(:all, :limit => 10, :order => 'created_at DESC')
+      @most_active_venues = scoped_venues.limit(10).order('events_count DESC')
+      @newest_venues = scoped_venues.limit(10).order('created_at DESC')
     end
 
     @page_title = "Venues"
