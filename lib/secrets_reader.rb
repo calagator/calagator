@@ -51,7 +51,7 @@ class SecretsReader
 
     unless silent
       puts message if error
-      if defined?(Rails.logger)
+      if !Rails.logger.nil?
         Rails.logger.info(message)
       end
     end

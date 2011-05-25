@@ -12,10 +12,9 @@ eval data if data
 gem 'sqlite3'
 
 # Run-time dependencies
-gem 'rake', '0.8.7'
-gem 'rails', '2.3.12'
-gem 'rdoc', '3.8', :require => nil
+gem 'rails', '3.0.7'
 gem 'columnize', '0.3.4'
+gem 'rdoc', '3.8', :require => nil
 gem 'geokit', '1.5.0'
 gem 'htmlentities', '4.2.3'
 gem 'linecache', '0.46'
