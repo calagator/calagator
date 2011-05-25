@@ -63,10 +63,8 @@ describe SourceParser, "when parsing events" do
 end
 
 describe SourceParser, "checking duplicates when importing" do
-  fixtures :events, :venues
-
   describe "with two identical events" do
-    before(:all) do
+    before :each do
       @venue_size_before_import = Venue.find(:all).size
       @cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
       @cal_content = (%{
@@ -109,11 +107,10 @@ describe SourceParser, "checking duplicates when importing" do
       event = hcal_source.to_events.first
       event.save!
 
-      event = hcal_source.to_events.first
-      event.should_not be_a_new_record
+      event2 = hcal_source.to_events.first
+      event2.should_not be_a_new_record
     end
     
-    #it "an event with a orphaned exact duplicate should should remove duplicate marking" do
     it "an event with a orphaned exact duplicate should should remove duplicate marking" do
       orphan = Event.create!(:title => "orphan", :start_time => Time.parse("July 14 2008"), :duplicate_of_id => 7142008 )
       cal_content = <<-HERE
@@ -175,10 +172,6 @@ describe SourceParser, "checking duplicates when importing" do
   end
 
   it "should use an existing venue when importing an event whose venue matches a squashed duplicate"  do
-    Event.destroy_all
-    Source.destroy_all
-    Venue.destroy_all
-
     dummy_source = Source.create!(:title => "Dummy", :url => "http://IcalEventWithSquashedVenue.com/")
     master_venue = Venue.create!(:title => "Master")
     squashed_venue = Venue.create!(

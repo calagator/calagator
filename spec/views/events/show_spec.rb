@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../../spec_helper'
 
 describe "/events/show" do
-  fixtures :events, :venues
+  fixtures :all
   
   before(:each) do
     @event = events(:calagator_codesprint)
@@ -33,7 +33,7 @@ describe "/events/show" do
 end
 
 describe 'Google Calendar Integration for Venue with Multi-Line Address' do
-  fixtures :events, :venues
+  fixtures :all
 
   before(:each) do
     @event = events(:duplicate_event)

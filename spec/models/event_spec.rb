@@ -26,7 +26,7 @@ describe Event do
   end
 
   describe "when checking time status" do
-    fixtures :events
+    fixtures :all
 
     it "should be old if event ended before today" do
       events(:old_event).should be_old
@@ -494,7 +494,7 @@ describe Event do
   end
 
   describe "when associating with venues" do
-    fixtures :venues
+    fixtures :all
 
     before(:each) do
       @venue = venues(:cubespace)
@@ -597,7 +597,7 @@ describe Event do
   end
 
   describe "with finding duplicates (integration test)" do
-    fixtures :events
+    fixtures :all
 
     before(:each) do
       @event = events(:calagator_codesprint)
@@ -652,7 +652,7 @@ describe Event do
   end
 
   describe "when squashing duplicates (integration test)" do
-    fixtures :events
+    fixtures :all
 
     before(:each) do
       @event = events(:calagator_codesprint)
@@ -761,7 +761,7 @@ describe Event do
   end
 
   describe "when cloning" do
-    fixtures :events, :venues
+    fixtures :all
 
     before(:each) do
       @original = events(:calagator_codesprint)
@@ -793,7 +793,7 @@ describe Event do
   end
 
   describe "when converting to iCal" do
-    fixtures :events
+    fixtures :all
 
     def ical_roundtrip(events, opts = {})
       parsed_events = RiCal.parse_string(Event.to_ical(events, opts)).first.events
@@ -890,7 +890,7 @@ describe Event do
     end
 
     describe "- the headers" do
-      fixtures :events
+      fixtures :all
 
       before(:each) do
         @data = Event.to_ical(events(:tomorrow))

@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe SourceParser::Hcal, "with hCalendar events" do
-  fixtures :events, :venues
+  fixtures :all
 
   it "should parse hcal" do
     hcal_content = read_sample('hcal_single.xml')

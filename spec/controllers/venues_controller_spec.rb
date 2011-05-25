@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../spec_helper'
 
 describe VenuesController do
   integrate_views
-  fixtures :events, :venues
+  fixtures :all
 
   #Delete this example and add some real ones
   it "should use VenuesController" do
@@ -41,7 +41,7 @@ describe VenuesController do
   
   describe "when updating venues" do 
     before(:each) do
-      @venue = stub_model(Venue)
+      @venue = stub_model(Venue, :versions => [])
       Venue.stub!(:find).and_return(@venue)
     end
     
@@ -52,10 +52,16 @@ describe VenuesController do
   end
 
   describe "when rendering the venues index" do
-    before(:all) do
+    before :all do
       @open_venue = Venue.create!(:title => 'Open Town', :description => 'baz')
       @closed_venue = Venue.create!(:title => 'Closed Down', :closed => true)
       @wifi_venue = Venue.create!(:title => "Internetful", :wifi => true)
+    end
+
+    after :all do
+      @open_venue.destroy
+      @closed_venue.destroy
+      @wifi_venue.destroy
     end
 
     describe "with no parameters" do
