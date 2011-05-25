@@ -1,5 +1,12 @@
 source :rubygems
 
+# Load debugger if installed
+begin
+  require 'ruby-debug'
+rescue LoadError
+  # Ignore
+end
+
 # Load additional gems from "Gemfile.local" if it exists, has same format as this file.
 begin
   data = File.read('Gemfile.local')
