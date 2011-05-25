@@ -11,7 +11,7 @@ namespace :server do
 
   def solr_port
     return @solr_port ||= begin
-      url = yaml_struct_for("#{RAILS_ROOT}/config/solr.yml")[server_rails_env]["url"]
+      url = yaml_struct_for("#{Rails.root}/config/solr.yml")[server_rails_env]["url"]
       URI.parse(url).port
     end
   end
@@ -103,7 +103,7 @@ E.g.,
   task :status do
     pid = nil
     begin
-      pid = File.read("#{RAILS_ROOT}/tmp/pids/thin.#{thin_port}.pid").to_i
+      pid = File.read("#{Rails.root}/tmp/pids/thin.#{thin_port}.pid").to_i
     rescue Errno::ENOENT
       puts "** thin server not running, pid file not found"
       exit 1

@@ -37,7 +37,7 @@ class DataMarshal
 
   def initialize(opts={})
     self.filename      = opts[:filename]
-    self.dump_dir      = opts[:dump_dir]      || %{#{RAILS_ROOT}/tmp/dumps}
+    self.dump_dir      = opts[:dump_dir]      || Rails.root.join('tmp','dumps')
     self.sql_filename  = opts[:sql_filename]  || %{#{self.dump_dir}/current.sql}
     self.solr_filename = opts[:solr_filename] || %{#{self.dump_dir}/current.solr}
     self.use_cache     = opts[:use_cache] == true

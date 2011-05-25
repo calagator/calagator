@@ -117,7 +117,7 @@ class BeValidXhtml
       resource_md5 = MD5.md5(resource).to_s
       file_md5 = nil
 
-      output_dir = "#{RAILS_ROOT}/tmp/#{base}"
+      output_dir = "#{Rails.root}/tmp/#{base}"
       base_filename = File.join(output_dir, fn)
       filename = base_filename + extension
 

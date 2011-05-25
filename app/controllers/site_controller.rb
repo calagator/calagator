@@ -22,11 +22,11 @@ class SiteController < ApplicationController
     respond_to do |format|
       format.html
       format.sqlite3 do
-        send_file(File.join(RAILS_ROOT, $database_yml_struct.database), :filename => File.basename($database_yml_struct.database))
+        send_file(Rails.root.join($database_yml_struct.database), :filename => File.basename($database_yml_struct.database))
       end
       format.data do
         require "lib/data_marshal"
-        target = "#{RAILS_ROOT}/tmp/dumps/current.data"
+        target = Rails.root.join('tmp','dumps','current.data')
         DataMarshal.dump_cached(target)
         send_file(target)
       end

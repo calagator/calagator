@@ -19,6 +19,6 @@ class DatabaseYmlReader
       YAML.load(
         ERB.new(
           File.read(
-            File.join(RAILS_ROOT, "config", "database.yml"))).result)[Rails.env])
+            Rails.root.join("config", "database.yml"))).result)[Rails.env])
   end
 end

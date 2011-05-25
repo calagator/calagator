@@ -12,7 +12,7 @@ Rails::Initializer.run do |config|
   require 'fileutils'
 
   # Bundled libraries
-  $LOAD_PATH << "#{RAILS_ROOT}/vendor/gems/lucene_query-0.1/lib"
+  $LOAD_PATH << Rails.root.join('vendor','gems','lucene_query-0.1','lib')
   require 'lucene_query'
 
   #---[ Rails ]-----------------------------------------------------------
@@ -44,19 +44,18 @@ Rails::Initializer.run do |config|
 
   #---[ Path -------------------------------------------------------------
 
-  config.autoload_paths += %W[
-    #{RAILS_ROOT}/app/mixins
-    #{RAILS_ROOT}/app/observers
+  config.autoload_paths += [
+    Rails.root.join('app','mixins'),
+    Rails.root.join('app','observers')
   ]
 
-  $LOAD_PATH << "#{RAILS_ROOT}"
-  config.eager_load_paths += %W[
-    #{RAILS_ROOT}/lib
+  config.eager_load_paths += [
+    Rails.root.join('lib')
   ]
 
   #---[ Caching ]---------------------------------------------------------
 
-  cache_path = "#{RAILS_ROOT}/tmp/cache/#{Rails.env}"
+  cache_path = Rails.root.join('tmp','cache',Rails.env)
   config.cache_store = :file_store, cache_path
   FileUtils.mkdir_p(cache_path)
 
@@ -71,7 +70,7 @@ Rails::Initializer.run do |config|
   THEME_NAME = ThemeReader.read
   Kernel.class_eval do
     def theme_file(filename)
-      return "#{RAILS_ROOT}/themes/#{THEME_NAME}/#{filename}"
+      return Rails.root.join('themes',THEME_NAME,filename)
     end
   end
 
