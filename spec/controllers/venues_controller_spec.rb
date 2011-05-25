@@ -41,7 +41,7 @@ describe VenuesController do
   
   describe "when updating venues" do 
     before(:each) do
-      @venue = stub_model(Venue)
+      @venue = stub_model(Venue, :versions => [])
       Venue.stub!(:find).and_return(@venue)
     end
     

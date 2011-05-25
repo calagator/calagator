@@ -217,16 +217,6 @@ class EventsController < ApplicationController
     render_events(@events)
   end
 
-  def refresh_version
-    @event = \
-      if params[:version] == '-1'
-        Event.find(params[:id])
-      else
-        Version.find(params[:version]).reify
-      end
-    render :partial => 'form', :locals => { :event => @event}
-  end
-
   # Display a new event form pre-filled with the contents of an existing record.
   def clone
     @event = Event.find(params[:id]).to_clone

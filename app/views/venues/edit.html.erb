@@ -1,18 +1,1 @@
-<% unless @venue.versions.empty? %>
-<form>
-  <div>
-    Version <%= select_tag("version", options_for_select([['Current', -1]] + @venue.versions.reverse.map { |v| ["#{v.created_at.strftime('%B %d, %Y at %I:%M %p')}", v.id]})) %><img alt="Spinner" id="version_loading" src="/images/spinner.gif?1214384400" style="display: none; margin-left: 0.5em;" />
-  </div>
-</form>
-<%= observe_field :version, :url => { :action => :refresh_version, :id => @venue.id },
-      :frequency => 0.25,
-      :update => "edit_venue_form",
-      :with => "'version=' + value",
-      :before => "$('#version_loading').show();",
-      :complete => "$('#version_loading').hide();"
-      %>
-<% end %>
-
-<div id="edit_venue_form">
-  <%= render :partial => 'form', :locals => {:venue => @venue} %>
-</div>
+<%= render '/versions/edit_with_chooser', :record => @venue %>

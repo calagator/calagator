@@ -184,14 +184,4 @@ class VenuesController < ApplicationController
       format.xml  { render :xml => @grouped_venues }
     end
   end
-  
-  def refresh_version
-    @venue = \
-      if params[:version] == '-1'
-        Venue.find(params[:id])
-      else
-        Version.find(params[:version]).reify
-      end
-    render :partial => 'form', :locals => { :venue => @venue}
-  end
 end

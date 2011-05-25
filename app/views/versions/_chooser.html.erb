@@ -1,0 +1,28 @@
+<%
+# USAGE: Displays a version picker for the given object.
+#
+# VARIABLES:
+# * record: The record to show a version picker for.
+# * target: The DOM id to update when refreshing the version.
+%>
+
+<% if record.versions.present? %>
+  <form class="version_chooser">
+    <div>
+      Version <%= select_tag("version", options_for_select(record.versions.reverse.map { |version| ["#{version.created_at.strftime('%B %d, %Y at %I:%M %p')}", version.id]})) %><img alt="Spinner" id="version_loading" src="/images/spinner.gif?1214384400" style="display: none; margin-left: 0.5em;" />
+    </div>
+  </form>
+  <% content_for :javascript_insert do %>
+    <script type='text/javascript'>
+      $(function() {
+        $('#version').change(function(event) {
+          $('#version_loading').show();
+          var version_id = event.target.value;
+          $('#<%= target %>').load('<%= versions_path %>/'+version_id+'/edit', function(response, status, xhr) {
+            $('#version_loading').hide();
+          });
+        })
+      })
+    </script>
+  <% end %>
+<% end %>
