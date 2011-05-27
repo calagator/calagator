@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 # TODO consider converting this to nested describe statements, similar to event_spec
 

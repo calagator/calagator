@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe SourceParser::Meetup do
   describe "with a meetup.com API key in secrets.yml" do
