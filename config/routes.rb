@@ -39,9 +39,9 @@ Calagator::Application.routes.draw do
   match 'export.:format' => 'site#export'
   match 'css/:name' => 'site#style'
   match 'css/:name.:format' => 'site#style'
-  match '/' => 'site#index'
-  match '/themes/:theme/images/*filename' => 'theme#images', :as => :theme_images
-  match '/themes/:theme/stylesheets/*filename' => 'theme#stylesheets', :as => :theme_stylesheets
-  match '/themes/:theme/javascript/*filename' => 'theme#javascript', :as => :theme_javascript
+  match '/' => 'site#index', :as => :root
+
+  themes_for_rails
+
   match '/:controller(/:action(/:id))'
 end
