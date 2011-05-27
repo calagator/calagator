@@ -74,7 +74,7 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
     @location = @event.location
   end
 
-  describe 'shared', :shared => true do
+  shared_examples_for 'shared' do
     it 'should have exactly one event' do
       @events.size.should == 1
     end
