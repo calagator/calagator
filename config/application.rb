@@ -66,43 +66,39 @@ module Calagator
 
     #---[ Secrets and settings ]--------------------------------------------
 
-    # Read secrets
-    require 'secrets_reader'
-    SECRETS = SecretsReader.read
+    config.before_initialize do
+      # Read secrets
+      require 'secrets_reader'
+      ::SECRETS = SecretsReader.read
 
-    # Read theme
-    require 'theme_reader'
-    THEME_NAME = ThemeReader.read
-    Kernel.class_eval do
-      def theme_file(filename)
-        return Rails.root.join('themes',THEME_NAME,filename)
+      # Read theme
+      require 'theme_reader'
+      ::THEME_NAME = ThemeReader.read
+      Kernel.class_eval do
+        def theme_file(filename)
+          return Rails.root.join('themes',THEME_NAME,filename)
+        end
       end
-    end
 
-    # Read theme settings
-    require 'settings_reader'
-    SETTINGS = SettingsReader.read(
-      theme_file("settings.yml"), {
-        'timezone' => 'Pacific Time (US & Canada)',
+      # Read theme settings
+      require 'settings_reader'
+      ::SETTINGS = SettingsReader.read(
+        theme_file("settings.yml"), {
+          'timezone' => 'Pacific Time (US & Canada)',
+        }
+      )
+
+      # Set timezone for Rails
+      config.time_zone = SETTINGS.timezone
+
+
+      # Set cookie session
+      config.action_controller.session = {
+        :key => SECRETS.session_name || "calagator",
+        :secret => SECRETS.session_secret,
       }
-    )
 
-    # Set timezone for Rails
-    config.time_zone = SETTINGS.timezone
-
-    # Set timezone for OS
-    config.after_initialize do
-      ENV['TZ'] = Time.zone.tzinfo.identifier
-    end
-
-    # Set cookie session
-    config.action_controller.session = {
-      :key => SECRETS.session_name || "calagator",
-      :secret => SECRETS.session_secret,
-    }
-
-    # Activate search engine
-    config.after_initialize do
+      # Activate search engine
       require 'lib/search_engine'
       SearchEngine.kind = SECRETS.search_engine
 
@@ -110,6 +106,11 @@ module Calagator
       when :acts_as_solr
         config.plugins << :acts_as_solr
       end
+    end
+
+    # Set timezone for OS
+    config.after_initialize do
+      ENV['TZ'] = Time.zone.tzinfo.identifier
     end
   end
 end
