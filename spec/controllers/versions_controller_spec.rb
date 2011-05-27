@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe VersionsController do
-  integrate_views
+  render_views
 
   describe "history" do
     before :each do

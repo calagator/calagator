@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe VenuesController do
-  integrate_views
+  render_views
   fixtures :all
 
   #Delete this example and add some real ones
@@ -219,7 +219,7 @@ describe VenuesController do
       end
 
       describe "and rendering XML" do
-        integrate_views
+        render_views
 
         before do
           delete :destroy, :id => @venue.id, :format => "xml"

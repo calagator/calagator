@@ -1,7 +1,7 @@
 require File.dirname(__FILE__) + '/../spec_helper'
 
 describe EventsController, "when displaying index" do
-  integrate_views
+  render_views
   fixtures :all
 
   it "should produce HTML" do
@@ -223,7 +223,7 @@ describe EventsController, "when creating or updating events" do
   end
 
   describe "when creating events" do
-    integrate_views
+    render_views
 
     it "should display form for creating new event" do
       get "new"
@@ -467,7 +467,7 @@ describe EventsController, "when creating or updating events" do
 end
 
 describe EventsController, "managing duplicates" do
-  integrate_views
+  render_views
   fixtures :all
 
   it "should find new duplicates and not old duplicates" do
@@ -543,7 +543,7 @@ describe EventsController, "when searching" do
   end
 
   describe "when returning results" do
-    integrate_views
+    render_views
     fixtures :all
 
     before do
@@ -648,7 +648,7 @@ describe EventsController, "when deleting" do
 end
 
 describe EventsController, "when running integration test" do
-  integrate_views
+  render_views
   fixtures :all
 
   before(:each) do
