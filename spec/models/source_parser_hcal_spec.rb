@@ -60,8 +60,8 @@ describe SourceParser::Hcal, "with hCalendar to AbstractLocation parsing" do
     abstract_location.should be_a_kind_of(SourceParser::AbstractLocation)
     abstract_location.locality.should == "portland"
     abstract_location.street_address.should == "317 SW Alder St Ste 500"
-    abstract_location.latitude.should be_close(45.5191, 0.1)
-    abstract_location.longitude.should be_close(-122.675, 0.1)
+    abstract_location.latitude.should be_within(0.1).of(45.5191)
+    abstract_location.longitude.should be_within(0.1).of(-122.675)
     abstract_location.postal_code.should == "97204"
   end
 end
@@ -113,8 +113,8 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
       @location.locality.should == 'portland'
       @location.region.should be_blank
       @location.postal_code.should == '97204'
-      @location.latitude.should be_close(45.5191, 0.1)
-      @location.longitude.should be_close(-122.675, 0.1)
+      @location.latitude.should be_within(0.1).of(45.5191)
+      @location.longitude.should be_within(0.1).of(-122.675)
       @location.url.should be_blank
       @location.email.should be_blank
       @location.telephone.should be_blank
