@@ -25,7 +25,7 @@ Development
 To run Calagator in `development` mode, which automatically reloads code as you change it:
 
   * Follow the **Setup** instructions above.
-  * Initialize your database, run `rake db:migrate db:test:prepare`
+  * Initialize your database, run `bundle exec rake db:migrate db:test:prepare`
   * Start the *Ruby on Rails* web application by running `./script/server` (UNIX) or `ruby script/server` (Windows).
   * Open a web browser to <http://localhost:3000/> to use the development server
   * Read the [Rails Guides](http://guides.rubyonrails.org/) to learn how to develop a Ruby on Rails application.
@@ -38,8 +38,8 @@ Production
 To run Calagator in `production` mode, which runs more quickly, but doesn't reload code:
 
   * Follow the **Setup** instructions above. Don't forget to do things like create the theme and secrets files.
-  * Initialize your database, run `rake RAILS_ENV=production db:migrate`
-  * Run `rake clear` to clear your cache after updating your application's code.
+  * Initialize your database, run `bundle exec rake RAILS_ENV=production db:migrate`
+  * Run `bundle exec rake clear` to clear your cache after updating your application's code.
   * Setup a production web server using [Phusion Passenger](http://www.modrails.com/), [Thin](http://code.macournoyer.com/thin/), [Rainbows](http://rainbows.rubyforge.org/), etc. These will be able to serve more users more quickly than `script/server`.
 
 The Calagator.org site runs on [Ubuntu Linux](http://ubuntu.com/), [Phusion REE (Ruby Enterprise Edition)](http://rubyenterpriseedition.com/) and [Phusion Passenger](http://www.modrails.com/).
@@ -84,16 +84,16 @@ To use, you will need to [install Java 1.6.x](http://www.java.com/getjava), a pr
 
 You will then need to initially populate your records by running commands like:
 
-    rake RAILS_ENV=production sunspot:solr:start
-    rake RAILS_ENV=production sunspot:reindex:calagator
+    bundle exec rake RAILS_ENV=production sunspot:solr:start
+    bundle exec rake RAILS_ENV=production sunspot:reindex:calagator
 
 You can start the Solr search service a command like:
 
-    rake RAILS_ENV=production sunspot:solr:start
+    bundle exec rake RAILS_ENV=production sunspot:solr:start
 
 You can stop the Solr search service a command like:
 
-    rake RAILS_ENV=production sunspot:solr:stop
+    bundle exec rake RAILS_ENV=production sunspot:solr:stop
 
 ### acts_as_solr
 
@@ -103,15 +103,15 @@ To use, you will need to [install Java 1.6.x](http://www.java.com/getjava), a pr
 
 You will then need to initially populate your records by running a command like:
 
-    rake RAILS_ENV=production solr:rebuild_index
+    bundle exec rake RAILS_ENV=production solr:rebuild_index
 
 You can start the Solr search service a command like:
 
-    rake RAILS_ENV=production solr:start
+    bundle exec rake RAILS_ENV=production solr:start
 
 You can stop the Solr search service a command like:
 
-    rake RAILS_ENV=production solr:stop
+    bundle exec rake RAILS_ENV=production solr:stop
 
 
 Feedback wanted
