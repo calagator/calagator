@@ -26,7 +26,7 @@ module ApplicationHelper
 
   def datetime_format(time,format)
     format = format.gsub(/(%[dHImU])/,'*\1')
-    time.strftime(format).gsub(/\*0*/,'')
+    time.strftime(format).gsub(/\*0*/,'').html_safe
   end
 
   # Returns HTML for a Google map containing the +locatable_items+.
