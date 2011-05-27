@@ -19,6 +19,7 @@ eval data if data
 gem 'sqlite3'
 
 # Run-time dependencies
+gem 'rake', '0.8.7'
 gem 'rails', '2.3.11'
 gem 'columnize', '0.3.2'
 gem 'geokit', '1.5.0'
