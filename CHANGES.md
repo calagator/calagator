@@ -26,7 +26,6 @@ List of Calagator stable releases and changes, with the latest at the top:
     * Fixed exceptions thrown when filtering events by invalid dates.
     * Improved dependencies so production environment doesn't need testing libraries.
     * Added `sql` search engine, which is used by default and requires no configuration or setup.
-
   * v0.20101108
     * [!] Fixed searching, run `rake solr:rebuild_index` to rebuild your search index to take advantage of the improvements for matching by: exact words, fuzzy word match, words that had punctuation in or adjacent to them, and tags.
     * [DEPENDENCY] Added RiCal library.
@@ -37,7 +36,6 @@ List of Calagator stable releases and changes, with the latest at the top:
     * Improved `rake data:fetch` to display download progress if programs like `curl` and `wget` are installed.
     * Added machine tags, to link Calagator entries to those on external services.
     * Added tag cloud for displaying popular tags.
-
   * v0.20100302
     * Fixed "rake gems:install", some required gems weren't being installed.
     * Fixed "rake solr:start", the Net::HTTP syntax changed in recent versions of Ruby.
@@ -46,7 +44,6 @@ List of Calagator stable releases and changes, with the latest at the top:
     * Eliminated alert emails notifying admin that a form was submitted without a valid authentication token, which is almost always a spam bot.
     * Improved event form so that the end date is set to the start date if the start date is changed to be after the end date, and displayed highlight to alert user of the modification.
     * Improved event form so that the end time is offset from the start time if the start time is changed, and displayed highlighted to alert the user of the modification
-
   * v0.20091223
     * [SECRETS] Added entry for setting custom Upcoming API key.
     * Added Upcoming API-based event importer, hopefully resolving long-standing problems caused by them frequently changing their invalid iCalendar output.
