@@ -389,6 +389,7 @@ EOF
     events = [events].flatten
     
     icalendar = RiCal.Calendar do |calendar|
+      calendar.prodid = "-//Calagator//EN"
       for item in events
         calendar.event do |entry|
           entry.summary(item.title || 'Untitled Event')
