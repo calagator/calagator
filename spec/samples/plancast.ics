@@ -1,0 +1,59 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Feedo Feed//NONSGML v1.0//EN
+METHOD:PUBLISH
+X-WR-CALNAME:PDX11 Civic Hackathon - Hacking on Plancast
+X-WR-CALDESC:This hackathon is dedicated to civic projects that folks in the Portland area would like to work on together.
+
+Participation is open to all. Feel free...
+X-MS-OLK-FORCEINSPECTOROPEN:TRUE
+BEGIN:VTIMEZONE
+TZID:America/Los_Angeles
+X-LIC-LOCATION:America/Los_Angeles
+BEGIN:DAYLIGHT
+TZOFFSETFROM:-0800
+TZOFFSETTO:-0700
+DTSTART:19700313T020000
+RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=3SU
+END:DAYLIGHT
+BEGIN:STANDARD
+TZOFFSETFROM:-0700
+TZOFFSETTO:-0800
+DTSTART:19701106T020000
+RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=2SU
+END:STANDARD
+END:VTIMEZONE
+BEGIN:VEVENT
+DTSTART;TZID=America/Los_Angeles;VALUE=DATE:20110604
+DTEND;TZID=America/Los_Angeles;VALUE=DATE:20110605
+TRANSP:TRANSPARENT
+UID:a266872@plancast.com
+SUMMARY:PDX11 Civic Hackathon
+DESCRIPTION:This hackathon is dedicated to civic projects that folks in the
+ Portland area would like to work on together.\n
+ \n
+ Participation is open to all. Feel free to add your project to
+ our etherpad\, and link to a repo.\n
+ \n
+ http://etherpad.opensourcebridge.org/pdx11hackathon-june4\n
+ \n
+ A short list of projects\, bugs to fix or tasks that you'd like
+ to work on would also be helpful.\n
+ \n
+ We've got the confirmation back for the FAB10 classroom for
+ Saturday\, June 4 from 8:30AM-5:30PM.\n
+ \n
+ Attendees should be able to enter FAB on Harrison Street (right
+ on the Portland Streetcar line)\, as the door will be unlocked
+ for the day.\n
+ \n
+ We will have wireless accounts to hand out.\n
+ \n
+ When: Saturday\, June 4\, 2011\n
+ Attendees: 6\n
+ Comments: 0 http://plancast.com/p/5px4
+URL:http://plancast.com/p/5px4
+CATEGORIES:Hacking,Technology
+DTSTAMP:20110603T154514Z
+END:VEVENT
+END:VCALENDAR
