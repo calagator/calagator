@@ -69,7 +69,6 @@ describe Event do
       # On next line, please retain the space between the "?" and ")";
       # it solves a fold issue in the SciTE text editor
       @event.stub!(:new_record? ).and_return(false)
-      @event.should_receive(:tag_with).with(@tags).and_return(@event)
       @event.tag_list = @tags
     end
 

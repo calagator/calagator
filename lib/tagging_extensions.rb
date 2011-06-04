@@ -14,9 +14,9 @@ class ActiveRecord::Base #:nodoc:
     end
     
     def apply_cached_tags
-      if taggable? && !@cached_tags.blank?
+      if taggable? && @cached_tags
         tag_with @cached_tags 
-        @cached_tags = ""
+        @cached_tags = nil
       end
     end
     
@@ -24,12 +24,11 @@ class ActiveRecord::Base #:nodoc:
     #
     # We need to avoid name conflicts with the built-in ActiveRecord association methods, thus the underscores.
     def _add_tags incoming
-      taggable?(true)
       tag_cast_to_string(incoming).each do |tag_name|
         begin
           tag = Tag.find_or_create_by_name(tag_name)
           raise Tag::Error, "tag could not be saved: #{tag_name}" if tag.new_record?
-          tag.taggables << self
+          self.tags << tag
         rescue ActiveRecord::StatementInvalid => e
           raise unless e.to_s =~ /duplicate/i
         end
@@ -38,19 +37,15 @@ class ActiveRecord::Base #:nodoc:
   
     # Removes tags from <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, an array of ids, or an array of Tags.  
     def _remove_tags outgoing
-      taggable?(true)
       outgoing = tag_cast_to_string(outgoing)
      
-      tags.delete(*(tags.select do |tag|
-        outgoing.include? tag.name    
-      end))
+      if outgoing.present?
+        tags.delete(*(tags.select do |tag|
+          outgoing.include? tag.name
+        end))
       end
-
-   # Returns the tags on <tt>self</tt> as a string.
-    def tag_list
-      # Redefined later to avoid an RDoc parse error.
     end
-  
+
     # Replace the existing tags on <tt>self</tt>. Accepts a string of tagnames, an array of tagnames, an array of ids, or an array of Tags.
     def tag_with list    
       #:stopdoc:
@@ -59,6 +54,7 @@ class ActiveRecord::Base #:nodoc:
              
       # Transactions may not be ideal for you here; be aware.
       Tag.transaction do 
+        self.save!
         current = tags.map(&:name)
         _add_tags(list - current)
         _remove_tags(current - list)
@@ -68,22 +64,15 @@ class ActiveRecord::Base #:nodoc:
       #:startdoc:
     end
 
-   # Returns the tags on <tt>self</tt> as a string.
-    def tag_list #:nodoc:
-      return @cached_tags || "" if new_record?
-      #:stopdoc:
-      taggable?(true)
-      tags.reload
-      tags.to_s
-      #:startdoc:
+    # Returns the tags on <tt>self</tt> as a string.
+    def tag_list
+      @cached_tags ?
+        @cached_tags :
+        tags.to_s
     end
     
     def tag_list=(value)
-      if new_record?
-        @cached_tags = value
-      else
-        tag_with value
-      end
+      @cached_tags = tag_cast_to_string(value).join("#{Tag::DELIMITER} ")
     end
     
     private
