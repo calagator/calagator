@@ -25,23 +25,8 @@ GeoKit::Geocoders::proxy_pass = nil
 # and http://developer.yahoo.com/maps/rest/V1/geocode.html
 GeoKit::Geocoders::yahoo = 'REPLACE_WITH_YOUR_YAHOO_KEY'
     
-# This is your Google Maps geocoder key. 
-# See http://www.google.com/apis/maps/signup.html
-# and http://www.google.com/apis/maps/documentation/#Geocoding_Examples
-#
-# CALAGATOR: was GeoKit::Geocoders::google = 'REPLACE_WITH_YOUR_GOOGLE_KEY',
-# but since each developer needs their own, we get it from an (optional)
-# separate file.
-#
-# CALAGATOR: We also assign the key to GOOGLE_APPLICATION_ID to make
-# the gmaps_on_rails plugin happy.
-#
-keys_path = "#{RAILS_ROOT}/config/geocoder_api_keys.yml"
-if File.exist? keys_path
-  geocoder_api_keys = YAML.load_file(keys_path)
-  GeoKit::Geocoders::google = GOOGLE_APPLICATION_ID = \
-    geocoder_api_keys.fetch(RAILS_ENV,{})['google']
-end
+# This is the Google Maps geocoder key, do NOT change this.
+GeoKit::Geocoders::google = GOOGLE_APPLICATION_ID = 'Google'
 
 # This is your username and password for geocoder.us.
 # To use the free service, the value can be set to nil or false.  For 
