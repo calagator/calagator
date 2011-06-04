@@ -38,6 +38,7 @@ Production
 To run Calagator in `production` mode, which runs more quickly, but doesn't reload code:
 
   * Follow the **Setup** instructions above. Don't forget to do things like create the theme and secrets files.
+  * Setup a firewall to protect ports used by your search engine, see the **Search engine** section for details.
   * Initialize your database, run `bundle exec rake RAILS_ENV=production db:migrate`
   * Run `bundle exec rake clear` to clear your cache after updating your application's code.
   * Setup a production web server using [Phusion Passenger](http://www.modrails.com/), [Thin](http://code.macournoyer.com/thin/), [Rainbows](http://rainbows.rubyforge.org/), etc. These will be able to serve more users more quickly than `script/server`.
@@ -95,6 +96,8 @@ You can stop the Solr search service a command like:
 
     bundle exec rake RAILS_ENV=production sunspot:solr:stop
 
+You should setup a firewall to protect the ports that the Solr search service runs on. These ports are described in the `config/sunspot.yml` file.
+
 ### acts_as_solr
 
 Optional search engine that uses the `acts_as_solr` gem. Requires additional setup, dependencies and service. Provides relevance-based sorting. Provides substring matches. However, has severe performance problems that may slow down creating and editing records.
@@ -113,6 +116,7 @@ You can stop the Solr search service a command like:
 
     bundle exec rake RAILS_ENV=production solr:stop
 
+You should setup a firewall to protect the ports that the Solr search service runs on. These ports are described in the `config/solr.yml` file.
 
 Feedback wanted
 ---------------
