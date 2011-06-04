@@ -241,7 +241,7 @@ class Event < ActiveRecord::Base
 
     return self.masters.find(:all,
       :conditions => [conditions_sql, conditions_vars],
-      :order => order)
+      :order => order, :include => [:tags, :versions])
   end
 
   # Return Hash of Events grouped by the +type+.
@@ -411,7 +411,7 @@ EOF
           # SEQUENCE for all events, they can edit the "config/secrets.yml"
           # file and set the "icalendar_sequence_offset" value to something
           # greater than 0.
-          entry.sequence((SECRETS.icalendar_sequence_offset || 0) + item.versions.count)
+          entry.sequence((SECRETS.icalendar_sequence_offset || 0) + item.versions.size)
           
           if item.multiday?
             entry.dtstart item.dates.first
