@@ -41,6 +41,7 @@ group :development, :test do
   gem 'rspec', '1.3.1', :require => false
   gem 'rspec-rails', '1.3.3', :require => false
   gem 'annotate-models', '1.0.4', :require => false
+  gem 'rcov', '0.9.9', :require => false
 end
 
 # Some dependencies are activated through server settings.
