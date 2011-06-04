@@ -1,15 +1,15 @@
 # == Schema Information
-# Schema version: 20080705164959
+# Schema version: 20110604174521
 #
 # Table name: sources
 #
 #  id          :integer         not null, primary key
-#  title       :string(255)     
-#  url         :string(255)     
-#  imported_at :datetime        
-#  created_at  :datetime        
-#  updated_at  :datetime        
-#  reimport    :boolean         
+#  title       :string(255)
+#  url         :string(255)
+#  imported_at :datetime
+#  created_at  :datetime
+#  updated_at  :datetime
+#  reimport    :boolean
 #
 
 # == Source

@@ -39,17 +39,22 @@ html_classes << " contentbar" if has_contentbar
             (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
             <% end -%>
 
-            <% if event.venue.wifi? %>
+            <% if event.venue.wifi? -%>
               <div class='wifi_callout'>Public WiFi</div>
-            <% end %>
+            <% end -%>
 
-
-            <% if event.venue.access_notes.present? %>
+            <% if event.venue.access_notes.present? -%>
               <div class="access_notes">
                 <h3>Access Notes</h3>
                 <%= h event.venue.access_notes %>
               </div>
-            <% end %>
+            <% end -%>
+
+            <% unless event.venue_details.blank? -%>
+            <p>
+              <%= format_description(event.venue_details) %>
+            </p>
+            <% end -%>
 
       </div>
       <% end -%>
@@ -61,6 +66,7 @@ html_classes << " contentbar" if has_contentbar
         <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow" -%>
       </div>
     <% end -%>
+
     <% unless event.description.blank? -%>
     <h3>Description</h3>
     <div class="description">

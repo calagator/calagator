@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20080705164959
+# Schema version: 20110604174521
 #
 # Table name: venues
 #
@@ -21,6 +21,11 @@
 #  telephone       :string(255)
 #  source_id       :integer
 #  duplicate_of_id :integer
+#  version         :integer
+#  closed          :boolean
+#  wifi            :boolean
+#  access_notes    :text
+#  events_count    :integer
 #
 
 class Venue < ActiveRecord::Base

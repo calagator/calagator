@@ -154,6 +154,14 @@
   </div>
 
   <div>
+    <%= f.label :venue_details %>
+    <%= f.text_area :venue_details, { :style => "height: 50px;" } %>
+    <div class='help'>
+      (Event-specific details like the room number, or who to call to be let into the building.)
+    </div>
+  </div>
+
+  <div>
     <%= f.label :tag_list, "Tags" %>
     <%= f.text_field :tag_list %>
     <div class="clearfix"></div>
