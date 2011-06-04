@@ -397,7 +397,8 @@ EOF
             end
 
             d << Hpricot(item.description).to_plain_text unless item.description.blank?
-            d << "\n\nTags:\n#{item.tag_list}" unless item.tag_list.blank?
+            d << "\n\nTags: #{item.tag_list}" unless item.tag_list.blank?
+            d << "\n\nImported from: #{opts[:url_helper].call(item)}" if opts[:url_helper]
           end
           
           entry.description(desc) unless desc.blank?
@@ -420,15 +421,13 @@ EOF
             entry.dtend   item.end_time || item.start_time + 1.hour
           end
 
-          # The reason for this messy URL helper business is that models can't access the route helpers,
-          # and even if they could, they'd need to access the request object so they know what the server's name is and such.
-          if item.url.blank?
-            entry.url opts[:url_helper].call(item) if opts[:url_helper]
-          else
+          if item.url.present?
             entry.url item.url
           end
 
-          entry.location item.venue.title if item.venue
+          if item.venue
+            entry.location [item.venue.title, item.venue.full_address].compact.join(": ") 
+          end
           
           # dtstamp and uid added because of a bug in Outlook;
           # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD

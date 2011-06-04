@@ -117,7 +117,7 @@ describe Event do
 
     before(:each) do
       @basic_hcal = read_sample('hcal_basic.xml')
-      @basic_venue = mock_model(Venue, :title => 'Argent Hotel, San Francisco, CA')
+      @basic_venue = mock_model(Venue, :title => 'Argent Hotel, San Francisco, CA', :full_address => '50 3rd St, San Francisco, CA 94103')
       @basic_event = Event.new(
         :title => 'Web 2.0 Conference',
         :url => 'http://www.web2con.com/',
@@ -152,8 +152,9 @@ describe Event do
       abstract_event = abstract_events.first
       abstract_event.title.should == @basic_event.title
       abstract_event.url.should == @basic_event.url
+      abstract_event.description.should_not =~ /Imported from: /
 
-      abstract_event.location.title.should == @basic_event.venue.title
+      abstract_event.location.title.should == "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
     end
 
     it "should parse an Event into an iCalendar without a URL and generate it" do
@@ -166,9 +167,10 @@ describe Event do
       abstract_events.size.should == 1
       abstract_event = abstract_events.first
       abstract_event.title.should == @basic_event.title
-      abstract_event.url.should == generated_url
+      abstract_event.url.should == @basic_event.url
+      abstract_event.description.should =~ /Imported from: #{generated_url}/
 
-      abstract_event.location.title.should == @basic_event.venue.title
+      abstract_event.location.title.should == "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
     end
 
   end
@@ -850,8 +852,12 @@ describe Event do
       ical_roundtrip(event).description.should include event.tag_list
     end
 
-    it "should use the event's URL on Calagator if no URL is provided (and a url helper is given)" do
-      ical_roundtrip( Event.create( valid_event_attributes ), :url_helper => lambda{|e| "FAKE"} ).url.should == "FAKE"
+    it "should leave URL blank if no URL is provided" do
+      ical_roundtrip( Event.create( valid_event_attributes )).url.should be_nil
+    end
+
+    it "should have Source URL if URL helper is given)" do
+     ical_roundtrip( Event.create( valid_event_attributes ), :url_helper => lambda{|e| "FAKE"} ).description.should =~ /FAKE/
     end
 
     it "should create multi-day entries for multi-day events" do
