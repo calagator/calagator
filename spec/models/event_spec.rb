@@ -319,6 +319,11 @@ describe Event do
         :start_time => @tomorrow + 1.day,
         :venue_id => @this_venue.id)
 
+      @started_before_today_and_ends_at_midnight = Event.create!(
+        :title => "Midnight end",
+        :start_time => @yesterday,
+        :end_time => @today_midnight,
+        :venue_id => @this_venue.id)
       @future_events_for_this_venue = @this_venue.find_future_events
     end
 
@@ -345,6 +350,10 @@ describe Event do
 
         it "should not include events that start tomorrow" do
           @overview[:today].should_not include(@starts_and_ends_tomorrow)
+        end
+
+        it "should not include events that ended at midnight today" do
+          @overview[:today].should_not include(@started_before_today_and_ends_at_midnight)
         end
       end
 
