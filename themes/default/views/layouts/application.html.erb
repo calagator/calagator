@@ -5,12 +5,17 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><%= cleanse(@page_title ? "#{@page_title} &raquo; " : "") %><%= SETTINGS.name %>: <%= SETTINGS.tagline %></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=false, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
     <!-- Stylesheets, static -->
     <%= theme_stylesheet_link_tag 'reset', :media => :all %>
     <%= stylesheet_link_tag 'common', :media => :all %>
     <%= theme_stylesheet_link_tag 'typography', 'forms', 'layout', :media => :all, :cache => true %>
-    <!--[if IE]>
+	<%= theme_stylesheet_link_tag 'mobile', :media => "only screen and (max-device-width: 960px)" %>
+
+	<!--[if IE]>
       <%= theme_stylesheet_link_tag 'ie', :media => :all %>
     <![endif]-->
     <%= theme_stylesheet_link_tag 'print', :media => :print %>
