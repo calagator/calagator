@@ -91,7 +91,7 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
   describe 'v1 data' do
     it_should_behave_like 'shared'
 
-    before(:all) do
+    before(:each) do
       prepare 'hcal_upcoming_v1.html'
     end
 
@@ -124,7 +124,7 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
   describe 'v2 data' do
     it_should_behave_like 'shared'
 
-    before(:all) do
+    before(:each) do
       prepare 'hcal_upcoming_v2.html'
     end
 
@@ -157,7 +157,7 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
   describe 'v3 data' do
     it_should_behave_like 'shared'
 
-    before(:all) do
+    before(:each) do
       prepare 'hcal_upcoming_v3.html'
     end
 
@@ -190,7 +190,7 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
   describe 'v4 data' do
     it_should_behave_like 'shared'
 
-    before(:all) do
+    before(:each) do
       prepare 'hcal_upcoming_v4.html'
     end
 

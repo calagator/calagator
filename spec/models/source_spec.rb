@@ -27,7 +27,7 @@ describe Source, "in general" do
 end
 
 describe Source, "when reading name" do
-  before(:all) do
+  before(:each) do
     @title = "title"
     @url = "http://my.url/"
   end
@@ -59,7 +59,7 @@ describe Source, "when reading name" do
 end
 
 describe Source, "when parsing URLs" do
-  before(:all) do
+  before(:each) do
     @http_url = 'http://upcoming.yahoo.com/event/390164/'
     @ical_url = 'webcal://upcoming.yahoo.com/event/390164/'
     @base_url = 'upcoming.yahoo.com/event/390164/'

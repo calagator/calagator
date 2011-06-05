@@ -4,7 +4,7 @@ describe VersionsController do
   integrate_views
 
   describe "history" do
-    before :all do
+    before :each do
       @versions_count_before = Version.count
 
       @venue = Venue.create!(:title => "Venue")
@@ -15,7 +15,7 @@ describe VersionsController do
       @venue.destroy
     end
 
-    after :all do
+    after :each do
       @venue.versions.destroy_all
       @venue.destroy
     end
@@ -107,16 +107,12 @@ describe VersionsController do
     end
 
     describe "update" do
-      before :each do
-        @versions = Version.all
-        @create_version  = @versions.find{|version| version.item_id == @venue.id && version.event == "create"}
-        @update_version  = @versions.find{|version| version.item_id == @venue.id && version.event == "update"}
-        @destroy_version = @versions.find{|version| version.item_id == @venue.id && version.event == "destroy"}
-      end
 
       it "should rollback a create, by deleting current object" do
-        Venue.should_receive(:find).and_return(@venue)
-        @venue.should_receive(:destroy).and_return(true)
+        venue = Venue.create!(:title => "Venue")
+        @create_version = Version.first(:conditions => { :item_id => venue.id, :event => "create" })
+        Venue.should_receive(:find).and_return(venue)
+        venue.should_receive(:destroy).and_return(true)
 
         put :update, :id => @create_version.id
 
@@ -124,21 +120,31 @@ describe VersionsController do
       end
 
       it "should rollback an update" do
-        lambda { Venue.find(@venue.id) }.should raise_error(ActiveRecord::RecordNotFound)
+        venue = Venue.create!(:title => "Venue")
+        venue.title = "My Venue"
+        venue.save!
+        update_version = Version.first(:conditions => { :item_id => venue.id, :event => "update" })
 
-        put :update, :id => @update_version.id
+        put :update, :id => update_version.id
 
-        Venue.find(@venue.id).title.should == "Venue"
-        response.should redirect_to(venue_path @venue)
+        Venue.find(venue.id).title.should == "Venue"
+        response.should redirect_to(venue_path venue)
       end
 
       it "should rollback a destroy" do
-        lambda { Venue.find(@venue.id) }.should raise_error(ActiveRecord::RecordNotFound)
+        venue = Venue.create!(:title => "Venue")
+        venue.title = "My Venue"
+        venue.save!
+        venue.destroy
 
-        put :update, :id => @destroy_version.id
+        destroy_version = Version.first(:conditions => { :item_id => venue.id, :event => "destroy" })
+        
+        lambda { Venue.find(venue.id) }.should raise_error(ActiveRecord::RecordNotFound)
 
-        Venue.find(@venue.id).title.should == "My Venue"
-        response.should redirect_to(venue_path @venue)
+        put :update, :id => destroy_version.id
+
+        Venue.find(venue.id).title.should == "My Venue"
+        response.should redirect_to(venue_path venue)
       end
 
       it "should fail on invalid version" do
@@ -148,12 +154,19 @@ describe VersionsController do
         response.should redirect_to(versions_path)
       end
 
-      it "should fail on invalid rollback" do
-        venue = stub_model(Venue)
-        Venue.stub!(:find).and_return(venue)
-        venue.should_receive(:save).and_return(false)
+      it "should fail when the record is no longer valid or saveable" do
+        venue = Venue.create!(:title => "Venue")
+        venue.title = "My Venue"
+        venue.save!
+        venue.destroy
 
-        put :update, :id => @destroy_version.id
+        destroy_version = Version.first(:conditions => { :item_id => venue.id, :event => "destroy" })
+
+        venue2 = stub_model(Venue)
+        Venue.stub!(:find).and_return(venue2)
+        venue2.should_receive(:save).and_return(false)
+
+        put :update, :id => destroy_version.id
 
         flash[:failure].should_not be_blank
         response.should redirect_to(versions_path)

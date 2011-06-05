@@ -85,7 +85,7 @@ describe EventsController, "when displaying index" do
   describe "and filtering by date range" do
     [:start, :end].each do |date_kind|
       describe "for #{date_kind} date" do
-        before :all do
+        before :each do
           @date_kind = date_kind
           @date_kind_other = \
             case date_kind

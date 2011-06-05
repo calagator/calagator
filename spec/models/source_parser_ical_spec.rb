@@ -25,7 +25,7 @@ end
 
 describe SourceParser::Ical, "when parsing events and their locations" do
 
-  before(:all) do
+  before(:each) do
     SourceParser::Base.should_receive(:read_url).and_return(read_sample('ical_upcoming_many.ics'))
     @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
   end
@@ -39,7 +39,7 @@ describe SourceParser::Ical, "when parsing events and their locations" do
 end
 
 describe SourceParser::Ical, "when parsing multiple items in an Upcoming feed" do
-  before(:all) do
+  before(:each) do
     SourceParser::Base.should_receive(:read_url).and_return(read_sample('ical_upcoming_many.ics'))
     @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
   end
@@ -71,7 +71,7 @@ describe SourceParser::Ical, "when parsing multiple items in an Upcoming feed" d
 end
 
 describe SourceParser::Ical, "when parsing multiple items in an Eventful feed" do
-  before(:all) do
+  before(:each) do
     SourceParser::Base.should_receive(:read_url).and_return(read_sample('ical_eventful_many.ics'))
     @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
   end
