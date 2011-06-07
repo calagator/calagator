@@ -1,6 +1,6 @@
 <%= render :partial => 'site/appropriateness_message' %>
 
-<% form_for @source, :url => { :action => :import } do |f| %>
+<% form_for(@source, :html => {:id => "source_form", :class => "standard_form"}, :url => { :action => :import }) do |f| %>
 <fieldset>
   <legend>Import a source</legend>
   <div>
