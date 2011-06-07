@@ -1,24 +1,16 @@
 <div id="events_subnav" class="subnav">
-    <ul>
-      <li><%= link_to 'Overview', root_url, 
-              :class => ( controller.action_name == 'index' && 
-                          controller.controller_name == 'site' && 
-                          'active') %>
+    <ul class="clearfix">
+      <li><%= link_to 'Overview', root_url,
+              :class => subnav_class_for("site", "index") %>
       </li>
-      <li><%= link_to 'Browse events', events_url, 
-              :class => ( controller.action_name == 'index' && 
-                          controller.controller_name == 'events' && 
-                          'active') %>
+      <li><%= link_to 'Browse events', events_url,
+              :class => subnav_class_for("events", "index") %>
       </li>
       <li><%= link_to 'Add an event', new_event_url,
-              :class => ( controller.action_name == 'new' && 
-                          controller.controller_name == 'events' && 
-                          'active') %>
+              :class => subnav_class_for("events", "new") %>
       </li>
       <li><%= link_to 'Import event(s)', new_source_url,
-              :class => ( controller.action_name == 'new' && 
-                          controller.controller_name == 'sources' && 
-                          'active') %>
+              :class => subnav_class_for("sources", "new") %>
       </li>
     </ul>
 </div>
