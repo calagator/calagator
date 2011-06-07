@@ -30,9 +30,9 @@
   </script>
 <% end %>
 
-<%= render :partial => 'events/item', :locals => {:event => @event} %>
+<a href="#" id="event_sidebar_toggle" class="expander_toggle">Export or edit this event...</a>
 
-<div class='single_view_right sidebar'>
+<div id="event_sidebar" class='single_view_right sidebar'>
   <h3 class='first'>Export to</h3>
   <ul>
     <li><%= link_to "Google Calendar", google_event_export_link(@event), :id => "google_calendar_export", :target => "_blank" %></li>
@@ -60,3 +60,5 @@
       <%= datestamp(@event) %>
   </div>
 </div>
+
+<%= render :partial => 'events/item', :locals => {:event => @event} %>

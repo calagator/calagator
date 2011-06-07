@@ -5,12 +5,17 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title><%= cleanse(@page_title ? "#{@page_title} &raquo; " : "") %><%= SETTINGS.name %>: <%= SETTINGS.tagline %></title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=true">
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
 
     <!-- Stylesheets, static -->
     <%= theme_stylesheet_link_tag 'reset', :media => :all %>
     <%= stylesheet_link_tag 'common', :media => :all %>
     <%= theme_stylesheet_link_tag 'typography', 'forms', 'layout', :media => :all, :cache => true %>
-    <!--[if IE]>
+    <%= theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
+
+	<!--[if IE]>
       <%= theme_stylesheet_link_tag 'ie', :media => :all %>
     <![endif]-->
     <%= theme_stylesheet_link_tag 'print', :media => :print %>
@@ -23,6 +28,7 @@
                                 'jquery-ui',
                                 'jquery-fx',
                                 'jrails',
+                                'application',
                                 :cache => true %>
     <%# TODO figure out how to fix 'theme_support' plugin to make a working include tag AND make the server actually send the contents, because both of these are broken. %>
     <%#= theme_javascript_include_tag 'application'%>
@@ -39,7 +45,7 @@
     <%# FIXME extract icon into theme %>
     <link rel="apple-touch-icon" href="/images/site-icon.png" />
   </head>
-  <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %>">
+  <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
 
   <div id="outer">
     <div id="global_header">
@@ -50,7 +56,6 @@
           <ul>
               <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
               <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
-              <!--<li class='<%=link_class[:import]%>'><%= link_to "Add Events", sources_path %></li>-->
           </ul>
         </div>
         <div id='project_menu'>
@@ -77,7 +82,6 @@
     <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
     <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
 
-
     <div id="content">
       <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
       <%= render_flash %>
@@ -87,6 +91,15 @@
     <div id="top_footer">
       <%= URI.parse(SETTINGS.url).host %>
       <%= source_code_version %>
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      <span class="nowrap">
+        Display for
+        <%= link_to "mobile", url_for(:mobile => "1") %>,
+        <%= link_to "desktop", url_for(:mobile => "0") %> or
+        <%= link_to "default", url_for(:mobile => "-1") %>
+      </span>
     </div>
 
 </div> <% # outer %>

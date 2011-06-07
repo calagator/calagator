@@ -4,3 +4,11 @@
   border: 2px solid red;
   background: #F5DBD7;
 }
+
+.expander_toggle {
+  display: none;
+}
+
+.nowrap {
+  white-space: nowrap;
+}

@@ -2,6 +2,7 @@
 
 <% cache(CacheObserver.daily_key_for("site_index", request)) do %>
 <% @times_to_events ||= @times_to_events_deferred.call %>
+<a href="#" id="homepage_sidebar_toggle" class="expander_toggle">Hi there. Learn about this site and how to use it...</a>
 <div id="homepage_sidebar">
   <div id="project_description">
     <%= render :partial => "description" %>

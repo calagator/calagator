@@ -136,7 +136,7 @@
     %>
       <%= text_field_tag 'start_date', event.start_time ? event.start_time.to_date : present.to_date, :id => 'date_start', :class => 'date_picker' %>
       <%= text_field_tag 'start_time', event.start_time.strftime('%I:%M %p'), :id => 'time_start', :class => 'time_picker' %>
-      <span>to</span>
+      <span class="to">to</span>
       <%= text_field_tag 'end_time', event.end_time ? event.end_time.strftime('%I:%M %p') : nil, :id => 'time_end', :class => 'time_picker' %>
       <%= text_field_tag 'end_date', event.end_time ? event.end_time.to_date : Time.now.to_date, :id => 'date_end', :class => 'date_picker' %>
   </div>

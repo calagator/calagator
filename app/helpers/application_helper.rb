@@ -167,4 +167,56 @@ module ApplicationHelper
 
     link_to cleanse(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
   end
+
+  def subnav_class_for(controller_name, action_name)
+    return [
+      "#{controller.controller_name}_#{controller.action_name}_subnav",
+      controller.controller_name == controller_name && controller.action_name == action_name ?
+        "active" :
+        nil
+    ].compact.join(" ")
+  end
+
+  # String name of the mobile preference cookie's name, e.g. "calagator_mobile".
+  MOBILE_COOKIE_NAME = "#{SECRETS.session_name}_mobile"
+
+  # Returns mobile stylesheet's :media option, which can be overriden by params or cookies.
+  #
+  # If user provides a "mobile" param to certain values, rendering will be affected:
+  # * "1" forces mobile rendering and saves this preference as a cookie.
+  # * "0" forces non-mobile rendering and saves this preference as a cookie.
+  # * "-1" forces default rendering and clears any previous prefernece cookie.
+  #
+  # Example:
+  #    theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
+  def mobile_stylesheet_media(default)
+    # TODO Figure out if it's possible to use the same handling for Rails "cookies" and Rspec "request.cookies", which seem to have totaly different behavior and no relationship to each other, which makes testing rather awkward.
+    expiration = 1.year.from_now
+    cookie = {:expires => expiration}
+    cookie_name = MOBILE_COOKIE_NAME
+
+    case params[:mobile]
+    when "1", "true", 1, true
+      cookies[cookie_name] = cookie.merge(:value => "1")
+      request.cookies[cookie_name] = "1"
+      return :all
+    when "0", "false", 0, false
+      cookies[cookie_name] = cookie.merge(:value => "0")
+      request.cookies[cookie_name] = "0"
+      return false
+    when "-1"
+      request.cookies.delete(cookie_name)
+      cookies.delete(cookie_name)
+      return default
+    else
+      case cookies[cookie_name] || request.cookies[cookie_name]
+      when "1"
+        return :all
+      when "0"
+        return false
+      else
+        return default
+      end
+    end
+  end
 end

@@ -5,6 +5,21 @@
 <% end %>
 
 <div class="single_venue contentbar">
+  <a href="#" id="venue_sidebar_toggle" class="expander_toggle">Export or edit this venue...</a>
+  <div id="venue_sidebar" class='single_view_right sidebar'>
+    <div id='edit_link'>
+      <p>
+        You can <%= link_to "edit", edit_venue_url(@venue) %>
+        or <%= link_to "delete", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>
+        this venue.
+      </p>
+    </div>
+    <hr />
+    <div class="metadata">
+      <%= datestamp(@venue) %>
+    </div>
+  </div>
+
   <div class="location vcard<%= " closed" if @venue.closed? %>">
     <%= google_map @venue %>
 
@@ -28,10 +43,14 @@
         <% if @venue.country.present? %>
           <div class='country-name'><%=h @venue.country %></div>
         <% end %>
+        (<a href='<%=google_maps_url(@venue.full_address) -%>'>map</a>)
       </div>
     <% else %>
       <% if @venue.address.present? %>
-        <div class='address'><%=h @venue.address %></div>
+        <div class='address'>
+          <%=h @venue.address %>
+          (<a href='<%=google_maps_url(@venue.address) -%>'>map</a>)
+        </div>
       <% end %>
     <% end %>
     <div class='info'>
@@ -76,20 +95,6 @@
     <div id='future_events'>
       <h2>Future events happening here</h2>
       <%= render :partial => 'events/list', :locals => { :events => @events } %>
-    </div>
-  </div>
-
-  <div class='single_view_right sidebar'>
-    <div id='edit_link'>
-      <p>
-        You can <%= link_to "edit", edit_venue_url(@venue) %>
-        or <%= link_to "delete", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>
-        this venue.
-      </p>
-    </div>
-    <hr />
-    <div class="metadata">
-      <%= datestamp(@venue) %>
     </div>
   </div>
 </div>
