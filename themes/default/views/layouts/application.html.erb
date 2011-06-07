@@ -93,6 +93,15 @@
     <div id="top_footer">
       <%= URI.parse(SETTINGS.url).host %>
       <%= source_code_version %>
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      <span class="nowrap">
+        Display for
+        <%= link_to "mobile", url_for(:mobile => "1") %>,
+        <%= link_to "desktop", url_for(:mobile => "0") %> or
+        <%= link_to "default", url_for(:mobile => "-1") %>
+      </span>
     </div>
 
 </div> <% # outer %>
