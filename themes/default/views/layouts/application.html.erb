@@ -13,7 +13,7 @@
     <%= theme_stylesheet_link_tag 'reset', :media => :all %>
     <%= stylesheet_link_tag 'common', :media => :all %>
     <%= theme_stylesheet_link_tag 'typography', 'forms', 'layout', :media => :all, :cache => true %>
-	<%= theme_stylesheet_link_tag 'mobile', :media => "only screen and (max-device-width: 960px)" %>
+    <%= theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
 
 	<!--[if IE]>
       <%= theme_stylesheet_link_tag 'ie', :media => :all %>
