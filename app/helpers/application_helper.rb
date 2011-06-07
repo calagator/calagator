@@ -168,6 +168,15 @@ module ApplicationHelper
     link_to cleanse(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
   end
 
+  def subnav_class_for(controller_name, action_name)
+    return [
+      "#{controller.controller_name}_#{controller.action_name}_subnav",
+      controller.controller_name == controller_name && controller.action_name == action_name ?
+        "active" :
+        nil
+    ].compact.join(" ")
+  end
+
   # String name of the mobile preference cookie's name, e.g. "calagator_mobile".
   MOBILE_COOKIE_NAME = "#{SECRETS.session_name}_mobile"
 
