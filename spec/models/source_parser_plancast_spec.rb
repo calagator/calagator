@@ -5,6 +5,7 @@ describe SourceParser::Plancast do
 
   it "should tag Plancast events with automagic machine tags" do
     content = read_sample('plancast.ics')
+    SourceParser::Base.should_receive(:read_url).and_return(content)
     events = SourceParser::Plancast.to_abstract_events(:content => content,
                                                        :url => 'http://plancast.com/p/5px4/pdx11-civic-hackathon')
 
