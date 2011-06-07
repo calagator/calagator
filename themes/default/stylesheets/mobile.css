@@ -4,11 +4,12 @@
 .expander_toggle:link,
 .expander_toggle:visited {
   display: block;
-  margin: 1em;
+  margin: 1em 0;
   color:  #66BAA9;
   font-style: italic; }
   a.expander_toggle {
-    padding: 0.25em; }
+    padding: 0.25em; 
+    padding-left: 0; }
   a.expander_toggle::before {
     content: "» "; }
 
@@ -127,10 +128,8 @@ textarea {
 }
 
 .contentbar {
-  margin: inherit;
-  padding: inherit;
-  margin-top: 0;
-  padding-top: 0; }
+  margin: 0;
+  padding: 0; }
   .contentbar > .vevent h1,
   .contentbar .location h1 {
     margin-top: 0;
@@ -140,19 +139,30 @@ textarea {
 .single_event .description,
 .single_event .location.vcard,
 .single_event .tags,
-.single_venue .description,
-.single_venue .location.vcard,
 .single_venue .tags,
-.single_venue #future_events {
+.single_venue #future_events,
+.single_venue .description,
+.single_venue .location.vcard
+{
   float: none;
   width: inherit;
+  padding: inherit;
   margin: 1em 0;
+}
+
+.flash {
+  float: none;
+  width: inherit;
+  margin: 0.5em;
+  margin-left: 0;
+  padding: 0.5em;
 }
 
 .single_venue > div > .description,
 .single_venue > div > .location.vcard {
   margin: 1em 0;
   padding: 1em 0;
+  background: inherit;
 }
 
 .site_index {}

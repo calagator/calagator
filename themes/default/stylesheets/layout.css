@@ -402,6 +402,12 @@ ul.event_list .list_date {
   margin: 2em 2em 2em -1em;
 }
 
+.single_venue h1 {
+  padding-top: 0.5em;
+  margin: 0;
+  line-height: 1.2em;
+}
+
 .location.closed .org {
   text-decoration: line-through;
   color: #999;
