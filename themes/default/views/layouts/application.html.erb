@@ -44,7 +44,7 @@
     <%# FIXME extract icon into theme %>
     <link rel="apple-touch-icon" href="/images/site-icon.png" />
   </head>
-  <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %>">
+  <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
 
   <div id="outer">
     <div id="global_header">
