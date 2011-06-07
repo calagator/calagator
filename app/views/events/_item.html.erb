@@ -24,16 +24,16 @@ html_classes << " contentbar" if has_contentbar
           <div class="street-address"><%= cleanse event.venue.street_address -%></div>
           <% end %>
           <% if !event.venue.locality.blank? -%>
-            <span class="locality"><%= cleanse event.venue.locality -%></span>
+            <span class="locality"><%= cleanse event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.region.blank? -%>
-            <span class="region"><%= cleanse event.venue.region -%></span>
+            <span class="region"><%= cleanse event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
             <% end -%>
             <% if !event.venue.postal_code.blank? -%>
-            <span class="postal-code"><%= cleanse event.venue.postal_code -%></span>
+            <span class="postal-code"><%= cleanse event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.country.blank? -%>
-            <div class='country-name'><%= cleanse event.venue.country -%></div>
+            <span class='country-name'><%= cleanse event.venue.country -%></span>
             <% end -%>
             <% if event.venue && event.venue.has_full_address? -%>
             (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
