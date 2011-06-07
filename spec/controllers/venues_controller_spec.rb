@@ -52,13 +52,13 @@ describe VenuesController do
   end
 
   describe "when rendering the venues index" do
-    before :all do
+    before :each do
       @open_venue = Venue.create!(:title => 'Open Town', :description => 'baz')
       @closed_venue = Venue.create!(:title => 'Closed Down', :closed => true)
       @wifi_venue = Venue.create!(:title => "Internetful", :wifi => true)
     end
 
-    after :all do
+    after :each do
       @open_venue.destroy
       @closed_venue.destroy
       @wifi_venue.destroy

@@ -230,7 +230,7 @@ class Event < ActiveRecord::Base
     conditions_sql = <<-HERE
       ( (start_time >= :start_of_range AND start_time <= :end_of_range) OR
         (end_time IS NOT NULL AND
-          NOT (start_time > :end_of_range OR end_time < :start_of_range ) ) )
+          NOT (start_time > :end_of_range OR end_time <= :start_of_range ) ) )
     HERE
 
     conditions_vars = {
@@ -389,6 +389,7 @@ EOF
     events = [events].flatten
     
     icalendar = RiCal.Calendar do |calendar|
+      calendar.prodid = "-//Calagator//EN"
       for item in events
         calendar.event do |entry|
           entry.summary(item.title || 'Untitled Event')

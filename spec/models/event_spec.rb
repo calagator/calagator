@@ -278,7 +278,7 @@ describe Event do
 
   describe "when finding by dates" do
 
-    before(:all) do
+    before(:each) do
       @today_midnight = Time.today
       @yesterday = @today_midnight.yesterday
       @tomorrow = @today_midnight.tomorrow
@@ -319,6 +319,11 @@ describe Event do
         :start_time => @tomorrow + 1.day,
         :venue_id => @this_venue.id)
 
+      @started_before_today_and_ends_at_midnight = Event.create!(
+        :title => "Midnight end",
+        :start_time => @yesterday,
+        :end_time => @today_midnight,
+        :venue_id => @this_venue.id)
       @future_events_for_this_venue = @this_venue.find_future_events
     end
 
@@ -326,7 +331,7 @@ describe Event do
       # TODO:  consider writing the following specs as view specs
       # either in addition to, or instead of, model specs
 
-      before(:all) do
+      before(:each) do
         @overview = Event.select_for_overview
       end
 
@@ -345,6 +350,10 @@ describe Event do
 
         it "should not include events that start tomorrow" do
           @overview[:today].should_not include(@starts_and_ends_tomorrow)
+        end
+
+        it "should not include events that ended at midnight today" do
+          @overview[:today].should_not include(@started_before_today_and_ends_at_midnight)
         end
       end
 
@@ -372,7 +381,7 @@ describe Event do
     end
 
     describe "for future events" do
-      before(:all) do
+      before(:each) do
         @future_events = Event.find_future_events
       end
 
@@ -399,7 +408,7 @@ describe Event do
     end
 
     describe "for future events with venue" do
-      before(:all) do
+      before(:each) do
         @another_venue = Venue.create!(:title => "Another venue")
 
         @future_event_another_venue = Event.create!(
@@ -676,7 +685,7 @@ describe Event do
   end
 
   describe "when checking for squashing" do
-    before(:all) do
+    before(:each) do
       @today  = Time.today
       @master = Event.create!(:title => "Master",    :start_time => @today)
       @slave1 = Event.create!(:title => "1st slave", :start_time => @today, :duplicate_of_id => @master.id)
