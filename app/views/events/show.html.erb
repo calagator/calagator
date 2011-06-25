@@ -11,20 +11,15 @@
       var plan = $('.external.plancast.plan:first');
       if (plan.length > 0) {
         var plan_id = plan.text().split('=')[1];
-        $.ajax({
-          url: "http://jsonpify.heroku.com",
-          dataType: 'jsonp',
-          data: {
-            resource: "http://api.plancast.com/02/plans/show.json",
-            extensions: "attendees",
-            plan_id: plan_id
-          },
-          success: function(data) {
+        $.getJSON("http://api.plancast.com/02/plans/show.json?jsonp=?",
+          { extensions: "attendees",
+            plan_id: plan_id },
+          function(data) {
             if (data.attendees.length > 0) {
               $('.attendees').append(Mustache.to_html($('#attendees-template').html(), data));
             }
           }
-        });
+        );
       }
     })
   </script>
