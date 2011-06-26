@@ -7,7 +7,7 @@ class SourceParser # :nodoc:
       plan_id = matchdata[1]
       return false unless plan_id # Give up unless we can extract the Plancast plan_id
 
-      # we want to make an api call to http://api.plancast.com/02/plans/show.json?plan_id=IDXX&extensions=place
+      # Make an api call to http://api.plancast.com/02/plans/show.json?plan_id=IDXX&extensions=place
       plancast_data = HTTParty.get('http://api.plancast.com/02/plans/show.json',
           :query => { :plan_id => plan_id, :extensions => 'place' })
 
@@ -27,7 +27,7 @@ class SourceParser # :nodoc:
       value = "" if value.nil?
       if value.present?
         location = AbstractLocation.new
-        location.title = value['name']
+        location.title   = value['name']
         location.address = value['address']
       elsif opts[:fallback].blank?
         location = nil
