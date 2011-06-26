@@ -83,8 +83,10 @@ class Venue < ActiveRecord::Base
     unless abstract_location.blank?
       venue.source = source if source
       abstract_location.each_pair do |key, value|
+        next if key == :tags
         venue[key] = value unless value.blank?
       end
+      venue.tag_list = abstract_location.tags.join(',')
     end
 
     # We must add geocoding information so this venue can be compared to existing ones.

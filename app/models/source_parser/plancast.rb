@@ -29,6 +29,7 @@ class SourceParser # :nodoc:
         location = AbstractLocation.new
         location.title   = value['name']
         location.address = value['address']
+        location.tags = ["plancast:place=#{value['id']}"]
       elsif opts[:fallback].blank?
         location = nil
       else

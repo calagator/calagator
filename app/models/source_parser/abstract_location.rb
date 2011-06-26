@@ -16,5 +16,13 @@ class SourceParser
 
     :url,
     :email,
-    :telephone)
+    :telephone,
+    :tags)
+
+  class AbstractLocation
+    def initialize(*args)
+      super
+      self.tags ||= []
+    end
+  end
 end
