@@ -1,5 +1,7 @@
 class SourceParser # :nodoc:
   class Plancast < Base
+    label :Plancast
+
     def self.to_abstract_events(opts={})
 
       expression = %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
