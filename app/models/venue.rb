@@ -95,7 +95,19 @@ class Venue < ActiveRecord::Base
     # if the new venue has no exact duplicate, use the new venue
     # otherwise, find the ultimate master and return it
     duplicates = venue.find_exact_duplicates
-    venue = duplicates.first.progenitor if duplicates
+
+    if duplicates.present?
+      venue = duplicates.first.progenitor
+    else
+      venue_machine_tag_name = abstract_location.tags.find { |t|
+        # Match 2 in the MACHINE_TAG_PATTERN is the predicate
+        %w(venue place spot biz).include? t.match(Tag::MACHINE_TAG_PATTERN)[2]
+      }
+      venue_machine_tag = Tag.find_by_name(venue_machine_tag_name)
+
+      venue = venue_machine_tag.venues.first.progenitor if venue_machine_tag.try(:venues).present?
+    end
+
     return venue
   end
 
