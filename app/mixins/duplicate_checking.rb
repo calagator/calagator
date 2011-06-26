@@ -98,7 +98,9 @@ module DuplicateChecking
   #
   # Note that this method requires that all associations are set before this method is called.
   def find_exact_duplicates
-    matchable_attributes = self.attributes.reject{|key, value| self.class.duplicate_checking_ignores_attributes.include?(key.to_sym)}
+    matchable_attributes = self.attributes.reject { |key, value|
+      self.class.duplicate_checking_ignores_attributes.include?(key.to_sym)
+    }
     duplicates = self.class.find(:all, :conditions => matchable_attributes).reject{|t| t.id == self.id}
     return duplicates.blank? ? nil : duplicates
   end
