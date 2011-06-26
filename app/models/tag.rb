@@ -116,6 +116,9 @@ class Tag < ActiveRecord::Base
   # Regular expression for parsing machine tags
   MACHINE_TAG_PATTERN = /([^:]+):([^=]+)=(.+)/
 
+  # Machine tag predicates that refer to place entries
+  VENUE_PREDICATES = %w(venue place spot biz)
+
   # Return a machine tag hash for this tag, or an empty hash if this isn't a
   # machine tag. The hash will always contain :namespace, :predicate and :value
   # key-value pairs. It may also contain an :url if one is known.

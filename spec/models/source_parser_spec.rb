@@ -195,4 +195,20 @@ describe SourceParser, "checking duplicates when importing" do
     event = source.to_events(:skip_old => false).first
     event.venue.title.should == "Master"
   end
+
+  it "should use an existing venue when importing an event with a matching machine tag that describes a venue" do
+    venue = Venue.create!(:title => "Custom Urban Airship", :tag_list => "plancast:place=1520153")
+
+    content = read_sample('plancast.json')
+    SourceParser::Base.stub!(:read_url).and_return("this content doesn't matter")
+    HTTParty.should_receive(:get).and_return(Crack::JSON.parse(content))
+
+    source = Source.new(
+      :title => "Event with duplicate machine-tagged venue",
+      :url   => "http://plancast.com/p/3cos/indiewebcamp")
+
+    event = source.to_events(:skip_old => false).first
+
+    event.venue.should == venue
+  end
 end

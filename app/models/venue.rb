@@ -101,7 +101,7 @@ class Venue < ActiveRecord::Base
     else
       venue_machine_tag_name = abstract_location.tags.find { |t|
         # Match 2 in the MACHINE_TAG_PATTERN is the predicate
-        %w(venue place spot biz).include? t.match(Tag::MACHINE_TAG_PATTERN)[2]
+        Tag::VENUE_PREDICATES.include? t.match(Tag::MACHINE_TAG_PATTERN)[2]
       }
       venue_machine_tag = Tag.find_by_name(venue_machine_tag_name)
 
