@@ -59,6 +59,7 @@ class SourceParser # :nodoc:
       location.country        = leaf['venue_country_name']
       location.latitude       = leaf['latitude']
       location.longitude      = leaf['longitude']
+      location.tags           = ["upcoming:venue=#{leaf['venue_id']}"]
       event.location          = location
 
       return [event]

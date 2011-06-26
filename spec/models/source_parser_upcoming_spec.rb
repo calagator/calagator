@@ -41,5 +41,6 @@ describe SourceParser::Upcoming do
     location.locality.should == 'Portland'
     location.region.should == 'Oregon'
     location.postal_code.should == '97214'
+    location.tags.should == ['upcoming:venue=61559']
   end
 end
