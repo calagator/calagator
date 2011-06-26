@@ -17,7 +17,7 @@ describe SourceParser::Plancast do
 
   it "should set event details" do
     @event.title.should == "IndieWebCamp"
-    @event.start_time.should == Time.zone.at(1308960000)
+    @event.start_time.should == Time.zone.parse("Sat, 25 Jun 2011 00:00:00 PDT -07:00")
   end
 
   it "should tag Plancast events with automagic machine tags" do
