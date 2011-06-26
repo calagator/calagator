@@ -211,4 +211,22 @@ describe SourceParser, "checking duplicates when importing" do
 
     event.venue.should == venue
   end
+
+  describe "choosing parsers by matching URLs" do
+    { "SourceParser::Plancast" => "http://plancast.com/p/3cos/indiewebcamp",
+      "SourceParser::Upcoming" => "http://upcoming.yahoo.com/event/6585499/OR/Portland/Caritas-GothicIndustrial-Karaoke/The-Red-Room/;_ylt=AtfkkSUv7.5QHcfMuDarPUGea80F;_ylu=X3oDMTFiM2c3NDlvBF9wAzEEY2IDcmFuZARwaWQDRS02NTg1NDk5BHBvcwMxBHNlYwNobWVwb3A-;_ylv=3",
+      "SourceParser::Meetup"   => "http://www.meetup.com/pdxweb/events/23287271/" }.each do |parser_name, url|
+
+      it "should only invoke the #{parser_name} parser when given #{url}" do
+        parser = parser_name.constantize
+        parser.should_receive(:to_abstract_events).and_return([Event.new])
+        SourceParser.parsers.reject{|p| p == parser }.each do |other_parser|
+          other_parser.should_not_receive :to_abstract_events
+        end
+
+        SourceParser::Base.stub!(:read_url).and_return("this content doesn't matter")
+        Source.new(:title => parser_name, :url => url).to_events
+      end
+    end
+  end
 end

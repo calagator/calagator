@@ -1,11 +1,10 @@
 class SourceParser # :nodoc:
   class Plancast < Base
     label :Plancast
+    url_pattern %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
 
     def self.to_abstract_events(opts={})
-
-      expression = %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
-      matchdata = opts[:url].match(expression)
+      matchdata = opts[:url].match(url_pattern)
       plan_id = matchdata[1]
       return false unless plan_id # Give up unless we can extract the Plancast plan_id
 

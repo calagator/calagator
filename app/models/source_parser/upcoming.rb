@@ -4,11 +4,12 @@ class SourceParser # :nodoc:
   # Reads Upcoming events using their API.
   class Upcoming < Base
     label :Upcoming
+    url_pattern %r{http://(?:m\.)?upcoming.yahoo.com/event/(\d+)}
 
     # Return the Upcoming event_id string extracted from an Upcoming Event URL.
     def self._upcoming_url_to_event_id(url)
       url.present? ?
-        url[%r{http://(?:m\.)?upcoming.yahoo.com/event/(\d+)}, 1] :
+        url[url_pattern, 1] :
         nil
     end
 

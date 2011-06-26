@@ -8,11 +8,16 @@ class SourceParser
   # * :url - URL string to read as parser input.
   # * :content - String to read as parser input.
   def self.to_abstract_events(opts)
+    matched_parser = parsers.find{|parser|
+      parser.url_pattern.present? && opts[:url].try(:match, parser.url_pattern)
+    }
+
     # Cache the content
     content = self.content_for(opts)
 
-    # Return events from the first parser that suceeds.
-    parsers.each do |parser|
+    # Return events from the first parser that suceeds, starting with the parser
+    # that matches the given URL if one is found.
+    parsers.unshift(matched_parser).compact.uniq.each do |parser|
       begin
         events = parser.to_abstract_events(opts.merge(:content => content))
         return events if not events.blank?
@@ -27,7 +32,7 @@ class SourceParser
 
   # Returns an Array of parser classes for the various formats
   def self.parsers
-    $SourceParserImplementations
+    $SourceParserImplementations.compact
   end
 
   # Return content for the arguments
@@ -48,6 +53,7 @@ class SourceParser
     def self.inherited(subclass)
       # Add class-wide ::_label accessor to subclasses.
       subclass.meta_eval {attr_accessor :_label}
+      subclass.meta_eval {attr_accessor :_url_pattern}
 
       $SourceParserImplementations << subclass unless $SourceParserImplementations.include?(subclass)
     end
@@ -56,6 +62,12 @@ class SourceParser
     def self.label(value=nil)
       self._label = value if value
       return self._label
+    end
+
+    # Gets or sets the applicable URL pattern for this parser.
+    def self.url_pattern(value=nil)
+      self._url_pattern = value if value
+      return self._url_pattern
     end
 
     # Returns content from either the :content option or by reading a :url.
