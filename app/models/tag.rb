@@ -110,6 +110,9 @@ class Tag < ActiveRecord::Base
     },
     'shizzow' => {
       'place' => "http://www.shizzow.com/places/%s"
+    },
+    'meetup' => {
+      'group' => "http://www.meetup.com/%s"
     }
   }
 

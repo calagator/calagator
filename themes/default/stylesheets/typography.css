@@ -208,6 +208,7 @@ a.external.yelp       { background-image: url("/images/external_sites/yelp.png")
 a.external.shizzow    { background-image: url("/images/external_sites/shizzow.png"); }
 a.external.foursquare { background-image: url("/images/external_sites/foursquare.png"); }
 a.external.gowalla    { background-image: url("/images/external_sites/gowalla.png"); }
+a.external.meetup     { background-image: url("/images/external_sites/meetup.png"); }
 
 #tagcloud .tagcloud_level_1 { font-size: 75%; }
 #tagcloud .tagcloud_level_2 { font-size: 100%; }
