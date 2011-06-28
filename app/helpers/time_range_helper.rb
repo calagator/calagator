@@ -89,12 +89,12 @@ class TimeRange
 
     # Combine the pieces
     results = []
-    results << %Q|<abbr class="dtstart" title="#{@start_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if @format == :hcal
+    results << %Q|<abbr class="dtstart d-dtstart" title="#{@start_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if @format == :hcal
     results << format_details_by_list(start_details, start_format_list)
     results << %Q|</abbr>| if @format == :hcal
     if end_format_list
       results << conjunction
-      results << %Q|<abbr class="dtend" title="#{@end_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if @format == :hcal
+      results << %Q|<abbr class="dtend d-dtend" title="#{@end_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if @format == :hcal
       results << format_details_by_list(end_details, end_format_list)
       results << %Q|</abbr>| if @format == :hcal
     end

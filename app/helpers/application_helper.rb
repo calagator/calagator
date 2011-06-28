@@ -104,7 +104,9 @@ module ApplicationHelper
     end
     stamp << " <br />" << content_tag(:strong, normalize_time(item.created_at, :format => :html) )
     if item.updated_at > item.created_at
-      stamp << " and last updated <br />" << content_tag(:strong, normalize_time(item.updated_at, :format => :html) )
+      stamp << " and last updated <br />" << content_tag(:strong,
+                                                         normalize_time(item.updated_at, :format => :html),
+                                                         :class => "d-last-modified")
     end
     stamp << "."
   end

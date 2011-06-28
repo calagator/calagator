@@ -9,31 +9,31 @@ html_classes = "single_event"
 html_classes << " contentbar" if has_contentbar
 %>
 <div class="<%= html_classes %>">
-  <div class="vevent">
-    <h1 class="summary"><%= cleanse event.title.strip_html %></h1>
+  <div class="vevent h-event">
+    <h1 class="summary p-summary"><%= cleanse event.title.strip_html %></h1>
     <div class='date'><%= normalize_time(event) -%></div>
       <% unless event.venue.blank? %>
-      <div class="clearfix location vcard<%= " closed" if event.venue.closed? %>">
-      <%= google_map event %>
-          <a class="url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
-            <span class='fn org'><%= cleanse event.venue.title.strip_html -%></span>
+      <div class="clearfix location p-location vcard h-card<%= " closed" if event.venue.closed? %>">
+          <%= google_map event %>
+          <a class="url u-url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
+            <span class='fn org p-fn p-org'><%= cleanse event.venue.title.strip_html -%></span>
           </a>
           <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
-          <div class="adr">
+          <div class="adr h-adr">
           <% if !event.venue.street_address.blank? -%>
-          <div class="street-address"><%= cleanse event.venue.street_address -%></div>
+          <div class="street-address p-street-address"><%= cleanse event.venue.street_address -%></div>
           <% end %>
           <% if !event.venue.locality.blank? -%>
-            <span class="locality"><%= cleanse event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
+            <span class="locality p-locality"><%= cleanse event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.region.blank? -%>
-            <span class="region"><%= cleanse event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
+            <span class="region p-region"><%= cleanse event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
             <% end -%>
             <% if !event.venue.postal_code.blank? -%>
-            <span class="postal-code"><%= cleanse event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
+            <span class="postal-code p-postal-code"><%= cleanse event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.country.blank? -%>
-            <span class='country-name'><%= cleanse event.venue.country -%></span>
+            <span class='country-name p-country-name'><%= cleanse event.venue.country -%></span>
             <% end -%>
             <% if event.venue && event.venue.has_full_address? -%>
             (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
@@ -63,13 +63,13 @@ html_classes << " contentbar" if has_contentbar
     <% unless event.url.blank? -%>
       <h3>Website</h3>
       <div class="website">
-        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow" -%>
+        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url u-url", :rel => "nofollow" -%>
       </div>
     <% end -%>
 
     <% unless event.description.blank? -%>
     <h3>Description</h3>
-    <div class="description">
+    <div class="description p-description">
       <%= format_description(event.description) %>
     </div>
     <% end -%>
@@ -81,9 +81,9 @@ html_classes << " contentbar" if has_contentbar
         <br />
         <ul>
           {{#attendees}}
-            <li>
-              {{#username}}<a href='http://plancast.com/{{username}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
-              {{^username}}<a href='http://plancast.com/user/{{id}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
+            <li class="p-attendee h-card">
+              {{#username}}<a href='http://plancast.com/{{username}}'><img class='avatar u-logo' src='{{pic_square}}'/></a>{{/username}}
+              {{^username}}<a href='http://plancast.com/user/{{id}}'><img class='avatar u-logo' src='{{pic_square}}'/></a>{{/username}}
             </li>
           {{/attendees}}
         </ul>

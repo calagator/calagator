@@ -12,17 +12,17 @@ describe "Time formatting" do
   tests = [
     # comment, end_time, results_without_context, results_with_context
     [ "start time only", nil,
-      "<abbr class=\"dtstart\" title=\"2008-04-01T09:00:00\">Tuesday, April 1, 2008 at 9am</abbr>",
-      "<abbr class=\"dtstart\" title=\"2008-04-01T09:00:00\">9am</abbr>"],
+      "<abbr class=\"dtstart d-dtstart\" title=\"2008-04-01T09:00:00\">Tuesday, April 1, 2008 at 9am</abbr>",
+      "<abbr class=\"dtstart d-dtstart\" title=\"2008-04-01T09:00:00\">9am</abbr>"],
     [ "same day & am-pm", DateTime.new(2008, 4, 1, 11, 00),
-      "<abbr class=\"dtstart\" title=\"2008-04-01T09:00:00\">Tuesday, April 1, 2008 from 9</abbr>&ndash;<abbr class=\"dtend\" title=\"2008-04-01T11:00:00\">11am</abbr>",
-      "<abbr class=\"dtstart\" title=\"2008-04-01T09:00:00\">9</abbr>&ndash;<abbr class=\"dtend\" title=\"2008-04-01T11:00:00\">11am</abbr>" ],
+      "<abbr class=\"dtstart d-dtstart\" title=\"2008-04-01T09:00:00\">Tuesday, April 1, 2008 from 9</abbr>&ndash;<abbr class=\"dtend d-dtend\" title=\"2008-04-01T11:00:00\">11am</abbr>",
+      "<abbr class=\"dtstart d-dtstart\" title=\"2008-04-01T09:00:00\">9</abbr>&ndash;<abbr class=\"dtend d-dtend\" title=\"2008-04-01T11:00:00\">11am</abbr>" ],
     [ "same day, different am-pm", DateTime.new(2008, 4, 1, 13, 30),
-      "<abbr class=\"dtstart\" title=\"2008-04-01T09:00:00\">Tuesday, April 1, 2008 from 9am</abbr>&ndash;<abbr class=\"dtend\" title=\"2008-04-01T13:30:00\">1:30pm</abbr>",
-      "<abbr class=\"dtstart\" title=\"2008-04-01T09:00:00\">9am</abbr>&ndash;<abbr class=\"dtend\" title=\"2008-04-01T13:30:00\">1:30pm</abbr>" ],
+      "<abbr class=\"dtstart d-dtstart\" title=\"2008-04-01T09:00:00\">Tuesday, April 1, 2008 from 9am</abbr>&ndash;<abbr class=\"dtend d-dtend\" title=\"2008-04-01T13:30:00\">1:30pm</abbr>",
+      "<abbr class=\"dtstart d-dtstart\" title=\"2008-04-01T09:00:00\">9am</abbr>&ndash;<abbr class=\"dtend d-dtend\" title=\"2008-04-01T13:30:00\">1:30pm</abbr>" ],
     [ "different days", DateTime.new(2009, 4, 1, 13, 30),
-      "<abbr class=\"dtstart\" title=\"2008-04-01T09:00:00\">Tuesday, April 1, 2008 at 9am</abbr> through <abbr class=\"dtend\" title=\"2009-04-01T13:30:00\">Wednesday, April 1, 2009 at 1:30pm</abbr>",
-      "<abbr class=\"dtstart\" title=\"2008-04-01T09:00:00\">9am</abbr> through <abbr class=\"dtend\" title=\"2009-04-01T13:30:00\">Wednesday, April 1, 2009 at 1:30pm</abbr>" ]
+      "<abbr class=\"dtstart d-dtstart\" title=\"2008-04-01T09:00:00\">Tuesday, April 1, 2008 at 9am</abbr> through <abbr class=\"dtend d-dtend\" title=\"2009-04-01T13:30:00\">Wednesday, April 1, 2009 at 1:30pm</abbr>",
+      "<abbr class=\"dtstart d-dtstart\" title=\"2008-04-01T09:00:00\">9am</abbr> through <abbr class=\"dtend d-dtend\" title=\"2009-04-01T13:30:00\">Wednesday, April 1, 2009 at 1:30pm</abbr>" ]
   ]
 
   [nil, Date.new(2008, 4, 1)].each do |context_date|
