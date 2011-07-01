@@ -44,6 +44,7 @@ describe SourceParser, "when parsing events" do
       SourceParser::Plancast,
       SourceParser::Meetup,
       SourceParser::Upcoming,
+      SourceParser::Facebook,
       SourceParser::Ical,
       SourceParser::Hcal,
       SourceParser::FakeParser,
