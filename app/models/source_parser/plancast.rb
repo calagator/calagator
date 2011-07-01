@@ -26,7 +26,6 @@ class SourceParser # :nodoc:
     end
 
     def self.to_abstract_location(value, opts={})
-      value = "" if value.nil?
       if value.present?
         location = AbstractLocation.new
         location.title   = value['name']

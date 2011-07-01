@@ -31,6 +31,7 @@ gem 'ri_cal', '0.8.7'
 gem 'rubyzip', '0.9.4', :require =>  'zip/zip'
 gem 'will_paginate', '2.3.15'
 gem 'httparty', '0.7.8'
+gem 'microformats2', '1.0.2'
 
 # NOTE: mofo 0.2.9 and above are evil, defining their own defective Object#try method and are unable to extract "postal-code" address fields from hCalendar. Mofo is used in Calagator's SourceParser::Hcal and throughout for String#strip_html. The library has been abandoned and its author recommends switching to the incompatible "prism" gem.
 gem 'mofo', '0.2.8'

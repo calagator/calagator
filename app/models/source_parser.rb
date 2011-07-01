@@ -172,4 +172,5 @@ SourceParser::Plancast
 SourceParser::Meetup
 SourceParser::Upcoming
 SourceParser::Ical
+SourceParser::Hcal2
 SourceParser::Hcal

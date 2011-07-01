@@ -45,8 +45,9 @@ describe SourceParser, "when parsing events" do
       SourceParser::Meetup,
       SourceParser::Upcoming,
       SourceParser::Ical,
+      SourceParser::Hcal2,
       SourceParser::Hcal,
-      SourceParser::FakeParser,
+      SourceParser::FakeParser
     ]
   end
 
