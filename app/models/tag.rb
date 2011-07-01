@@ -113,6 +113,12 @@ class Tag < ActiveRecord::Base
     },
     'meetup' => {
       'group' => "http://www.meetup.com/%s"
+    },
+    'facebook' => {
+      'event' => "http://www.facebook.com/event.php?eid=%s"
+    },
+    'lanyrd' => {
+      'event' => "http://lanyrd.com/%s"
     }
   }
 

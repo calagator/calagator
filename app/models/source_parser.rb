@@ -171,6 +171,7 @@ $SourceParserImplementations = []
 SourceParser::Plancast
 SourceParser::Meetup
 SourceParser::Upcoming
+SourceParser::Facebook
 SourceParser::Ical
 SourceParser::Hcal2
 SourceParser::Hcal
