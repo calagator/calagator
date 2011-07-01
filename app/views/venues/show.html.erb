@@ -20,34 +20,34 @@
     </div>
   </div>
 
-  <div class="location vcard<%= " closed" if @venue.closed? %>">
+  <div class="location vcard h-card<%= " closed" if @venue.closed? %>">
     <%= google_map @venue %>
 
-    <h1 class="fn org"><%= cleanse @venue.title.strip_html %></h1>
+    <h1 class="fn org p-fn p-org"><%= cleanse @venue.title.strip_html %></h1>
     <% if @venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
 
     <% if @venue.has_full_address? %>
-      <div class="adr">
+      <div class="adr h-adr">
         <% if @venue.street_address.present? %>
-          <div class="street-address"><%=h @venue.street_address %></div>
+          <div class="street-address p-street-address"><%=h @venue.street_address %></div>
         <% end %>
         <% if @venue.locality.present? %>
-          <span class="locality"><%=h @venue.locality %></span><%= "," if @venue.region.present? or @venue.postal_code.present? or @venue.country.present? %>
+          <span class="locality p-locality"><%=h @venue.locality %></span><%= "," if @venue.region.present? or @venue.postal_code.present? or @venue.country.present? %>
         <% end %>
         <% if @venue.region.present? %>
-          <span class="region"><%=h @venue.region %></span><%= "," if @venue.country.present? and not @venue.postal_code.present? %>
+          <span class="region p-region"><%=h @venue.region %></span><%= "," if @venue.country.present? and not @venue.postal_code.present? %>
         <% end %>
         <% if @venue.postal_code.present? %>
-          <span class="postal-code"><%=h @venue.postal_code %></span><%= "," if  @venue.country.present? %>
+          <span class="postal-code p-postal-code"><%=h @venue.postal_code %></span><%= "," if  @venue.country.present? %>
         <% end %>
         <% if @venue.country.present? %>
-          <span class='country-name'><%=h @venue.country %></span>
+          <span class='country-name p-country-name'><%=h @venue.country %></span>
         <% end %>
         (<a href='<%=google_maps_url(@venue.full_address) -%>'>map</a>)
       </div>
     <% else %>
       <% if @venue.address.present? %>
-        <div class='address'>
+        <div class='address p-address'>
           <%=h @venue.address %>
           (<a href='<%=google_maps_url(@venue.address) -%>'>map</a>)
         </div>
@@ -55,15 +55,15 @@
     <% end %>
     <div class='info'>
       <% if @venue.url.present? %>
-        <div class='url'><%= link_to(truncate(url_for(@venue.url), :length => 60), url_for(@venue.url), :rel => "nofollow") %></div>
+        <div class='url u-url'><%= link_to(truncate(url_for(@venue.url), :length => 60), url_for(@venue.url), :rel => "nofollow") %></div>
       <% end %>
 
       <% if @venue.email.present? %>
-        <div class='email'><%= mail_to( cleanse(@venue.email) ) %></div>
+        <div class='email u-email'><%= mail_to( cleanse(@venue.email) ) %></div>
       <% end %>
 
       <% if @venue.telephone.present? %>
-        <div class='tel'><%=h @venue.telephone %></div>
+        <div class='tel p-tel'><%=h @venue.telephone %></div>
       <% end %>
 
       <% if @venue.wifi? %>
@@ -74,7 +74,7 @@
 
   <div>
     <% if @venue.description.present? || @venue.access_notes.present? %>
-      <div class="description">
+      <div class="description p-description">
         <%= format_description(@venue.description) %>
         <% if @venue.access_notes.present? %>
           <div class="access_notes">
