@@ -116,6 +116,9 @@ class Tag < ActiveRecord::Base
     },
     'facebook' => {
       'event' => "http://www.facebook.com/event.php?eid=%s"
+    },
+    'lanyrd' => {
+      'event' => "http://lanyrd.com/%s"
     }
   }
 

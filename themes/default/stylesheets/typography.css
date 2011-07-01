@@ -210,6 +210,7 @@ a.external.foursquare { background-image: url("/images/external_sites/foursquare
 a.external.gowalla    { background-image: url("/images/external_sites/gowalla.png"); }
 a.external.meetup     { background-image: url("/images/external_sites/meetup.png"); }
 a.external.facebook   { background-image: url("/images/external_sites/facebook.png"); }
+a.external.lanyrd     { background-image: url("/images/external_sites/lanyrd.png"); }
 
 #tagcloud .tagcloud_level_1 { font-size: 75%; }
 #tagcloud .tagcloud_level_2 { font-size: 100%; }
