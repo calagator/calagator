@@ -21,6 +21,8 @@ class SourceParser
       begin
         events = parser.to_abstract_events(opts.merge(:content => content))
         return events if not events.blank?
+      rescue ::SourceParser::HttpAuthenticationRequiredError => e
+        raise e
       rescue Exception => e
         # Ignore
       end

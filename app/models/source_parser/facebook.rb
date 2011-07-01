@@ -8,9 +8,10 @@ class SourceParser # :nodoc:
       event_id = matchdata[1]
       return false unless event_id # Give up unless we can extract the Facebook event_id
 
-      event_url = "http://graph.facebook.com/#{event_id}"
       # Make an api call to the Facebook graph API to get event data.
-      facebook_data = HTTParty.get(event_url)
+      facebook_data = HTTParty.get("http://graph.facebook.com/#{event_id}")
+
+      raise ::SourceParser::HttpAuthenticationRequiredError if facebook_data.parsed_response === false
 
       event = AbstractEvent.new
       event.title       = facebook_data['name']
