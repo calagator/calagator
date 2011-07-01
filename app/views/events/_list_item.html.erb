@@ -4,7 +4,7 @@ opts ||= {}
 opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
 show_year ||= false
 %>
-<div class='vevent'>
+<div class='vevent h-event'>
   <% date_class = (opts[:dates]==false || !new_day) ? ' hidden' : '' -%>
   <div class='list_date<%=date_class%>'>
     <div class='day_of_week'><%= today_tomorrow_or_weekday(event) %></div>
@@ -14,20 +14,20 @@ show_year ||= false
     <% end %>
   </div>
   <div class='list_content'>
-    <a class='summary' href='<%= url_for event_url(event) %>'><%= cleanse event.title.strip_html %></a>
+    <a class='summary p-summary' href='<%= url_for event_url(event) %>'><%= cleanse event.title.strip_html %></a>
     <div>
     <%= normalize_time(event, :context => event.start_time.to_date) -%>
     <% if event.venue && !event.venue.title.blank? %>
-      <br/><a class='location' href='<%= url_for venue_url(event.venue) %>'><%= cleanse event.venue.title.strip_html -%></a>
+      <br/><a class='location u-location' href='<%= url_for venue_url(event.venue) %>'><%= cleanse event.venue.title.strip_html -%></a>
     <% end -%>
     </div>
     <% if !event.description.blank? %>
-      <div class='description'>
+      <div class='description p-description'>
         <%= format_description(event.description) -%>
       </div>
     <% end -%>
     <% if !event.url.blank? -%>
-      <%= link_to "Website", h(event.url), :class => "url", :rel => "nofollow" -%>
+      <%= link_to "Website", h(event.url), :class => "url u-url", :rel => "nofollow" -%>
     <% end -%>
   </div>
 </div>

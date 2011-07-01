@@ -81,9 +81,9 @@ html_classes << " contentbar" if has_contentbar
         <br />
         <ul>
           {{#attendees}}
-            <li class="p-attendee h-card">
-              {{#username}}<a href='http://plancast.com/{{username}}'><img class='avatar u-logo' src='{{pic_square}}'/></a>{{/username}}
-              {{^username}}<a href='http://plancast.com/user/{{id}}'><img class='avatar u-logo' src='{{pic_square}}'/></a>{{/username}}
+            <li class="p-attendee h-card vcard">
+              {{#username}}<a href='http://plancast.com/{{username}}'><img class='avatar u-photo photo' src='{{pic_square}}'/></a>{{/username}}
+              {{^username}}<a href='http://plancast.com/user/{{id}}'><img class='avatar u-photo photo' src='{{pic_square}}'/></a>{{/username}}
             </li>
           {{/attendees}}
         </ul>
