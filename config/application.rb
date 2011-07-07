@@ -93,10 +93,9 @@ module Calagator
 
 
       # Set cookie session
-      config.action_controller.session = {
-        :key => SECRETS.session_name || "calagator",
-        :secret => SECRETS.session_secret,
-      }
+      config.session_store :cookie_store, :key => SECRETS.session_name || "calagator"
+      config.secret_token = SECRETS.session_secret
+
 
       # Activate search engine
       require 'lib/search_engine'
