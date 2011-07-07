@@ -8,7 +8,6 @@ Bundler.require(:default, Rails.env) if defined?(Bundler)
 
 module Calagator
   class Application < Rails::Application
-    include Rake::DSL
     #---[ Libraries ]-------------------------------------------------------
 
     # Gems are packaged in "Gemfile", run `bundle` to install them.

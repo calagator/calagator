@@ -12,7 +12,7 @@ eval data if data
 gem 'sqlite3'
 
 # Run-time dependencies
-gem 'rails', '3.0.7'
+gem 'rails', '3.0.9'
 gem 'columnize', '0.3.4'
 gem 'rdoc', '3.8', :require => nil
 gem 'geokit', '1.5.0'
