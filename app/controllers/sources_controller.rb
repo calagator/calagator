@@ -11,13 +11,13 @@ class SourcesController < ApplicationController
       begin
         @events = @source.create_events!
       rescue SourceParser::HttpAuthenticationRequiredError => e
-        @source.errors.add_to_base("source requires authentication")
+        @source.errors.add(:base, "source requires authentication")
       rescue OpenURI::HTTPError => e
-        @source.errors.add_to_base("we received an error from this source")
+        @source.errors.add(:base, "we received an error from this source")
       rescue Errno::EHOSTUNREACH => e
-        @source.errors.add_to_base("this source is not responding")
+        @source.errors.add(:base, "this source is not responding")
       rescue SocketError => e
-        @source.errors.add_to_base("hostname not found")
+        @source.errors.add(:base, "hostname not found")
       end
     end
 
