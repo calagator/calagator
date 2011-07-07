@@ -16,13 +16,13 @@ class Tagging < ActiveRecord::Base
   if (table_exists? rescue nil)
     belongs_to :tag
     belongs_to :taggable, :polymorphic => true
-
+    after_destroy :destroy_orphaned_tags
   
     # If you also need to use <tt>acts_as_list</tt>, you will have to manage the tagging positions manually by creating decorated join records when you associate Tags with taggables.
     # acts_as_list :scope => :taggable
     
     # This callback makes sure that an orphaned <tt>Tag</tt> is deleted if it no longer tags anything.
-    def after_destroy
+    def destroy_orphaned_tags
       tag.destroy_without_callbacks if tag and tag.taggings.count == 0
     end    
   end

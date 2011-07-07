@@ -24,6 +24,8 @@ class Tag < ActiveRecord::Base
     validates_format_of :name,
       :with => %r{^[^#{Tag::DELIMITER}]+$},
       :message => "can not contain delimiter character: #{Tag::DELIMITER}"
+
+    before_create :strip_name
   
     # Set up the polymorphic relationship.
     begin
@@ -43,8 +45,7 @@ class Tag < ActiveRecord::Base
     end
     
     # Callback to strip extra spaces from the tagname before saving it. If you allow tags to be renamed later, you might want to use the <tt>before_save</tt> callback instead.
-  
-    def before_create 
+    def strip_name
       self.name = name.downcase.strip.squeeze(" ")
     end
 
