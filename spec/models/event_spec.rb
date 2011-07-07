@@ -587,22 +587,22 @@ describe Event do
   describe "with finding duplicates" do
     it "should find all events with duplicate titles" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
-      Event.find(:duplicates, :by => :title )
+      Event.find_duplicates_by(:title )
     end
 
     it "should find all events with duplicate titles and urls" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-      Event.find(:duplicates, :by => [:title,:url])
+      Event.find_duplicates_by([:title,:url])
     end
 
     it "should find all events that have not been marked as duplicate" do
       Event.should_receive(:find_without_duplicate_support).with(:all, {})
-      Event.find(:non_duplicates)
+      Event.non_duplicates
     end
 
     it "should find all events that have been marked as duplicate" do
       Event.should_receive(:find_without_duplicate_support).with(:all, {})
-      Event.find(:marked_duplicates)
+      Event.marked_duplicates
     end
 
   end
@@ -617,9 +617,9 @@ describe Event do
     # Find duplicates, create another event with the given attributes, and find duplicates again
     # TODO Refactor #find_duplicates_create_a_clone_and_find_again and its uses into something simpler, like #assert_duplicate_count.
     def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes, create_class = Event)
-      before_results = create_class.find(:duplicates, :by => find_duplicates_arguments)
+      before_results = create_class.find_duplicates_by( find_duplicates_arguments)
       clone = create_class.create!(clone_attributes)
-      after_results = Event.find(:duplicates, :by => find_duplicates_arguments)
+      after_results = Event.find_duplicates_by(find_duplicates_arguments)
       return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
     end
 
@@ -633,7 +633,7 @@ describe Event do
       #pre, post = find_duplicates_create_a_clone_and_find_again(:any, {:title => @event.title, :start_time => @event.start_time} )
       #post.size.should == pre.size + 2
       dup_title = Event.create!({:title => @event.title, :start_time => @event.start_time + 1.minute})
-      Event.find(:duplicates, :by => :any).should include(dup_title)
+      Event.find_duplicates_by(:any).should include(dup_title)
     end
 
     it "should not find duplicate title by url" do
