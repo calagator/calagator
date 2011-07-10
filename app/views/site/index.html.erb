@@ -12,7 +12,7 @@
     <h2>Popular tags</h2>
     <%= @tagcloud_items_deferred.call.map{ |item| 
           tag_link(:event, item[:tag], "tagcloud_level_#{item[:level]}") 
-        }.join('<span class="spacer"> &middot; </span>') -%>
+        }.join('<span class="spacer"> &middot; </span>').html_safe -%>
   </div>
 </div>
 
@@ -29,7 +29,7 @@
     <%= render 'events/list', :events => @times_to_events[:later] %>
   </div>
   <div id='recently_added_events'>
-    <h3><%= link_to("View future events &raquo;", events_path(:anchor => "event-#{@times_to_events[:more].id}")) if @times_to_events[:more] %></h3>
+    <h3><%= link_to("View future events &raquo;".html_safe, events_path(:anchor => "event-#{@times_to_events[:more].id}")) if @times_to_events[:more] %></h3>
   </div>
 </div>
 <% end %>

@@ -11,7 +11,7 @@
         <a name="<%= version.id %>">
         <b><%= version.event.titleize %></b>
         <%= version.item_type %>
-        <%= link_to "&laquo;#{title_for(version)}&raquo;", url_for(:controller => version.item_type.tableize, :action => "show", :id => version.item_id) %>
+        <%= link_to "&laquo;#{title_for(version)}&raquo;".html_safe, url_for(:controller => version.item_type.tableize, :action => "show", :id => version.item_id) %>
         &mdash;
         <%= link_to "(Rollback)", version, :method => :put, :confirm => 'Are you sure?' %>
         <% if version.whodunnit %>

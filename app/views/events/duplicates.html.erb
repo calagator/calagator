@@ -38,7 +38,7 @@
                 <td><%= check_box_tag("duplicate_id_#{event.id}", event.id) %></td>
                 <td>
                   <div><%= link_to event.title, event_url(event) %></div>
-                  <div><%= event.start_time %><%= h ", #{event.venue.title}" unless event.venue.nil? %></div>
+                  <div><%= event.start_time %><%= ", #{event.venue.title}" unless event.venue.nil? %></div>
                </td>
               </tr>
             <% end %>

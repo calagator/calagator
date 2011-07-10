@@ -23,7 +23,7 @@
   <div id='venues_search_results'>
     <div id='list_description'>
       <% if @tag %>
-        <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%=h @tag %></strong></h2>
+        <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%= @tag %></strong></h2>
       <% else -%>
         <h2>
           <% if @venues.size == 0 -%>
@@ -31,7 +31,9 @@
           <% else -%>
             Showing <%= "all " if params[:all] %><strong><%= @venues.size %></strong> venue<%= @venues.size == 1 ? '' : 's' %>
           <% end %>
-          <%= "matching &#8220;#{params[:query]}&#8221;" if params[:query].present? %>
+          <% if params[:query].present? %>
+            matching &#8220;<%= params[:query] %>&#8221;
+          <% end %>
           <%= "with public WiFi" if params[:wifi] %>
         </h2>
       <% end -%>
@@ -40,9 +42,9 @@
     <ul>
       <% for venue in @venues %>
         <li>
-          <%= link_to(cleanse(venue.title), venue_url(venue)) %>
+          <%= link_to(venue.title, venue_url(venue)) %>
           <% if venue.has_full_address? %>
-            <p class='detail'><%= cleanse venue.full_address %></p>
+            <p class='detail'><%= venue.full_address %></p>
           <% end %>
         </li>
       <% end %>
@@ -55,7 +57,7 @@
       <ul>
         <% for venue in @most_active_venues %>
           <li>
-            <%= link_to(cleanse(venue.title), venue_url(venue)) %>
+            <%= link_to(venue.title, venue_url(venue)) %>
             <p class='detail'><%= venue.events_count %> events</p>
           </li>
         <% end %>
@@ -66,7 +68,7 @@
       <ul>
         <% for venue in @newest_venues %>
           <li>
-            <%= link_to(cleanse(venue.title), venue_url(venue)) %>
+            <%= link_to(venue.title, venue_url(venue)) %>
             <p class='detail'>Added <%= time_ago_in_words(venue.created_at) %> ago</p>
           </li>
         <% end %>

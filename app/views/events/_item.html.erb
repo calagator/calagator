@@ -10,30 +10,30 @@ html_classes << " contentbar" if has_contentbar
 %>
 <div class="<%= html_classes %>">
   <div class="vevent">
-    <h1 class="summary"><%= cleanse event.title.strip_html %></h1>
+    <h1 class="summary"><%= event.title %></h1>
     <div class='date'><%= normalize_time(event) -%></div>
       <% unless event.venue.blank? %>
       <div class="clearfix location vcard<%= " closed" if event.venue.closed? %>">
       <%= google_map event %>
           <a class="url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
-            <span class='fn org'><%= cleanse event.venue.title.strip_html -%></span>
+            <span class='fn org'><%= event.venue.title -%></span>
           </a>
           <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
           <div class="adr">
           <% if !event.venue.street_address.blank? -%>
-          <div class="street-address"><%= cleanse event.venue.street_address -%></div>
+          <div class="street-address"><%= event.venue.street_address -%></div>
           <% end %>
           <% if !event.venue.locality.blank? -%>
-            <span class="locality"><%= cleanse event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
+            <span class="locality"><%= event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.region.blank? -%>
-            <span class="region"><%= cleanse event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
+            <span class="region"><%= event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
             <% end -%>
             <% if !event.venue.postal_code.blank? -%>
-            <span class="postal-code"><%= cleanse event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
+            <span class="postal-code"><%= event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.country.blank? -%>
-            <span class='country-name'><%= cleanse event.venue.country -%></span>
+            <span class='country-name'><%= event.venue.country -%></span>
             <% end -%>
             <% if event.venue && event.venue.has_full_address? -%>
             (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
@@ -46,7 +46,7 @@ html_classes << " contentbar" if has_contentbar
             <% if event.venue.access_notes.present? -%>
               <div class="access_notes">
                 <h3>Access Notes</h3>
-                <%= h event.venue.access_notes %>
+                <%= event.venue.access_notes %>
               </div>
             <% end -%>
 

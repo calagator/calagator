@@ -5,7 +5,7 @@
   <% unless event.venue.blank? %>
     <div class="location vcard">
     <a href='<%= url_for venue_path(event.venue) %>' class='url'>
-        <span class='fn org'><%= h event.venue.title %></span>
+        <span class='fn org'><%= event.venue.title %></span>
     </a>
     <div class="adr">
       <% if !event.venue.street_address.blank? %>

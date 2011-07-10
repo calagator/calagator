@@ -14,11 +14,14 @@ module ApplicationHelper
   FLASH_TYPES = [:success, :failure]
 
   def render_flash
-    result = ""
+    result = "".html_safe
     for name in FLASH_TYPES
-      result += "<div class='flash #{name} flash_#{name}'>#{name == :failure ? 'ERROR: ' : ''}#{flash[name]}</div>" if flash[name]
+      next unless flash[name]
+      result << content_tag(:div, :class => "flash #{name} flash_#{name}") do
+        "#{name == :failure ? 'ERROR: ' : ''}#{flash[name]}"
+      end
     end
-    return(result.blank? ? nil : "<div id='flash'>#{result}</div>")
+    return result
   end
 
   def datetime_format(time,format)
@@ -56,7 +59,7 @@ module ApplicationHelper
           :icon => icon)
       end
     end
-    map.to_html + map.div(nil) unless map.markers.empty?
+    (map.to_html + map.div(nil)).html_safe unless map.markers.empty?
   end
 
   # Retrun a string describing the source code version being used, or false/nil if it can't figure out how to find the version.
@@ -107,6 +110,7 @@ module ApplicationHelper
       stamp << " and last updated <br />" << content_tag(:strong, normalize_time(item.updated_at, :format => :html) )
     end
     stamp << "."
+    stamp.html_safe
   end
 
   # Caches +block+ in view only if the +condition+ is true.
@@ -122,7 +126,7 @@ module ApplicationHelper
   # Insert a chunk of +javascript+ into the page, and execute it when the document is ready.
   def insert_javascript(javascript)
     content_for(:javascript_insert) do
-      <<-HERE
+      (<<-HERE).html_safe
         <script>
           $(document).ready(function() {
             #{javascript}
@@ -152,7 +156,7 @@ module ApplicationHelper
   end
 
   def tag_links_for(model)
-    model.tags.map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ')
+    model.tags.map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
   end
 
   def tag_link(type, tag, link_class=nil)
@@ -165,7 +169,7 @@ module ApplicationHelper
     link_classes = [link_class]
     link_classes << "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" if tag.machine_tag[:url]
 
-    link_to cleanse(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
+    link_to escape_once(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
   end
 
   def subnav_class_for(controller_name, action_name)
