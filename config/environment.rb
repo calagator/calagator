@@ -26,15 +26,21 @@ Rails::Initializer.run do |config|
 
   #---[ Plugins ]---------------------------------------------------------
 
+  # Load these plugins first, or they won't work
   config.plugins = [
     :catch_cookie_exception,
     :exception_notification,
-    :gmaps_on_rails,
-    :has_many_polymorphs,
-    :jrails,
-    :theme_support,
-    :white_list,
   ]
+
+  # Load remaining plugins
+  for entry in Pathname.glob(Rails.root + 'vendor/plugins/*')
+    name = entry.basename.to_s
+    symbol = name.to_sym
+    next if ['.', '..'].include?(name)
+    next if config.plugins.include?(symbol)
+    next unless entry.directory?
+    config.plugins << symbol
+  end
 
   #---[ Path -------------------------------------------------------------
 
