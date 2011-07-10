@@ -77,7 +77,11 @@ module VersionsHelper
              when Source then :url
              else :title
              end
-    title =  truncate(object.send(method), :length => 100)
-    return h(title)
+    if string = object.try(method)
+      title =  truncate(string, :length => 100)
+      return h(title)
+    else
+      "N/A"
+    end
   end
 end
