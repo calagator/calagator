@@ -37,6 +37,8 @@ class Venue < ActiveRecord::Base
 
   include VersionDiff
 
+  xss_foliate :sanitize => [:description, :access_notes]
+
   # Associations
   has_many :events, :dependent => :nullify
   belongs_to :source

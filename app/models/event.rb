@@ -35,6 +35,8 @@ class Event < ActiveRecord::Base
 
   has_paper_trail
 
+  xss_foliate :sanitize => [:description, :venue_details]
+
   # Associations
   belongs_to :venue, :counter_cache => true
   belongs_to :source
