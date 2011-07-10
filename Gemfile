@@ -26,6 +26,7 @@ gem 'will_paginate', '2.3.15'
 gem 'httparty', '0.7.8'
 gem 'loofah', '1.0.0'
 gem 'loofah-activerecord', '1.0.0'
+gem 'bluecloth', '2.1.0'
 
 # NOTE: mofo 0.2.9 and above are evil, defining their own defective Object#try method and are unable to extract "postal-code" address fields from hCalendar. Mofo is used in Calagator's SourceParser::Hcal and throughout for String#strip_html. The library has been abandoned and its author recommends switching to the incompatible "prism" gem.
 gem 'mofo', '0.2.8'
