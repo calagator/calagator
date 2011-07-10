@@ -21,6 +21,7 @@ gem 'sqlite3'
 # Run-time dependencies
 gem 'rake', '0.8.7'
 gem 'rails', '2.3.12'
+gem 'rdoc', '3.8', :require => nil
 gem 'columnize', '0.3.4'
 gem 'geokit', '1.5.0'
 gem 'hpricot', '0.8.4'
