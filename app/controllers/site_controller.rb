@@ -32,4 +32,10 @@ class SiteController < ApplicationController
       end
     end
   end
+
+  def opensearch
+    respond_to do |format|
+      format.xml { render :content_type => 'application/opensearchdescription+xml' }
+    end
+  end
 end
