@@ -105,11 +105,11 @@ class BeValidXhtml
     end
 
     def text_to_multipart(key,value)
-      return "Content-Disposition: form-data; name=\"#{CGI::escape(key)}\"\r\n\r\n#{value}\r\n"
+      return "Content-Disposition: form-data; name=\"#{cgi_escape(key)}\"\r\n\r\n#{value}\r\n"
     end
 
     def file_to_multipart(key,filename,mime_type,content)
-      return "Content-Disposition: form-data; name=\"#{CGI::escape(key)}\"; filename=\"#{filename}\"\r\n" +
+      return "Content-Disposition: form-data; name=\"#{cgi_escape(key)}\"; filename=\"#{filename}\"\r\n" +
                 "Content-Transfer-Encoding: binary\r\nContent-Type: #{mime_type}\r\n\r\n#{content}\r\n"
     end
 

@@ -38,7 +38,7 @@ module EventsHelper
   end
 
   def google_maps_url(address)
-    return "http://maps.google.com/maps?q=#{CGI::escape(address)}"
+    return "http://maps.google.com/maps?q=#{cgi_escape(address)}"
   end
 
   #---[ Event sorting ]----------------------------------------------------
@@ -74,19 +74,19 @@ module EventsHelper
 
   # Return a Google Calendar export URL.
   def google_event_export_link(event)
-    result = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&text=" << CGI::escape(event.title.strip_html)
+    result = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&text=" << cgi_escape(event.title)
 
     result << "&dates=" << format_google_timespan(event)
 
     if event.venue
-      result << "&location=" << CGI::escape(event.venue.title)
+      result << "&location=" << cgi_escape(event.venue.title)
       if event.venue.geocode_address.present?
-        result << CGI::escape(", " + event.venue.geocode_address)
+        result << cgi_escape(", " + event.venue.geocode_address)
       end
     end
 
     if event.url.present?
-      result << "&sprop=website:" << CGI::escape(event.url.sub(/^http.?:\/\//, ''))
+      result << "&sprop=website:" << cgi_escape(event.url.sub(/^http.?:\/\//, ''))
     end
 
     if event.description.present?
@@ -96,7 +96,7 @@ module EventsHelper
       if overflow > 0
         details = "#{details[0..(overflow - details.size - details_suffix.size - 1)]}#{details_suffix}"
       end
-      result << "&details=" << CGI::escape(details)
+      result << "&details=" << cgi_escape(details)
     end
 
     return result

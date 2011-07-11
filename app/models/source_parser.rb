@@ -81,7 +81,7 @@ class SourceParser
     def self.content_for(opts)
       content = opts[:content] || self.read_url(opts[:url])
       if content.respond_to?(:content_type) && ["application/atom+xml"].include?(content.content_type)
-        return CGI::unescapeHTML(content)
+        return CGI::unescapeHTML(content.to_str)
       else
         return content
       end
