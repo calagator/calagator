@@ -24,7 +24,6 @@ gem 'rails', '2.3.12'
 gem 'rdoc', '3.8', :require => nil
 gem 'columnize', '0.3.4'
 gem 'geokit', '1.5.0'
-gem 'hpricot', '0.8.4'
 gem 'htmlentities', '4.2.3'
 gem 'linecache', '0.46'
 gem 'paper_trail', '1.6.4'

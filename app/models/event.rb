@@ -400,7 +400,7 @@ EOF
               d << "\n\n Description:\n"
             end
 
-            d << Hpricot(item.description).to_plain_text unless item.description.blank?
+            d << Loofah::Helpers::strip_tags(item.description) if item.description.present?
             d << "\n\nTags: #{item.tag_list}" unless item.tag_list.blank?
             d << "\n\nImported from: #{opts[:url_helper].call(item)}" if opts[:url_helper]
           end
