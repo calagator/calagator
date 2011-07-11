@@ -3,7 +3,7 @@ module ApplicationHelper
 
   # Returns HTML string of an event or venue description for display in a view.
   def format_description(string)
-    return upgrade_br(simple_format(auto_link(white_list(string.gsub(%r{<br\s?/?>}, "\n")))))
+    sanitize(upgrade_br(markdown(auto_link(string))))
   end
 
   # Return a HTML string with the BR tags converted to XHTML compliant markup.
