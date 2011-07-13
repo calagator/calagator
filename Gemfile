@@ -1,12 +1,5 @@
 source :rubygems
 
-# Load debugger if installed
-begin
-  require 'ruby-debug'
-rescue LoadError
-  # Ignore
-end
-
 # Load additional gems from "Gemfile.local" if it exists, has same format as this file.
 begin
   data = File.read('Gemfile.local')
@@ -44,6 +37,13 @@ group :development, :test do
   gem 'rspec', '1.3.1', :require => false
   gem 'rspec-rails', '1.3.3', :require => false
   gem 'rcov', '0.9.9', :require => false
+
+  case RUBY_VERSION.to_f
+  when 1.9..2.0
+    gem "ruby-debug19", :require => "ruby-debug"
+  when 1.8..1.9
+    gem "ruby-debug"
+  end
 end
 
 # Some dependencies are activated through server settings.
