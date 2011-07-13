@@ -49,6 +49,7 @@ Rails::Initializer.run do |config|
     #{RAILS_ROOT}/app/observers
   ]
 
+  $LOAD_PATH << "#{RAILS_ROOT}"
   config.eager_load_paths += %W[
     #{RAILS_ROOT}/lib
   ]
