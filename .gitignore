@@ -6,6 +6,7 @@
 *.tmp
 *~
 .dtach
+.vagrant
 config/database~custom.yml
 config/geocoder_api_keys.yml
 config/mongrel_cluster.yml
