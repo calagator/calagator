@@ -16,7 +16,7 @@ file "/etc/profile.d/rubygems1.8.sh" do
 end
 
 # Install packages
-for name in %w[screen tmux elinks build-essential libcurl4-openssl-dev libsqlite3-dev libxml2 libxml2-dev libxslt1.1 libxslt1-dev]
+for name in %w[screen tmux elinks build-essential ruby-dev irb libcurl4-openssl-dev libsqlite3-dev libxml2 libxml2-dev libxslt1.1 libxslt1-dev]
   package name
 end
 
