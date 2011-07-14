@@ -231,3 +231,25 @@ describe SourceParser, "checking duplicates when importing" do
     end
   end
 end
+
+describe SourceParser, "labels" do
+  it "should have labels" do
+    SourceParser.labels.should_not be_blank
+  end
+
+  it "should have labels for each parser" do
+    SourceParser.labels.size.should == SourceParser.parsers.size
+  end
+
+  it "should use the label of the parser, as a string" do
+    label = SourceParser.parsers.first.label.to_s
+    SourceParser.labels.should include(label)
+  end
+
+  it "should have sorted labels" do
+    labels = SourceParser.labels
+    sorted = labels.sort_by(&:downcase)
+
+    labels.should == sorted
+  end
+end
