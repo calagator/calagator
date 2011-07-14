@@ -328,6 +328,10 @@ describe "Venue geocode addressing" do
   end
 
   describe "when versioning" do
+    before :each do
+      Version.destroy_all
+    end
+
     it "should have versions" do
       Venue.new.versions.should == []
     end
