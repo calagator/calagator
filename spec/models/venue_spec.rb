@@ -122,6 +122,13 @@ describe Venue, "when checking for squashing" do
     @slave_second = Venue.create!(:title => "2nd slave", :duplicate_of_id => @slave_first.id)
   end
 
+  after(:all) do
+    for record in [@master, @slave_first, @slave_second]
+      record.versions.destroy_all
+      record.destroy
+    end
+  end
+
   it "should recognize a master" do
     @master.should be_a_master
   end
