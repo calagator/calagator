@@ -337,19 +337,23 @@ describe "Venue geocode addressing" do
     end
 
     it "should create a new version after updating" do
-      venue = Venue.create!(:title => 'My Event')
+      venue = Factory.create :venue
       venue.versions.count.should == 1
 
-      venue.title = "New Title"
+      venue.title += " (change)"
+
       venue.save!
       venue.versions.count.should == 2
     end
 
     it "should store old content in past versions" do
-      venue = Venue.create!(:title => "Original title")
-      venue.title = "New Title"
+      venue = Factory.create :venue
+      original_title = venue.title
+
+      venue.title += " (change)"
+
       venue.save!
-      venue.versions.last.reify.title.should == "Original title"
+      venue.versions.last.reify.title.should == original_title
     end
   end
 end
