@@ -4,7 +4,8 @@
 <fieldset>
   <legend>Import a source</legend>
   <div>
-    Import one or more events from a feed or web page in one of the following formats: iCalendar, hCalendar, Upcoming, Meetup and Plancast.
+    Import one or more events from a feed or web page in one of the following formats:
+    <%= SourceParser.labels.to_sentence %>
   </div>
   <div>
     <%= f.label :url, "URL" %>
