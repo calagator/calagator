@@ -1,6 +1,17 @@
-# Override the settings here by creating a "Vagrantfile.local" file. You can currently use it to override the portforwarding by using commands like:
-#  HTTP_PORT  = 9999 # Forwarding for VM's port 80
-#  RAILS_PORT = 8888 # Forwarding for VM's port 3000
+# Override settings in this file by creating a "Vagrantfile.local" file. Here
+# are example commands that produce the default settings:
+#
+#  # Forward virtual machine's port 80 to local machine's port 8080
+#  HTTP_PORT  = 8080
+#
+#  # Forward virtual machine's port 3000 to local machine's port 8000
+#  RAILS_PORT = 8000
+#
+#  # Share files from the local machine to the virtual machine over NFS? Much faster
+#  NFS = false
+#
+#  # Host-only IP address for virtual machine
+#  ADDRESS = "33.33.31.13"
 overrides = "#{__FILE__}.local"
 if File.exist?(overrides)
     eval File.read(overrides)
@@ -18,6 +29,10 @@ Vagrant::Config.run do |config|
   # doesn't already exist on the user's system.
   config.vm.box_url = "http://opscode-vagrant-boxes.s3.amazonaws.com/ubuntu10.04-gems.box"
 
+  # Assign this VM to a host only network IP, allowing you to access it
+  # via the IP.
+  config.vm.network defined?(ADDRESS) ? ADDRESS : "33.33.31.13"
+
   # Forward a port from the guest to the host, which allows for outside
   # computers to access the VM, whereas host only networking does not.
   config.vm.forward_port "http", 80, defined?(HTTP_PORT) ? HTTP_PORT : 8080
@@ -26,7 +41,7 @@ Vagrant::Config.run do |config|
   # Share an additional folder to the guest VM. The first argument is
   # an identifier, the second is the path on the guest to mount the
   # folder, and the third is the path on the host to the actual folder.
-  config.vm.share_folder "vagrant", "/vagrant", "."
+  config.vm.share_folder "vagrant", "/vagrant", ".", :nfs => defined?(NFS) ? NFS : false
 
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
