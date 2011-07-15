@@ -1,6 +1,13 @@
 APPDIR = "/vagrant" # Application directory
 USER = "vagrant"      # User that owns files
 
+# Change directory to /vagrant after doing a `vagrant ssh`.
+execute "update-profile-chdir" do
+  profile = "~vagrant/.profile"
+  command %{printf "\nif shopt -q login_shell; then cd #{APPDIR}; fi" >> #{profile}}
+  not_if "grep -q 'cd #{APPDIR}' #{profile}"
+end
+
 # Update package list, but only if stale
 execute "update-apt" do
   timestamp = "/root/.apt-get-updated"

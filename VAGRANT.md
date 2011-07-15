@@ -42,12 +42,15 @@ prefixes are meant to indicate what machine you're on
 **SSH** into the virtual machine and go into the directory containing the application:
 
     local% vagrant ssh
-    virtual% cd /vagrant
+
+**Run** the application on the virtual machine, it will be accessible on [http://localhost:8000/](http://localhost:8000/):
+
+    local% vagrant ssh
+    virtual% ./script/server
 
 **Test** the application within the virtual machine:
 
     local% vagrant ssh
-    virtual% cd /vagrant
     virtual% bundle exec rake
 
 **Reload** the virtual machine, needed if you changed the `Gemfile` or `config` files, or used a revision control command that updated them:
