@@ -35,7 +35,7 @@ prefixes are meant to indicate what machine you're on
 
     local% vagrant up
 
-**Access** the application running on the virtual machine by visiting:
+**Access** the application running on the virtual machine by visiting -- it won't be running until you start it though:
 
     http://localhost:8000/
 

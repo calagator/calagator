@@ -50,10 +50,3 @@ execute "setup-db" do
   cwd APPDIR
   command "bundle exec rake db:create:all db:migrate db:test:prepare"
 end
-
-# Start server
-execute "start-server" do
-  user USER
-  cwd APPDIR
-  command "./script/server --port 3000 --daemon"
-end
