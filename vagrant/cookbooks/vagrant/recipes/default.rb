@@ -41,13 +41,13 @@ end
 # Install bundle
 execute "install-bundle" do
   cwd APPDIR
-  command "bundle --local || bundle update"
-  not_if "bundle check"
+  user USER
+  command "export HOME=/home/vagrant; bundle check || bundle --local || bundle"
 end
 
 # Setup database
 execute "setup-db" do
   user USER
   cwd APPDIR
-  command "bundle exec rake db:create:all db:migrate db:test:prepare"
+  command "export HOME=/home/vagrant; bundle exec rake db:create:all db:migrate db:test:prepare"
 end
