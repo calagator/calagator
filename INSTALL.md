@@ -5,15 +5,15 @@ Calagator
 Setup
 -----
 
-To use Calagator, you'll need to:
+You will need to:
 
-  * [Install git](http://git-scm.com/) 1.5.x or newer, a distributed version control system. Read the [Github Git Guides](http://github.com/guides/home) to learn how to use *git*.
-  * [Install Ruby](http://www.ruby-lang.org/), a programming language. You can use MRI Ruby 1.8.6, MRI Ruby 1.8.7, or [Phusion REE (Ruby Enterprise Edition)](http://rubyenterpriseedition.com/). Your operating system may already have Ruby installed or offer it as a prebuilt package.
-  * [Install RubyGems](http://rubyforge.org/projects/rubygems/) 1.3.x, a tool for managing software packages for Ruby. If you already have `rubygems` installed, you may need to update it by running `gem update --system` as root or an administrator.
-  * [Install SQLite3](http://www.sqlite.org/), a database engine. Your operating system may already have Ruby installed or offer it as a prebuilt package.
-  * [Install Bundler](http://gembundler.com/), a Ruby dependency management tool. You should run `gem install bundler` as root or an administrator.
-  * Checkout the Calagator source code. Run `git clone git://github.com/calagator/calagator.git` or equivalent, which will create a `calagator` directory with the source code. Go into this directory and run the remaining commands from there.
-  * Install Bundler-managed gems, the actual libraries that this application uses, like Ruby on Rails. You should run `bundle update`, which may take a long time to complete.
+  * [Install git](http://git-scm.com/), a distributed version control system. Read the [Github Git Guides](http://github.com/guides/home) to learn how to use *git*.
+  * [Install Ruby](http://www.ruby-lang.org/), a programming language. You can use MRI Ruby 1.8.7, or [Phusion REE (Ruby Enterprise Edition)](http://rubyenterpriseedition.com/). Your operating system may already have it installed or offer it as a pre-built package.
+  * [Install RubyGems](http://rubyforge.org/projects/rubygems/) 1.3.x or newer, a tool for managing software packages for Ruby.
+  * [Install SQLite3](http://www.sqlite.org/), a database engine. Your operating system may already have it installed or offer it as a pre-built package.
+  * [Install Bundler](http://gembundler.com/), a Ruby dependency management tool. You should run `gem install bundler` as root or an administrator after installing Ruby and RubyGems.
+  * Checkout the source code. Run `git clone git://github.com/calagator/calagator.git`, which will create a `calagator` directory with the source code. Go into this directory and run the remaining commands from there.
+  * Install Bundler-managed gems, the actual libraries that this application uses, like Ruby on Rails. You should run `bundle`, which may take a long time to complete.
   * Optionally specify the theme to use, see the **Customizing** section for details.
   * Optionally setup API keys for external services so that maps will be displayed, see the **API Keys** section for details.
   * Start the search service if needed, see the **Search engine** section for details.
