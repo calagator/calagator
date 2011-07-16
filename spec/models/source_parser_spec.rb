@@ -10,7 +10,7 @@ describe SourceParser, "when reading content" do
   end
 
   it "should read from a wacky URL" do
-    uri = mock_model(URI)
+    uri = URI.parse('fake')
     # please retain space betwen "?" and ")" on following line; it avoids a SciTE issue
     uri.should_receive(:respond_to? ).any_number_of_times.and_return(false)
     URI.should_receive(:parse).any_number_of_times.and_return(uri)
@@ -20,7 +20,9 @@ describe SourceParser, "when reading content" do
   end
 
   it "should unescape ATOM feeds" do
-    content = mock_model(String, :content_type => "application/atom+xml")
+    content = "ATOM"
+    content.stub(:content_type).and_return("application/atom+xml")
+
     SourceParser::Base.should_receive(:read_url).and_return(content)
     CGI.should_receive(:unescapeHTML).and_return("42")
 
@@ -52,7 +54,7 @@ describe SourceParser, "when parsing events" do
   end
 
   it "should use first successful parser's results" do
-    events = [mock_model(SourceParser::AbstractEvent)]
+    events = [double(SourceParser::AbstractEvent)]
     SourceParser::Upcoming.should_receive(:to_abstract_events).and_return(false)
     SourceParser::Ical.should_receive(:to_abstract_events).and_raise(NotImplementedError)
     SourceParser::Hcal.should_receive(:to_abstract_events).and_return(events)

@@ -559,7 +559,7 @@ describe Event do
     end
 
     it "should raise an exception if associated with an unknown type" do
-      lambda { @event.associate_with_venue(mock_model(SourceParser)) }.should raise_error(TypeError)
+      lambda { @event.associate_with_venue(double('SourceParser')) }.should raise_error(TypeError)
     end
 
     describe "and searching" do
