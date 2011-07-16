@@ -1,20 +1,13 @@
 <h1>Editing source</h1>
 
-<%= form_for(@source) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.label :url %><br />
-    <%= f.text_field :url %>
-    <% focus_on '#source_url' %>
-  </p>
-  <p>
-    <%= f.label :reimport, "Re-import?" %>
-    <%= f.check_box :reimport %>
-  </p>
-  <p>
+<%= semantic_form_for(@source) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :url %>
+    <%= f.input :reimport, :label => "Re-import?" %>
+  <% end %>
+  <%= f.buttons do %>
     <%= f.submit "Update" %>
-  </p>
+  <% end %>
 <% end %>
 
 <%= link_to 'Show', @source %> |
