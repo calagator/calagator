@@ -10,12 +10,12 @@ Vagrant::Config.run do |config|
   # options are documented and commented below. For a complete reference,
   # please see the online documentation at vagrantup.com.
 
-  # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "calagator"
-
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
   config.vm.box_url = "http://opscode-vagrant-boxes.s3.amazonaws.com/ubuntu10.04-gems.box"
+
+  # Every Vagrant virtual environment requires a box to build off of.
+  config.vm.box = File.basename(config.vm.box_url, ".box")
 
   # Assign this VM to a host only network IP, allowing you to access it
   # via the IP.
