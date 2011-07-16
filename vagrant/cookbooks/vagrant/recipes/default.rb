@@ -41,7 +41,8 @@ end
 # Install bundle
 execute "install-bundle" do
   cwd APPDIR
-  command "bundle check || bundle --local || bundle update"
+  command "bundle --local || bundle update"
+  not_if "bundle check"
 end
 
 # Setup database
