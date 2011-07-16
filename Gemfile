@@ -26,6 +26,8 @@ gem 'httparty', '0.7.8'
 gem 'loofah', '1.0.0'
 gem 'loofah-activerecord', '1.0.0'
 gem 'bluecloth', '2.1.0'
+gem 'formtastic', '2.0.0.rc3'
+gem 'validation_reflection', '1.0.0'
 
 gem 'themes_for_rails', '0.4.2'
 
