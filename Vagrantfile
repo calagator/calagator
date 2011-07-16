@@ -1,17 +1,5 @@
-# Override settings in this file by creating a "Vagrantfile.local" file. Here
-# are example commands that produce the default settings:
-#
-#  # Forward virtual machine's port 80 to local machine's port 8080
-#  HTTP_PORT  = 8080
-#
-#  # Forward virtual machine's port 3000 to local machine's port 8000
-#  RAILS_PORT = 8000
-#
-#  # Share files from the local machine to the virtual machine over NFS? Much faster
-#  NFS = false
-#
-#  # Host-only IP address for virtual machine
-#  ADDRESS = "33.33.31.13"
+# You can override settings in this file by creating a `Vagrantfile.local`
+# file, see the `VAGRANT.md` file for instructions.
 overrides = "#{__FILE__}.local"
 if File.exist?(overrides)
     eval File.read(overrides)

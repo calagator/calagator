@@ -1,16 +1,16 @@
 Using Vagrant for development
 =============================
 
-Vagrant is a tool that simplifies setup by providing you with a complete, working copy of the Calagator development environment. If you're new to Ruby, using Vagrant will be much easier than setting up the environment yourself. Vagrant works by creating a "virtual machine", an isolated operating system that runs within your normal operating system. This virtual machine has been specially prepared to include everything needed to develop and run the application.
+[Vagrant](http://vagrantup.com/) is a tool used by this project to provide you with a complete, working copy of the development environment. Using Vagrant will make it easier and faster to begin working on this project than if you were to try to set everything up yourself. Vagrant works by creating a virtual machine -- an isolated operating system that runs within your normal operating system. This virtual machine has been specially prepared to include everything needed to develop and run the application.
 
 Overview
 --------
 
 Working with Vagrant means interacting with your local operating system AND the virtual machine.
 
-You'll use your local machine to access the web application at [http://localhost:8000/](http://localhost:8000/), edit files, and do version control.
+You will use your local machine to access the web application at [http://localhost:8000/](http://localhost:8000/), edit files, and do version control.
 
-You'll use your virtual machine to run `bundle exec rake` and other commands that need the development environment.
+You will use your virtual machine to run `bundle exec rake` and other commands that need the development environment.
 
 Setup
 -----
@@ -68,3 +68,40 @@ prefixes are meant to indicate what machine you're on
 **Destroy** the virtual machine if you don't need it any more and want to free up disk space -- don't worry, you can always `vagrant up` to recreate it later:
 
     local% vagrant destroy
+
+Advanced settings
+-----------------
+
+### Virtual machine
+
+You can customize some settings on your virtual machine by creating a `Vagrantfile.local` file. This file is local to your computer and should not be added to revision control.
+
+The overrides are written in Ruby and included by the `Vagrantfile` if found. These overrides are applied when you start a virtual machine with `vagrant up` or any time you run `vagrant reload`.
+
+Below are the supported overrides:
+
+* Forward the virtual machine's port 80 to the local machine's port 8080:
+
+        HTTP_PORT  = 8080
+
+* Forward the virtual machine's port 3000 to the local machine's port 8000:
+
+        RAILS_PORT = 8000
+
+* Share files from the local machine to the virtual machine using NFS, which is much faster than the default sharing mechanism. Unfortunately, using NFS requires a UNIX-like operating system, an NFS server, and `root` access via `sudo` for Vagrant to setup sharing. If the virtual machine fails to mount the shared files the first time, please just do a `vagrant reload` after the provisioning completes, and it should work.
+
+        NFS = true
+
+* Set the virtual machine's IP address to `33.33.31.13`, which is useful if you want to SSH into the virtual machine by IP, rather than using `vagrant ssh`. If you're not using overrides to set the address or enable NFS, the address will be randomly assigned by VirtualBox.
+
+        ADDRESS = "33.33.31.13"
+
+### Provisioning
+
+You can customize your virtual machine by creating a `vagrant/cookbooks/vagrant/recipes/local.rb` file. This file is local to your computer and should not be added to revision control.
+
+This file can contain any valid Chef recipe code, and will be applied when a virtual machine is first created using `vagrant up` or any time you run `vagrant reload`. This custom code will be run after all the other operating system packages have been installed, but before Bundler is run -- see `vagrant/cookbooks/vagrant/recipes/default.rb` for additional context.
+
+For example, you could add the following to install the `emacs` package on your virtal machine:
+
+    package "emacs"
