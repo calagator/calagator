@@ -3,15 +3,6 @@ Using Vagrant for development
 
 [Vagrant](http://vagrantup.com/) is a tool used by this project to provide you with a complete, working copy of the development environment. Using Vagrant will make it easier and faster to begin working on this project than if you were to try to set everything up yourself. Vagrant works by creating a virtual machine -- an isolated operating system that runs within your normal operating system. This virtual machine has been specially prepared to include everything needed to develop and run the application.
 
-Overview
---------
-
-Working with Vagrant means interacting with your local operating system AND the virtual machine.
-
-You will use your local machine to access the web application at [http://localhost:8000/](http://localhost:8000/), edit files, and do version control.
-
-You will use your virtual machine to run `bundle exec rake` and other commands that need the development environment.
-
 Setup
 -----
 
@@ -27,9 +18,9 @@ Setup Vagrant and its dependencies:
 Usage
 -----
 
-Use Vagrant by issuing the commands below. The `local%` and `virtual%` mentioned in the commands are just indicators to show which machine to enter commands into, you shouldn't actually type them -- thus `local% pwd` means that you should run `pwd` on your local machine.
+Working with a Vagrant environment requires interacting with your local operating system AND the virtual machine. You will use your local machine to access the web application at [http://localhost:8000/](http://localhost:8000/), edit files, and do version control. You will use your virtual machine to run `bundle exec rake` and other commands that need the development environment.
 
-prefixes are meant to indicate what machine you're on
+Use Vagrant by issuing the commands below. The `local%` and `virtual%` in the commands are just indicators to show which machine to enter commands into, you shouldn't actually type them -- thus `local% pwd` means that you should run `pwd` on your local machine.
 
 **Start** the virtual machine, which will take some time to download the first time:
 
@@ -88,7 +79,7 @@ Below are the supported overrides:
 
         RAILS_PORT = 8000
 
-* Share files from the local machine to the virtual machine using NFS, which is much faster than the default sharing mechanism. Unfortunately, using NFS requires a UNIX-like operating system, an NFS server, and `root` access via `sudo` for Vagrant to setup sharing. If the virtual machine fails to mount the shared files the first time, please just do a `vagrant reload` after the provisioning completes, and it should work.
+* Share files from the local machine to the virtual machine using NFS, which is much faster than the default sharing mechanism. Unfortunately, there are a few gotchas. You must provision the virtual machine initially without NFS so the NFS client can be installed, then you can enable NFS and run `vagrant reload` so you can begin using it. You must be running a UNIX-like operating system as your local machine, have an NFS server installed, and have `root` access via `sudo` for Vagrant to automatically configure NFS sharing.
 
         NFS = true
 
