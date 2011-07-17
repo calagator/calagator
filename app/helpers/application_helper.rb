@@ -6,6 +6,10 @@ module ApplicationHelper
     sanitize(upgrade_br(markdown(auto_link(string))))
   end
 
+  def markdown(text)
+    BlueCloth.new(text).to_html
+  end
+
   # Return a HTML string with the BR tags converted to XHTML compliant markup.
   def upgrade_br(content)
     content.gsub('<br>','<br />')
