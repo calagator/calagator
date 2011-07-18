@@ -27,10 +27,14 @@ for name in %w[nfs-common git-core screen tmux elinks build-essential ruby-dev i
   package name
 end
 
-# Install pre-release bundler which doesn't use insane amounts of memory
-execute "install-bundler" do
-  command "gem install bundler --pre --no-ri --no-rdoc"
-  not_if %{ruby -e 'require "rubygems"; require "bundler"; exit Bundler::VERSION > "1.1"'}
+# Uninstall pre-release bundler, which doesn't install things correctly
+execute "gem uninstall bundler" do
+  only_if "type bundle && bundle --version | grep 'pre'"
+end
+
+# Install gems
+for name in %w[bundler]
+  gem_package name
 end
 
 # Fix permissions on homedir
