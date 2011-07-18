@@ -61,16 +61,7 @@ describe Event do
     end
 
     it "should be taggable" do
-      Tag # need to reference Tag class in order to load it.
-      @event.tag_list.should == ""
-    end
-
-    it "should tag itself if it is an extant record" do
-      # On next line, please retain the space between the "?" and ")";
-      # it solves a fold issue in the SciTE text editor
-      @event.stub!(:new_record? ).and_return(false)
-      @event.should_receive(:tag_with).with(@tags).and_return(@event)
-      @event.tag_list = @tags
+      @event.tag_list.should == []
     end
 
     it "should just cache tagging if it is a new record" do
@@ -78,14 +69,7 @@ describe Event do
       @event.should_not_receive(:tag_with)
       @event.new_record?.should == true
       @event.tag_list = @tags
-      @event.tag_list.should == @tags
-    end
-
-    it "should tag itself when saved for the first time if there are cached tags" do
-      @event.new_record?.should == true
-      @event.should_receive(:tag_with).with(@tags).and_return(@event)
-      @event.tag_list = @tags
-      @event.save
+      @event.tag_list.to_s.should == @tags
     end
 
     it "should use tags with punctuation" do
@@ -679,7 +663,7 @@ describe Event do
       clone.should_not be_duplicate
 
       Event.squash(:master => @event, :duplicates => clone)
-      @event.tag_list.should == "first, second, third" # master now contains all three tags
+      @event.tag_list.to_a.sort.should == %w(first second third) # master now contains all three tags
       clone.duplicate_of.should == @event
     end
   end
@@ -858,7 +842,7 @@ describe Event do
     it "should include tags in the description" do
       event = events(:tomorrow)
       event.tag_list = "tags, folksonomy, categorization"
-      ical_roundtrip(event).description.should include event.tag_list
+      ical_roundtrip(event).description.should include event.tag_list.to_s
     end
 
     it "should leave URL blank if no URL is provided" do

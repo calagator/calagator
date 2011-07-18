@@ -15,8 +15,8 @@ describe EventsHelper do
       helper.events_sort_label(:score).should =~ / by .+#{Event::SORTING_LABELS['score']}.+/
     end
 
-it "should return special string when using a tag" do
-      assigns[:tag] = Tag.new
+    it "should return special string when using a tag" do
+      assign :tag, ActsAsTaggableOn::Tag.new
       helper.events_sort_label(nil).should =~ / by .+#{Event::SORTING_LABELS['default']}.+/
     end
   end

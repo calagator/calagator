@@ -25,8 +25,6 @@
 class Event < ActiveRecord::Base
   include SearchEngine
 
-  Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
-
   # Treat any event with a duration of at least this many hours as a multiday
   # event. This constant is used by the #multiday? method and is primarily
   # meant to make iCalendar exports display this event as covering a range of
@@ -34,6 +32,7 @@ class Event < ActiveRecord::Base
   MIN_MULTIDAY_DURATION = 20.hours
 
   has_paper_trail
+  acts_as_taggable
 
   xss_foliate :sanitize => [:description, :venue_details]
 

@@ -31,9 +31,8 @@
 class Venue < ActiveRecord::Base
   include SearchEngine
 
-  Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
-
   has_paper_trail
+  acts_as_taggable
 
   include VersionDiff
 
@@ -103,11 +102,11 @@ class Venue < ActiveRecord::Base
     else
       venue_machine_tag_name = abstract_location.tags.find { |t|
         # Match 2 in the MACHINE_TAG_PATTERN is the predicate
-        Tag::VENUE_PREDICATES.include? t.match(Tag::MACHINE_TAG_PATTERN)[2]
+        ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? t.match(ActsAsTaggableOn::Tag::MACHINE_TAG_PATTERN)[2]
       }
-      venue_machine_tag = Tag.find_by_name(venue_machine_tag_name)
+      matched_venue = Venue.tagged_with(venue_machine_tag_name).first
 
-      venue = venue_machine_tag.venues.first.progenitor if venue_machine_tag.try(:venues).present?
+      venue = matched_venue.progenitor if matched_venue.present?
     end
 
     return venue

@@ -683,6 +683,6 @@ describe EventsController, "when running integration test" do
 
     flash[:success].should_not be_blank
     event = assigns[:event]
-    event.tag_list.should == "bar, baz, foo"
+    event.tag_list.to_s.should == "bar, baz, foo"
   end
 end
