@@ -7,7 +7,7 @@ describe EventsController, "when displaying index" do
   it "should produce HTML" do
     get :index, :format => "html"
 
-    response.should have_tag("table.event_table")
+    response.should have_selector("table.event_table")
   end
 
   describe "in XML format" do
@@ -71,7 +71,7 @@ describe EventsController, "when displaying index" do
     it "should produce ICS" do
       post :index, :format => "ics"
 
-      response.body.should have_text(/BEGIN:VEVENT/)
+      response.body.should =~ /BEGIN:VEVENT/
     end
 
     it "should render all future events" do
@@ -104,25 +104,25 @@ describe EventsController, "when displaying index" do
         it "should use the default if given a malformed parameter" do
           get :index, :date => "omgkittens"
           assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
-          response.should have_tag(".flash_failure", /malformed.+#{@date_kind}/)
+          response.should have_selector(".flash_failure", :content => 'malformed')
         end
 
         it "should use the default if given a missing parameter" do
           get :index, :date => {:foo => "bar"}
           assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
-          response.should have_tag(".flash_failure", /missing.+#{@date_kind}/)
+          response.should have_selector(".flash_failure", :content => 'missing')
         end
 
         it "should use the default if given an empty parameter" do
           get :index, :date => {@date_kind => ""}
           assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
-          response.should have_tag(".flash_failure", /empty.+#{@date_kind}/)
+          response.should have_selector(".flash_failure", :content => 'empty')
         end
 
         it "should use the default if given an invalid parameter" do
           get :index, :date => {@date_kind => "omgkittens"}
           assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
-          response.should have_tag(".flash_failure", /invalid.+#{@date_kind}/)
+          response.should have_selector(".flash_failure", :content => 'invalid')
         end
 
         it "should use the value if valid" do
@@ -319,7 +319,7 @@ describe EventsController, "when creating or updating events" do
                        :preview => "Preview",
                        :venue_name => "This venue had better not exist"
       response.should render_template(:new)
-      response.should have_tag('#event_preview')
+      response.should have_selector('#event_preview')
       event.should be_valid
     end
   end
@@ -503,7 +503,7 @@ describe EventsController, "managing duplicates" do
     get 'duplicates', :type => 'omgwtfbbq'
 
     response.should be_success
-    response.should have_tag('.failure', :text => /omgwtfbbq/)
+    response.should have_selector('.failure', :content => 'omgwtfbbq')
   end
 
 end
@@ -557,7 +557,7 @@ describe EventsController, "when searching" do
     it "should produce HTML" do
       post :search, :query => "myquery", :format => "html"
 
-      response.should have_tag("table.event_table")
+      response.should have_selector("table.event_table")
       assigns[:events].should == @results[:past] + @results[:current]
     end
 
@@ -621,7 +621,7 @@ describe EventsController, "when searching" do
       it "should produce ICS" do
         post :search, :query => "myquery", :format => "ics"
 
-        response.body.should have_text(/BEGIN:VEVENT/)
+        response.body.should =~ /BEGIN:VEVENT/
       end
 
       it "should produce events matching the query" do
@@ -683,6 +683,6 @@ describe EventsController, "when running integration test" do
 
     flash[:success].should_not be_blank
     event = assigns[:event]
-    event.tag_list.to_s.should == "bar, baz, foo"
+    event.tag_list.to_a.sort.should == %w(bar baz foo)
   end
 end

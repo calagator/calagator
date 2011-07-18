@@ -29,7 +29,7 @@ describe VenuesController do
     get 'duplicates', :type => 'omgwtfbbq'
 
     response.should be_success
-    response.should have_tag('.failure', :text => /omgwtfbbq/)
+    response.should have_selector('.failure', :content => 'omgwtfbbq')
   end
   
   describe "when creating venues" do

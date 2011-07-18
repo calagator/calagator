@@ -40,6 +40,7 @@ gem 'mofo', '0.2.8'
 #   bundle install --without development test
 group :development, :test do
   gem 'rspec-rails', '2.6.0'
+  gem 'webrat', '0.7.3'
   gem 'rcov', '0.9.9', :require => false
   gem 'factory_girl_rails', '1.0.1'
 

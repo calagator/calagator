@@ -36,19 +36,19 @@ describe VersionsController do
       it "should include create for item" do
         version = @create_version
         version.should be_a_kind_of(Version)
-        assert_select ".change_details a[name=#{version.id}]", /Create/
+        response.should have_selector ".change_details a[name='#{version.id}']", :content => 'Create'
       end
 
       it "should include update for item" do
         version = @update_version
         version.should be_a_kind_of(Version)
-        assert_select ".change_details a[name=#{version.id}]", /Update/
+        response.should have_selector ".change_details a[name='#{version.id}']", :content => 'Update'
       end
 
       it "should include destroy for item" do
         version = @destroy_version
         version.should be_a_kind_of(Version)
-        assert_select ".change_details a[name=#{version.id}]", /Destroy/
+        response.should have_selector ".change_details a[name='#{version.id}']", :content => 'Destroy'
       end
     end
 
