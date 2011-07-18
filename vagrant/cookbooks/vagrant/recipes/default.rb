@@ -27,9 +27,10 @@ for name in %w[nfs-common git-core screen tmux elinks build-essential ruby-dev i
   package name
 end
 
-# Install gems
-for name in %w[bundler]
-  gem_package name
+# Install pre-release bundler which doesn't use insane amounts of memory
+execute "install-bundler" do
+  command "gem install bundler --pre --no-ri --no-rdoc"
+  not_if %{ruby -e 'require "rubygems"; require "bundler"; exit Bundler::VERSION > "1.1"'}
 end
 
 # Run the contents of the "vagrant/cookbooks/vagrant/recipes/local.rb" file if present. This optional file can contain additional provisioning logic that shouldn't be part of the global setup. For example, if you're using the "Gemfile.local" to install special gems, you'd use this "local.rb" to install their dependencies.
