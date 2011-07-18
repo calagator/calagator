@@ -34,7 +34,11 @@ Calagator::Application.routes.draw do
 
   end
 
-  resources :versions
+  resources :versions, :only => [:edit]
+  resources :changes, :controller => 'paper_trail_manager/changes'
+  match 'recent_changes' => redirect("/changes")
+  match 'recent_changes.:format' => redirect("/changes.%{format}")
+
   match 'export' => 'site#export'
   match 'export.:format' => 'site#export'
   match 'css/:name' => 'site#style'

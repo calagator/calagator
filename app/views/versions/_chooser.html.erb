@@ -18,7 +18,7 @@
         $('#version').change(function(event) {
           $('#version_loading').show();
           var version_id = event.target.value;
-          $('#<%= target %>').load('<%= versions_path %>/'+version_id+'/edit', function(response, status, xhr) {
+          $('#<%= target %>').load('versions/'+version_id+'/edit', function(response, status, xhr) {
             $('#version_loading').hide();
           });
         })
