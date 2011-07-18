@@ -33,6 +33,9 @@ execute "install-bundler" do
   not_if %{ruby -e 'require "rubygems"; require "bundler"; exit Bundler::VERSION > "1.1"'}
 end
 
+# Fix permissions on homedir
+execute "chown -R #{USER}:#{USER} ~#{USER}"
+
 # Run the contents of the "vagrant/cookbooks/vagrant/recipes/local.rb" file if present. This optional file can contain additional provisioning logic that shouldn't be part of the global setup. For example, if you're using the "Gemfile.local" to install special gems, you'd use this "local.rb" to install their dependencies.
 local_recipe = File.join(File.dirname(__FILE__), "local.rb")
 if File.exist?(local_recipe)
