@@ -569,6 +569,12 @@ describe Event do
   end
 
   describe "with finding duplicates" do
+    before do
+      @non_duplicate_event = Factory(:event)
+      @duplicate_event = Factory(:duplicate_event)
+      @events = [@non_duplicate_event, @duplicate_event]
+    end
+
     it "should find all events with duplicate titles" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
       Event.find_duplicates_by(:title )
@@ -580,22 +586,23 @@ describe Event do
     end
 
     it "should find all events that have not been marked as duplicate" do
-      Event.should_receive(:find_without_duplicate_support).with(:all, {})
-      Event.non_duplicates
+      non_duplicates = Event.non_duplicates
+      non_duplicates.should include @non_duplicate_event
+      non_duplicates.should_not include @duplicate_event
     end
 
     it "should find all events that have been marked as duplicate" do
-      Event.should_receive(:find_without_duplicate_support).with(:all, {})
-      Event.marked_duplicates
+      duplicates = Event.marked_duplicates
+      duplicates.should include @duplicate_event
+      duplicates.should_not include @non_duplicate_event
     end
-
   end
 
   describe "with finding duplicates (integration test)" do
     fixtures :all
 
     before(:each) do
-      @event = events(:calagator_codesprint)
+      @event = Factory(:event)
     end
 
     # Find duplicates, create another event with the given attributes, and find duplicates again
@@ -647,10 +654,8 @@ describe Event do
   end
 
   describe "when squashing duplicates (integration test)" do
-    fixtures :all
-
     before(:each) do
-      @event = events(:calagator_codesprint)
+      @event = Factory(:event)
     end
 
     it "should consolidate associations, and merge tags" do

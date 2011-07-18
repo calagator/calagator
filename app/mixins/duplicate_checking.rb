@@ -49,11 +49,6 @@ module DuplicateChecking
 
       scope :marked_duplicates, :conditions => "#{DUPLICATE_MARK_COLUMN} IS NOT NULL"
       scope :non_duplicates, :conditions => "#{DUPLICATE_MARK_COLUMN} IS NULL"
-
-      class << self
-        VALID_FIND_OPTIONS << :duplicates
-        alias_method_chain :find, :duplicate_support
-      end
     end
   end
 
@@ -121,43 +116,6 @@ module DuplicateChecking
         self._duplicate_squashing_ignores_associations.merge(args.map(&:to_sym))
       end
       return self._duplicate_squashing_ignores_associations
-    end
-
-    # Extends ActiveRecord find with support for duplicates.
-    #
-    # find(:duplicates) => finds duplicates by a given set of fields
-    #   Class.find(:duplicates) # finds duplicates with all fields matching
-    #   Class.find(:duplicates, :by => :title) # finds duplicates with matching titles
-    #   Class.find(:duplicates, :by => [:title, :description]) # finds duplicates with matching titles and description
-    #
-    # find(:marked_duplicates) => finds entries that have been marked as a duplicate of another entry.
-    #
-    # find(:non_duplicates) => finds entries that have not been marked as duplicate
-    def find_with_duplicate_support(*args)
-      opts = args.extract_options!
-
-      condition = nil
-      if args.first
-        case args.first.kind_of?(String) ? args.first.to_sym : args.first
-        when :duplicates
-          fields = opts[:by] ? opts[:by] : :all
-          return find_duplicates_by(fields)
-        when :marked_duplicates
-          condition = "#{DUPLICATE_MARK_COLUMN} IS NOT NULL"
-        when :non_duplicates
-          condition = "#{DUPLICATE_MARK_COLUMN} IS NULL"
-        end
-      end
-
-      if condition
-        if !new.attribute_names.include?('duplicate_of_id')
-          raise ArgumentError, "#{table_name} is not set up to track duplicates."
-        end
-        args[0] = :all
-      end
-      with_scope(:find => {:conditions => condition}) do
-        find_without_duplicate_support(*(args + [opts]))
-      end
     end
 
     # Return events with duplicate values for a given set of fields.
@@ -276,7 +234,7 @@ module DuplicateChecking
           end
 
           # Handle tags - can't simply reassign, need to be unique, and they may have some of the same tags
-          if association.name == :taggings
+          if association.name == :tag_taggings
             squash_tags(master, duplicate)
             next
           end
@@ -302,6 +260,7 @@ module DuplicateChecking
     # custom behavior for tags, concatentate the two objects tag strings together
     def squash_tags(master, duplicate)
       master.tag_list = master.tag_list + duplicate.tag_list
+      master.save_tags
     end
 
   end
