@@ -41,7 +41,7 @@ gem 'mofo', '0.2.8'
 group :development, :test do
   gem 'rspec-rails', '2.6.0'
   gem 'rcov', '0.9.9', :require => false
-  gem 'factory_girl', '1.3.3'
+  gem 'factory_girl_rails', '1.0.1'
 
   case RUBY_VERSION.to_f
   when 1.9..2.0
