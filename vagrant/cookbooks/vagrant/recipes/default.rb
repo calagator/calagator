@@ -27,11 +27,6 @@ for name in %w[nfs-common git-core screen tmux elinks build-essential ruby-dev i
   package name
 end
 
-# Uninstall pre-release bundler, which doesn't install things correctly
-execute "gem uninstall bundler" do
-  only_if "type bundle && bundle --version | grep 'pre'"
-end
-
 # Install gems
 for name in %w[bundler]
   gem_package name
