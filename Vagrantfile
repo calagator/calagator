@@ -33,6 +33,11 @@ Vagrant::Config.run do |config|
   # folder, and the third is the path on the host to the actual folder.
   config.vm.share_folder "vagrant", "/vagrant", ".", :nfs => defined?(NFS) ? NFS : false
 
+  # Use more memory so badly-designed programs like Bundler can work.
+  config.vm.customize do |vm|
+    vm.memory_size = 512
+  end
+
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
   # to this Vagrantfile), and adding some recipes and/or roles.
   config.vm.provision :chef_solo do |chef|
