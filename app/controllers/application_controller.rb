@@ -8,15 +8,6 @@ class ApplicationController < ActionController::Base
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '8813a7fec0bb4fbffd283a3868998eed'
 
-  layout "application"
-
-  # For vendor/plugins/exception_notification
-  if ['preview', 'production'].include?(Rails.env) || ENV['NOTIFY_ON_EXCEPTIONS']
-    include ExceptionNotifiable
-    local_addresses.clear
-    (self.exception_notifiable_silent_exceptions ||= []) << ActionController::InvalidAuthenticityToken if ActionController.const_defined?(:InvalidAuthenticityToken)
-  end
-
   # Setup theme
   layout "application"
   theme THEME_NAME # DEPENDENCY: lib/theme_reader.rb

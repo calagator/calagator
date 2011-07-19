@@ -38,6 +38,8 @@ gem 'paper_trail_manager', :git => 'https://github.com/igal/paper_trail_manager.
 # NOTE: mofo 0.2.9 and above are evil, defining their own defective Object#try method and are unable to extract "postal-code" address fields from hCalendar. Mofo is used in Calagator's SourceParser::Hcal and throughout for String#strip_html. The library has been abandoned and its author recommends switching to the incompatible "prism" gem.
 gem 'mofo', '0.2.8'
 
+gem 'exception_notification', '2.4.1'
+
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
 #   bundle install --without development test
