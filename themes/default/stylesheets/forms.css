@@ -109,16 +109,16 @@ div.time-picker li {
 
 .flash      { padding: .8em; margin: 1em 250px 1em 0 ;  }
 
-.error, .failure      { background: #445544; color: #f9ffec; }
+.error, .failure      { background: #FFC5A3; color: #C00; border: #C00}
 .notice     { background: #bcf794; }
 .success    { background: #98f0f7; color: #445544;  }
-.error a    { color:  #C10F00; }
+.error a    { color:  #FF640A; }
 .notice a   { color: #514721; }
 .success a  { color: #264409; }
 
 .flash.flash_failure, .errorExplanation {
-  color: #C10F00;
-  border: 2px solid  #C10F00;
+  color: #C00;
+  border: 2px solid  #C00;
   background: #F5DBD7;
   padding: 1em;
 }
