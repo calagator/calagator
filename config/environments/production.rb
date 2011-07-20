@@ -46,13 +46,5 @@ Calagator::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-
-  config.after_initialize do
-    # Set up exception notification
-    config.middleware.use ExceptionNotifier,
-      :email_prefix => "[ERROR #{SETTINGS.name}] ",
-      :sender_address => "#{SECRETS.administrator_email}",
-      :exception_recipients => [SECRETS.administrator_email]
-  end
 end
 
