@@ -128,16 +128,16 @@ describe VenuesController do
 
       describe "when searching by title (for the ajax selector)" do
         it "should find venues by title" do
-          get :index, :val => 'Open Town'
+          get :index, :term => 'Open Town'
           assigns[:venues].should include @open_venue
           assigns[:venues].should_not include @wifi_venue
         end
         it "should NOT find venues by description" do
-          get :index, :val => 'baz'
+          get :index, :term => 'baz'
           assigns[:venues].should_not include @open_venue
         end
         it "should NOT find closed venues" do
-          get :index, :val => 'closed'
+          get :index, :term => 'closed'
           assigns[:venues].should_not include @closed_venue
         end
       end
