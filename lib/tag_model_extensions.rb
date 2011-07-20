@@ -13,40 +13,40 @@ module TagModelExtensions
   # #machine_tag for details.
   MACHINE_TAG_URLS = {
     'epdx' => {
-    'company' => 'http://epdx.org/companies/%s',
-    'group' => 'http://epdx.org/groups/%s',
-    'person' => 'http://epdx.org/people/%s',
-    'project' => 'http://epdx.org/projects/%s',
-  },
-  'upcoming' => {
-    'event' => "http://upcoming.yahoo.com/event/%s",
-    'venue' => "http://upcoming.yahoo.com/venue/%s"
-  },
-    'plancast' => {
-    'activity' => "http://plancast.com/a/%s",
-    'plan' => "http://plancast.com/p/%s"
-  },
-    'yelp' => {
-    'biz' => "http://www.yelp.com/biz/%s"
-  },
-    'foursquare' => {
-    'venue' => "http://foursquare.com/venue/%s"
-  },
-    'gowalla' => {
-    'spot' => "http://gowalla.com/spots/%s"
-  },
-    'shizzow' => {
-    'place' => "http://www.shizzow.com/places/%s"
-  },
-    'meetup' => {
-    'group' => "http://www.meetup.com/%s"
-  },
-    'facebook' => {
-    'event' => "http://www.facebook.com/event.php?eid=%s"
-  },
-    'lanyrd' => {
-    'event' => "http://lanyrd.com/%s"
-  }
+      'company' => 'http://epdx.org/companies/%s',
+      'group' => 'http://epdx.org/groups/%s',
+      'person' => 'http://epdx.org/people/%s',
+      'project' => 'http://epdx.org/projects/%s',
+    },
+    'upcoming' => {
+      'event' => "http://upcoming.yahoo.com/event/%s",
+      'venue' => "http://upcoming.yahoo.com/venue/%s"
+    },
+      'plancast' => {
+      'activity' => "http://plancast.com/a/%s",
+      'plan' => "http://plancast.com/p/%s"
+    },
+      'yelp' => {
+      'biz' => "http://www.yelp.com/biz/%s"
+    },
+      'foursquare' => {
+      'venue' => "http://foursquare.com/venue/%s"
+    },
+      'gowalla' => {
+      'spot' => "http://gowalla.com/spots/%s"
+    },
+      'shizzow' => {
+      'place' => "http://www.shizzow.com/places/%s"
+    },
+      'meetup' => {
+      'group' => "http://www.meetup.com/%s"
+    },
+      'facebook' => {
+      'event' => "http://www.facebook.com/event.php?eid=%s"
+    },
+      'lanyrd' => {
+      'event' => "http://lanyrd.com/%s"
+    }
   } unless defined?(MACHINE_TAG_URLS)
 
   # Regular expression for parsing machine tags
