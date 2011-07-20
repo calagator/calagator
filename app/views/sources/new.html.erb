@@ -9,6 +9,7 @@
       </p>
     </li>
     <%= f.input :url, :label => "URL" %>
+    <% focus_on '#source_url' %>
 
     <%# FIXME Igal has disabled reimport UI because people are adding almost all new events with re-import, which means that they're almost all generating duplicates and I'm completely overwhelmed with having to use the horrible squashing UI to deal with them. %>
     <% if false %>

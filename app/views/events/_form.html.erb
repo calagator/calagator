@@ -93,6 +93,7 @@
 <%= semantic_form_for(event, :html => {:id => "event_form", :novalidate => 'novalidate'}) do |f| %>
   <%= f.inputs :name => "#{'Editing: ' unless event.new_record?} <em>#{event.title}</em>".html_safe do %>
     <%= f.input :title, :label => "Event Name" %>
+    <% focus_on '#event_title' %>
     <li class="string input required stringish" id="event_venue_title_input">
       <%= f.label :venue_id, "Venue", :class => 'label' %>
       <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !event.venue.nil? ? event.venue.title : params[:venue_name] %>
