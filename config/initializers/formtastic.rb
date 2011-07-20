@@ -19,7 +19,7 @@
 
 # Should all fields be considered "required" by default?
 # Defaults to true.
-# Formtastic::FormBuilder.all_fields_required_by_default = true
+Formtastic::FormBuilder.all_fields_required_by_default = false
 
 # Should select fields have a blank option/prompt by default?
 # Defaults to true.
@@ -71,3 +71,13 @@
 # You can add custom inputs or override parts of Formtastic by subclassing Formtastic::FormBuilder and
 # specifying that class here.  Defaults to Formtastic::FormBuilder.
 # Formtastic::Helpers::FormHelper.builder = MyCustomBuilder
+
+
+# Hack to disable Formtastic's HTML5 'required' attributes until Chrome properly supports the novalidate option.
+module NoHtmlRequired
+  def input_html_options_with_no_html_5_required_attribute
+    input_html_options_without_no_html_5_required_attribute.merge(:required => nil)
+  end
+end
+Formtastic::Inputs::Base::Html.send(:include, NoHtmlRequired)
+Formtastic::Inputs::Base::Html.send(:alias_method_chain, :input_html_options, :no_html_5_required_attribute)
