@@ -66,7 +66,7 @@ class VenuesController < ApplicationController
     return redirect_to(venue_url(@venue.duplicate_of)) if @venue.duplicate?
 
     @page_title = @venue.title
-    @events = @venue.find_future_events
+    @events = @venue.events.future.non_duplicates
 
     respond_to do |format|
       format.html # show.html.erb

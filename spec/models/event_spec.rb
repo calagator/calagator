@@ -173,7 +173,7 @@ describe Event do
 
   describe "when finding duplicates by type" do
     def assert_default_find_duplicates_by_type(type)
-      Event.should_receive(:find_future_events).and_return(42)
+      Event.should_receive(:future).and_return(42)
       Event.find_duplicates_by_type(type).should == { [] => 42 }
     end
 
@@ -308,7 +308,7 @@ describe Event do
         :start_time => @yesterday,
         :end_time => @today_midnight,
         :venue_id => @this_venue.id)
-      @future_events_for_this_venue = @this_venue.find_future_events
+      @future_events_for_this_venue = @this_venue.events.future
     end
 
     describe "for overview" do
@@ -366,7 +366,7 @@ describe Event do
 
     describe "for future events" do
       before(:each) do
-        @future_events = Event.find_future_events
+        @future_events = Event.future
       end
 
       it "should include events that started earlier today" do
@@ -378,7 +378,7 @@ describe Event do
       end
 
       it "should include events that started before today and ended after today" do
-        events = Event.find_future_events("start_time")
+        events = Event.future
         events.should include(@started_before_today_and_ends_after_today)
       end
 
@@ -434,22 +434,22 @@ describe Event do
 
     describe "for date range" do
       it "should include events that started earlier today" do
-        events = Event.find_by_dates(@today_midnight, @tomorrow, order = "start_time")
+        events = Event.within_dates(@today_midnight, @tomorrow)
         events.should include(@started_midnight_and_continuing_after)
       end
 
       it "should include events that started before today and end after today" do
-        events = Event.find_by_dates(@today_midnight, @tomorrow, order = "start_time")
+        events = Event.within_dates(@today_midnight, @tomorrow)
         events.should include(@started_before_today_and_ends_after_today)
       end
 
       it "should not include past events" do
-        events = Event.find_by_dates(@today_midnight, @tomorrow, order = "start_time")
+        events = Event.within_dates(@today_midnight, @tomorrow)
         events.should_not include(@started_and_ended_yesterday)
       end
 
       it "should exclude events that start after the end of the range" do
-        events = Event.find_by_dates(@tomorrow, @tomorrow, order = "start_time")
+        events = Event.within_dates(@tomorrow, @tomorrow)
         events.should_not include(@started_today_and_no_end_time)
       end
     end

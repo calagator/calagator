@@ -17,10 +17,11 @@ class EventsController < ApplicationController
 
     @start_date = date_or_default_for(:start)
     @end_date = date_or_default_for(:end)
+    query = Event.non_duplicates.order(order)
     @events_deferred = lambda {
       params[:date] ?
-        Event.find_by_dates(@start_date, @end_date, :order => order) :
-        Event.find_future_events(:order => order)
+        query.within_dates(@start_date, @end_date) :
+        query.future
     }
     @perform_caching = params[:order].blank? && params[:date].blank?
 
@@ -235,7 +236,7 @@ protected
 
   # Export +events+ to an iCalendar file.
   def ical_export(events=nil)
-    events = events || Event.find_future_events
+    events = events || Event.future.non_duplicates
     render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
   end
 
@@ -274,12 +275,12 @@ protected
 
   # Return the default start date.
   def default_start_date
-    Time.today
+    Time.zone.today
   end
 
   # Return the default end date.
   def default_end_date
-    Time.today + 3.months
+    Time.zone.today + 3.months
   end
 
   # Return a date parsed from user arguments or a default date. The +kind+

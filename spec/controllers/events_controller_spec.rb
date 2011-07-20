@@ -138,25 +138,25 @@ describe EventsController, "when displaying index" do
       matching = [
         Event.create!(
           :title => "matching1",
-          :start_time => Time.parse("2010-01-16 00:00"),
-          :end_time => Time.parse("2010-01-16 01:00")
+          :start_time => Time.zone.parse("2010-01-16 00:00"),
+          :end_time => Time.zone.parse("2010-01-16 01:00")
         ),
         Event.create!(:title => "matching2",
-          :start_time => Time.parse("2010-01-16 23:00"),
-          :end_time => Time.parse("2010-01-17 00:00")
+          :start_time => Time.zone.parse("2010-01-16 23:00"),
+          :end_time => Time.zone.parse("2010-01-17 00:00")
         ),
       ]
 
       non_matching = [
         Event.create!(
           :title => "nonmatchingbefore",
-          :start_time => Time.parse("2010-01-15 23:00"),
-          :end_time => Time.parse("2010-01-15 23:59")
+          :start_time => Time.zone.parse("2010-01-15 23:00"),
+          :end_time => Time.zone.parse("2010-01-15 23:59")
         ),
         Event.create!(
           :title => "nonmatchingafter",
-          :start_time => Time.parse("2010-01-17 00:01"),
-          :end_time => Time.parse("2010-01-17 01:00")
+          :start_time => Time.zone.parse("2010-01-17 00:01"),
+          :end_time => Time.zone.parse("2010-01-17 01:00")
         ),
       ]
 

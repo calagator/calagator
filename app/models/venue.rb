@@ -65,11 +65,6 @@ class Venue < ActiveRecord::Base
   duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
 
-  # Named scopes
-  scope :masters,
-    :conditions => ['duplicate_of_id IS NULL'],
-    :include => [:source, :events, :tags, :taggings]
-
   scope :with_public_wifi, :conditions => { :wifi   => true }
   scope :in_business, :conditions      => { :closed => false }
   scope :out_of_business, :conditions  => { :closed  => true }
@@ -113,12 +108,6 @@ class Venue < ActiveRecord::Base
   end
 
   #===[ Finders ]=========================================================
-
-  # Returns future events for this venue. Accepts the same +opts+ as Event.find_future_events.
-  def find_future_events(opts={})
-    opts[:venue] = self
-    Event.find_future_events(opts)
-  end
 
   # Return Hash of Venues grouped by the +type+, e.g., a 'title'. Each Venue
   # record will include an <tt>events_count</tt> field containing the number of
