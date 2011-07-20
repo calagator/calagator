@@ -15,6 +15,9 @@ class VenuesController < ApplicationController
       scoped_venues = scoped_venues.in_business
     end
 
+    # Support old ajax autocomplete parameter name
+    params[:term] = params[:val] if params[:val]
+
     @tag = nil
     if params[:tag].present? # searching by tag
       @tag = params[:tag]
