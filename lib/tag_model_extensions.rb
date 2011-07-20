@@ -47,13 +47,13 @@ module TagModelExtensions
     'lanyrd' => {
     'event' => "http://lanyrd.com/%s"
   }
-  }
+  } unless defined?(MACHINE_TAG_URLS)
 
   # Regular expression for parsing machine tags
-  MACHINE_TAG_PATTERN = /([^:]+):([^=]+)=(.+)/
+  MACHINE_TAG_PATTERN = /([^:]+):([^=]+)=(.+)/ unless defined?(MACHINE_TAG_PATTERN)
 
   # Machine tag predicates that refer to place entries
-  VENUE_PREDICATES = %w(venue place spot biz)
+  VENUE_PREDICATES = %w(venue place spot biz) unless defined?(VENUE_PREDICATES)
 
   # Return a machine tag hash for this tag, or an empty hash if this isn't a
   # machine tag. The hash will always contain :namespace, :predicate and :value
