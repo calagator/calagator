@@ -1,5 +1,8 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
-ENV["RAILS_ENV"] ||= 'test'
+
+# Calagator:
+ENV['RAILS_ENV'] = 'test' if ENV['RAILS_ENV'].to_s.empty? || ENV['RAILS_ENV'] == 'development'
+
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 
