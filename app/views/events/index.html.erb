@@ -34,12 +34,12 @@
   <ul>
     <li><%= link_to "iCalendar feed", url_for(:action => "index", :protocol => "webcal", :only_path => false)+".ics" %></li>
     <li><%= link_to "Atom feed", events_url(:format => "atom") %></li>
+    <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+events_url(:format => 'ics') %></li>
   </ul>
 
   <h3>Export to</h3>
   <ul>
     <li><%= link_to "iCalendar file", events_url(:format => "ics") %></li>
-    <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+events_url(:format => 'ics') %></li>
     <li><%= link_to "My Yahoo!", "http://add.my.yahoo.com/content?.intl=us&amp;url="+events_url(:format => 'ics') %></li>
   </ul>
   
