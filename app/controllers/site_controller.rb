@@ -10,7 +10,7 @@ class SiteController < ApplicationController
   end
 
   def index
-    @times_to_events_deferred = lambda { Event.select_for_overview }
+    @times_to_events = Event.select_for_overview
     @tagcloud_items_deferred = lambda { ActsAsTaggableOn::Tag.for_tagcloud }
   end
   
