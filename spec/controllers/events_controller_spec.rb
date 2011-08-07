@@ -162,7 +162,7 @@ describe EventsController, "when displaying index" do
 
       # When
       get :index, :date => {:start => "2010-01-16", :end => "2010-01-16"}
-      results = assigns[:events_deferred].call
+      results = assigns[:events]
 
       # Then
       results.size.should == 2

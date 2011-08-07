@@ -4,20 +4,19 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.xml
   def index
-    query = Event.non_duplicates.ordered_by_ui_field(params[:order])
-
     @start_date = date_or_default_for(:start)
     @end_date = date_or_default_for(:end)
-    @events_deferred = lambda {
-      params[:date] ?
-        query.within_dates(@start_date, @end_date) :
-        query.future
-    }
+
+    query = Event.non_duplicates.ordered_by_ui_field(params[:order])
+    @events = params[:date] ?
+                query.within_dates(@start_date, @end_date) :
+                query.future
+
     @perform_caching = params[:order].blank? && params[:date].blank?
 
     @page_title = "Events"
 
-    render_events(@events_deferred)
+    render_events(@events)
   end
 
   # GET /events/1
@@ -235,17 +234,11 @@ protected
     respond_to do |format|
       format.html # *.html.erb
       format.kml  # *.kml.erb
-      format.ics  { ical_export(yield_events(events)) }
+      format.ics  { ical_export(events) }
       format.atom { render :template => 'events/index' }
-      format.xml  { render :xml  => yield_events(events).to_xml(:include => :venue) }
-      format.json { render :json => yield_events(events).to_json(:include => :venue), :callback => params[:callback] }
+      format.xml  { render :xml  => events.to_xml(:include => :venue) }
+      format.json { render :json => events.to_json(:include => :venue), :callback => params[:callback] }
     end
-  end
-
-  # Return an array of Events from a +container+, which can either be an array
-  # of Events or a lambda that returns an array of Events.
-  def yield_events(container)
-    return container.respond_to?(:call) ? container.call : container
   end
 
   # Venues may be referred to in the params hash either by id or by name. This
