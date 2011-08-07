@@ -60,7 +60,7 @@ class VenuesController < ApplicationController
       @venue = Venue.find(params[:id], :include => :source)
     rescue ActiveRecord::RecordNotFound => e
       flash[:failure] = e.to_s
-      return redirect_to(:action => :index)
+      return redirect_to(venues_path)
     end
 
     return redirect_to(venue_url(@venue.duplicate_of)) if @venue.duplicate?
@@ -105,7 +105,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       if !evil_robot && @venue.save
         flash[:success] = 'Venue was successfully created.'
-        format.html { redirect_to(@venue) }
+        format.html { redirect_to( venues_path(@venue) ) }
         format.xml  { render :xml => @venue, :status => :created, :location => @venue }
       else
         format.html { render :action => "new" }
@@ -131,7 +131,7 @@ class VenuesController < ApplicationController
           if(!params[:from_event].blank?)
             redirect_to(event_url(params[:from_event]))
           else
-            redirect_to(@venue)
+            redirect_to( venue_path(@venue) )
           end
           }
         format.xml  { head :ok }
@@ -152,7 +152,7 @@ class VenuesController < ApplicationController
       respond_to do |format|
         format.html {
           flash[:failure] = message
-          redirect_to(@venue)
+          redirect_to( venue_path(@venue) )
         }
         format.xml {
           render :xml => message, :status => :unprocessable_entity

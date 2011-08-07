@@ -36,7 +36,7 @@ class SourcesController < ApplicationController
         s << "</ul>"
         flash[:success] = s
 
-        format.html { redirect_to events_path }
+        format.html { redirect_to(events_path) }
         format.xml  { render :xml => @source, :events => @events }
       else
         flash[:failure] = @events.nil? \
@@ -67,7 +67,7 @@ class SourcesController < ApplicationController
       @source = Source.find(params[:id], :include => [:events, :venues])
     rescue ActiveRecord::RecordNotFound => e
       flash[:failure] = e.to_s if params[:id] != "import"
-      return redirect_to(:action => :new)
+      return redirect_to(new_source_path)
     end
 
     respond_to do |format|
@@ -101,7 +101,7 @@ class SourcesController < ApplicationController
     respond_to do |format|
       if @source.save
         flash[:notice] = 'Source was successfully created.'
-        format.html { redirect_to(@source) }
+        format.html { redirect_to( source_path(@source) ) }
         format.xml  { render :xml => @source, :status => :created, :location => @source }
       else
         format.html { render :action => "new" }
@@ -118,7 +118,7 @@ class SourcesController < ApplicationController
     respond_to do |format|
       if @source.update_attributes(params[:source])
         flash[:notice] = 'Source was successfully updated.'
-        format.html { redirect_to(@source) }
+        format.html { redirect_to( source_path(@source) ) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

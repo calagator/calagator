@@ -25,8 +25,7 @@ class EventsController < ApplicationController
     begin
       @event = Event.find(params[:id])
     rescue ActiveRecord::RecordNotFound => e
-      flash[:failure] = e.to_s
-      return redirect_to(:action => :index)
+      return redirect_to events_path, :flash => {:failure => e.to_s}
     end
 
     if @event.duplicate?
@@ -83,7 +82,7 @@ class EventsController < ApplicationController
             flash[:success] += " Please tell us more about where it's being held."
             redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
           else
-            redirect_to(@event)
+            redirect_to( event_path(@event) )
           end
         }
         format.xml  { render :xml => @event, :status => :created, :location => @event }
@@ -117,7 +116,7 @@ class EventsController < ApplicationController
             flash[:success] += "Please tell us more about where it's being held."
             redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
           else
-            redirect_to(@event)
+            redirect_to( event_path(@event) )
           end
         }
         format.xml  { head :ok }
