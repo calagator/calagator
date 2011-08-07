@@ -80,6 +80,18 @@ class Event < ActiveRecord::Base
     on_or_after_date(start_date).before_date(end_date)
   }
 
+  # Expand the simple sort order names from the URL into more intelligent SQL order strings
+  scope :ordered_by_ui_field, lambda{|ui_field|
+    case ui_field
+      when 'name'
+        order('lower(events.title), start_time')
+      when 'venue'
+        order('lower(venues.title), start_time')
+      else # when 'date', nil
+        order('start_time')
+    end
+  }
+
   #---[ Overrides ]-------------------------------------------------------
 
   # Return the title but strip out any whitespace.

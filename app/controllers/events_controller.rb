@@ -4,20 +4,10 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.xml
   def index
-    order = params[:order] || 'date'
-    order = \
-      case order
-        when 'date'
-          'start_time'
-        when 'name'
-          'lower(events.title), start_time'
-        when 'venue'
-          'lower(venues.title), start_time'
-        end
+    query = Event.non_duplicates.ordered_by_ui_field(params[:order])
 
     @start_date = date_or_default_for(:start)
     @end_date = date_or_default_for(:end)
-    query = Event.non_duplicates.order(order)
     @events_deferred = lambda {
       params[:date] ?
         query.within_dates(@start_date, @end_date) :
