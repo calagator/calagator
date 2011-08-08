@@ -21,7 +21,9 @@ module DecodeHtmlEntitiesHack
   def decode_html_entities
     self.attributes.each do |field, value|
       decoded_content = HTMLEntities.decode_entities(value)
-      self.send("#{field}=", decoded_content) unless decoded_content == value
+      if decoded_content.present? && !(decoded_content == value)
+        self.send("#{field}=", decoded_content)
+      end
     end
   end
 end
