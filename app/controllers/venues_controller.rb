@@ -105,7 +105,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       if !evil_robot && @venue.save
         flash[:success] = 'Venue was successfully created.'
-        format.html { redirect_to( venues_path(@venue) ) }
+        format.html { redirect_to( venue_path(@venue) ) }
         format.xml  { render :xml => @venue, :status => :created, :location => @venue }
       else
         format.html { render :action => "new" }
@@ -161,10 +161,7 @@ class VenuesController < ApplicationController
     else
       @venue.destroy
       respond_to do |format|
-        format.html {
-          flash[:success] = "Destroyed venue."
-          redirect_to(venues_url)
-        }
+        format.html { redirect_to(venues_path, :flash => {:success => "\"#{@venue.title}\" has been deleted"}) }
         format.xml { head :ok }
       end
     end
