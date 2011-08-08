@@ -123,4 +123,9 @@ div.time-picker li {
   padding: 1em;
 }
 
+ul.errors {
+  clear: both;
+  padding-top: .5em;
+}
+
 /* @end */ 
