@@ -119,9 +119,6 @@ class Venue < ActiveRecord::Base
       # The LEFT OUTER JOIN makes sure that venues without any events are also returned.
       return { [] => \
         self.all(
-          :select     => 'venues.*, COUNT(DISTINCT events.id) AS events_count',
-          :joins      => 'LEFT OUTER JOIN events ON events.venue_id = venues.id',
-          :group      => 'venues.id',
           :conditions => 'venues.duplicate_of_id IS NULL',
           :order      => 'LOWER(venues.title)'
         )
@@ -131,8 +128,6 @@ class Venue < ActiveRecord::Base
 
       return self.find_duplicates_by(kind, 
         :grouped  => true, 
-        :select   => 'COUNT(DISTINCT events.id) AS events_count',
-        :joins    => 'LEFT OUTER JOIN events ON events.venue_id = a.id',
         :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL',
         :group_by => 'a.id'
       )
