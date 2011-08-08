@@ -28,6 +28,9 @@ class Source < ActiveRecord::Base
 
   has_paper_trail
 
+  xss_foliate
+  include DecodeHtmlEntitiesHack
+
   # Return a newly-created or existing Source record matching the given
   # attributes. The +attrs+ hash is the same format as used when calling
   # Source::new.
