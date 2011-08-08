@@ -47,8 +47,8 @@ module DuplicateChecking
       belongs_to :duplicate_of, :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
       has_many   :duplicates,   :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
 
-      scope :marked_duplicates, :conditions => "#{DUPLICATE_MARK_COLUMN} IS NOT NULL"
-      scope :non_duplicates, :conditions => "#{DUPLICATE_MARK_COLUMN} IS NULL"
+      scope :marked_duplicates, :conditions => "#{self.table_name}.#{DUPLICATE_MARK_COLUMN} IS NOT NULL"
+      scope :non_duplicates, :conditions => "#{self.table_name}.#{DUPLICATE_MARK_COLUMN} IS NULL"
     end
   end
 

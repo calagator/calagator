@@ -86,7 +86,7 @@ class Event < ActiveRecord::Base
       when 'name'
         order('lower(events.title), start_time')
       when 'venue'
-        order('lower(venues.title), start_time')
+        includes(:venue).order('lower(venues.title), start_time')
       else # when 'date', nil
         order('start_time')
     end
@@ -521,7 +521,7 @@ protected
 
   def end_time_later_than_start_time
     if start_time && end_time && end_time < start_time
-      errors.add(:end_time, "End cannot be before start")
+      errors.add(:end_time, "cannot be before start")
     end
   end
 end
