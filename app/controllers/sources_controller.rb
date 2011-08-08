@@ -30,7 +30,7 @@ class SourcesController < ApplicationController
             s << "<li>And #{@events.size - i} other events.</li>"
             break
           else
-            s << "<li>#{help.link_to event.title, event_url(event)}</li>"
+            s << "<li>#{help.link_to(event.title, event_url(event))}</li>"
           end
         end
         s << "</ul>"
