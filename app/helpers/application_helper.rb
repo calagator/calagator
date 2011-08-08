@@ -18,14 +18,12 @@ module ApplicationHelper
   FLASH_TYPES = [:success, :failure]
 
   def render_flash
-    result = "".html_safe
-    for name in FLASH_TYPES
-      next unless flash[name]
-      result << content_tag(:div, :class => "flash #{name} flash_#{name}") do
-        "#{name == :failure ? 'ERROR: ' : ''}#{flash[name]}"
+    FLASH_TYPES.map{|type|
+      next unless flash[type].present?
+      content_tag(:div, :class => "flash #{type} flash_#{type}") do
+        "#{type == :failure ? 'ERROR: ' : ''}#{flash[type]}".html_safe
       end
-    end
-    return result
+    }.compact.join.html_safe
   end
 
   def datetime_format(time,format)
