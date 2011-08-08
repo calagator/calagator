@@ -637,7 +637,7 @@ end
 describe EventsController, "when deleting" do
 
   it "should destroy events" do
-    event = mock_model(Event)
+    event = mock_model(Event, :title => "Soon to be gone")
     event.should_receive(:destroy)
     Event.should_receive(:find).and_return(event)
 
