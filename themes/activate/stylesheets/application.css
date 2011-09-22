@@ -1,0 +1,210 @@
+/* @override http://localhost:3000/stylesheets/application.css?1204562855 */
+
+.hidden {
+  visibility: hidden;
+}
+
+#project-title {
+  font-weight: bold;
+  margin-right: 1em;
+  margin-left: 1em;
+  float: left;
+}
+
+#top_menu {
+  padding: 0.5em;
+  background-color: #a8fd5f;
+  color: #0f7800;
+  margin-bottom: 1em;
+  height: 1.5em;
+}
+
+#top_menu ul {
+  margin: 0;
+}
+
+#top_menu li {
+  list-style: none;
+  float: left;
+}
+
+#project_menu {
+  float: right;
+}
+
+#top_menu a {
+  color: #00ab00;
+  padding: .7em 1.3em;
+  border-bottom: none;
+  border-right: 1px solid #59df59;
+}
+
+#top_menu a.first {
+  border-left: 1px solid #59df59;
+}
+
+#top_menu a.active {
+  background-color: #fff;
+}
+
+#top_menu a:hover {
+  text-decoration: underline;
+  background: #e2fdcb;
+}
+
+#top_content {
+  padding: 0.5em;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+#top_footer {
+  background: #d0ffa7;
+  color: #247712;
+  padding: 0.25em;
+  font-size: 70%;
+  padding-left: 2em;
+  clear: both;
+}
+
+#flash .flash_success, body #flash .flash_failure {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+  padding: 0.15em;
+}
+
+#flash .flash_success {
+  border: 2px solid green;
+  background: #DDF5DC;
+}
+
+#flash .flash_failure {
+  border: 2px solid red;
+  background: #F5DBD7;
+}
+
+td.desc {
+  text-align: right;
+  font-style: italic;
+  white-space: nowrap;
+  vertical-align: top;
+  width: 7em;
+  display: block;
+  float: left;
+  clear: both;
+}
+
+.active-scaffold td {
+  vertical-align: top;
+}
+
+ul.event_list {
+  list-style: none;
+  margin: 0;
+}
+
+ul.event_list li {
+  position: relative;
+  padding-left: 7em;
+  margin-bottom: 1em;
+}
+
+ul.event_list .list_date {
+  position: absolute;
+  left: 0;
+}
+
+
+ul.event_list .description, ul.event_list .url {
+  display: none;
+}
+
+#coming_events {
+  float: left;
+  margin-right: 5em;
+} 
+
+#recently_added_events {
+  float: left;
+}
+
+fieldset label {
+  display: block;
+  float: left;
+  width: 7em;
+  text-align: right;
+  margin-right: 1em;
+  clear: left;
+}
+
+fieldset > div {
+  clear: both;
+  padding-top: 1em;
+  
+}
+
+label.checkbox {
+  clear: none;
+  text-align: left;
+}
+
+fieldset input {
+  float: left;
+}
+
+fieldset .date_picker {
+  float: left;
+  margin-right: 2em;
+}
+
+fieldset .calendar_date_select {
+  border: 0;
+  width: 25em;
+}
+
+fieldset .date_picker label {
+  text-align: left;
+}
+
+fieldset .no_label, fieldset .help {
+  padding-left: 8em;
+}
+
+fieldset .help {
+  color: #999;
+}
+
+#list_filters {
+  padding: 1em;
+  float: left;
+  width: 17em;
+  background: #e3fdcd;
+  margin-right: 1em;
+  margin-left: -1em;
+  margin-top: 1em;
+}
+
+#list_items {
+  float: left;
+  padding: 1em;
+}
+
+#list_items .odd {
+  background: #E9E9E9;
+}
+
+#list_items .even {
+  background: #F7F7F7;
+}
+
+#google_map {
+  padding: 8px;
+  margin-bottom: 20px;
+  float: right;
+  width: 400px;
+  height: 300px;
+}
+
+a.control-link {
+  border-bottom: none;
+}

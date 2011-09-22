@@ -1,0 +1,23 @@
+# Site's name:
+name: 'Calagator'
+
+# Site's tagline:
+tagline: "Portland's Tech Calendar"
+
+# Site's URL with trailing slash:
+url: 'http://calagator.org/'
+
+# Default timezone, run "rake -D time" for information on how to display known timezones:
+timezone: 'Pacific Time (US & Canada)'
+
+# Google map to display on /venues page:
+venues_google_map_options:
+  # Zoom magnification level:
+  zoom: 12
+  # Center of the map, in latitude and longitude:
+  center: [45.518493, -122.660737]
+
+# Array of tag names to exclude from tag cloud:
+tagcloud_exclusions:
+  - ostartupskey
+  - tvg

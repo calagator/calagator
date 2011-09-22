@@ -1,0 +1,713 @@
+/* @group Global Layout
+----------------------------------------*/
+
+body {
+  background: #fff;
+}
+
+#global_header {
+  background: #82c555;
+  position: relative;
+  height: 95px;
+}
+
+#global_header a {
+  color: #f9ffec
+}
+
+#top_footer {
+  background: #445544;
+  color: #f9ffec;
+  padding: .5em 30px .5em 40px;
+  font-size: 70%;
+  clear: both;
+}
+
+
+#project_title {
+  background: url('/images/head_calagator.gif') no-repeat;
+  height: 31px;
+  left: 40px;
+  overflow: hidden;
+  position: absolute;
+  text-indent: -999px;
+  top: 25px;
+  width: 135px;
+}
+
+#app_menu ul {
+  font-size: 1.3em;
+  line-height: 1.3em;
+  font-weight: bold;
+  list-style: none;
+  margin: 0;
+
+  position: absolute;
+  bottom: 0;
+  left: 40px;
+}
+
+#app_menu li {
+  float: left;
+  margin-right: 1em;
+  padding-bottom: 10px
+}
+
+#app_menu li.active {
+  background: url('/images/nav_marker.gif') no-repeat center bottom;
+}
+
+#project_menu {
+  font-weight: bold;
+  text-align: right;
+  float: right;
+  position: absolute;
+  right: 30px;
+  bottom: 10px;
+}
+
+#search_form {
+  position:absolute;
+  right: 30px;
+  top: 15px;
+}
+
+.subnav {
+  font-size: 1.2em;
+  background: #bcf794;
+  padding-left: 40px;
+  line-height: 2em;
+}
+
+.subnav ul {
+  list-style: none;
+  margin: 0;
+}
+
+.subnav li {
+  float: left;
+  margin-right: 1.5em;
+}
+
+.subnav a {
+  color: #445544;
+  padding-bottom: .42em;
+}
+
+.subnav .active {
+  background: url('/images/subnav_marker.gif') no-repeat center bottom;
+}
+
+
+
+#content {
+  min-height: 40em;
+  margin: 1em 30px 1em 40px;
+  position: relative;
+}
+
+
+.sidebar h3 {
+  font-weight: bold;
+  font-size: 1.3em;
+  margin-top: 1.5em;
+  margin-bottom: 0.25em;
+  line-height: 1;
+}
+
+.sidebar .clear_filter {
+  font-size: .7em;
+  float: right;
+  line-height: .7em
+}
+
+.sidebar h3.first {
+  margin-top: 0;
+}
+
+.copy_block {
+  width: 45em;
+}
+
+.appropriateness_message {
+  background: #e8fbfe;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+/* @end */
+
+/* @group Event Table
+----------------------------------------*/
+
+#list_description {
+  padding-top: 1em;
+}
+
+#list_items { margin-right: 20em; }
+
+.event_table .description,
+.event_table .url,
+ul.event_list .description,
+ul.event_list .url {
+  display: none;
+}
+
+.event_table .date,
+ul.event_list .list_date {
+  text-align: right;
+  padding-right: 1.5em;
+  border-right: 1px solid #e2fad2;
+  vertical-align: top;
+  width: 7em;
+}
+
+.event_table .event_summary {
+  padding-left: 1.5em
+}
+
+.event_table .day_of_week,
+ul.event_list .day_of_week {
+  color: #59a12d;
+  font-weight: bold;
+}
+
+.event_table th {
+  padding-bottom: 2em;
+}
+
+
+.sidebar {
+  background: #e8fbfe;
+  padding: 2em 30px 1em 1em;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: -1em -30px 0 0;
+  width: 200px;
+}
+
+.contentbar {
+margin-right: 200px;
+}
+
+#list_filters #date_filter label {
+  width: 3em;
+  font-weight: normal;
+  display: block;
+  float: left;
+  text-align: right;
+  margin-right: 1em;
+}
+
+#list_filters #date_filter input[type=text] {
+  width: 8em;
+}
+
+#list_filters #date_filter .clear_filter {
+  font-size: inherit;
+  float: none;
+}
+
+/* @end */
+
+/* @group Event List
+----------------------------------------*/
+
+ul.event_list {
+  list-style: none;
+  margin: 0;
+}
+
+ul.event_list li {
+  position: relative;
+  padding-left: 10em;
+  margin-bottom: 1em;
+}
+
+ul.event_list .list_date {
+  position: absolute;
+  left: 0;
+}
+
+
+/* @end */
+
+
+/* @group Single Event
+----------------------------------------*/
+
+.single_event h1 {
+  padding-top: 0.5em;
+  margin: 0;
+  line-height: 1.2em;
+}
+
+.single_event h3 {
+  padding-top: 1.0em;
+  margin-bottom: 0.5em;
+  line-height: 0.5em;
+}
+
+.single_event .date {
+  color: #82c555;
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+.single_event .location.vcard {
+  background: #e8fbfe;
+  width: 45em;
+  /* height: 16em;*/
+  padding: 1em;
+  margin: 2em 0 2em -1em;
+}
+
+.single_event .location.vcard.closed {
+  background: #eee
+}
+
+.single_event .location #google_map {
+  width: 25em;
+  height: 16em;
+  float: right;
+}
+
+.single_event .location .access_notes {
+  margin-top: 1em
+}
+
+.single_event .location .access_notes h3 {
+  display: block;
+}
+
+.single_event .location .fn {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.single_event .description {
+  width: 40em;
+}
+
+/* @end */
+
+/* Event Preview */
+
+#event_preview .single_event {
+  background-color: #EEE;
+  padding: 1em;
+  margin-bottom: 2em;
+}
+
+#event_preview .single_event .location {
+  margin: 2em 0 2em 0em;
+  background-color: #DDD;
+}
+
+
+/* @group Venues
+----------------------------------------*/
+
+#venues_index #google_map {
+  width: 400px;
+  height: 300px;
+  float: right;
+}
+
+#venues_index h1 {
+  margin-bottom: .25em;
+}
+
+#venues_index p.detail {
+  margin-bottom: 0;
+  color: #aaa;
+}
+
+#venues_index ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+#venues_index li {
+  margin-bottom: .25em
+}
+
+#venues_index li a {
+  font-weight: bold;
+}
+
+#venues_search_results li {
+  margin-bottom: .5em;
+}
+
+#venues_search {
+  background: #e8fbfe;
+  padding: 1em;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+#venues_search h2 {
+  float: left;
+  margin: 0 1em 0 0;
+}
+
+#venues_search form div {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+#venue_portal {
+}
+
+#venue_portal #most_active,
+#venue_portal #newest,
+#venue_portal #exports {
+  float: left;
+  padding: 1em 1em 2em 0;
+}
+
+#venue_portal #most_active,
+#venue_portal #newest {
+  width: 300px;
+  border-right: 1px solid #e9e9e9;
+  margin-right: 2em;
+}
+
+#venue_portal #exports h3 {
+  margin-top: .5em;
+}
+
+#venue_portal h3 {
+  margin-bottom: .5em;
+}
+
+#venues_map #google_map {
+  width: 100%;
+  height: 650px;
+}
+
+/* @end */
+
+
+/* @group Single Venue
+----------------------------------------*/
+
+.single_venue .location.vcard {
+  /* background: #e8fbfe;*/
+  /* width: 45em;*/
+  /* height: 16em;*/
+  padding: 1em;
+  margin: 2em 2em 2em -1em;
+}
+
+.single_venue h1 {
+  padding-top: 0.5em;
+  margin: 0;
+  line-height: 1.2em;
+}
+
+.location.closed .org {
+  text-decoration: line-through;
+  color: #999;
+  margin-bottom: 0;
+}
+
+.location .closed_callout {
+  margin-top: 0;
+  color: #CE421D;
+  font-weight: bold;
+}
+
+.location .wifi_callout {
+  margin-top: .5em;
+  padding-left: 20px;
+  background: url('/images/transmit_blue.png') no-repeat;
+  font-weight: bold;
+  color: #6098E6
+}
+
+.location .access_notes h3,
+.single_venue .access_notes h3 {
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  margin-right: .5em;
+  color: #456FC9;
+  font-size: 1em;
+  font-weight: bold;
+  padding-left: 20px;
+  line-height: 16px;
+  background: url('/images/information.png') no-repeat;
+}
+
+.single_venue .location .adr,
+.single_venue .location .address,
+.single_venue .location .info {
+  font-size: 14px;
+}
+
+.single_venue .location.vcard .adr,
+.single_venue .location.vcard .address {
+  margin-bottom: 1em;
+  float: left;
+  width: 300px;
+}
+
+.single_venue .location .info {
+  float: left;
+}
+
+.single_venue .description,
+.single_venue .tags,
+.single_venue #future_events {
+  float: left;
+  clear: left;
+  width: 500px;
+}
+
+.single_venue .description {
+  background: #e8fbfe;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.single_venue #future_events,
+.single_venue .tags {
+  margin-top: 1em;
+}
+
+.single_venue #google_map {
+  width: 30em;
+  height: 20em;
+  float: right;
+  border: 1px solid #222;
+}
+
+.single_venue h3 {
+  padding-top: 1.0em;
+  margin-bottom: 0.5em;
+  line-height: 0.5em;
+}
+
+/* @end */
+
+
+/* @group Forms (imported from old UI)
+----------------------------------------*/
+
+fieldset .calendar_date_select {
+  border: 0;
+  width: 25em;
+}
+
+fieldset .no_label, fieldset .help {
+  padding-left: 8em;
+}
+
+/* @end */
+
+/* @group Front Page
+----------------------------------------*/
+
+#whats_happening {
+  margin: 1em 0 0 24em;
+}
+
+#whats_happening h1 {
+  padding-top: .2em
+}
+
+#project_description {
+  background: #e8fbfe;
+  padding: 1em;
+  width: 20em;
+  margin: 0 2em 0 -1em;
+}
+
+#project_description a {
+  font-weight: bold;
+}
+
+#project_description h2 {
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+
+#tagcloud {
+  padding: 1em;
+  width: 20em;
+  margin: 0 2em 0 -1em;
+}
+
+#tagcloud h2 {
+  font-weight: bold;
+  margin-bottom: .5em;
+}
+
+#homepage_sidebar {
+  float: left;
+}
+
+
+/* @end */
+
+/* @group Helper Classes
+----------------------------------------*/
+
+.right {
+  float:  right;
+}
+
+.left {
+  float: left;
+}
+
+.hidden {
+  display: none;
+}
+
+/* @end */
+
+
+
+/* @group Recent Changes Display
+----------------------------------------*/
+
+#changes_table th,
+#changes_table td,
+#changes_table tr {
+  padding: 0.1em;
+  margin: 0;
+  line-height: 1;
+}
+
+#changes_table th {
+  font-size: 125%;
+}
+
+#changes_table tr.change_row {
+  /* wtf!? */
+  border-top: 10px solid red;
+  padding: 10em;
+  margin: 10em;
+}
+
+#changes_table,
+.changes_details_table {
+  width: 100%;
+}
+
+#changes_table .change_time {
+  width: 10%;
+  white-space: nowrap;
+}
+
+#changes_table .change_details {
+  width: 90%;
+}
+
+#changes_table .change_time,
+#changes_table .change_details {
+  padding-bottom: 1em;
+  vertical-align: top;
+}
+
+#changes_table .change_detail_description {
+  margin: 0;
+  padding: 0;
+  padding-bottom: 0.25em;
+  font-style: italic;
+  background-color: #E6E6E6;
+  font-size: 110%;
+}
+
+#changes_table .changes_details_table tr.even td {
+  background-color: #F2F2F2;
+}
+
+#changes_table .changes_details_table tr.odd td {
+  background-color: white;
+}
+
+#changes_table .changes_details_table td.change_detail_value {
+  width: 40%;
+}
+
+#changes_table .changes_details_table td.change_detail_spacer {
+  width: 10%;
+  text-align: center;
+  vertical-align: middle;
+  font-weight: bold;
+  font-size: 200%;
+}
+
+/* @end */
+
+
+/* float clearing for IE6 */
+* html .clearfix{
+  height: 1%;
+  overflow: visible;
+}
+
+/* float clearing for IE7 */
+*+html .clearfix{
+  min-height: 1%;
+}
+
+/* float clearing for everyone else */
+.clearfix:after {
+  clear: both;
+  content: ".";
+  display: block;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+}
+
+.sources_index td {
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.sources_index tr.odd td {
+  background-color: #F2F2F2;
+}
+
+.sources_index tr.even td {
+  background-color: white;
+}
+
+/* @group Event Attendees
+----------------------------------------*/
+
+.attendees {
+  overflow: auto;}
+
+.attendees h3 {
+  display: inline;
+}
+
+.attendees ul {
+  clear: both;
+  margin: 0;
+  padding: 0;
+  float: left;}
+
+.attendees li {
+  list-style-type: none;
+  float: left;
+  margin: 0px 8px 8px 0px;
+  padding: 0; }
+
+  .attendees li .avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+.plancast-rsvp {
+  font-size: 11px;
+}
+/* @end */
