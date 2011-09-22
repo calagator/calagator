@@ -32,3 +32,14 @@ Run 'rails db' and it drops you in sqlite3 command, where the `.database` and `.
 Development Conventions
 -----------------------
 * Implement new features on feature branches in git (ex: `git checkout -b full-calendalar` ... hackhackhack... `git commit; git checkout master; git merge full-calendar`).
+
+See Also
+--------
+ * Logo files are in dropbox.  Lindsay can share with you if necessary.
+ * Issues / stories are in Pivotal Tracker. https://www.pivotaltracker.com/projects/365511
+
+Submitting code changes
+-----------------------
+Once you have made changes to the code, you can do a pull request.
+Or, if you have push permission, you can run:
+    git push origin name-of-your-feature-branch
