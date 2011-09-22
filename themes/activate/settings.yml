@@ -1,11 +1,11 @@
 # Site's name:
-name: 'Calagator'
+name: 'ActiCal'
 
 # Site's tagline:
-tagline: "Portland's Tech Calendar"
+tagline: "Portland's Progressive Calendar"
 
 # Site's URL with trailing slash:
-url: 'http://calagator.org/'
+url: 'http://actical.org/'
 
 # Default timezone, run "rake -D time" for information on how to display known timezones:
 timezone: 'Pacific Time (US & Canada)'
