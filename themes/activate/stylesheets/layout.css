@@ -516,7 +516,7 @@ fieldset .no_label, fieldset .help {
 ----------------------------------------*/
 
 #whats_happening {
-  margin: 1em 0 0 24em;
+  margin: 1em 0 0 0;
 }
 
 #whats_happening h1 {
@@ -526,7 +526,6 @@ fieldset .no_label, fieldset .help {
 #project_description {
   background: #e8fbfe;
   padding: 1em;
-  width: 20em;
   margin: 0 2em 0 -1em;
 }
 
@@ -541,7 +540,6 @@ fieldset .no_label, fieldset .help {
 
 #tagcloud {
   padding: 1em;
-  width: 20em;
   margin: 0 2em 0 -1em;
 }
 
@@ -551,7 +549,6 @@ fieldset .no_label, fieldset .help {
 }
 
 #homepage_sidebar {
-  float: left;
 }
 
 
