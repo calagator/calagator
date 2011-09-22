@@ -11,8 +11,31 @@
   %>
   <script>
     $(document).ready(function() {
-        $('#calendar').fullCalendar({
-        })
+      $('#calendar').fullCalendar({
+        events: function(start, end, callback) {
+          $.ajax({
+            url: 'events.json',
+            dataType: 'json',
+            data: {
+              // format request for calagator
+              'date[start]': $.fullCalendar.formatDate(start, 'yyyy-MM-dd'),
+              'date[end]': $.fullCalendar.formatDate(end, 'yyyy-MM-dd'),
+            },
+            success: function(doc) {
+              var events = [];
+              $.each(doc, function(i, v){
+                console.log(v);
+                events.push({
+                  title: v.title,
+                  start: v.start_time, // will be parsed
+                  end: v.end_time // will be parsed
+                });
+              });
+              callback(events);
+            }
+          });
+        }
+      });
     });
   </script>
 <% end %>
