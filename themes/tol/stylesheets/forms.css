@@ -1,0 +1,130 @@
+/* ##############################################################
+  
+   forms.css
+   * Sets up some default styling for forms
+   * Gives you classes to enhance your forms
+   
+   Usage:
+   * For text fields, use class .title or .text
+   
+   Originally based on blueprint-css v0.7.1
+   
+############################################################## */
+
+fieldset .trap { display: none }
+
+label       { font-weight: bold; }
+fieldset    { padding:1.4em; margin: 0 0 1.5em 0; border: 1px solid #ccc; }
+legend      { font-weight: bold; font-size:1.2em; }
+
+
+/* @group Autocomplete
+-------------------------------------------------------------- */
+ul.jq-ui-autocomplete {
+    position: absolute;
+    overflow: hidden;
+    background-color: #fff;
+    border: 1px solid #aaa;
+    margin: 0px;
+    padding: 0;
+    list-style: none;
+    color: #333;
+}
+ul.jq-ui-autocomplete li { 
+  display: block; 
+  padding: .3em .5em .3em .3em; 
+  overflow: hidden;
+  width: 100%;
+}
+
+ul.jq-ui-autocomplete li.active { 
+  background-color: #bcf794; 
+  color: #445544;;
+}
+
+/* @end */
+
+/* @group Form fields
+-------------------------------------------------------------- */
+
+
+
+input.text, input.title,
+textarea, select {
+  margin:0.5em 0;
+  border:1px solid #bbb;
+}
+
+input.text:focus, input.title:focus,
+textarea:focus, select:focus {
+  border:1px solid #666;
+}
+
+input.text, 
+input.title   { width: 300px; padding:5px; }
+input.title   { font-size:1.5em; }
+textarea      { width: 390px; height: 250px; padding:5px; }
+
+.standard_form div.help {
+  margin: 0;
+  padding: 0.25em 0 0 8em;
+}
+
+.standard_form span.help {
+  margin: 0;
+  padding: 0 0 0 1em;
+}
+
+.standard_form textarea {
+  margin: 0px ;
+}
+
+.standard_form input[type="text"] {
+  width: 390px;
+}
+
+#event_times input, #event_times span {
+  margin-right: 1em;
+  float: left;
+}
+
+.standard_form input.date_picker
+{
+  width: 7em;
+} 
+
+.standard_form input.time_picker
+{
+  width: 5em;
+}
+
+div.time-picker li {
+  white-space: nowrap;
+}
+
+/* @end */ 
+
+/* @group Success, notice and error boxes
+-------------------------------------------------------------- */
+
+.flash      { padding: .8em; margin: 1em 250px 1em 0 ;  }
+
+.error, .failure      { background: #445544; color: #f9ffec; }
+.notice     { background: #bcf794; }
+.success    { background: #98f0f7; color: #445544;  }
+.error a    { color:  #C10F00; }
+.notice a   { color: #514721; }
+.success a  { color: #264409; }
+
+.flash.flash_failure, .errorExplanation {
+  color: #C10F00;
+  border: 2px solid  #C10F00;
+  background: #F5DBD7;
+  padding: 1em;
+}
+
+/* A field with a validation error */
+.fieldWithErrors label { color: #C10F00; }
+.fieldWithErrors input { background: #F5DBD7; }
+
+/* @end */ 

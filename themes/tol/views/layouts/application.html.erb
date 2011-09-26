@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title><%= cleanse(@page_title ? "#{@page_title} &raquo; " : "") %><%= SETTINGS.name %>: <%= SETTINGS.tagline %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=true">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel='search' type='application/opensearchdescription+xml' href='/opensearch.xml' title='<%= SETTINGS.name %>' />
+
+    <!-- Stylesheets, static -->
+    <%= theme_stylesheet_link_tag 'reset', :media => :all %>
+    <%= stylesheet_link_tag 'common', :media => :all %>
+    <%= theme_stylesheet_link_tag 'typography', 'forms', 'layout', :media => :all, :cache => true %>
+    <%= theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
+
+	<!--[if IE]>
+      <%= theme_stylesheet_link_tag 'ie', :media => :all %>
+    <![endif]-->
+    <%= theme_stylesheet_link_tag 'print', :media => :print %>
+
+    <!-- Stylesheets, inserted  -->
+    <%= yield :css_insert %>
+
+    <!-- JavaScripts, static -->
+    <%= javascript_include_tag  'jquery.min.js',
+                                'jquery-ui',
+                                'jquery-fx',
+                                'jrails',
+                                'application',
+                                :cache => true %>
+    <%# TODO figure out how to fix 'theme_support' plugin to make a working include tag AND make the server actually send the contents, because both of these are broken. %>
+    <%#= theme_javascript_include_tag 'application'%>
+
+    <!-- JavaScripts, inserted -->
+    <%= yield :javascript_insert %>
+
+    <!-- Auto-discovery, static -->
+    <%= auto_discovery_link_tag(:atom, events_url(:format => 'atom'), :title => 'Atom: All Events' )%>
+
+    <!-- Auto-discovery, inserted -->
+    <%= yield :discovery_insert %>
+
+    <%# FIXME extract icon into theme %>
+    <link rel="apple-touch-icon" href="/images/site-icon.png" />
+  </head>
+  <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
+
+  <div id="outer">
+    <div id="global_header">
+      <a href="/" id="project_title"><%= SETTINGS.name %></a>
+
+      <div id="top_menu">
+         <div id='app_menu'>
+          <ul>
+              <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+              <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+          </ul>
+        </div>
+        <div id='project_menu'>
+          <strong>Get Involved:</strong> <%= link_to "Blog", "http://calagator.wordpress.com/", {:class => 'first'} %> | <%= link_to "Forum", "http://groups.google.com/group/pdx-tech-calendar/" %> | <%= link_to "Code", "https://github.com/calagator/calagator" %>
+          <br />
+          <strong>Something not right?</strong> <%= link_to "File an issue", "http://code.google.com/p/calagator/issues/list" %> or <%= link_to "get satisfaction", 'http://getsatisfaction.com/calagator' %>.
+        </div>
+        <% form_tag '/events/search', :method => :get do %>
+          <div id='search_form'>
+          <label for="search_field">Search Events</label>
+          <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+            <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+          <% else %>
+            <%= text_field_tag 'query', @query, :id => 'search_field' %>
+          <% end %>
+          </div>
+        <% end -%>
+      </div>
+    </div>
+
+    <% # Pick a subnav %>
+
+    <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
+    <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
+    <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+
+    <div id="content">
+      <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
+      <%= render_flash %>
+      <%= yield %>
+    </div>
+
+    <div id="top_footer">
+      <%= URI.parse(SETTINGS.url).host %>
+      <%= source_code_version %>
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      <span class="nowrap">
+        Display for
+        <%= link_to "mobile", url_for(:mobile => "1") %>,
+        <%= link_to "desktop", url_for(:mobile => "0") %> or
+        <%= link_to "default", url_for(:mobile => "-1") %>
+      </span>
+    </div>
+
+</div> <%# outer %>
+
+    <% if ENV['RAILS_ENV'] == 'production' %>
+      <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+        var pageTracker = _gat._getTracker("UA-168427-7");
+        pageTracker._initData();
+        pageTracker._trackPageview();
+      </script>
+    <% end %>
+
+  </body>
+</html>
