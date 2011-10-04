@@ -33,8 +33,9 @@ for name in %w[nfs-common git-core screen tmux elinks build-essential ruby-dev i
 end
 
 # Install gems
-for name in %w[bundler]
-  gem_package name
+gem_package "bundler"
+gem_package "rake" do
+  version "0.8.7"
 end
 
 # Fix permissions on homedir
