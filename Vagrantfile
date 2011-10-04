@@ -12,10 +12,10 @@ Vagrant::Config.run do |config|
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "lucid32"
+  # config.vm.box_url = "http://files.vagrantup.com/lucid32.box"
 
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "calagator"
+  config.vm.box = "lucid32"
 
   # Assign this VM to a host only network IP, allowing you to access it
   # via the IP.
