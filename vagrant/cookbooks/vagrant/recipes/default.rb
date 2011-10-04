@@ -17,9 +17,14 @@ execute "update-apt" do
   end
 end
 
-# Add gems to PATH
+# Remove obsolete file
 file "/etc/profile.d/rubygems1.8.sh" do
-  content "PATH=/usr/lib/ruby/gems/1.8/bin:$PATH"
+  action :delete
+end
+
+# Add gems to PATH, use "zz-" prefix to ensure this runs after box's "vagrantruby.sh".
+file "/etc/profile.d/zz-rubygems1.8.sh" do
+  content "export PATH=`gem env path`:$PATH"
 end
 
 # Install packages
