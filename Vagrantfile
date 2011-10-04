@@ -12,7 +12,7 @@ Vagrant::Config.run do |config|
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
-  config.vm.box_url = "http://opscode-vagrant-boxes.s3.amazonaws.com/ubuntu10.04-gems.box"
+  config.vm.box_url = "lucid32"
 
   # Every Vagrant virtual environment requires a box to build off of.
   config.vm.box = "calagator"
