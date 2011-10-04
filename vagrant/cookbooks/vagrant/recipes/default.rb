@@ -49,11 +49,13 @@ end
 # Install bundle
 execute "install-bundle" do
   cwd APPDIR
-  command "su #{USER} -c 'bundle check || bundle --local || bundle'"
+  user USER
+  command "bundle check || bundle --local || bundle"
 end
 
 # Setup database
 execute "setup-db" do
   cwd APPDIR
-  command "su #{USER} -c 'bundle exec rake db:create:all db:migrate db:test:prepare'"
+  user USER
+  command "bundle exec rake db:create:all db:migrate db:test:prepare"
 end
