@@ -6,7 +6,6 @@ Disallow: /omfg
 Disallow: /recent_changes
 Disallow: /sources
 Disallow: /sources/import
-Disallow: /events/search
 Disallow: /sources/new
 Disallow: /events/new
 Disallow: /venues/new

@@ -7,3 +7,5 @@
 \bsex\s+tape\b
 \bmichael\s+jackson\s+died\b
 \blevitra\b
+\bNaivahita\b
+\bdfadlmox\b
