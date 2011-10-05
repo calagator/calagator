@@ -57,13 +57,11 @@ end
 # Install bundle
 execute "install-bundle" do
   cwd APPDIR
-  user USER
-  command "bundle check || bundle --local || bundle"
+  command "su vagrant -l -c 'bundle check || bundle --local || bundle'"
 end
 
 # Setup database
 execute "setup-db" do
   cwd APPDIR
-  user USER
-  command "bundle exec rake db:create:all db:migrate db:test:prepare"
+  command "su vagrant -l -c 'bundle exec rake db:create:all db:migrate db:test:prepare'"
 end
