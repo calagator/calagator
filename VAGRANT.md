@@ -87,6 +87,10 @@ Below are the supported overrides:
 
         ADDRESS = "33.33.31.13"
 
+* Set the amount of memory to dedicate to the virtual machine to 512 megabytes. The appropriate amount will depend on how much memory you have available versus how much processes within the virtual machine need. In general, running `bundler` or `gem` in the virtual machine will require at least 512 megabytes:
+
+        MEMORY = 512
+
 ### Provisioning
 
 You can customize your virtual machine by creating a `vagrant/cookbooks/vagrant/recipes/local.rb` file. This file is local to your computer and should not be added to revision control.

@@ -33,9 +33,16 @@ Vagrant::Config.run do |config|
   # folder, and the third is the path on the host to the actual folder.
   config.vm.share_folder "vagrant", "/vagrant", ".", :nfs => defined?(NFS) ? NFS : false
 
+  # Share a folder with the guest VM for storing downloaded packages. This
+  # makes rebuilding VMs faster by only downloading packages if needed.
+  require "fileutils"
+  apt_cache = "tmp/vagrant_apt_cache"
+  FileUtils.mkdir_p("#{apt_cache}/archives/partial")
+  config.vm.share_folder "vagrant-apt-cache", "/var/cache/apt", apt_cache, :nfs => defined?(NFS) ? NFS : false
+
   # Use more memory so badly-designed programs like Bundler can work.
   config.vm.customize do |vm|
-    vm.memory_size = 512
+    vm.memory_size = defined?(MEMORY) ? MEMORY : 512
   end
 
   # Enable provisioning with chef solo, specifying a cookbooks path (relative

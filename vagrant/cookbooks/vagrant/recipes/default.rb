@@ -27,8 +27,15 @@ file "/etc/profile.d/zz-rubygems1.8.sh" do
   content "export PATH=`gem env path`:$PATH"
 end
 
+# Remove conflicting packages
+for name in %w[irb ruby-dev]
+  package name do
+    action :remove
+  end
+end
+
 # Install packages
-for name in %w[nfs-common git-core screen tmux elinks build-essential ruby-dev irb libcurl4-openssl-dev libsqlite3-dev libxml2 libxml2-dev libxslt1.1 libxslt1-dev]
+for name in %w[nfs-common git-core screen tmux elinks build-essential libcurl4-openssl-dev libsqlite3-dev libxml2 libxml2-dev libxslt1.1 libxslt1-dev]
   package name
 end
 
@@ -50,13 +57,11 @@ end
 # Install bundle
 execute "install-bundle" do
   cwd APPDIR
-  user USER
-  command "bundle check || bundle --local || bundle"
+  command "su vagrant -l -c 'bundle check || bundle --local || bundle'"
 end
 
 # Setup database
 execute "setup-db" do
   cwd APPDIR
-  user USER
-  command "bundle exec rake db:create:all db:migrate db:test:prepare"
+  command "su vagrant -l -c 'bundle exec rake db:create:all db:migrate db:test:prepare'"
 end
