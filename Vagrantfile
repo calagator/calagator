@@ -35,7 +35,7 @@ Vagrant::Config.run do |config|
 
   # Use more memory so badly-designed programs like Bundler can work.
   config.vm.customize do |vm|
-    vm.memory_size = 512
+    vm.memory_size = defined?(MEMORY) ? MEMORY : 512
   end
 
   # Enable provisioning with chef solo, specifying a cookbooks path (relative
