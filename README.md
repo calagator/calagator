@@ -23,7 +23,7 @@ By releasing this code under a liberal MIT open source license, we hope to empow
 Releases
 --------
 
-The stable releases this software are tagged with version numbers, such as "v0.20090416", that represent the date they were made. There is also a "stable" branch that points to the current stable release. The [CHANGES.md](http://github.com/calagator/calagator/blob/master/CHANGES.md) file describes significant changes made between stable releases.
+The stable releases this software are tagged with version numbers, such as `v0.20090416`, that represent the date they were made. There is also a `stable` branch that points to the current stable release. The [CHANGES.md](http://github.com/calagator/calagator/blob/master/CHANGES.md) file describes significant changes made between stable releases.
 
 
 Installing
