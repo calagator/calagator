@@ -63,6 +63,7 @@ require "#{File.dirname(__FILE__)}/lib/secrets_reader"
 secrets = SecretsReader.read(:silent => true)
 case secrets.search_engine
 when 'sunspot'
-  gem 'sunspot', '1.2.1', :require => 'sunspot'
-  gem 'sunspot_rails', '1.2.1', :require  => 'sunspot/rails'
+  sunspot_version = '1.3.0.rc4'
+  gem 'sunspot_rails', sunspot_version
+  gem 'sunspot_solr',  sunspot_version
 end
