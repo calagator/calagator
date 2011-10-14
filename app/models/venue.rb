@@ -122,10 +122,7 @@ class Venue < ActiveRecord::Base
     when 'na', nil, ''
       # The LEFT OUTER JOIN makes sure that venues without any events are also returned.
       return { [] => \
-        self.all(
-          :conditions => 'venues.duplicate_of_id IS NULL',
-          :order      => 'LOWER(venues.title)'
-        )
+        self.where('venues.duplicate_of_id IS NULL').order('LOWER(venues.title)')
       }
     else
       kind = %w[all any].include?(type) ? type.to_sym : type.split(',')

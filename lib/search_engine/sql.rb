@@ -48,7 +48,7 @@ class SearchEngine::Sql < SearchEngine::Base
             conditions_arguments = [Date.yesterday.to_time] + conditions_arguments
           end
           conditions = [conditions_text, *conditions_arguments]
-          return Event.all(:conditions => conditions, :order => order, :limit => limit, :include => [:venue, :taggings, :tags])
+          return Event.joins('INNER JOIN taggings ON taggings.taggable_id = events.id', 'LEFT OUTER JOIN tags ON tags.id = taggings.id').includes(:venue).where(conditions).order(order).group('events.id').limit(limit)
         end
       end
     else
