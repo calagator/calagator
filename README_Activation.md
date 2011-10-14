@@ -43,3 +43,19 @@ Submitting code changes
 Once you have made changes to the code, you can do a pull request.
 Or, if you have push permission, you can run:
     git push origin name-of-your-feature-branch
+    
+Deployment recipe
+-----------------
+
+Outline: (flesh out later)
+
+ * push
+ * merge
+ * tag
+ * pull (server)
+ * stop server
+ * db migrations
+ * clear cache
+ * start server
+
+
