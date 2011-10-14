@@ -1,4 +1,4 @@
-<%= semantic_form_for(venue, :html => {:id => "venue_form", :novalidate => 'novalidate'}) do |f| %>
+<%= semantic_form_for(venue, :html => {:id => 'venue_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
   <%= f.inputs :name => "#{'Editing: ' unless venue.new_record?} <em>#{venue.title}</em>".html_safe do %>
     <li class='input'>
       <p class='inline-hints'>You can <%= venue.new_record? ? "enter" : "edit" %> the details of your venue below.  The more information we have about your venue, the easier it will be for people to find it.</p>
