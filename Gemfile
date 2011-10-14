@@ -59,7 +59,7 @@ group :development, :test do
 end
 
 # Some dependencies are activated through server settings.
-require 'lib/secrets_reader'
+require "#{File.dirname(__FILE__)}/lib/secrets_reader"
 secrets = SecretsReader.read(:silent => true)
 case secrets.search_engine
 when 'sunspot'
