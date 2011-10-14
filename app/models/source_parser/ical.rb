@@ -76,7 +76,15 @@ class SourceParser # :nodoc:
       end
 
       return [].tap do |events|
-        content_calendars = RiCal.parse_string(content)
+        begin
+          content_calendars = RiCal.parse_string(content)
+        rescue Exception => e
+          if e.message =~ /Invalid icalendar file/
+            return false # Invalid data, give up.
+          else
+            raise e # Unknown error, we should care.
+          end
+        end
         content_calendars.each do |content_calendar|
           content_calendar.events.each_with_index do |component, index|
             next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff

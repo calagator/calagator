@@ -1,32 +1,41 @@
 class SourceParser # :nodoc:
   class Meetup < Base
     label :Meetup
-    url_pattern %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?}
+    url_pattern %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
 
     def self.to_abstract_events(opts={})
       if SECRETS.meetup_api_key.present?
-        matchdata = opts[:url].match(url_pattern)
-        event_id = matchdata[2]
-        return false unless event_id # Give up unless we can extract the id
+        self.to_abstract_events_api_helper(
+          :url => opts[:url],
+          :error => 'problem',
+          :api => lambda { |event_id|
+            [
+              "https://api.meetup.com/2/event/#{event_id}",
+              {
+                :query => {
+                  :key => SECRETS.meetup_api_key,
+                  :sign => 'true'
+                }
+              }
+            ]
+          }
+        ) do |data, event_id|
+          event = AbstractEvent.new
+          event.title       = data['name']
+          event.description = data['description']
+          # Meetup sends us milliseconds since the epoch in UTC
+          event.start_time  = Time.at(data['time']/1000).utc
+          event.url         = data['event_url']
+          event.location    = to_abstract_location(data['venue'])
+          event.tags        = ["meetup:event=#{event_id}", "meetup:group=#{data['group']['urlname']}"]
 
-        meetup_data = HTTParty.get("https://api.meetup.com/2/event/#{event_id}",
-            :query => { :key => SECRETS.meetup_api_key, :sign => 'true' })
-
-        event = AbstractEvent.new
-        event.title       = meetup_data['name']
-        event.description = meetup_data['description']
-        # Meetup sends us milliseconds since the epoch in UTC
-        event.start_time  = Time.at(meetup_data['time']/1000).utc
-        event.url         = meetup_data['event_url']
-        event.location    = to_abstract_location(meetup_data['venue'])
-        event.tags        = ["meetup:event=#{event_id}", "meetup:group=#{meetup_data['group']['urlname']}"]
-
-        [event]
+          [event]
+        end
       else
         self.to_abstract_events_wrapper(
           opts,
           SourceParser::Ical,
-          url_pattern,
+          %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?},
           lambda { |matcher| "http://www.meetup.com/#{matcher[1]}/events/#{matcher[2]}/ical/omgkittens.ics" }
         )
       end

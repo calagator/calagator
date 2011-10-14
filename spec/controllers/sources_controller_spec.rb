@@ -70,17 +70,17 @@ describe SourcesController do
 
       it "should fail when host responds with an error" do
         assert_import_raises(OpenURI::HTTPError.new("omfg", "bbq"))
-        flash[:failure].should =~ /error from this source/
+        flash[:failure].should =~ /Couldn't download events/
       end
 
       it "should fail when host is not responding" do
         assert_import_raises(Errno::EHOSTUNREACH.new("omfg"))
-        flash[:failure].should =~ /this source is not responding/
+        flash[:failure].should =~ /Couldn't connect to remote site/
       end
 
       it "should fail when host is not found" do
         assert_import_raises(SocketError.new("omfg"))
-        flash[:failure].should =~ /hostname not found/
+        flash[:failure].should =~ /Couldn't find IP address for remote site/
       end
 
       it "should fail when host requires authentication" do

@@ -5,9 +5,7 @@ describe SourceParser::Plancast do
   before(:each) do
     content = read_sample('plancast.json')
     HTTParty.should_receive(:get).and_return(Crack::JSON.parse(content))
-    @events = SourceParser::Plancast.to_abstract_events(:content => content,
-                                                       :url => 'http://plancast.com/p/3cos/indiewebcamp',
-                                                       :skip_old => false)
+    @events = SourceParser::Plancast.to_abstract_events(:url => 'http://plancast.com/p/3cos/indiewebcamp')
     @event = @events.first
   end
 
