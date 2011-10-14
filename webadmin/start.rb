@@ -20,8 +20,9 @@ post '/' do
   revision = params[:revision].ergo.to_s[/(\w+)/, 1]
 
   @command = nil
-  common_restart = %{bundle exec rake RAILS_ENV=production clear && (bundle check || bundle --local || sudo bundle) && touch #{RESTART_TXT}}
-  common_deploy  = %{bundle exec rake RAILS_ENV=production db:migrate && #{common_restart}}
+  common_bundle  = %{bundle check || bundle --local || sudo bundle}
+  common_restart = %{(#{common_bundle}) && bundle exec rake RAILS_ENV=production clear && touch #{RESTART_TXT}}
+  common_deploy  = %{(#{common_bundle}) && bundle exec rake RAILS_ENV=production db:migrate && #{common_restart}}
   case action
   when "deploy_and_migrate_via_update"
     if revision

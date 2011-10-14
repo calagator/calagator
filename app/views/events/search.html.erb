@@ -11,6 +11,7 @@
   <ul>
     <li><%= link_to "iCalendar feed", url_for(:action => "search", :protocol => "webcal", :only_path => false, :query => @query, :format => "ics") %></li>
     <li><%= link_to "Atom feed", search_events_url(:query => @query, :format => "atom") %></li>
+    <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+CGI::escape(search_events_url(:query => @query, :format => "ics")) %></li>
   </ul>
 
   <h3>Export to</h3>

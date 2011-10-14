@@ -79,7 +79,7 @@
         <% if @venue.access_notes.present? %>
           <div class="access_notes">
             <h3>Access Notes</h3>
-            <%= @venue.access_notes %>
+            <%= format_description @venue.access_notes %>
           </div>
         <% end %>
       </div>
