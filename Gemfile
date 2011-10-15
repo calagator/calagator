@@ -1,8 +1,10 @@
 source :rubygems
 
+basedir = File.dirname(__FILE__)
+
 # Load additional gems from "Gemfile.local" if it exists, has same format as this file.
 begin
-  data = File.read('Gemfile.local')
+  data = File.read("#{basedir}/Gemfile.local")
 rescue Errno::ENOENT
   # Ignore
 end
@@ -43,7 +45,7 @@ gem 'exception_notification', '2.4.1'
 
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
-#   bundle install --without development test
+#   bundle install --without development:test
 group :development, :test do
   gem 'rspec-rails', '2.6.0'
   gem 'webrat', '0.7.3'
@@ -59,7 +61,7 @@ group :development, :test do
 end
 
 # Some dependencies are activated through server settings.
-require "#{File.dirname(__FILE__)}/lib/secrets_reader"
+require "#{basedir}/lib/secrets_reader"
 secrets = SecretsReader.read(:silent => true)
 case secrets.search_engine
 when 'sunspot'
