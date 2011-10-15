@@ -43,10 +43,12 @@
   </ul>
   <% end %>
 
-  <% unless event.tag_list.blank? %>
+  <% unless event.tags.blank? %>
   <div class="tags">
     <h3>Tags</h3>
-    <p><%= event.tag_list %></p>
+    <p>
+      <%= tag_links_for event %>
+    </p>
   </div>
   <% end %>
 
