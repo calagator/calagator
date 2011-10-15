@@ -282,7 +282,7 @@ class Event < ActiveRecord::Base
         opts[:include] = :venue
     end
 
-    result = self.group_by_currentness(self.tagged_with(tag, opts).includes(:venue))
+    result = self.group_by_currentness(self.includes(:venue).tagged_with(tag, opts))
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
     return result
