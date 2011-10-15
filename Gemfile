@@ -11,7 +11,17 @@ end
 eval data if data
 
 # Database driver
-gem 'sqlite3'
+require 'erb'
+require 'yaml'
+filename = File.join(File.dirname(__FILE__), 'config', 'database.yml')
+raise "Can't find database configuration at: #{filename}" unless File.exist?(filename)
+databases = YAML.load(ERB.new(File.read(filename)).result)
+railsenv = ENV['RAILS_ENV'] || 'development'
+raise "Can't find database configuration for environment '#{railsenv}' in: #{filename}" unless databases[railsenv]
+adapter = databases[railsenv]['adapter']
+raise "Can't find database adapter for environment '#{railsenv}' in: #{filename}" unless databases[railsenv]['adapter']
+adapter = 'pg' if adapter == 'postgresql'
+gem adapter
 
 # Run-time dependencies
 gem 'rails', '3.0.10'
