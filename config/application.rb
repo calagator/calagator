@@ -29,6 +29,12 @@ module Calagator
     config.action_mailer.delivery_method = :sendmail
     config.action_mailer.sendmail_settings = { :arguments => '-i' }
 
+    # Configure the default encoding used in templates for Ruby 1.9.
+    config.encoding = "utf-8"
+
+    # Configure sensitive parameters which will be filtered from the log file.
+    config.filter_parameters += [:password]
+
     #---[ Plugins ]---------------------------------------------------------
 
     # Load these plugins first, or they won't work
