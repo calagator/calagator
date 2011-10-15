@@ -27,6 +27,7 @@ module Calagator
 
     # Deliver email using sendmail by default
     config.action_mailer.delivery_method = :sendmail
+    config.action_mailer.sendmail_settings = { :arguments => '-i' }
 
     #---[ Plugins ]---------------------------------------------------------
 
