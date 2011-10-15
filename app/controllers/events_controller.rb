@@ -7,7 +7,7 @@ class EventsController < ApplicationController
     @start_date = date_or_default_for(:start)
     @end_date = date_or_default_for(:end)
 
-    query = Event.non_duplicates.ordered_by_ui_field(params[:order])
+    query = Event.non_duplicates.ordered_by_ui_field(params[:order]).includes(:venue, :tags)
     @events = params[:date] ?
                 query.within_dates(@start_date, @end_date) :
                 query.future
