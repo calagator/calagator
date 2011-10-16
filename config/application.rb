@@ -22,6 +22,9 @@ module Calagator
     $LOAD_PATH << Rails.root.join('vendor','gems','mofo-0.2.8','lib')
     require 'mofo'
 
+    # "/lib" libraries
+    $LOAD_PATH << Rails.root.join
+
     #---[ Rails ]-----------------------------------------------------------
 
     # Activate observers that should always be running
