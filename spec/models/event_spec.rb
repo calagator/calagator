@@ -78,7 +78,7 @@ describe Event do
       @event.save
 
       @event.reload
-      @event.tags.map(&:name).should == tags
+      @event.tags.map(&:name).sort.should == tags.sort
     end
 
     it "should not interpret numeric tags as IDs" do
