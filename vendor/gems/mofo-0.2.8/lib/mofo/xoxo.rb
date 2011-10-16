@@ -40,7 +40,7 @@ class XOXO < Microformat
 
   def self.build_label(node)
     if node.elem?
-      label = Label.new(node.innerHTML.strip)
+      label = Label.new(node.inner_html.strip)
       label.url = node['href'] if node.name == 'a'
       label
     elsif node.text? && !node.to_s.strip.empty?

@@ -1,5 +1,4 @@
-%w(rubygems set hpricot microformat/string microformat/array open-uri ostruct timeout).each { |f| require f }
-gem 'hpricot', '>=0.4.59'
+%w(rubygems set nokogiri microformat/string microformat/array open-uri ostruct timeout).each { |f| require f }
 
 class Microformat
   module Base
@@ -139,16 +138,18 @@ class Microformat
       when String, File, StringIO
         result = ''
         Timeout.timeout(@@timeout) { result = open(source) }
-        Hpricot(result)
-      when Hpricot, Hpricot::Elements
+        Nokogiri::XML.fragment(result)
+      when Nokogiri, Nokogiri::XML::Element
         source
       when Hash
-        Hpricot(source[:text]) if source[:text]
+        Nokogiri::XML.fragment(source[:text]) if source[:text]
+      else
+        raise ArgumentError, "Unknown source class: #{source.class.name}"
       end
     end
 
     def find_occurences(doc)
-      doc/".#{@container}"
+      doc.css ".#{@container}"
     end
 
     def build_class(microformat)
@@ -260,7 +261,7 @@ class Microformat
 
     def extract_tags(doc)
       return unless (tags = doc.search("[@rel=tag]")).size.nonzero?
-      tags.inject([]) { |array, tag| array + [tag.innerText] }
+      tags.inject([]) { |array, tag| array + [tag.text] }
     end
 
     def parse_element(element, target = nil)
@@ -285,7 +286,7 @@ class Microformat
         when 'img'  then element['alt']
         end || ''
 
-        (value.empty? ? element.innerHTML : value).strip.strip_html.coerce
+        (value.empty? ? element.inner_html : value).strip.strip_html.coerce
       end
     end
 
@@ -316,5 +317,9 @@ class MicroformatNotFound < Exception; end
 Mofo = Microformat
 
 # type & id are used a lot in uformats and deprecated in ruby.  no loss.
-OpenStruct.class_eval { undef :type, :id }
+OpenStruct.class_eval do
+  [:type, :id].each do |name|
+    undef_method(name) if self.respond_to?(name)
+  end
+end
 Symbol.class_eval { def no_bang() to_s.sub('!','').to_sym end }

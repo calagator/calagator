@@ -22,8 +22,9 @@ class XFN < Microformat
   attr_accessor :links
 
   def self.find_occurences(doc)
+    raise NotImplementedError, "XFN not supported yet. What's the Nokogiri equivalent of Hpricot::Doc?"
     case doc
-    when Hpricot::Doc then @occurences = XFN.new(doc)
+    when Nokogiri::XML::Element then @occurences = XFN.new(doc)
     else @occurences
     end
   end
@@ -36,7 +37,7 @@ class XFN < Microformat
   def initialize(doc)
     @links = doc.search("a[@rel]").map do |rl|
       relation = rl[:rel].include?(' ') ? rl[:rel].split(' ') : rl[:rel]
-      Link.new(:name => rl.innerHTML, :link => rl[:href], :relation => relation)
+      Link.new(:name => rl.inner_html, :link => rl[:href], :relation => relation)
     end
   end
 

@@ -13,7 +13,7 @@ class Microformat
     end
 
     def self.build_class(tag)
-      new(tag.innerText)
+      new(tag.text)
     end
 
     def self.from(options)
