@@ -181,7 +181,9 @@ class SourceParser # :nodoc:
     # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
     def self.hash_from_vcard_lines(vcard_lines)
       return {}.tap do |vcard_hash|
-        vcard_lines.each do |vcard_line|
+        # Turn a String-like object into an Enumerable.
+        lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
+        lines.each do |vcard_line|
           if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
             key = matcher[1]
             qualifier = matcher[2]
