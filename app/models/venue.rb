@@ -129,8 +129,7 @@ class Venue < ActiveRecord::Base
 
       return self.find_duplicates_by(kind, 
         :grouped  => true, 
-        :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL',
-        :group_by => 'a.id'
+        :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL'
       )
     end
   end

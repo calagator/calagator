@@ -180,8 +180,6 @@ module DuplicateChecking
 
       query << " )"
 
-      query << " GROUP BY #{options[:group_by]}" if options[:group_by]
-
       Rails.logger.debug("find_duplicates_by: SQL -- #{query}")
       records = find_by_sql(query) || []
 
