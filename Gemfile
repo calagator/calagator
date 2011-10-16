@@ -2,8 +2,10 @@ source :rubygems
 
 basedir = File.dirname(__FILE__)
 
-# Use "syck" YAML engine on Ruby 1.9.2 because it actually works, e.g. supports merge keys, doesn't produce output it can't parse, etc.
-if defined?(YAML::ENGINE)
+# Use "syck" YAML engine on Ruby 1.9.2 with early versions (e.g. p180) because
+# the default "psyche" engine is broken -- it doesn't support merge keys,
+# produce output it can't parse, etc.
+if defined?(Syck::Syck) and defined?(YAML::ENGINE)
   YAML::ENGINE.yamler = 'syck'
 end
 
