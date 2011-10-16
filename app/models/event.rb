@@ -319,7 +319,7 @@ class Event < ActiveRecord::Base
     event.source       = source
     event.title        = abstract_event.title
     event.description  = abstract_event.description
-    event.start_time   = Time.parse(abstract_event.start_time.to_s)
+    event.start_time   = abstract_event.start_time.blank? ? nil : Time.parse(abstract_event.start_time.to_s)
     event.end_time     = abstract_event.end_time.blank? ? nil : Time.parse(abstract_event.end_time.to_s)
     event.url          = abstract_event.url
     event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
