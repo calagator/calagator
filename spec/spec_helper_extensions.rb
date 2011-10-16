@@ -4,8 +4,8 @@ class BeValidXhtml
   # require 'action_controller/test_process'
   # require 'test/unit'
   require 'net/http'
-  require 'md5'
-  require 'ftools'
+  require 'digest/md5'
+  require 'fileutils'
 
   def initialize(options)
     @fragment = options[:fragment]
