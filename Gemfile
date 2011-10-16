@@ -29,7 +29,6 @@ gem 'columnize', '0.3.4'
 gem 'rdoc', '3.8', :require => nil
 gem 'geokit', '1.5.0'
 gem 'htmlentities', '4.2.3'
-gem 'linecache', '0.46'
 gem 'paper_trail', '2.2.4'
 gem 'ri_cal', '0.8.8'
 gem 'rubyzip', '0.9.4', :require =>  'zip/zip'
