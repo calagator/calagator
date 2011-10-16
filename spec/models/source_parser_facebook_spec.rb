@@ -4,7 +4,7 @@ describe SourceParser::Facebook do
 
   before(:each) do
     content = read_sample('facebook.json')
-    parsed_content = Crack::JSON.parse(content)
+    parsed_content = MultiJson.decode(content)
     HTTParty.should_receive(:get).and_return(parsed_content)
     @events = SourceParser::Facebook.to_abstract_events(:url => 'http://facebook.com/event.php?eid=247619485255249')
     @event = @events.first
