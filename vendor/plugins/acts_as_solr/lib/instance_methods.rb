@@ -120,8 +120,8 @@ module ActsAsSolr #:nodoc:
     
     def evaluate_condition(condition, field)
       case condition
-        when Symbol: field.send(condition)
-        when String: eval(condition, binding)
+        when Symbol then field.send(condition)
+        when String then eval(condition, binding)
         else
           if condition_block?(condition)
             condition.call(field)
