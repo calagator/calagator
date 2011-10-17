@@ -28,7 +28,7 @@
     <%= yield :css_insert %>
 
     <!-- JavaScripts, static -->
-    <%= javascript_include_tag  :defaults, :cache => true %>
+    <%= javascript_include_tag  :defaults %>
     <%# TODO figure out how to fix 'theme_support' plugin to make a working include tag AND make the server actually send the contents, because both of these are broken. %>
     <%#= theme_javascript_include_tag 'application'%>
 
