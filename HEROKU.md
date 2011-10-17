@@ -8,16 +8,57 @@ Warning
 
 The ability to run Calagator on Heroku is very new and relies on experimental code. This documentation may not be complete and will change as we make progress with this. Please take the time to report problems, suggestions and corrections to the [calagator-development mailing list](http://groups.google.com/group/calagator-development) so we can make this work for you and others.
 
-Setup
------
+Minimal setup
+-------------
+
+If you want to just deploy Calagator to Heroku without needing to run it locally:
+
 
 To setup your copy of Calagator to run on Heroku:
 
-* Checkout the source code and the `with_ruby192` branch:
+* Checkout the source code, go into the checkout directory, and use the `with_heroku` branch:
 
         git clone git://github.com/calagator/calagator.git
         cd calagator
-        git checkout with_ruby192
+        git checkout with_heroku
+
+* Create a new branch for your Heroku-specific changes:
+
+        git checkout -b heroku
+
+* Register an account at [Heroku](http://heroku.com/).
+
+* Install the Heroku gem:
+
+        gem install heroku
+
+* Initialize your Heroku application:
+
+        heroku create
+
+* Follow the instructions in the `INSTALL.md` file to create these files:
+
+        config/theme.txt
+        config/secrets.yml
+        config/geocoder_api_keys.yml
+
+* Add and commit the above files to your `heroku` branch:
+
+        git add config/theme.txt config/secrets.yml config/geocoder_api_keys.yml
+        git commit config/theme.txt config/secrets.yml config/geocoder_api_keys.yml
+
+* Go to the **Deployment** section below to deploy the application to Heroku.
+
+Full setup
+----------
+
+If you want to setup a development server able to run the Heroku code locally, which will significantly simplify your ability to work with the code:
+
+* Checkout the source code and the `with_heroku` branch:
+
+        git clone git://github.com/calagator/calagator.git
+        cd calagator
+        git checkout with_heroku
 
 * Create a new branch for your Heroku-specific changes:
 
@@ -55,28 +96,30 @@ To setup your copy of Calagator to run on Heroku:
         gem install linecache19 -- --with-ruby-include=$rvm_path/src/${RUBY_VERSION?}
         gem install ruby-debug19 -- --with-ruby-include=$rvm_path/src/${RUBY_VERSION?}
 
-* Configure your Rails app to use PostgreSQL by copying the sample and editing the authentication:
-
-        cp config/database~postgresql.sample.yml config/database.yml
+* Configure your Rails app to use PostgreSQL, create a `config/database~custom.yml` file. You can use the `config/database~postgresql.sample.yml` as a sample.
 
 * Install dependencies and create a Bundle:
 
         bundle
 
-* Edit your `.gitignore`, remove these lines, and commit it to your `heroku` branch:
+* If your `Gemfile.lock` changes after running `bundle`, commit it to your `heroku` branch:
 
-        Gemfile.lock
-        config/database.yml
+* Follow the instructions in the `INSTALL.md` file to create these files:
+
+        config/theme.txt
         config/secrets.yml
         config/geocoder_api_keys.yml
 
-* Create and commit all the above files to your `heroku` branch, see the `INSTALL.md` for instructions on how to create each of these.
+* Add and commit the above files to your `heroku` branch:
 
-* Edit your theme and ensure that it doesn't do caching, e.g. edit `themes/default/views/layouts/application.html.erb` and change `:cache => true` to `:cache => false`. Commit these changes to your `heroku` branch.
+        git add config/theme.txt config/secrets.yml config/geocoder_api_keys.yml
+        git commit config/theme.txt config/secrets.yml config/geocoder_api_keys.yml
 
 * You should now be able to run the app locally and access it as [http://localhost:3000/](http://localhost:3000/):
 
         rails server
+
+* Go to the **Deployment** section below to deploy the application to Heroku.
 
 Deployment
 ----------
