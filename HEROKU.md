@@ -8,13 +8,15 @@ Warning
 
 The ability to run Calagator on Heroku is very new and relies on experimental code. This documentation may not be complete and will change as we make progress with this. Please take the time to report problems, suggestions and corrections to the [calagator-development mailing list](http://groups.google.com/group/calagator-development) so we can make this work for you and others.
 
+Also, take heed of these issues:
+
+* Do not publish your `heroku` branch, it contains secret information such as your API keys. In the future, we hope to use Heroku's config variables to avoid committing secret information as files to the repository.
+* Do not use multiple Heroku dynos becuase the code uses file system caching. In the future, we hope to offer a configuration option to choose the caching mechanism: none (slow, but works with multiple dynos), file-system (fast, but doesn't support multiple dynos) and memcache (fast, supports multiple dynos, but requires additional setup).
+
 Minimal setup
 -------------
 
 If you want to just deploy Calagator to Heroku without needing to run it locally:
-
-
-To setup your copy of Calagator to run on Heroku:
 
 * Checkout the source code, go into the checkout directory, and use the `with_heroku` branch:
 
@@ -126,7 +128,7 @@ Deployment
 
 Once you've confirmed that the stack works, you should now be able to deploy your app to Heroku:
 
-	    git push --force heroku heroku:master
-        heroku rake db:migrate
+    git push --force heroku heroku:master
+    heroku rake db:migrate
 
 Your app should now be available! If the site fails to load, run `heroku logs` to try to identify the problem. If you're not sure how to fix the problem, please include the backtrace from the logs to help us figure out a solution.
