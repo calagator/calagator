@@ -16,6 +16,19 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
+  * v0.20111021
+    * [!] This should be the final release based on Ruby on Rails 2.x, all future releases will be based on Rails 3.x.
+    * [DEPENDENCY] Upgraded to Rails 2.3.12.
+    * [MIGRATION] Added venue details so organizers can specify per-event information like room number, access code, etc.
+    * [THEME] Added mobile CSS stylesheet for friendlier experience on smaller screens.
+    * Updated Upcoming importer to work around invalid UTC dates emitted by current API.
+    * Updated Plancast importer to use the new, official JSONP API.
+    * Updated Meetup importer to use the new, official API if a key is available. See instructions in `INSTALL.md` file.
+    * Update robot exclusion rules to allow Google Calendar to subscribe to filtered searches.
+    * Updated iCalendar exporter to include venue address and source URL.
+    * Added "opensearch" to let browsers use Calagator as a search provider.
+    * Added Vagrant support, allowing easy setup of a development environment. See instructions in `VAGRANT.md` file.
+
   * v0.20110603
     * [DEPENDENCY] Added `bundler` for installing dependencies and isolating from unwanted versions of gems. See `INSTALL.md`  for usage information.
     * [MIGRATION] Added fields to Venues: access notes, "has public wifi" flag, and "is closed" flag.
