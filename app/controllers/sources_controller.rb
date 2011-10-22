@@ -10,14 +10,18 @@ class SourcesController < ApplicationController
     if valid
       begin
         @events = @source.create_events!
+      rescue SourceParser::NotFound => e
+        @source.errors.add(:base, "No events found at remote site. Is the event identifier in the URL correct?")
       rescue SourceParser::HttpAuthenticationRequiredError => e
-        @source.errors.add_to_base("source requires authentication")
+        @source.errors.add(:base, "Couldn't import events, remote site requires authentication.")
       rescue OpenURI::HTTPError => e
-        @source.errors.add_to_base("we received an error from this source")
+        @source.errors.add(:base, "Couldn't download events, remote site may be experiencing connectivity problems. ")
       rescue Errno::EHOSTUNREACH => e
-        @source.errors.add_to_base("this source is not responding")
+        @source.errors.add(:base, "Couldn't connect to remote site.")
       rescue SocketError => e
-        @source.errors.add_to_base("hostname not found")
+        @source.errors.add(:base, "Couldn't find IP address for remote site. Is the URL correct?")
+      rescue Exception => e
+        @source.errors.add(:base, "Unknown error: #{e}")
       end
     end
 
@@ -30,13 +34,13 @@ class SourcesController < ApplicationController
             s << "<li>And #{@events.size - i} other events.</li>"
             break
           else
-            s << "<li>#{help.link_to event.title, event_url(event)}</li>"
+            s << "<li>#{help.link_to(event.title, event_url(event))}</li>"
           end
         end
         s << "</ul>"
         flash[:success] = s
 
-        format.html { redirect_to events_path }
+        format.html { redirect_to(events_path) }
         format.xml  { render :xml => @source, :events => @events }
       else
         flash[:failure] = @events.nil? \
@@ -67,7 +71,7 @@ class SourcesController < ApplicationController
       @source = Source.find(params[:id], :include => [:events, :venues])
     rescue ActiveRecord::RecordNotFound => e
       flash[:failure] = e.to_s if params[:id] != "import"
-      return redirect_to(:action => :new)
+      return redirect_to(new_source_path)
     end
 
     respond_to do |format|
@@ -80,6 +84,7 @@ class SourcesController < ApplicationController
   # GET /sources/new.xml
   def new
     @source = Source.new
+    @source.url = params[:url] if params[:url].present?
 
     respond_to do |format|
       format.html # new.html.erb
@@ -100,7 +105,7 @@ class SourcesController < ApplicationController
     respond_to do |format|
       if @source.save
         flash[:notice] = 'Source was successfully created.'
-        format.html { redirect_to(@source) }
+        format.html { redirect_to( source_path(@source) ) }
         format.xml  { render :xml => @source, :status => :created, :location => @source }
       else
         format.html { render :action => "new" }
@@ -117,7 +122,7 @@ class SourcesController < ApplicationController
     respond_to do |format|
       if @source.update_attributes(params[:source])
         flash[:notice] = 'Source was successfully updated.'
-        format.html { redirect_to(@source) }
+        format.html { redirect_to( source_path(@source) ) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

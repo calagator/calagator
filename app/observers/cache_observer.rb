@@ -16,7 +16,7 @@ class CacheObserver < ActiveRecord::Observer
   # Expires all cached data.
   def self.expire_all
     logit "invoked"
-    Rails.cache.delete_matched(//)
+    Rails.cache.clear
   end
 
   #---[ Triggers ]--------------------------------------------------------

@@ -24,9 +24,12 @@ class Source < ActiveRecord::Base
   has_many :venues,  :dependent => :destroy
   has_many :updates, :dependent => :destroy
 
-  named_scope :listing, :order => 'created_at DESC'
+  scope :listing, :order => 'created_at DESC'
 
   has_paper_trail
+
+  xss_foliate
+  include DecodeHtmlEntitiesHack
 
   # Return a newly-created or existing Source record matching the given
   # attributes. The +attrs+ hash is the same format as used when calling

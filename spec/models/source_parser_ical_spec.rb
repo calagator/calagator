@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 def events_from_ical_at(filename)
   url = "http://foo.bar/"

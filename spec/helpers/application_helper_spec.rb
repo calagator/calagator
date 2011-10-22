@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 include ApplicationHelper
 
 describe ApplicationHelper do
@@ -20,48 +20,48 @@ describe ApplicationHelper do
     end
   end
 
-  describe "#mobile_stylesheet_media" do
+  describe "#helper.mobile_stylesheet_media" do
     def mobile_cookie(value=nil)
       cookie_name = ApplicationController::MOBILE_COOKIE_NAME
       if value
-        cookies[cookie_name] = value
+        @request.cookies[cookie_name] = value
       end
-      return request.cookies[cookie_name]
+      return @request.cookies[cookie_name]
     end
 
     before :each do
-      cookies.delete(:mobile)
+      @request.cookies.delete(:mobile)
     end
 
     after :each do
-      cookies.delete(:mobile)
+      @request.cookies.delete(:mobile)
     end
 
     it "should use default media if no overrides in params or cookies were specified" do
-      mobile_stylesheet_media("hello").should == "hello"
+      helper.mobile_stylesheet_media("hello").should == "hello"
     end
 
     it "should force rendering of mobile site if given a param of '1' and save it as cookie" do
-      params[:mobile] = "1"
+      controller.params[:mobile] = "1"
 
-      mobile_stylesheet_media("hello").should == :all
+      helper.mobile_stylesheet_media("hello").should == :all
 
       mobile_cookie.should == "1"
     end
 
     it "should force rendering of non-mobile site if given a param of '0' and save it as cookie" do
-      params[:mobile] = "0"
+      controller.params[:mobile] = "0"
 
-      mobile_stylesheet_media("hello").should == false
+      helper.mobile_stylesheet_media("hello").should == false
 
       mobile_cookie.should == "0"
     end
 
     it "should use default media if given a param of '' and clear :mobile cookie" do
       mobile_cookie "1"
-      params[:mobile] = "-1"
+      controller.params[:mobile] = "-1"
 
-      mobile_stylesheet_media("hello").should == "hello"
+      helper.mobile_stylesheet_media("hello").should == "hello"
 
       mobile_cookie.should be_nil
     end
@@ -69,7 +69,7 @@ describe ApplicationHelper do
     it "should use mobile rendering if cookie's mobile preference is set to '1'" do
       mobile_cookie "1"
 
-      mobile_stylesheet_media("hello").should == :all
+      helper.mobile_stylesheet_media("hello").should == :all
 
       mobile_cookie.should == "1"
     end
@@ -77,7 +77,7 @@ describe ApplicationHelper do
     it "should use non-mobile rendering if cookie's mobile preference is set to '0'" do
       mobile_cookie "0"
 
-      mobile_stylesheet_media("hello").should == false
+      helper.mobile_stylesheet_media("hello").should == false
 
       mobile_cookie.should == "0"
     end

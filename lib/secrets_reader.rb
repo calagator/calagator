@@ -33,7 +33,7 @@ class SecretsReader
 
     normal_file = "config/secrets.yml"
     sample_file = "config/secrets.yml.sample"
-    rails_root = defined?(RAILS_ROOT) ? RAILS_ROOT : File.dirname(File.dirname(__FILE__))
+    rails_root = defined?(Rails.root) ? Rails.root : File.dirname(File.dirname(__FILE__))
 
     message = "** SecretsReader - "
     error = false
@@ -51,8 +51,8 @@ class SecretsReader
 
     unless silent
       puts message if error
-      if defined?(RAILS_DEFAULT_LOGGER)
-        RAILS_DEFAULT_LOGGER.info(message)
+      if !Rails.logger.nil?
+        Rails.logger.info(message)
       end
     end
 

@@ -54,7 +54,7 @@ module ValidatesBlacklistOnMixin
     # will be used.
     def _get_blacklist_patterns_from(filename=nil)
       filename ||= "blacklist.txt"
-      filename = "#{RAILS_ROOT}/config/#{filename}" unless filename.match(/[\/\\]/)
+      filename = Rails.root.join('config',filename) unless filename.match(/[\/\\]/)
       return File.read(filename).map{|line| Regexp.new(line.strip, Regexp::IGNORECASE)}
     end
   end

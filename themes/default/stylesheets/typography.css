@@ -28,7 +28,7 @@ body {
 h1,h2,h3,h4,h5,h6 { font-weight: normal;  }
 
 /* h2 { font-size: 3em; line-height: 1; margin-bottom: 0.5em; } */ 
-h1 { font-size: 1.7em; margin-bottom: 0.75em; font-weight: bold; }
+h1, form.formtastic fieldset legend { font-size: 1.7em; margin-bottom: 0.75em; font-weight: bold; }
 h2 { font-size: 1.5em; line-height: 1; margin-bottom: .5em; }
 h3 { font-size: 1.2em; line-height: 1.25; margin-bottom: 1.25em; font-weight: bold}
 h4 { font-size: 1em; font-weight: bold; margin-bottom: .5em; }

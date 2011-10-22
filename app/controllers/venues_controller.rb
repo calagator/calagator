@@ -15,23 +15,26 @@ class VenuesController < ApplicationController
       scoped_venues = scoped_venues.in_business
     end
 
+    # Support old ajax autocomplete parameter name
+    params[:term] = params[:val] if params[:val]
+
     @tag = nil
     if params[:tag].present? # searching by tag
       @tag = params[:tag]
       @venues = scoped_venues.tagged_with(@tag)
-    elsif params.has_key?(:query) || params.has_key?(:val) || params[:all] == '1' # searching by query
+    elsif params.has_key?(:query) || params.has_key?(:term) || params[:all] == '1' # searching by query
       scoped_venues = scoped_venues.with_public_wifi if params[:wifi]
 
-      if params[:val].present? # for the ajax autocomplete widget
-        conditions = ["title LIKE :query", {:query => "%#{params[:val]}%"}]
+      if params[:term].present? # for the ajax autocomplete widget
+        conditions = ["title LIKE :query", {:query => "%#{params[:term]}%"}]
       elsif params[:query].present?
         conditions = ["title LIKE :query OR description LIKE :query", {:query => "%#{params[:query]}%"}]
       end
 
-      @venues = scoped_venues.find(:all, :order => 'lower(title)', :conditions => conditions)
+      @venues = scoped_venues.order('lower(title)').where(conditions)
     else # default view
-      @most_active_venues = scoped_venues.find(:all, :limit => 10, :order => 'events_count DESC')
-      @newest_venues = scoped_venues.find(:all, :limit => 10, :order => 'created_at DESC')
+      @most_active_venues = scoped_venues.limit(10).order('events_count DESC')
+      @newest_venues = scoped_venues.limit(10).order('created_at DESC')
     end
 
     @page_title = "Venues"
@@ -57,13 +60,13 @@ class VenuesController < ApplicationController
       @venue = Venue.find(params[:id], :include => :source)
     rescue ActiveRecord::RecordNotFound => e
       flash[:failure] = e.to_s
-      return redirect_to(:action => :index)
+      return redirect_to(venues_path)
     end
 
     return redirect_to(venue_url(@venue.duplicate_of)) if @venue.duplicate?
 
     @page_title = @venue.title
-    @events = @venue.find_future_events
+    @events = @venue.events.future.non_duplicates
 
     respond_to do |format|
       format.html # show.html.erb
@@ -102,7 +105,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       if !evil_robot && @venue.save
         flash[:success] = 'Venue was successfully created.'
-        format.html { redirect_to(@venue) }
+        format.html { redirect_to( venue_path(@venue) ) }
         format.xml  { render :xml => @venue, :status => :created, :location => @venue }
       else
         format.html { render :action => "new" }
@@ -128,7 +131,7 @@ class VenuesController < ApplicationController
           if(!params[:from_event].blank?)
             redirect_to(event_url(params[:from_event]))
           else
-            redirect_to(@venue)
+            redirect_to( venue_path(@venue) )
           end
           }
         format.xml  { head :ok }
@@ -149,7 +152,7 @@ class VenuesController < ApplicationController
       respond_to do |format|
         format.html {
           flash[:failure] = message
-          redirect_to(@venue)
+          redirect_to( venue_path(@venue) )
         }
         format.xml {
           render :xml => message, :status => :unprocessable_entity
@@ -158,10 +161,7 @@ class VenuesController < ApplicationController
     else
       @venue.destroy
       respond_to do |format|
-        format.html {
-          flash[:success] = "Destroyed venue."
-          redirect_to(venues_url)
-        }
+        format.html { redirect_to(venues_path, :flash => {:success => "\"#{@venue.title}\" has been deleted"}) }
         format.xml { head :ok }
       end
     end

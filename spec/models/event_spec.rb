@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe Event do
   def valid_event_attributes
@@ -61,16 +61,7 @@ describe Event do
     end
 
     it "should be taggable" do
-      Tag # need to reference Tag class in order to load it.
-      @event.tag_list.should == ""
-    end
-
-    it "should tag itself if it is an extant record" do
-      # On next line, please retain the space between the "?" and ")";
-      # it solves a fold issue in the SciTE text editor
-      @event.stub!(:new_record? ).and_return(false)
-      @event.should_receive(:tag_with).with(@tags).and_return(@event)
-      @event.tag_list = @tags
+      @event.tag_list.should == []
     end
 
     it "should just cache tagging if it is a new record" do
@@ -78,14 +69,7 @@ describe Event do
       @event.should_not_receive(:tag_with)
       @event.new_record?.should == true
       @event.tag_list = @tags
-      @event.tag_list.should == @tags
-    end
-
-    it "should tag itself when saved for the first time if there are cached tags" do
-      @event.new_record?.should == true
-      @event.should_receive(:tag_with).with(@tags).and_return(@event)
-      @event.tag_list = @tags
-      @event.save
+      @event.tag_list.to_s.should == @tags
     end
 
     it "should use tags with punctuation" do
@@ -94,7 +78,7 @@ describe Event do
       @event.save
 
       @event.reload
-      @event.tags.map(&:name).should == tags
+      @event.tags.map(&:name).sort.should == tags.sort
     end
 
     it "should not interpret numeric tags as IDs" do
@@ -189,7 +173,7 @@ describe Event do
 
   describe "when finding duplicates by type" do
     def assert_default_find_duplicates_by_type(type)
-      Event.should_receive(:find_future_events).and_return(42)
+      Event.should_receive(:future).and_return(42)
       Event.find_duplicates_by_type(type).should == { [] => 42 }
     end
 
@@ -324,7 +308,7 @@ describe Event do
         :start_time => @yesterday,
         :end_time => @today_midnight,
         :venue_id => @this_venue.id)
-      @future_events_for_this_venue = @this_venue.find_future_events
+      @future_events_for_this_venue = @this_venue.events.future
     end
 
     describe "for overview" do
@@ -382,7 +366,7 @@ describe Event do
 
     describe "for future events" do
       before(:each) do
-        @future_events = Event.find_future_events
+        @future_events = Event.future
       end
 
       it "should include events that started earlier today" do
@@ -394,7 +378,7 @@ describe Event do
       end
 
       it "should include events that started before today and ended after today" do
-        events = Event.find_future_events("start_time")
+        events = Event.future
         events.should include(@started_before_today_and_ends_after_today)
       end
 
@@ -450,22 +434,22 @@ describe Event do
 
     describe "for date range" do
       it "should include events that started earlier today" do
-        events = Event.find_by_dates(@today_midnight, @tomorrow, order = "start_time")
+        events = Event.within_dates(@today_midnight, @tomorrow)
         events.should include(@started_midnight_and_continuing_after)
       end
 
       it "should include events that started before today and end after today" do
-        events = Event.find_by_dates(@today_midnight, @tomorrow, order = "start_time")
+        events = Event.within_dates(@today_midnight, @tomorrow)
         events.should include(@started_before_today_and_ends_after_today)
       end
 
       it "should not include past events" do
-        events = Event.find_by_dates(@today_midnight, @tomorrow, order = "start_time")
+        events = Event.within_dates(@today_midnight, @tomorrow)
         events.should_not include(@started_and_ended_yesterday)
       end
 
       it "should exclude events that start after the end of the range" do
-        events = Event.find_by_dates(@tomorrow, @tomorrow, order = "start_time")
+        events = Event.within_dates(@tomorrow, @tomorrow)
         events.should_not include(@started_today_and_no_end_time)
       end
     end
@@ -559,7 +543,7 @@ describe Event do
     end
 
     it "should raise an exception if associated with an unknown type" do
-      lambda { @event.associate_with_venue(mock_model(SourceParser)) }.should raise_error(TypeError)
+      lambda { @event.associate_with_venue(double('SourceParser')) }.should raise_error(TypeError)
     end
 
     describe "and searching" do
@@ -585,41 +569,48 @@ describe Event do
   end
 
   describe "with finding duplicates" do
+    before do
+      @non_duplicate_event = Factory(:event)
+      @duplicate_event = Factory(:duplicate_event)
+      @events = [@non_duplicate_event, @duplicate_event]
+    end
+
     it "should find all events with duplicate titles" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
-      Event.find(:duplicates, :by => :title )
+      Event.find_duplicates_by(:title )
     end
 
     it "should find all events with duplicate titles and urls" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-      Event.find(:duplicates, :by => [:title,:url])
+      Event.find_duplicates_by([:title,:url])
     end
 
     it "should find all events that have not been marked as duplicate" do
-      Event.should_receive(:find_without_duplicate_support).with(:all, {})
-      Event.find(:non_duplicates)
+      non_duplicates = Event.non_duplicates
+      non_duplicates.should include @non_duplicate_event
+      non_duplicates.should_not include @duplicate_event
     end
 
     it "should find all events that have been marked as duplicate" do
-      Event.should_receive(:find_without_duplicate_support).with(:all, {})
-      Event.find(:marked_duplicates)
+      duplicates = Event.marked_duplicates
+      duplicates.should include @duplicate_event
+      duplicates.should_not include @non_duplicate_event
     end
-
   end
 
   describe "with finding duplicates (integration test)" do
     fixtures :all
 
     before(:each) do
-      @event = events(:calagator_codesprint)
+      @event = Factory(:event)
     end
 
     # Find duplicates, create another event with the given attributes, and find duplicates again
     # TODO Refactor #find_duplicates_create_a_clone_and_find_again and its uses into something simpler, like #assert_duplicate_count.
     def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes, create_class = Event)
-      before_results = create_class.find(:duplicates, :by => find_duplicates_arguments)
+      before_results = create_class.find_duplicates_by( find_duplicates_arguments)
       clone = create_class.create!(clone_attributes)
-      after_results = Event.find(:duplicates, :by => find_duplicates_arguments)
+      after_results = Event.find_duplicates_by(find_duplicates_arguments)
       return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
     end
 
@@ -633,7 +624,7 @@ describe Event do
       #pre, post = find_duplicates_create_a_clone_and_find_again(:any, {:title => @event.title, :start_time => @event.start_time} )
       #post.size.should == pre.size + 2
       dup_title = Event.create!({:title => @event.title, :start_time => @event.start_time + 1.minute})
-      Event.find(:duplicates, :by => :any).should include(dup_title)
+      Event.find_duplicates_by(:any).should include(dup_title)
     end
 
     it "should not find duplicate title by url" do
@@ -663,10 +654,8 @@ describe Event do
   end
 
   describe "when squashing duplicates (integration test)" do
-    fixtures :all
-
     before(:each) do
-      @event = events(:calagator_codesprint)
+      @event = Factory(:event)
     end
 
     it "should consolidate associations, and merge tags" do
@@ -679,7 +668,7 @@ describe Event do
       clone.should_not be_duplicate
 
       Event.squash(:master => @event, :duplicates => clone)
-      @event.tag_list.should == "first, second, third" # master now contains all three tags
+      @event.tag_list.to_a.sort.should == %w(first second third) # master now contains all three tags
       clone.duplicate_of.should == @event
     end
   end
@@ -858,7 +847,7 @@ describe Event do
     it "should include tags in the description" do
       event = events(:tomorrow)
       event.tag_list = "tags, folksonomy, categorization"
-      ical_roundtrip(event).description.should include event.tag_list
+      ical_roundtrip(event).description.should include event.tag_list.to_s
     end
 
     it "should leave URL blank if no URL is provided" do

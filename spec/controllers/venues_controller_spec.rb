@@ -1,7 +1,7 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe VenuesController do
-  integrate_views
+  render_views
   fixtures :all
 
   #Delete this example and add some real ones
@@ -29,7 +29,7 @@ describe VenuesController do
     get 'duplicates', :type => 'omgwtfbbq'
 
     response.should be_success
-    response.should have_tag('.failure', :text => /omgwtfbbq/)
+    response.should have_selector('.failure', :content => 'omgwtfbbq')
   end
   
   describe "when creating venues" do
@@ -128,16 +128,16 @@ describe VenuesController do
 
       describe "when searching by title (for the ajax selector)" do
         it "should find venues by title" do
-          get :index, :val => 'Open Town'
+          get :index, :term => 'Open Town'
           assigns[:venues].should include @open_venue
           assigns[:venues].should_not include @wifi_venue
         end
         it "should NOT find venues by description" do
-          get :index, :val => 'baz'
+          get :index, :term => 'baz'
           assigns[:venues].should_not include @open_venue
         end
         it "should NOT find closed venues" do
-          get :index, :val => 'closed'
+          get :index, :term => 'closed'
           assigns[:venues].should_not include @closed_venue
         end
       end
@@ -219,7 +219,7 @@ describe VenuesController do
       end
 
       describe "and rendering XML" do
-        integrate_views
+        render_views
 
         before do
           delete :destroy, :id => @venue.id, :format => "xml"

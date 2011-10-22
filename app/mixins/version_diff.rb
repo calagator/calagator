@@ -24,8 +24,8 @@ module VersionDiff
     end
     
     raise(ArgumentError, "version cannot be 0") if n1 == 0 || n2 == 0
-    v1 = self.versions.find(:first, :conditions => {:version => n1})
-    v2 = self.versions.find(:first, :conditions => {:version => n2})
+    v1 = self.versions.where({:version => n1}).first
+    v2 = self.versions.where({:version => n2}).first
     
     v1.attributes = v2.attributes
     changed_fields = v1.changes

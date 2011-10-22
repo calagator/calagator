@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 include EventsHelper
 
 describe EventsHelper do
@@ -15,8 +15,8 @@ describe EventsHelper do
       helper.events_sort_label(:score).should =~ / by .+#{Event::SORTING_LABELS['score']}.+/
     end
 
-it "should return special string when using a tag" do
-      assigns[:tag] = Tag.new
+    it "should return special string when using a tag" do
+      assign :tag, ActsAsTaggableOn::Tag.new
       helper.events_sort_label(nil).should =~ / by .+#{Event::SORTING_LABELS['default']}.+/
     end
   end
@@ -42,13 +42,15 @@ it "should return special string when using a tag" do
       return Regexp.escape(CGI.escape(string))
     end
 
-    shared_examples_for "exported event" do
+    shared_context "exported event setup" do
       before do
         @venue = Venue.create!(:title => "My venue", :address => "1930 SW 4th Ave, Portland, Oregon 97201")
         @event = Event.create!(:title => "My event", :start_time => Time.now - 1.hour, :end_time => Time.now, :venue => @venue, :description => event_description)
         @export = helper.google_event_export_link(@event)
       end
+    end
 
+    shared_examples_for "exported event" do
       it "should have title" do
         @export.should =~ /\&text=#{escape(@event.title)}/
       end
@@ -68,6 +70,7 @@ it "should return special string when using a tag" do
 
     describe "an event's text doesn't need truncation" do
       let(:event_description) { "My event description." }
+      include_context "exported event setup"
 
       it_should_behave_like "exported event"
 
@@ -78,6 +81,7 @@ it "should return special string when using a tag" do
 
     describe "an event's text needs truncation" do
       let(:event_description) { "My event description. " * 100 }
+      include_context "exported event setup"
 
       it_should_behave_like "exported event"
 

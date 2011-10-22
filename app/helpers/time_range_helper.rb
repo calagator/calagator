@@ -1,6 +1,6 @@
 module TimeRangeHelper
   def normalize_time(start_time, end_time=nil, opts=nil)
-    TimeRange.new(start_time, end_time, opts).to_s
+    TimeRange.new(start_time, end_time, opts).to_s.html_safe
     # datetime_format(time,time.min == 0 ? '%I%p' : '%I:%M%p').downcase
   end  
 end
@@ -98,7 +98,7 @@ class TimeRange
       results << format_details_by_list(end_details, end_format_list)
       results << %Q|</abbr>| if @format == :hcal
     end
-    results.to_s
+    results.to_s.html_safe
   end
 
 protected

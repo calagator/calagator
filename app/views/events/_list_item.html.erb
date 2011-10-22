@@ -14,11 +14,11 @@ show_year ||= false
     <% end %>
   </div>
   <div class='list_content'>
-    <a class='summary' href='<%= url_for event_url(event) %>'><%= cleanse event.title.strip_html %></a>
+    <a class='summary' href='<%= url_for event_url(event) %>'><%= event.title %></a>
     <div>
     <%= normalize_time(event, :context => event.start_time.to_date) -%>
     <% if event.venue && !event.venue.title.blank? %>
-      <br/><a class='location' href='<%= url_for venue_url(event.venue) %>'><%= cleanse event.venue.title.strip_html -%></a>
+      <br/><a class='location' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
     <% end -%>
     </div>
     <% if !event.description.blank? %>

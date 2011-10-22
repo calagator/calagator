@@ -1,13 +1,13 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe EventsController, "when displaying index" do
-  integrate_views
+  render_views
   fixtures :all
 
   it "should produce HTML" do
     get :index, :format => "html"
 
-    response.should have_tag("table.event_table")
+    response.should have_selector("table.event_table")
   end
 
   describe "in XML format" do
@@ -71,7 +71,7 @@ describe EventsController, "when displaying index" do
     it "should produce ICS" do
       post :index, :format => "ics"
 
-      response.body.should have_text(/BEGIN:VEVENT/)
+      response.body.should =~ /BEGIN:VEVENT/
     end
 
     it "should render all future events" do
@@ -104,25 +104,25 @@ describe EventsController, "when displaying index" do
         it "should use the default if given a malformed parameter" do
           get :index, :date => "omgkittens"
           assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
-          response.should have_tag(".flash_failure", /malformed.+#{@date_kind}/)
+          response.should have_selector(".flash_failure", :content => 'malformed')
         end
 
         it "should use the default if given a missing parameter" do
           get :index, :date => {:foo => "bar"}
           assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
-          response.should have_tag(".flash_failure", /missing.+#{@date_kind}/)
+          response.should have_selector(".flash_failure", :content => 'missing')
         end
 
         it "should use the default if given an empty parameter" do
           get :index, :date => {@date_kind => ""}
           assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
-          response.should have_tag(".flash_failure", /empty.+#{@date_kind}/)
+          response.should have_selector(".flash_failure", :content => 'empty')
         end
 
         it "should use the default if given an invalid parameter" do
           get :index, :date => {@date_kind => "omgkittens"}
           assigns["#{@date_kind}_date"].should == controller.send("default_#{@date_kind}_date")
-          response.should have_tag(".flash_failure", /invalid.+#{@date_kind}/)
+          response.should have_selector(".flash_failure", :content => 'invalid')
         end
 
         it "should use the value if valid" do
@@ -138,31 +138,31 @@ describe EventsController, "when displaying index" do
       matching = [
         Event.create!(
           :title => "matching1",
-          :start_time => Time.parse("2010-01-16 00:00"),
-          :end_time => Time.parse("2010-01-16 01:00")
+          :start_time => Time.zone.parse("2010-01-16 00:00"),
+          :end_time => Time.zone.parse("2010-01-16 01:00")
         ),
         Event.create!(:title => "matching2",
-          :start_time => Time.parse("2010-01-16 23:00"),
-          :end_time => Time.parse("2010-01-17 00:00")
+          :start_time => Time.zone.parse("2010-01-16 23:00"),
+          :end_time => Time.zone.parse("2010-01-17 00:00")
         ),
       ]
 
       non_matching = [
         Event.create!(
           :title => "nonmatchingbefore",
-          :start_time => Time.parse("2010-01-15 23:00"),
-          :end_time => Time.parse("2010-01-15 23:59")
+          :start_time => Time.zone.parse("2010-01-15 23:00"),
+          :end_time => Time.zone.parse("2010-01-15 23:59")
         ),
         Event.create!(
           :title => "nonmatchingafter",
-          :start_time => Time.parse("2010-01-17 00:01"),
-          :end_time => Time.parse("2010-01-17 01:00")
+          :start_time => Time.zone.parse("2010-01-17 00:01"),
+          :end_time => Time.zone.parse("2010-01-17 01:00")
         ),
       ]
 
       # When
       get :index, :date => {:start => "2010-01-16", :end => "2010-01-16"}
-      results = assigns[:events_deferred].call
+      results = assigns[:events]
 
       # Then
       results.size.should == 2
@@ -223,7 +223,7 @@ describe EventsController, "when creating or updating events" do
   end
 
   describe "when creating events" do
-    integrate_views
+    render_views
 
     it "should display form for creating new event" do
       get "new"
@@ -319,7 +319,7 @@ describe EventsController, "when creating or updating events" do
                        :preview => "Preview",
                        :venue_name => "This venue had better not exist"
       response.should render_template(:new)
-      response.should have_tag('#event_preview')
+      response.should have_selector('#event_preview')
       event.should be_valid
     end
   end
@@ -467,7 +467,7 @@ describe EventsController, "when creating or updating events" do
 end
 
 describe EventsController, "managing duplicates" do
-  integrate_views
+  render_views
   fixtures :all
 
   it "should find new duplicates and not old duplicates" do
@@ -503,7 +503,7 @@ describe EventsController, "managing duplicates" do
     get 'duplicates', :type => 'omgwtfbbq'
 
     response.should be_success
-    response.should have_tag('.failure', :text => /omgwtfbbq/)
+    response.should have_selector('.failure', :content => 'omgwtfbbq')
   end
 
 end
@@ -543,7 +543,7 @@ describe EventsController, "when searching" do
   end
 
   describe "when returning results" do
-    integrate_views
+    render_views
     fixtures :all
 
     before do
@@ -557,7 +557,7 @@ describe EventsController, "when searching" do
     it "should produce HTML" do
       post :search, :query => "myquery", :format => "html"
 
-      response.should have_tag("table.event_table")
+      response.should have_selector("table.event_table")
       assigns[:events].should == @results[:past] + @results[:current]
     end
 
@@ -621,7 +621,7 @@ describe EventsController, "when searching" do
       it "should produce ICS" do
         post :search, :query => "myquery", :format => "ics"
 
-        response.body.should have_text(/BEGIN:VEVENT/)
+        response.body.should =~ /BEGIN:VEVENT/
       end
 
       it "should produce events matching the query" do
@@ -637,7 +637,7 @@ end
 describe EventsController, "when deleting" do
 
   it "should destroy events" do
-    event = mock_model(Event)
+    event = mock_model(Event, :title => "Soon to be gone")
     event.should_receive(:destroy)
     Event.should_receive(:find).and_return(event)
 
@@ -648,7 +648,7 @@ describe EventsController, "when deleting" do
 end
 
 describe EventsController, "when running integration test" do
-  integrate_views
+  render_views
   fixtures :all
 
   before(:each) do
@@ -683,6 +683,6 @@ describe EventsController, "when running integration test" do
 
     flash[:success].should_not be_blank
     event = assigns[:event]
-    event.tag_list.should == "bar, baz, foo"
+    event.tag_list.to_a.sort.should == %w(bar baz foo)
   end
 end

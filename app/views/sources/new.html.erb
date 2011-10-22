@@ -1,35 +1,32 @@
 <%= render :partial => 'site/appropriateness_message' %>
 
-<% form_for(@source, :html => {:id => "source_form", :class => "standard_form"}, :url => { :action => :import }) do |f| %>
-<fieldset>
-  <legend>Import a source</legend>
-  <div>
-    Import one or more events from a feed or web page in one of the following formats:
-    <%= SourceParser.labels.to_sentence %>
-  </div>
-  <div>
-    <%= f.label :url, "URL" %>
-    <%= f.text_field :url, :size => 60, :value => params[:url] %>
+<%= semantic_form_for(@source, :html => {:id => 'source_form', :class => 'standard_form'}, :url => { :action => :import }) do |f| %>
+  <%= f.inputs :name => "Import a source" do %>
+    <li class='input'>
+      <p class='inline-hints'>
+        Import one or more events from a feed or web page in one of the following formats:
+        <%= SourceParser.labels.to_sentence %>
+      </p>
+    </li>
+    <%= f.input :url, :label => "URL" %>
     <% focus_on '#source_url' %>
-  </div>
-  <div>
+
     <%# FIXME Igal has disabled reimport UI because people are adding almost all new events with re-import, which means that they're almost all generating duplicates and I'm completely overwhelmed with having to use the horrible squashing UI to deal with them. %>
     <% if false %>
-    <%= f.label :reimport, "Re-import?" %>
-    <%= f.check_box :reimport %>
-    <span class="help" style="left-padding: 1em; left-margin: 1em">
-      (Regularly check this source and import new events automatically?)
-    </span>
+      <%= f.input :reimport, :label => "Re-import?", :hint => "(Regularly check this source and import new events automatically?)" %>
     <% end %>
-  </div>
-  <div class='no_label'>
-        <%= f.submit "Import" %>
-  </div>
-  <div class='help'>
-    <p>
-    <b>Bookmarklet</b>: Import pages faster by adding the following bookmark to your browser's bookmarks and click it when you're visiting a webpage that contains events that you'd like to import:
-    <%= link_to "Add to #{SETTINGS.name}", "javascript:d=document;q=(d.location.href);w=window;location.href='#{new_source_url}?url='+escape(q);" %>
-    </p>
-  </div>
-</fieldset>
+  <% end %>
+
+  <%= f.buttons do %>
+    <%= f.commit_button "Import" %>
+  <% end %>
+
+  <%= f.inputs do %>
+    <li class='input'>
+      <p class='inline-hints'>
+      <b>Bookmarklet</b>: Import pages faster by adding the following bookmark to your browser's bookmarks and click it when you're visiting a webpage that contains events that you'd like to import:
+      <%= link_to "Add to #{SETTINGS.name}", "javascript:d=document;q=(d.location.href);w=window;location.href='#{new_source_url}?url='+escape(q);" %>
+      </p>
+    </li>
+  <% end %>
 <% end %>

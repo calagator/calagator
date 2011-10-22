@@ -1,19 +1,22 @@
 <% tabindex_on '#search_field' %>
 
 <% cache(CacheObserver.daily_key_for("site_index", request)) do %>
-<% @times_to_events ||= @times_to_events_deferred.call %>
 <a href="#" id="homepage_sidebar_toggle" class="expander_toggle">Hi there. Learn about this site and how to use it...</a>
 <div id="homepage_sidebar">
   <div id="project_description">
     <%= render :partial => "description" %>
   </div>
 
-  <div id="tagcloud">
-    <h2>Popular tags</h2>
-    <%= @tagcloud_items_deferred.call.map{ |item| 
+  <% tags =
+        @tagcloud_items_deferred.call.map{ |item|
           tag_link(:event, item[:tag], "tagcloud_level_#{item[:level]}") 
-        }.join('<span class="spacer"> &middot; </span>') -%>
-  </div>
+        }.join('<span class="spacer"> &middot; </span>').html_safe -%>
+  <% if tags.present? %>
+    <div id="tagcloud">
+      <h2>Popular tags</h2>
+      <%= tags -%>
+    </div>
+  <% end %>
 </div>
 
 <div id="whats_happening">
@@ -29,7 +32,7 @@
     <%= render 'events/list', :events => @times_to_events[:later] %>
   </div>
   <div id='recently_added_events'>
-    <h3><%= link_to("View future events &raquo;", events_path(:anchor => "event-#{@times_to_events[:more].id}")) if @times_to_events[:more] %></h3>
+    <h3><%= link_to("View future events &raquo;".html_safe, events_path(:anchor => "event-#{@times_to_events[:more].id}")) if @times_to_events[:more] %></h3>
   </div>
 </div>
 <% end %>

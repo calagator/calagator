@@ -37,7 +37,7 @@ Use Vagrant by issuing the commands below. The `local%` and `virtual%` in the co
 **Run** the application on the virtual machine, it will be accessible on [http://localhost:8000/](http://localhost:8000/):
 
     local% vagrant ssh
-    virtual% ./script/server
+    virtual% rails server
 
 **Test** the application within the virtual machine:
 

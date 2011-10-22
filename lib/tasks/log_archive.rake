@@ -4,7 +4,7 @@ task "log:archive" do
   # to append to those previously-opened filehandles. The following approach
   # keeps those files intact and simply truncates them.
   require 'date'
-  log_dir = File.join(RAILS_ROOT, "log")
+  log_dir = Rails.root.join("log")
   archive_dir = File.join(log_dir, "archive")
   timestamp = DateTime.now.strftime
 
