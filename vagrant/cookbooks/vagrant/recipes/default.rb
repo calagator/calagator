@@ -39,6 +39,23 @@ for name in %w[nfs-common git-core screen tmux elinks build-essential libcurl4-o
   package name
 end
 
+# Install PostgreSQL
+for name in %w[postgresql libpq-dev]
+  package name
+end
+
+# Fix PostgreSQL encoding -- WARNING: this drops all data in all databases if they're not using UTF8
+execute "fix-postgresql-encoding" do
+  command %{pg_dropcluster --stop 8.4 main; pg_createcluster --start --locale=en_US.UTF-8 8.4 main}
+  not_if  %{su postgres -l -c 'psql -l | egrep "template0.+UTF8"'}
+end
+
+# Create PostgreSQL user
+execute "create-postgresql-user" do
+  command %{su postgres -l -c 'createuser --superuser #{USER}'}
+  not_if  %{su postgres -l -c 'psql -c "\\du" | grep #{USER}'}
+end
+
 # Install gems
 gem_package "bundler"
 gem_package "rake" do
@@ -57,11 +74,11 @@ end
 # Install bundle
 execute "install-bundle" do
   cwd APPDIR
-  command "su vagrant -l -c 'bundle check || bundle --local || bundle'"
+  command "su #{USER} -l -c 'bundle check || bundle --local || bundle'"
 end
 
 # Setup database
 execute "setup-db" do
   cwd APPDIR
-  command "su vagrant -l -c 'bundle exec rake db:create:all db:migrate db:test:prepare'"
+  command "su #{USER} -l -c 'bundle exec rake db:create:all db:migrate db:test:prepare'"
 end
