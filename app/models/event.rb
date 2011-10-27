@@ -439,7 +439,7 @@ EOF
   end
 
   # Array of attributes that should be cloned by #to_clone.
-  CLONE_ATTRIBUTES = [:title, :description, :venue_id, :url, :tag_list]
+  CLONE_ATTRIBUTES = [:title, :description, :venue_id, :url, :tag_list, :venue_details]
 
   # Return a new record with fields selectively copied from the original, and
   # the start_time and end_time adjusted so that their date is set to today and
