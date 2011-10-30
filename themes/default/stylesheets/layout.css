@@ -497,45 +497,6 @@ ul.event_list .list_date {
 /* @group Forms (imported from old UI)
 ----------------------------------------*/
 
-fieldset label {
-  display: block;
-  float: left;
-  width: 7em;
-  text-align: right;
-  margin-right: 1em;
-  clear: left;
-}
-
-fieldset > div, #form-contents > div {
-  clear: both;
-  padding-top: 1em;
-}
-
-#form-contents {
-  clear: none;
-}
-
-label.checkbox {
-  clear: none;
-  text-align: left;
-}
-
-form div.checkbox {
-  padding-left: 8em
-}
-
-form div.checkbox label {
-  clear: none;
-  text-align: left;
-  float: none;
-  font-weight: normal;
-  width: auto;
-}
-
-fieldset input {
-  float: left;
-}
-
 fieldset .calendar_date_select {
   border: 0;
   width: 25em;
@@ -543,10 +504,6 @@ fieldset .calendar_date_select {
 
 fieldset .no_label, fieldset .help {
   padding-left: 8em;
-}
-
-fieldset .help {
-  color: #999;
 }
 
 /* @end */

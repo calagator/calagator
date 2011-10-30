@@ -43,7 +43,7 @@
                 <td>
                   <%= link_to(venue.title, venue_url(venue)) %>
                   <% if venue.has_full_address? %>
-                    at <%=h venue.full_address %>
+                    at <%= venue.full_address %>
                   <% end %>
                 </td>
               </tr>

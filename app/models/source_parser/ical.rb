@@ -76,7 +76,15 @@ class SourceParser # :nodoc:
       end
 
       return [].tap do |events|
-        content_calendars = RiCal.parse_string(content)
+        begin
+          content_calendars = RiCal.parse_string(content)
+        rescue Exception => e
+          if e.message =~ /Invalid icalendar file/
+            return false # Invalid data, give up.
+          else
+            raise e # Unknown error, we should care.
+          end
+        end
         content_calendars.each do |content_calendar|
           content_calendar.events.each_with_index do |component, index|
             next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
@@ -102,7 +110,7 @@ class SourceParser # :nodoc:
                   venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
                 rescue Exception => e
                   # Ignore
-                  RAILS_DEFAULT_LOGGER.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
+                  Rails.logger.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
                   nil
                 end
               end
@@ -173,7 +181,9 @@ class SourceParser # :nodoc:
     # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
     def self.hash_from_vcard_lines(vcard_lines)
       return {}.tap do |vcard_hash|
-        vcard_lines.each do |vcard_line|
+        # Turn a String-like object into an Enumerable.
+        lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
+        lines.each do |vcard_line|
           if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
             key = matcher[1]
             qualifier = matcher[2]

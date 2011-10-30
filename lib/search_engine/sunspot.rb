@@ -83,7 +83,7 @@ class SearchEngine::Sunspot < SearchEngine::Base
         end
 
         # Do this last to prevent Sunspot from taking over our ::search method.
-        unless RAILS_ENV == 'test'
+        unless Rails.env == 'test'
           # Why aren't these loaded by default!?
           include Sunspot::Rails::Searchable unless defined?(self.solr_search)
           Sunspot::Adapters::InstanceAdapter.register(Sunspot::Rails::Adapters::ActiveRecordInstanceAdapter, self)

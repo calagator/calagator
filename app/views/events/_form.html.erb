@@ -14,11 +14,7 @@
 
 <% content_for :javascript_insert do %>
   <%= javascript_include_tag \
-    'jquery.dimensions.min.js',
-    'jquery.ui.autocomplete.ext.js',
-    'jquery.ui.autocomplete.js',
     'date-functions.js',
-    'ui.datepicker.js',
     'jquery.timePicker.js'
   %>
   <script>
@@ -26,37 +22,27 @@
     $(document).ready(function(){
       
       // Initialize autocompletion for venues
-      $("input.autocomplete").autocomplete({
-        ajax: "/venues.js",
-        timeout: 200,
-        match: function(typed) { return this.title.match(new RegExp("^"+typed, "i")); },
-        insertText: function(venue) { return venue.title },
-        template:   function(venue) {
-          venue.short_address = (venue.street_address && venue.street_address.length > 0) ?
-            venue.street_address+", "+venue.locality+" "+venue.region :
-            venue.address;
-          return "<li><strong>"+venue.title+"</strong><br />"+venue.short_address+"</li>"
-        }
-      })
-      .bind("activate.autocomplete", function(e,venue) {
-        $("#event_venue_id").val(venue.id);
-        completed_title = venue.title;
-      })
-      .bind("cancel.autocomplete", function(e,venue) { 
-        $("#event_venue_id").val(''); 
-      })
-      .bind("change", function(e) {
-        if(completed_title != e.target.value) {
+      $("input.autocomplete").attr('autocomplete', 'off').autocomplete({
+        source: "/venues.js",
+        minLength: 2,
+        search: function(event, ui) {
+          //$("#event_venue_loading").show();
           $("#event_venue_id").val('');
+        },
+        select: function(event, ui) {
+          $('input.autocomplete').val( ui.item.title );
+          $("#event_venue_id").val( ui.item.id );
+
+          return false;
         }
-      })
-      .bind('autocomplete', function(e, value) {
-        $("#event_venue_loading").show();
-      })
-      .bind('updateList', function(e) {
-        $("#event_venue_loading").hide();
-      })
-      .attr('autocomplete', 'off');
+      }).data( "autocomplete" )._renderItem = function( ul, item ) {
+        var short_address = (item.street_address && item.street_address.length > 0)
+                              ? item.street_address+", "+item.locality+" "+item.region
+                              : item.address;
+        return $( "<li><a><strong>"+item.title+"</strong><br />"+short_address+"</a></li>" )
+                .data( "item.autocomplete", item )
+                .appendTo(ul);
+      };
       
       // Initialize date and time pickers
       $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
@@ -104,76 +90,53 @@
 </div>
 <% end -%>
 
-<% form_for(event, :html => {:id => "event_form", :class => "standard_form"}) do |f| %>
-  <fieldset>
-    <legend><% unless event.new_record? %>Editing: <em><%= event.title %></em><% end %></legend>
-    
-  <%= error_messages_for :event %>
-  <div>
-    <%= f.label :title, "Event Name" %>
-    <%= f.text_field :title %>
+<%= semantic_form_for(event, :html => {:id => 'event_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
+  <%= f.inputs :name => "#{'Editing: ' unless event.new_record?} <em>#{event.title}</em>".html_safe do %>
+    <%= f.input :title, :label => "Event Name" %>
     <% focus_on '#event_title' %>
-  </div>
-  <div>
-    <%= f.label :venue_id, "Venue" %>
-    <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !event.venue.nil? ? event.venue.title : params[:venue_name] %>
-    <%= hidden_field(:event, :venue_id, :value => (!event.venue.nil? ? event.venue.id : params[:event_venue_id])) %>
-    <%= image_tag "spinner.gif", :id=> "event_venue_loading", :style => "display: none; margin-left: 0.5em;" %>
-  </div>
-  <div class='help'>
-    Type the name of a venue to search. If it doesn't exist, we'll create it for you.
-  </div>
-
-  <div id="event_times">
-    <%= f.label :when, "When" %>
-    <% 
-      present = Time.now 
-      if event.new_record?
-        # Provide an initial default value for the start_time and end_time that's rounded to the upcoming hour.
-        event.start_time ||= present + (60.minutes - present.min.minutes) - present.sec
-        event.end_time   ||= present + (60.minutes - present.min.minutes) - present.sec + 1.hour
-      end
-    %>
-      <%= text_field_tag 'start_date', event.start_time ? event.start_time.to_date : present.to_date, :id => 'date_start', :class => 'date_picker' %>
-      <%= text_field_tag 'start_time', event.start_time.strftime('%I:%M %p'), :id => 'time_start', :class => 'time_picker' %>
-      <span class="to">to</span>
-      <%= text_field_tag 'end_time', event.end_time ? event.end_time.strftime('%I:%M %p') : nil, :id => 'time_end', :class => 'time_picker' %>
-      <%= text_field_tag 'end_date', event.end_time ? event.end_time.to_date : Time.now.to_date, :id => 'date_end', :class => 'date_picker' %>
-  </div>
-  <div>
-    <%= f.label :url, "Website" %>
-    <%= f.text_field :url %>
-  </div>
-
-  <div>
-    <%= f.label :description %>
-    <%= f.text_area :description %>
-    <div class='help'>
-      (HTML formatting allowed: <%= WhiteListHelper.tags.sort.join(', ') %>)
-    </div>
-  </div>
-
-  <div>
-    <%= f.label :venue_details %>
-    <%= f.text_area :venue_details, { :style => "height: 50px;" } %>
-    <div class='help'>
-      (Event-specific details like the room number, or who to call to be let into the building.)
-    </div>
-  </div>
-
-  <div>
-    <%= f.label :tag_list, "Tags" %>
-    <%= f.text_field :tag_list %>
-    <div class="clearfix"></div>
-    <div class="help">
-      (Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>plancast:plan=ABCD</code> to associate this with a particular <a href="http://plancast.com/">Plancast</a> event, or a tag like <code>epdx:group=1234</code> to associate the event with a particular <a href="http://epdx.org/">ePDX</a> group)
-    </div>
-  </div>
-
-  <div class='trap'>
-    <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
-    <%= text_field_tag 'trap_field', params[:trap_field] %>
-  </div>
-  <div class='no_label'><%= f.submit "Preview", :name => "preview" %> <%= f.submit(event.new_record? ? "Create" : "Update") %></div>
-  </fieldset>
+    <li class="string input required stringish" id="event_venue_title_input">
+      <%= f.label :venue_id, "Venue", :class => 'label' %>
+      <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !event.venue.nil? ? event.venue.title : params[:venue_name] %>
+      <%= hidden_field(:event, :venue_id, :value => (!event.venue.nil? ? event.venue.id : params[:event_venue_id])) %>
+      <%= image_tag "spinner.gif", :id=> "event_venue_loading", :style => "display: none; margin-left: 0.5em;" %>
+      <p class='inline-hints'>
+        Type the name of a venue to search. If it doesn't exist, we'll create it for you.
+      </p>
+    <li>
+    <li id="event_times" class='input'>
+      <%= f.label :when, "When", :class => 'label' %>
+      <%
+        present = Time.now
+        if event.new_record?
+          # Provide an initial default value for the start_time and end_time that's rounded to the upcoming hour.
+          event.start_time ||= present + (60.minutes - present.min.minutes) - present.sec
+          event.end_time   ||= present + (60.minutes - present.min.minutes) - present.sec + 1.hour
+        end
+      %>
+        <%= text_field_tag 'start_date', event.start_time ? event.start_time.to_date : present.to_date, :id => 'date_start', :class => 'date_picker' %>
+        <%= text_field_tag 'start_time', event.start_time.strftime('%I:%M %p'), :id => 'time_start', :class => 'time_picker' %>
+        <span class="to">to</span>
+        <%= text_field_tag 'end_time', event.end_time ? event.end_time.strftime('%I:%M %p') : nil, :id => 'time_end', :class => 'time_picker' %>
+        <%= text_field_tag 'end_date', event.end_time ? event.end_time.to_date : Time.now.to_date, :id => 'date_end', :class => 'date_picker' %>
+        <%= f.semantic_errors :start_date, :start_time, :end_date, :end_time %>
+    </li>
+    <%= f.input :url, :label => 'Website' %>
+    <%= f.input :description,
+                :input_html => {:rows => 12},
+                :hint => "(Format text using #{link_to("Markdown", "http://www.simpleeditions.com/59001/markdown-an-introduction", :target => "_blank")} and HTML)".html_safe %>
+    <%= f.input :venue_details, :required => false,
+                :input_html => {:rows => 4},
+                :hint => "(Event-specific details like the room number, or who to call to be let into the building.)" %>
+    <%= f.input :tag_list, :required => false,
+                :label => 'Tags',
+                :hint => "(Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>plancast:plan=ABCD</code> to associate this with a particular <a href='http://plancast.com/'>Plancast</a> event, or a tag like <code>epdx:group=1234</code> to associate the event with a particular <a href='http://epdx.org/'>ePDX</a> group)".html_safe %>
+    <li class='trap'>
+      <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
+      <%= text_field_tag 'trap_field', params[:trap_field] %>
+    </li>
+  <% end %>
+  <%= f.buttons do %>
+    <%= f.commit_button :label => "Preview", :button_html => {:name => 'preview'} %>
+    <%= f.commit_button %>
+  <% end %>
 <% end %>

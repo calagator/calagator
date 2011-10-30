@@ -24,7 +24,7 @@ class SearchEngine::ActsAsSolr < SearchEngine::Base
           ].map(&:to_sym)
         end
 
-        unless RAILS_ENV == 'test'
+        unless Rails.env == 'test'
           acts_as_solr :fields => self.solr_indexable_fields
         end
 

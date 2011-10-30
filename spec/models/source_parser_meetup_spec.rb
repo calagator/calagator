@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 describe SourceParser::Meetup do
   describe "with a meetup.com API key in secrets.yml" do
@@ -8,10 +8,8 @@ describe SourceParser::Meetup do
 
     before(:each) do
       content = read_sample('meetup.json')
-      HTTParty.should_receive(:get).and_return(Crack::JSON.parse(content))
-      @events = SourceParser::Meetup.to_abstract_events(:content => content,
-                                                         :url => 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/',
-                                                         :skip_old => false)
+      HTTParty.should_receive(:get).and_return(MultiJson.decode(content))
+      @events = SourceParser::Meetup.to_abstract_events(:url => 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/')
       @event = @events.first
     end
 

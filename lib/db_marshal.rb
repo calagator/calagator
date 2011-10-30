@@ -2,11 +2,11 @@ class DbMarshal
 
   module ClassMethods
     def adapter
-      abcs[RAILS_ENV]["adapter"]
+      abcs[Rails.env]["adapter"]
     end
 
     def database
-      abcs[RAILS_ENV]["database"]
+      abcs[Rails.env]["database"]
     end
 
     def abcs
@@ -14,7 +14,7 @@ class DbMarshal
     end
 
     def dump_filename
-      %{#{RAILS_ENV}.#{Time.now.strftime('%Y-%m-%d@%H%M%S')}.sql}
+      %{#{Rails.env}.#{Time.now.strftime('%Y-%m-%d@%H%M%S')}.sql}
     end
 
     def dump(filename=nil)

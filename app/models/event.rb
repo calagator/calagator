@@ -25,8 +25,6 @@
 class Event < ActiveRecord::Base
   include SearchEngine
 
-  Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
-
   # Treat any event with a duration of at least this many hours as a multiday
   # event. This constant is used by the #multiday? method and is primarily
   # meant to make iCalendar exports display this event as covering a range of
@@ -34,6 +32,10 @@ class Event < ActiveRecord::Base
   MIN_MULTIDAY_DURATION = 20.hours
 
   has_paper_trail
+  acts_as_taggable
+
+  xss_foliate :strip => [:title], :sanitize => [:description, :venue_details]
+  include DecodeHtmlEntitiesHack
 
   # Associations
   belongs_to :venue, :counter_cache => true
@@ -58,12 +60,38 @@ class Event < ActiveRecord::Base
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version
-  duplicate_squashing_ignores_associations :tags
+  duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
 
   # Named scopes
-  named_scope :masters,
-    :conditions => ["events.duplicate_of_id IS NULL"],
-    :include => [:source, :venue, :tags, :taggings]
+  scope :on_or_after_date, lambda { |date|
+    time = date.beginning_of_day
+    where("(start_time >= :time) OR (end_time IS NOT NULL AND end_time > :time)",
+      :time => time).order(:start_time)
+  }
+  scope :before_date, lambda { |date|
+    time = date.beginning_of_day
+    where("start_time < :time", :time => time).order(:start_time)
+  }
+  scope :future, lambda { on_or_after_date(Time.zone.today) }
+  scope :past, lambda { before_date(Time.zone.today) }
+  scope :within_dates, lambda { |start_date, end_date|
+    if start_date == end_date
+      end_date = end_date + 1.day
+    end
+    on_or_after_date(start_date).before_date(end_date)
+  }
+
+  # Expand the simple sort order names from the URL into more intelligent SQL order strings
+  scope :ordered_by_ui_field, lambda{|ui_field|
+    case ui_field
+      when 'name'
+        order('lower(events.title), start_time')
+      when 'venue'
+        includes(:venue).order('lower(venues.title), start_time')
+      else # when 'date', nil
+        order('start_time')
+    end
+  }
 
   #---[ Overrides ]-------------------------------------------------------
 
@@ -166,7 +194,7 @@ class Event < ActiveRecord::Base
   #     :more => ...,       # First event after the two week window or nil
   #   }
   def self.select_for_overview
-    today = Time.today
+    today = Time.zone.now.beginning_of_day
     tomorrow = today + 1.day
     after_tomorrow = tomorrow + 1.day
     future_cutoff = today + 2.weeks
@@ -180,7 +208,7 @@ class Event < ActiveRecord::Base
 
     # Find all events between today and future_cutoff, sorted by start_time
     # includes events any part of which occurs on or after today through on or after future_cutoff
-    overview_events = Event.find_by_dates(today.utc, future_cutoff, :order => :start_time)
+    overview_events = self.non_duplicates.within_dates(today, future_cutoff)
     overview_events.each do |event|
       if event.start_time < tomorrow
         times_to_events[:today]    << event
@@ -197,61 +225,11 @@ class Event < ActiveRecord::Base
     return times_to_events
   end
 
-  # last Time representable in certain operating systems is Jan 18 2038, local time
-  # TODO rewrite SQL in find_by_dates to eliminate the need for this constant
-  #   also re-write call find_future_events
-  #   see r1048 which has been reverted because it broke find_future_events
-  END_OF_TIME = Time.local(2038, 01, 18).yesterday.end_of_day.utc
-
-  # Returns an Array of non-duplicate future Event instances.
-  # where "future" means any part of an event occurs today or later
-  # Options:
-  # * :order => How to sort events. Defaults to :start_time.
-  # * :venue => Which venue to display events for. Defaults to all
-  def self.find_future_events(opts={})
-    order = opts[:order] || :start_time
-    venue = opts[:venue]
-    Event.find_by_dates(Time.today.utc, END_OF_TIME, :order => order, :venue => venue)
-  end
-
-  # Returns an Array of non-duplicate Event instances in a date range
-  # includes event if any part of the event is (on or after the start) and (on or before the end)
-  # Options:
-  # * :order => How to sort events. Defaults to :start_time.
-  # * :venue => Which venue to display events for. Defaults to all.
-  def self.find_by_dates(start_of_range, end_of_range, opts={})
-    start_of_range = Time.parse(start_of_range.to_s) if start_of_range.is_a?(Date)
-    end_of_range = Time.parse(end_of_range.to_s).end_of_day if end_of_range.is_a?(Date)
-    order = opts [:order] || :start_time
-
-    # event is in range if start_time is in range
-    # an event with an end_time is out of range if
-    #  its start_time is after the end of range OR its end_time is before the start of the range
-    conditions_sql = <<-HERE
-      ( (start_time >= :start_of_range AND start_time <= :end_of_range) OR
-        (end_time IS NOT NULL AND
-          NOT (start_time > :end_of_range OR end_time <= :start_of_range ) ) )
-    HERE
-
-    conditions_vars = {
-      :start_of_range => start_of_range.utc,
-      :end_of_range => end_of_range.utc }
-
-    if venue = opts[:venue]
-      conditions_sql << " AND venues.id = :venue"
-      conditions_vars[:venue] = venue.id
-    end
-
-    return self.masters.find(:all,
-      :conditions => [conditions_sql, conditions_vars],
-      :order => order)
-  end
-
   # Return Hash of Events grouped by the +type+.
   def self.find_duplicates_by_type(type='na')
     case type.to_s.strip
     when 'na', ''
-      return { [] => self.find_future_events }
+      return { [] => self.future }
     else
       kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
       return self.find_duplicates_by(kind,
@@ -304,7 +282,7 @@ class Event < ActiveRecord::Base
         opts[:include] = :venue
     end
 
-    result = self.group_by_currentness(self.tagged_with(tag, opts))
+    result = self.group_by_currentness(self.includes(:venue).tagged_with(tag, opts))
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
     return result
@@ -341,7 +319,7 @@ class Event < ActiveRecord::Base
     event.source       = source
     event.title        = abstract_event.title
     event.description  = abstract_event.description
-    event.start_time   = Time.parse(abstract_event.start_time.to_s)
+    event.start_time   = abstract_event.start_time.blank? ? nil : Time.parse(abstract_event.start_time.to_s)
     event.end_time     = abstract_event.end_time.blank? ? nil : Time.parse(abstract_event.end_time.to_s)
     event.url          = abstract_event.url
     event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
@@ -461,7 +439,7 @@ EOF
   end
 
   # Array of attributes that should be cloned by #to_clone.
-  CLONE_ATTRIBUTES = [:title, :description, :venue_id, :url, :tag_list]
+  CLONE_ATTRIBUTES = [:title, :description, :venue_id, :url, :tag_list, :venue_details]
 
   # Return a new record with fields selectively copied from the original, and
   # the start_time and end_time adjusted so that their date is set to today and
@@ -544,7 +522,7 @@ protected
 
   def end_time_later_than_start_time
     if start_time && end_time && end_time < start_time
-      errors.add(:end_time, "End cannot be before start")
+      errors.add(:end_time, "cannot be before start")
     end
   end
 end

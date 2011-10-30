@@ -31,11 +31,13 @@
 class Venue < ActiveRecord::Base
   include SearchEngine
 
-  Tag # this class uses tagging. referencing the Tag class ensures that has_many_polymorphs initializes correctly across reloads.
-
   has_paper_trail
+  acts_as_taggable
 
   include VersionDiff
+
+  xss_foliate :sanitize => [:description, :access_notes]
+  include DecodeHtmlEntitiesHack
 
   # Associations
   has_many :events, :dependent => :nullify
@@ -62,16 +64,15 @@ class Venue < ActiveRecord::Base
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi, :access_notes
-  duplicate_squashing_ignores_associations :tags
+  duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
 
   # Named scopes
-  named_scope :masters,
+  scope :masters,
     :conditions => ['duplicate_of_id IS NULL'],
     :include => [:source, :events, :tags, :taggings]
-
-  named_scope :with_public_wifi, :conditions => { :wifi   => true }
-  named_scope :in_business, :conditions      => { :closed => false }
-  named_scope :out_of_business, :conditions  => { :closed  => true }
+  scope :with_public_wifi, :conditions => { :wifi   => true }
+  scope :in_business, :conditions      => { :closed => false }
+  scope :out_of_business, :conditions  => { :closed  => true }
 
   #===[ Instantiators ]===================================================
 
@@ -101,23 +102,17 @@ class Venue < ActiveRecord::Base
     else
       venue_machine_tag_name = abstract_location.tags.find { |t|
         # Match 2 in the MACHINE_TAG_PATTERN is the predicate
-        Tag::VENUE_PREDICATES.include? t.match(Tag::MACHINE_TAG_PATTERN)[2]
+        ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? t.match(ActsAsTaggableOn::Tag::MACHINE_TAG_PATTERN)[2]
       }
-      venue_machine_tag = Tag.find_by_name(venue_machine_tag_name)
+      matched_venue = Venue.tagged_with(venue_machine_tag_name).first
 
-      venue = venue_machine_tag.venues.first.progenitor if venue_machine_tag.try(:venues).present?
+      venue = matched_venue.progenitor if matched_venue.present?
     end
 
     return venue
   end
 
   #===[ Finders ]=========================================================
-
-  # Returns future events for this venue. Accepts the same +opts+ as Event.find_future_events.
-  def find_future_events(opts={})
-    opts[:venue] = self
-    Event.find_future_events(opts)
-  end
 
   # Return Hash of Venues grouped by the +type+, e.g., a 'title'. Each Venue
   # record will include an <tt>events_count</tt> field containing the number of
@@ -127,23 +122,14 @@ class Venue < ActiveRecord::Base
     when 'na', nil, ''
       # The LEFT OUTER JOIN makes sure that venues without any events are also returned.
       return { [] => \
-        self.all(
-          :select     => 'venues.*, COUNT(DISTINCT events.id) AS events_count',
-          :joins      => 'LEFT OUTER JOIN events ON events.venue_id = venues.id',
-          :group      => 'venues.id',
-          :conditions => 'venues.duplicate_of_id IS NULL',
-          :order      => 'LOWER(venues.title)'
-        )
+        self.where('venues.duplicate_of_id IS NULL').order('LOWER(venues.title)')
       }
     else
       kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
 
       return self.find_duplicates_by(kind, 
         :grouped  => true, 
-        :select   => 'COUNT(DISTINCT events.id) AS events_count',
-        :joins    => 'LEFT OUTER JOIN events ON events.venue_id = a.id',
-        :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL',
-        :group_by => 'a.id'
+        :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL'
       )
     end
   end

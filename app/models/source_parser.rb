@@ -1,3 +1,5 @@
+require 'source_parser/not_found'
+
 # == SourceParser
 #
 # A hierarchy of classes that provide a way to parse different source formats and return hCalendar events.
@@ -8,7 +10,7 @@ class SourceParser
   # * :url - URL string to read as parser input.
   # * :content - String to read as parser input.
   def self.to_abstract_events(opts)
-    matched_parser = parsers.find{|parser|
+    matched_parser = self.parsers.find{|parser|
       parser.url_pattern.present? && opts[:url].try(:match, parser.url_pattern)
     }
 
@@ -17,14 +19,19 @@ class SourceParser
 
     # Return events from the first parser that suceeds, starting with the parser
     # that matches the given URL if one is found.
-    parsers.unshift(matched_parser).compact.uniq.each do |parser|
+    self.parsers.uniq.unshift(matched_parser).compact.uniq.each do |parser|
       begin
         events = parser.to_abstract_events(opts.merge(:content => content))
         return events if not events.blank?
+      rescue ::SourceParser::NotFound => e
+        raise e
       rescue ::SourceParser::HttpAuthenticationRequiredError => e
         raise e
+      rescue NotImplementedError
+        # Ignore
       rescue Exception => e
         # Ignore
+        # TODO Eliminate this catch-all rescue and make each parser handle its own exceptions.
       end
     end
 
@@ -81,7 +88,7 @@ class SourceParser
     def self.content_for(opts)
       content = opts[:content] || self.read_url(opts[:url])
       if content.respond_to?(:content_type) && ["application/atom+xml"].include?(content.content_type)
-        return CGI::unescapeHTML(content)
+        return CGI::unescapeHTML(content.to_str)
       else
         return content
       end
@@ -130,11 +137,51 @@ class SourceParser
       raise NotImplementedError, "Do not use #{self.class}.to_abstract_events method directly"
     end
 
+    # Wrapper for getting abstract events from a JSON API.
+    #
+    # @example See SourceParser::Facebook for an example of this in use.
+    #
+    # @option opts [String] :url the user-provided URL for the event page.
+    # @option opts [String] :error the name of the JSON field that indicates an error, defaults to +error+.
+    # @option opts [Proc] :api a lambda that gets the +event_id+ and
+    #   returns the arguments to send to +HTTParty.get+ for downloading
+    #   data. This is usually a URL string and an optional hash of query
+    #   parameters.
+    # @yield a block for processing the downloaded JSON data.
+    # @yieldparam [Hash] data the JSON data downloaded from the API.
+    # @yieldparam [String] event_id the event's identifier.
+    # @yieldreturn [Array<AbstractEvent>] events.
+    # @return [Array<AbstractEvent>] events.
+    def self.to_abstract_events_api_helper(opts, &block)
+      return false unless opts[:url]
+      raise ArgumentError, "No block specified" unless block
+      raise ArgumentError, "No API specified" unless opts[:api]
+
+      # Extract +event_id+ from :url using +url_pattern+.
+      event_id = opts[:url][self.url_pattern, 1]
+      return false unless event_id # Give up unless we find the identifier.
+
+      # Get URL and arguments for using the API.
+      api_args = opts[:api].call(event_id)
+
+      # Get data from the API.
+      data = HTTParty.get(*api_args)
+
+      # Stop if API tells us there's an error.
+      opts[:error] ||= 'error'
+      if error = data[opts[:error]]
+        raise SourceParser::NotFound, error
+      end
+
+      # Process the JSON data into AbstractEvents.
+      return yield(data, event_id)
+    end
+
     # Wrapper for invoking a driver from another, e.g. if given a Plancast URL,
     # fetch another URL and parse it with the iCalendar driver.
     #
     # Arguments:
-    # * opts: Hash with <tt>to_abstract_events</tt> options.
+    # * opts: Hash with +to_abstract_events+ options.
     # * driver: Driver that should parse the results. Should be a subclass of SourceParser::Base.
     # * source: Regular expression for extracting the event id from the URL.
     # * target: Lambda for generating the URL that the +driver+ should parse. It's called with a Regexp matcher for the +source+ and emits a string URL that the +driver+ should parse.

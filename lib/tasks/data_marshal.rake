@@ -8,7 +8,7 @@ namespace :data do
       puts "* Restarting sunspot's solr..."
       begin
         Rake::Task['sunspot:solr:stop'].invoke
-      rescue Sunspot::Server::NotRunningError:
+      rescue Sunspot::Solr::Server::NotRunningError
         # Ignore
       end
       Rake::Task['sunspot:solr:start'].invoke

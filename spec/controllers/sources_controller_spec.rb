@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 describe SourcesController do
   describe "using import logic" do
@@ -70,17 +70,17 @@ describe SourcesController do
 
       it "should fail when host responds with an error" do
         assert_import_raises(OpenURI::HTTPError.new("omfg", "bbq"))
-        flash[:failure].should =~ /error from this source/
+        flash[:failure].should =~ /Couldn't download events/
       end
 
       it "should fail when host is not responding" do
         assert_import_raises(Errno::EHOSTUNREACH.new("omfg"))
-        flash[:failure].should =~ /this source is not responding/
+        flash[:failure].should =~ /Couldn't connect to remote site/
       end
 
       it "should fail when host is not found" do
         assert_import_raises(SocketError.new("omfg"))
-        flash[:failure].should =~ /hostname not found/
+        flash[:failure].should =~ /Couldn't find IP address for remote site/
       end
 
       it "should fail when host requires authentication" do
@@ -95,7 +95,7 @@ describe SourcesController do
 
     before(:each) do
       @source = mock_model(Source)
-      Source.stub!(:find).and_return([@source])
+      Source.stub!(:listing).and_return([@source])
     end
   
     def do_get
@@ -141,14 +141,13 @@ describe SourcesController do
     end
 
     it "should find all sources" do
-      Source.should_receive(:find).with(:all).and_return(@sources)
+      Source.should_receive(:listing).and_return(@sources)
       do_get
     end
   
     it "should render the found sources as xml" do
-      @sources.should_receive(:to_xml).and_return("XML")
       do_get
-      response.body.should == "XML"
+      response.content_type.should == 'application/xml'
     end
   end
 
