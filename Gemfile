@@ -32,7 +32,7 @@ gem 'acts-as-taggable-on', '2.0.6'
 gem 'themes_for_rails', '0.4.2'
 gem 'jquery-rails', '1.0.12'
 
-gem 'paper_trail_manager', :git => 'https://github.com/igal/paper_trail_manager.git'
+gem 'paper_trail_manager', :git => 'git://github.com/igal/paper_trail_manager.git'
 # gem 'paper_trail_manager', :path => '../paper_trail_manager'
 
 # NOTE: mofo 0.2.9 and above are evil, defining their own defective Object#try method and are unable to extract "postal-code" address fields from hCalendar. Mofo is used in Calagator's SourceParser::Hcal and throughout for String#strip_html. The library has been abandoned and its author recommends switching to the incompatible "prism" gem.
