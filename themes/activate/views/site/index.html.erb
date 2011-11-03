@@ -1,0 +1,65 @@
+
+<% content_for :css_insert do %>
+  <%= stylesheet_link_tag \
+    "fullcalendar"
+  %>
+<% end %>
+
+<% content_for :javascript_insert do %>
+  <%= javascript_include_tag \
+    'fullcalendar.min.js'
+  %>
+  <script>
+    $(document).ready(function() {
+      $('#calendar').fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay'
+        },
+        events: function(start, end, callback) {
+          $.ajax({
+            url: 'events.json',
+            dataType: 'json',
+            data: {
+              // format request for calagator
+              'date[start]': $.fullCalendar.formatDate(start, 'yyyy-MM-dd'),
+              'date[end]': $.fullCalendar.formatDate(end, 'yyyy-MM-dd'),
+            },
+            success: function(doc) {
+              var events = [];
+              $.each(doc, function(i, v){
+                console.log(v);
+                events.push({
+                  title: v.title,
+                  start: v.start_time, // will be parsed
+                  end: v.end_time // will be parsed
+                });
+              });
+              callback(events);
+            }
+          });
+        }
+      });
+    });
+  </script>
+<% end %>
+
+
+
+<% tabindex_on '#search_field' %>
+
+<% cache(CacheObserver.daily_key_for("site_index", request)) do %>
+<a href="#" id="homepage_sidebar_toggle" class="expander_toggle">Hi there. Learn about this site and how to use it...</a>
+<div id="homepage_sidebar">
+  <div id="project_description">
+    <%= render :partial => "description" %>
+  </div>
+</div>
+
+<div id="whats_happening">
+  <h1>What's happening?</h1>
+  <div id='calendar'>
+  </div>
+</div>
+<% end %>
