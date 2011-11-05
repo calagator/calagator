@@ -27,14 +27,14 @@ body {
 #project_title {
   /* commented code may be uncommented when we put up the logo. 
    * For now, see #project_title in typography.css. */
-  /* background: url('/images/head_calagator.gif') no-repeat; */
-  /* height: 20px; */
-  left: 40px;
+  background: url('/themes/activate/images/logo.png') no-repeat;
   overflow: hidden;
   position: absolute;
-  /* text-indent: -999px; */
-  top: 18px;
-  /* width: 135px; */
+  text-indent: -999px;
+  top: -12px;
+  width: 225px;
+  height: 100px;
+  left: 40px;
 }
 
 
