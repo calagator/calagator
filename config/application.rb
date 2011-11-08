@@ -19,6 +19,12 @@ module Calagator
     $LOAD_PATH << Rails.root.join('vendor','gems','lucene_query-0.1','lib')
     require 'lucene_query'
 
+    $LOAD_PATH << Rails.root.join('vendor','gems','mofo-0.2.8','lib')
+    require 'mofo'
+
+    # "/lib" libraries
+    $LOAD_PATH << Rails.root.join
+
     #---[ Rails ]-----------------------------------------------------------
 
     # Activate observers that should always be running
@@ -27,6 +33,13 @@ module Calagator
 
     # Deliver email using sendmail by default
     config.action_mailer.delivery_method = :sendmail
+    config.action_mailer.sendmail_settings = { :arguments => '-i' }
+
+    # Configure the default encoding used in templates for Ruby 1.9.
+    config.encoding = "utf-8"
+
+    # Configure sensitive parameters which will be filtered from the log file.
+    config.filter_parameters += [:password]
 
     #---[ Plugins ]---------------------------------------------------------
 

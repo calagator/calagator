@@ -10,14 +10,18 @@ class SourcesController < ApplicationController
     if valid
       begin
         @events = @source.create_events!
+      rescue SourceParser::NotFound => e
+        @source.errors.add(:base, "No events found at remote site. Is the event identifier in the URL correct?")
       rescue SourceParser::HttpAuthenticationRequiredError => e
-        @source.errors.add(:base, "source requires authentication")
+        @source.errors.add(:base, "Couldn't import events, remote site requires authentication.")
       rescue OpenURI::HTTPError => e
-        @source.errors.add(:base, "we received an error from this source")
+        @source.errors.add(:base, "Couldn't download events, remote site may be experiencing connectivity problems. ")
       rescue Errno::EHOSTUNREACH => e
-        @source.errors.add(:base, "this source is not responding")
+        @source.errors.add(:base, "Couldn't connect to remote site.")
       rescue SocketError => e
-        @source.errors.add(:base, "hostname not found")
+        @source.errors.add(:base, "Couldn't find IP address for remote site. Is the URL correct?")
+      rescue Exception => e
+        @source.errors.add(:base, "Unknown error: #{e}")
       end
     end
 

@@ -88,6 +88,21 @@ ul.jq-ui-autocomplete li.active {
   float: left;
 }
 
+form.standard_form {
+  width: 100%;
+}
+
+.standard_form input[type="text"],
+.standard_form input[type="url"],
+.standard_form input[type="number"],
+.standard_form input[type="email"],
+.standard_form input[type="tel"],
+.standard_form textarea,
+.standard_form .text textarea
+{
+  width: 370px;
+}
+
 .standard_form input.date_picker
 {
   width: 7em;

@@ -44,10 +44,21 @@ class SourceParser # :nodoc:
       end
 
       event = AbstractEvent.new
-      event.start_time  = Time.parse(leaf['utc_start'])
+
+      # WARNING: Upcoming's "utc_start" and "utc_end" data is invalid and shouldn't be used.
+      event.start_time  = Time.parse("#{leaf['start_date']} #{leaf['start_time']}")
+
+      event.end_time =
+        if leaf['end_date'].blank? && leaf['end_time'].blank?
+          # Both 'end_date' and 'end_time' may be blank if no end was specified.
+          nil
+        else
+          # The "end_date" may be blank if the event ends on the same date as it starts.
+          Time.parse("#{leaf['end_date'].presence || leaf['start_date']} #{leaf['end_time'].presence || leaf['start_time']}")
+        end
+
       event.title       = leaf['name']
       event.description = leaf['description']
-      event.end_time    = Time.parse(leaf['utc_end'])
       event.url         = leaf['url']
       event.tags        = ["upcoming:event=#{event_id}"]
 

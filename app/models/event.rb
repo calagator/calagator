@@ -282,7 +282,7 @@ class Event < ActiveRecord::Base
         opts[:include] = :venue
     end
 
-    result = self.group_by_currentness(self.tagged_with(tag, opts))
+    result = self.group_by_currentness(self.includes(:venue).tagged_with(tag, opts))
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
     return result
@@ -319,7 +319,7 @@ class Event < ActiveRecord::Base
     event.source       = source
     event.title        = abstract_event.title
     event.description  = abstract_event.description
-    event.start_time   = Time.parse(abstract_event.start_time.to_s)
+    event.start_time   = abstract_event.start_time.blank? ? nil : Time.parse(abstract_event.start_time.to_s)
     event.end_time     = abstract_event.end_time.blank? ? nil : Time.parse(abstract_event.end_time.to_s)
     event.url          = abstract_event.url
     event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
@@ -439,7 +439,7 @@ EOF
   end
 
   # Array of attributes that should be cloned by #to_clone.
-  CLONE_ATTRIBUTES = [:title, :description, :venue_id, :url, :tag_list]
+  CLONE_ATTRIBUTES = [:title, :description, :venue_id, :url, :tag_list, :venue_details]
 
   # Return a new record with fields selectively copied from the original, and
   # the start_time and end_time adjusted so that their date is set to today and

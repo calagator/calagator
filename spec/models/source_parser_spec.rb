@@ -204,7 +204,7 @@ describe SourceParser, "checking duplicates when importing" do
 
     content = read_sample('plancast.json')
     SourceParser::Base.stub!(:read_url).and_return("this content doesn't matter")
-    HTTParty.should_receive(:get).and_return(Crack::JSON.parse(content))
+    HTTParty.should_receive(:get).and_return(MultiJson.decode(content))
 
     source = Source.new(
       :title => "Event with duplicate machine-tagged venue",

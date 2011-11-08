@@ -82,4 +82,25 @@ describe ApplicationHelper do
       mobile_cookie.should == "0"
     end
   end
+
+  describe "#format_description" do
+    it "should autolink" do
+      helper.format_description("foo http://mysite.com/~user bar").should ==
+        '<p>foo <a href="http://mysite.com/~user">http://mysite.com/~user</a> bar</p>'
+    end
+
+    it "should process Markdown links" do
+      helper.format_description("[ClojureScript](https://github.com/clojure/clojurescript), the Clojure to JS compiler").should ==
+        '<p><a href="https://github.com/clojure/clojurescript">ClojureScript</a>, the Clojure to JS compiler</p>'
+    end
+
+    it "should process Markdown references" do
+      helper.format_description("
+[SocketStream][1], a phenomenally fast real-time web framework for Node.js
+
+[1]: https://github.com/socketstream/socketstream
+      ").should ==
+        '<p><a href="https://github.com/socketstream/socketstream">SocketStream</a>, a phenomenally fast real-time web framework for Node.js</p>'
+    end
+  end
 end

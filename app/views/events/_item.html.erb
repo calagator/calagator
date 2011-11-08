@@ -46,7 +46,7 @@ html_classes << " contentbar" if has_contentbar
             <% if event.venue.access_notes.present? -%>
               <div class="access_notes">
                 <h3>Access Notes</h3>
-                <%= event.venue.access_notes %>
+                <%= format_description event.venue.access_notes %>
               </div>
             <% end -%>
 

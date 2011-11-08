@@ -78,7 +78,7 @@ describe Event do
       @event.save
 
       @event.reload
-      @event.tags.map(&:name).should == tags
+      @event.tags.map(&:name).sort.should == tags.sort
     end
 
     it "should not interpret numeric tags as IDs" do
@@ -761,34 +761,30 @@ describe Event do
   end
 
   describe "when cloning" do
-    fixtures :all
-
-    before(:each) do
-      @original = events(:calagator_codesprint)
-      @original.start_time = Time.parse("2008-01-19 10:00 PST")
-      @original.end_time = Time.parse("2008-01-19 17:00 PST")
-      @clone = @original.to_clone
+    let :original do
+      Factory(:event,
+        :start_time => Time.parse("2008-01-19 10:00 PST"),
+        :end_time => Time.parse("2008-01-19 17:00 PST"),
+        :tag_list => "foo, bar, baz",
+        :venue_details => "Details")
     end
 
-    it "should be a new record" do
-      @clone.should be_a_new_record
+    subject do
+      original.to_clone
     end
 
-    it "should not have an id" do
-      @clone.id.should be_nil
-    end
+    its(:new_record?) { should be_true }
 
-    it "should set start and end time to original time of day for today" do
-      @clone.start_time.should == Time.today + 10.hours
-      @clone.end_time.should   == Time.today + 17.hours
-    end
+    its(:id) { should be_nil }
 
-    it "should duplicate title, description, venue, url and tag_list" do
-      @clone.title.should       == @original.title
-      @clone.description.should == @original.description
-      @clone.url.should         == @original.url
-      @clone.venue.should       == @original.venue
-      @clone.tag_list.should    == @original.tag_list
+    its(:start_time) { should == Time.today + original.start_time.hour.hours }
+
+    its(:end_time)   { should == Time.today + original.end_time.hour.hours }
+
+    its(:tag_list) { should == original.tag_list }
+
+    %w[title description url venue_id venue_details].each do |field|
+      its(field) { should == original[field] }
     end
   end
 

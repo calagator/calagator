@@ -151,7 +151,15 @@ module DuplicateChecking
             query << " ((a.#{attr} = b.#{attr}) OR (a.#{attr} IS NULL AND b.#{attr} IS NULL))"
           else
             query << " OR" if matched
-            query << " (a.#{attr} = b.#{attr} AND (a.#{attr} != '' AND a.#{attr} != 0 AND a.#{attr} IS NOT NULL))"
+            query << " (a.#{attr} = b.#{attr} AND ("
+            column = self.columns.find {|column| column.name == attr}
+            case column.type
+            when :integer, :decimal
+              query << "a.#{attr} != 0 AND "
+            when :string, :text
+              query << "a.#{attr} != '' AND "
+            end
+            query << "a.#{attr} IS NOT NULL))"
           end
           matched = true
         end
@@ -171,8 +179,6 @@ module DuplicateChecking
       end
 
       query << " )"
-
-      query << " GROUP BY #{options[:group_by]}" if options[:group_by]
 
       Rails.logger.debug("find_duplicates_by: SQL -- #{query}")
       records = find_by_sql(query) || []

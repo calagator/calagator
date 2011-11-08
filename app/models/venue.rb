@@ -63,9 +63,13 @@ class Venue < ActiveRecord::Base
 
   # Duplicates
   include DuplicateChecking
-  duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi
+  duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi, :access_notes
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
 
+  # Named scopes
+  scope :masters,
+    :conditions => ['duplicate_of_id IS NULL'],
+    :include => [:source, :events, :tags, :taggings]
   scope :with_public_wifi, :conditions => { :wifi   => true }
   scope :in_business, :conditions      => { :closed => false }
   scope :out_of_business, :conditions  => { :closed  => true }
@@ -118,18 +122,14 @@ class Venue < ActiveRecord::Base
     when 'na', nil, ''
       # The LEFT OUTER JOIN makes sure that venues without any events are also returned.
       return { [] => \
-        self.all(
-          :conditions => 'venues.duplicate_of_id IS NULL',
-          :order      => 'LOWER(venues.title)'
-        )
+        self.where('venues.duplicate_of_id IS NULL').order('LOWER(venues.title)')
       }
     else
       kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
 
       return self.find_duplicates_by(kind, 
         :grouped  => true, 
-        :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL',
-        :group_by => 'a.id'
+        :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL'
       )
     end
   end

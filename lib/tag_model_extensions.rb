@@ -111,7 +111,7 @@ module TagModelExtensions
       exclusions = SETTINGS.tagcloud_exclusions || ['']
       counts_and_tags = []
       benchmark("Tag::for_tagcloud") do
-        for tag in ActsAsTaggableOn::Tag.find_by_sql ['SELECT tags.name, count(taggings.id) as counter FROM tags, taggings WHERE tags.id = taggings.tag_id AND taggings.taggable_type = ? AND tags.name NOT IN (?) GROUP BY taggings.tag_id HAVING counter > ? ORDER BY lower(tags.name) asc', type.name, exclusions, minimum_taggings]
+        for tag in ActsAsTaggableOn::Tag.find_by_sql ['SELECT tags.name, COUNT(taggings.id) AS counter FROM tags, taggings WHERE tags.id = taggings.tag_id AND taggings.taggable_type = ? AND tags.name NOT IN (?) GROUP BY tags.name HAVING COUNT(taggings.id) > ? ORDER BY LOWER(tags.name) ASC', type.name, exclusions, minimum_taggings]
           count = tag.counter.to_i
           counts_and_tags << [count, tag]
         end
