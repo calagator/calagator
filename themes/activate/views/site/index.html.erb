@@ -33,7 +33,9 @@
                 events.push({
                   title: v.title,
                   start: v.start_time, // will be parsed
-                  end: v.end_time // will be parsed
+                  end: v.end_time, // will be parsed
+                  id: v.id,
+                  url: '/events/'+v.id
                 });
               });
               callback(events);
