@@ -57,6 +57,10 @@ Security and secrets.yml
 
 This application runs with insecure settings by default to make it easy to get started. These default settings include publicly-known cryptography keys that can allow attackers to gain admin privileges to your application. You should create a `config/secrets.yml` file with your secret settings if you intend to run this application on a server that can be accessed by untrusted users, read the [config/secrets.yml.sample](config/secrets.yml.sample) file for details.
 
+Spam Blacklist
+--------------
+
+A default set of blacklist words is provided in config/blacklist.txt. You can create your own by adding a config/blacklist-local.txt file with one regular expression per line (see config/blacklist.txt for examples).
 
 API Keys
 --------
