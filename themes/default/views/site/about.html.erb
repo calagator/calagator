@@ -28,7 +28,7 @@
 
     <h3>Subscribe or export</h3>
     <ul>
-      <li><strong>Subscribe</strong> to a list of events with your favorite calendar or feed reader.</li>
+      <li><strong>Subscribe</strong> to a list of events with your <%= link_to "favorite calendar client", url_for(:controller => "events", :action => "index", :protocol => "webcal", :only_path => false)+".ics" %> or <%= link_to "feed reader", events_url(:format => "atom") %>.</li>
       <li><strong>Export</strong> a single event to your favorite calendar.</li>
     </ul>
             
