@@ -27,11 +27,12 @@ class VenuesController < ApplicationController
 
       if params[:term].present? # for the ajax autocomplete widget
         conditions = ["title LIKE :query", {:query => "%#{params[:term]}%"}]
+        @venues = scoped_venues.find(:all, :order => 'lower(title)', :conditions => conditions)
       elsif params[:query].present?
-        conditions = ["title LIKE :query OR description LIKE :query", {:query => "%#{params[:query]}%"}]
+        @venues = Venue.search(params[:query], :include_closed => params[:include_closed], :wifi => params[:wifi])
+      else
+        @venues = scoped_venues.all
       end
-
-      @venues = scoped_venues.order('lower(title)').where(conditions)
     else # default view
       @most_active_venues = scoped_venues.limit(10).order('events_count DESC')
       @newest_venues = scoped_venues.limit(10).order('created_at DESC')
