@@ -66,12 +66,8 @@ group :development, :test do
   gem 'rcov', '0.9.9', :require => false
   gem 'factory_girl_rails', '1.0.1'
 
-  case RUBY_VERSION.to_f
-  when 1.9..2.0
-    gem "ruby-debug19", :require => "ruby-debug"
-  when 1.8..1.9
-    gem "ruby-debug"
-  end
+  gem 'ruby-debug', :platform => :mri_18
+  gem 'ruby-debug19', :platform => :mri_19
 end
 
 # Some dependencies are activated through server settings.
