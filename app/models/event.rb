@@ -40,6 +40,7 @@ class Event < ActiveRecord::Base
   # Associations
   belongs_to :venue, :counter_cache => true
   belongs_to :source
+  belongs_to :organization
 
   # Triggers
   before_validation :normalize_url!
