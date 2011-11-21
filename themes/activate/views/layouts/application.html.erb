@@ -78,7 +78,9 @@
       <div class="sidebar">
         <div class="well">
           <%= yield :sidebar %>
+        </div>
           
+        <div class="well">
           <% # Pick a subnav %>
           <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
           <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
