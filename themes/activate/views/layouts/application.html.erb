@@ -18,7 +18,7 @@
 
     <!-- Stylesheets, static -->
     <%= stylesheet_link_tag 'common', 'formtastic', :media => :all %>
-    <%= theme_stylesheet_link_tag 'forms', 'jquery-ui/jquery-ui', :media => :all %>
+    <%= theme_stylesheet_link_tag 'layout', 'forms', 'jquery-ui/jquery-ui', :media => :all %>
     <%= theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
 
     <!--[if IE]>
@@ -76,9 +76,11 @@
     </div>
     <div class="container-fluid">
       <div class="sidebar">
+      <% if content_for?(:sidebar) %>
         <div class="well">
           <%= yield :sidebar %>
         </div>
+      <% end %>
           
         <div class="well">
           <% # Pick a subnav %>
