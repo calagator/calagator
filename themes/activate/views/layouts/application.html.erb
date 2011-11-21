@@ -1,9 +1,7 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8">
     <title>
       <%= "#{@page_title} » " if @page_title -%>
       <%= SETTINGS.name -%>: <%= SETTINGS.tagline -%>
@@ -13,13 +11,17 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <link rel='search' type='application/opensearchdescription+xml' href='/opensearch.xml' title='<%= SETTINGS.name %>' />
 
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
     <!-- Stylesheets, static -->
-    <%= theme_stylesheet_link_tag 'reset', :media => :all %>
     <%= stylesheet_link_tag 'common', 'formtastic', :media => :all %>
-    <%= theme_stylesheet_link_tag 'typography', 'forms', 'layout', 'jquery-ui/jquery-ui', :media => :all %>
+    <%= theme_stylesheet_link_tag 'forms', 'jquery-ui/jquery-ui', :media => :all %>
     <%= theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
 
-	<!--[if IE]>
+    <!--[if IE]>
       <%= theme_stylesheet_link_tag 'ie', :media => :all %>
     <![endif]-->
     <%= theme_stylesheet_link_tag 'print', :media => :print %>
@@ -27,7 +29,11 @@
     <!-- Stylesheets, inserted  -->
     <%= yield :css_insert %>
 
+    <link charset="utf-8" href="/less/site.less" rel="stylesheet/less" type="text/css"/>
+
+
     <!-- JavaScripts, static -->
+    <%= javascript_include_tag  "less", :cache => true %>
     <%= javascript_include_tag  :defaults, :cache => true %>
     <%# TODO figure out how to fix 'theme_support' plugin to make a working include tag AND make the server actually send the contents, because both of these are broken. %>
     <%#= theme_javascript_include_tag 'application'%>
@@ -46,46 +52,45 @@
   </head>
   <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
 
-  <div id="outer">
-    <div id="global_header">
-      <a href="/" id="project_title"><%= SETTINGS.name %></a>
-
-      <div id="top_menu">
-         <div id='app_menu'>
-          <ul>
-              <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
-              <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="/"><%= SETTINGS.name %></a>
+          <ul class="nav">
+            <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+            <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
           </ul>
-        </div>
-<!--         <div id='project_menu'>
-          <strong>Get Involved:</strong> <%= link_to "Blog", "http://calagator.wordpress.com/", {:class => 'first'} %> | <%= link_to "Forum", "http://groups.google.com/group/pdx-tech-calendar/" %> | <%= link_to "Code", "https://github.com/calagator/calagator" %>
-          <br />
-          <strong>Something not right?</strong> <%= link_to "File an issue", "http://code.google.com/p/calagator/issues/list" %> or <%= link_to "get satisfaction", 'http://getsatisfaction.com/calagator' %>.
-        </div>
--->
-         <%= form_tag '/events/search', :method => :get do %>
-          <div id='search_form'>
-          <label for="search_field">Search Events</label>
-          <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-            <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-          <% else %>
-            <%= text_field_tag 'query', @query, :id => 'search_field' %>
-          <% end %>
+          <div class="pull-right">
+            <%= form_tag '/events/search', :method => :get do %>
+              <div id='search_form'>
+              <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+                <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+              <% else %>
+                <%= text_field_tag 'query', @query, :id => 'search_field' %>
+              <% end %>
+              </div>
+            <% end -%>
           </div>
-        <% end -%>
+        </div>
       </div>
     </div>
+    <div class="container-fluid">
+      <div class="sidebar">
+        <div class="well">
+          <%= yield :sidebar %>
+          
+          <% # Pick a subnav %>
+          <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
+          <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
+          <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+        </div>
+      </div>
 
-    <% # Pick a subnav %>
-
-    <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
-    <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
-    <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
-
-    <div id="content">
-      <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
-      <%= render_flash %>
-      <%= yield %>
+      <div class="content">
+        <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
+        <%= render_flash %>
+        <%= yield %>
+      </div>
     </div>
 
     <div id="top_footer">
@@ -101,8 +106,6 @@
         <%= link_to "default", url_for(:mobile => "-1") %>
       </span>
     </div>
-
-</div>
 
     <% if Rails.env == 'production' %>
       <script type="text/javascript">
