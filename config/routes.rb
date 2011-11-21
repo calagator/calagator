@@ -24,6 +24,8 @@ Calagator::Application.routes.draw do
     end
   end
 
+  resources :organizations
+
   resources :venues do
     collection do
       post :squash_multiple_duplicates
