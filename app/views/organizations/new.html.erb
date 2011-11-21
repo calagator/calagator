@@ -1,2 +1,5 @@
-<h1>Organizations#new</h1>
-<p>Find me in app/views/organizations/new.html.erb</p>
+<div id="new_organization_form">
+  <%= render :partial => 'site/appropriateness_message' %>
+
+  <%= render :partial => 'form', :locals => {:organization => @organization} %>
+</div>
