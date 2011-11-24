@@ -11,6 +11,7 @@
    <%= render :partial => 'events/list', :locals => { :events =>  @organization.events } %>
 </p>
 
-<%= link_to 'Edit', edit_organization_url %> |
-<%= link_to 'Back', organizations_path %>
+<% content_for :sidebar do %>
+  <%= link_to 'Edit this organization', edit_organization_url %> 
 <%# link_to 'Destroy', @organization, :confirm => 'Are you sure?', :method => :delete %>
+<% end %>
