@@ -195,14 +195,14 @@ class Event < ActiveRecord::Base
       case organization
       when Organization then organization
       when NilClass then nil
-      when String   then Organization.find_or_initialize_by_title(organization)
+      when String   then Organization.find_or_initialize_by_name(organization)
       when Fixnum   then Organization.find(organization)
       else raise TypeError, "Unknown type: #{organization.class}"
       end
 
     if organization && ((self.organization && self.organization != organization) || (!self.organization))
       # Set organization if one is provided and it's different than the current, or no organization is currently set.
-      self.organization = organization.progenitor
+      self.organization = organization
     elsif !organization && self.organization
       # Clear the event's organization field
       self.organization = nil

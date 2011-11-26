@@ -96,27 +96,15 @@
     <%= f.input :title, :label => "Event Name" %>
     <% focus_on '#event_title' %>
 
-<!-- Was playing with formtastic here -->
-<!--     <%= f.inputs :name => "Organization", :for => :organization do |org_form| %>
-      <%= org_form.input :name %>
-      <%= org_form.input :url %>
-    <% end %> -->
-
-    <!-- Neither example will work because Event's 'organization' member is of Organization class, but
-    these forms will post strings & the controller won't 
-    know what to do with them. -->
-    
-    <%# A field w/o autocomplete. %>
-    <%# f.input :organization, :label => "Organization" %>
-    
-    <%# Autocomplete w/ formtastic. %>
-    <%# f.autocomplete_field :organization_name, autocomplete_organization_name_events_path, :id_element => '#org_id' %>
-
-<!-- non-formtastic elements will work. -->
-  <%= hidden_field(:event, :organization_id, :id => 'organization_id') %>
-  <%= label_tag :organization_name %>
-  <%= autocomplete_field_tag 'organization_name', '', autocomplete_organization_name_events_path, :id_element => '#organization_id', :size => 75 %>
-    
+    <!-- Organizaton Autocomplete Form Element (name + hidden id) -->
+    <li class="string input required stringish" id="event_organization_title_input">
+      <%= f.label :organization_id, "Organization", :class => 'label' %>
+      <%= autocomplete_field_tag 'organization_name', '', autocomplete_organization_name_events_path, :id_element => '#organization_id' %>
+      <%= hidden_field(:event, :organization_id, :id => 'organization_id', :value => (!event.organization.nil? ? event.organization.id : params[:event_organization_id])) %>
+      <p class='inline-hints'>
+        Type the name of an organization to search.
+      </p>
+    </li>
    
     <li class="string input required stringish" id="event_venue_title_input">
       <%= f.label :venue_id, "Venue", :class => 'label' %>
