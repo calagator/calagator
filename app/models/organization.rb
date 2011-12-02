@@ -1,14 +1,6 @@
 class Organization < ActiveRecord::Base
   has_many :events # we might want :dependent => :destroy later
 
-  def evil?
-    false
-  end
-
-  def has_hope?
-    true
-  end
-
   # Validations
   validates_presence_of :name
 

@@ -1,0 +1,67 @@
+<% tabindex_on '#search_field' %>
+
+<% content_for :discovery_insert do %>
+  <link rel="alternate" type="application/x-wiki" title="Edit this page" href="<%= edit_event_url(@event) %>" />
+<% end %>
+
+<% content_for :javascript_insert do %>
+  <script src="/javascripts/mustache.js" type="text/javascript"></script>
+  <script type='text/javascript'>
+    $(function() {
+      var plan = $('.external.plancast.plan:first');
+      if (plan.length > 0) {
+        var plan_id = plan.text().split('=')[1];
+        $.getJSON("http://api.plancast.com/02/plans/show.json?jsonp=?",
+          { extensions: "attendees",
+            plan_id: plan_id },
+          function(data) {
+            if (data.attendees.length > 0) {
+              $('.attendees').append(Mustache.to_html($('#attendees-template').html(), data));
+            }
+          }
+        );
+      }
+    })
+  </script>
+<% end %>
+
+<% content_for :sidebar do %>
+  <div id="event_sidebar" class='single_view_right'>
+    <h3 class='first'>Export to</h3>
+    <ul>
+      <li><%= link_to "Google Calendar", google_event_export_link(@event), :id => "google_calendar_export", :target => "_blank" %></li>
+      <li><%= link_to 'iCalendar file', "#{event_url(@event)}.ics" %></li>
+      <li>
+        <%= link_to_function 'hCalendar markup', '$("#hcal_field").toggle()' %>
+        <div id="hcal_field" style="display: none;">
+          <%# TODO: Do we actually want to keep providing this? %>
+          <%= text_area_tag 'hCalendar',
+            h(
+              render :partial => 'hcal.html.erb',
+                        :locals => {
+                          :event => @event,
+                          :show_year => true
+                        }
+            ), :rows => 10, :cols => 80 %>
+        </div>
+      </li>
+    </ul>
+  <hr />
+    <div id='edit_link'>
+      <p>
+        You can 
+        <%= link_to "edit", edit_event_url(@event) %>,
+        <%= link_to "clone", clone_event_url(@event) %>,
+        or 
+        <%= link_to "delete", event_url(@event), :method => :delete, :confirm => "Are you sure?" %>
+        this event.
+      </p>
+    </div>
+  <hr />
+    <div id='metadata'>
+        <%= datestamp(@event) %>
+    </div>
+  </div>
+<% end %>
+
+<%= render :partial => 'events/item', :locals => {:event => @event} %>

@@ -1,0 +1,24 @@
+<% tabindex_on '#search_field' %>
+
+<% content_for :discovery_insert do %>
+  <%= auto_discovery_link_tag(:atom, search_events_url(:query => @query, :format => 'atom'), :title => "Atom: Search Results for '#{@query}'" )%>
+<% end -%>
+<%= render :partial => 'search_section', :locals => {:description => "current", :events => @grouped_events[:current]} %>
+<%= render :partial => 'search_section', :locals => {:description => "past", :events => @grouped_events[:past]} %>
+
+<% content_for :sidebar do %>
+  <div id='list_filters'>
+    <h3>Subscribe to</h3>
+    <ul>
+      <li><%= link_to "iCalendar feed", url_for(:action => "search", :protocol => "webcal", :only_path => false, :query => @query, :format => "ics") %></li>
+      <li><%= link_to "Atom feed", search_events_url(:query => @query, :format => "atom") %></li>
+      <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+CGI::escape(search_events_url(:query => @query, :format => "ics")) %></li>
+    </ul>
+
+    <h3>Export to</h3>
+    <ul>
+      <li><%= link_to "iCalendar file", search_events_url(:query => @query, :format => "ics") %></li>
+      <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+cgi_escape(search_events_url(:query => @query, :format => "ics")) %></li>
+    </ul>
+  </div>
+<% end %>

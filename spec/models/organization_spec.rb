@@ -14,8 +14,6 @@ describe Organization do
       @org = Organization.new(:name => "My Organization")
     end
     specify {@org.should be_valid}
-    specify {@org.should_not be_evil}
-    specify {@org.should have_hope}
   end
 
   describe "when creating nameless organizations" do

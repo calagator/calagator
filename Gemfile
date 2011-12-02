@@ -50,6 +50,7 @@ gem 'validation_reflection', '1.0.0'
 gem 'acts-as-taggable-on', '2.0.6'
 gem 'themes_for_rails', '0.4.2'
 gem 'jquery-rails', '1.0.12'
+gem 'rails3-jquery-autocomplete'
 
 # gem 'paper_trail_manager', :path => '../paper_trail_manager'
 gem 'paper_trail_manager'

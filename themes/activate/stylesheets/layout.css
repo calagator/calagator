@@ -1,154 +1,9 @@
-/* @group Global Layout
-----------------------------------------*/
-
-body {
-  background: #fff;
-}
-
-#global_header {
-  background: #82c555;
-  position: relative;
-  height: 95px;
-}
-
-#global_header a {
-  color: #f9ffec
-}
-
-#top_footer {
-  background: #445544;
-  color: #f9ffec;
-  padding: .5em 30px .5em 40px;
-  font-size: 70%;
-  clear: both;
-}
-
-
-#project_title {
-  /* commented code may be uncommented when we put up the logo. 
-   * For now, see #project_title in typography.css. */
-  background: url('/themes/activate/images/logo.png') no-repeat;
-  overflow: hidden;
-  position: absolute;
-  text-indent: -999px;
-  top: -12px;
-  width: 225px;
-  height: 100px;
-  left: 40px;
-}
-
-
-
-#app_menu ul {
-  font-size: 1.3em;
-  line-height: 1.3em;
-  font-weight: bold;
-  list-style: none;
-  margin: 0;
-
-  position: absolute;
-  bottom: 0;
-  left: 40px;
-}
-
-#app_menu li {
-  float: left;
-  margin-right: 1em;
-  padding-bottom: 10px
-}
-
-#app_menu li.active {
-  background: url('/images/nav_marker.png') no-repeat center bottom;
-}
-
-#project_menu {
-  font-weight: bold;
-  text-align: right;
-  float: right;
-  position: absolute;
-  right: 30px;
-  bottom: 10px;
-}
-
-#search_form {
-  position:absolute;
-  right: 30px;
-  top: 15px;
-}
-
-.subnav {
-  font-size: 1.2em;
-  background: #bcf794;
-  padding-left: 40px;
-  line-height: 2em;
-}
-
-.subnav ul {
-  list-style: none;
-  margin: 0;
-}
-
-.subnav li {
-  float: left;
-  margin-right: 1.5em;
-}
-
-.subnav a {
-  color: #445544;
-  padding-bottom: .42em;
-}
-
-.subnav .active {
-  background: url('/images/subnav_marker.png') no-repeat center bottom;
-}
-
-
-
-#content {
-  min-height: 40em;
-  margin: 1em 30px 1em 40px;
-  position: relative;
-}
-
-
-.sidebar h3 {
-  font-weight: bold;
-  font-size: 1.3em;
-  margin-top: 1.5em;
-  margin-bottom: 0.25em;
-  line-height: 1;
-}
-
-.sidebar .clear_filter {
-  font-size: .7em;
-  float: right;
-  line-height: .7em
-}
-
-.sidebar h3.first {
-  margin-top: 0;
-}
-
-.copy_block {
-  width: 45em;
-}
-
-.appropriateness_message {
-  background: #e8fbfe;
-  padding: 1em;
-  margin: 1em 0;
-}
-
-/* @end */
-
 /* @group Event Table
 ----------------------------------------*/
 
 #list_description {
   padding-top: 1em;
 }
-
-#list_items { margin-right: 20em; }
 
 .event_table .description,
 .event_table .url,
@@ -178,21 +33,6 @@ ul.event_list .day_of_week {
 
 .event_table th {
   padding-bottom: 2em;
-}
-
-
-.sidebar {
-  background: #e8fbfe;
-  padding: 2em 30px 1em 1em;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: -1em -30px 0 0;
-  width: 200px;
-}
-
-.contentbar {
-margin-right: 200px;
 }
 
 #list_filters #date_filter label {
@@ -346,22 +186,6 @@ ul.event_list .list_date {
   margin-bottom: .5em;
 }
 
-#venues_search {
-  background: #e8fbfe;
-  padding: 1em;
-  border-bottom: 1px solid #e9e9e9;
-}
-
-#venues_search h2 {
-  float: left;
-  margin: 0 1em 0 0;
-}
-
-#venues_search form div {
-  display: inline-block;
-  margin-right: 1em;
-}
-
 #venue_portal {
 }
 
@@ -511,67 +335,6 @@ fieldset .no_label, fieldset .help {
 }
 
 /* @end */
-
-/* @group Front Page
-----------------------------------------*/
-
-#whats_happening {
-  margin: 1em 0 0 0;
-}
-
-#whats_happening h1 {
-  padding-top: .2em
-}
-
-#project_description {
-  background: #e8fbfe;
-  padding: 1em;
-  margin: 0 2em 0 -1em;
-}
-
-#project_description a {
-  font-weight: bold;
-}
-
-#project_description h2 {
-  font-weight: bold;
-  margin-bottom: .5em;
-}
-
-#tagcloud {
-  padding: 1em;
-  margin: 0 2em 0 -1em;
-}
-
-#tagcloud h2 {
-  font-weight: bold;
-  margin-bottom: .5em;
-}
-
-#homepage_sidebar {
-}
-
-
-/* @end */
-
-/* @group Helper Classes
-----------------------------------------*/
-
-.right {
-  float:  right;
-}
-
-.left {
-  float: left;
-}
-
-.hidden {
-  display: none;
-}
-
-/* @end */
-
-
 
 /* @group Recent Changes Display
 ----------------------------------------*/

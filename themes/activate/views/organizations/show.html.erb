@@ -1,0 +1,17 @@
+<%# render :partial => 'organizations/item', :locals => {:organization => @organization} %>
+
+<h1><%= @organization.name %></h1>
+<p>
+  <b>URL:</b>
+  <%= source_url_link @organization %>
+</p>
+
+<p>
+   <b>Events:</b>
+   <%= render :partial => 'events/list', :locals => { :events =>  @organization.events } %>
+</p>
+
+<% content_for :sidebar do %>
+  <%= link_to 'Edit this organization', edit_organization_url %> 
+<%# link_to 'Destroy', @organization, :confirm => 'Are you sure?', :method => :delete %>
+<% end %>
