@@ -55,7 +55,7 @@
     <div class="topbar">
       <div class="topbar-inner">
         <div class="container-fluid">
-          <a class="brand" href="/"><%= SETTINGS.name %></a>
+          <a class="brand" href="/" title="<%= SETTINGS.name %>"><%= theme_image_tag 'logo_dark_sm.png' %></a>
           <ul class="nav">
             <li class='<%=link_class[:events]%>'><%= link_to "Organizations", organizations_path %></li>
             <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
