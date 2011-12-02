@@ -33,6 +33,15 @@ Development Conventions
 -----------------------
 * Implement new features on feature branches in git (ex: `git checkout -b full-calendalar` ... hackhackhack... `git commit; git checkout master; git merge full-calendar`).
 
+Model Notes
+-----------------------
+Calagator comes with Events, Tags, Venues, and Sources.  Activate makes the following modifications:
+ * New model added: Organization (which can have Sources and Events).
+ * Tags on Events and Venues stores the information for Type, Topics, and Neighborhood, like so:
+   * A tag is stored like type:protest on an Event to represent a Protest.
+   * A tag is stored like 'beekeeping' on an Event to represent the 'beekeeping' Topic.
+   * A tag is stored like 'hood:SW' on a Venue to represent the SW Neighborhood.
+
 See Also
 --------
  * Logo files are in dropbox.  Lindsay can share with you if necessary.
