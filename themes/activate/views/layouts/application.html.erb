@@ -78,12 +78,10 @@
     <div class="container-fluid">
       <div class="sidebar">
       <% if content_for?(:sidebar) %>
-        <div class="well">
-          <%= yield :sidebar %>
-        </div>
+        <%= yield :sidebar %>
       <% end %>
           
-        <div class="well">
+        <div class="subnav box">
           <% # Pick a subnav %>
           <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
           <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>

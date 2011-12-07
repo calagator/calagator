@@ -60,14 +60,11 @@
 <% end %>
 
 <% content_for :sidebar do %>
-  <a href="#" id="homepage_sidebar_toggle" class="expander_toggle">Hi there. Learn about this site and how to use it...</a>
-  <div id="homepage_sidebar">
-    <div id="project_description">
-      <%= render :partial => "description" %>
-    </div>
+  <div class="alert-message">
+    <%= render :partial => "description" %>
   </div>
   <% if @tags.present? %>
-    <div id="tagcloud">
+    <div id="tagcloud" class="box">
       <h2>Popular tags</h2>
       <% @tags.each do |tag| %>
         <%= tag_link(:event, tag[:tag], "tagcloud_level_#{tag[:level]}") %>
