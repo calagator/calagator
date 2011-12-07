@@ -66,4 +66,12 @@
       <%= render :partial => "description" %>
     </div>
   </div>
+  <% if @tags.present? %>
+    <div id="tagcloud">
+      <h2>Popular tags</h2>
+      <% @tags.each do |tag| %>
+        <%= tag_link(:event, tag[:tag], "tagcloud_level_#{tag[:level]}") %>
+      <% end %>
+    </div>
+  <% end %>
 <% end %>
