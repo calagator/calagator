@@ -5,8 +5,7 @@
 <% end %>
 
 <% content_for :sidebar do %>
-  <a href="#" id="venue_sidebar_toggle" class="expander_toggle">Export or edit this venue...</a>
-  <div id="venue_sidebar" class='single_view_right'>
+  <div id="venue_sidebar" class='box'>
     <div id='edit_link'>
       <p>
         You can <%= link_to "edit", edit_venue_url(@venue) %>
@@ -14,7 +13,6 @@
         this venue.
       </p>
     </div>
-    <hr />
     <div class="metadata">
       <%= datestamp(@venue) %>
     </div>

@@ -12,6 +12,8 @@
 </p>
 
 <% content_for :sidebar do %>
-  <%= link_to 'Edit this organization', edit_organization_url %> 
+  <div class='box'>
+    <%= link_to 'Edit this organization', edit_organization_url %> 
+  </div>
 <%# link_to 'Destroy', @organization, :confirm => 'Are you sure?', :method => :delete %>
 <% end %>

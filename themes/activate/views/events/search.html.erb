@@ -7,7 +7,7 @@
 <%= render :partial => 'search_section', :locals => {:description => "past", :events => @grouped_events[:past]} %>
 
 <% content_for :sidebar do %>
-  <div id='list_filters'>
+  <div id='list_filters' class='box'>
     <h3>Subscribe to</h3>
     <ul>
       <li><%= link_to "iCalendar feed", url_for(:action => "search", :protocol => "webcal", :only_path => false, :query => @query, :format => "ics") %></li>

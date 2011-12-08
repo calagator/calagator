@@ -26,7 +26,7 @@
 <% end %>
 
 <% content_for :sidebar do %>
-  <div id="event_sidebar" class='single_view_right'>
+  <div id="event_sidebar" class='box'>
     <h3 class='first'>Export to</h3>
     <ul>
       <li><%= link_to "Google Calendar", google_event_export_link(@event), :id => "google_calendar_export", :target => "_blank" %></li>
