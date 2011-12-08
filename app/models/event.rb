@@ -1,5 +1,5 @@
 # == Schema Information
-# Schema version: 20110604174521
+# Schema version: 20111110144520
 #
 # Table name: events
 #
@@ -17,6 +17,7 @@
 #  version         :integer
 #  rrule           :string(255)
 #  venue_details   :text
+#  organization_id :integer
 #
 
 # == Event
@@ -40,6 +41,7 @@ class Event < ActiveRecord::Base
   # Associations
   belongs_to :venue, :counter_cache => true
   belongs_to :source
+  belongs_to :organization
 
   # Triggers
   before_validation :normalize_url!
@@ -184,6 +186,31 @@ class Event < ActiveRecord::Base
 
     return self.venue
   end
+
+
+ # Associate this event with the +organization+. The +organization+ can be given as an Organization
+  # instance, an ID, or a title.
+  def associate_with_organization(organization)
+    organization = \
+      case organization
+      when Organization then organization
+      when NilClass then nil
+      when String   then Organization.find_or_initialize_by_name(organization)
+      when Fixnum   then Organization.find(organization)
+      else raise TypeError, "Unknown type: #{organization.class}"
+      end
+
+    if organization && ((self.organization && self.organization != organization) || (!self.organization))
+      # Set organization if one is provided and it's different than the current, or no organization is currently set.
+      self.organization = organization
+    elsif !organization && self.organization
+      # Clear the event's organization field
+      self.organization = nil
+    end
+
+    return self.organization
+  end
+
 
   # Returns groups of records for the site overview screen in the following format:
   #

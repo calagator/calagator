@@ -1,0 +1,52 @@
+<% tabindex_on '#search_field' %>
+
+<%= cache_if(@perform_caching, CacheObserver.daily_key_for("events_index", request)) do %>
+<div id='list_description'>
+  <h2>Viewing <strong><%= @events.size %></strong>
+  <%= params[:date] ? 'filtered' : 'future' %> events
+  <%= events_sort_label(params[:order]) %></h2>
+</div>
+
+<% content_for :sidebar do %>
+  <div id='list_filters' class='box'>
+    
+    <h3 class='first'>Filter by date</h3>
+
+    <%= form_tag events_url, :method => 'get' do  -%>
+    <div id="date_filter">
+      <div id='start_calendar'>
+        <label for='date_start'>From</label>
+        <%= text_field_tag 'date[start]', @start_date.strftime('%Y-%m-%d'), :id => 'date_start', :class => 'date_picker' %>
+      </div>
+      <div id='end_calendar'>
+        <label for='date_end'>To</label>
+        <%= text_field_tag 'date[end]', @end_date.strftime('%Y-%m-%d'), :id => 'date_end', :class => 'date_picker' %>
+      </div>
+      <div>
+        <label for="commit">&nbsp;</label>
+        <%= submit_tag 'Filter' %>
+        <span class="clear_filter"><%= link_to 'Reset', events_url %></span>
+      </div>
+    </div>
+    <% end %>
+    
+    <h3>Subscribe to</h3>
+    <ul>
+      <li><%= link_to "iCalendar feed", url_for(:action => "index", :protocol => "webcal", :only_path => false)+".ics" %></li>
+      <li><%= link_to "Atom feed", events_url(:format => "atom") %></li>
+      <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+events_url(:format => 'ics') %></li>
+    </ul>
+
+    <h3>Export to</h3>
+    <ul>
+      <li><%= link_to "iCalendar file", events_url(:format => "ics") %></li>
+      <li><%= link_to "Google Calendar", "http://www.google.com/calendar/render?cid="+events_url(:format => 'ics') %></li>
+    </ul>
+    
+  </div>
+<% end %>
+
+<div id='list_items'>
+  <%= render :partial => 'events/table', :locals => { :events => @events } %>
+</div>
+<% end %>

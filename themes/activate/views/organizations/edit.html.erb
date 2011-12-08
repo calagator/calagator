@@ -1,0 +1,11 @@
+<h1>Editing organization</h1>
+
+<%= semantic_form_for(@organization) do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :name %>
+    <%= f.input :url %>
+  <% end %>
+  <%= f.buttons do %>
+    <%= f.submit "Update" %>
+  <% end %>
+<% end %>

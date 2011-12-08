@@ -11,6 +11,7 @@ Calagator::Application.routes.draw do
       post :squash_multiple_duplicates
       get :search
       get :duplicates
+      get :autocomplete_organization_name
     end
 
     member do
@@ -23,6 +24,8 @@ Calagator::Application.routes.draw do
       put :import
     end
   end
+
+  resources :organizations
 
   resources :venues do
     collection do

@@ -6,17 +6,6 @@
   <div id="project_description">
     <%= render :partial => "description" %>
   </div>
-
-  <% tags =
-        @tagcloud_items_deferred.call.map{ |item|
-          tag_link(:event, item[:tag], "tagcloud_level_#{item[:level]}") 
-        }.join('<span class="spacer"> &middot; </span>').html_safe -%>
-  <% if tags.present? %>
-    <div id="tagcloud">
-      <h2>Popular tags</h2>
-      <%= tags -%>
-    </div>
-  <% end %>
 </div>
 
 <div id="whats_happening">

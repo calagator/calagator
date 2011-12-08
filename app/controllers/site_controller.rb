@@ -11,7 +11,8 @@ class SiteController < ApplicationController
 
   def index
     @times_to_events = Event.select_for_overview
-    @tagcloud_items_deferred = lambda { ActsAsTaggableOn::Tag.for_tagcloud }
+    #@tags = Event.tag_counts_on(:tags)
+    @tags = ActsAsTaggableOn::Tag.for_tagcloud(Event, 1)
   end
   
   # Displays the about page.

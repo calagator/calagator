@@ -5,9 +5,10 @@
   background: #F5DBD7;
 }
 
-.expander_toggle {
+#homepage_sidebar {
   display: none;
 }
+
 
 .nowrap {
   white-space: nowrap;

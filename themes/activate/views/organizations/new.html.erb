@@ -1,0 +1,24 @@
+<div id="new_organization_form">
+  <%= render :partial => 'site/appropriateness_message' %>
+
+  <%# Create a form that collects Org details (currently name + URL). %>
+
+  <%= semantic_form_for(@organization, :html => {:id => 'organization_form', :class => 'standard_form'}) do |f| %>
+    <%= f.inputs :name => "Create Organization" do %>
+      <li class='input'>
+        <p class='inline-hints'>
+          Specify the organization's full name:
+        </p>
+      </li>
+      <%= f.input :name, :label => "Name" %>
+      <%= f.input :url, :label => "Homepage" %>
+      <% focus_on '#organization_name' %>
+    <% end %>
+
+    <%= f.buttons do %>
+      <%= f.commit_button "Save" %>
+    <% end %>
+  <% end %>
+
+
+</div>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>
+      <%= "#{@page_title} » " if @page_title -%>
+      <%= SETTINGS.name -%>: <%= SETTINGS.tagline -%>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel='search' type='application/opensearchdescription+xml' href='/opensearch.xml' title='<%= SETTINGS.name %>' />
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Stylesheets, static -->
+    <%= stylesheet_link_tag 'common', 'formtastic', :media => :all %>
+    <%= theme_stylesheet_link_tag 'layout', 'forms', 'jquery-ui/jquery-ui', :media => :all %>
+    <%= theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
+
+    <!--[if IE]>
+      <%= theme_stylesheet_link_tag 'ie', :media => :all %>
+    <![endif]-->
+    <%= theme_stylesheet_link_tag 'print', :media => :print %>
+
+    <!-- Stylesheets, inserted  -->
+    <%= yield :css_insert %>
+
+    <link charset="utf-8" href="/less/site.less" rel="stylesheet/less" type="text/css"/>
+
+
+    <!-- JavaScripts, static -->
+    <%= javascript_include_tag  "less"%>
+    <%= javascript_include_tag  :defaults, :cache => true %>
+    <%# TODO figure out how to fix 'theme_support' plugin to make a working include tag AND make the server actually send the contents, because both of these are broken. %>
+    <%#= theme_javascript_include_tag 'application'%>
+
+    <!-- JavaScripts, inserted -->
+    <%= yield :javascript_insert %>
+
+    <!-- Auto-discovery, static -->
+    <%= auto_discovery_link_tag(:atom, events_url(:format => 'atom'), :title => 'Atom: All Events' )%>
+
+    <!-- Auto-discovery, inserted -->
+    <%= yield :discovery_insert %>
+
+    <%# FIXME extract icon into theme %>
+    <link rel="apple-touch-icon" href="/images/site-icon.png" />
+  </head>
+  <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
+
+    <div class="topbar">
+      <div class="topbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="/" title="<%= SETTINGS.name %>"><%= theme_image_tag 'logo_dark_sm.png' %></a>
+          <ul class="nav">
+            <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li>
+            <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+            <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+          </ul>
+          <div class="pull-right">
+            <%= form_tag '/events/search', :method => :get do %>
+              <div id='search_form'>
+              <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+                <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+              <% else %>
+                <%= text_field_tag 'query', @query, :id => 'search_field' %>
+              <% end %>
+              </div>
+            <% end -%>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div class="sidebar">
+      <% if content_for?(:sidebar) %>
+        <%= yield :sidebar %>
+      <% end %>
+          
+        <div class="subnav box">
+          <% # Pick a subnav %>
+          <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
+          <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
+          <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+          <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
+        </div>
+      </div>
+
+      <div class="content">
+        <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
+        <%= render_flash %>
+        <%= yield %>
+      </div>
+    </div>
+
+    <div id="top_footer">
+      <%= URI.parse(SETTINGS.url).host %>
+      <%= source_code_version %>
+      &nbsp;
+      &nbsp;
+      &nbsp;
+      <span class="nowrap">
+        Display for
+        <%= link_to "mobile", url_for(:mobile => "1") %>,
+        <%= link_to "desktop", url_for(:mobile => "0") %> or
+        <%= link_to "default", url_for(:mobile => "-1") %>
+      </span>
+    </div>
+
+    <% if Rails.env == 'production' %>
+      <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+        var pageTracker = _gat._getTracker("UA-168427-7");
+        pageTracker._initData();
+        pageTracker._trackPageview();
+      </script>
+    <% end %>
+
+  </body>
+</html>

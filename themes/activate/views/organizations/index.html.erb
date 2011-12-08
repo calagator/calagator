@@ -1,0 +1,22 @@
+<h1>Listing Organizations</h1>
+
+<table>
+  <tr>
+    <th>Manage</th>
+    <th>Name</th>
+    <th>URL</th>
+  </tr>
+
+  <% for organization in @organizations %>
+  <tr class="<%= cycle 'odd', 'even' %>">
+    <td>
+      <%= link_to 'Show', organization %> | 
+      <%= link_to 'Edit', edit_organization_path(organization) %>
+      <%# link_to 'Destroy', organization, :confirm => 'Are you sure?', :method => :delete %>
+    </td>
+    <td><%= organization.name %></td>
+    <td><%= organization.url %></td>
+  </tr>
+  <% end %>
+</table>
+ 

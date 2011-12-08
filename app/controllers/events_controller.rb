@@ -1,6 +1,8 @@
 class EventsController < ApplicationController
   include SquashManyDuplicatesMixin # Provides squash_many_duplicates
 
+  autocomplete :organization, :name, :full=>true
+
   # GET /events
   # GET /events.xml
   def index
@@ -9,8 +11,8 @@ class EventsController < ApplicationController
 
     query = Event.non_duplicates.ordered_by_ui_field(params[:order]).includes(:venue, :tags)
     @events = params[:date] ?
-                query.within_dates(@start_date, @end_date) :
-                query.future
+    query.within_dates(@start_date, @end_date) :
+    query.future
 
     @perform_caching = params[:order].blank? && params[:date].blank?
 
@@ -66,6 +68,10 @@ class EventsController < ApplicationController
     @event = Event.new(params[:event])
     @event.associate_with_venue(venue_ref(params))
     has_new_venue = @event.venue && @event.venue.new_record?
+
+    @event.associate_with_organization(organization_ref(params))
+    flash[:success] = 'DEBUG - org name: ' + @event.organization.name
+    # TODO - remove debug stmt after fixing Event _item.html.erb.
 
     @event.start_time = [ params[:start_date], params[:start_time] ]
     @event.end_time   = [ params[:end_date], params[:end_time] ]
@@ -214,7 +220,7 @@ class EventsController < ApplicationController
     end
   end
 
-protected
+  protected
 
   # Export +events+ to an iCalendar file.
   def ical_export(events=nil)
@@ -246,6 +252,15 @@ protected
       p[:event][:venue_id].to_i
     else
       p[:venue_name]
+    end
+  end
+
+  # TODO - comment.  See above; consider refactoring.
+  def organization_ref(p)
+    if (p[:event] && !p[:event][:organization_id].blank?)
+      p[:event][:organization_id].to_i
+    else
+      p[:organization_name]
     end
   end
 
