@@ -16,9 +16,9 @@
     <h2><a name='find_local_events'>Find local events</a></h2>
     <h3>Browse</h3>
     <ul>
-      <li><a href='http://calagator.org/'>Browse an overview</a> of events for the next two weeks.</li>
-      <li><a href='http://calagator.org/events'>Browse events</a> in the future and past, and filter by date.</li>
-      <li><a href='http://calagator.org/venues'>Browse venues</a> and view future events occurring at each venue.</li>
+      <li><%= link_to "Browse an overview", root_path %> of events for the next two weeks.</li>
+      <li><%= link_to "Browse events", events_path %> in the future and past, and filter by date.</li>
+      <li><%= link_to "Browse venues", venues_path %> and view future events occurring at each venue.</li>
     </ul>
     
     <h3>Search</h3>
@@ -28,15 +28,15 @@
 
     <h3>Subscribe or export</h3>
     <ul>
-      <li><strong>Subscribe</strong> to a list of events with your favorite calendar or feed reader.</li>
+      <li><strong>Subscribe</strong> to a list of events with your <%= link_to "favorite calendar client", url_for(:controller => "events", :action => "index", :protocol => "webcal", :only_path => false)+".ics" %> or <%= link_to "feed reader", events_url(:format => "atom") %>.</li>
       <li><strong>Export</strong> a single event to your favorite calendar.</li>
     </ul>
             
     <h2><a name='share_local_events'>Share local events</a></h2>
     
     <ul>
-      <li><a href='http://calagator.org/events/new'>Add</a> an event by entering its details.</li>
-      <li><a href='http://calagator.org/sources/new/'>Import</a> event(s) by entering a URL to a feed or webpage, or via a bookmarklet.</li>
+      <li><%= link_to "Add", new_event_path %> an event by entering its details.</li>
+      <li><%= link_to "Import", new_source_path %> event(s) by entering a URL to a feed or webpage, or via a bookmarklet.</li>
       <li><strong>Improve</strong> content by editing events and venues.</li>
     </ul>
   
