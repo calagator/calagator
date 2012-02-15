@@ -66,10 +66,12 @@ class VenuesController < ApplicationController
     return redirect_to(venue_url(@venue.duplicate_of)) if @venue.duplicate?
 
     @page_title = @venue.title
-    @events = @venue.events.future.non_duplicates
 
     respond_to do |format|
-      format.html # show.html.erb
+      format.html {
+        @future_events = @venue.events.order("start_time ASC").future.non_duplicates
+        @past_events = @venue.events.order("start_time DESC").past.non_duplicates
+      }
       format.xml  { render :xml => @venue }
       format.json  { render :json => @venue, :callback => params[:callback] }
     end

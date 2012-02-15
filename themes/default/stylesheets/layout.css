@@ -461,7 +461,7 @@ ul.event_list .list_date {
 
 .single_venue .description,
 .single_venue .tags,
-.single_venue #future_events {
+.single_venue #events {
   float: left;
   clear: left;
   width: 500px;
@@ -473,7 +473,7 @@ ul.event_list .list_date {
   margin: 1em 0;
 }
 
-.single_venue #future_events,
+.single_venue #events,
 .single_venue .tags {
   margin-top: 1em;
 }

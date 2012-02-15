@@ -92,9 +92,16 @@
       </div>
     <% end %>
 
-    <div id='future_events'>
-      <h2>Future events happening here</h2>
-      <%= render :partial => 'events/list', :locals => { :events => @events } %>
+    <div id='events'>
+      <div id='future_events'>
+        <h2>Future events happening here</h2>
+        <%= render :partial => 'events/list', :locals => { :events => @future_events } %>
+      </div>
+
+      <div id='past_events'>
+        <h2>Past events that happened here</h2>
+        <%= render :partial => 'events/list', :locals => { :events => @past_events } %>
+      </div>
     </div>
   </div>
 </div>
