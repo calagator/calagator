@@ -39,6 +39,30 @@ describe SourceParser::Facebook do
     end
   end
 
+  describe "when parsing Facebook URLs" do
+    def should_parse(url)
+      url.match(SourceParser::Facebook.url_pattern)[1].should == "247619485255249"
+    end
+
+    it "should parse a GET-style URL" do
+      should_parse 'http://facebook.com/event.php?eid=247619485255249'
+    end
+
+    it "should parse a GET-style URL using HTTPS" do
+      should_parse 'https://facebook.com/event.php?eid=247619485255249'
+    end
+
+    it "should parse a REST-style URL" do
+      should_parse 'http://www.facebook.com/events/247619485255249'
+    end
+
+    it "should parse a GET-style URL with a 'www.' host prefix" do
+      should_parse 'http://www.facebook.com/event.php?eid=247619485255249'
+    end
+
+    it "should parse a API uri" do
+      should_parse 'http://graph.facebook.com/247619485255249'
+    end
   end
 
 end
