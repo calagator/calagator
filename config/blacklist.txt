@@ -10,3 +10,4 @@
 \bNaivahita\b
 \bdfadlmox\b
 \btramadol\b
+\bxanax\b
