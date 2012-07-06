@@ -14,6 +14,9 @@ namespace :sunspot do
       Event.find_in_batches(:batch_size => 100, :include => [:venue, :tags]) do |events|
         events.each(&:index)
       end
+      Venue.find_in_batches(:batch_size => 100, :include => [:tags]) do |venues|
+        venues.each(&:index)
+      end
       Sunspot.optimize
       Sunspot.commit
     end
