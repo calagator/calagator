@@ -44,6 +44,8 @@ Calagator::Application.routes.draw do
   match 'css/:name.:format' => 'site#style'
 
   match '/' => 'site#index', :as => :root
+  match '/index' => 'site#index'
+  match '/index.:format' => 'site#index'
 
   themes_for_rails
 
