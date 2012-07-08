@@ -61,7 +61,7 @@ gem 'exception_notification', '2.4.1'
 # production servers, you can skip their installation by running:
 #   bundle install --without development:test
 group :development, :test do
-  gem 'rspec-rails', '2.6.0'
+  gem 'rspec-rails', '2.11.0'
   gem 'webrat', '0.7.3'
   gem 'rcov', '0.9.9', :require => false
   gem 'factory_girl_rails', '1.0.1'
