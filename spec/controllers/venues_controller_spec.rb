@@ -194,8 +194,8 @@ describe VenuesController do
           @venue = Factory.create(:venue)
           @future_event = Factory.create(:event_without_venue, :venue => @venue)
           @past_event = Factory.create(:event_without_venue, :venue => @venue,
-            :start_time => Time.now - 1.day + 1.hour,
-            :end_time => Time.now - 1.day + 2.hours)
+            :start_time => Time.now - 1.week + 1.hour,
+            :end_time => Time.now - 1.week + 2.hours)
 
           get :show, :id => @venue.to_param, :format => "html"
           response.should be_success
