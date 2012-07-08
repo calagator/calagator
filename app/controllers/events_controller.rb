@@ -190,6 +190,9 @@ class EventsController < ApplicationController
       @grouped_events = Event.search_keywords_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
     elsif @tag
       @grouped_events = Event.search_tag_grouped_by_currentness(@tag, :order => @order, :current => @current)
+      if @grouped_events[:error]
+        flash[:failure] = escape_once(@grouped_events[:error])
+      end
     end
 
     # setting @events so that we can reuse the index atom builder
