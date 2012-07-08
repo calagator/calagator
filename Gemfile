@@ -1,3 +1,14 @@
+#===[ Gemfile usage ]===================================================
+#
+# This Gemfile activates the following gems in an unusual way:
+#
+# * The database gem is retrieved from the `config/database.yml` file.
+# * The debugger and code coverage are only activated if a `.dev` file exists.
+# * The Sunspot indexer is only activated if enabled in the secrets file.
+# * Additional gems may be loaded from a `Gemfile.local` file if it exists.
+
+#=======================================================================
+
 source :rubygems
 
 basedir = File.dirname(__FILE__)
@@ -63,11 +74,26 @@ gem 'exception_notification', '2.4.1'
 group :development, :test do
   gem 'rspec-rails', '2.11.0'
   gem 'webrat', '0.7.3'
-  gem 'rcov', '0.9.9', :require => false
   gem 'factory_girl_rails', '1.0.1'
 
-  gem 'ruby-debug', :platform => :mri_18
-  gem 'ruby-debug19', :platform => :mri_19
+  # Optional libraries add debugging and code coverage functionality, but are not
+  # needed otherwise. These are not activated by default because they may cause
+  # Ruby or RVM to hang, complicate installation, and upset travis-ci. To
+  # activate them, create a `.dev` file and rerun Bundler, e.g.:
+  #
+  #   touch .dev && bundle
+  if File.exist?(File.join(File.dirname(File.expand_path(__FILE__)), ".dev"))
+    platform :mri_18 do
+      gem 'ruby-debug'
+      gem 'rcov'
+    end
+
+    platform :mri_19 do
+      gem 'debugger'
+      gem 'debugger-ruby_core_source'
+      gem 'simplecov'
+    end
+  end
 end
 
 # Some dependencies are activated through server settings.
