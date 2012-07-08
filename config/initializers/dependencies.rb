@@ -7,6 +7,11 @@ require 'open-uri'
 require 'set'
 require 'uri'
 
+#===[ Gems ]============================================================
+
+# Adds Array#paginate
+require 'will_paginate/array'
+
 #===[ /lib ]============================================================
 
 require 'metaclass'
