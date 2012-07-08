@@ -2,7 +2,8 @@
 #
 # Expires caches.
 class CacheObserver < ActiveRecord::Observer
-  observe :event, :venue
+  observe :event
+  observe :venue
 
   #---[ Unique methods ]--------------------------------------------------
 
