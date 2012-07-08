@@ -46,7 +46,7 @@ gem 'rails', '3.0.14'
 gem 'columnize', '0.3.6'
 gem 'rdoc', '3.12', :require => false
 gem 'geokit', '1.6.5'
-gem 'htmlentities', '4.2.3' # 4.3 and above change the API significantly
+gem 'htmlentities', '4.3.1'
 gem 'paper_trail', '2.6.3'
 gem 'ri_cal', '0.8.8'
 gem 'rubyzip', '0.9.9', :require =>  'zip/zip'
