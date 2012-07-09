@@ -98,29 +98,36 @@ module TagModelExtensions
     #
     # Return data structure that can be used to make a tag cloud.
     #
-    # Argument:
+    # Options:
     # * type: The ActiveRecord model class to find tags for.
     # * minimum_taggings: The minimum number of taggings that a tag must have to be included in the results.
     # * levels: The number of levels that the tag cloud has.
+    # * maximum_tags: The maximum number of tags to display.
     #
     # The data structure is an array of hashes representing tags sorted by name, each hash has:
     # * :tag => The tag model instance.
     # * :count => The count of matching taggings for this tag.
     # * :level => The tag cloud level, the higher the count, the higher the level.
-    def for_tagcloud(type=Event, minimum_taggings=20, levels=5)
+    def for_tagcloud(opts={})
+      type = opts[:type] || Event
+      minimum_taggings = opts[:minimum_taggings] || 10
+      levels = opts[:levels] || 5
+      maximum_tags = opts[:maximum_tags] || 100
+
       exclusions = SETTINGS.tagcloud_exclusions || ['']
       counts_and_tags = []
+      max_count = 0
       benchmark("Tag::for_tagcloud") do
-        for tag in ActsAsTaggableOn::Tag.find_by_sql ['SELECT tags.name, COUNT(taggings.id) AS counter FROM tags, taggings WHERE tags.id = taggings.tag_id AND taggings.taggable_type = ? AND tags.name NOT IN (?) GROUP BY tags.name HAVING COUNT(taggings.id) > ? ORDER BY LOWER(tags.name) ASC', type.name, exclusions, minimum_taggings]
+        for tag in ActsAsTaggableOn::Tag.find_by_sql ["SELECT tags.name, COUNT(taggings.id) AS counter FROM tags, taggings WHERE tags.id = taggings.tag_id AND taggings.taggable_type = ? AND tags.name NOT IN (?) AND tags.name NOT LIKE '%:%=%' GROUP BY tags.name HAVING COUNT(taggings.id) > ? ORDER BY counter DESC LIMIT #{maximum_tags}", type.name, exclusions, minimum_taggings]
           count = tag.counter.to_i
           counts_and_tags << [count, tag]
+          max_count = count if count > max_count
         end
       end
 
-      max_count = counts_and_tags.map(&:first).max.to_f
       return counts_and_tags.map do |count, tag|
-        {:tag => tag, :count => count, :level => ((count / max_count) * (levels - 1)).round}
-      end
+        {:tag => tag, :count => count, :level => ((count.to_f / max_count.to_f) * (levels - 1)).round}
+      end.sort_by { |o| o[:tag].name }
     end
   end
 end
