@@ -80,12 +80,17 @@ namespace :deploy do
   task :prepare_shared, :roles => :app do
     run "mkdir -p #{shared_path}/config"
     run "mkdir -p #{shared_path}/db"
+    run "mkdir -p #{shared_path}/solr/data"
+    run "mkdir -p #{shared_path}/tmp/pids"
   end
 
   desc "Finish update, called by deploy"
   task :finish, :roles => :app do
     # Theme
     put (theme == "calagator" ? "default" : theme), "#{release_path}/config/theme.txt"
+
+    # PIDS
+    run %{ln -nsf "#{shared_path}/tmp/pids" "#{release_path}/tmp/"}
 
     # Secrets
     source = "#{shared_path}/config/secrets.yml"
@@ -120,10 +125,10 @@ ERROR!  You must have a file on your server with the database configuration.
     end
 
     # Solr
-    source = "#{shared_path}/solr/data"
-    target = "#{release_path}/solr/data"
-    run %{mkdir -p #{source}}
-    run %{ln -nsf #{source} #{target}}
+    run %{mkdir -p "#{release_path}/solr/pids"}
+    run %{ln -nsf "#{shared_path}/tmp/pids" "#{release_path}/solr/pids/production"}
+    run %{ln -nsf "#{shared_path}/solr/data" "#{release_path}/solr/data"}
+    run %{cd "#{release_path}" && ./bin/rake RAILS_ENV=production solr:condstart}
   end
 
   desc "Clear the application's cache"

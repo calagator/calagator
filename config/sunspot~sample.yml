@@ -1,17 +1,23 @@
+common: &common
+  pid_dir: "tmp/pids"
+
 production:
   solr:
     hostname: localhost
     port: 8983
     log_level: WARNING
+    << : *common
 
 development:
   solr:
     hostname: localhost
     port: 8982
     log_level: INFO
+    << : *common
 
 test:
   solr:
     hostname: localhost
     port: 8981
     log_level: WARNING
+    << : *common
