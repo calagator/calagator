@@ -88,9 +88,6 @@ namespace :deploy do
     # Theme
     put (theme == "calagator" ? "default" : theme), "#{release_path}/config/theme.txt"
 
-    # PIDS
-    run %{ln -nsf "#{shared_path}/tmp/pids" "#{release_path}/tmp/"}
-
     # Secrets
     source = "#{shared_path}/config/secrets.yml"
     target = "#{release_path}/config/"
@@ -130,6 +127,7 @@ ERROR!  You must have a file on your server with the database configuration.
 
     # Sunspot
     run %{rm -rf "#{release_path}/tmp/pids" && ln -nsf "#{shared_path}/tmp/pids" "#{release_path}/tmp/"}
+    run %{rm -rf "#{release_path}/solr/pids/production" && mkdir -p "#{release_path}/solr/pids" && ln -nsf "#{shared_path}/tmp/pids" "#{release_path}/solr/pids/production"}
     run %{ln -nsf "#{shared_path}/solr/data" "#{release_path}/solr/"}
     run %{cd "#{release_path}" && ./bin/rake RAILS_ENV=production sunspot:solr:condstart}
   end
