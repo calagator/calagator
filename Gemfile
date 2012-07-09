@@ -75,6 +75,8 @@ group :development, :test do
   gem 'rspec-rails', '2.11.0'
   gem 'webrat', '0.7.3'
   gem 'factory_girl_rails', '1.7.0' # 2.0 and above don't support Ruby 1.8.7 :(
+  gem 'capistrano', '2.12.0'
+  gem 'capistrano-ext', '1.2.1'
 
   # Optional libraries add debugging and code coverage functionality, but are not
   # needed otherwise. These are not activated by default because they may cause
