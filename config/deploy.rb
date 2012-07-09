@@ -124,11 +124,10 @@ ERROR!  You must have a file on your server with the database configuration.
       raise e
     end
 
-    # Solr
-    run %{mkdir -p "#{release_path}/solr/pids"}
-    run %{ln -nsf "#{shared_path}/tmp/pids" "#{release_path}/solr/pids/production"}
+    # Sunspot
+    run %{rm -rf "#{release_path}/tmp/pids" && ln -nsf "#{shared_path}/tmp/pids" "#{release_path}/tmp/pids"}
     run %{ln -nsf "#{shared_path}/solr/data" "#{release_path}/solr/data"}
-    run %{cd "#{release_path}" && ./bin/rake RAILS_ENV=production solr:condstart}
+    run %{cd "#{release_path}" && ./bin/rake RAILS_ENV=production sunspot:solr:condstart}
   end
 
   desc "Clear the application's cache"
