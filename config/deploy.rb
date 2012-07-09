@@ -190,9 +190,15 @@ end
 namespace :solr do
   desc "Download Solr data from remote server"
   task :use , :roles => :db, :only => {:primary => true} do
-    sh "mkdir -p solr/data/development"
-    sh "rsync -vaxP #{user}@#{host}:#{shared_path}/solr/data/production/ solr/data/development/"
-    sh "bundle exec rake solr:restart"
+    require "lib/secrets_reader"
+    secrets = SecretsReader.read
+    if "sunspot" == secrets.search_engine
+      sh "mkdir -p solr/data/development"
+      sh "rsync -vaxP #{user}@#{host}:#{shared_path}/solr/data/production/ solr/data/development/"
+      sh "bundle exec rake sunspot:solr:restart"
+    else
+      puts "# Sunspot isn't activated in your 'config/secrets.yml', not downloading its files."
+    end
   end
 end
 
