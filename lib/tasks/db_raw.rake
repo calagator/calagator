@@ -38,7 +38,8 @@ namespace :db do
       when 'sqlite3'
         target = struct.database
         mv target, "#{target}.old" if File.exist?(target)
-        sh "sqlite3 #{shellescape target} < #{shellescape source}"
+        # Ignore the "no such table: sqlite_sequence" errors
+        sh "sqlite3 #{shellescape target} < #{shellescape source} || true"
       when 'mysql'
         sh "mysql #{mysql_credentials_for struct} < #{shellescape source}"
       when 'postgresql'
