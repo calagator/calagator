@@ -108,6 +108,11 @@ ERROR!  You must have a file on your server to store secret information.
       raise e
     end
 
+    # Geocoder keys
+    source = "#{shared_path}/config/geocoder_api_keys.yml"
+    target = "#{release_path}/config/"
+    run %{if test -f #{source}; then ln -nsf #{source} #{target}; fi}
+
     # Database
     source = "#{shared_path}/config/database.yml"
     target = "#{release_path}/config/database.yml"
