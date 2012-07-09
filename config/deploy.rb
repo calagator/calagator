@@ -44,6 +44,7 @@
 ssh_options[:compression] = false
 default_run_options[:pty] = true
 set :use_sudo, false
+set :keep_releases, 5 # Keep no more than 5 successfully-deployed releases
 
 # Name
 set :application, "calagator"
