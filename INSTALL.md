@@ -102,26 +102,6 @@ You can stop the Solr search service a command like:
 
 You should setup a firewall to protect the ports that the Solr search service runs on. These ports are described in the `config/sunspot.yml` file.
 
-### acts_as_solr
-
-Optional search engine that uses the `acts_as_solr` gem. Requires additional setup, dependencies and service. Provides relevance-based sorting. Provides substring matches. However, has severe performance problems that may slow down creating and editing records.
-
-To use, you will need to [install Java 1.6.x](http://www.java.com/getjava), a programming language used to run the search service.
-
-You will then need to initially populate your records by running a command like:
-
-    bundle exec rake RAILS_ENV=production solr:rebuild_index
-
-You can start the Solr search service a command like:
-
-    bundle exec rake RAILS_ENV=production solr:start
-
-You can stop the Solr search service a command like:
-
-    bundle exec rake RAILS_ENV=production solr:stop
-
-You should setup a firewall to protect the ports that the Solr search service runs on. These ports are described in the `config/solr.yml` file.
-
 Feedback wanted
 ---------------
 

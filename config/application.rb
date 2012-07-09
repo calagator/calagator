@@ -112,11 +112,6 @@ module Calagator
       # Activate search engine
       require 'lib/search_engine'
       SearchEngine.kind = SECRETS.search_engine
-
-      case SearchEngine.kind
-      when :acts_as_solr
-        config.plugins << :acts_as_solr
-      end
     end
 
     # Set timezone for OS
