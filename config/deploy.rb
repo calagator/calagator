@@ -66,7 +66,7 @@ end
 namespace :deploy do
   desc "Restart Passenger application"
   task :restart, :roles => :app, :except => { :no_release => true } do
-    run "touch #{current_path}/tmp/restart.txt"
+    run %{touch "#{current_path}/tmp/restart.txt"}
   end
 
   [:start, :stop].each do |t|
@@ -78,10 +78,9 @@ namespace :deploy do
 
   desc "Prepare shared directories"
   task :prepare_shared, :roles => :app do
-    run "mkdir -p #{shared_path}/config"
-    run "mkdir -p #{shared_path}/db"
-    run "mkdir -p #{shared_path}/solr/data"
-    run "mkdir -p #{shared_path}/tmp/pids"
+    %w[config db solr/data tmp/pids].each do |base|
+      run %{mkdir -p "#{shared_path}/#{base}"}
+    end
   end
 
   desc "Finish update, called by deploy"
@@ -94,10 +93,10 @@ namespace :deploy do
 
     # Secrets
     source = "#{shared_path}/config/secrets.yml"
-    target = "#{release_path}/config/secrets.yml"
+    target = "#{release_path}/config/"
     begin
-      run %{if test ! -f #{source}; then exit 1; fi}
-      run %{ln -nsf #{source} #{target}}
+      run %{if test ! -f "#{source}"; then exit 1; fi}
+      run %{ln -nsf "#{source}" "#{target}"}
     rescue Exception => e
       puts <<-HERE
 ERROR!  You must have a file on your server to store secret information.
@@ -111,14 +110,14 @@ ERROR!  You must have a file on your server to store secret information.
     # Geocoder keys
     source = "#{shared_path}/config/geocoder_api_keys.yml"
     target = "#{release_path}/config/"
-    run %{if test -f #{source}; then ln -nsf #{source} #{target}; fi}
+    run %{if test -f "#{source}"; then ln -nsf "#{source}" "#{target}"; fi}
 
     # Database
     source = "#{shared_path}/config/database.yml"
-    target = "#{release_path}/config/database.yml"
+    target = "#{release_path}/config/"
     begin
-      run %{if test ! -f #{source}; then exit 1; fi}
-      run %{ln -nsf #{source} #{target}}
+      run %{if test ! -f "#{source}"; then exit 1; fi}
+      run %{ln -nsf "#{source}" "#{target}"}
     rescue Exception => e
       puts <<-HERE
 ERROR!  You must have a file on your server with the database configuration.
@@ -130,14 +129,14 @@ ERROR!  You must have a file on your server with the database configuration.
     end
 
     # Sunspot
-    run %{rm -rf "#{release_path}/tmp/pids" && ln -nsf "#{shared_path}/tmp/pids" "#{release_path}/tmp/pids"}
-    run %{ln -nsf "#{shared_path}/solr/data" "#{release_path}/solr/data"}
+    run %{rm -rf "#{release_path}/tmp/pids" && ln -nsf "#{shared_path}/tmp/pids" "#{release_path}/tmp/"}
+    run %{ln -nsf "#{shared_path}/solr/data" "#{release_path}/solr/"}
     run %{cd "#{release_path}" && ./bin/rake RAILS_ENV=production sunspot:solr:condstart}
   end
 
   desc "Clear the application's cache"
   task :clear_cache, :roles => :app do
-    run "(cd #{current_path} && ./bin/rake RAILS_ENV=production clear)"
+    run %{cd "#{current_path}" && ./bin/rake RAILS_ENV=production clear}
   end
 end
 
@@ -168,20 +167,20 @@ namespace :db do
   namespace :remote do
     desc "Dump database on remote server"
     task :dump, :roles => :db, :only => {:primary => true} do
-      run "(cd #{current_path} && ./bin/rake RAILS_ENV=production db:raw:dump FILE=#{shared_path}/db/database.sql)"
+      run %{cd "#{current_path}" && ./bin/rake RAILS_ENV=production db:raw:dump FILE="#{shared_path}/db/database.sql"}
     end
   end
 
   namespace :local do
     desc "Restore downloaded database on local server"
     task :restore, :roles => :db, :only => {:primary => true} do
-      sh "bundle exec rake db:raw:dump FILE=database~old.sql && bundle exec rake db:raw:restore FILE=database.sql"
+      sh %{bundle exec rake db:raw:dump FILE=database~old.sql && bundle exec rake db:raw:restore FILE=database.sql}
     end
   end
 
   desc "Download database from remote server"
   task :download, :roles => :db, :only => {:primary => true} do
-    sh "rsync -vaxP #{user}@#{host}:#{shared_path}/db/database.sql ."
+    sh %{rsync -vaxP #{user}@#{host}:"#{shared_path}/db/database.sql" .}
   end
 
   desc "Download and install production database locally"
@@ -198,9 +197,9 @@ namespace :solr do
     require "lib/secrets_reader"
     secrets = SecretsReader.read
     if "sunspot" == secrets.search_engine
-      sh "mkdir -p solr/data/development"
-      sh "rsync -vaxP #{user}@#{host}:#{shared_path}/solr/data/production/ solr/data/development/"
-      sh "bundle exec rake sunspot:solr:restart"
+      sh %{mkdir -p solr/data/development}
+      sh %{rsync -vaxP #{user}@#{host}:"#{shared_path}/solr/data/production/" solr/data/development/}
+      sh %{bundle exec rake sunspot:solr:restart}
     else
       puts "# Sunspot isn't activated in your 'config/secrets.yml', not downloading its files."
     end
