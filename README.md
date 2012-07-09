@@ -1,3 +1,6 @@
+[![Build Status](https://secure.travis-ci.org/calagator/calagator.png)](http://travis-ci.org/calagator/calagator)
+
+
 Calagator
 =========
 
