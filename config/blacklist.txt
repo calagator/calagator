@@ -28,3 +28,4 @@
 \bvicodin\b
 \balprazolam\b
 \bAloha!\s+<a\b
+\bpayday\s+loans\b
