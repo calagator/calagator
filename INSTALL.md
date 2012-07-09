@@ -87,14 +87,13 @@ Optional search engine that uses the Sunspot gem. Requires additional setup, dep
 
 To use, you will need to [install Java 1.6.x](http://www.java.com/getjava), a programming language used to run the search service.
 
-You will then need to initially populate your records by running commands like:
-
-    bundle exec rake RAILS_ENV=production sunspot:solr:start
-    bundle exec rake RAILS_ENV=production sunspot:reindex:calagator
-
 You can start the Solr search service a command like:
 
     bundle exec rake RAILS_ENV=production sunspot:solr:start
+
+You will then need to initially populate your records by running commands like:
+
+    bundle exec rake RAILS_ENV=production sunspot:reindex:calagator
 
 You can stop the Solr search service a command like:
 
