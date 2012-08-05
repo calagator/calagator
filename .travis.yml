@@ -11,8 +11,8 @@ rvm:
   - ree
   # - ruby-head
 env:
-#   - DB=mysql
-  - DB=postgresql USER=postgres
+  - DB=mysql DBUSER=root
+  - DB=postgresql DBUSER=postgres
   - DB=sqlite3
 before_script:
   - test -n "${DB}" && cp "config/database~${DB}.sample.yml" "config/database~custom.yml" && bundle
