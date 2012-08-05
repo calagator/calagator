@@ -1,3 +1,5 @@
+require 'shellwords'
+
 desc "Move and compress logs to log/archive/"
 task "log:archive" do
   # Rails logging fails if you simply rename the logs because it'll keep trying
@@ -14,9 +16,7 @@ task "log:archive" do
     target = File.join(archive_dir, "#{File.basename(source)}.#{timestamp}")
     target_archive = "#{target}.gz"
 
-    #puts "#{source} & #{target_archive}"
     # FIXME some requests will be lost due to a race condition between these two commands
-    sh("gzip -c #{source} > #{target_archive}")
-    sh("cat /dev/null > #{source}")
+    sh("gzip -c #{Shellwords.escape(source)} > #{Shellwords.escape(target_archive)} && cat /dev/null > #{Shellwords.escape(source)}") or raise "Bad return value from sh!"
   end
 end

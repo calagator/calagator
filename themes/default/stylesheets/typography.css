@@ -212,10 +212,11 @@ a.external.meetup     { background-image: url("/images/external_sites/meetup.png
 a.external.facebook   { background-image: url("/images/external_sites/facebook.png"); }
 a.external.lanyrd     { background-image: url("/images/external_sites/lanyrd.png"); }
 
-#tagcloud .tagcloud_level_1 { font-size: 75%; }
-#tagcloud .tagcloud_level_2 { font-size: 100%; }
-#tagcloud .tagcloud_level_3 { font-size: 125%; }
-#tagcloud .tagcloud_level_4 { font-size: 150%; }
+#tagcloud .tagcloud_level_0 { font-size: 85%; }
+#tagcloud .tagcloud_level_1 { font-size: 100%; }
+#tagcloud .tagcloud_level_2 { font-size: 125%; }
+#tagcloud .tagcloud_level_3 { font-size: 150%; }
+#tagcloud .tagcloud_level_4 { font-size: 175%; }
 #tagcloud .tagcloud_level_5 { font-size: 200%; }
 
 #tagcloud .spacer { color: gray }

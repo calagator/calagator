@@ -266,25 +266,34 @@ class Event < ActiveRecord::Base
   # NOTE: The `Event.search` method is implemented elsewhere! For example, it's
   # added by SearchEngine::ActsAsSolr if you're using that search engine.
 
-  # Return events matching given +tag+ grouped by their currentness, see
-  # ::group_by_currentness for data structure details.
+  # Return events matching the given +tag+ are grouped by their currentness,
+  # see ::group_by_currentness for data structure details.
+  #
+  # Will also set :error key if there was a non-fatal problem, e.g. invalid
+  # sort order.
   #
   # Options:
   # * :current => Limit results to only current events? Defaults to false.
   def self.search_tag_grouped_by_currentness(tag, opts={})
+    error = nil
+    tagged_with_opts = {}
     case opts[:order]
-      when 'name', 'title'
-        opts[:order] = 'events.title'
-      when 'date'
-        opts[:order] = 'events.start_time'
-      when 'venue'
-        opts[:order] = 'venues.title'
-        opts[:include] = :venue
+    when 'date', '', nil
+      tagged_with_opts[:order] = 'events.start_time'
+    when 'name', 'title'
+      tagged_with_opts[:order] = 'events.title'
+    when 'venue'
+      tagged_with_opts[:order] = 'venues.title'
+      tagged_with_opts[:include] = :venue
+    else
+      tagged_with_opts[:order] = 'events.start_time'
+      error = "Unknown ordering option #{opts[:order].inspect}, sorting by date instead."
     end
 
-    result = self.group_by_currentness(self.includes(:venue).tagged_with(tag, opts))
+    result = self.group_by_currentness(self.includes(:venue).tagged_with(tag, tagged_with_opts))
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
+    result[:error] = error
     return result
   end
 

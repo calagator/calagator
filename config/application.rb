@@ -14,16 +14,26 @@ module Calagator
 
     # Standard libraries
     require 'fileutils'
+    require 'net/http'
+    require 'net/https'
+    require 'open-uri'
+    require 'set'
+    require 'uri'
 
     # Bundled libraries
     $LOAD_PATH << Rails.root.join('vendor','gems','lucene_query-0.1','lib')
     require 'lucene_query'
-
     $LOAD_PATH << Rails.root.join('vendor','gems','mofo-0.2.8','lib')
     require 'mofo'
 
     # "/lib" libraries
     $LOAD_PATH << Rails.root.join
+    require 'metaclass'
+    require 'ext'
+    require 'tag_model_extensions'
+
+    # Adds Array#paginate
+    require 'will_paginate/array'
 
     #---[ Rails ]-----------------------------------------------------------
 
@@ -112,11 +122,6 @@ module Calagator
       # Activate search engine
       require 'lib/search_engine'
       SearchEngine.kind = SECRETS.search_engine
-
-      case SearchEngine.kind
-      when :acts_as_solr
-        config.plugins << :acts_as_solr
-      end
     end
 
     # Set timezone for OS

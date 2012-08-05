@@ -17,4 +17,27 @@ describe ApplicationController do
       flash[:failure].should == "Hello. World."
     end
   end
+
+  describe "#help" do
+    it "should respond to a view helper method" do
+      controller.send(:help).should respond_to(:link_to)
+    end
+
+    it "should not respond to an invalid method" do
+      controller.send(:help).should_not respond_to(:no_such_method)
+    end
+  end
+
+  describe "#escape_once" do
+    let(:raw) { "this & that" }
+    let(:escaped) { "this &amp; that" }
+
+    it "should escape raw string" do
+      controller.send(:escape_once, raw).should == escaped
+    end
+
+    it "should not escape an already escaped string" do
+      controller.send(:escape_once, escaped).should == escaped
+    end
+  end
 end

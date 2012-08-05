@@ -21,8 +21,6 @@
   </div>
 
   <div class="location vcard<%= " closed" if @venue.closed? %>">
-    <%= google_map @venue %>
-
     <h1 class="fn org"><%= @venue.title %></h1>
     <% if @venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
 
@@ -53,6 +51,7 @@
         </div>
       <% end %>
     <% end %>
+
     <div class='info'>
       <% if @venue.url.present? %>
         <div class='url'><%= link_to(truncate(url_for(@venue.url), :length => 60), url_for(@venue.url), :rel => "nofollow") %></div>
@@ -72,29 +71,38 @@
     </div>
   </div>
 
-  <div>
-    <% if @venue.description.present? || @venue.access_notes.present? %>
-      <div class="description">
-        <%= format_description(@venue.description) %>
-        <% if @venue.access_notes.present? %>
-          <div class="access_notes">
-            <h3>Access Notes</h3>
-            <%= format_description @venue.access_notes %>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
+  <% if @venue.description.present? || @venue.access_notes.present? %>
+    <div class="description">
+      <%= format_description(@venue.description) %>
+      <% if @venue.access_notes.present? %>
+        <div class="access_notes">
+          <h3>Access Notes</h3>
+          <%= format_description @venue.access_notes %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
 
-    <% if @venue.tags.present? -%>
-      <div class="tags">
-        <h2>Tags</h2>
-        <%= tag_links_for @venue %>
-      </div>
-    <% end %>
+  <% if @venue.tags.present? -%>
+    <div class="tags">
+      <h2>Tags</h2>
+      <%= tag_links_for @venue %>
+    </div>
+  <% end %>
 
+  <div id="google_map">
+    <%= google_map @venue %>
+  </div>
+
+  <div id='events'>
     <div id='future_events'>
       <h2>Future events happening here</h2>
-      <%= render :partial => 'events/list', :locals => { :events => @events } %>
+      <%= render :partial => 'events/list', :locals => { :events => @future_events } %>
+    </div>
+
+    <div id='past_events'>
+      <h2>Past events that happened here</h2>
+      <%= render :partial => 'events/list', :locals => { :events => @past_events } %>
     </div>
   </div>
 </div>

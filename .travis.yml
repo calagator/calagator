@@ -1,0 +1,23 @@
+language: ruby
+rvm:
+  - 1.8.7
+  - 1.9.2
+  - 1.9.3
+  ## JRuby is not compatible, see Gemfile for details.
+  # - jruby-18mode
+  # - jruby-19mode
+  # - jruby-head
+  ## Rubinius is not compatible, see Gemfile for details.
+  # - rbx-18mode
+  # - rbx-19mode
+  - ree
+env:
+  - DB=mysql DBUSER=root
+  - DB=postgresql DBUSER=postgres
+  - DB=sqlite3
+before_script:
+  - test -n "${DB}" && cp "config/database~${DB}.sample.yml" "config/database~custom.yml" && bundle
+  - bundle exec rake db:create:all db:migrate db:test:prepare --trace
+  - cp "config/secrets.yml.sample" "config/secrets.yml"
+-script:
+  - bundle exec rake --trace

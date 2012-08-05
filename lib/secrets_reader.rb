@@ -33,9 +33,9 @@ class SecretsReader
 
     normal_file = "config/secrets.yml"
     sample_file = "config/secrets.yml.sample"
-    rails_root = defined?(Rails.root) ? Rails.root : File.dirname(File.dirname(__FILE__))
+    rails_root = defined?(Rails) ? ::Rails.root : File.dirname(File.dirname(__FILE__))
 
-    message = "** SecretsReader - "
+    message = ""
     error = false
 
     if object = self.filename_to_ostruct(given_file)
@@ -43,16 +43,20 @@ class SecretsReader
     elsif object = self.filename_to_ostruct(File.join(rails_root, normal_file))
       message << "loaded '#{normal_file}'"
     elsif object = self.filename_to_ostruct(File.join(rails_root, sample_file))
-      message << "WARNING! Using insecure '#{sample_file}' settings, see 'Security' in INSTALL.md"
+      message << "WARNING! Using insecure '#{sample_file}' settings, see 'Security' in INSTALL.md" unless defined?($INSECURE_SECRETS)
+      $INSECURE_SECRETS = true
       error = true
     else
       raise Errno::ENOENT, "Couldn't find '#{normal_file}'"
     end
 
     unless silent
-      puts message if error
-      if !Rails.logger.nil?
-        Rails.logger.info(message)
+      if message.present?
+        message = "** SecretsReader - #{message}"
+        puts message if error
+        if message.present? && defined?(Rails)
+          Rails.logger.info(message)
+        end
       end
     end
 

@@ -188,6 +188,33 @@ describe VenuesController do
 
     end
 
+    describe "in HTML format" do
+      describe "venue with future and past events" do
+        before(:each) do
+          @venue = Factory.create(:venue)
+          @future_event = Factory.create(:event_without_venue, :venue => @venue)
+          @past_event = Factory.create(:event_without_venue, :venue => @venue,
+            :start_time => Time.now - 1.week + 1.hour,
+            :end_time => Time.now - 1.week + 2.hours)
+
+          get :show, :id => @venue.to_param, :format => "html"
+          response.should be_success
+        end
+
+        it "should have a venue" do
+          response.should have_selector(".location .fn", :content => @venue.title)
+        end
+
+        it "should have a future event" do
+          response.should have_selector("#events #future_events .summary", :content => @future_event.title)
+        end
+
+        it "should have a past event" do
+          response.should have_selector("#events #past_events .summary", :content => @past_event.title)
+        end
+      end
+    end
+
   end
 
   describe "DELETE" do

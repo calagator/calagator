@@ -12,26 +12,15 @@ class SiteController < ApplicationController
   def index
     @times_to_events = Event.select_for_overview
     @tagcloud_items_deferred = lambda { ActsAsTaggableOn::Tag.for_tagcloud }
+
+    respond_to do |format|
+      format.html { } # Default
+      format.any  { redirect_to(events_path(:format => params[:format])) }
+    end
   end
   
   # Displays the about page.
   def about; end
-  
-  # Export the database
-  def export
-    respond_to do |format|
-      format.html
-      format.sqlite3 do
-        send_file(Rails.root.join($database_yml_struct.database), :filename => File.basename($database_yml_struct.database))
-      end
-      format.data do
-        require "lib/data_marshal"
-        target = Rails.root.join('tmp','dumps','current.data')
-        DataMarshal.dump_cached(target)
-        send_file(target)
-      end
-    end
-  end
 
   def opensearch
     respond_to do |format|

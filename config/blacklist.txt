@@ -9,3 +9,23 @@
 \blevitra\b
 \bNaivahita\b
 \bdfadlmox\b
+\btramadol\b
+\bxanax\b
+\bbuy cheap\b
+\bbuy generic\b
+\bhydrocodone\b
+\bativan\b
+\bdiazepam\b
+\baccutane\b
+\bklonopin\b
+\badipex\b
+\badderall\b
+\bdiazepam \b
+\bazithromycin\b
+\baccutane\b
+\bclomid\b
+\bambien \b
+\bvicodin\b
+\balprazolam\b
+\bAloha!\s+<a\b
+\bpayday\s+loans\b

@@ -63,7 +63,20 @@ describe EventsController, "when displaying index" do
     post :index, :format => "atom"
 
     hash = Hash.from_xml(response.body)
-    hash["feed"]["entry"].should be_a_kind_of(Array)
+    entries = hash["feed"]["entry"]
+
+    entries.should be_a_kind_of(Array)
+    entries.should_not be_empty
+    entry = entries.first
+    record = Event.find(entry['id'][%r{(\d+)$}, 1])
+
+    Nokogiri.parse(entry['content']).search('.description p').inner_html.should == record.description
+    entry['end_time'].should == record.end_time.xmlschema
+    entry['start_time'].should == record.start_time.xmlschema
+    entry['summary'].should be_present
+    entry['title'].should == record.title
+    entry['updated'].should == record.updated_at.xmlschema
+    entry['url'].should == event_url(record)
   end
 
   describe "in ICS format" do
@@ -530,15 +543,22 @@ describe EventsController, "when searching" do
   end
 
   it "should be able to only return events matching specific tag" do
-    Event.should_receive(:tagged_with).with("foo", :current => false, :order => nil).and_return([])
+    Event.should_receive(:tagged_with).with("foo", :order => "events.start_time").and_return([])
 
     post :search, :tag => "foo"
   end
 
   it "should warn if user tries ordering tags by score" do
-    Event.should_receive(:tagged_with).with("foo", :current => false, :order => nil).and_return([])
+    Event.should_receive(:tagged_with).with("foo", :order => "events.start_time").and_return([])
 
     post :search, :tag => "foo", :order => "score"
+    flash[:failure].should_not be_blank
+  end
+
+  it "should warn if user tries ordering tags by invalid order" do
+    Event.should_receive(:tagged_with).with("foo", :order => "events.start_time").and_return([])
+
+    post :search, :tag => "foo", :order => "kittens"
     flash[:failure].should_not be_blank
   end
 

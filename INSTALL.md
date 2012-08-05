@@ -57,6 +57,10 @@ Security and secrets.yml
 
 This application runs with insecure settings by default to make it easy to get started. These default settings include publicly-known cryptography keys that can allow attackers to gain admin privileges to your application. You should create a `config/secrets.yml` file with your secret settings if you intend to run this application on a server that can be accessed by untrusted users, read the [config/secrets.yml.sample](config/secrets.yml.sample) file for details.
 
+Spam Blacklist
+--------------
+
+A default set of blacklist words is provided in config/blacklist.txt. You can create your own by adding a config/blacklist-local.txt file with one regular expression per line (see config/blacklist.txt for examples).
 
 API Keys
 --------
@@ -83,40 +87,19 @@ Optional search engine that uses the Sunspot gem. Requires additional setup, dep
 
 To use, you will need to [install Java 1.6.x](http://www.java.com/getjava), a programming language used to run the search service.
 
-You will then need to initially populate your records by running commands like:
-
-    bundle exec rake RAILS_ENV=production sunspot:solr:start
-    bundle exec rake RAILS_ENV=production sunspot:reindex:calagator
-
 You can start the Solr search service a command like:
 
     bundle exec rake RAILS_ENV=production sunspot:solr:start
+
+You will then need to initially populate your records by running commands like:
+
+    bundle exec rake RAILS_ENV=production sunspot:reindex:calagator
 
 You can stop the Solr search service a command like:
 
     bundle exec rake RAILS_ENV=production sunspot:solr:stop
 
 You should setup a firewall to protect the ports that the Solr search service runs on. These ports are described in the `config/sunspot.yml` file.
-
-### acts_as_solr
-
-Optional search engine that uses the `acts_as_solr` gem. Requires additional setup, dependencies and service. Provides relevance-based sorting. Provides substring matches. However, has severe performance problems that may slow down creating and editing records.
-
-To use, you will need to [install Java 1.6.x](http://www.java.com/getjava), a programming language used to run the search service.
-
-You will then need to initially populate your records by running a command like:
-
-    bundle exec rake RAILS_ENV=production solr:rebuild_index
-
-You can start the Solr search service a command like:
-
-    bundle exec rake RAILS_ENV=production solr:start
-
-You can stop the Solr search service a command like:
-
-    bundle exec rake RAILS_ENV=production solr:stop
-
-You should setup a firewall to protect the ports that the Solr search service runs on. These ports are described in the `config/solr.yml` file.
 
 Feedback wanted
 ---------------

@@ -212,17 +212,23 @@ describe Event do
       @event = Event.new(:title => "MyEvent")
     end
 
+    it "should fail to validate if start time is nil" do
+      @event.start_time = nil
+      @event.should_not be_valid
+      @event.should have(1).error_on(:start_time)
+    end
+
+    it "should fail to validate if start time is blank" do
+      @event.start_time = ""
+      @event.should_not be_valid
+      @event.should have(1).error_on(:start_time)
+    end
+
     it "should fail to validate if end_time is earlier than start time " do
       @event.start_time = Time.now
       @event.end_time = @event.start_time - 2.hours
       @event.save.should be_false
       @event.should have(1).error_on(:end_time)
-    end
-
-    it "should fail to validate if start time is set to invalid value" do
-      @event.start_time = "0/0/0"
-      @event.should_not be_valid
-      @event.should have(1).error_on(:start_time)
     end
 
   end

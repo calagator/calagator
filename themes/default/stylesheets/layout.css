@@ -394,12 +394,16 @@ ul.event_list .list_date {
 /* @group Single Venue
 ----------------------------------------*/
 
+.single_venue #google_map {
+  margin-bottom: 2em;
+}
+
 .single_venue .location.vcard {
   /* background: #e8fbfe;*/
   /* width: 45em;*/
   /* height: 16em;*/
   padding: 1em;
-  margin: 2em 2em 2em -1em;
+  margin: 2em 2em 0em -1em;
 }
 
 .single_venue h1 {
@@ -451,18 +455,15 @@ ul.event_list .list_date {
 .single_venue .location.vcard .adr,
 .single_venue .location.vcard .address {
   margin-bottom: 1em;
-  float: left;
   width: 300px;
 }
 
 .single_venue .location .info {
-  float: left;
 }
 
 .single_venue .description,
 .single_venue .tags,
-.single_venue #future_events {
-  float: left;
+.single_venue #events {
   clear: left;
   width: 500px;
 }
@@ -473,7 +474,7 @@ ul.event_list .list_date {
   margin: 1em 0;
 }
 
-.single_venue #future_events,
+.single_venue #events,
 .single_venue .tags {
   margin-top: 1em;
 }
@@ -481,7 +482,6 @@ ul.event_list .list_date {
 .single_venue #google_map {
   width: 30em;
   height: 20em;
-  float: right;
   border: 1px solid #222;
 }
 

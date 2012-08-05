@@ -12,8 +12,9 @@ cache_if(@perform_caching, CacheObserver.daily_key_for("events_atom", request)) 
           entry.title(event.title)
           entry.summary(summary)
           entry.url(event_url(event))
-          entry.updated(event.updated_at)
           entry.link({:rel => 'enclosure', :type => 'text/calendar', :href => event_url(event, :format => 'ics') })
+          entry.start_time(event.start_time.xmlschema)
+          entry.end_time(event.end_time.xmlschema) if event.end_time
           entry.content(render(:partial => 'events/feed_item.html.erb', :locals => { :event => event }), :type => 'html')
           if event.venue && event.venue.latitude && event.venue.longitude
             entry.georss :point, "#{event.venue.latitude} #{event.venue.longitude}"

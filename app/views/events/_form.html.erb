@@ -107,17 +107,15 @@
       <%= f.label :when, "When", :class => 'label' %>
       <%
         present = Time.now
-        if event.new_record?
-          # Provide an initial default value for the start_time and end_time that's rounded to the upcoming hour.
-          event.start_time ||= present + (60.minutes - present.min.minutes) - present.sec
-          event.end_time   ||= present + (60.minutes - present.min.minutes) - present.sec + 1.hour
-        end
+        # Provide initial default values for the start_time and end_time rounded to the upcoming hour.
+        event.start_time ||= present + (60.minutes - present.min.minutes) - present.sec
+        event.end_time   ||= present + (60.minutes - present.min.minutes) - present.sec + 1.hour
       %>
-        <%= text_field_tag 'start_date', event.start_time ? event.start_time.to_date : present.to_date, :id => 'date_start', :class => 'date_picker' %>
+        <%= text_field_tag 'start_date', event.start_time.to_date, :id => 'date_start', :class => 'date_picker' %>
         <%= text_field_tag 'start_time', event.start_time.strftime('%I:%M %p'), :id => 'time_start', :class => 'time_picker' %>
         <span class="to">to</span>
-        <%= text_field_tag 'end_time', event.end_time ? event.end_time.strftime('%I:%M %p') : nil, :id => 'time_end', :class => 'time_picker' %>
-        <%= text_field_tag 'end_date', event.end_time ? event.end_time.to_date : Time.now.to_date, :id => 'date_end', :class => 'date_picker' %>
+        <%= text_field_tag 'end_time', event.end_time.strftime('%I:%M %p'), :id => 'time_end', :class => 'time_picker' %>
+        <%= text_field_tag 'end_date', event.end_time.to_date, :id => 'date_end', :class => 'date_picker' %>
         <%= f.semantic_errors :start_date, :start_time, :end_date, :end_time %>
     </li>
     <%= f.input :url, :label => 'Website' %>
