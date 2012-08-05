@@ -12,7 +12,7 @@ rvm:
   # - ruby-head
 env:
 #   - DB=mysql
-#   - DB=postgresql
+  - DB=postgresql USER=postgres
   - DB=sqlite3
 before_script:
   - bundle exec rake db:create:all || true
