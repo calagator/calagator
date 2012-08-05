@@ -44,6 +44,9 @@ when 'pg', 'postgresql'
 when 'mysql2'
   # The latest "mysql2" gem isn't compatible with our Rails 3.0
   gem adapter, '~> 0.2.0'
+when 'jdbcsqlite3'
+  gem 'jdbc-sqlite3'
+  gem 'activerecord-jdbcsqlite3-adapter'
 else
   gem adapter
 end
@@ -74,6 +77,16 @@ gem 'exception_notification', '2.6.1'
 # gem 'paper_trail_manager', :git => 'https://github.com/igal/paper_trail_manager.git'
 # gem 'paper_trail_manager', :path => '../paper_trail_manager'
 gem 'paper_trail_manager', '0.1.4'
+
+platform :jruby do
+  gem 'activerecord-jdbc-adapter'
+  gem 'jruby-openssl'
+  gem 'jruby-rack'
+  gem 'warbler'
+
+  gem 'activerecord-jdbcsqlite3-adapter'
+  gem 'jdbc-sqlite3'
+end
 
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
