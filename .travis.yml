@@ -3,13 +3,14 @@ rvm:
   - 1.8.7
   - 1.9.2
   - 1.9.3
+  ## JRuby is not compatible, see Gemfile for details.
   # - jruby-18mode
   # - jruby-19mode
   # - jruby-head
+  ## Rubinius is not compatible, see Gemfile for details.
   # - rbx-18mode
   # - rbx-19mode
   - ree
-  # - ruby-head
 env:
   - DB=mysql DBUSER=root
   - DB=postgresql DBUSER=postgres
