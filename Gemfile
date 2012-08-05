@@ -69,12 +69,11 @@ gem 'acts-as-taggable-on', '2.3.3'
 gem 'themes_for_rails', '0.5.1'
 gem 'jquery-rails', '1.0.19'
 gem 'progress_bar', '0.4.0'
+gem 'exception_notification', '2.6.1'
 
 # gem 'paper_trail_manager', :git => 'https://github.com/igal/paper_trail_manager.git'
 # gem 'paper_trail_manager', :path => '../paper_trail_manager'
 gem 'paper_trail_manager', '0.1.4'
-
-gem 'exception_notification', '2.6.1'
 
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
