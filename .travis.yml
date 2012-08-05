@@ -18,3 +18,4 @@ before_script:
   - bundle exec rake db:create:all || true
   - bundle exec rake db:migrate
   - bundle exec rake db:test:prepare
+  - cp config/secrets.yml.sample config/secrets.yml
