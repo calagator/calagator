@@ -49,6 +49,16 @@ You need do the following before you can deploy a Calagator to Heroku:
 
         heroku create
 
+* Add a Heroku database, e.g.:
+
+        heroku addons:add heroku-postgresql:dev
+
+* **WARNING**: This default free database only allows 10,000 rows of data, [read about how to buy more](https://addons.heroku.com/heroku-postgresql).
+
+* Make the Heroku database your default:
+
+        heroku pg:promote `heroku addons | grep HEROKU_POSTGRESQL | awk '{ print $2 }'`
+
 * Follow the instructions in the `INSTALL.md` file to create these files:
 
         config/theme.txt
@@ -72,27 +82,29 @@ You can do run the Calagator development environment on your computer so you can
 
 * Open a terminal and `cd` into the `calagator` directory created when you did the `git` checkout, and run all of the commands from there.
 
-* If using RVM, create a gemset, use the gemset, and record your preference:
+* If using RVM:
 
+        # Install Ruby
+        rvm install 1.9.3
+
+        # Create a gemset
         rvm gemset create calagator
-        rvm use 1.9.2@calagator
-        rvm --rvmrc --create 1.9.2@calagator
+
+        # Use the new interpreter and gemset
+        rvm use 1.9.3@calagator
+
+        # Record your settings
+        rvm --rvmrc --create 1.9.3@calagator
 
 * Install [PostgreSQL](http://www.postgresql.org/), the database used by Heroku. Your operating system may already provide an easy way to install this, e.g. on Ubuntu you can run `sudo apt-get install postgresql`.
 
-* Install the Heroku gem, in case it's not already part of your gemset:
+* Install the Heroku gem:
 
         gem install heroku
 
 * Install the Bundler gem:
 
         gem install bundler
-
-* If using RVM, you must install some libraries in a special way:
-
-        gem install linecache19 -- --with-ruby-include=$rvm_path/src/${RUBY_VERSION?}
-
-        gem install ruby-debug19 -- --with-ruby-include=$rvm_path/src/${RUBY_VERSION?}
 
 * Configure the Calagator application to use PostgreSQL, by creating a `config/database~custom.yml` file and adding your database credentials there. You can use the `config/database~postgresql.sample.yml` as a reference.
 
@@ -112,7 +124,8 @@ Deployment
 After following the instructions in the **Common setup** section, you should now be able to deploy your app to Heroku:
 
     git push --force heroku heroku:master
-    heroku rake db:migrate
+    heroku run bundle exec rake db:migrate
+    heroku restart
 
 Your app should now be available! If the site fails to load, run `heroku logs` to try to identify the problem. If you're not sure how to fix the problem, please include the backtrace from the logs to help us figure out a solution.
 
