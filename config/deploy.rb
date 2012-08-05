@@ -53,6 +53,7 @@ set :application, "calagator"
 set :stages, Dir["config/deploy/*.rb"].map{|t| File.basename(t, ".rb")}
 require "capistrano/ext/multistage"
 require "bundler/capistrano"
+set :default_stage, "calagator"
 
 # Bundler
 set :bundle_flags, "--binstubs" # Clear flags because defaults require Gemfile.lock
