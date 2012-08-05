@@ -10,12 +10,13 @@ rvm:
   # - rbx-19mode
   - ree
   # - ruby-head
-# env:
+env:
 #   - DB=mysql
 #   - DB=postgresql
-#   - DB=sqlite3
+  - DB=sqlite3
 before_script:
   - bundle exec rake db:create:all || true
   - bundle exec rake db:migrate
   - bundle exec rake db:test:prepare
-  - cp config/secrets.yml.sample config/secrets.yml
+  - cp "config/secrets.yml.sample" "config/secrets.yml"
+  - test -n "${DB}" && cp "config/database~${DB}.sample.yml" "config/database~custom.yml"
