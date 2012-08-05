@@ -14,10 +14,10 @@
 #       Install MySQL and put its /bin directory on your path.
 
 common: &common
-  adapter: mysql
+  adapter: mysql2
   encoding: utf8
   socket: <%= `mysql_config --socket`.chomp %>
-  username: <%= ENV['USER'] %>
+  username: <%= ENV['DBUSER'] || ENV['USER'] %>
   password:
 
 development:

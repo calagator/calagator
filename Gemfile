@@ -11,6 +11,16 @@
 
 source :rubygems
 
+unless defined?($BUNDLER_INTERPRETER_CHECKED)
+  if defined?(JRUBY_VERSION)
+    puts "WARNING: JRuby cannot run Calagator. Its version of Nokogiri is incompatible with 'loofah', 'mofo' and other things. Although basic things like running the console and starting the server work, you'll run into problems as soon as you try to add/edit records or import hCalendar events."
+    $JRUBY_WARNED = true
+  elsif defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+    puts "WARNING: Rubinius cannot run Calagator. It's multibyte string handling is broken in ways that break 'loofah' and other libraries. You won't even be able to start the console because this is such a severe problem."
+  end
+  $BUNDLER_INTERPRETER_CHECKED = true
+end
+
 basedir = File.dirname(__FILE__)
 
 # Use "syck" YAML engine on Ruby 1.9.2 with early versions (e.g. p180) because
@@ -38,8 +48,18 @@ railsenv = ENV['RAILS_ENV'] || 'development'
 raise "Can't find database configuration for environment '#{railsenv}' in: #{filename}" unless databases[railsenv]
 adapter = databases[railsenv]['adapter']
 raise "Can't find database adapter for environment '#{railsenv}' in: #{filename}" unless databases[railsenv]['adapter']
-adapter = 'pg' if adapter == 'postgresql'
-gem adapter
+case adapter
+when 'pg', 'postgresql'
+  gem 'pg'
+when 'mysql2'
+  # The latest "mysql2" gem isn't compatible with our Rails 3.0
+  gem adapter, '~> 0.2.0'
+when 'jdbcsqlite3'
+  gem 'jdbc-sqlite3'
+  gem 'activerecord-jdbcsqlite3-adapter'
+else
+  gem adapter
+end
 
 # Run-time dependencies
 gem 'rails', '3.0.14'
@@ -58,16 +78,25 @@ gem 'loofah-activerecord', '1.0.0'
 gem 'bluecloth', '2.2.0'
 gem 'formtastic', '2.0.2' # 2.1 and above change the syntax significantly :(
 gem 'validation_reflection', '1.0.0'
-gem 'acts-as-taggable-on', '2.3.1'
+gem 'acts-as-taggable-on', '2.3.3'
 gem 'themes_for_rails', '0.5.1'
 gem 'jquery-rails', '1.0.19'
 gem 'progress_bar', '0.4.0'
+gem 'exception_notification', '2.6.1'
 
 # gem 'paper_trail_manager', :git => 'https://github.com/igal/paper_trail_manager.git'
 # gem 'paper_trail_manager', :path => '../paper_trail_manager'
 gem 'paper_trail_manager', '0.1.4'
 
-gem 'exception_notification', '2.6.1'
+platform :jruby do
+  gem 'activerecord-jdbc-adapter'
+  gem 'jruby-openssl'
+  gem 'jruby-rack'
+  gem 'warbler'
+
+  gem 'activerecord-jdbcsqlite3-adapter'
+  gem 'jdbc-sqlite3'
+end
 
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
@@ -95,6 +124,10 @@ group :development, :test do
       gem 'debugger'
       gem 'debugger-ruby_core_source'
       gem 'simplecov'
+    end
+
+    platform :jruby do
+      gem 'ruby-debug'
     end
   end
 end
