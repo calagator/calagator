@@ -58,7 +58,7 @@ gem 'loofah-activerecord', '1.0.0'
 gem 'bluecloth', '2.2.0'
 gem 'formtastic', '2.0.2' # 2.1 and above change the syntax significantly :(
 gem 'validation_reflection', '1.0.0'
-gem 'acts-as-taggable-on', '2.3.1'
+gem 'acts-as-taggable-on', '2.3.3'
 gem 'themes_for_rails', '0.5.1'
 gem 'jquery-rails', '1.0.19'
 gem 'progress_bar', '0.4.0'
