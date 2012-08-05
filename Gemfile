@@ -115,6 +115,10 @@ group :development, :test do
       gem 'debugger-ruby_core_source'
       gem 'simplecov'
     end
+
+    platform :jruby do
+      gem 'ruby-debug'
+    end
   end
 end
 
