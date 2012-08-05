@@ -38,8 +38,15 @@ railsenv = ENV['RAILS_ENV'] || 'development'
 raise "Can't find database configuration for environment '#{railsenv}' in: #{filename}" unless databases[railsenv]
 adapter = databases[railsenv]['adapter']
 raise "Can't find database adapter for environment '#{railsenv}' in: #{filename}" unless databases[railsenv]['adapter']
-adapter = 'pg' if adapter == 'postgresql'
-gem adapter
+case adapter
+when 'pg', 'postgresql'
+  gem 'pg'
+when 'mysql2'
+  # The latest "mysql2" gem isn't compatible with our Rails 3.0
+  gem adapter, '~> 0.2.0'
+else
+  gem adapter
+end
 
 # Run-time dependencies
 gem 'rails', '3.0.14'
