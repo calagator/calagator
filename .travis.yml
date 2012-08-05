@@ -16,9 +16,7 @@ env:
   - DB=sqlite3
 before_script:
   - test -n "${DB}" && cp "config/database~${DB}.sample.yml" "config/database~custom.yml" && bundle
-  - bundle exec rake db:create:all || true
-  - bundle exec rake db:migrate --trace
-  - bundle exec rake db:test:prepare --trace
+  - bundle exec rake db:create:all db:migrate db:test:prepare --trace
   - cp "config/secrets.yml.sample" "config/secrets.yml"
 -script:
   - bundle exec rake --trace
