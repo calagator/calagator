@@ -208,3 +208,8 @@ fieldset .help {
 a.control-link {
   border-bottom: none;
 }
+
+.share .fb-like {
+  top: -3px;
+  left: 0px;
+}
