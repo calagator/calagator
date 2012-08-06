@@ -91,9 +91,14 @@ html_classes << " contentbar" if has_contentbar
     </div>
     <h3>Share</h3>
     <div class="share">
-      <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= event_path(event) %>" data-text="<%= event.title rescue nil %> » <%= SETTINGS.name -%> <%= root_url+event_path(event) %>" data-related="calagator" data-dnt="true">Tweet</a>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-      <div class="fb-like" data-href="<%= root_url+event_path(event) %>" data-send="false" data-layout="button_count" data-width="450" data-show-faces="false"></div>
+      <% unless Rails.env.production? %>
+        <!-- Twitter will throw a bad request error in Chrome if the URL is localhost. The hard links to calagator.org fix this. Happy to implement a better alternative, couldn't find a domain in the site settings. -->
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://calagator.org<%= event_path(event) %>" data-text="<%= event.title rescue nil %> » <%= SETTINGS.name -%> : <%= SETTINGS.tagline %>" data-related="calagator" data-dnt="true">Tweet</a>
+      <% else %>
+        <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= root_url.sub(/\/$/,'')+event_path(event) %>" data-text="<%= event.title rescue nil %> » <%= SETTINGS.name -%> : <%= SETTINGS.tagline %>" data-related="calagator" data-dnt="true">Tweet</a>
+      <% end %>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      <div class="fb-like" data-href="<%= root_url+event_path(event) %>" data-send="false" data-layout="button_count" data-width="200" data-show-faces="false"></div>
     </div>
     <% unless event.tags.blank? -%>
     <h3>Tags</h3>

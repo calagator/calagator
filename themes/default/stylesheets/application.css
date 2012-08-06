@@ -210,6 +210,6 @@ a.control-link {
 }
 
 .share .fb-like {
-  top: -3px;
-  left: 0px;
+  top: -3px !important;
+  left: 0px !important;
 }
