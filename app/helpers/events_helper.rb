@@ -166,7 +166,7 @@ module EventsHelper
   # Will increase the maximum length of either the event title or venue
   # if one of the two is shorter than the maximum: 46
 
-  def text_sizer(event)
+  def tweet_text_sizer(event)
     title_length = event.title.length
     venue_length = event.venue.title.length
     if (title_length > 46) && (venue_length < 46)
@@ -187,7 +187,7 @@ module EventsHelper
 
   def tweet_text(event)
 
-    lengths = text_sizer(event)
+    lengths = tweet_text_sizer(event)
 
     result = []
     result << "#{truncate(event.title, :length => lengths[:title])} -"
