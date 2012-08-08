@@ -7,7 +7,7 @@
 <% content_for :facebook_tags do %>
   <meta property="og:title" content="<%= @event.title %>" />
   <meta property="og:description" content="<%= @event.description %>" />
-  <meta property="og:site_name" content="Calagator" />
+  <meta property="og:site_name" content="<%= SETTINGS.name %>" />
   <meta property="og:url" content="<%= event_url(@event) %>">
 <% end %>
 
