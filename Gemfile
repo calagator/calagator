@@ -62,7 +62,8 @@ else
 end
 
 # Run-time dependencies
-gem 'rails', '3.0.17'
+gem 'rails', '3.1.8'
+gem 'rails_autolink', '1.0.9'
 gem 'columnize', '0.3.6'
 gem 'rdoc', '3.12', :require => false
 gem 'geokit', '1.6.5'
