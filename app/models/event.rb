@@ -153,7 +153,9 @@ class Event < ActiveRecord::Base
       rescue Exception => e
         return e
       end
-    when Date, Time, DateTime, ActiveSupport::TimeWithZone
+    when Date, DateTime, ActiveSupport::TimeWithZone
+      return value.to_time
+    when Time
       return value # Accept as-is.
     else
       raise TypeError, "Unknown type #{value.class.to_s.inspect} with value #{value.inspect}"

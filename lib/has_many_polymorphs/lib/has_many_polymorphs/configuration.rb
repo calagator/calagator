@@ -4,7 +4,7 @@ Access the <tt>has_many_polymorphs_options</tt> hash in your Rails::Initializer.
 =end
 
 module Rails #:nodoc:
-  class Configuration
+  module Configuration
 
     def has_many_polymorphs_options
       ::HasManyPolymorphs.options

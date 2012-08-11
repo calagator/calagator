@@ -15,12 +15,12 @@ describe Event do
   describe "in general"  do
 
     it "should be valid" do
-      event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'))
+      event = Event.new(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'))
       event.should be_valid
     end
 
     it "should add a http:// prefix to urls without one" do
-      event = Event.new(:title => "Event title", :start_time => Time.parse('2008.04.12'), :url => 'google.com')
+      event = Event.new(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'), :url => 'google.com')
       event.should be_valid
     end
   end
@@ -45,11 +45,11 @@ describe Event do
     end
 
     it "should be considered a multi-day event if it crosses a day boundry and is longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
-      Event.new(:start_time => Date.today - 1.second, :end_time => Date.today + Event::MIN_MULTIDAY_DURATION).should be_multiday
+      Event.new(:start_time => Time.today - 1.second, :end_time => Time.today + Event::MIN_MULTIDAY_DURATION).should be_multiday
     end
 
     it "should not be considered a multi-day event if it crosses a day boundry, but is not longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
-      Event.new(:start_time => Date.today - 1.second, :end_time => Date.today - 1.second + Event::MIN_MULTIDAY_DURATION).should_not be_multiday
+      Event.new(:start_time => Time.today - 1.second, :end_time => Time.today - 1.second + Event::MIN_MULTIDAY_DURATION).should_not be_multiday
     end
   end
 
@@ -105,7 +105,7 @@ describe Event do
       @basic_event = Event.new(
         :title => 'Web 2.0 Conference',
         :url => 'http://www.web2con.com/',
-        :start_time => Time.parse('2007-10-05'),
+        :start_time => Time.zone.parse('2007-10-05'),
         :end_time => nil,
         :venue => @basic_venue)
     end
@@ -113,11 +113,11 @@ describe Event do
     it "should parse an AbstractEvent into an Event" do
       event = Event.new(:title => "EventTitle",
                         :description => "EventDescription",
-                        :start_time => Time.parse("2008-05-20"),
-                        :end_time => Time.parse("2008-05-22"))
+                        :start_time => Time.zone.parse("2008-05-20"),
+                        :end_time => Time.zone.parse("2008-05-22"))
       Event.should_receive(:new).and_return(event)
 
-      abstract_event = SourceParser::AbstractEvent.new("EventTitle", "EventDescription", Time.parse("2008-05-20"), Time.parse("2008-05-22"))
+      abstract_event = SourceParser::AbstractEvent.new("EventTitle", "EventDescription", Time.zone.parse("2008-05-20"), Time.zone.parse("2008-05-22"))
 
       Event.from_abstract_event(abstract_event).should == event
     end
@@ -238,7 +238,7 @@ describe Event do
       @date = "2009-01-02"
       @time = "03:45"
       @date_time = "#{@date} #{@time}"
-      @value = Time.parse(@date_time)
+      @value = Time.zone.parse(@date_time)
     end
 
     it "should return nil for a NilClass" do
@@ -253,7 +253,7 @@ describe Event do
       Event.time_for([@date, @time]).should == @value
     end
 
-    it "should return time for a Time" do
+    it "should return time for a DateTime" do
       Event.time_for(@value).should == @value
     end
 
@@ -736,7 +736,7 @@ describe Event do
     end
 
     it "should create a new version after updating" do
-      event = Event.create!(:title => "Event title", :start_time => Time.parse('2008.04.12'))
+      event = Event.create!(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'))
       event.versions.count.should == 1
 
       event.title = "New Title"
@@ -823,16 +823,30 @@ describe Event do
       (rt.dtend - rt.dtstart).should == 2.hours
     end
 
-    { :summary => :title,
-      :created => :created_at,
-      :last_modified => :updated_at,
-      :description => :description,
-      :url => :url,
-      :dtstart => :start_time,
-      :dtstamp => :created_at
-    }.each do |ical_attribute, model_attribute|
-      it "should map the Event's #{model_attribute} attribute to '#{ical_attribute}' in the iCalendar output" do
-        events(:tomorrow).send(model_attribute).should == ical_roundtrip( events(:tomorrow) ).send(ical_attribute)
+    context "when comparing Event's attributes to its iCalendar output" do
+      let(:event) { events(:tomorrow) }
+      let(:ical) { ical_roundtrip(event) }
+
+      { :summary => :title,
+        :created => :created_at,
+        :last_modified => :updated_at,
+        :description => :description,
+        :url => :url,
+        :dtstart => :start_time,
+        :dtstamp => :created_at
+      }.each do |ical_attribute, model_attribute|
+        it "should map the Event's #{model_attribute} attribute to '#{ical_attribute}' in the iCalendar output" do
+          model_value = event.send(model_attribute)
+          ical_value = ical.send(ical_attribute)
+
+          case model_value
+          when ActiveSupport::TimeWithZone
+            # Compare raw time because one is using local time zone, while other is using UTC time.
+            model_value.to_i.should == ical_value.to_i
+          else
+            model_value.should == ical_value
+          end
+        end
       end
     end
 
