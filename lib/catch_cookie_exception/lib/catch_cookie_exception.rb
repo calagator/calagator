@@ -2,7 +2,7 @@ require 'cgi'
 require 'cgi/session'
 class CGI::Session::CookieStore
   # Restore session data from the cookie.
-  # This method overrides the one in 
+  # This method overrides the one in
   # actionpack/lib/action_controller/session/cookie_store.rb
   # in order to handle the case of a "tampered" cookie more gracefully.
   # The issue is that changing the 'secret' in config/environment.rb

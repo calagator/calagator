@@ -1,4 +1,4 @@
-require 'lib/search_engine/base'
+require 'search_engine/base'
 
 class SearchEngine::Sunspot < SearchEngine::Base
   score true

@@ -1,4 +1,4 @@
-spec = Gem::Specification.new do |s| 
+spec = Gem::Specification.new do |s|
   s.name = "catch_cookie_exception"
   s.version = "1.0"
   s.author = "Michael Hartl"

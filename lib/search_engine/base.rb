@@ -1,4 +1,4 @@
-require 'lib/search_engine'
+require 'search_engine'
 
 # = SearchEngine::Base
 #
