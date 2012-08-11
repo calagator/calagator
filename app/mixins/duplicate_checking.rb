@@ -247,8 +247,8 @@ module DuplicateChecking
 
           foreign_objects = duplicate.send(association.name)
           for object in foreign_objects
-            object.update_attribute(association.primary_key_name, master.id) unless object.new_record?
-            Rails.logger.debug(%{#{self.name}#squash: transferring foreign object "#{object.class.name}##{object.id}" from duplicate "#{self.name}##{duplicate.id}" to master "#{self.name}##{master.id}" via association "#{association.name}" using attribute "#{association.primary_key_name}"})
+            object.update_attribute(association.foreign_key, master.id) unless object.new_record?
+            Rails.logger.debug(%{#{self.name}#squash: transferring foreign object "#{object.class.name}##{object.id}" from duplicate "#{self.name}##{duplicate.id}" to master "#{self.name}##{master.id}" via association "#{association.name}" using attribute "#{association.foreign_key}"})
           end
         end
 
