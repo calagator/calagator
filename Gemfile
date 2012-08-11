@@ -86,7 +86,7 @@ gem 'exception_notification', '2.6.1'
 
 # gem 'paper_trail_manager', :git => 'https://github.com/igal/paper_trail_manager.git'
 # gem 'paper_trail_manager', :path => '../paper_trail_manager'
-gem 'paper_trail_manager', '0.1.4'
+gem 'paper_trail_manager'
 
 platform :jruby do
   gem 'activerecord-jdbc-adapter'
