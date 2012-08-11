@@ -105,15 +105,13 @@ group :development, :test do
   gem 'rspec-rails', '2.11.0'
   gem 'webrat', '0.7.3'
   gem 'factory_girl_rails', '1.7.0' # 2.0 and above don't support Ruby 1.8.7 :(
+  gem 'spork', '~> 0.9.2'
 
   # Do not install these interactive libraries onto the continuous integration server.
   unless ENV['CI'] || ENV['TRAVIS']
     # Deployment
     gem 'capistrano', '2.12.0'
     gem 'capistrano-ext', '1.2.1'
-
-    # Efficient testing
-    gem 'spork', '~> 0.9.2'
 
     # Guard and plugins
     gem 'guard', '~> 1.3.0'
