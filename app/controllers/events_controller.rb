@@ -211,7 +211,7 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html {
         flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
-        render "new.html.erb"
+        render "new"
       }
       format.xml  { render :xml => @event }
     end
