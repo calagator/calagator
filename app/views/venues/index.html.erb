@@ -29,7 +29,7 @@
           <% if @venues.size == 0 -%>
             Sorry, there are no venues
           <% else -%>
-            Showing <%= "all " if params[:all] %><strong><%= @venues.size %></strong> venue<%= @venues.size == 1 ? '' : 's' %>
+            Showing <%= "all " if params[:all] %><strong><%= @venues.size %></strong> <%= 'venue'.pluralize(@venues.size) %>
           <% end %>
           <% if params[:query].present? %>
             matching &#8220;<%= params[:query] %>&#8221;
