@@ -52,8 +52,7 @@ case adapter
 when 'pg', 'postgresql'
   gem 'pg'
 when 'mysql2'
-  # The latest "mysql2" gem isn't compatible with our Rails 3.0
-  gem adapter, '~> 0.2.0'
+  gem 'mysql2', '~> 0.3.11'
 when 'jdbcsqlite3'
   gem 'jdbc-sqlite3'
   gem 'activerecord-jdbcsqlite3-adapter'
