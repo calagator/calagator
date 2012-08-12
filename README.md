@@ -56,4 +56,4 @@ This program is provided under an MIT open source license, read the [LICENSE.txt
 Copyright
 ---------
 
-Copyright (c) 2007-2011 Calagator
+Copyright (c) 2007-2012 Calagator
