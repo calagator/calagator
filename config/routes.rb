@@ -37,9 +37,6 @@ Calagator::Application.routes.draw do
   match 'recent_changes' => redirect("/changes")
   match 'recent_changes.:format' => redirect("/changes.%{format}")
 
-  match 'export' => 'site#export'
-  match 'export.:format' => 'site#export'
-
   match 'css/:name' => 'site#style'
   match 'css/:name.:format' => 'site#style'
 
