@@ -69,8 +69,8 @@ class VenuesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        @future_events = @venue.events.order("start_time ASC").future.non_duplicates
-        @past_events = @venue.events.order("start_time DESC").past.non_duplicates
+        @future_events = @venue.events.order("start_time ASC").future.non_duplicates.includes(:venue)
+        @past_events = @venue.events.order("start_time DESC").past.non_duplicates.includes(:venue)
       }
       format.xml  { render :xml => @venue }
       format.json  { render :json => @venue, :callback => params[:callback] }
