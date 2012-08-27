@@ -5,6 +5,7 @@
 *.swp
 *.tmp
 *~
+.dev
 .dtach
 .vagrant
 Vagrantfile.local
@@ -16,13 +17,14 @@ config/theme.txt
 config/thin.yml
 config/secrets.yml
 config/sunspot.yml
-coverage.info
+coverage.info*
 coverage/*
 db/*.sqlite3
 db/*.sqlite3.*
 db/schema.rb
 Gemfile.local
 Gemfile.lock
+Makefile
 index/*
 log/*
 nbproject/*
