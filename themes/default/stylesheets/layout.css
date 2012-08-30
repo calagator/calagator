@@ -291,6 +291,10 @@ ul.event_list .list_date {
   width: 40em;
 }
 
+.share .fb-like {
+  top: -3px !important;
+  left: 0px !important;
+}
 /* @end */
 
 /* Event Preview */

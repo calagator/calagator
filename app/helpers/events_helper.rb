@@ -102,4 +102,40 @@ module EventsHelper
     return result
   end
 
+  #--[ Sharing buttons ]-----------------------------------------
+
+  # Will increase the maximum length of either the event title or venue
+  # if one of the two is shorter than the maximum: 46
+
+  def tweet_text_sizer(event)
+    title_length = event.title.length
+    venue_length = event.venue.title.length
+    if (title_length > 46) && (venue_length < 46)
+      title_length = 46 + (46-venue_length)
+    elsif (title_length > 46)
+      title_length = 46
+    end
+
+    if (venue_length > 46) && (title_length < 46)
+      venue_length = 46 + (46-title_length)
+    elsif (venue_length > 46)
+      venue_length = 46
+    end
+    result = {title: title_length, venue: title_length}
+  end
+
+  # Tweet button text
+
+  def tweet_text(event)
+    
+    lengths = tweet_text_sizer(event)
+
+    result = []
+    result << "#{truncate(event.title, :length => lengths[:title])} -"
+    result << event.start_time.strftime("%I:%M%p %m.%d.%Y") # "04:00PM 08.01.2012"
+    result << "@ #{truncate(event.venue.title, :length => lengths[:venue])}"
+
+    return result.join(" ")
+  end
+
 end

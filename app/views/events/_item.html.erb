@@ -8,6 +8,7 @@ has_contentbar = local_assigns.has_key?(:has_contentbar) ? local_assigns[:has_co
 html_classes = "single_event"
 html_classes << " contentbar" if has_contentbar
 %>
+<div id="fb-root"></div>
 <div class="<%= html_classes %>">
   <div class="vevent">
     <h1 class="summary"><%= event.title %></h1>
@@ -73,7 +74,6 @@ html_classes << " contentbar" if has_contentbar
       <%= format_description(event.description) %>
     </div>
     <% end -%>
-
     <div class="attendees">
       <script id="attendees-template" type="text/mustache">
         <h3>Attendees</h3>
@@ -89,7 +89,18 @@ html_classes << " contentbar" if has_contentbar
         </ul>
       </script>
     </div>
+    <h3>Share</h3>
+    <div class="share">
+        <!-- Twitter will throw a bad request error in Chrome if the URL is localhost. The hard links to calagator.org fix this. Happy to implement a better alternative, couldn't find a domain in the site settings. -->
+        <% if Rails.env.development? %>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= SETTINGS.url.sub(/\/$/,'') + event_path(event) %>" data-text="<%= tweet_text(event) %>" data-related="calagator" data-dnt="true">Tweet</a>
+        <% else %>
+          <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= url_for(event) %>" data-text="<%= tweet_text(event) %>" data-related="calagator" data-dnt="true">Tweet</a>
+        <% end %>
 
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+      <div class="fb-like" data-href="<%= url_for(event) %>" data-send="false" data-layout="button_count" data-width="200" data-show-faces="false"></div>
+    </div>
     <% unless event.tags.blank? -%>
     <h3>Tags</h3>
     <div class="tags">
