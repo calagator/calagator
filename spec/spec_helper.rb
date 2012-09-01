@@ -41,6 +41,11 @@ Spork.prefork do
     # examples within a transaction, remove the following line or assign false
     # instead of true.
     config.use_transactional_fixtures = true
+    # Filter out gems from backtraces
+    config.backtrace_clean_patterns << /vendor\//
+    config.backtrace_clean_patterns << /lib\/rspec\/rails/
+    config.backtrace_clean_patterns << /gems\//
+
   end
 end
 
