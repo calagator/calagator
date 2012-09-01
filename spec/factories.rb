@@ -21,7 +21,7 @@ Factory.define :event_without_venue, :class => Event do |f|
   f.sequence(:title) { |n| "Event #{n}" }
   f.sequence(:description) { |n| "Description of Event #{n}." }
   f.start_time { Time.now + 1.hour }
-  f.end_time { self.start_time + 2.hours }
+  f.end_time { self.start_time + 1.hours }
 end
 
 Factory.define :event, :parent => :event_without_venue do |f|

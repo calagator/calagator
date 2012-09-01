@@ -4,7 +4,7 @@ describe Event do
   # TODO replace with Factory
   def valid_event_attributes
     {
-      :start_time => Time.now,
+      :start_time => now,
       :title => "A newfangled event"
     }
   end
@@ -28,27 +28,27 @@ describe Event do
 
   describe "when checking time status" do
     it "should be old if event ended before today" do
-      Factory.build(:event_without_venue, :start_time => Time.now - 1.day).should be_old
+      Factory.build(:event_without_venue, :start_time => today - 1.hour).should be_old
     end
 
     it "should be current if event is happening today" do
-      Factory.build(:event_without_venue, :start_time => Time.now + 1.day).should be_current
+      Factory.build(:event_without_venue, :start_time => today + 1.hour).should be_current
     end
 
     it "should be ongoing if it began before today but ends today or later" do
-      Factory.build(:event_without_venue, :start_time => Time.now - 1.day, :end_time => Time.now + 1.day).should be_ongoing
+      Factory.build(:event_without_venue, :start_time => today - 1.day, :end_time => today + 1.day).should be_ongoing
     end
 
     it "should be considered a multi-day event if it spans multiple days" do
-      Factory.build(:event_without_venue, :start_time => Time.now - 1.day, :end_time => Time.now + 1.day).should be_multiday
+      Factory.build(:event_without_venue, :start_time => today - 1.day, :end_time => now + 1.day).should be_multiday
     end
 
     it "should be considered a multi-day event if it crosses a day boundry and is longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
-      Event.new(:start_time => Time.today - 1.second, :end_time => Time.today + Event::MIN_MULTIDAY_DURATION).should be_multiday
+      Event.new(:start_time => today - 1.second, :end_time => today + Event::MIN_MULTIDAY_DURATION).should be_multiday
     end
 
     it "should not be considered a multi-day event if it crosses a day boundry, but is not longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
-      Event.new(:start_time => Time.today - 1.second, :end_time => Time.today - 1.second + Event::MIN_MULTIDAY_DURATION).should_not be_multiday
+      Event.new(:start_time => today - 1.second, :end_time => today - 1.second + Event::MIN_MULTIDAY_DURATION).should_not be_multiday
     end
   end
 
@@ -56,7 +56,7 @@ describe Event do
     before do
       @tags = "some, tags"
       @event.title = "Tagging Day"
-      @event.start_time = Time.now
+      @event.start_time = now
     end
 
     it "should be taggable" do
@@ -224,7 +224,7 @@ describe Event do
     end
 
     it "should fail to validate if end_time is earlier than start time " do
-      @event.start_time = Time.now
+      @event.start_time = now
       @event.end_time = @event.start_time - 2.hours
       @event.save.should be_false
       @event.should have(1).error_on(:end_time)
@@ -271,40 +271,40 @@ describe Event do
     end
 
     it "should set from date String" do
-      event = Event.new(:start_time => Date.today.to_s(:db))
+      event = Event.new(:start_time => today.to_date.to_s(:db))
       event.start_time.should be_a_kind_of(Time)
-      event.start_time.should == Time.now.midnight
+      event.start_time.should === today
     end
 
     it "should set from date-time String" do
-      event = Event.new(:start_time => Time.now.midnight.to_s(:db))
+      event = Event.new(:start_time => today.localtime.to_s(:db))
       event.start_time.should be_a_kind_of(Time)
-      event.start_time.should == Time.now.midnight
+      event.start_time.should === today
     end
 
     it "should set from Date" do
-      event = Event.new(:start_time => Date.today)
+      event = Event.new(:start_time => today.to_date)
       event.start_time.should be_a_kind_of(Time)
-      event.start_time.should == Time.now.midnight
+      event.start_time.should === today
     end
 
     it "should set from DateTime" do
-      event = Event.new(:start_time => DateTime.now.midnight)
+      event = Event.new(:start_time => today.to_datetime)
       event.start_time.should be_a_kind_of(Time)
-      event.start_time.should == Time.now.midnight
+      event.start_time.should === today
     end
 
     it "should set from TimeWithZone" do
       event = Event.new(:start_time => ActiveSupport::TimeWithZone.new(Time.now.midnight, Time.zone))
       event.start_time.should be_a_kind_of(Time)
-      event.start_time.should == Time.now.midnight
+      event.start_time.should === today
     end
 
     it "should set from Time" do
-      time = Time.now.midnight
+      time = today
       event = Event.new(:start_time => time)
       event.start_time.should be_a_kind_of(Time)
-      event.start_time.should == time
+      event.start_time.should === time
     end
 
     it "should flag an invalid time" do
@@ -317,7 +317,7 @@ describe Event do
   describe "when finding by dates" do
 
     before do
-      @today_midnight = Time.today
+      @today_midnight = today
       @yesterday = @today_midnight.yesterday
       @tomorrow = @today_midnight.tomorrow
 
@@ -404,14 +404,14 @@ describe Event do
       describe "determining if we should show the more link" do
         it "should provide :more item if there are events past the future cutoff" do
           event = stub_model(Event)
-          Event.should_receive(:first).with(:order=>"start_time asc", :conditions => ["start_time >= ?", Time.today + 2.weeks]).and_return(event)
+          Event.should_receive(:first).with(:order=>"start_time asc", :conditions => ["start_time >= ?", today + 2.weeks]).and_return(event)
 
           Event.select_for_overview[:more].should == event
         end
 
         it "should set :more item if there are no events past the future cutoff" do
           event = stub_model(Event)
-          Event.should_receive(:first).with(:order=>"start_time asc", :conditions => ["start_time >= ?", Time.today + 2.weeks]).and_return(event)
+          Event.should_receive(:first).with(:order=>"start_time asc", :conditions => ["start_time >= ?", today + 2.weeks]).and_return(event)
 
           Event.select_for_overview[:more?].should be_blank
         end
@@ -528,10 +528,10 @@ describe Event do
     end
 
     it "should find events" do
-      event_Z = Event.new(:title => "Zipadeedoodah", :start_time => (Time.now + 1.week))
-      event_A = Event.new(:title => "Antidisestablishmentarism", :start_time => (Time.now + 2.weeks))
-      event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (Time.now + 3.weeks))
-      event_o = Event.new(:title => "ommmmmmmmmmm...", :start_time => (Time.now + 4.weeks))
+      event_Z = Event.new(:title => "Zipadeedoodah", :start_time => (now + 1.week))
+      event_A = Event.new(:title => "Antidisestablishmentarism", :start_time => (now + 2.weeks))
+      event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (now + 3.weeks))
+      event_o = Event.new(:title => "ommmmmmmmmmm...", :start_time => (now + 4.weeks))
 
       Event.should_receive(:search).and_return([event_A, event_Z, event_O, event_o])
 
@@ -592,10 +592,10 @@ describe Event do
 
     describe "and searching" do
       it "should find events" do
-        event_A = Event.new(:title => "Zipadeedoodah", :start_time => (Time.now + 1.week))
-        event_o = Event.new(:title => "Antidisestablishmentarism", :start_time => (Time.now + 2.weeks))
-        event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (Time.now + 3.weeks))
-        event_Z = Event.new(:title => "ommmmmmmmmmm...", :start_time => (Time.now + 4.weeks))
+        event_A = Event.new(:title => "Zipadeedoodah", :start_time => (now + 1.week))
+        event_o = Event.new(:title => "Antidisestablishmentarism", :start_time => (now + 2.weeks))
+        event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (now + 3.weeks))
+        event_Z = Event.new(:title => "ommmmmmmmmmm...", :start_time => (now + 4.weeks))
 
         event_A.venue = Venue.new(:title => "Acme Hotel")
         event_o.venue = Venue.new(:title => "opbmusic Studios")
@@ -719,7 +719,7 @@ describe Event do
 
   describe "when checking for squashing" do
     before do
-      @today  = Time.today
+      @today  = today
       @master = Event.create!(:title => "Master",    :start_time => @today)
       @slave1 = Event.create!(:title => "1st slave", :start_time => @today, :duplicate_of_id => @master.id)
       @slave2 = Event.create!(:title => "2nd slave", :start_time => @today, :duplicate_of_id => @slave1.id)
@@ -821,9 +821,9 @@ describe Event do
 
     its(:id) { should be_nil }
 
-    its(:start_time) { should == Time.today + original.start_time.hour.hours }
+    its(:start_time) { should == today + original.start_time.hour.hours }
 
-    its(:end_time)   { should == Time.today + original.end_time.hour.hours }
+    its(:end_time)   { should == today + original.end_time.hour.hours }
 
     its(:tag_list) { should == original.tag_list }
 
@@ -847,7 +847,7 @@ describe Event do
     end
 
     it "should represent an event without an end time as a 1-hour block" do
-      event = Factory.build(:event_without_venue, :start_time => Time.now, :end_time => nil)
+      event = Factory.build(:event_without_venue, :start_time => now, :end_time => nil)
       event.end_time.should be_blank
 
       rt = ical_roundtrip(event)
@@ -855,14 +855,14 @@ describe Event do
     end
 
     it "should set the appropriate end time if one is given" do
-      event = Factory.build(:event_without_venue, :start_time => Time.now, :end_time => Time.now + 2.hours)
+      event = Factory.build(:event_without_venue, :start_time => now, :end_time => now + 2.hours)
 
       rt = ical_roundtrip(event)
       (rt.dtend - rt.dtstart).should == 2.hours
     end
 
     describe "when comparing Event's attributes to its iCalendar output" do
-      let(:event) { Factory.build(:event_without_venue, :id => 123, :created_at => Time.now) }
+      let(:event) { Factory.build(:event_without_venue, :id => 123, :created_at => now) }
       let(:ical) { ical_roundtrip(event) }
 
       { :summary => :title,
