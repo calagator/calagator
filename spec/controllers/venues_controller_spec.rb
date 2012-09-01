@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe VenuesController do
   render_views
-  fixtures :all
 
   #Delete this example and add some real ones
   it "should use VenuesController" do
@@ -10,16 +9,19 @@ describe VenuesController do
   end
 
   it "should redirect duplicate venues to their master" do
-    venue_master = venues(:cubespace)
-    venue_duplicate = venues(:duplicate_venue)
+    venue_master = Factory(:venue)
+    venue_duplicate = Factory(:venue)
 
+    # No redirect when they're unique
     get 'show', :id => venue_duplicate.id
     response.should_not be_redirect
     assigns(:venue).id.should == venue_duplicate.id
 
+    # Mark as duplicate
     venue_duplicate.duplicate_of = venue_master
     venue_duplicate.save!
 
+    # Now check that redirection happens
     get 'show', :id => venue_duplicate.id
     response.should be_redirect
     response.should redirect_to(venue_url(venue_master.id))
@@ -31,20 +33,20 @@ describe VenuesController do
     response.should be_success
     response.should have_selector('.failure', :content => 'omgwtfbbq')
   end
-  
+
   describe "when creating venues" do
     it "should stop evil robots" do
       post :create, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
       response.should render_template(:new)
     end
   end
-  
-  describe "when updating venues" do 
-    before(:each) do
-      @venue = stub_model(Venue, :versions => [])
+
+  describe "when updating venues" do
+    before do
+      @venue = Factory.build(:venue, :versions => [])
       Venue.stub!(:find).and_return(@venue)
     end
-    
+
     it "should stop evil robots" do
       put :update,:id => '1', :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
       response.should render_template(:edit)
@@ -52,16 +54,10 @@ describe VenuesController do
   end
 
   describe "when rendering the venues index" do
-    before :each do
-      @open_venue = Venue.create!(:title => 'Open Town', :description => 'baz')
-      @closed_venue = Venue.create!(:title => 'Closed Down', :closed => true)
-      @wifi_venue = Venue.create!(:title => "Internetful", :wifi => true)
-    end
-
-    after :each do
-      @open_venue.destroy
-      @closed_venue.destroy
-      @wifi_venue.destroy
+    before do
+      @open_venue = Factory(:venue, :title => 'Open Town', :description => 'baz', :wifi => false)
+      @closed_venue = Factory(:venue, :title => 'Closed Down', :closed => true, :wifi => false)
+      @wifi_venue = Factory(:venue, :title => "Internetful", :wifi => true)
     end
 
     describe "with no parameters" do
@@ -71,8 +67,8 @@ describe VenuesController do
 
       it "should assign @most_active_venues and @newest_venues by default" do
         get :index
-        assigns[:most_active_venues].should_not be_nil
-        assigns[:newest_venues].should_not be_nil
+        assigns[:most_active_venues].should be_present
+        assigns[:newest_venues].should be_present
       end
 
       it "should not included closed venues" do
@@ -166,34 +162,37 @@ describe VenuesController do
   end
 
   describe "when showing venues" do
-
-    before(:each) do
-      @venue = Venue.find(:first)
-    end
-
     describe "in JSON format" do
+      describe "with events" do
+        before do
+          @venue = Factory.build(:venue, :id => 123)
+          Venue.stub!(:find).and_return(@venue)
+        end
 
-      it "should produce JSON" do
-        get :show, :id => @venue.to_param, :format => "json"
+        it "should produce JSON" do
+          get :show, :id => @venue.to_param, :format => "json"
 
-        struct = ActiveSupport::JSON.decode(response.body)
-        struct.should be_a_kind_of(Hash)
+          struct = ActiveSupport::JSON.decode(response.body)
+          struct.should be_a_kind_of(Hash)
+          %w[id title description address].each do |field|
+            struct[field].should == @venue.send(field)
+          end
+        end
+
+        it "should accept a JSONP callback" do
+          get :show, :id => @venue.to_param, :format => "json", :callback => "some_function"
+
+          response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
+        end
       end
-
-      it "should accept a JSONP callback" do
-        get :show, :id => @venue.to_param, :format => "json", :callback => "some_function"
-
-        response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
-      end
-
     end
 
     describe "in HTML format" do
       describe "venue with future and past events" do
-        before(:each) do
-          @venue = Factory.create(:venue)
-          @future_event = Factory.create(:event_without_venue, :venue => @venue)
-          @past_event = Factory.create(:event_without_venue, :venue => @venue,
+        before do
+          @venue = Factory(:venue)
+          @future_event = Factory(:event, :venue => @venue)
+          @past_event = Factory(:event, :venue => @venue,
             :start_time => Time.now - 1.week + 1.hour,
             :end_time => Time.now - 1.week + 2.hours)
 
@@ -220,7 +219,7 @@ describe VenuesController do
   describe "DELETE" do
     describe "when deleting a venue without events" do
       before do
-        @venue = Venue.create!(:title => "My Venue")
+        @venue = Factory(:venue)
       end
 
       shared_examples_for "destroying a Venue record without events" do
@@ -262,8 +261,8 @@ describe VenuesController do
 
     describe "when deleting a venue with events" do
       before do
-        @venue = Venue.create!(:title => "My Venue")
-        @event = @venue.events.create!(:title => "My Event", :start_time => Time.now, :end_time => Time.now+1.hour)
+        @event = Factory(:event)
+        @venue = @event.venue
       end
 
       shared_examples_for "destroying a Venue record with events" do
@@ -305,5 +304,4 @@ describe VenuesController do
       end
     end
   end
-  
 end

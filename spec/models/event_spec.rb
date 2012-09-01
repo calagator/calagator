@@ -1,6 +1,7 @@
 require 'spec_helper'
 
 describe Event do
+  # TODO replace with Factory
   def valid_event_attributes
     {
       :start_time => Time.now,
@@ -8,7 +9,7 @@ describe Event do
     }
   end
 
-  before(:each) do
+  before do
     @event = Event.new
   end
 
@@ -26,22 +27,20 @@ describe Event do
   end
 
   describe "when checking time status" do
-    fixtures :all
-
     it "should be old if event ended before today" do
-      events(:old_event).should be_old
+      Factory.build(:event_without_venue, :start_time => Time.now - 1.day).should be_old
     end
 
     it "should be current if event is happening today" do
-      events(:tomorrow).should be_current
+      Factory.build(:event_without_venue, :start_time => Time.now + 1.day).should be_current
     end
 
     it "should be ongoing if it began before today but ends today or later" do
-      events(:ongoing_event).should be_ongoing
+      Factory.build(:event_without_venue, :start_time => Time.now - 1.day, :end_time => Time.now + 1.day).should be_ongoing
     end
 
     it "should be considered a multi-day event if it spans multiple days" do
-      events(:ongoing_event).should be_multiday
+      Factory.build(:event_without_venue, :start_time => Time.now - 1.day, :end_time => Time.now + 1.day).should be_multiday
     end
 
     it "should be considered a multi-day event if it crosses a day boundry and is longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
@@ -54,7 +53,7 @@ describe Event do
   end
 
   describe "dealing with tags" do
-    before(:each) do
+    before do
       @tags = "some, tags"
       @event.title = "Tagging Day"
       @event.start_time = Time.now
@@ -99,7 +98,7 @@ describe Event do
 
   describe "when parsing" do
 
-    before(:each) do
+    before do
       @basic_hcal = read_sample('hcal_basic.xml')
       @basic_venue = mock_model(Venue, :title => 'Argent Hotel, San Francisco, CA', :full_address => '50 3rd St, San Francisco, CA 94103')
       @basic_event = Event.new(
@@ -159,7 +158,7 @@ describe Event do
 
   end
 
-  describe "when finding duplicates" do 
+  describe "when finding duplicates" do
     it "should find all events with duplicate titles" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
       Event.find_duplicates_by(:title)
@@ -208,7 +207,7 @@ describe Event do
   end
 
   describe "when processing date" do
-    before(:each) do
+    before do
       @event = Event.new(:title => "MyEvent")
     end
 
@@ -233,8 +232,8 @@ describe Event do
 
   end
 
-  describe "time_for" do
-    before(:each) do
+  describe "#time_for" do
+    before do
       @date = "2009-01-02"
       @time = "03:45"
       @date_time = "#{@date} #{@time}"
@@ -258,7 +257,7 @@ describe Event do
     end
 
     it "should return exception for an invalid date expressed as a String" do
-      Event.time_for("0/0/0").should be_a_kind_of(Exception)
+      lambda { Event.time_for("0/0/0") }.should raise_error
     end
 
     it "should raise exception for an invalid type" do
@@ -266,9 +265,58 @@ describe Event do
     end
   end
 
+  describe "#set_time_on" do
+    it "should clear with nil" do
+      Event.new(:start_time => nil).start_time.should be_nil
+    end
+
+    it "should set from date String" do
+      event = Event.new(:start_time => Date.today.to_s(:db))
+      event.start_time.should be_a_kind_of(Time)
+      event.start_time.should == Time.now.midnight
+    end
+
+    it "should set from date-time String" do
+      event = Event.new(:start_time => Time.now.midnight.to_s(:db))
+      event.start_time.should be_a_kind_of(Time)
+      event.start_time.should == Time.now.midnight
+    end
+
+    it "should set from Date" do
+      event = Event.new(:start_time => Date.today)
+      event.start_time.should be_a_kind_of(Time)
+      event.start_time.should == Time.now.midnight
+    end
+
+    it "should set from DateTime" do
+      event = Event.new(:start_time => DateTime.now.midnight)
+      event.start_time.should be_a_kind_of(Time)
+      event.start_time.should == Time.now.midnight
+    end
+
+    it "should set from TimeWithZone" do
+      event = Event.new(:start_time => ActiveSupport::TimeWithZone.new(Time.now.midnight, Time.zone))
+      event.start_time.should be_a_kind_of(Time)
+      event.start_time.should == Time.now.midnight
+    end
+
+    it "should set from Time" do
+      time = Time.now.midnight
+      event = Event.new(:start_time => time)
+      event.start_time.should be_a_kind_of(Time)
+      event.start_time.should == time
+    end
+
+    it "should flag an invalid time" do
+      event = Factory.build(:event_without_venue)
+      event.start_time = "1/0"
+      event.errors[:start_time].should be_present
+    end
+  end
+
   describe "when finding by dates" do
 
-    before(:each) do
+    before do
       @today_midnight = Time.today
       @yesterday = @today_midnight.yesterday
       @tomorrow = @today_midnight.tomorrow
@@ -321,7 +369,7 @@ describe Event do
       # TODO:  consider writing the following specs as view specs
       # either in addition to, or instead of, model specs
 
-      before(:each) do
+      before do
         @overview = Event.select_for_overview
       end
 
@@ -371,7 +419,7 @@ describe Event do
     end
 
     describe "for future events" do
-      before(:each) do
+      before do
         @future_events = Event.future
       end
 
@@ -398,7 +446,7 @@ describe Event do
     end
 
     describe "for future events with venue" do
-      before(:each) do
+      before do
         @another_venue = Venue.create!(:title => "Another venue")
 
         @future_event_another_venue = Event.create!(
@@ -495,10 +543,8 @@ describe Event do
   end
 
   describe "when associating with venues" do
-    fixtures :all
-
-    before(:each) do
-      @venue = venues(:cubespace)
+    before do
+      @venue = Factory(:venue)
     end
 
     it "should not change a venue to a nil venue" do
@@ -510,7 +556,7 @@ describe Event do
     end
 
     it "should change an existing venue to a different one" do
-      @event.venue = venues(:duplicate_venue)
+      @event.venue = Factory(:venue, :duplicate_of => @venue)
 
       @event.associate_with_venue(@venue).should == @venue
     end
@@ -533,17 +579,9 @@ describe Event do
     end
 
     it "should raise an exception if there's a loop in the duplicates chain" do
-      venue1 = stub_model(Venue, :id => 123)
-      venue2 = stub_model(Venue, :id => 321, :duplicate_of => venue1)
-      venue1.stub!(:duplicate_of => venue2)
-
-      Venue.should_receive(:find).and_return do |key|
-        case key
-        when 123 then venue1
-        when 321 then venue2
-        else raise ArgumentError, "Unknown key: #{key.inspect}"
-        end
-      end
+      venue1 = Factory(:venue)
+      venue2 = Factory(:venue, :duplicate_of => venue1)
+      venue1.update_attribute(:duplicate_of, venue2)
 
       lambda { @event.associate_with_venue(venue1.id) }.should raise_error(DuplicateCheckingError)
     end
@@ -575,12 +613,6 @@ describe Event do
   end
 
   describe "with finding duplicates" do
-    before do
-      @non_duplicate_event = Factory(:event)
-      @duplicate_event = Factory(:duplicate_event)
-      @events = [@non_duplicate_event, @duplicate_event]
-    end
-
     it "should find all events with duplicate titles" do
       Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
       Event.find_duplicates_by(:title )
@@ -591,23 +623,29 @@ describe Event do
       Event.find_duplicates_by([:title,:url])
     end
 
-    it "should find all events that have not been marked as duplicate" do
-      non_duplicates = Event.non_duplicates
-      non_duplicates.should include @non_duplicate_event
-      non_duplicates.should_not include @duplicate_event
-    end
+    describe "with sample records" do
+      before do
+        @non_duplicate_event = Factory(:event)
+        @duplicate_event = Factory(:duplicate_event)
+        @events = [@non_duplicate_event, @duplicate_event]
+      end
 
-    it "should find all events that have been marked as duplicate" do
-      duplicates = Event.marked_duplicates
-      duplicates.should include @duplicate_event
-      duplicates.should_not include @non_duplicate_event
+      it "should find all events that have not been marked as duplicate" do
+        non_duplicates = Event.non_duplicates
+        non_duplicates.should include @non_duplicate_event
+        non_duplicates.should_not include @duplicate_event
+      end
+
+      it "should find all events that have been marked as duplicate" do
+        duplicates = Event.marked_duplicates
+        duplicates.should include @duplicate_event
+        duplicates.should_not include @non_duplicate_event
+      end
     end
   end
 
   describe "with finding duplicates (integration test)" do
-    fixtures :all
-
-    before(:each) do
+    before do
       @event = Factory(:event)
     end
 
@@ -660,7 +698,7 @@ describe Event do
   end
 
   describe "when squashing duplicates (integration test)" do
-    before(:each) do
+    before do
       @event = Factory(:event)
     end
 
@@ -680,7 +718,7 @@ describe Event do
   end
 
   describe "when checking for squashing" do
-    before(:each) do
+    before do
       @today  = Time.today
       @master = Event.create!(:title => "Master",    :start_time => @today)
       @slave1 = Event.create!(:title => "1st slave", :start_time => @today, :duplicate_of_id => @master.id)
@@ -746,7 +784,7 @@ describe Event do
   end
 
   describe "when normalizing line-endings in the description" do
-    before(:each) do
+    before do
       @event = Event.new
     end
 
@@ -795,8 +833,6 @@ describe Event do
   end
 
   describe "when converting to iCal" do
-    fixtures :all
-
     def ical_roundtrip(events, opts = {})
       parsed_events = RiCal.parse_string(Event.to_ical(events, opts)).first.events
       if events.is_a?(Event)
@@ -807,24 +843,26 @@ describe Event do
     end
 
     it "should produce parsable iCal output" do
-      lambda { ical_roundtrip( events(:tomorrow) ) }.should_not raise_error
+      lambda { ical_roundtrip( Factory.build(:event_without_venue) ) }.should_not raise_error
     end
 
     it "should represent an event without an end time as a 1-hour block" do
-      rt = ical_roundtrip(events(:tomorrow))
+      event = Factory.build(:event_without_venue, :start_time => Time.now, :end_time => nil)
+      event.end_time.should be_blank
+
+      rt = ical_roundtrip(event)
       (rt.dtend - rt.dtstart).should == 1.hour
     end
 
     it "should set the appropriate end time if one is given" do
-      event = Event.new(valid_event_attributes)
-      event.end_time = event.start_time + 2.hours
+      event = Factory.build(:event_without_venue, :start_time => Time.now, :end_time => Time.now + 2.hours)
 
       rt = ical_roundtrip(event)
       (rt.dtend - rt.dtstart).should == 2.hours
     end
 
-    context "when comparing Event's attributes to its iCalendar output" do
-      let(:event) { events(:tomorrow) }
+    describe "when comparing Event's attributes to its iCalendar output" do
+      let(:event) { Factory.build(:event_without_venue, :id => 123, :created_at => Time.now) }
       let(:ical) { ical_roundtrip(event) }
 
       { :summary => :title,
@@ -861,7 +899,7 @@ describe Event do
     end
 
     it "should include tags in the description" do
-      event = events(:tomorrow)
+      event = Factory.build(:event_without_venue)
       event.tag_list = "tags, folksonomy, categorization"
       ical_roundtrip(event).description.should include event.tag_list.to_s
     end
@@ -910,10 +948,8 @@ describe Event do
     end
 
     describe "- the headers" do
-      fixtures :all
-
-      before(:each) do
-        @data = Event.to_ical(events(:tomorrow))
+      before do
+        @data = Factory.build(:event_without_venue).to_ical
       end
 
       it "should include the calendar name" do

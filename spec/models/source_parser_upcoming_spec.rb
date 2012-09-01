@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe SourceParser::Upcoming do
-  fixtures :all
-
   describe "when extracting Upcoming event id" do
     it 'should extract from verbose URL' do
       SourceParser::Upcoming._upcoming_url_to_event_id('http://upcoming.yahoo.com/event/3082817/OR/Portland/Ignite-Portland-7/').should == '3082817'

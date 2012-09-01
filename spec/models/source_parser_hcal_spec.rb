@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe SourceParser::Hcal, "with hCalendar events" do
-  fixtures :all
-
   it "should parse hcal" do
     hcal_content = read_sample('hcal_single.xml')
     hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
