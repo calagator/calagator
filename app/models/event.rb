@@ -126,33 +126,42 @@ class Event < ActiveRecord::Base
     alias_method_chain :end_time=, :smarter_setter
   end
 
-  # Set the time in Event +record+ instance for an +attribute+ (e.g.,
-  # :start_time) to +value+ (e.g., a Time).
+  # Sets record's attribute to time value. If time is invalid, marks record as invalid.
+  #
+  # @param [ActiveRecord::Base] record The record to modify.
+  # @param [String, Symbol] attribute The attribute to set, e.g. :start_time.
+  # @param [Time] value The time.
+  #
+  # @return [Time]
   def self.set_time_on(record, attribute, value)
-    result = self.time_for(value)
-    case result
-    when Exception
+    begin
+      result = self.time_for(value)
+    rescue Exception => e
       record.errors.add(attribute, "is invalid")
       return record.send("#{attribute}_without_smarter_setter=", nil)
-    else
-      return record.send("#{attribute}_without_smarter_setter=", result)
     end
+    return record.send("#{attribute}_without_smarter_setter=", result)
   end
 
-  # Return the time for the +value+, which could be a Time, Date, DateTime,
-  # String, Array of Strings, etc.
+  # Returns time for the value, which can be a Time, Date, DateTime, String,
+  # Array of Strings, nil, etc.
+  #
+  # @param [nil, String, Date, DateTime, ActiveSupport::TimeWithZone, Time] value The time to parse.
+  #
+  # @return [Time]
+  #
+  # @raise TypeError Thrown if given an unknown type.
+  # @raise Exception Thrown if value can't be parsed.
   def self.time_for(value)
     value = value.join(' ') if value.kind_of?(Array)
     case value
     when NilClass
       return nil
     when String
-      return nil if value.blank?
-      begin
-        return Time.parse(value)
-      rescue Exception => e
-        return e
-      end
+      # This can throw an exception
+      return value.present? ?
+        Time.parse(value) :
+        nil
     when Date, DateTime, ActiveSupport::TimeWithZone
       return value.to_time
     when Time
