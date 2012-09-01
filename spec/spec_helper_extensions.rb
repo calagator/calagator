@@ -172,3 +172,13 @@ SAMPLES_PATH = File.expand_path(File.dirname(__FILE__) + "/samples") unless defi
 def read_sample(path_fragment)
   File.read(File.join(SAMPLES_PATH, path_fragment))
 end
+
+# Returns the time right now.
+def now
+  return Time.zone.now
+end
+
+# Returns the time for today at midnight.
+def today
+  return now.midnight
+end
