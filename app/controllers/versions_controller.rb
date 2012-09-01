@@ -1,7 +1,7 @@
 class VersionsController < ApplicationController
   def edit
     @version = Version.find(params[:id])
-    @record = @version.next.try(:reify) || @version.item
+    @record = @version.next.try(:reify) || @version.item || @version.reify
 
     singular = @record.class.name.singularize.underscore
     plural = @record.class.name.pluralize.underscore
