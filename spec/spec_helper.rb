@@ -34,13 +34,27 @@ Spork.prefork do
     # config.mock_with :rr
     config.mock_with :rspec
 
-    # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-    config.fixture_path = "#{::Rails.root}/spec/fixtures"
+    # Filter out gems from backtraces
+    config.backtrace_clean_patterns << /vendor\//
+    config.backtrace_clean_patterns << /lib\/rspec\/rails/
+    config.backtrace_clean_patterns << /gems\//
 
-    # If you're not using ActiveRecord, or you'd prefer not to run each of your
-    # examples within a transaction, remove the following line or assign false
-    # instead of true.
-    config.use_transactional_fixtures = true
+    # Disable these so transactions can be used by the database cleaner
+    config.use_transactional_fixtures = false
+
+    # Database cleaner
+    config.before(:suite) do
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:deletion)
+    end
+
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
+
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
   end
 end
 

@@ -1,5 +1,4 @@
-<% puts "WARNING: MySQL support is incomplete at this time, use at your own risk!" unless $dyW; $dyW = true %>
-# MySQL.  Versions 4.1 and 5.0 are recommended.
+# MySQL.  Versions 5.x are recommended.
 #
 # Install the MySQL driver:
 #   gem install mysql
@@ -17,7 +16,7 @@ common: &common
   adapter: mysql2
   encoding: utf8
   socket: <%= `mysql_config --socket`.chomp %>
-  username: <%= ENV['DBUSER'] || ENV['USER'] %>
+  username: <%= ENV['DBUSER_MYSQL'] || ENV['DBUSER'] || ENV['USER'] %>
   password:
 
 development:

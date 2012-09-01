@@ -154,9 +154,9 @@ def be_valid_xhtml_fragment
 end
 
 # Save the response.body to "/tmp/response.html", to aid manual debugging.
-def save_body
-  filename = "/tmp/response.html"
+def save_body(filename="/tmp/response.html")
   bytes = File.open(filename, "w+"){|h| h.write(response.body)}
+  puts "# Saved response body to: #{filename}"
   return [filename, bytes]
 end
 
