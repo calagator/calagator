@@ -162,7 +162,7 @@ class Event < ActiveRecord::Base
     when String
       # This can throw an exception
       return value.present? ?
-        Time.parse(value) :
+        Time.zone.parse(value) :
         nil
     when Date, DateTime, ActiveSupport::TimeWithZone
       return value.to_time
