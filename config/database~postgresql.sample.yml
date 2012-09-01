@@ -8,7 +8,7 @@
 common: &common
   adapter: postgresql
   encoding: unicode
-  username: <%= ENV['DBUSER'] || ENV['USER'] %>
+  username: <%= ENV['DBUSER_POSTGRESQL'] || ENV['DBUSER'] || ENV['USER'] %>
   password:
 
   # Connect on a TCP socket. Omitted by default since the client uses a
