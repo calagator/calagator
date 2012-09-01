@@ -59,7 +59,7 @@ class Event < ActiveRecord::Base
 
   # Duplicates
   include DuplicateChecking
-  duplicate_checking_ignores_attributes    :source_id, :version
+  duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
 
   # Named scopes
