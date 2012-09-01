@@ -40,12 +40,29 @@ Spork.prefork do
     # If you're not using ActiveRecord, or you'd prefer not to run each of your
     # examples within a transaction, remove the following line or assign false
     # instead of true.
-    config.use_transactional_fixtures = true
+    ### config.use_transactional_fixtures = true
+
     # Filter out gems from backtraces
     config.backtrace_clean_patterns << /vendor\//
     config.backtrace_clean_patterns << /lib\/rspec\/rails/
     config.backtrace_clean_patterns << /gems\//
 
+    # Disable these so transactions can be used by the database cleaner
+    config.use_transactional_fixtures = false
+
+    # Database cleaner
+    config.before(:suite) do
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:deletion)
+    end
+
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
+
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
   end
 end
 
