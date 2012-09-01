@@ -1,5 +1,4 @@
-<% puts "WARNING: MySQL support is incomplete at this time, use at your own risk!" unless $dyW; $dyW = true %>
-# MySQL.  Versions 4.1 and 5.0 are recommended.
+# MySQL.  Versions 5.x are recommended.
 #
 # Install the MySQL driver:
 #   gem install mysql
