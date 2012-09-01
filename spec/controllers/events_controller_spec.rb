@@ -174,8 +174,8 @@ describe EventsController do
 
       describe "with events" do
         before do
-          @current_event = Factory(:event, :start_time => Time.now + 1.day)
-          @past_event = Factory(:event, :start_time => Time.now - 1.day)
+          @current_event = Factory(:event, :start_time => today + 1.hour)
+          @past_event = Factory(:event, :start_time => today - 1.hour)
 
           post :index, :format => "ics"
         end
@@ -190,6 +190,9 @@ describe EventsController do
 
         it "should render all future events" do
           response.body.should =~ /SUMMARY:#{@current_event.title}/
+        end
+
+        it "should not render past events" do
           response.body.should_not =~ /SUMMARY:#{@past_event.title}/
         end
       end
@@ -286,7 +289,7 @@ describe EventsController do
 
   describe "#show" do
     it "should show an event" do
-      event = Event.new(:start_time => Time.now)
+      event = Event.new(:start_time => now)
       Event.should_receive(:find).and_return(event)
 
       get "show", :id => 1234
@@ -295,7 +298,7 @@ describe EventsController do
 
     it "should redirect from a duplicate event to its master" do
       master = Factory.build(:event, :id => 4321)
-      event = Event.new(:start_time => Time.now, :duplicate_of => master)
+      event = Event.new(:start_time => now, :duplicate_of => master)
       Event.should_receive(:find).and_return(event)
 
       get "show", :id => 1234
@@ -423,8 +426,8 @@ describe EventsController do
         event.should_not_receive(:save)
 
         post "create", :event => { :title => "Awesomeness" },
-                        :start_time => Time.now, :start_date => Date.today,
-                        :end_time => Time.now, :end_date => Date.today,
+                        :start_time => now, :start_date => today,
+                        :end_time => now, :end_date => today,
                         :preview => "Preview",
                         :venue_name => "This venue had better not exist"
         response.should render_template(:new)
@@ -436,8 +439,8 @@ describe EventsController do
         venue = Factory(:venue)
 
         post "create",
-          :start_time => Time.now.strftime("%Y-%m-%d"),
-          :end_time   => (Time.now + 1.hour).strftime("%Y-%m-%d"),
+          :start_time => now.strftime("%Y-%m-%d"),
+          :end_time   => (now + 1.hour).strftime("%Y-%m-%d"),
           :event      => {
             :title      => "My Event",
             :tag_list   => ",,foo,bar, baz,",
@@ -608,8 +611,8 @@ describe EventsController do
       current_master = Factory(:event, :title => "Current")
       current_duplicate = Factory(:event, :title => current_master.title)
 
-      past_master = Factory(:event, :title => "Past", :start_time => Time.now - 2.days)
-      past_duplicate = Factory(:event, :title => past_master.title, :start_time => Time.now - 1.day)
+      past_master = Factory(:event, :title => "Past", :start_time => now - 2.days)
+      past_duplicate = Factory(:event, :title => past_master.title, :start_time => now - 1.day)
 
       get 'duplicates', :type => 'title'
 
