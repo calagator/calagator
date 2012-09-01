@@ -274,8 +274,8 @@ class Event < ActiveRecord::Base
     end
   end
 
-  #---[ Searching ]------------------------------------------------------- 
-  
+  #---[ Searching ]-------------------------------------------------------
+
   # NOTE: The `Event.search` method is implemented elsewhere! For example, it's
   # added by SearchEngine::ActsAsSolr if you're using that search engine.
 
@@ -387,13 +387,13 @@ EOF
   #   ics2 = Event.to_ical(myevents, :url_helper => lambda{|event| event_url(event)})
   def self.to_ical(events, opts={})
     events = [events].flatten
-    
+
     icalendar = RiCal.Calendar do |calendar|
       calendar.prodid = "-//Calagator//EN"
       for item in events
         calendar.event do |entry|
           entry.summary(item.title || 'Untitled Event')
-          
+
           desc = String.new.tap do |d|
             if item.multiday?
               d << "This event runs from #{TimeRange.new(item.start_time, item.end_time, :format => :text).to_s}."
@@ -404,9 +404,9 @@ EOF
             d << "\n\nTags: #{item.tag_list}" unless item.tag_list.blank?
             d << "\n\nImported from: #{opts[:url_helper].call(item)}" if opts[:url_helper]
           end
-          
+
           entry.description(desc) unless desc.blank?
-          
+
           entry.created       item.created_at if item.created_at
           entry.last_modified item.updated_at if item.updated_at
 
@@ -416,7 +416,7 @@ EOF
           # file and set the "icalendar_sequence_offset" value to something
           # greater than 0.
           entry.sequence((SECRETS.icalendar_sequence_offset || 0) + item.versions.count)
-          
+
           if item.multiday?
             entry.dtstart item.dates.first
             entry.dtend   item.dates.last + 1.day
@@ -430,9 +430,9 @@ EOF
           end
 
           if item.venue
-            entry.location [item.venue.title, item.venue.full_address].compact.join(": ") 
+            entry.location [item.venue.title, item.venue.full_address].compact.join(": ")
           end
-          
+
           # dtstamp and uid added because of a bug in Outlook;
           # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
           # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
@@ -441,7 +441,7 @@ EOF
         end
       end
     end
-    
+
     # Add the calendar name, normalize line-endings to UNIX LF, then replace them with DOS CF-LF.
     return icalendar.
       export.
