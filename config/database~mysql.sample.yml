@@ -16,7 +16,7 @@ common: &common
   adapter: mysql2
   encoding: utf8
   socket: <%= `mysql_config --socket`.chomp %>
-  username: <%= ENV['DBUSER'] || ENV['USER'] %>
+  username: <%= ENV['DBUSER_MYSQL'] || ENV['DBUSER'] || ENV['USER'] %>
   password:
 
 development:
