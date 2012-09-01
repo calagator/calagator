@@ -519,8 +519,8 @@ EOF
 
   # Is this event old? Default cutoff is yesterday
   def old?(cutoff=nil)
-    cutoff ||= Time.today # midnight today is the end of yesterday
-    return (self.end_time || self.start_time) < cutoff
+    cutoff ||= Time.zone.now.midnight # midnight today is the end of yesterday
+    return (self.end_time || self.start_time + 1.hour) <= cutoff
   end
 
   # Did this event start before today but ends today or later?
