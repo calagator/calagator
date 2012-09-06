@@ -34,3 +34,4 @@
 \bonline.+drugstore\b
 \boverseas.+pharmacy\b
 \bHello!\s+\w+\s+interesting\s+\w+\s+site!\b
+\bpropecia\b
