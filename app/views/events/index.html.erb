@@ -40,12 +40,15 @@
 
 <% end %>
 
-<div id='list_description'>
-  <h2>Viewing <strong><%= @events.size %></strong>
-  <%= params[:date] ? 'filtered' : 'future' %> events
-  <%= events_sort_label(params[:order]) %></h2>
-</div>
 
 <div id='list_items'>
   <%= render :partial => 'events/table', :locals => { :events => @events } %>
 </div>
+
+<div class="digg_pagination">
+    <div clas="page_info">
+      <%= page_entries_info @events %>
+    </div>
+    <%= will_paginate @events, :container => false %>
+  </div>
+

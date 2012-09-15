@@ -11,6 +11,7 @@ class EventsController < ApplicationController
     @events = params[:date] ?
                 query.within_dates(@start_date, @end_date) :
                 query.future
+    @events = @events.paginate(:page => params[:page], :per_page => 50)
 
     @perform_caching = params[:order].blank? && params[:date].blank?
 
