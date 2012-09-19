@@ -5,7 +5,7 @@ describe "Time formatting" do
   before(:each) do
     @start_time = DateTime.new(2008, 4, 1, 9, 00)
   end
-  
+
   # Test all permutations of
   # - context-date: with vs without
   # - format: hcal vs html (tags stripped) vs text (tags stripped, '&ndash;' --> '-')
@@ -33,24 +33,24 @@ describe "Time formatting" do
           expected = expected.gsub(%r|\<[^\>]*\>|,'') if format != :hcal
           expected = expected.gsub('&ndash;', '-') if format == :text
           it "should format #{label} in #{format} format as '#{expected}'" do
-            TimeRange.new(@start_time, end_time, :format => format, 
-              :context => context_date).to_s.should == expected
+            TimeRange.new(@start_time, end_time, :format => format,
+              :context => context_date).to_s.should eq expected
           end
         end
       end
-    end      
+    end
   end
-  
+
   describe "with objects" do
     it "should format from objects that respond to just start_time" do
       event = Event.new(:start_time => Time.parse('2008-04-01 13:30'))
-      TimeRange.new(event, :format => :text).to_s.should == "Tuesday, April 1, 2008 at 1:30pm"
+      TimeRange.new(event, :format => :text).to_s.should eq "Tuesday, April 1, 2008 at 1:30pm"
     end
-    
+
     it "should format from objects that respond to both start_time and end_time" do
       event = Event.new(:start_time => Time.parse('2008-04-01 13:30'),
                         :end_time => Time.parse('2008-04-01 15:30'))
-      TimeRange.new(event, :format => :text).to_s.should == "Tuesday, April 1, 2008 from 1:30-3:30pm"
+      TimeRange.new(event, :format => :text).to_s.should eq "Tuesday, April 1, 2008 from 1:30-3:30pm"
     end
   end
 end

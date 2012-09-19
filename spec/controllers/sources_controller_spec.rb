@@ -28,14 +28,14 @@ describe SourcesController do
 
     it "should provide a way to create new sources" do
       get :new
-      assigns(:source).should be_a_kind_of(Source)
+      assigns(:source).should be_a_kind_of Source
       assigns(:source).should be_a_new_record
     end
 
     it "should save the source object when creating events" do
       @source.should_receive(:save!)
       post :import, :source => {:url => @source.url}
-      flash[:success].should =~ /Imported/i
+      flash[:success].should match /Imported/i
     end
 
     it "should assign newly-created events to the source" do
@@ -54,7 +54,7 @@ describe SourcesController do
         .inject([]){|result,i| result << @event; result}
       @source.should_receive(:to_events).and_return(events)
       post :import, :source => {:url => @source.url}
-      flash[:success].should =~ /And #{excess} other events/si
+      flash[:success].should match /And #{excess} other events/si
     end
 
     describe "is given problematic sources" do
@@ -70,38 +70,38 @@ describe SourcesController do
 
       it "should fail when host responds with an error" do
         assert_import_raises(OpenURI::HTTPError.new("omfg", "bbq"))
-        flash[:failure].should =~ /Couldn't download events/
+        flash[:failure].should match /Couldn't download events/
       end
 
       it "should fail when host is not responding" do
         assert_import_raises(Errno::EHOSTUNREACH.new("omfg"))
-        flash[:failure].should =~ /Couldn't connect to remote site/
+        flash[:failure].should match /Couldn't connect to remote site/
       end
 
       it "should fail when host is not found" do
         assert_import_raises(SocketError.new("omfg"))
-        flash[:failure].should =~ /Couldn't find IP address for remote site/
+        flash[:failure].should match /Couldn't find IP address for remote site/
       end
 
       it "should fail when host requires authentication" do
         assert_import_raises(SourceParser::HttpAuthenticationRequiredError.new("omfg"))
-        flash[:failure].should =~ /requires authentication/
+        flash[:failure].should match /requires authentication/
       end
     end
   end
-  
-  
+
+
   describe "handling GET /sources" do
 
     before(:each) do
       @source = mock_model(Source)
       Source.stub!(:listing).and_return([@source])
     end
-  
+
     def do_get
       get :index
     end
-  
+
     it "should be successful" do
       do_get
       response.should be_success
@@ -109,17 +109,17 @@ describe SourcesController do
 
     it "should render index template" do
       do_get
-      response.should render_template('index')
+      response.should render_template :index
     end
-  
+
     it "should find sources" do
       Source.should_receive(:listing).and_return([@source])
       do_get
     end
-  
+
     it "should assign the found sources for the view" do
       do_get
-      assigns[:sources].should == [@source]
+      assigns[:sources].should eq [@source]
     end
   end
 
@@ -129,12 +129,12 @@ describe SourcesController do
       @sources = mock("Array of Sources", :to_xml => "XML")
       Source.stub!(:find).and_return(@sources)
     end
-  
+
     def do_get
       @request.env["HTTP_ACCEPT"] = "application/xml"
       get :index
     end
-  
+
     it "should be successful" do
       do_get
       response.should be_success
@@ -144,10 +144,10 @@ describe SourcesController do
       Source.should_receive(:listing).and_return(@sources)
       do_get
     end
-  
+
     it "should render the found sources as xml" do
       do_get
-      response.content_type.should == 'application/xml'
+      response.content_type.should eq 'application/xml'
     end
   end
 
@@ -166,7 +166,7 @@ describe SourcesController do
       @source = mock_model(Source)
       Source.stub!(:find).and_return(@source)
     end
-  
+
     def do_get
       get :show, :id => "1"
     end
@@ -175,20 +175,20 @@ describe SourcesController do
       do_get
       response.should be_success
     end
-  
+
     it "should render show template" do
       do_get
-      response.should render_template('show')
+      response.should render_template :show
     end
-  
+
     it "should find the source requested" do
       Source.should_receive(:find).with("1", :include => [:events, :venues]).and_return(@source)
       do_get
     end
-  
+
     it "should assign the found source for the view" do
       do_get
-      assigns[:source].should equal(@source)
+      assigns[:source].should eq @source
     end
   end
 
@@ -198,7 +198,7 @@ describe SourcesController do
       @source = mock_model(Source, :to_xml => "XML")
       Source.stub!(:find).and_return(@source)
     end
-  
+
     def do_get
       @request.env["HTTP_ACCEPT"] = "application/xml"
       get :show, :id => "1"
@@ -208,16 +208,16 @@ describe SourcesController do
       do_get
       response.should be_success
     end
-  
+
     it "should find the source requested" do
       Source.should_receive(:find).with("1", :include => [:events, :venues]).and_return(@source)
       do_get
     end
-  
+
     it "should render the found source as xml" do
       @source.should_receive(:to_xml).and_return("XML")
       do_get
-      response.body.should == "XML"
+      response.body.should eq "XML"
     end
   end
 
@@ -227,7 +227,7 @@ describe SourcesController do
       @source = mock_model(Source)
       Source.stub!(:new).and_return(@source)
     end
-  
+
     def do_get
       get :new
     end
@@ -236,25 +236,25 @@ describe SourcesController do
       do_get
       response.should be_success
     end
-  
+
     it "should render new template" do
       do_get
-      response.should render_template('new')
+      response.should render_template :new
     end
-  
+
     it "should create an new source" do
       Source.should_receive(:new).and_return(@source)
       do_get
     end
-  
+
     it "should not save the new source" do
       @source.should_not_receive(:save)
       do_get
     end
-  
+
     it "should assign the new source for the view" do
       do_get
-      assigns[:source].should equal(@source)
+      assigns[:source].should eq @source
     end
   end
 
@@ -264,7 +264,7 @@ describe SourcesController do
       @source = mock_model(Source)
       Source.stub!(:find).and_return(@source)
     end
-  
+
     def do_get
       get :edit, :id => "1"
     end
@@ -273,20 +273,20 @@ describe SourcesController do
       do_get
       response.should be_success
     end
-  
+
     it "should render edit template" do
       do_get
-      response.should render_template('edit')
+      response.should render_template :edit
     end
-  
+
     it "should find the source requested" do
       Source.should_receive(:find).and_return(@source)
       do_get
     end
-  
+
     it "should assign the found Source for the view" do
       do_get
-      assigns[:source].should equal(@source)
+      assigns[:source].should eq @source
     end
   end
 
@@ -296,14 +296,14 @@ describe SourcesController do
       @source = mock_model(Source, :to_param => "1")
       Source.stub!(:new).and_return(@source)
     end
-    
+
     describe "with successful save" do
-  
+
       def do_post
         @source.should_receive(:save).and_return(true)
         post :create, :source => {}
       end
-  
+
       it "should create a new source" do
         Source.should_receive(:new).with({}).and_return(@source)
         do_post
@@ -313,21 +313,21 @@ describe SourcesController do
         do_post
         response.should redirect_to(source_url("1"))
       end
-      
+
     end
-    
+
     describe "with failed save" do
 
       def do_post
         @source.should_receive(:save).and_return(false)
         post :create, :source => {}
       end
-  
+
       it "should re-render 'new'" do
         do_post
-        response.should render_template('new')
+        response.should render_template :new
       end
-      
+
     end
   end
 
@@ -337,7 +337,7 @@ describe SourcesController do
       @source = mock_model(Source, :to_param => "1")
       Source.stub!(:find).and_return(@source)
     end
-    
+
     describe "with successful update" do
 
       def do_put
@@ -352,12 +352,12 @@ describe SourcesController do
 
       it "should update the found source" do
         do_put
-        assigns(:source).should equal(@source)
+        assigns(:source).should eq @source
       end
 
       it "should assign the found source for the view" do
         do_put
-        assigns(:source).should equal(@source)
+        assigns(:source).should eq @source
       end
 
       it "should redirect to the source" do
@@ -366,7 +366,7 @@ describe SourcesController do
       end
 
     end
-    
+
     describe "with failed update" do
 
       def do_put
@@ -376,7 +376,7 @@ describe SourcesController do
 
       it "should re-render 'edit'" do
         do_put
-        response.should render_template('edit')
+        response.should render_template :edit
       end
 
     end
@@ -388,7 +388,7 @@ describe SourcesController do
       @source = mock_model(Source, :destroy => true)
       Source.stub!(:find).and_return(@source)
     end
-  
+
     def do_delete
       delete :destroy, :id => "1"
     end
@@ -397,12 +397,12 @@ describe SourcesController do
       Source.should_receive(:find).with("1").and_return(@source)
       do_delete
     end
-  
+
     it "should call destroy on the found source" do
       @source.should_receive(:destroy)
       do_delete
     end
-  
+
     it "should redirect to the sources list" do
       do_delete
       response.should redirect_to(sources_url)

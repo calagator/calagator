@@ -5,7 +5,7 @@ describe VenuesController do
 
   #Delete this example and add some real ones
   it "should use VenuesController" do
-    controller.should be_an_instance_of(VenuesController)
+    controller.should be_an_instance_of VenuesController
   end
 
   it "should redirect duplicate venues to their master" do
@@ -15,7 +15,7 @@ describe VenuesController do
     # No redirect when they're unique
     get 'show', :id => venue_duplicate.id
     response.should_not be_redirect
-    assigns(:venue).id.should == venue_duplicate.id
+    assigns(:venue).id.should eq venue_duplicate.id
 
     # Mark as duplicate
     venue_duplicate.duplicate_of = venue_master
@@ -37,7 +37,7 @@ describe VenuesController do
   describe "when creating venues" do
     it "should stop evil robots" do
       post :create, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
-      response.should render_template(:new)
+      response.should render_template :new
     end
   end
 
@@ -49,7 +49,7 @@ describe VenuesController do
 
     it "should stop evil robots" do
       put :update,:id => '1', :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
-      response.should render_template(:edit)
+      response.should render_template :edit
     end
   end
 
@@ -149,13 +149,13 @@ describe VenuesController do
         get :index, :format => "json"
 
         struct = ActiveSupport::JSON.decode(response.body)
-        struct.should be_a_kind_of(Array)
+        struct.should be_a_kind_of Array
       end
 
       it "should accept a JSONP callback" do
         get :index, :format => "json", :callback => "some_function"
 
-        response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
+        response.body.split("\n").join.should match /^\s*some_function\(.*\);?\s*$/
       end
     end
 
@@ -173,16 +173,16 @@ describe VenuesController do
           get :show, :id => @venue.to_param, :format => "json"
 
           struct = ActiveSupport::JSON.decode(response.body)
-          struct.should be_a_kind_of(Hash)
+          struct.should be_a_kind_of Hash
           %w[id title description address].each do |field|
-            struct[field].should == @venue.send(field)
+            struct[field].should eq @venue.send(field)
           end
         end
 
         it "should accept a JSONP callback" do
           get :show, :id => @venue.to_param, :format => "json", :callback => "some_function"
 
-          response.body.split("\n").join.should match(/^\s*some_function\(.*\);?\s*$/)
+          response.body.split("\n").join.should match /^\s*some_function\(.*\);?\s*$/
         end
       end
     end
@@ -224,7 +224,7 @@ describe VenuesController do
 
       shared_examples_for "destroying a Venue record without events" do
         it "should destroy the Venue record" do
-          lambda { Venue.find(@venue.id) }.should raise_error(ActiveRecord::RecordNotFound)
+          lambda { Venue.find(@venue.id) }.should raise_error ActiveRecord::RecordNotFound
         end
       end
 
@@ -295,11 +295,11 @@ describe VenuesController do
         it_should_behave_like "destroying a Venue record with events"
 
         it "should return unprocessable entity status" do
-          response.code.to_i.should == 422
+          response.code.to_i.should eq 422
         end
 
         it "should describing the problem" do
-          response.body.should =~ /cannot/i
+          response.body.should match /cannot/i
         end
       end
     end

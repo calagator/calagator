@@ -38,13 +38,13 @@ describe DecodeHtmlEntitiesHack do
   it "should not modify attributes in models that don't include it" do
     record = ModelWithoutDecodeHack.new(:kitten => encoded_string)
     record.should be_valid
-    record.kitten.should == encoded_string
+    record.kitten.should eq encoded_string
   end
 
   it "should modify attributes in models that include it" do
     record = ModelWithDecodeHack.new(:kitten => encoded_string)
     record.should be_valid
-    record.kitten.should == decoded_string
+    record.kitten.should eq decoded_string
   end
 
 end
