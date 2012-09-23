@@ -7,11 +7,7 @@ namespace :spec do
       failed = false
 
       databases.each do |database|
-        failed = true unless test_against database
-      end
-
-      if failed
-        fail "## Error: At least one of the specs above failed"
+        test_against database
       end
     end
 
@@ -33,13 +29,13 @@ namespace :spec do
 
       cp sample, custom
 
-      result = nil
+      succeeded = nil
 
       begin
         Rails.root.chdir do
           puts
           puts "## Database: #{kind}"
-          result = system "bundle --quiet && rake db:create:all db:migrate db:test:prepare spec"
+          succeeded = system "bundle --quiet && rake db:create:all db:migrate db:test:prepare spec"
         end
       ensure
         rm custom
@@ -49,7 +45,9 @@ namespace :spec do
         end
       end
 
-      return result
+      unless succeeded
+        raise "Tests failed against database '#{kind}'"
+      end
     end
   end
 end
