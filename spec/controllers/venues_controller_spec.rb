@@ -261,7 +261,7 @@ describe VenuesController do
 
     describe "when deleting a venue with events" do
       before do
-        @event = Factory(:event)
+        @event = Factory(:event_with_venue)
         @venue = @event.venue
       end
 

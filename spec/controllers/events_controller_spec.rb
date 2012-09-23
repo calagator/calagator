@@ -27,8 +27,8 @@ describe EventsController do
 
       describe "with events" do
         before do
-          Factory(:event)
-          Factory(:event)
+          Factory(:event_with_venue)
+          Factory(:event_with_venue)
 
           get :index, :format => "xml"
 
@@ -78,7 +78,7 @@ describe EventsController do
 
       describe "with events" do
         before do
-          @event = Factory(:event)
+          @event = Factory(:event_with_venue)
           @venue = @event.venue
 
           post :index, :format => "json"
@@ -124,8 +124,8 @@ describe EventsController do
 
       describe "with events" do
         before do
-          Factory(:event)
-          Factory(:event)
+          Factory(:event_with_venue)
+          Factory(:event_with_venue)
 
           post :index, :format => "atom"
 
@@ -461,7 +461,7 @@ describe EventsController do
 
     describe "#update" do
       before(:each) do
-        @event = Factory.build(:event, :id => 42)
+        @event = Factory.build(:event_with_venue, :id => 42)
         @venue = @event.venue
         Event.stub!(:find).and_return(@event)
       end
@@ -698,9 +698,9 @@ describe EventsController do
     describe "when returning results" do
       render_views
 
-      let(:current_event) { Factory(:event) }
-      let(:current_event_2) { Factory(:event) }
-      let(:past_event) { Factory(:event) }
+      let(:current_event) { Factory(:event_with_venue) }
+      let(:current_event_2) { Factory(:event_with_venue) }
+      let(:past_event) { Factory(:event_with_venue) }
       let(:results) do
         {
           :current => [current_event, current_event_2],
