@@ -30,3 +30,5 @@
 \bviagra\b
 \bvicodin\b
 \bxanax\b
+\bКупить\s+участок\b
+\bзнакомства\s+свингеры\s+тюмень\b
