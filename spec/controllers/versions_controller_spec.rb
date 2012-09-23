@@ -5,19 +5,19 @@ describe VersionsController do
     it "should raise RecordNotFound if not given an id" do
       lambda do
         get :edit, :id => ''
-      end.should raise_error(ActiveRecord::RecordNotFound)
+      end.should raise_error ActiveRecord::RecordNotFound
     end
 
     it "should raise RecordNotFound if given invalid id" do
       lambda do
         get :edit, :id => '-1'
-      end.should raise_error(ActiveRecord::RecordNotFound)
+      end.should raise_error ActiveRecord::RecordNotFound
     end
 
     it "should raise RecordNotFound if given id that doesn't exist" do
       lambda do
         get :edit, :id => '1234'
-      end.should raise_error(ActiveRecord::RecordNotFound)
+      end.should raise_error ActiveRecord::RecordNotFound
     end
   end
 
@@ -48,15 +48,15 @@ describe VersionsController do
     end
 
     it "should render the initial content for a 'create'" do
-      title_for(:create).should == @create_title
+      title_for(:create).should eq @create_title
     end
 
     it "should render the updated content for an 'update'" do
-      title_for(:update).should == @update_title
+      title_for(:update).should eq @update_title
     end
 
     it "should render the final content for a 'destroy'" do
-      title_for(:destroy).should == @final_title
+      title_for(:destroy).should eq @final_title
     end
   end
 end

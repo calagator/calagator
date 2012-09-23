@@ -14,10 +14,10 @@ describe Source, "in general" do
 
   it "should create events for source from URL" do
     @event.should_receive(:save!)
-    
+
     source = Source.new(:url => "http://my.url/")
     source.should_receive(:to_events).and_return([@event])
-    source.create_events!.should == [@event]
+    source.create_events!.should eq [@event]
   end
 
   it "should fail to create events for invalid sources" do
@@ -42,19 +42,19 @@ describe Source, "when reading name" do
 
   it "should use title if available" do
     @source.title = @title
-    @source.name.should == @title
+    @source.name.should eq @title
   end
 
   it "should use URL if available" do
     @source.url = @url
-    @source.name.should == @url
+    @source.name.should eq @url
   end
 
   it "should prefer to use title over URL if both are available" do
     @source.title = @title
     @source.url = @url
 
-    @source.name.should == @title
+    @source.name.should eq @title
   end
 end
 
@@ -72,25 +72,25 @@ describe Source, "when parsing URLs" do
   it "should not modify supported url schemes" do
     @source.url = @http_url
 
-    @source.url.should == @http_url
+    @source.url.should eq @http_url
   end
 
   it "should substitute http for unsupported url schemes" do
     @source.url = @ical_url
 
-    @source.url.should == @http_url
+    @source.url.should eq @http_url
   end
 
   it "should add the http prefix to urls without one" do
     @source.url = @base_url
 
-    @source.url.should == @http_url
+    @source.url.should eq @http_url
   end
 
   it "should strip leading and trailing whitespace from URL" do
     source = Source.new
     source.url = "     #{@http_url}     "
-    source.url.should == @http_url
+    source.url.should eq @http_url
   end
 
   it "should be invalid if given invalid URL" do
@@ -117,7 +117,7 @@ describe Source, "find_or_create_from" do
     Source.should_receive(:find_or_create_by_url).and_return(record)
 
     result = Source.find_or_create_from(:url => @url)
-    record.should == result
+    record.should eq result
   end
 
   it "should set re-import flag if given" do

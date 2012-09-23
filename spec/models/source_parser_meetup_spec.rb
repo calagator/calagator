@@ -14,23 +14,23 @@ describe SourceParser::Meetup do
     end
 
     it "should find one event" do
-      @events.size.should == 1
+      @events.size.should eq 1
     end
 
     it "should set event details" do
-      @event.title.should == "eLearning Network Meetup"
-      @event.start_time.should == Time.zone.parse("Thu Aug 11 00:00:00 UTC 2011")
+      @event.title.should eq "eLearning Network Meetup"
+      @event.start_time.should eq Time.zone.parse("Thu Aug 11 00:00:00 UTC 2011")
     end
 
     it "should tag Meetup events with automagic machine tags" do
-      @event.tags.should == ["meetup:event=ldhnqyplbnb", "meetup:group=eLearningNetwork"]
+      @event.tags.should eq ["meetup:event=ldhnqyplbnb", "meetup:group=eLearningNetwork"]
     end
 
     it "should populate a venue when structured data is provided" do
       @event.location.should be_a SourceParser::AbstractLocation
-      @event.location.title.should == "Green Dragon Bistro and Brewpub"
-      @event.location.street_address.should == "928 SE 9th Ave"
-      @event.location.tags.should == ["meetup:venue=774133"]
+      @event.location.title.should eq "Green Dragon Bistro and Brewpub"
+      @event.location.street_address.should eq "928 SE 9th Ave"
+      @event.location.tags.should eq ["meetup:venue=774133"]
     end
   end
 end
