@@ -32,7 +32,7 @@ namespace :spec do
       succeeded = nil
 
       begin
-        Rails.root.chdir do
+        Dir.chdir(Rails.root) do
           puts
           puts "## Database: #{kind}"
           succeeded = system "unset BUNDLE_GEMFILE BUNDLE_BIN_PATH RUBYOPT; bundle --quiet && rake db:create:all db:migrate db:test:prepare spec"
