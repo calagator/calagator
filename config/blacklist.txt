@@ -1,7 +1,8 @@
 \b(online|overseas).+(drugstore|pharmacy)\b
 \bAloha!\s+<a\b
 \bAloha!\w+\b
-\bHello!\s+\w+\s+interesting\s+\w+\s+site!\b
+\bHello!\s+\w+\s+interesting\s+\w+\s+site!
+\bPharm\w+\d+\b
 \baccutane\b
 \badderall\b
 \badipex\b
