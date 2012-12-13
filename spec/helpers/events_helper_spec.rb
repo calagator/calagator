@@ -8,16 +8,16 @@ describe EventsHelper do
     end
 
     it "should return string for a string key" do
-      helper.events_sort_label("score").should =~ / by .+#{Event::SORTING_LABELS['score']}.+/
+      helper.events_sort_label("score").should match(/ by .+#{Event::SORTING_LABELS['score']}.+/)
     end
 
     it "should return string for a symbol key" do
-      helper.events_sort_label(:score).should =~ / by .+#{Event::SORTING_LABELS['score']}.+/
+      helper.events_sort_label(:score).should match(/ by .+#{Event::SORTING_LABELS['score']}.+/)
     end
 
     it "should return special string when using a tag" do
       assign :tag, ActsAsTaggableOn::Tag.new
-      helper.events_sort_label(nil).should =~ / by .+#{Event::SORTING_LABELS['default']}.+/
+      helper.events_sort_label(nil).should match(/ by .+#{Event::SORTING_LABELS['default']}.+/)
     end
   end
 
@@ -27,13 +27,13 @@ describe EventsHelper do
   it "should display today as 'Today'" do
     @event = Event.new
     @event.start_time = Time.now
-    helper.today_tomorrow_or_weekday(@event).should == 'Today'
+    helper.today_tomorrow_or_weekday(@event).should eq 'Today'
   end
 
   it "should display tomorrow as 'Tomorrow'" do
     @event = Event.new
     @event.start_time = Time.now+1.days
-    helper.today_tomorrow_or_weekday(@event).should == 'Tomorrow'
+    helper.today_tomorrow_or_weekday(@event).should eq 'Tomorrow'
   end
 =end
 
@@ -52,19 +52,19 @@ describe EventsHelper do
 
     shared_examples_for "exported event" do
       it "should have title" do
-        @export.should =~ /\&text=#{escape(@event.title)}/
+        @export.should match /\&text=#{escape(@event.title)}/
       end
 
       it "should have time range" do
-        @export.should =~ /\&dates=#{helper.format_google_timespan(@event)}/
+        @export.should match /\&dates=#{helper.format_google_timespan(@event)}/
       end
 
       it "should have venue title" do
-        @export.should =~ /\&location=#{escape(@event.venue.title)}/
+        @export.should match /\&location=#{escape(@event.venue.title)}/
       end
 
       it "should have venue address" do
-        @export.should =~ /\&location=.+?#{escape(@event.venue.geocode_address)}/
+        @export.should match /\&location=.+?#{escape(@event.venue.geocode_address)}/
       end
     end
 
@@ -75,7 +75,7 @@ describe EventsHelper do
       it_should_behave_like "exported event"
 
       it "should have a complete event description" do
-        @export.should =~ /\&details=.*#{escape(event_description)}/
+        @export.should match /\&details=.*#{escape(event_description)}/
       end
     end
 
@@ -86,12 +86,100 @@ describe EventsHelper do
       it_should_behave_like "exported event"
 
       it "should have a truncated event description" do
-        @export.should =~ /\&details=.*#{escape(event_description[0..100])}/
+        @export.should match /\&details=.*#{escape(event_description[0..100])}/
       end
 
       it "should have a truncated URL" do
-        @export.size.should < event_description.size
+        @export.size.should be < event_description.size
       end
+    end
+  end
+
+  describe "#google_events_subscription_link" do
+    def method(*args)
+      helper.google_events_subscription_link(*args)
+    end
+
+    it "should fail if given unknown options" do
+      lambda { method(:omg => :kittens) }.should raise_error ArgumentError
+    end
+
+    it "should generate a default link" do
+      method.should eq "http://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents.ics"
+    end
+
+    it "should generate a search link" do
+      method(:query => "my query").should eq "http://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Fquery%3Dmy%2Bquery"
+    end
+
+    it "should generate a tag link" do
+      method(:tag => "mytag").should eq "http://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Ftag%3Dmytag"
+    end
+  end
+
+  describe "#icalendar_feed_link" do
+    def method(*args)
+      helper.icalendar_feed_link(*args)
+    end
+
+    it "should fail if given unknown options" do
+      lambda { method(:omg => :kittens) }.should raise_error ArgumentError
+    end
+
+    it "should generate a default link" do
+      method.should eq "webcal://test.host/events.ics"
+    end
+
+    it "should generate a search link" do
+      method(:query => "my query").should eq "webcal://test.host/events/search.ics?query=my+query"
+    end
+
+    it "should generate a tag link" do
+      method(:tag => "mytag").should eq "webcal://test.host/events/search.ics?tag=mytag"
+    end
+  end
+
+  describe "#icalendar_export_link" do
+    def method(*args)
+      helper.icalendar_export_link(*args)
+    end
+
+    it "should fail if given unknown options" do
+      lambda { method(:omg => :kittens) }.should raise_error ArgumentError
+    end
+
+    it "should generate a default link" do
+      method.should eq "http://test.host/events.ics"
+    end
+
+    it "should generate a search link" do
+      method(:query => "my query").should eq "http://test.host/events/search.ics?query=my+query"
+    end
+
+    it "should generate a tag link" do
+      method(:tag => "mytag").should eq "http://test.host/events/search.ics?tag=mytag"
+    end
+  end
+
+  describe "#atom_feed_link" do
+    def method(*args)
+      helper.atom_feed_link(*args)
+    end
+
+    it "should fail if given unknown options" do
+      lambda { method(:omg => :kittens) }.should raise_error ArgumentError
+    end
+
+    it "should generate a default link" do
+      method.should eq "http://test.host/events.atom"
+    end
+
+    it "should generate a search link" do
+      method(:query => "my query").should eq "http://test.host/events/search.atom?query=my+query"
+    end
+
+    it "should generate a tag link" do
+      method(:tag => "mytag").should eq "http://test.host/events/search.atom?tag=mytag"
     end
   end
 

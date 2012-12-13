@@ -1,73 +1,62 @@
 require 'spec_helper'
 
 describe VersionsController do
-  render_views
-
-  describe "history" do
-    before :each do
-      @versions_count_before = Version.count
-
-      @venue = Venue.create!(:title => "Venue")
-
-      @venue.title = "My Venue"
-      @venue.save!
-
-      @venue.destroy
+  describe "without versions" do
+    it "should raise RecordNotFound if not given an id" do
+      lambda do
+        get :edit, :id => ''
+      end.should raise_error ActiveRecord::RecordNotFound
     end
 
-    after :each do
-      @venue.versions.destroy_all
-      @venue.destroy
+    it "should raise RecordNotFound if given invalid id" do
+      lambda do
+        get :edit, :id => '-1'
+      end.should raise_error ActiveRecord::RecordNotFound
     end
 
-    describe "edit" do
-      before :all do
-        @venue = Venue.create!(:title => "myvenue")
-        @event = Event.create!(:title => "myevent", :start_time => Time.now, :end_time => Time.now+1.hour, :venue => @venue)
-        @event.title = "myevent v2"
-        @event.save!
-        @event.title = "myevent v3"
-        @event.save!
-        @event.destroy
-        @event = @event.versions(true).last.reify
-        @event.save!
-      end
+    it "should raise RecordNotFound if given id that doesn't exist" do
+      lambda do
+        get :edit, :id => '1234'
+      end.should raise_error ActiveRecord::RecordNotFound
+    end
+  end
 
-      after :all do
-        @event.versions.destroy_all
-        @event.destroy
+  describe "with versions" do
+    before do
+      @create_title = "myevent"
+      @update_title = "myevent v2"
+      @final_title = "myevent v3"
 
-        @venue.versions.destroy_all
-        @venue.destroy
-      end
+      @event = Factory(:event, :title => @create_title)
 
-      def refresh_with(version_id)
-        get :edit, :id => version_id
-        @result = controller.instance_variable_get(:@event)
-      end
+      @event.title = @update_title
+      @event.save!
 
-      it "should raise RecordNotFound if called with blank version" do
-        lambda { refresh_with '' }.should raise_error(ActiveRecord::RecordNotFound)
-      end
+      @event.title = @final_title
+      @event.save!
 
-      it "should raise RecordNotFound if called with -1" do
-        lambda { refresh_with '-1' }.should raise_error(ActiveRecord::RecordNotFound)
-      end
+      @event.destroy
+    end
 
-      it "should render a create using intial content" do
-        refresh_with @event.versions.first(:conditions => {:event => "create"}).id
-        @result.title.should == "myevent"
-      end
+    # Returns the versioned record's title for the event (e.g. :update).
+    def title_for(event)
+      version_id = @event.versions.first(:conditions => {:event => event}).id
 
-      it "should render an update using updated content" do
-        refresh_with @event.versions.first(:conditions => {:event => "update"}).id
-        @result.title.should == "myevent v2"
-      end
+      get :edit, :id => version_id
 
-      it "should render a destroy using final content" do
-        refresh_with @event.versions.first(:conditions => {:event => "destroy"}).id
-        @result.title.should == "myevent v3"
-      end
+      return assigns[:event].title
+    end
+
+    it "should render the initial content for a 'create'" do
+      title_for(:create).should eq @create_title
+    end
+
+    it "should render the updated content for an 'update'" do
+      title_for(:update).should eq @update_title
+    end
+
+    it "should render the final content for a 'destroy'" do
+      title_for(:destroy).should eq @final_title
     end
   end
 end

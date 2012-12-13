@@ -1,0 +1,24 @@
+language: ruby
+rvm:
+  - 1.8.7
+  - 1.9.3
+
+  ## Don't test 1.9.2 because people shouldn't be using it.
+  # - 1.9.2
+
+  ## Don't test REE because it's compatible enough with 1.8.7.
+  # - ree
+
+  ## JRuby is not compatible, see Gemfile for details.
+  # - jruby-18mode
+  # - jruby-19mode
+  # - jruby-head
+
+  ## Rubinius is not compatible, see Gemfile for details.
+  # - rbx-18mode
+  # - rbx-19mode
+script:
+  - export DBUSER_MYSQL=root
+  - export DBUSER_POSTGRESQL=postgres
+  - cp "config/secrets.yml.sample" "config/secrets.yml"
+  - bundle exec rake spec:db:all --trace

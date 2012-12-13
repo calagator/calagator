@@ -78,6 +78,7 @@ protected
         if value.match(pattern)
           self.errors.add(attr, opts[:message])
           is_valid = false
+          break
         end
       end
     end

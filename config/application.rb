@@ -14,16 +14,56 @@ module Calagator
 
     # Standard libraries
     require 'fileutils'
+    require 'net/http'
+    require 'net/https'
+    require 'open-uri'
+    require 'set'
+    require 'uri'
 
     # Bundled libraries
     $LOAD_PATH << Rails.root.join('vendor','gems','lucene_query-0.1','lib')
     require 'lucene_query'
-
     $LOAD_PATH << Rails.root.join('vendor','gems','mofo-0.2.8','lib')
     require 'mofo'
 
-    # "/lib" libraries
-    $LOAD_PATH << Rails.root.join
+    # Load from "/lib"
+    $LOAD_PATH << Rails.root.join('lib')
+    ### libraries
+    require 'metaclass'
+    require 'tag_model_extensions'
+    ### monkeypatches
+    require 'ext/nil_strip_html'
+    require 'ext/object_logit'
+    require 'ext/time_today'
+    require 'ext/time_get_zone'
+
+    # Adds Array#paginate
+    require 'will_paginate/array'
+
+    #---[ Plugins ]---------------------------------------------------------
+
+    # Load these plugins first, or they won't work
+    config.plugins = [
+      :catch_cookie_exception,
+      :exception_notification,
+    ]
+
+    #---[ Path -------------------------------------------------------------
+
+    config.autoload_paths += [
+      # App
+      Rails.root.join('app','mixins'),
+      Rails.root.join('app','observers'),
+      # Plugins
+      Rails.root.join('lib','catch_cookie_exception', 'lib'),
+      Rails.root.join('lib','exception_notification', 'lib'),
+      Rails.root.join('lib','has_many_polymorphs', 'lib'),
+      Rails.root.join('lib','gmaps_on_rails', 'lib'),
+    ]
+
+    config.eager_load_paths += [
+      Rails.root.join('lib')
+    ]
 
     #---[ Rails ]-----------------------------------------------------------
 
@@ -40,35 +80,6 @@ module Calagator
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
-
-    #---[ Plugins ]---------------------------------------------------------
-
-    # Load these plugins first, or they won't work
-    config.plugins = [
-      :catch_cookie_exception,
-      :exception_notification,
-    ]
-
-    # Load remaining plugins
-    for entry in Pathname.glob(Rails.root + 'vendor/plugins/*')
-      name = entry.basename.to_s
-      symbol = name.to_sym
-      next if ['.', '..'].include?(name)
-      next if config.plugins.include?(symbol)
-      next unless entry.directory?
-      config.plugins << symbol
-    end
-
-    #---[ Path -------------------------------------------------------------
-
-    config.autoload_paths += [
-      Rails.root.join('app','mixins'),
-      Rails.root.join('app','observers')
-    ]
-
-    config.eager_load_paths += [
-      Rails.root.join('lib')
-    ]
 
     #---[ Caching ]---------------------------------------------------------
 
@@ -110,13 +121,8 @@ module Calagator
 
 
       # Activate search engine
-      require 'lib/search_engine'
+      require 'search_engine'
       SearchEngine.kind = SECRETS.search_engine
-
-      case SearchEngine.kind
-      when :acts_as_solr
-        config.plugins << :acts_as_solr
-      end
     end
 
     # Set timezone for OS

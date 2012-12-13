@@ -2,7 +2,7 @@ cache_if(@perform_caching, CacheObserver.daily_key_for("events_atom", request)) 
   atom_feed("xmlns:georss".to_sym => "http://www.georss.org/georss") do |feed|
     feed.title("#{SETTINGS.name}#{': ' + @page_title if @page_title}")
     unless @events.size == 0
-      feed.updated(@events.sort_by(&:updated_at).last.updated_at)
+      feed.updated(@events.present? ? @events.sort_by(&:updated_at).last.updated_at : Time.now)
 
       for event in @events
         feed.entry(event) do |entry|
@@ -12,9 +12,10 @@ cache_if(@perform_caching, CacheObserver.daily_key_for("events_atom", request)) 
           entry.title(event.title)
           entry.summary(summary)
           entry.url(event_url(event))
-          entry.updated(event.updated_at)
           entry.link({:rel => 'enclosure', :type => 'text/calendar', :href => event_url(event, :format => 'ics') })
-          entry.content(render(:partial => 'events/feed_item.html.erb', :locals => { :event => event }), :type => 'html')
+          entry.start_time(event.start_time.xmlschema)
+          entry.end_time(event.end_time.xmlschema) if event.end_time
+          entry.content(render(:partial => 'events/feed_item', :locals => {:event => event}, :formats => [:html]), :type => 'html')
           if event.venue && event.venue.latitude && event.venue.longitude
             entry.georss :point, "#{event.venue.latitude} #{event.venue.longitude}"
           end

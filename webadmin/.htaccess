@@ -1,4 +1,0 @@
-AuthType Basic
-AuthName "Password Required"
-AuthUserFile /var/www/calagator/config/webadmin.htpasswd
-require valid-user

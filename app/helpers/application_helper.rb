@@ -68,28 +68,20 @@ module ApplicationHelper
   def self.source_code_version_raw
     begin
       if File.directory?(Rails.root.join(".svn"))
-        $svn_revision ||= \
-          if s = `svn info 2>&1`
-            if m = s.match(/^Revision: (\d+)/s)
-              " - SVN revision: #{m[1]}"
-            end
-          end
+        s = `svn info 2>&1`
+        m = s.match(/^Revision: (\d+)/s)
+        return " - SVN revision: #{m[1]}"
       elsif File.directory?(Rails.root.join(".git"))
-        $git_date ||= \
-          if s = `git log -1 2>&1`
-            if m = s.match(/^Date: (.+?)$/s)
-              " - Git timestamp: #{m[1]}"
-            end
-          end
+        s = `git log -1 2>&1`
+        m = s.match(/^Date: (.+?)$/s)
+        return " - Git timestamp: #{m[1]}"
       elsif File.directory?(Rails.root.join(".hg"))
-        $git_date ||= \
-          if s = `hg id -nibt 2>&1`
-            " - Mercurial revision: #{s}"
-        end
+        s = `hg id -nibt 2>&1`
+        return " - Mercurial revision: #{s}"
       end
     rescue Errno::ENOENT
       # Platform (e.g., Windows) has the checkout directory but not the command-line command to manipulate it.
-      ""
+      return ""
     end
   end
 

@@ -45,7 +45,7 @@ module SearchEngine
     end
   end
 
-  # Set kind of search engine to use, e.g. :acts_as_solr.
+  # Set kind of search engine to use, e.g. :sunspot.
   def self.kind=(value)
     case value
     when nil, ''
@@ -57,7 +57,7 @@ module SearchEngine
     return @@kind
   end
 
-  # Return kind of search engine to use, e.g. :acts_as_solr.
+  # Return kind of search engine to use, e.g. :sunspot.
   def self.kind
     return @@kind
   end

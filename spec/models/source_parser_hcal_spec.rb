@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe SourceParser::Hcal, "with hCalendar events" do
-  fixtures :all
-
   it "should parse hcal" do
     hcal_content = read_sample('hcal_single.xml')
     hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
@@ -10,7 +8,7 @@ describe SourceParser::Hcal, "with hCalendar events" do
 
     events = hcal_source.to_events
 
-    events.size.should == 1
+    events.size.should eq 1
     for key, value in {
       :title => "Calendar event",
       :description => "Check it out!",
@@ -19,7 +17,7 @@ describe SourceParser::Hcal, "with hCalendar events" do
       :url => "http://www.cubespacepdx.com",
       :venue_id => nil, # TODO what should venue instance be?
     }
-      events.first.send(key).should == value
+      events.first.send(key).should eq value
     end
   end
 
@@ -29,7 +27,7 @@ describe SourceParser::Hcal, "with hCalendar events" do
     SourceParser::Base.stub!(:read_url).and_return(hcal_content)
     events = hcal_source.to_events
 
-    events.first.venue.title.should == 'Jive Software Office'
+    events.first.venue.title.should eq 'Jive Software Office'
   end
 
   it "should parse a page with multiple events" do
@@ -39,12 +37,12 @@ describe SourceParser::Hcal, "with hCalendar events" do
     SourceParser::Base.should_receive(:read_url).and_return(hcal_content)
 
     events = hcal_source.to_events
-    events.size.should == 2
+    events.size.should eq 2
     first, second = *events
-    first.start_time.should == Time.parse('2008-1-19')
-    first.end_time.should == Time.parse('2008-01-20')
-    second.start_time.should == Time.parse('2008-2-2')
-    second.end_time.should == Time.parse('2008-02-03')
+    first.start_time.should eq Time.parse('2008-1-19')
+    first.end_time.should eq Time.parse('2008-01-20')
+    second.start_time.should eq Time.parse('2008-2-2')
+    second.end_time.should eq Time.parse('2008-02-03')
   end
 end
 
@@ -58,11 +56,11 @@ describe SourceParser::Hcal, "with hCalendar to AbstractLocation parsing" do
     abstract_location = abstract_event.location
 
     abstract_location.should be_a_kind_of(SourceParser::AbstractLocation)
-    abstract_location.locality.should == "portland"
-    abstract_location.street_address.should == "317 SW Alder St Ste 500"
+    abstract_location.locality.should eq "portland"
+    abstract_location.street_address.should eq "317 SW Alder St Ste 500"
     abstract_location.latitude.should be_within(0.1).of(45.5191)
     abstract_location.longitude.should be_within(0.1).of(-122.675)
-    abstract_location.postal_code.should == "97204"
+    abstract_location.postal_code.should eq "97204"
   end
 end
 
@@ -76,7 +74,7 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
 
   shared_examples_for 'shared' do
     it 'should have exactly one event' do
-      @events.size.should == 1
+      @events.size.should eq 1
     end
 
     it 'should have an event' do
@@ -96,23 +94,23 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
     end
 
     it 'should have the expected event' do
-      @event.title.should == 'February BarCamp Portland Informal Tech Meetup'
-      @event.description.should =~ /The intent is to get a group of cool people/
+      @event.title.should eq 'February BarCamp Portland Informal Tech Meetup'
+      @event.description.should match /The intent is to get a group of cool people/
       # FIXME why is start_time a Time, while end_time is a String?!
       # NOTE: Source does not include timezone?!
-      @event.start_time.should == Time.parse('2008-02-28 5:30PM').to_s
-      @event.end_time.should == Time.parse('2008-02-28 7:30PM')
-      @event.url.should == 'http://barcamp.org/BarCampPortlandMeetups'
+      @event.start_time.should eq Time.parse('2008-02-28 5:30PM').to_s
+      @event.end_time.should eq Time.parse('2008-02-28 7:30PM')
+      @event.url.should eq 'http://barcamp.org/BarCampPortlandMeetups'
     end
 
     it 'should have the expected location' do
-      @location.title.should == 'Jive Software Office'
+      @location.title.should eq 'Jive Software Office'
       @location.description.should be_blank
       @location.address.should be_blank
-      @location.street_address.should == '317 SW Alder St Ste 500'
-      @location.locality.should == 'portland'
+      @location.street_address.should eq '317 SW Alder St Ste 500'
+      @location.locality.should eq 'portland'
       @location.region.should be_blank
-      @location.postal_code.should == '97204'
+      @location.postal_code.should eq '97204'
       @location.latitude.should be_within(0.1).of(45.5191)
       @location.longitude.should be_within(0.1).of(-122.675)
       @location.url.should be_blank
@@ -129,23 +127,23 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
     end
 
     it 'should have the expected event' do
-      @event.title.should == 'Ignite Portland 4'
-      @event.description.should =~ /Save the date! Ignite Portland 4 will happen/
+      @event.title.should eq 'Ignite Portland 4'
+      @event.description.should match /Save the date! Ignite Portland 4 will happen/
       # TODO why is start_time a Time, while end_time is a String?!
       # NOTE: Source does not include timezone?!
-      @event.start_time.should == Time.parse('2008-11-13 7:00PM').to_s
-      @event.end_time.should == Time.parse('2008-11-13 9:00PM')
-      @event.url.should == 'http://www.igniteportland.com'
+      @event.start_time.should eq Time.parse('2008-11-13 7:00PM').to_s
+      @event.end_time.should eq Time.parse('2008-11-13 9:00PM')
+      @event.url.should eq 'http://www.igniteportland.com'
     end
 
     it 'should have the expected location' do
-      @location.title.should == 'Bagdad Theater and Pub'
+      @location.title.should eq 'Bagdad Theater and Pub'
       @location.description.should be_blank
       @location.address.should be_blank
-      @location.street_address.should == '3702 S.E. Hawthorne Blvd'
-      @location.locality.should == 'Portland'
-      @location.region.should == 'Oregon'
-      @location.postal_code.should == '97214'
+      @location.street_address.should eq '3702 S.E. Hawthorne Blvd'
+      @location.locality.should eq 'Portland'
+      @location.region.should eq 'Oregon'
+      @location.postal_code.should eq '97214'
       @location.latitude.should be_blank
       @location.longitude.should be_blank
       @location.url.should be_blank
@@ -162,23 +160,23 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
     end
 
     it 'should have the expected event' do
-      @event.title.should == 'Ignite Portland 5'
-      @event.description.should =~ /Save the date! Ignite Portland 5 will happen/
+      @event.title.should eq 'Ignite Portland 5'
+      @event.description.should match /Save the date! Ignite Portland 5 will happen/
       # TODO why is start_time a Time, while end_time is a String?!
       # NOTE: Source does not include timezone?!
-      @event.start_time.should == Time.parse('2009-02-19 7:00PM').to_s
+      @event.start_time.should eq Time.parse('2009-02-19 7:00PM').to_s
       @event.end_time.should be_nil # This specific event has no DTEND
-      @event.url.should == 'http://www.igniteportland.com'
+      @event.url.should eq 'http://www.igniteportland.com'
     end
 
     it 'should have the expected location' do
-      @location.title.should == 'Bagdad Theater and Pub'
+      @location.title.should eq 'Bagdad Theater and Pub'
       @location.description.should be_blank
       @location.address.should be_blank
-      @location.street_address.should == '3702 S.E. Hawthorne Blvd'
-      @location.locality.should == 'Portland'
-      @location.region.should == 'Oregon'
-      @location.postal_code.should == '97214'
+      @location.street_address.should eq '3702 S.E. Hawthorne Blvd'
+      @location.locality.should eq 'Portland'
+      @location.region.should eq 'Oregon'
+      @location.postal_code.should eq '97214'
       @location.latitude.should be_blank
       @location.longitude.should be_blank
       @location.url.should be_blank
@@ -195,23 +193,23 @@ describe SourceParser::Hcal, 'when parsing Upcoming' do
     end
 
     it 'should have the expected event' do
-      @event.title.should == 'Lunch 2.0 Party Train to OTBC'
-      @event.description.should =~ /Here('|&#39;)s the scoop: Meet up at Pioneer Square/
+      @event.title.should eq 'Lunch 2.0 Party Train to OTBC'
+      @event.description.should match /Here('|&#39;)s the scoop: Meet up at Pioneer Square/
       # TODO why is start_time a Time, while end_time is a String?!
       # NOTE: Source does not include timezone?!
-      @event.start_time.should == Time.parse('2009-01-14 11:00').to_s
+      @event.start_time.should eq Time.parse('2009-01-14 11:00').to_s
       @event.end_time.should be_nil # This specific event has no DTEND
       @event.url.should be_nil
     end
 
     it 'should have the expected location' do
-      @location.title.should == 'Pioneer Courthouse Square'
+      @location.title.should eq 'Pioneer Courthouse Square'
       @location.description.should be_blank
       @location.address.should be_blank
-      @location.street_address.should == '701 Sw 6th Ave'
-      @location.locality.should == 'Portland'
-      @location.region.should == 'Oregon'
-      @location.postal_code.should == '97204'
+      @location.street_address.should eq '701 Sw 6th Ave'
+      @location.locality.should eq 'Portland'
+      @location.region.should eq 'Oregon'
+      @location.postal_code.should eq '97204'
       @location.latitude.should be_blank
       @location.longitude.should be_blank
       @location.url.should be_blank

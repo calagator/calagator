@@ -147,7 +147,7 @@ textarea {
 .single_event .location.vcard,
 .single_event .tags,
 .single_venue .tags,
-.single_venue #future_events,
+.single_venue #events,
 .single_venue .description,
 .single_venue .location.vcard
 {

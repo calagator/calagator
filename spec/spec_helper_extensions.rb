@@ -36,8 +36,8 @@ class BeValidXhtml
   @@auto_validate = false
   cattr_accessor :auto_validate
 
-  class_inheritable_accessor :auto_validate_excludes
-  class_inheritable_accessor :auto_validate_includes
+  class_attribute :auto_validate_excludes
+  class_attribute :auto_validate_includes
 
 
   def matches?(response)
@@ -154,9 +154,9 @@ def be_valid_xhtml_fragment
 end
 
 # Save the response.body to "/tmp/response.html", to aid manual debugging.
-def save_body
-  filename = "/tmp/response.html"
+def save_body(filename="/tmp/response.html")
   bytes = File.open(filename, "w+"){|h| h.write(response.body)}
+  puts "# Saved response body to: #{filename}"
   return [filename, bytes]
 end
 
@@ -171,4 +171,14 @@ SAMPLES_PATH = File.expand_path(File.dirname(__FILE__) + "/samples") unless defi
 
 def read_sample(path_fragment)
   File.read(File.join(SAMPLES_PATH, path_fragment))
+end
+
+# Returns the time right now.
+def now
+  return Time.zone.now
+end
+
+# Returns the time for today at midnight.
+def today
+  return now.midnight
 end

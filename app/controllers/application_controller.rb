@@ -53,3 +53,8 @@ end
 def help
   Helper.instance
 end
+
+# Return string with contents HTML escaped once.
+def escape_once(*args)
+  help.escape_once(*args)
+end

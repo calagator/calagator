@@ -38,11 +38,12 @@
         <%# TODO: Do we actually want to keep providing this? %>
         <%= text_area_tag 'hCalendar',
           h(
-            render :partial => 'hcal.html.erb',
+            render :partial => 'hcal',
                       :locals => {
                         :event => @event,
                         :show_year => true
-                      }
+                      },
+                      :formats => [:html]
           ), :rows => 10, :cols => 80 %>
       </div>
     </li>

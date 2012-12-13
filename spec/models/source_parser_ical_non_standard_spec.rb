@@ -60,15 +60,15 @@ CATEGORIES:apple applecom appleinc technology
   end
 
   it "should find a property set by its key" do
-    @vcard_hash['NAME'].should == 'Apple Store Pioneer Place'
+    @vcard_hash['NAME'].should eq 'Apple Store Pioneer Place'
   end
 
   it "should find a property set by its key and meta-qualifier" do
-    @vcard_hash['URL;X-LABEL=Venue Info'].should == 'http://eventful.com/V0-001-001423875-1'
+    @vcard_hash['URL;X-LABEL=Venue Info'].should eq 'http://eventful.com/V0-001-001423875-1'
   end
 
   it "should find a property set by its key and meta-qualifier by its key when one wasn't specified" do
-    @vcard_hash['URL'].should == 'http://eventful.com/V0-001-001423875-1'
+    @vcard_hash['URL'].should eq 'http://eventful.com/V0-001-001423875-1'
   end
 
   it "should find a property set by its key and multiple meta-qualifier by" do

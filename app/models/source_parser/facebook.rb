@@ -1,7 +1,23 @@
 class SourceParser # :nodoc:
   class Facebook < Base
     label :Facebook
-    url_pattern %r{^http(?:s)?://(?:(?:www\.)?facebook\.com/event.php\?eid=|graph\.facebook\.com/)([^/]+)/?}
+    # NOTE: This pattern's goal is to get the Facebook event identifier in the first capture group, so the "(?:foo)" non-capturing group syntax is used to match but not capture those groups -- search the web for "ruby class rexep non-capturing" for details.
+    #
+    url_pattern %r{(?x)                     # Ignore regexp whitespace and comments
+      ^
+        (?:https?://)?                      # Optional http URI prefix
+        (?:
+          (?:www\.)?                        # Optional 'www.' host prefix
+          (?:
+            facebook\.com/events/           # REST-style path
+          |                                 # ...or....
+            facebook\.com/event\.php\?eid=  # GET-style path
+          )
+        |                                   # ...or...
+          graph\.facebook\.com/             # API path
+        )
+        ([^/]+)                             # Facebook event identifier to capture
+      }
 
     def self.to_abstract_events(opts={})
       self.to_abstract_events_api_helper(

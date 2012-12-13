@@ -190,6 +190,9 @@ class EventsController < ApplicationController
       @grouped_events = Event.search_keywords_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
     elsif @tag
       @grouped_events = Event.search_tag_grouped_by_currentness(@tag, :order => @order, :current => @current)
+      if @grouped_events[:error]
+        flash[:failure] = escape_once(@grouped_events[:error])
+      end
     end
 
     # setting @events so that we can reuse the index atom builder
@@ -208,7 +211,7 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html {
         flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
-        render "new.html.erb"
+        render "new"
       }
       format.xml  { render :xml => @event }
     end
