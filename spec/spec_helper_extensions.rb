@@ -4,8 +4,8 @@ class BeValidXhtml
   # require 'action_controller/test_process'
   # require 'test/unit'
   require 'net/http'
-  require 'md5'
-  require 'ftools'
+  require 'digest/md5'
+  require 'fileutils'
 
   def initialize(options)
     @fragment = options[:fragment]
@@ -105,11 +105,11 @@ class BeValidXhtml
     end
 
     def text_to_multipart(key,value)
-      return "Content-Disposition: form-data; name=\"#{CGI::escape(key)}\"\r\n\r\n#{value}\r\n"
+      return "Content-Disposition: form-data; name=\"#{cgi_escape(key)}\"\r\n\r\n#{value}\r\n"
     end
 
     def file_to_multipart(key,filename,mime_type,content)
-      return "Content-Disposition: form-data; name=\"#{CGI::escape(key)}\"; filename=\"#{filename}\"\r\n" +
+      return "Content-Disposition: form-data; name=\"#{cgi_escape(key)}\"; filename=\"#{filename}\"\r\n" +
                 "Content-Transfer-Encoding: binary\r\nContent-Type: #{mime_type}\r\n\r\n#{content}\r\n"
     end
 
@@ -117,7 +117,7 @@ class BeValidXhtml
       resource_md5 = MD5.md5(resource).to_s
       file_md5 = nil
 
-      output_dir = "#{RAILS_ROOT}/tmp/#{base}"
+      output_dir = "#{Rails.root}/tmp/#{base}"
       base_filename = File.join(output_dir, fn)
       filename = base_filename + extension
 
@@ -163,7 +163,7 @@ end
 def stub_source_parser_http_response!(opts={})
   code = (opts[:code] || "200").to_s
   body = opts[:body]
-  http_response = mock_model(Net::HTTPResponse, :code => code, :body => body)
+  http_response = double("Net::HTTPResponse", :code => code, :body => body)
   SourceParser::Base.should_receive(:http_response_for).and_return(http_response)
 end
 

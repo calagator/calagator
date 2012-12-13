@@ -54,8 +54,8 @@ module ValidatesBlacklistOnMixin
     # will be used.
     def _get_blacklist_patterns_from(filename=nil)
       filename ||= "blacklist.txt"
-      filename = "#{RAILS_ROOT}/config/#{filename}" unless filename.match(/[\/\\]/)
-      return File.read(filename).map{|line| Regexp.new(line.strip, Regexp::IGNORECASE)}
+      filename = Rails.root.join('config',filename) unless filename.match(/[\/\\]/)
+      return File.read(filename).lines.map{|line| Regexp.new(line.strip, Regexp::IGNORECASE)} if File.exists?(filename)
     end
   end
 
@@ -64,7 +64,12 @@ protected
   def _validate_blacklist_on_record(*attrs)
     opts = { :message => ValidatesBlacklistOnMixin::BLACKLIST_DEFAULT_MESSAGE }
     opts.update(attrs.extract_options!.symbolize_keys)
-    patterns = opts[:patterns] || self.class._get_blacklist_patterns_from(opts[:blacklist])
+    if opts[:patterns].present?
+      patterns = opts[:patterns]
+    else
+      patterns = [self.class._get_blacklist_patterns_from(opts[:blacklist]),
+                self.class._get_blacklist_patterns_from("blacklist-local.txt")].flatten.compact
+    end
     is_valid = true
     attrs.each do |attr|
       value = self.send(attr).to_s

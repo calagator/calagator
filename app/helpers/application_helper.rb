@@ -3,7 +3,11 @@ module ApplicationHelper
 
   # Returns HTML string of an event or venue description for display in a view.
   def format_description(string)
-    return upgrade_br(simple_format(auto_link(white_list(string.gsub(%r{<br\s?/?>}, "\n")))))
+    sanitize(auto_link(upgrade_br(markdown(string))))
+  end
+
+  def markdown(text)
+    BlueCloth.new(text).to_html
   end
 
   # Return a HTML string with the BR tags converted to XHTML compliant markup.
@@ -14,16 +18,17 @@ module ApplicationHelper
   FLASH_TYPES = [:success, :failure]
 
   def render_flash
-    result = ""
-    for name in FLASH_TYPES
-      result += "<div class='flash #{name} flash_#{name}'>#{name == :failure ? 'ERROR: ' : ''}#{flash[name]}</div>" if flash[name]
-    end
-    return(result.blank? ? nil : "<div id='flash'>#{result}</div>")
+    FLASH_TYPES.map{|type|
+      next unless flash[type].present?
+      content_tag(:div, :class => "flash #{type} flash_#{type}") do
+        "#{type == :failure ? 'ERROR: ' : ''}#{flash[type]}".html_safe
+      end
+    }.compact.join.html_safe
   end
 
   def datetime_format(time,format)
     format = format.gsub(/(%[dHImU])/,'*\1')
-    time.strftime(format).gsub(/\*0*/,'')
+    time.strftime(format).gsub(/\*0*/,'').html_safe
   end
 
   # Returns HTML for a Google map containing the +locatable_items+.
@@ -40,7 +45,7 @@ module ApplicationHelper
   # the little overview map obscures such a big chunk of the main map that
   # it's likely to hide some of our markers, so it's off by default.
   def google_map(locatable_items, options={})
-    return nil if defined?(GoogleMap::GOOGLE_APPLICATION_ID) == nil
+    return nil if defined?(GOOGLE_APPLICATION_ID) == nil
     options[:controls] ||= [:zoom, :scale, :type] # the default, minus :overview
     options[:zoom] ||= 14
 
@@ -56,27 +61,27 @@ module ApplicationHelper
           :icon => icon)
       end
     end
-    map.to_html + map.div(nil) unless map.markers.empty?
+    (map.to_html + map.div(nil)).html_safe unless map.markers.empty?
   end
 
   # Retrun a string describing the source code version being used, or false/nil if it can't figure out how to find the version.
   def self.source_code_version_raw
     begin
-      if File.directory?(File.join(RAILS_ROOT, ".svn"))
+      if File.directory?(Rails.root.join(".svn"))
         $svn_revision ||= \
           if s = `svn info 2>&1`
             if m = s.match(/^Revision: (\d+)/s)
               " - SVN revision: #{m[1]}"
             end
           end
-      elsif File.directory?(File.join(RAILS_ROOT, ".git"))
+      elsif File.directory?(Rails.root.join(".git"))
         $git_date ||= \
           if s = `git log -1 2>&1`
             if m = s.match(/^Date: (.+?)$/s)
               " - Git timestamp: #{m[1]}"
             end
           end
-      elsif File.directory?(File.join(RAILS_ROOT, ".hg"))
+      elsif File.directory?(Rails.root.join(".hg"))
         $git_date ||= \
           if s = `hg id -nibt 2>&1`
             " - Mercurial revision: #{s}"
@@ -107,6 +112,7 @@ module ApplicationHelper
       stamp << " and last updated <br />" << content_tag(:strong, normalize_time(item.updated_at, :format => :html) )
     end
     stamp << "."
+    stamp.html_safe
   end
 
   # Caches +block+ in view only if the +condition+ is true.
@@ -122,7 +128,7 @@ module ApplicationHelper
   # Insert a chunk of +javascript+ into the page, and execute it when the document is ready.
   def insert_javascript(javascript)
     content_for(:javascript_insert) do
-      <<-HERE
+      (<<-HERE).html_safe
         <script>
           $(document).ready(function() {
             #{javascript}
@@ -152,7 +158,7 @@ module ApplicationHelper
   end
 
   def tag_links_for(model)
-    model.tags.map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ')
+    model.tags.map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
   end
 
   def tag_link(type, tag, link_class=nil)
@@ -165,7 +171,7 @@ module ApplicationHelper
     link_classes = [link_class]
     link_classes << "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" if tag.machine_tag[:url]
 
-    link_to cleanse(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
+    link_to escape_once(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
   end
 
   def subnav_class_for(controller_name, action_name)
@@ -218,5 +224,10 @@ module ApplicationHelper
         return default
       end
     end
+  end
+
+  # CGI escape a string-like object. The issue is that CGI::escape fails if used on a RailsXss SafeBuffer: https://github.com/rails/rails_xss/issues/8
+  def cgi_escape(data)
+    return CGI::escape(data.to_str)
   end
 end

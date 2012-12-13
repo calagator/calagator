@@ -1,14 +1,9 @@
-<% puts "WARNING: PostgreSQL support is incomplete at this time, use at your own risk!" unless $dyW; $dyW = true %>
-# PostgreSQL. Versions 7.4 and 8.x are supported.
+# PostgreSQL.
 #
 # Install the ruby-postgres driver:
-#   gem install ruby-postgres
+#   gem install pg
 # On Mac OS X:
-#   gem install ruby-postgres -- --include=/usr/local/pgsql
-# On Windows:
-#   gem install ruby-postgres
-#       Choose the win32 build.
-#       Install PostgreSQL and put its /bin directory on your path.
+#   gem install pg -- --include=/usr/local/pgsql
 
 common: &common
   adapter: postgresql

@@ -4,29 +4,19 @@ class EventsController < ApplicationController
   # GET /events
   # GET /events.xml
   def index
-    order = params[:order] || 'date'
-    order = \
-      case order
-        when 'date'
-          'start_time'
-        when 'name'
-          'lower(events.title), start_time'
-        when 'venue'
-          'lower(venues.title), start_time'
-        end
-
     @start_date = date_or_default_for(:start)
     @end_date = date_or_default_for(:end)
-    @events_deferred = lambda {
-      params[:date] ?
-        Event.find_by_dates(@start_date, @end_date, :order => order) :
-        Event.find_future_events(:order => order)
-    }
+
+    query = Event.non_duplicates.ordered_by_ui_field(params[:order]).includes(:venue, :tags)
+    @events = params[:date] ?
+                query.within_dates(@start_date, @end_date) :
+                query.future
+
     @perform_caching = params[:order].blank? && params[:date].blank?
 
     @page_title = "Events"
 
-    render_events(@events_deferred)
+    render_events(@events)
   end
 
   # GET /events/1
@@ -35,8 +25,7 @@ class EventsController < ApplicationController
     begin
       @event = Event.find(params[:id])
     rescue ActiveRecord::RecordNotFound => e
-      flash[:failure] = e.to_s
-      return redirect_to(:action => :index)
+      return redirect_to events_path, :flash => {:failure => e.to_s}
     end
 
     if @event.duplicate?
@@ -44,12 +33,6 @@ class EventsController < ApplicationController
     end
 
     @page_title = @event.title
-    @hcal = render_to_string :partial => 'list_item.html.erb',
-        :locals => { :event => @event, :show_year => true }
-
-    # following used by Show so that weekday is rendered
-    @show_hcal = render_to_string :partial => 'hcal.html.erb',
-        :locals => { :event => @event, :show_year => true }
 
     respond_to do |format|
       format.html # show.html.erb
@@ -84,8 +67,8 @@ class EventsController < ApplicationController
     @event.associate_with_venue(venue_ref(params))
     has_new_venue = @event.venue && @event.venue.new_record?
 
-    @event.start_time = params[:start_date], params[:start_time]
-    @event.end_time = params[:end_date], params[:end_time]
+    @event.start_time = [ params[:start_date], params[:start_time] ]
+    @event.end_time   = [ params[:end_date], params[:end_time] ]
 
     if evil_robot = params[:trap_field].present?
       flash[:failure] = "<h3>Evil Robot</h3> We didn't create this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
@@ -99,7 +82,7 @@ class EventsController < ApplicationController
             flash[:success] += " Please tell us more about where it's being held."
             redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
           else
-            redirect_to(@event)
+            redirect_to( event_path(@event) )
           end
         }
         format.xml  { render :xml => @event, :status => :created, :location => @event }
@@ -118,8 +101,8 @@ class EventsController < ApplicationController
     @event.associate_with_venue(venue_ref(params))
     has_new_venue = @event.venue && @event.venue.new_record?
 
-    @event.start_time = params[:start_date], params[:start_time]
-    @event.end_time = params[:end_date], params[:end_time]
+    @event.start_time = [ params[:start_date], params[:start_time] ]
+    @event.end_time   = [ params[:end_date], params[:end_time] ]
 
     if evil_robot = !params[:trap_field].blank?
       flash[:failure] = "<h3>Evil Robot</h3> We didn't update this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
@@ -133,7 +116,7 @@ class EventsController < ApplicationController
             flash[:success] += "Please tell us more about where it's being held."
             redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
           else
-            redirect_to(@event)
+            redirect_to( event_path(@event) )
           end
         }
         format.xml  { head :ok }
@@ -156,7 +139,7 @@ class EventsController < ApplicationController
     @event.destroy
 
     respond_to do |format|
-      format.html { redirect_to(events_url) }
+      format.html { redirect_to(events_url, :flash => {:success => "\"#{@event.title}\" has been deleted"}) }
       format.xml  { head :ok }
     end
   end
@@ -235,7 +218,7 @@ protected
 
   # Export +events+ to an iCalendar file.
   def ical_export(events=nil)
-    events = events || Event.find_future_events
+    events = events || Event.future.non_duplicates
     render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
   end
 
@@ -244,17 +227,11 @@ protected
     respond_to do |format|
       format.html # *.html.erb
       format.kml  # *.kml.erb
-      format.ics  { ical_export(yield_events(events)) }
+      format.ics  { ical_export(events) }
       format.atom { render :template => 'events/index' }
-      format.xml  { render :xml  => yield_events(events).to_xml(:include => :venue) }
-      format.json { render :json => yield_events(events).to_json(:include => :venue), :callback => params[:callback] }
+      format.xml  { render :xml  => events.to_xml(:include => :venue) }
+      format.json { render :json => events.to_json(:include => :venue), :callback => params[:callback] }
     end
-  end
-
-  # Return an array of Events from a +container+, which can either be an array
-  # of Events or a lambda that returns an array of Events.
-  def yield_events(container)
-    return container.respond_to?(:call) ? container.call : container
   end
 
   # Venues may be referred to in the params hash either by id or by name. This
@@ -274,12 +251,12 @@ protected
 
   # Return the default start date.
   def default_start_date
-    Time.today
+    Time.zone.today
   end
 
   # Return the default end date.
   def default_end_date
-    Time.today + 3.months
+    Time.zone.today + 3.months
   end
 
   # Return a date parsed from user arguments or a default date. The +kind+

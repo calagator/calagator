@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/../spec_helper'
+require 'spec_helper'
 
 # TODO consider converting this to nested describe statements, similar to event_spec
 
@@ -42,24 +42,13 @@ end
 describe Venue, "with finding unmarked duplicates" do
   it "should find all venues with duplicate titles" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title )")
-    Venue.find(:duplicates, :by => :title )
+    Venue.find_duplicates_by(:title )
   end
 
   it "should find all venues with duplicate titles and urls" do
     Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-    Venue.find(:duplicates, :by => [:title,:url])
+    Venue.find_duplicates_by([:title,:url])
   end
-
-  it "should find all venues that have not been marked as duplicate" do
-    Venue.should_receive(:find_without_duplicate_support).with(:all, {})
-    Venue.find(:non_duplicates)
-  end
-
-  it "should find all venues that have been marked as duplicate" do
-    Venue.should_receive(:find_without_duplicate_support).with(:all, {})
-    Venue.find(:marked_duplicates)
-  end
-
 end
 
 describe Venue, "with finding unmarked duplicates (integration test)" do
@@ -71,11 +60,11 @@ describe Venue, "with finding unmarked duplicates (integration test)" do
 
   # Find duplicates, create another venue with the given attributes, and find duplicates again
   def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes, create_class = Venue)
-    before_results = create_class.find(:duplicates, :by => find_duplicates_arguments)
+    before_results = create_class.find_duplicates_by(find_duplicates_arguments)
     clone = create_class.new(clone_attributes)
     clone.stub!(:geocode)
     clone.save!
-    after_results = Venue.find(:duplicates, :by => find_duplicates_arguments)
+    after_results = Venue.find_duplicates_by(find_duplicates_arguments)
     return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
   end
 

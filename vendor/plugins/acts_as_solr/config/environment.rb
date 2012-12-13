@@ -7,15 +7,15 @@ SOLR_PATH = "#{File.dirname(File.expand_path(__FILE__))}/../solr" unless defined
 unless defined? SOLR_PORT
   SOLR_PORT =
     ENV['PORT'] || \
-    if File.exists?(RAILS_ROOT+'/config/solr.yml')
+    if File.exists?(Rails.root+'/config/solr.yml')
       # Via 'config/solr.yml' file
-      config = YAML::load(ERB.new(File.read(RAILS_ROOT+'/config/solr.yml')).result)
-      if config[RAILS_ENV]['port']
+      config = YAML::load(ERB.new(File.read(Rails.root+'/config/solr.yml')).result)
+      if config[Rails.env]['port']
         # Via 'port' attribute
-        config[RAILS_ENV]['port'].to_i
+        config[Rails.env]['port'].to_i
       else
         # Via 'url' attribute
-        url = config[RAILS_ENV]['url']
+        url = config[Rails.env]['url']
         uri = URI.parse(url)
         uri.port
       end

@@ -26,10 +26,10 @@ To run Calagator in `development` mode, which automatically reloads code as you 
 
   * Follow the **Setup** instructions above.
   * Initialize your database, run `bundle exec rake db:migrate db:test:prepare`
-  * Start the *Ruby on Rails* web application by running `./script/server` (UNIX) or `ruby script/server` (Windows).
+  * Start the *Ruby on Rails* web application by running `rails server` (UNIX) or `ruby script/rails /server` (Windows).
   * Open a web browser to <http://localhost:3000/> to use the development server
   * Read the [Rails Guides](http://guides.rubyonrails.org/) to learn how to develop a Ruby on Rails application.
-  * When done, stop the *Ruby on Rails* server `script/server` by pressing `CTRL-C`.
+  * When done, stop the *Ruby on Rails* server (e.g. `rails server`) by pressing `CTRL-C`.
 
 
 Production
@@ -41,7 +41,7 @@ To run Calagator in `production` mode, which runs more quickly, but doesn't relo
   * Setup a firewall to protect ports used by your search engine, see the **Search engine** section for details.
   * Initialize your database, run `bundle exec rake RAILS_ENV=production db:migrate`
   * Run `bundle exec rake clear` to clear your cache after updating your application's code.
-  * Setup a production web server using [Phusion Passenger](http://www.modrails.com/), [Thin](http://code.macournoyer.com/thin/), [Rainbows](http://rainbows.rubyforge.org/), etc. These will be able to serve more users more quickly than `script/server`.
+  * Setup a production web server using [Phusion Passenger](http://www.modrails.com/), [Thin](http://code.macournoyer.com/thin/), [Unicorn](http://unicorn.bogomips.org/), [Rainbows](http://rainbows.rubyforge.org/), etc. These will be able to serve more users more quickly than using the built-in server (e.g. `rails server`).
 
 The Calagator.org site runs on [Ubuntu Linux](http://ubuntu.com/), [Phusion REE (Ruby Enterprise Edition)](http://rubyenterpriseedition.com/) and [Phusion Passenger](http://www.modrails.com/).
 
@@ -57,6 +57,10 @@ Security and secrets.yml
 
 This application runs with insecure settings by default to make it easy to get started. These default settings include publicly-known cryptography keys that can allow attackers to gain admin privileges to your application. You should create a `config/secrets.yml` file with your secret settings if you intend to run this application on a server that can be accessed by untrusted users, read the [config/secrets.yml.sample](config/secrets.yml.sample) file for details.
 
+Spam Blacklist
+--------------
+
+A default set of blacklist words is provided in config/blacklist.txt. You can create your own by adding a config/blacklist-local.txt file with one regular expression per line (see config/blacklist.txt for examples).
 
 API Keys
 --------
