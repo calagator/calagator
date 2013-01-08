@@ -61,7 +61,7 @@ else
 end
 
 # Run-time dependencies
-gem 'rails', '3.2.8'
+gem 'rails', '3.2.11'
 gem 'rails_autolink', '1.0.9'
 gem 'columnize', '0.3.6'
 gem 'rdoc', '3.12', :require => false
@@ -75,11 +75,11 @@ gem 'httparty', '0.8.3'
 gem 'multi_json' # Use whichever version 'httparty' wants, needed for our specs
 gem 'loofah', '1.2.1'
 # NOTE: 'loofah-activerecord' doesn't support Rails 3.2, so use my fork:
-gem 'loofah-activerecord', :git => 'git://github.com/igal/loofah-activerecord.git', :branch => 'with_rails_3.1_and_3.2'
+gem 'loofah-activerecord', :git => 'https://github.com/igal/loofah-activerecord.git', :branch => 'with_rails_3.1_and_3.2'
 gem 'bluecloth', '2.2.0'
 gem 'formtastic', '2.0.2' # 2.1 and above change the syntax significantly :(
 # validation_reflection 1.0.0 doesn't support Rails 3.2, so use unofficial patches:
-gem 'validation_reflection', :git => 'git://github.com/ncri/validation_reflection.git', :ref => '60320e6beb088808fd625a8d958dbd0d2661d494'
+gem 'validation_reflection', :git => 'https://github.com/ncri/validation_reflection.git', :ref => '60320e6beb088808fd625a8d958dbd0d2661d494'
 gem 'acts-as-taggable-on', '2.3.3'
 gem 'themes_for_rails', '0.5.1'
 gem 'jquery-rails', '1.0.19'
