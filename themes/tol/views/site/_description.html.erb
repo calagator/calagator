@@ -11,6 +11,6 @@
 
 <h4>Subscribe To</h4>
 <ul>
-  <li><%= link_to "iCalendar feed", url_for(:controller => "events", :action => "index", :protocol => "webcal", :only_path => false)+".ics" %></li>
-  <li><%= link_to "Atom feed", events_url(:format => "atom") %></li>
+  <li><%= link_to "iCalendar feed", icalendar_feed_link %></li>
+  <li><%= link_to "Atom feed", atom_feed_link %></li>
 </ul>
