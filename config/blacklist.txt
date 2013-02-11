@@ -28,6 +28,7 @@
 \bsex\s+tape\b
 \btamiflu\b
 \btramadol\b
+\bugg\s+boots\b
 \buiouoiuiuoi\b
 \bviagra\b
 \bvicodin\b
