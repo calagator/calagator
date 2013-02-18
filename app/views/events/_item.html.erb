@@ -9,28 +9,30 @@ html_classes = "single_event"
 html_classes << " contentbar" if has_contentbar
 %>
 <div class="<%= html_classes %>">
-  <div class="vevent">
-    <h1 class="summary"><%= event.title %></h1>
+  <div class="vevent" itemscope itemtype="http://schema.org/Event">
+    <h1 class="summary" itemprop="name"><%= event.title %></h1>
+    <meta itemprop="startDate" content="<%= event.start_time.to_time.iso8601 %>">
+    <meta itemprop="endDate" content="<%= event.end_time.to_time.iso8601 %>">
     <div class='date'><%= normalize_time(event) -%></div>
       <% unless event.venue.blank? %>
-      <div class="clearfix location vcard<%= " closed" if event.venue.closed? %>">
+      <div class="clearfix location vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
       <%= google_map event %>
           <a class="url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
-            <span class='fn org'><%= event.venue.title -%></span>
+            <span class='fn org' itemprop="name"><%= event.venue.title -%></span>
           </a>
           <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
-          <div class="adr">
+          <div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
           <% if !event.venue.street_address.blank? -%>
-          <div class="street-address"><%= event.venue.street_address -%></div>
+          <div class="street-address" itemprop="streetAddress"><%= event.venue.street_address -%></div>
           <% end %>
           <% if !event.venue.locality.blank? -%>
-            <span class="locality"><%= event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
+            <span class="locality" itemprop="addressLocality"><%= event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.region.blank? -%>
-            <span class="region"><%= event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
+            <span class="region" itemprop="addressRegion"><%= event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
             <% end -%>
             <% if !event.venue.postal_code.blank? -%>
-            <span class="postal-code"><%= event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
+            <span class="postal-code"  itemprop="postalCode"><%= event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.country.blank? -%>
             <span class='country-name'><%= event.venue.country -%></span>
@@ -63,13 +65,14 @@ html_classes << " contentbar" if has_contentbar
     <% unless event.url.blank? -%>
       <h3>Website</h3>
       <div class="website">
-        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow" -%>
+        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow", 
+        :itemprop => "url" %>
       </div>
     <% end -%>
 
     <% unless event.description.blank? -%>
     <h3>Description</h3>
-    <div class="description">
+    <div class="description" itemprop="description">
       <%= format_description(event.description) %>
     </div>
     <% end -%>
