@@ -27,7 +27,7 @@
 
 <a href="#" id="event_sidebar_toggle" class="expander_toggle">Export or edit this event...</a>
 
-<div id="event_sidebar" class='single_view_right sidebar'>
+<aside id="event_sidebar" class='single_view_right sidebar'>
   <h3 class='first'>Export to</h3>
   <ul>
     <li><%= link_to "Google Calendar", google_event_export_link(@event), :id => "google_calendar_export", :target => "_blank" %></li>
@@ -48,7 +48,6 @@
       </div>
     </li>
   </ul>
-<hr />
   <div id='edit_link'>
     <p>
       You can 
@@ -59,10 +58,9 @@
       this event.
     </p>
   </div>
-<hr />
   <div id='metadata'>
       <%= datestamp(@event) %>
   </div>
-</div>
+</aside>
 
 <%= render :partial => 'events/item', :locals => {:event => @event} %>
