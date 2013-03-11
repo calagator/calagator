@@ -46,5 +46,6 @@ Calagator::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+  ENV['PATH'] = "#{ENV['PATH']}:/usr/local/bin"
 end
 
