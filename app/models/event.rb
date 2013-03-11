@@ -222,6 +222,11 @@ class Event < ActiveRecord::Base
     # Find all events between today and future_cutoff, sorted by start_time
     # includes events any part of which occurs on or after today through on or after future_cutoff
     overview_events = self.non_duplicates.within_dates(today, future_cutoff)
+
+    if overview_events.count < 10
+      overview_events = self.on_or_after_date(after_tomorrow).limit(10)
+    end
+
     overview_events.each do |event|
       if event.start_time < tomorrow
         times_to_events[:today]    << event

@@ -22,16 +22,20 @@
 <div id="whats_happening">
   <h2>What's happening?</h2>
   <section id='coming_events'>
+    <% if @times_to_events[:today].any? %>
     <h3>Today</h3>
       <%= render 'events/list', :events => @times_to_events[:today], :dates => false %>
+    <% end %>
+    <% if @times_to_events[:tomorrow].any? %>
     <h3>Tomorrow</h3>
     <%= render 'events/list', :events => @times_to_events[:tomorrow], :dates => false %>
+    <% end %>
   </section>
   <secton id='recently_added_events'>
-    <h3>Next two weeks</h3>
+    <h3>Future Events</h3>
     <%= render 'events/list', :events => @times_to_events[:later] %>
   </section>
-  <%= link_to("View future events &raquo;".html_safe, 
+  <%= link_to("View more &raquo;".html_safe, 
   events_path(:anchor => "event-#{@times_to_events[:more].id}"),
   :id => "future_events_link") if @times_to_events[:more] %>
 </div>
