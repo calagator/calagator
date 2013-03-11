@@ -254,6 +254,12 @@ ul.event_list .list_date {
   line-height: 0.5em;
 }
 
+#future_events_link{ 
+  font-size: 1.5em; 
+  line-height: 1; 
+  margin-bottom: .5em; 
+}
+
 .single_event .date {
   color: #82c555;
   font-size: 1.3em;
