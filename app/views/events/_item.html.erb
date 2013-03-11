@@ -10,12 +10,12 @@ html_classes << " contentbar" if has_contentbar
 %>
 <div class="<%= html_classes %>">
   <div class="vevent" itemscope itemtype="http://schema.org/Event">
-    <h1 class="summary" itemprop="name"><%= event.title %></h1>
+    <h2 class="summary" itemprop="name"><%= event.title %></h2>
     <meta itemprop="startDate" content="<%= event.start_time.to_time.iso8601 %>">
     <meta itemprop="endDate" content="<%= event.end_time.to_time.iso8601 %>">
-    <div class='date'><%= normalize_time(event) -%></div>
+    <section class='date'><%= normalize_time(event) -%></section>
       <% unless event.venue.blank? %>
-      <div class="clearfix location vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
+      <section class="clearfix location vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
       <%= google_map event %>
           <a class="url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
             <span class='fn org' itemprop="name"><%= event.venue.title -%></span>
@@ -58,24 +58,33 @@ html_classes << " contentbar" if has_contentbar
             </p>
             <% end -%>
 
-      </div>
+      </section>
       <% end -%>
   </div>
 
-    <% unless event.url.blank? -%>
-      <h3>Website</h3>
-      <div class="website">
-        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow", 
+  <section id="event_details">
+    <h2>Event Details</h2> 
+      <table class="event_info">
+        <% unless event.url.blank? -%>
+        <tr>
+          <th>Website:</th>
+          <td>
+            <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow", 
         :itemprop => "url" %>
-      </div>
-    <% end -%>
+          </td>
+        </tr>
+        <% end %>
+        <% unless event.description.blank? -%>
+        <tr>
+          <th>Description:</th>
+          <td>
+            <%= format_description(event.description) %>
+          </td>
+        </tr>
+        <% end -%>
+      </table>
 
-    <% unless event.description.blank? -%>
-    <h3>Description</h3>
-    <div class="description" itemprop="description">
-      <%= format_description(event.description) %>
-    </div>
-    <% end -%>
+    
 
     <div class="attendees">
       <script id="attendees-template" type="text/mustache">

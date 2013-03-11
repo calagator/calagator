@@ -35,6 +35,11 @@ body {
   width: 135px;
 }
 
+#project_title a{
+  display:block;
+  height: 31px;
+}
+
 #app_menu ul {
   font-size: 1.3em;
   line-height: 1.3em;
@@ -237,7 +242,7 @@ ul.event_list .list_date {
 /* @group Single Event
 ----------------------------------------*/
 
-.single_event h1 {
+.single_event h2 {
   padding-top: 0.5em;
   margin: 0;
   line-height: 1.2em;
@@ -247,6 +252,12 @@ ul.event_list .list_date {
   padding-top: 1.0em;
   margin-bottom: 0.5em;
   line-height: 0.5em;
+}
+
+#future_events_link{ 
+  font-size: 1.5em; 
+  line-height: 1; 
+  margin-bottom: .5em; 
 }
 
 .single_event .date {
@@ -291,6 +302,17 @@ ul.event_list .list_date {
   width: 40em;
 }
 
+.event_info{ width:80%; margin-top:1em;}
+.event_info th{ vertical-align:top; font-size:1.4em; font-weight:700; }
+.event_info td{ padding-bottom:1.2em; }
+
+#edit_link{ 
+  border-top: 1px solid #000; 
+  border-bottom: 1px solid #000; 
+  padding:.5em 0;
+  margin-bottom:.5em;
+}
+#edit_link p{ margin-bottom:.6em; }
 /* @end */
 
 /* Event Preview */
@@ -515,7 +537,7 @@ fieldset .no_label, fieldset .help {
   margin: 1em 0 0 24em;
 }
 
-#whats_happening h1 {
+#whats_happening h2 {
   padding-top: .2em
 }
 
@@ -710,4 +732,18 @@ fieldset .no_label, fieldset .help {
 .plancast-rsvp {
   font-size: 11px;
 }
+
+/* About Page */
+#get_involved_steps{ 
+  font-size: 1.2em;
+  line-height: 1.25; 
+  font-weight: bold;
+  list-style:none;
+  margin:1em 0 0 .75em;  
+}
+
+#get_involved_steps li{ 
+  margin-bottom:1em; 
+}
+
 /* @end */

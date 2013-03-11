@@ -732,4 +732,18 @@ fieldset .no_label, fieldset .help {
 .plancast-rsvp {
   font-size: 11px;
 }
+
+/* About Page */
+#get_involved_steps{ 
+  font-size: 1.2em;
+  line-height: 1.25; 
+  font-weight: bold;
+  list-style:none;
+  margin:1em 0 0 .75em;  
+}
+
+#get_involved_steps li{ 
+  margin-bottom:1em; 
+}
+
 /* @end */
