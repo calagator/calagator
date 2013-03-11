@@ -35,6 +35,11 @@ body {
   width: 135px;
 }
 
+#project_title a{
+  display:block;
+  height: 31px;
+}
+
 #app_menu ul {
   font-size: 1.3em;
   line-height: 1.3em;
@@ -237,7 +242,7 @@ ul.event_list .list_date {
 /* @group Single Event
 ----------------------------------------*/
 
-.single_event h1 {
+.single_event h2 {
   padding-top: 0.5em;
   margin: 0;
   line-height: 1.2em;
@@ -247,6 +252,12 @@ ul.event_list .list_date {
   padding-top: 1.0em;
   margin-bottom: 0.5em;
   line-height: 0.5em;
+}
+
+#future_events_link{ 
+  font-size: 1.5em; 
+  line-height: 1; 
+  margin-bottom: .5em; 
 }
 
 .single_event .date {
@@ -515,7 +526,7 @@ fieldset .no_label, fieldset .help {
   margin: 1em 0 0 24em;
 }
 
-#whats_happening h1 {
+#whats_happening h2 {
   padding-top: .2em
 }
 

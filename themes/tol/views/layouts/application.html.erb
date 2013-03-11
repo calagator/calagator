@@ -1,5 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
@@ -19,7 +18,10 @@
     <%= theme_stylesheet_link_tag 'typography', 'forms', 'layout', 'jquery-ui/jquery-ui', 'changes', :media => :all %>
     <%= theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
 
-	<!--[if IE]>
+    <!--[if lt IE 9]>
+      <script src="javascripts/html5shiv.js"></script>
+    <![endif]-->
+	  <!--[if IE]>
       <%= theme_stylesheet_link_tag 'ie', :media => :all %>
     <![endif]-->
     <%= theme_stylesheet_link_tag 'print', :media => :print %>
@@ -46,62 +48,61 @@
   </head>
   <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
 
-  <div id="outer">
-    <div id="global_header">
-      <a href="/" id="project_title"><%= SETTINGS.name %></a>
+  <header id="global_header">
+    <a href="/" id="project_title"><%= SETTINGS.name %></a>
 
-      <div id="top_menu">
-         <div id='app_menu'>
-          <ul>
-              <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
-              <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
-          </ul>
-        </div>
-        <div id='project_menu'>
-          <strong>Get Involved:</strong> <%= link_to "Blog", "http://calagator.wordpress.com/", {:class => 'first'} %> | <%= link_to "Forum", "http://groups.google.com/group/tol-calagator/" %> | <%= link_to "Code", "https://github.com/jmslagle/calagator" %>
-          <br />
-          <strong>Something not right?</strong> <%= link_to "File an issue", "http://github.com/jmslagle/calagator/issues" %>.
-        </div>
-        <%= form_tag '/events/search', :method => :get do %>
-          <div id='search_form'>
-          <label for="search_field">Search Events</label>
-          <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-            <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-          <% else %>
-            <%= text_field_tag 'query', @query, :id => 'search_field' %>
-          <% end %>
-          </div>
-        <% end -%>
+    <div id="top_menu">
+       <nav id='app_menu'>
+        <ul>
+            <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+            <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+        </ul>
+      </nav>
+      <div id='project_menu'>
+        <strong>Get Involved:</strong> 
+        <%= link_to "Blog", "http://calagator.wordpress.com/" %> | 
+        <%= link_to "Forum", "http://groups.google.com/group/tol-calagator/" %> | 
+        <%= link_to "Code", "https://github.com/jmslagle/calagator" %>
+        <br />
+        <strong>Something not right?</strong> <%= link_to "File an issue", "http://github.com/jmslagle/calagator/issues" %>.
       </div>
+      <%= form_tag '/events/search', :method => :get, :id => "search_form" do %>
+        <label for="search_field">Search Events</label>
+        <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+          <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+        <% else %>
+          <%= text_field_tag 'query', @query, :id => 'search_field' %>
+        <% end %>
+      <% end -%>
     </div>
+  </header>
 
-    <% # Pick a subnav %>
+  <% # Pick a subnav %>
 
-    <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
-    <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
-    <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+  <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
+  <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
+  <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
 
-    <div id="content">
-      <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
-      <%= render_flash %>
-      <%= yield %>
-    </div>
+  <div id="content">
+    <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
+    <%= render_flash %>
+    <%= yield %>
+  </div>
 
-    <div id="top_footer">
-      <%= URI.parse(SETTINGS.url).host %>
-      <%= source_code_version %>
-      &nbsp;
-      &nbsp;
-      &nbsp;
-      <span class="nowrap">
-        Display for
-        <%= link_to "mobile", url_for(:mobile => "1") %>,
-        <%= link_to "desktop", url_for(:mobile => "0") %> or
-        <%= link_to "default", url_for(:mobile => "-1") %>
-      </span>
-    </div>
+  <footer id="top_footer">
+    <%= URI.parse(SETTINGS.url).host %>
+    <%= source_code_version %>
+    &nbsp;
+    &nbsp;
+    &nbsp;
+    <span class="nowrap">
+      Display for
+      <%= link_to "mobile", url_for(:mobile => "1") %>,
+      <%= link_to "desktop", url_for(:mobile => "0") %> or
+      <%= link_to "default", url_for(:mobile => "-1") %>
+    </span>
+  </footer>
 
-</div>
 
     <% if Rails.env == 'production' %>
       <script type="text/javascript">
