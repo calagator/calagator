@@ -14,6 +14,25 @@ describe Venue do
     venue.should be_valid
   end
 
+  describe "when validating" do
+    let(:attributes) { {:title => 'My Venue'} }
+    let(:bad_data) { ' blargie ' }
+    let(:expected_data) { bad_data.strip }
+    [:title, :description, :address, :street_address, :locality, :region, :postal_code, :country, :email, :telephone].each do |field|
+      it "should strip whitespace from #{field}" do
+        venue = Venue.new(attributes.merge(field => bad_data))
+        venue.valid?
+        venue.send(field).should == expected_data
+      end
+    end
+
+    it "should strip whitespace from url" do
+      venue = Venue.new(attributes.merge(:url => bad_data))
+      venue.valid?
+      venue.url.should == "http://#{expected_data}"
+    end
+  end
+
 end
 
 describe Venue, "when finding exact duplicates" do
