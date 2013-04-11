@@ -42,7 +42,7 @@ class Event < ActiveRecord::Base
   belongs_to :source
 
   # Triggers
-  before_validation :normalize_url!
+  before_validation :normalize_urls!
 
   # Validations
   validates_presence_of :title, :start_time
@@ -222,6 +222,11 @@ class Event < ActiveRecord::Base
     # Find all events between today and future_cutoff, sorted by start_time
     # includes events any part of which occurs on or after today through on or after future_cutoff
     overview_events = self.non_duplicates.within_dates(today, future_cutoff)
+
+    if overview_events.count < 10
+      overview_events = self.on_or_after_date(after_tomorrow).limit(10)
+    end
+
     overview_events.each do |event|
       if event.start_time < tomorrow
         times_to_events[:today]    << event
@@ -454,9 +459,13 @@ EOF
     venue && venue.location
   end
 
-  def normalize_url!
+  def normalize_urls!
     unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + self.url
+    end
+
+    unless self.rsvp_url.blank? || self.rsvp_url.match(/^[\d\D]+:\/\//)
+      self.rsvp_url = 'http://' + self.rsvp_url
     end
   end
 
