@@ -105,6 +105,8 @@ end
 #   bundle install --without development:test
 group :development, :test do
   gem 'rspec-rails', '2.11.0'
+  gem "better_errors"
+  gem "binding_of_caller"
   gem 'webrat', '0.7.3'
   gem 'factory_girl_rails', '1.7.0' # 2.0 and above don't support Ruby 1.8.7 :(
   gem 'spork', '~> 0.9.2'

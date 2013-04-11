@@ -42,7 +42,7 @@ class Event < ActiveRecord::Base
   belongs_to :source
 
   # Triggers
-  before_validation :normalize_url!
+  before_validation :normalize_urls!
 
   # Validations
   validates_presence_of :title, :start_time
@@ -459,9 +459,13 @@ EOF
     venue && venue.location
   end
 
-  def normalize_url!
+  def normalize_urls!
     unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + self.url
+    end
+
+    unless self.rsvp_url.blank? || self.rsvp_url.match(/^[\d\D]+:\/\//)
+      self.rsvp_url = 'http://' + self.rsvp_url
     end
   end
 

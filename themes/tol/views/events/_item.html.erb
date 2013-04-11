@@ -74,6 +74,14 @@ html_classes << " contentbar" if has_contentbar
           </td>
         </tr>
         <% end %>
+        <% unless event.rsvp_url.blank? %>
+          <tr>
+            <th>RSVP Url:</th>
+            <td>
+              <%= link_to "#{truncate(event.rsvp_url, :length => 128)}", h(event.rsvp_url), :class => "url", :rel => "nofollow" %>
+            </td>
+          </tr>
+        <% end %>
         <% unless event.description.blank? -%>
         <tr>
           <th>Description:</th>

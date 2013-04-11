@@ -96,7 +96,7 @@
     <%= f.input :title, :label => "Event Name" %>
     <% focus_on '#event_title' %>
     <li class="string input required stringish" id="event_venue_title_input">
-      <%= f.label :venue_id, "Venue", :class => 'label' %>
+      <%= f.label :venue_id, "Venue", :class => 'label', :for => 'venue_name' %>
       <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !event.venue.nil? ? event.venue.title : params[:venue_name] %>
       <%= hidden_field(:event, :venue_id, :value => (!event.venue.nil? ? event.venue.id : params[:event_venue_id])) %>
       <%= image_tag "spinner.gif", :id=> "event_venue_loading", :style => "display: none; margin-left: 0.5em;" %>
@@ -120,6 +120,7 @@
         <%= f.semantic_errors :start_date, :start_time, :end_date, :end_time %>
     </li>
     <%= f.input :url, :label => 'Website' %>
+    <%= f.input :rsvp_url, :label => 'RSVP Url' %>
     <%= f.input :description,
                 :input_html => {:rows => 12},
                 :hint => "(Format text using #{link_to("Markdown", "http://www.simpleeditions.com/59001/markdown-an-introduction", :target => "_blank")} and HTML)".html_safe %>
