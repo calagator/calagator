@@ -44,6 +44,7 @@ class Venue < ActiveRecord::Base
   belongs_to :source
 
   # Triggers
+  strip_whitespace! :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone
   before_validation :normalize_url!
   before_save :geocode
 
