@@ -9,7 +9,7 @@
 
 #=======================================================================
 
-source :rubygems
+source 'https://rubygems.org'
 
 unless defined?($BUNDLER_INTERPRETER_CHECKED)
   if defined?(JRUBY_VERSION)
