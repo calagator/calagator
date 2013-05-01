@@ -61,7 +61,7 @@ else
 end
 
 # Run-time dependencies
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 gem 'rails_autolink', '1.0.9'
 gem 'columnize', '0.3.6'
 gem 'rdoc', '3.12', :require => false
