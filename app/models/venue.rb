@@ -30,6 +30,7 @@
 
 class Venue < ActiveRecord::Base
   include SearchEngine
+  include StripWhitespace
 
   has_paper_trail
   acts_as_taggable
