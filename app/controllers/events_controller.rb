@@ -75,7 +75,7 @@ class EventsController < ApplicationController
     end
 
     if too_many_links = too_many_links?(@event.description)
-      flash[:failure] = "We allow a maximum of 3 links in a descriptio. You have too many links currently."
+      flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
     end
 
     respond_to do |format|
@@ -113,7 +113,7 @@ class EventsController < ApplicationController
     end
 
     if too_many_links = too_many_links?(@event.description)
-      flash[:failure] = "We allow a maximum of 3 links in a descriptio. You have too many links currently."
+      flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
     end
 
     respond_to do |format|
