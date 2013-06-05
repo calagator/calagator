@@ -419,6 +419,18 @@ describe EventsController do
         flash[:failure].should match /evil robot/i
       end
 
+      it "should not allow too many links in the description" do
+        @params[:event][:description] = <<-DESC
+          http://example.com
+          https://example.com
+          http://example.net
+          https://example.net
+        DESC
+        post "create", @params
+        response.should render_template :new
+        flash[:failure].should match /too many links/i
+      end
+
       it "should allow the user to preview the event" do
         event = Event.new(:title => "Awesomeness")
         Event.should_receive(:new).and_return(event)
@@ -553,6 +565,18 @@ describe EventsController do
         put "update", :id => 1234, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
         response.should render_template :edit
         flash[:failure].should match /evil robot/i
+      end
+
+      it "should not allow too many links in the description" do
+        @params[:event][:description] = <<-DESC
+          http://example.com
+          https://example.com
+          http://example.net
+          https://example.net
+        DESC
+        post "create", @params
+        response.should render_template :new
+        flash[:failure].should match /too many links/i
       end
 
       it "should allow the user to preview the event" do
