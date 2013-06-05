@@ -74,8 +74,12 @@ class EventsController < ApplicationController
       flash[:failure] = "<h3>Evil Robot</h3> We didn't create this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
     end
 
+    if too_many_links = too_many_links?(@event.description)
+      flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
+    end
+
     respond_to do |format|
-      if !evil_robot && params[:preview].nil? && @event.save
+      if !evil_robot && !too_many_links && params[:preview].nil? && @event.save
         flash[:success] = 'Your event was successfully created. '
         format.html {
           if has_new_venue && !params[:venue_name].blank?
@@ -108,8 +112,12 @@ class EventsController < ApplicationController
       flash[:failure] = "<h3>Evil Robot</h3> We didn't update this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
     end
 
+    if too_many_links = too_many_links?(@event.description)
+      flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
+    end
+
     respond_to do |format|
-      if !evil_robot && params[:preview].nil? && @event.update_attributes(params[:event])
+      if !evil_robot && !too_many_links && params[:preview].nil? && @event.update_attributes(params[:event])
         flash[:success] = 'Event was successfully updated.'
         format.html {
           if has_new_venue && !params[:venue_name].blank?
@@ -218,6 +226,12 @@ class EventsController < ApplicationController
   end
 
 protected
+
+  # Checks if the description has too many links
+  # which is probably spam
+  def too_many_links?(description)
+    description.scan(/http/).size > 3
+  end
 
   # Export +events+ to an iCalendar file.
   def ical_export(events=nil)
