@@ -112,7 +112,7 @@ class EventsController < ApplicationController
       flash[:failure] = "<h3>Evil Robot</h3> We didn't update this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
     end
 
-    if too_many_links = too_many_links?(@event.description)
+    if too_many_links = too_many_links?(params[:event] && params[:event][:description])
       flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
     end
 
@@ -230,7 +230,7 @@ protected
   # Checks if the description has too many links
   # which is probably spam
   def too_many_links?(description)
-    description.scan(/http/).size > 3
+    description.present? && description.scan(/http/).size > 3
   end
 
   # Export +events+ to an iCalendar file.
