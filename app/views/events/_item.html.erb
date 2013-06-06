@@ -12,7 +12,9 @@ html_classes << " contentbar" if has_contentbar
   <div class="vevent" itemscope itemtype="http://schema.org/Event">
     <h1 class="summary" itemprop="name"><%= event.title %></h1>
     <meta itemprop="startDate" content="<%= event.start_time.to_time.iso8601 %>">
-    <meta itemprop="endDate" content="<%= event.end_time.to_time.iso8601 %>">
+    <% if event.end_time %>
+      <meta itemprop="endDate" content="<%= event.end_time.to_time.iso8601 %>">
+    <% end %>
     <div class='date'><%= normalize_time(event) -%></div>
       <% unless event.venue.blank? %>
       <div class="clearfix location vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
