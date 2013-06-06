@@ -574,8 +574,8 @@ describe EventsController do
           http://example.net
           https://example.net
         DESC
-        post "create", @params
-        response.should render_template :new
+        post "update", @params
+        response.should render_template :edit
         flash[:failure].should match /too many links/i
       end
 
