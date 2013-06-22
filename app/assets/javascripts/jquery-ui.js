@@ -258,7 +258,7 @@ $.extend( $.ui, {
 			if ( !set || !instance.element[ 0 ].parentNode ) {
 				return;
 			}
-	
+
 			for ( var i = 0; i < set.length; i++ ) {
 				if ( instance.options[ set[ i ][ 0 ] ] ) {
 					set[ i ][ 1 ].apply( instance.element, args );
@@ -266,29 +266,29 @@ $.extend( $.ui, {
 			}
 		}
 	},
-	
+
 	// will be deprecated when we switch to jQuery 1.4 - use jQuery.contains()
 	contains: function( a, b ) {
 		return document.compareDocumentPosition ?
 			a.compareDocumentPosition( b ) & 16 :
 			a !== b && a.contains( b );
 	},
-	
+
 	// only used by resizable
 	hasScroll: function( el, a ) {
-	
+
 		//If overflow is hidden, the element might have extra content, but the user wants to hide it
 		if ( $( el ).css( "overflow" ) === "hidden") {
 			return false;
 		}
-	
+
 		var scroll = ( a && a === "left" ) ? "scrollLeft" : "scrollTop",
 			has = false;
-	
+
 		if ( el[ scroll ] > 0 ) {
 			return true;
 		}
-	
+
 		// TODO: determine which cases actually cause this to happen
 		// if the element doesn't have the scroll set, see if it's possible to
 		// set the scroll
@@ -297,7 +297,7 @@ $.extend( $.ui, {
 		el[ scroll ] = 0;
 		return has;
 	},
-	
+
 	// these are odd functions, fix the API or move into individual plugins
 	isOverAxis: function( x, reference, size ) {
 		//Determines when x coordinate is over "b" element axis
@@ -1559,12 +1559,12 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 		};
 
 		$.each(inst.sortables, function(i) {
-			
+
 			//Copy over some variables to allow calling the sortable's native _intersectsWith
 			this.instance.positionAbs = inst.positionAbs;
 			this.instance.helperProportions = inst.helperProportions;
 			this.instance.offset.click = inst.offset.click;
-			
+
 			if(this.instance._intersectsWith(this.instance.containerCache)) {
 
 				//If it intersects, we use a little isOver variable and set it once, so our move-in stuff gets fired only once
@@ -1607,13 +1607,13 @@ $.ui.plugin.add("draggable", "connectToSortable", {
 
 					this.instance.isOver = 0;
 					this.instance.cancelHelperRemoval = true;
-					
+
 					//Prevent reverting on this forced stop
 					this.instance.options.revert = false;
-					
+
 					// The out event needs to be triggered independently
 					this.instance._trigger('out', event, this.instance._uiHash(this.instance));
-					
+
 					this.instance._mouseStop(event, true);
 					this.instance.options.helper = this.instance.options._helper;
 
@@ -1783,7 +1783,7 @@ $.ui.plugin.add("draggable", "stack", {
 			return (parseInt($(a).css("zIndex"),10) || 0) - (parseInt($(b).css("zIndex"),10) || 0);
 		});
 		if (!group.length) { return; }
-		
+
 		var min = parseInt(group[0].style.zIndex) || 0;
 		$(group).each(function(i) {
 			this.style.zIndex = min + i;
@@ -2695,7 +2695,7 @@ $.ui.plugin.add("resizable", "alsoResize", {
 
 		_alsoResize = function (exp, c) {
 			$(exp).each(function() {
-				var el = $(this), start = $(this).data("resizable-alsoresize"), style = {}, 
+				var el = $(this), start = $(this).data("resizable-alsoresize"), style = {},
 					css = c && c.length ? c : el.parents(ui.originalElement[0]).length ? ['width', 'height'] : ['width', 'height', 'top', 'left'];
 
 				$.each(css, function (i, prop) {
@@ -3289,7 +3289,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 	_setOption: function(key, value){
 		if ( key === "disabled" ) {
 			this.options[ key ] = value;
-	
+
 			this.widget()
 				[ value ? "addClass" : "removeClass"]( "ui-sortable-disabled" );
 		} else {
@@ -3729,7 +3729,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 			? [options.connectWith]
 			: options.connectWith;
 	},
-	
+
 	_getItemsAsjQuery: function(connected) {
 
 		var self = this;
@@ -3902,28 +3902,28 @@ $.widget("ui.sortable", $.ui.mouse, {
 	},
 
 	_contactContainers: function(event) {
-		
-		// get innermost container that intersects with item 
-		var innermostContainer = null, innermostIndex = null;		
-		
-		
+
+		// get innermost container that intersects with item
+		var innermostContainer = null, innermostIndex = null;
+
+
 		for (var i = this.containers.length - 1; i >= 0; i--){
 
-			// never consider a container that's located within the item itself 
+			// never consider a container that's located within the item itself
 			if($.ui.contains(this.currentItem[0], this.containers[i].element[0]))
 				continue;
 
 			if(this._intersectsWith(this.containers[i].containerCache)) {
 
-				// if we've already found a container and it's more "inner" than this, then continue 
+				// if we've already found a container and it's more "inner" than this, then continue
 				if(innermostContainer && $.ui.contains(this.containers[i].element[0], innermostContainer.element[0]))
 					continue;
 
-				innermostContainer = this.containers[i]; 
+				innermostContainer = this.containers[i];
 				innermostIndex = i;
-					
+
 			} else {
-				// container doesn't intersect. trigger "out" event if necessary 
+				// container doesn't intersect. trigger "out" event if necessary
 				if(this.containers[i].containerCache.over) {
 					this.containers[i]._trigger("out", event, this._uiHash(this));
 					this.containers[i].containerCache.over = 0;
@@ -3931,42 +3931,42 @@ $.widget("ui.sortable", $.ui.mouse, {
 			}
 
 		}
-		
-		// if no intersecting containers found, return 
-		if(!innermostContainer) return; 
+
+		// if no intersecting containers found, return
+		if(!innermostContainer) return;
 
 		// move the item into the container if it's not there already
 		if(this.containers.length === 1) {
 			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));
 			this.containers[innermostIndex].containerCache.over = 1;
-		} else if(this.currentContainer != this.containers[innermostIndex]) { 
+		} else if(this.currentContainer != this.containers[innermostIndex]) {
 
-			//When entering a new container, we will find the item with the least distance and append our item near it 
-			var dist = 10000; var itemWithLeastDistance = null; var base = this.positionAbs[this.containers[innermostIndex].floating ? 'left' : 'top']; 
-			for (var j = this.items.length - 1; j >= 0; j--) { 
-				if(!$.ui.contains(this.containers[innermostIndex].element[0], this.items[j].item[0])) continue; 
-				var cur = this.items[j][this.containers[innermostIndex].floating ? 'left' : 'top']; 
-				if(Math.abs(cur - base) < dist) { 
-					dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j]; 
-				} 
-			} 
+			//When entering a new container, we will find the item with the least distance and append our item near it
+			var dist = 10000; var itemWithLeastDistance = null; var base = this.positionAbs[this.containers[innermostIndex].floating ? 'left' : 'top'];
+			for (var j = this.items.length - 1; j >= 0; j--) {
+				if(!$.ui.contains(this.containers[innermostIndex].element[0], this.items[j].item[0])) continue;
+				var cur = this.items[j][this.containers[innermostIndex].floating ? 'left' : 'top'];
+				if(Math.abs(cur - base) < dist) {
+					dist = Math.abs(cur - base); itemWithLeastDistance = this.items[j];
+				}
+			}
 
-			if(!itemWithLeastDistance && !this.options.dropOnEmpty) //Check if dropOnEmpty is enabled 
-				return; 
+			if(!itemWithLeastDistance && !this.options.dropOnEmpty) //Check if dropOnEmpty is enabled
+				return;
 
-			this.currentContainer = this.containers[innermostIndex]; 
-			itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[innermostIndex].element, true); 
-			this._trigger("change", event, this._uiHash()); 
-			this.containers[innermostIndex]._trigger("change", event, this._uiHash(this)); 
+			this.currentContainer = this.containers[innermostIndex];
+			itemWithLeastDistance ? this._rearrange(event, itemWithLeastDistance, null, true) : this._rearrange(event, null, this.containers[innermostIndex].element, true);
+			this._trigger("change", event, this._uiHash());
+			this.containers[innermostIndex]._trigger("change", event, this._uiHash(this));
 
-			//Update the placeholder 
-			this.options.placeholder.update(this.currentContainer, this.placeholder); 
-		
-			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this)); 
+			//Update the placeholder
+			this.options.placeholder.update(this.currentContainer, this.placeholder);
+
+			this.containers[innermostIndex]._trigger("over", event, this._uiHash(this));
 			this.containers[innermostIndex].containerCache.over = 1;
-		} 
-	
-		
+		}
+
+
 	},
 
 	_createHelper: function(event) {

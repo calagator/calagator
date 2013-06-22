@@ -117,11 +117,11 @@
           method = element.data('method');
           url = element.data('url');
 					data = element.serialize();
-					if (element.data('params')) data = data + "&" + element.data('params'); 
+					if (element.data('params')) data = data + "&" + element.data('params');
         } else {
            method = element.data('method');
            url = element.attr('href');
-           data = element.data('params') || null; 
+           data = element.data('params') || null;
         }
 
         options = {
@@ -281,7 +281,7 @@
 
     rails.handleRemote(link);
     return false;
-  });	
+  });
 
   $(rails.formSubmitSelector).live('submit.rails', function(e) {
     var form = $(this),

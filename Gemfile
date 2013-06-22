@@ -153,6 +153,21 @@ group :development, :test do
   end
 end
 
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  # gem 'sass-rails',   '~> 3.2.3'
+  # gem 'coffee-rails', '~> 3.2.1'
+
+  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+  # gem 'therubyracer', :platforms => :ruby
+
+  # Minify assets.  Requires a javascript runtime, such as 'therubyracer'
+  # above. You will also need to set 'config.assets.compress' to true in
+  # config/environments/production.rb
+  # gem 'uglifier', '>= 1.0.3'
+end
+
 # Some dependencies are activated through server settings.
 require "#{basedir}/lib/secrets_reader"
 secrets = SecretsReader.read(:silent => true)
