@@ -6,18 +6,11 @@
 %>
 
 <% content_for :css_insert do %>
-  <%= stylesheet_link_tag \
-    "datepicker",
-    "timePicker"
-  %>
+  <%= stylesheet_link_tag 'forms' %>
 <% end %>
 
 <% content_for :javascript_insert do %>
-  <%= javascript_include_tag \
-    'jquery-ui.js',
-    'date-functions.js',
-    'jquery.timePicker.js'
-  %>
+  <%= javascript_include_tag 'forms' %>
   <script>
     var completed_title = '';
     $(document).ready(function(){
