@@ -5,7 +5,7 @@
 <% end %>
 
 <% content_for :javascript_insert do %>
-  <script src="/javascripts/mustache.js" type="text/javascript"></script>
+  <%= javascript_include_tag 'mustache' %>
   <script type='text/javascript'>
     $(function() {
       var plan = $('.external.plancast.plan:first');

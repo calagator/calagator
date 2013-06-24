@@ -94,6 +94,10 @@ module Calagator
     # Enable the asset pipeline
     config.assets.enabled = true
 
+    # Enable asset pipeline for themes
+    #config.assets.paths += Dir[Rails.root.join('themes', '*', '{javascripts,stylesheets,images}')]
+    #ThemesForRails.config.themes_routes_dir = 'assets'
+
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 
