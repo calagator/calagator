@@ -224,7 +224,7 @@ class Event < ActiveRecord::Base
     overview_events = self.non_duplicates.within_dates(today, future_cutoff)
 
     if overview_events.count < 10
-      overview_events = self.on_or_after_date(after_tomorrow).limit(10)
+      overview_events = self.on_or_after_date(today).limit(10)
     end
 
     overview_events.each do |event|
