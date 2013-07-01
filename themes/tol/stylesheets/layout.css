@@ -747,3 +747,7 @@ fieldset .no_label, fieldset .help {
 }
 
 /* @end */
+
+.formtastic .choices{
+  position: static;
+}

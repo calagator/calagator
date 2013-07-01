@@ -1,4 +1,19 @@
 Calagator::Application.routes.draw do
+  get "organizations/new"
+
+  get "organizations/edit"
+
+  get "organizations/update"
+
+  get "organizations/create"
+
+  get "organizations/index"
+
+  get "organizations/show"
+
+  resources :categories
+
+
   match 'omfg' => 'site#omfg'
   match 'hello' => 'site#hello'
 
