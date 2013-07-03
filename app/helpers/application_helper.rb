@@ -186,7 +186,7 @@ module ApplicationHelper
   # * "-1" forces default rendering and clears any previous prefernece cookie.
   #
   # Example:
-  #    theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
+  #    stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
   def mobile_stylesheet_media(default)
     # TODO Figure out if it's possible to use the same handling for Rails "cookies" and Rspec "request.cookies", which seem to have totaly different behavior and no relationship to each other, which makes testing rather awkward.
     expiration = 1.year.from_now

@@ -44,5 +44,4 @@ Calagator::Application.routes.draw do
   match '/index' => 'site#index'
   match '/index.:format' => 'site#index'
 
-  themes_for_rails
 end
