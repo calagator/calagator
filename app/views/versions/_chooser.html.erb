@@ -9,7 +9,7 @@
 <% if record.versions.present? %>
   <form class="version_chooser">
     <div>
-      Version <%= select_tag("version", options_for_select(record.versions.reverse.map { |version| ["#{version.created_at.strftime('%B %d, %Y at %I:%M %p')}", version.id]})) %><img alt="Spinner" id="version_loading" src="/images/spinner.gif?1214384400" style="display: none; margin-left: 0.5em;" />
+      Version <%= select_tag("version", options_for_select(record.versions.reverse.map { |version| ["#{version.created_at.strftime('%B %d, %Y at %I:%M %p')}", version.id]})) %><%= image_tag "spinner.gif", :alt => "Spinner", :id => "version_loading" :style => "display: none; margin-left: 0.5em;" %>
     </div>
   </form>
   <% content_for :javascript_insert do %>
