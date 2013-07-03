@@ -10,6 +10,11 @@ url: 'http://calagator.org/'
 # Default timezone, run "rake -D time" for information on how to display known timezones:
 timezone: 'Pacific Time (US & Canada)'
 
+# Precompile additional theme assets (theme.js, theme.css, and images already included):
+precompile_assets:
+  - 'mobile.css'
+  - 'print.css'
+
 # Google map to display on /venues page:
 venues_google_map_options:
   # Zoom magnification level:

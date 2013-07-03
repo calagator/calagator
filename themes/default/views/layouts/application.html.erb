@@ -14,18 +14,15 @@
     <link rel='search' type='application/opensearchdescription+xml' href='/opensearch.xml' title='<%= SETTINGS.name %>' />
 
     <!-- Stylesheets, static -->
-    <%= stylesheet_link_tag 'application', :media => :all %>
-    <%= theme_stylesheet_link_tag 'typography', 'forms', 'layout', 'jquery-ui/jquery-ui', 'changes', :media => :all %>
-    <%= theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
-    <%= theme_stylesheet_link_tag 'print', :media => :print %>
+    <%= stylesheet_link_tag 'application', 'theme', :media => :all %>
+    <%= stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
+    <%= stylesheet_link_tag 'print', :media => :print %>
 
     <!-- Stylesheets, inserted  -->
     <%= yield :css_insert %>
 
     <!-- JavaScripts, static -->
-    <%= javascript_include_tag 'application' %>
-    <%# TODO figure out how to fix 'theme_support' plugin to make a working include tag AND make the server actually send the contents, because both of these are broken. %>
-    <%#= theme_javascript_include_tag 'application'%>
+    <%= javascript_include_tag 'application', 'theme' %>
 
     <!-- JavaScripts, inserted -->
     <%= yield :javascript_insert %>
