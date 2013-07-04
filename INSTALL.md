@@ -42,6 +42,12 @@ To run Calagator in `production` mode, which runs more quickly, but doesn't relo
   * Initialize your database, run `bundle exec rake RAILS_ENV=production db:migrate`
   * Run `bundle exec rake clear` to clear your cache after updating your application's code.
   * Setup a production web server using [Phusion Passenger](http://www.modrails.com/), [Thin](http://code.macournoyer.com/thin/), [Unicorn](http://unicorn.bogomips.org/), [Rainbows](http://rainbows.rubyforge.org/), etc. These will be able to serve more users more quickly than using the built-in server (e.g. `rails server`).
+  * Run the following commands to compile core and theme-based assets into the public/ directory:
+
+    ```
+    bundle exec rake assets:precompile
+    bundle exec rake themes:create_cache
+    ```
 
 The Calagator.org site runs on [Ubuntu Linux](http://ubuntu.com/), [Phusion REE (Ruby Enterprise Edition)](http://rubyenterpriseedition.com/) and [Phusion Passenger](http://www.modrails.com/).
 

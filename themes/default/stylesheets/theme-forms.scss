@@ -1,14 +1,14 @@
 /* ##############################################################
-  
+
    forms.css
    * Sets up some default styling for forms
    * Gives you classes to enhance your forms
-   
+
    Usage:
    * For text fields, use class .title or .text
-   
+
    Originally based on blueprint-css v0.7.1
-   
+
 ############################################################## */
 
 fieldset .trap { display: none }
@@ -65,15 +65,15 @@ ul.jq-ui-autocomplete {
     list-style: none;
     color: #333;
 }
-ul.jq-ui-autocomplete li { 
-  display: block; 
-  padding: .3em .5em .3em .3em; 
+ul.jq-ui-autocomplete li {
+  display: block;
+  padding: .3em .5em .3em .3em;
   overflow: hidden;
   width: 100%;
 }
 
-ul.jq-ui-autocomplete li.active { 
-  background-color: #bcf794; 
+ul.jq-ui-autocomplete li.active {
+  background-color: #bcf794;
   color: #445544;;
 }
 
@@ -106,7 +106,7 @@ form.standard_form {
 .standard_form input.date_picker
 {
   width: 7em;
-} 
+}
 
 .standard_form input.time_picker
 {
@@ -117,7 +117,7 @@ div.time-picker li {
   white-space: nowrap;
 }
 
-/* @end */ 
+/* @end */
 
 /* @group Success, notice and error boxes
 -------------------------------------------------------------- */
@@ -143,4 +143,4 @@ ul.errors {
   padding-top: .5em;
 }
 
-/* @end */ 
+/* @end */

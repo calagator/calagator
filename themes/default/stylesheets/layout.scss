@@ -25,7 +25,7 @@ body {
 
 
 #project_title {
-  background: url('/images/head_calagator.gif') no-repeat;
+  background: image-url("head_calagator.gif") no-repeat;
   height: 31px;
   left: 40px;
   overflow: hidden;
@@ -54,7 +54,7 @@ body {
 }
 
 #app_menu li.active {
-  background: url('/images/nav_marker.gif') no-repeat center bottom;
+  background: image-url("nav_marker.gif") no-repeat center bottom;
 }
 
 #project_menu {
@@ -95,7 +95,7 @@ body {
 }
 
 .subnav .active {
-  background: url('/images/subnav_marker.gif') no-repeat center bottom;
+  background: image-url("subnav_marker.gif") no-repeat center bottom;
 }
 
 
@@ -427,7 +427,7 @@ ul.event_list .list_date {
 .location .wifi_callout {
   margin-top: .5em;
   padding-left: 20px;
-  background: url('/images/transmit_blue.png') no-repeat;
+  background: image-url("transmit_blue.png") no-repeat;
   font-weight: bold;
   color: #6098E6
 }
@@ -443,7 +443,7 @@ ul.event_list .list_date {
   font-weight: bold;
   padding-left: 20px;
   line-height: 16px;
-  background: url('/images/information.png') no-repeat;
+  background: image-url("information.png") no-repeat;
 }
 
 .single_venue .location .adr,
