@@ -16,6 +16,73 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
+  * v0.20130717
+    * [DEPENDENCY] Upgraded to rails 3.2.13.
+    * Fixed #30: Relax markdown emphasis parsing to avoid adding emphasis to words_containing_underscores.
+    * Fixed #22 and #33: avoid double-output of cache block for filtered events.
+    * Fixed #35: Use 'medium' git log format for footer version number.
+    * Fixed #36, #37: Limit the number of links in event descriptions to three.
+    * Fixed Google Code issue #280: Strip whitespace from venue fields.
+    * Fixed #38: Fixed display of events with no end time
+    * Added Schema.org support to event markup.
+    * Updated spam blacklist.
+  * v0.20121111
+    * Updated specs to use the new RSpec 2.11.
+    * Update and increase use of factories.
+    * Improved TravisCI configuration
+    * Updated spam blacklist.
+  * v0.20120906
+    * [DEPENDENCY] Upgraded to Rails 3.2.8.
+    * [DEPENDENCY] Upgraded other external dependencies to support Rails 3.2.
+    * [DEPENDENCY] Added database_cleaner.
+    * [MIGRATION] Fix venues latitude/longitude on MySQL to specify precision.
+    * Fixed event form autocomplete.
+    * Fixed search by tag feed/subscription links.
+    * Fixed, refactored and improved specs and factories: dependent examples, nesting, fixtures, factories, etc.
+    * Fixed #updated_at, which may have been breaking iCal refreshes.
+    * Fixed timezone parsing behavior.
+    * Improved duplicate detection.
+    * Removed obsolete 'export' routes, which are throwing exceptions when hit.
+    * Added a rake task up update counter caches.
+    * Added `rake spec:db:all` and others to run tests against all or specific databases.
+    * Updated spam blacklist.
+  * v0.20120810
+    * [DEPENDENCY] Upgraded to Rails 3.0.17, for security fixes.
+    * [DEPENDENCY] Upgraded several external dependencies.
+    * [DEPENDENCY] Removed outdated acts_as_solr plugin.
+    * Improved TravisCI configuration: Added Ruby 1.9.2, postgresql, sqlite3, and mysql to the test matrix.
+  * v0.20120709
+    * [!] This release drops support for 'acts_as_solr' search backend.  Please migrate to the 'sunspot' backend instead.
+    * [DEPENDENCY] Upgraded most external dependencies.
+    * [MIGRATION] Remove obsolete tables and columns that may have been left behind. 
+    * Improved compatibility with Ruby 1.9.x.
+    * Improved tag cloud implementation and styling.
+    * Improved ATOM output.
+    * Fixed issues with CacheObserver.
+    * Fixed ordering when searching by tag
+    * Fixed handling of unknown formats in requests
+    * Reworked date forms to better handle editing and cloning.
+    * Switched to Capistrano for deployment and data downloading.
+    * Improved specs.
+    * Updated spam blacklist.
+    * Added configuration for TravisCI to test on 1.8.7 and 1.9.3
+  * v0.20120518
+    * Improved Facebook source parser code to increase clarity and use new REST URLs.
+    * Updated spam blacklist with new terms and improved its search efficiency.
+    * Added escaping and error handling to `rake log:archive`.
+  * v0.20120215
+    * Added links to about page for subscribing to calendar and feed.
+    * Fixed map display under Ruby 1.9 and corrected map float behavior.
+    * Fixed Google Code issue #457: blacklist should also be read from a local configuration.
+    * Fixed Google Code issue #458: Changed about page to use relative links for links within calagator.
+    * Fixed Gemfile to load "ruby-debug" using :platform declarations.
+    * Fixed Vagrant to add workaround for Windows mounting '/var/cache/apt'.
+  * v0.20111007
+    * [DEPENDENCY] Upgraded Rails to 3.0.10.
+    * Added support for Ruby 1.9.2.
+    * Added PostgreSQL support to Vagrant environment.
+    * Fixed Github issues #6 & #7: Markdown links and references broken.
+    * Fixed Event#to_clone to also include :venue_details.
   * v0.20111021
     * [!] This should be the final release based on Ruby on Rails 2.x, all future releases will be based on Rails 3.x.
     * [DEPENDENCY] Upgraded to Rails 2.3.12.
@@ -28,7 +95,6 @@ List of Calagator stable releases and changes, with the latest at the top:
     * Updated iCalendar exporter to include venue address and source URL.
     * Added "opensearch" to let browsers use Calagator as a search provider.
     * Added Vagrant support, allowing easy setup of a development environment. See instructions in `VAGRANT.md` file.
-
   * v0.20110603
     * [DEPENDENCY] Added `bundler` for installing dependencies and isolating from unwanted versions of gems. See `INSTALL.md`  for usage information.
     * [MIGRATION] Added fields to Venues: access notes, "has public wifi" flag, and "is closed" flag.
