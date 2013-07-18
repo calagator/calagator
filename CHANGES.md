@@ -77,7 +77,7 @@ List of Calagator stable releases and changes, with the latest at the top:
     * Fixed Google Code issue #458: Changed about page to use relative links for links within calagator.
     * Fixed Gemfile to load "ruby-debug" using :platform declarations.
     * Fixed Vagrant to add workaround for Windows mounting '/var/cache/apt'.
-  * v0.20111007
+  * v0.20111027
     * [DEPENDENCY] Upgraded Rails to 3.0.10.
     * Added support for Ruby 1.9.2.
     * Added PostgreSQL support to Vagrant environment.
