@@ -475,6 +475,7 @@ describe EventsController do
       before(:each) do
         @event = Factory.build(:event_with_venue, :id => 42)
         @venue = @event.venue
+        @params.merge!(:id => 42)
         Event.stub!(:find).and_return(@event)
       end
 
@@ -503,7 +504,7 @@ describe EventsController do
         @event.stub!(:venue).and_return(@venue)
         @event.should_receive(:update_attributes).and_return(true)
 
-        post "update", @params
+        put "update", @params
       end
 
       it "should associate a venue based on a given venue name" do
@@ -513,7 +514,7 @@ describe EventsController do
         @event.stub!(:venue).and_return(@venue)
         @event.should_receive(:update_attributes).and_return(true)
 
-        post "update", @params
+        put "update", @params
       end
 
       it "should associate a venue by id when both an id and a name are provided" do
@@ -524,7 +525,7 @@ describe EventsController do
         @event.stub!(:venue).and_return(@venue)
         @event.should_receive(:update_attributes).and_return(true)
 
-        post "update", @params
+        put "update", @params
       end
 
       it "should update an event and associate it with an existing venue" do
@@ -557,7 +558,7 @@ describe EventsController do
         @event.stub!(:venue).and_return(nil)
         @event.should_receive(:update_attributes).and_return(false)
 
-        post "update", :id => 1234
+        put "update", :id => 1234
         response.should render_template :edit
       end
 
@@ -574,7 +575,7 @@ describe EventsController do
           http://example.net
           https://example.net
         DESC
-        post "update", @params
+        put "update", @params
         response.should render_template :edit
         flash[:failure].should match /too many links/i
       end
