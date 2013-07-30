@@ -20,7 +20,7 @@ Calagator::Application.routes.draw do
 
   resources :sources do
     collection do
-      put :import
+      post :import
     end
   end
 
