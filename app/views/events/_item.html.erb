@@ -9,35 +9,35 @@ html_classes = "single_event"
 html_classes << " contentbar" if has_contentbar
 %>
 <div class="<%= html_classes %>">
-  <div class="vevent" itemscope itemtype="http://schema.org/Event">
-    <h1 class="summary" itemprop="name"><%= event.title %></h1>
+  <div class="vevent h-event" itemscope itemtype="http://schema.org/Event">
+    <h1 class="summary p-name" itemprop="name"><%= event.title %></h1>
     <meta itemprop="startDate" content="<%= event.start_time.to_time.iso8601 %>">
     <% if event.end_time %>
       <meta itemprop="endDate" content="<%= event.end_time.to_time.iso8601 %>">
     <% end %>
     <div class='date'><%= normalize_time(event) -%></div>
       <% unless event.venue.blank? %>
-      <div class="clearfix location vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
+      <div class="clearfix location p-location h-card vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
       <%= google_map event %>
-          <a class="url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
-            <span class='fn org' itemprop="name"><%= event.venue.title -%></span>
+          <a class="url u-url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
+            <span class='fn org p-name' itemprop="name"><%= event.venue.title -%></span>
           </a>
           <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
-          <div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+          <div class="adr p-adr h-adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
           <% if !event.venue.street_address.blank? -%>
-          <div class="street-address" itemprop="streetAddress"><%= event.venue.street_address -%></div>
+          <div class="p-street-address" itemprop="streetAddress"><%= event.venue.street_address -%></div>
           <% end %>
           <% if !event.venue.locality.blank? -%>
-            <span class="locality" itemprop="addressLocality"><%= event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
+            <span class="p-locality" itemprop="addressLocality"><%= event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.region.blank? -%>
-            <span class="region" itemprop="addressRegion"><%= event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
+            <span class="p-region" itemprop="addressRegion"><%= event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
             <% end -%>
             <% if !event.venue.postal_code.blank? -%>
-            <span class="postal-code"  itemprop="postalCode"><%= event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
+            <span class="p-postal-code"  itemprop="postalCode"><%= event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
             <% end -%>
             <% if !event.venue.country.blank? -%>
-            <span class='country-name'><%= event.venue.country -%></span>
+            <span class='p-country-name'><%= event.venue.country -%></span>
             <% end -%>
             <% if event.venue && event.venue.has_full_address? -%>
             (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
@@ -55,7 +55,7 @@ html_classes << " contentbar" if has_contentbar
             <% end -%>
 
             <% unless event.venue_details.blank? -%>
-            <p>
+            <p class="p-description">
               <%= format_description(event.venue_details) %>
             </p>
             <% end -%>
@@ -67,14 +67,14 @@ html_classes << " contentbar" if has_contentbar
     <% unless event.url.blank? -%>
       <h3>Website</h3>
       <div class="website">
-        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow", 
+        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url u-url", :rel => "nofollow", 
         :itemprop => "url" %>
       </div>
     <% end -%>
 
     <% unless event.description.blank? -%>
     <h3>Description</h3>
-    <div class="description" itemprop="description">
+    <div class="description e-description" itemprop="description">
       <%= format_description(event.description) %>
     </div>
     <% end -%>

@@ -160,7 +160,7 @@ module ApplicationHelper
       when :venue then venues_path(:tag => tag.name)
       end
 
-    link_classes = [link_class]
+    link_classes = [link_class, "p-category"]
     link_classes << "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" if tag.machine_tag[:url]
 
     link_to escape_once(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
