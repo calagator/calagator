@@ -31,7 +31,7 @@ rowspans = calculate_rowspans(events)
   <tbody>
     <% unless events.size==0 %>
       <% events.each_with_index do |event, index| %>
-        <tr class='vevent'>
+        <tr class='vevent h-event'>
           <% if rowspans[index] > 0 %>
           <td class='date' rowspan="<%=rowspans[index]%>">
             <div class='day_of_week <%= today_tomorrow_or_weekday(event).downcase -%>'>
@@ -42,18 +42,18 @@ rowspans = calculate_rowspans(events)
           </td>
           <% end %>
           <td class='event_summary'>
-            <a class='summary' href='<%= url_for event_url(event) %>' name='<%= "event-#{event.id}" %>' id='<%= "event-#{event.id}" %>'><%= event.title %></a><br />
+            <a class='summary p-name u-url' href='<%= url_for event_url(event) %>' name='<%= "event-#{event.id}" %>' id='<%= "event-#{event.id}" %>'><%= event.title %></a><br />
             <%= normalize_time(event, :context => event.start_time.to_date) -%>
             <% if event.venue && !event.venue.title.blank? %>
-              <a class='location' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
+              <a class='location p-location h-card' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
             <% end -%>
             <% if !event.description.blank? %>
-              <div class='description'>
+              <div class='description e-description'>
                 <%= format_description(event.description) -%>
               </div>
             <% end -%>
             <% if !event.url.blank? -%>
-              <%= link_to "Website", event.url, :class => "url", :rel => "nofollow" -%>
+              <%= link_to "Website", event.url, :class => "url u-url", :rel => "nofollow" -%>
             <% end -%>
           </td>
         </tr>
