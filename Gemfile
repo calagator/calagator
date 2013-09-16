@@ -57,6 +57,7 @@ end
 # production servers, you can skip their installation by running:
 #   bundle install --without development:test
 group :development, :test do
+  gem 'sqlite3'
   gem 'rspec-rails', '2.11.0'
   gem 'webrat', '0.7.3'
   gem 'factory_girl_rails', '1.7.0' # 2.0 and above don't support Ruby 1.8.7 :(
