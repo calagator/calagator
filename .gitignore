@@ -10,7 +10,6 @@
 .rvmrc
 .vagrant
 Gemfile.local
-Gemfile.lock
 Makefile
 Vagrantfile.local
 config/database~custom.yml

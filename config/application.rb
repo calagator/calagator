@@ -20,12 +20,6 @@ module Calagator
     require 'set'
     require 'uri'
 
-    # Bundled libraries
-    $LOAD_PATH << Rails.root.join('vendor','gems','lucene_query-0.1','lib')
-    require 'lucene_query'
-    $LOAD_PATH << Rails.root.join('vendor','gems','mofo-0.2.8','lib')
-    require 'mofo'
-
     # Load from "/lib"
     $LOAD_PATH << Rails.root.join('lib')
     ### libraries
@@ -80,6 +74,8 @@ module Calagator
 
     # Configure sensitive parameters which will be filtered from the log file.
     config.filter_parameters += [:password]
+
+    config.assets.initialize_on_precompile = false
 
     #---[ Caching ]---------------------------------------------------------
 
