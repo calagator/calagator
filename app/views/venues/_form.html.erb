@@ -12,8 +12,8 @@
       <%= f.input :locality, :label => "City" %>
       <%= f.input :region, :label => "State" %>
       <%= f.input :postal_code, :label => "Zip Code" %>
-      <%= f.input :latitude %>
-      <%= f.input :longitude %>
+      <%= f.input :latitude,  :input_html => { :maxlength => 20 } %>
+      <%= f.input :longitude, :input_html => { :maxlength => 20 } %>
     <% end %>
 
     <%= f.input :url, :label => "Web Link" %>
