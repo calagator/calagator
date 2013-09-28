@@ -214,6 +214,32 @@ describe VenuesController do
       end
     end
 
+    describe "as an iCalendar" do
+      before do
+        @venue = Factory(:venue)
+        @future_event = Factory(:event, :venue => @venue, :start_time => today + 1.hour)
+        @past_event = Factory(:event, :venue => @venue, :start_time => today - 1.hour)
+
+        get :show, :id => @venue.to_param, :format => "ics"
+      end
+
+      it "should have a calendar" do
+        response.body.should match /BEGIN:VCALENDAR/
+      end
+
+      it "should have events" do
+        response.body.should match /BEGIN:VEVENT/
+      end
+
+      it "should render all future events" do
+        response.body.should match /SUMMARY:#{@future_event.title}/
+      end
+
+      it "should render all past events" do
+        response.body.should match /SUMMARY:#{@past_event.title}/
+      end
+    end
+
   end
 
   describe "DELETE" do
