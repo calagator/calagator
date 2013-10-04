@@ -431,6 +431,21 @@ describe EventsController do
         flash[:failure].should match /too many links/i
       end
 
+      it "should accept HTTP-rich presentation descriptions without too many links" do
+        @params[:event][:description] = <<-DESC
+          I hereby offer to give a presentation at the August ruby meeting about the faraday
+          gem (https://github.com/lostisland/faraday) and how compares to or compliments other
+          HTTP client libraries such as httparty (https://github.com/jnunemaker/httparty).
+
+          --
+
+          I wouldn't mind seeing a PDX.pm talk about HTTP::Tiny vs Net::HTTP::Tiny vs Net::HTTP
+          vs HTTP::Client vs HTTP::Client::Parallel
+        DESC
+        post "create", @params
+        flash[:failure].should be_nil
+      end
+
       it "should allow the user to preview the event" do
         event = Event.new(:title => "Awesomeness")
         Event.should_receive(:new).and_return(event)
