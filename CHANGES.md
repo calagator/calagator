@@ -20,8 +20,9 @@ List of Calagator stable releases and changes, with the latest at the top:
     * We now use the Rails 3.2 asset pipeline to compile assets
       * [THEME] Theme maintainers need to make a few small changes when upgrading.
         See https://github.com/calagator/calagator/wiki/Asset-Pipeline-Theme-Upgrade for details.
-    * Added Twitter and Facebook share buttons to event pages
     * Improved venue search, backed by SQL or Sunspot
+      * If you're running a Calagator instance using Sunspot for search, you'll want to run `rake sunspot:reindex` to index your venues.
+    * Added Twitter and Facebook share buttons to event pages
     * Added ability to export all events at a given venue to iCalendar
     * Fixed Google geocoder: v2 was deprecated, using v3 now
     * Assed microformats2 markup to event pages
