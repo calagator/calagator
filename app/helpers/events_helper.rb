@@ -168,7 +168,7 @@ module EventsHelper
 
   def tweet_text_sizer(event)
     title_length = event.title.length
-    venue_length = event.venue.title.length
+    venue_length = (event.venue.try(:title) || "").length
     if (title_length > 46) && (venue_length < 46)
       title_length = 46 + (46-venue_length)
     elsif (title_length > 46)
@@ -192,7 +192,7 @@ module EventsHelper
     result = []
     result << "#{truncate(event.title, :length => lengths[:title])} -"
     result << event.start_time.strftime("%I:%M%p %m.%d.%Y") # "04:00PM 08.01.2012"
-    result << "@ #{truncate(event.venue.title, :length => lengths[:venue])}"
+    result << "@ #{truncate(event.venue.title, :length => lengths[:venue])}" if event.venue
 
     return result.join(" ")
   end
