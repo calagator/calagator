@@ -17,9 +17,10 @@ Changes
 List of Calagator stable releases and changes, with the latest at the top:
 
   * [master]
-    * Use the Rails 3.2 asset pipeline
+    * We now use the Rails 3.2 asset pipeline to compile assets
       * [THEME] Theme maintainers need to make a few small changes when upgrading.
         See https://github.com/calagator/calagator/wiki/Asset-Pipeline-Theme-Upgrade for details.
+    * Improved venue search, backed by SQL or Sunspot
     * Added ability to export all events at a given venue to iCalendar
     * Fixed Google geocoder: v2 was deprecated, using v3 now
     * Assed microformats2 markup to event pages
