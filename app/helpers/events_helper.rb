@@ -197,4 +197,12 @@ module EventsHelper
     return result.join(" ")
   end
 
+  def shareable_event_url(event)
+    if Rails.env.development?
+      SETTINGS.url.sub(/\/$/,'') + event_path(event)
+    else
+      event_url(event)
+    end
+  end
+
 end
