@@ -43,7 +43,7 @@ class SearchEngine::Sql < SearchEngine::Base
           tag_conditions = Array.new(keywords.size, "LOWER(tags.name) = ?").join(" OR ")
 
           conditions = ["title LIKE ? OR description LIKE ? OR (#{tag_conditions})", *(["%#{query}%", "%#{query}%"] + keywords) ]
-          return scoped_venues.joins('LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type = "Venue"',
+          return scoped_venues.joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type = 'Venue'",
                                      'LEFT OUTER JOIN tags ON tags.id = taggings.tag_id').where(conditions).order(order).group(Venue.columns.map(&:name).map{|attribute| "venues.#{attribute}"}.join(', ')).limit(limit)
         end
       end
@@ -88,7 +88,7 @@ class SearchEngine::Sql < SearchEngine::Base
             conditions_arguments = [Date.yesterday.to_time] + conditions_arguments
           end
           conditions = [conditions_text, *conditions_arguments]
-          return Event.joins('LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type = "Event"',
+          return Event.joins("LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type = 'Event'",
                              'LEFT OUTER JOIN tags ON tags.id = taggings.tag_id').includes(:venue).where(conditions).order(order).group(Event.columns.map(&:name).map{|attribute| "events.#{attribute}"}.join(', ')).limit(limit)
         end
       end
