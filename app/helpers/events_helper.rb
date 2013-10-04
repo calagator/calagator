@@ -180,7 +180,7 @@ module EventsHelper
     elsif (venue_length > 46)
       venue_length = 46
     end
-    result = {title: title_length, venue: title_length}
+    result = {:title => title_length, :venue => title_length}
   end
 
   # Tweet button text
