@@ -62,7 +62,7 @@ end
 
 # Run-time dependencies
 gem 'rails', '3.2.14'
-gem 'rails_autolink', '1.0.9'
+gem 'rails_autolink', '1.1.3'
 gem 'nokogiri', '1.5.10'
 gem 'columnize', '0.3.6'
 gem 'rdoc', '3.12.2', :require => false
