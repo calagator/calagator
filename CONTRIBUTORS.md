@@ -47,6 +47,7 @@ These people have contributed to Calagator's design and implementation:
   * Selena Deckelman
   * Simon Chiang
   * Steve Morris
+  * Seve Salazar
   * Ted Kubaska
   * Ward Cunningham
 
