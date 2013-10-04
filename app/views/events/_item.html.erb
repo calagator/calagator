@@ -96,9 +96,18 @@ html_classes << " contentbar" if has_contentbar
     </div>
     <h3>Share</h3>
     <div class="share">
+      <a class="fb-share" href="#"
+        onclick="
+          window.open(
+            'https://www.facebook.com/sharer/sharer.php?u='+encodeURIComponent('<%= shareable_event_url(event) %>'),
+            'facebook-share-dialog',
+            'width=626,height=436');
+          return false;">
+        Share
+      </a>
       <a href="https://twitter.com/share" class="twitter-share-button" data-url="<%= shareable_event_url(event) %>" data-text="<%= tweet_text(event) %>" data-related="calagator" data-dnt="true">Tweet</a>
       <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
-      <div class="fb-like" data-href="<%= url_for(event) %>" data-send="false" data-layout="button_count" data-width="200" data-show-faces="false"></div>
+
     </div>
     <% unless event.tags.blank? -%>
     <h3>Tags</h3>
