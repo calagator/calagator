@@ -4,6 +4,7 @@ namespace :sunspot do
     task :calagator => :environment do
       Event.remove_all_from_index
       Rake.application.invoke_task('sunspot:solr:reindex[500,Event]')
+	  Rake.application.invoke_task('sunspot:solr:reindex[500,Venue]')
     end
   end
 
