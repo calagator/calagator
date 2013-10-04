@@ -4,6 +4,13 @@
   <link rel="alternate" type="application/x-wiki" title="Edit this page" href="<%= edit_event_url(@event) %>" />
 <% end %>
 
+<% content_for :open_graph_tags do %>
+  <meta property="og:title" content="<%= @event.title %>" />
+  <meta property="og:description" content="<%= @event.description %>" />
+  <meta property="og:site_name" content="<%= SETTINGS.name %>" />
+  <meta property="og:url" content="<%= event_url(@event) %>">
+<% end %>
+
 <% content_for :javascript_insert do %>
   <%= javascript_include_tag 'mustache' %>
   <script type='text/javascript'>
@@ -24,6 +31,7 @@
     })
   </script>
 <% end %>
+
 
 <a href="#" id="event_sidebar_toggle" class="expander_toggle">Export or edit this event...</a>
 

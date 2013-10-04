@@ -291,6 +291,17 @@ ul.event_list .list_date {
   width: 40em;
 }
 
+.share .fb-share {
+  background: rgb(236, 238, 245) image-url('external_sites/facebook.png') no-repeat 2px center;
+  color: rgb(59, 89, 152);
+  border: 1px solid rgb(202, 212, 231);
+  border-radius: 3px;
+  padding: 2px 5px 2px 22px;
+  margin: 0 1em 0 0;
+  position: relative;
+  top: -5px;
+}
+
 /* @end */
 
 /* Event Preview */
