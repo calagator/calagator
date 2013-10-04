@@ -29,6 +29,7 @@ db/schema.rb
 index/*
 log/*
 nbproject/*
+public/assets
 public/images/active_scaffold
 public/images/record_select
 public/javascripts/active_scaffold

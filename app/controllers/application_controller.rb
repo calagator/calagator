@@ -10,7 +10,8 @@ class ApplicationController < ActionController::Base
 
   # Setup theme
   layout "application"
-  theme THEME_NAME # DEPENDENCY: lib/theme_reader.rb
+
+  before_filter :set_theme
 
 protected
 
@@ -40,6 +41,10 @@ protected
     else
       flash[kind] = "#{message}"
     end
+  end
+
+  def set_theme
+    prepend_view_path "themes/#{THEME_NAME}/views"
   end
 end
 

@@ -82,7 +82,6 @@ gem 'formtastic', '2.0.2' # 2.1 and above change the syntax significantly :(
 # validation_reflection 1.0.0 doesn't support Rails 3.2, so use unofficial patches:
 gem 'validation_reflection', :git => 'git://github.com/ncri/validation_reflection.git', :ref => '60320e6beb088808fd625a8d958dbd0d2661d494'
 gem 'acts-as-taggable-on', '2.3.3'
-gem 'themes_for_rails', '0.5.1'
 gem 'jquery-rails', '1.0.19'
 gem 'progress_bar', '0.4.0'
 gem 'exception_notification', '2.6.1'
@@ -151,6 +150,21 @@ group :development, :test do
       gem 'ruby-debug'
     end
   end
+end
+
+# Gems used only for assets and not required
+# in production environments by default.
+group :assets do
+  gem 'sass-rails',   '~> 3.2.3'
+  # gem 'coffee-rails', '~> 3.2.1'
+
+  # See https://github.com/sstephenson/execjs#readme for more supported runtimes
+  gem 'therubyracer', :platforms => :ruby
+
+  # Minify assets.  Requires a javascript runtime, such as 'therubyracer'
+  # above. You will also need to set 'config.assets.compress' to true in
+  # config/environments/production.rb
+  gem 'uglifier', '>= 1.0.3'
 end
 
 # Some dependencies are activated through server settings.

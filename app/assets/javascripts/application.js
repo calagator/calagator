@@ -1,5 +1,6 @@
-// Place your application-specific JavaScript functions and classes here
-// This file is automatically included by javascript_include_tag :defaults
+//= require jquery
+//= require jquery_ujs
+
 $(document).ready(function(){
   // Shows hidden section when a link is clicked, and hides the link.
   //
