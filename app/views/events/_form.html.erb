@@ -127,8 +127,8 @@
       <%= text_field_tag 'trap_field', params[:trap_field] %>
     </li>
   <% end %>
-  <%= f.buttons do %>
-    <%= f.commit_button :label => "Preview", :button_html => {:name => 'preview'} %>
-    <%= f.commit_button %>
+  <%= f.actions do %>
+    <%= f.action :submit, :label => "Preview", :button_html => {:name => 'preview'} %>
+    <%= f.action :submit %>
   <% end %>
 <% end %>
