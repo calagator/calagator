@@ -35,3 +35,4 @@
 \bxanax\b
 \bКупить\s+участок\b
 \bзнакомства\s+свингеры\s+тюмень\b
+painmanage@hotmail.com
