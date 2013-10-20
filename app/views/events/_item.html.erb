@@ -19,7 +19,7 @@ html_classes << " contentbar" if has_contentbar
     <div class='date'><%= normalize_time(event) -%></div>
       <% unless event.venue.blank? %>
       <div class="clearfix location p-location h-card vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
-      <%= google_map event %>
+          <%= map event %>
           <a class="url u-url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
             <span class='fn org p-name' itemprop="name"><%= event.venue.title -%></span>
           </a>
