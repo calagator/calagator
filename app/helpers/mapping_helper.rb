@@ -49,6 +49,11 @@ module MappingHelper
 
         map.addLayer(layer);
 
+        var venueIcon = L.AwesomeMarkers.icon({
+          icon: 'star',
+          color: 'green'
+        })
+
         var markers = [#{markers.join(", ")}];
         var markerGroup = L.featureGroup(markers);
         markerGroup.addTo(map);
@@ -82,7 +87,7 @@ module MappingHelper
         title = locatable_item.title
         popup = link_to(locatable_item.title, locatable_item)
 
-        "L.marker([#{latitude}, #{longitude}], {title: '#{j title}'}).bindPopup('#{j popup}')"
+        "L.marker([#{latitude}, #{longitude}], {title: '#{j title}', icon: venueIcon}).bindPopup('#{j popup}')"
       end
     }.compact
   end
