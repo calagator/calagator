@@ -64,6 +64,8 @@ module MappingHelper
     end
   end
 
+  alias_method :google_map, :map
+
   def layer_constructor
     case map_provider
       when "stamen"
