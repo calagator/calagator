@@ -15,8 +15,6 @@ unless defined?($BUNDLER_INTERPRETER_CHECKED)
   if defined?(JRUBY_VERSION)
     puts "WARNING: JRuby cannot run Calagator. Its version of Nokogiri is incompatible with 'loofah', 'mofo' and other things. Although basic things like running the console and starting the server work, you'll run into problems as soon as you try to add/edit records or import hCalendar events."
     $JRUBY_WARNED = true
-  elsif defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
-    puts "WARNING: Rubinius cannot run Calagator. It's multibyte string handling is broken in ways that break 'loofah' and other libraries. You won't even be able to start the console because this is such a severe problem."
   end
   $BUNDLER_INTERPRETER_CHECKED = true
 end
@@ -98,6 +96,11 @@ platform :jruby do
 
   gem 'activerecord-jdbcsqlite3-adapter'
   gem 'jdbc-sqlite3'
+end
+
+platform :rbx do
+  gem "rubysl"
+  gem "racc"
 end
 
 # Some dependencies are only needed for test and development environments. On
