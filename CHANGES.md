@@ -20,8 +20,10 @@ List of Calagator stable releases and changes, with the latest at the top:
     * Switched from outdated v2 Google Maps to a more flexible leaflet-based mapping system.
       * [!] New mapping settings have been added to secrets.yml
         If you wish to keep using Google as your map provider, you'll need to set your provider and add an API key to secrets.yml.
-      * [!] The "venues_google_map_options" setting in settings.yml has been renamed to venues_map_settings
+      * [!] The "venues_google_map_options" setting in settings.yml has been renamed to venues_map_settings.
       * [!] Loading Google API keys from config/geocoder_api_keys.yml has been deprecated. Use config/secrets.yml instead.
+      * [!][THEME] Theme authors need to require the mapping javascript files in the layout:
+        Add `<%= javascript_include_tag *mapping_js_includes %>` just before your application javascript_include_tag.
   * v0.20131020
     * We now use the Rails 3.2 asset pipeline to compile assets.
       * [!][THEME] Theme maintainers need to make a few small changes when upgrading.
