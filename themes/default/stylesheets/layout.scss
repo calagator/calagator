@@ -268,7 +268,7 @@ ul.event_list .list_date {
   background: #eee
 }
 
-.single_event .location #google_map {
+.single_event .location #map {
   width: 25em;
   height: 16em;
   float: right;
@@ -321,7 +321,7 @@ ul.event_list .list_date {
 /* @group Venues
 ----------------------------------------*/
 
-#venues_index #google_map {
+#venues_index #map {
   width: 400px;
   height: 300px;
   float: right;
@@ -394,7 +394,7 @@ ul.event_list .list_date {
   margin-bottom: .5em;
 }
 
-#venues_map #google_map {
+#venues_map #map {
   width: 100%;
   height: 650px;
 }
@@ -405,7 +405,7 @@ ul.event_list .list_date {
 /* @group Single Venue
 ----------------------------------------*/
 
-.single_venue #google_map {
+.single_venue #map {
   margin-bottom: 2em;
 }
 
@@ -490,7 +490,7 @@ ul.event_list .list_date {
   margin-top: 1em;
 }
 
-.single_venue #google_map {
+.single_venue #map {
   width: 30em;
   height: 20em;
   border: 1px solid #222;
