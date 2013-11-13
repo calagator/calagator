@@ -59,6 +59,7 @@ else
 end
 
 # Run-time dependencies
+gem 'puma', '2.6.0'
 gem 'rails', '3.2.16'
 gem 'rails_autolink', '1.1.3'
 gem 'nokogiri', '1.5.10'
