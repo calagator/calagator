@@ -180,7 +180,7 @@ require "#{basedir}/lib/secrets_reader"
 secrets = SecretsReader.read(:silent => true)
 case secrets.search_engine
 when 'sunspot'
-  sunspot_version = '1.3.3'
+  sunspot_version = '2.1.0'
   gem 'sunspot_rails', sunspot_version
   gem 'sunspot_solr',  sunspot_version
 end
