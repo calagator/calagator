@@ -9,11 +9,4 @@ require 'rake'
 
 # require 'tasks/rails'
 
-# Try to load `sunspot_rails` gem's tasks if available
-begin
-  require 'sunspot/rails/tasks' rescue nil
-rescue LoadError => e
-  # Ignore
-end
-
 Calagator::Application.load_tasks
