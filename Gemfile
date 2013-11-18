@@ -58,8 +58,9 @@ else
   gem adapter
 end
 
-# Run-time dependencies
 gem 'puma', '2.6.0'
+
+# Run-time dependencies
 gem 'rails', '3.2.16'
 gem 'rails_autolink', '1.1.3'
 gem 'nokogiri', '1.5.10'
@@ -119,8 +120,9 @@ group :development, :test do
   # Do not install these interactive libraries onto the continuous integration server.
   unless ENV['CI'] || ENV['TRAVIS']
     # Deployment
-    gem 'capistrano', '2.12.0'
-    gem 'capistrano-ext', '1.2.1'
+    gem 'capistrano', '3.0.1'
+    gem 'capistrano-rails', '1.0.0'
+    gem 'capistrano-bundler', '1.0.0'
 
     # Guard and plugins
     platforms :ruby_19, :ruby_20 do
