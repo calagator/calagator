@@ -121,9 +121,11 @@ group :development, :test do
     gem 'capistrano-ext', '1.2.1'
 
     # Guard and plugins
-    gem 'guard', '~> 1.3.0'
-    gem 'guard-rspec', '~> 1.2.1'
-    gem 'guard-spork', '~> 1.1.0'
+    platforms :ruby_19, :ruby_20 do
+      gem 'guard', '~> 1.3.0'
+      gem 'guard-rspec', '~> 1.2.1'
+      gem 'guard-spork', '~> 1.1.0'
+    end
 
     # Guard notifier
     case RUBY_PLATFORM
@@ -144,7 +146,7 @@ group :development, :test do
       gem 'rcov'
     end
 
-    platform :mri_19 do
+    platforms :mri_19, :mri_20 do
       gem 'debugger'
       gem 'debugger-ruby_core_source'
       gem 'simplecov'
