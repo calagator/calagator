@@ -321,9 +321,9 @@ describe EventsController do
         :end_date       => "2008-06-04",
         :start_date     => "2008-06-03",
         :event => {
-          "title"       => "MyVenue",
-          "url"         => "http://my.venue",
-          "description" => "Wheeeee"
+          :title       => "MyVenue",
+          :url         => "http://my.venue",
+          :description => "Wheeeee"
         },
         :end_time       => "",
         :start_time     => ""
