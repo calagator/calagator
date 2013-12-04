@@ -62,9 +62,6 @@ module Calagator
       Rails.root.join('lib','exception_notification', 'lib'),
       Rails.root.join('lib','has_many_polymorphs', 'lib'),
       Rails.root.join('lib','gmaps_on_rails', 'lib'),
-    ]
-
-    config.eager_load_paths += [
       Rails.root.join('lib')
     ]
 
