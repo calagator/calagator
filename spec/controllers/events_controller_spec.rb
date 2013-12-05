@@ -318,16 +318,16 @@ describe EventsController do
     before(:each) do
       # Fields marked with "###" may be filled in by examples to alter behavior
       @params = {
-        :end_date       => "2008-06-04",
-        :start_date     => "2008-06-03",
-        :event => {
-          :title       => "MyVenue",
-          :url         => "http://my.venue",
-          :description => "Wheeeee"
+        "end_date"       => "2008-06-04",
+        "start_date"     => "2008-06-03",
+        "event" => {
+          "title"       => "MyVenue",
+          "url"         => "http://my.venue",
+          "description" => "Wheeeee"
         },
-        :end_time       => "",
-        :start_time     => ""
-      }
+        "end_time"       => "",
+        "start_time"     => ""
+      }.with_indifferent_access
       @venue = Factory.build(:venue, :id => 12)
       @event = Factory.build(:event, :id => 34, :venue => @venue)
     end
