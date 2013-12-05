@@ -101,7 +101,6 @@ end
 
 platform :rbx do
   gem "rubysl"
-  gem "rubysl-test-unit"
   gem "racc"
 end
 
