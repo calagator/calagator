@@ -68,4 +68,15 @@ namespace :calagator do
       end
     end
   end
+
+  namespace :sunspot do
+    desc "Rebuild the solr index"
+    task :reindex do
+      on roles(:db) do
+        within release_path do
+          execute :rake, 'sunspot:reindex:calagator'
+        end
+      end
+    end
+  end
 end
