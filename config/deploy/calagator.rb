@@ -1,22 +1,33 @@
-set :theme, "calagator"
+set :stage, :calagator
 
- set :scm, "git"
- set :branch, "master" unless variables[:branch]
- set :repository,  "git://github.com/calagator/calagator.git"
- set :deploy_via, :remote_cache
+# Extended Server Syntax
+# ======================
+# This can be used to drop a more detailed server
+# definition into the server list. The second argument
+# something that quacks like a hash can be used to set
+# extended properties on the server.
+server 'calagator.org', user: 'calagator', roles: %w{web app db}
 
-#set :scm, "git"
-#set :repository,  "."
-#set :deploy_via, :copy
-#set :copy_cache, true
-#set :copy_exclude, ['.git', 'log', 'tmp', '*.sql', '*.diff', 'coverage.info', 'coverage.info', 'coverage', 'public/images/members', 'public/system', 'tags', 'db/remote.sql', 'db/*.sqlite3', '*.swp', '.*.swp']
-#default_run_options[:pty] = true
+# you can set custom ssh options
+# it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
+# you can see them in [net/ssh documentation](http://net-ssh.github.io/net-ssh/classes/Net/SSH.html#method-c-start)
+# set it globally
+#  set :ssh_options, {
+#    keys: %w(/home/rlisowski/.ssh/id_rsa),
+#    forward_agent: false,
+#    auth_methods: %w(password)
+#  }
+# and/or per server
+# server 'example.com',
+#   user: 'user_name',
+#   roles: %w{web app},
+#   ssh_options: {
+#     user: 'user_name', # overrides user setting above
+#     keys: %w(/home/user_name/.ssh/id_rsa),
+#     forward_agent: false,
+#     auth_methods: %w(publickey password)
+#     # password: 'please use keys'
+#   }
+# setting per server overrides global ssh_options
 
-set :deploy_to, "/var/www/calagator"
-set :host, "calagator.org"
-set :user, "calagator"
-
-role :app, host
-role :web, host
-role :db,  host, :primary => true
-default_run_options[:pty] = true
+# fetch(:default_env).merge!(rails_env: :calagator)

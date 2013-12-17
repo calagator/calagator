@@ -58,6 +58,8 @@ else
   gem adapter
 end
 
+gem 'puma', '2.6.0'
+
 # Run-time dependencies
 gem 'rails', '3.2.16'
 gem 'rails_autolink', '1.1.3'
@@ -118,8 +120,9 @@ group :development, :test do
   # Do not install these interactive libraries onto the continuous integration server.
   unless ENV['CI'] || ENV['TRAVIS']
     # Deployment
-    gem 'capistrano', '2.12.0'
-    gem 'capistrano-ext', '1.2.1'
+    gem 'capistrano', '3.0.1'
+    gem 'capistrano-rails', '1.0.0'
+    gem 'capistrano-bundler', '1.0.0'
 
     # Guard and plugins
     platforms :ruby_19, :ruby_20 do
@@ -179,7 +182,7 @@ require "#{basedir}/lib/secrets_reader"
 secrets = SecretsReader.read(:silent => true)
 case secrets.search_engine
 when 'sunspot'
-  sunspot_version = '1.3.3'
+  sunspot_version = '2.1.0'
   gem 'sunspot_rails', sunspot_version
   gem 'sunspot_solr',  sunspot_version
 end
