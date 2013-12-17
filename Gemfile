@@ -28,14 +28,6 @@ if defined?(Syck::Syck) and defined?(YAML::ENGINE)
   YAML::ENGINE.yamler = 'syck'
 end
 
-# Load additional gems from "Gemfile.local" if it exists, has same format as this file.
-begin
-  data = File.read("#{basedir}/Gemfile.local")
-rescue Errno::ENOENT
-  # Ignore
-end
-eval data if data
-
 # Database driver
 require 'erb'
 require 'yaml'
@@ -186,3 +178,11 @@ when 'sunspot'
   gem 'sunspot_rails', sunspot_version
   gem 'sunspot_solr',  sunspot_version
 end
+
+# Load additional gems from "Gemfile.local" if it exists, has same format as this file.
+begin
+  data = File.read("#{basedir}/Gemfile.local")
+rescue Errno::ENOENT
+  # Ignore
+end
+eval data if data
