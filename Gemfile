@@ -83,6 +83,8 @@ gem 'font-awesome-rails', '3.2.1.3'
 # gem 'paper_trail_manager', :path => '../paper_trail_manager'
 gem 'paper_trail_manager', '>= 0.2.0'
 
+gem 'utf8-cleaner', '~> 0.0.6'
+
 platform :jruby do
   gem 'activerecord-jdbc-adapter'
   gem 'jruby-openssl'
