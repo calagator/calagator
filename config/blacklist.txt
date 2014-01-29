@@ -18,6 +18,7 @@
 \bdfadlmox\b
 \bdiazepam\b
 \bdoxycycline\b
+\bephedrine\b
 \bhydrocodone\b
 \bklonopin\b
 \blevitra\b
