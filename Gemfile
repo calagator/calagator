@@ -53,9 +53,9 @@ end
 gem 'puma', '2.6.0'
 
 # Run-time dependencies
-gem 'rails', '3.2.16'
+gem 'rails', '3.2.17'
 gem 'rails_autolink', '1.1.3'
-gem 'nokogiri', '1.5.10'
+gem 'nokogiri', '1.6.1'
 gem 'columnize', '0.3.6'
 gem 'rdoc', '3.12.2', :require => false
 gem 'geokit', '1.6.5'
