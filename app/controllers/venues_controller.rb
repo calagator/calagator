@@ -123,7 +123,7 @@ class VenuesController < ApplicationController
   def update
     params[:venue][:latitude] = params[:venue][:longitude] = nil if params[:venue][:force_geocoding]=="1" unless params[:venue].blank?
     @venue = Venue.find(params[:id])
-    
+
     if evil_robot = !params[:trap_field].blank?
       flash[:failure] = "<h3>Evil Robot</h3> We didn't update this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
     end
@@ -131,7 +131,7 @@ class VenuesController < ApplicationController
     respond_to do |format|
       if !evil_robot && @venue.update_attributes(params[:venue])
         flash[:success] = 'Venue was successfully updated.'
-        format.html { 
+        format.html {
           if(!params[:from_event].blank?)
             redirect_to(event_url(params[:from_event]))
           else
@@ -168,24 +168,6 @@ class VenuesController < ApplicationController
         format.html { redirect_to(venues_path, :flash => {:success => "\"#{@venue.title}\" has been deleted"}) }
         format.xml { head :ok }
       end
-    end
-  end
-
-  # GET /venues/duplicates
-  def duplicates
-    @type = params[:type]
-    begin
-      @grouped_venues = Venue.find_duplicates_by_type(@type)
-    rescue ArgumentError => e
-      @grouped_venues = {}
-      flash[:failure] = "#{e}"
-    end
-
-    @page_title = "Duplicate Venue Squasher"
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @grouped_venues }
     end
   end
 
