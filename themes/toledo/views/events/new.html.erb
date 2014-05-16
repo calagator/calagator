@@ -1,0 +1,12 @@
+<div id="new_event_form" class="large-7 columns">
+<ul class="add-tabs">
+  <li><%= link_to "Add Event", new_event_url %></li>
+  <li><%= link_to "Import Events", new_source_url %></li>
+</ul>
+	<h2>Add Event</h2>
+	<%= render :partial => 'site/appropriateness_message' %>
+
+	<%= render :partial => 'form', :locals => {:event => @event} %>
+</div>
+<div class="large-3 offset-2 columns importlink">
+</div>

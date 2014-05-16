@@ -1,0 +1,12 @@
+<%
+# USAGE: Renders an edit form for an ActiveRecord model.
+#
+# VARIABLES:
+# * record: The record to render this form for.
+
+target = "edit_#{record.class.name.underscore}_form"
+name = record.class.name.underscore.to_sym
+template = "/#{record.class.name.pluralize.underscore}/form"
+%>
+
+<%= render :partial => '/versions/chooser', :locals => {:record => record, :target => target} %>

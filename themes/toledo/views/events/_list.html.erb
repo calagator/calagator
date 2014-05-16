@@ -1,0 +1,30 @@
+<%
+# Arguments:
+# * events => Array of Event records
+
+opts ||= {}
+previous_start_time = nil
+show_year ||= true
+skipped = 0
+
+%>
+<table class='event_list'>
+  <% unless events.blank? %>
+      <% for event in events do %>
+          <% new_day = previous_start_time.nil? || (previous_start_time.to_date != event.start_time.to_date) %>
+      <tr>
+        <%= render :partial => 'events/list_item', :locals => { :event => event, :new_day => new_day, :opts => opts, :show_year => show_year } %>
+      </tr>
+      <% previous_start_time = event.start_time %>
+    <% end %>
+  <% else %>
+    <tr class='blank_list'>
+      <td>- No events -</td>
+    </tr>
+  <% end %>
+  <% if skipped > 0 %>
+    <tr>
+      <td><%= link_to "(And #{skipped} more)", events_url %></td>
+    </tr>
+  <% end %>
+</table>

@@ -1,0 +1,95 @@
+<%
+# VARIABLES:
+# * event: An Event instance.
+# * has_contentbar: Should room be left to display a contentbar on the side? Defaults to true.
+
+has_contentbar = local_assigns.has_key?(:has_contentbar) ? local_assigns[:has_contentbar] : true
+
+%>
+<div id="single_event" class="content-left large-9 columns">
+  <div class="vevent" itemscope itemtype="http://schema.org/Event">
+    <h2 class="summary" itemprop="name"><%= event.title %></h2>
+    <meta itemprop="startDate" content="<%= event.start_time.to_time.iso8601 %>">
+    <meta itemprop="endDate" content="<%= event.end_time.to_time.iso8601 %>">
+    <section class='date'><%= normalize_time(event) -%></section>
+    <section id="event_details">
+      <% unless event.url.blank? -%>
+      <h3>More Information:</h3>
+        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow", :itemprop => "url" %> 
+      <% end %> 
+      <% unless event.rsvp_url.blank? %>
+      <h3>RSVP/Register:</h3>
+        <%= link_to "#{truncate(event.rsvp_url, :length => 128)}", h(event.rsvp_url), :class => "url", :rel => "nofollow" %>
+      <% end %>   
+    </section>
+    <% unless event.description.blank? %>
+    <section id="event_description">
+      <%= format_description(event.description) %>
+    </section>
+    <% end -%>
+    <% unless event.venue.blank? %>
+    <section id="venue_details" itemprop="location" itemscope itemtype="http://schema.org/Place">
+      <h3>Venue</h3>
+        <a class="url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
+          <span class='fn org' itemprop="name"><%= event.venue.title -%></span>
+        </a>
+        <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
+        <div class="adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+        <% if !event.venue.street_address.blank? -%>
+        <div class="street-address" itemprop="streetAddress"><%= event.venue.street_address -%></div>
+      </div>
+        <% end %>
+        <% if !event.venue.locality.blank? -%>
+          <span class="locality" itemprop="addressLocality"><%= event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
+          <% end -%>
+          <% if !event.venue.region.blank? -%>
+          <span class="region" itemprop="addressRegion"><%= event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
+          <% end -%>
+          <% if !event.venue.postal_code.blank? -%>
+          <span class="postal-code"  itemprop="postalCode"><%= event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
+          <% end -%>
+          <% if !event.venue.country.blank? -%>
+          <span class='country-name'><%= event.venue.country -%></span>
+          <% end -%>
+          <% if event.venue && event.venue.has_full_address? -%>
+          (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
+          <% end -%>
+
+          <% if event.venue.wifi? -%>
+            <div class='wifi_callout'>Public WiFi</div>
+          <% end -%>
+
+          <% if event.venue.access_notes.present? -%>
+            <div class="access_notes">
+              <h3>Access Notes</h3>
+              <%= format_description event.venue.access_notes %>
+            </div>
+          <% end -%>
+
+          <% unless event.venue_details.blank? -%>
+          <p>
+            <%= format_description(event.venue_details) %>
+          </p>
+          <% end -%>
+          <%= google_map event %>
+
+    </section>
+    <% end -%>
+  </div>
+
+
+    <% unless event.url.blank? -%>
+      <h3>More Information:</h3>
+        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url", :rel => "nofollow", :itemprop => "url" %> 
+      <% end %> 
+      <% unless event.rsvp_url.blank? %>
+      <h3>RSVP/Register:</h3>
+        <%= link_to "#{truncate(event.rsvp_url, :length => 128)}", h(event.rsvp_url), :class => "url", :rel => "nofollow" %>
+      <% end %> 
+    <% unless event.tags.blank? -%>
+    <section id="event_tags">
+      <h3>Tags</h3>
+          <%= tag_links_for event %>
+      </section>
+    <% end %>
+  </div>

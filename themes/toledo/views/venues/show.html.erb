@@ -1,0 +1,102 @@
+<% tabindex_on '#search_field' %>
+
+<% content_for :discovery_insert do %>
+  <link rel="alternate" type="application/x-wiki" title="Edit this page" href="<%= edit_venue_url(@venue) %>" />
+<% end %>
+
+<div class="content-left large-9 columns">
+  <h2><%= @venue.title %></h2>
+  <div class="location vcard<%= " closed" if @venue.closed? %>">
+    
+    <% if @venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
+
+    <% if @venue.has_full_address? %>
+      <div class="adr">
+        <% if @venue.street_address.present? %>
+          <div class="street-address"><%= @venue.street_address %></div>
+        <% end %>
+        <% if @venue.locality.present? %>
+          <span class="locality"><%= @venue.locality %></span><%= "," if @venue.region.present? or @venue.postal_code.present? or @venue.country.present? %>
+        <% end %>
+        <% if @venue.region.present? %>
+          <span class="region"><%= @venue.region %></span><%= "," if @venue.country.present? and not @venue.postal_code.present? %>
+        <% end %>
+        <% if @venue.postal_code.present? %>
+          <span class="postal-code"><%= @venue.postal_code %></span><%= "," if  @venue.country.present? %>
+        <% end %>
+        <% if @venue.country.present? %>
+          <span class='country-name'><%= @venue.country %></span>
+        <% end %>
+        (<a href='<%=google_maps_url(@venue.full_address) -%>'>map</a>)
+      </div>
+    <% else %>
+      <% if @venue.address.present? %>
+        <div class='address'>
+          <%= @venue.address %>
+          (<a href='<%=google_maps_url(@venue.address) -%>'>map</a>)
+        </div>
+      <% end %>
+    <% end %>
+
+    <div class='info'>
+      <% if @venue.url.present? %>
+        <div class='url'><%= link_to(truncate(url_for(@venue.url), :length => 60), url_for(@venue.url), :rel => "nofollow") %></div>
+      <% end %>
+
+      <% if @venue.email.present? %>
+        <div class='email'><%= mail_to @venue.email %></div>
+      <% end %>
+
+      <% if @venue.telephone.present? %>
+        <div class='tel'><%= @venue.telephone %></div>
+      <% end %>
+
+      <% if @venue.wifi? %>
+        <div class='wifi_callout'>Public WiFi</div>
+      <% end %>
+    </div>
+  </div>
+
+  <% if @venue.description.present? || @venue.access_notes.present? %>
+    <div class="description">
+      <%= format_description(@venue.description) %>
+      <% if @venue.access_notes.present? %>
+        <div class="access_notes">
+          <h3>Access Notes</h3>
+          <%= format_description @venue.access_notes %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @venue.tags.present? -%>
+    <div class="tags">
+      <h3>Tags</h3>
+      <%= tag_links_for @venue %>
+    </div>
+  <% end %>
+
+  <div id="google_map">
+    <%= google_map @venue %>
+  </div>
+
+  <div id='events'>
+    <div id='future_events'>
+      <h3>Future events happening here</h3>
+      <%= render :partial => 'events/list', :locals => { :events => @future_events } %>
+    </div>
+
+    <div id='past_events'>
+      <h3>Past events that happened here</h3>
+      <%= render :partial => 'events/list', :locals => { :events => @past_events } %>
+    </div>
+  </div>
+</div>
+<aside class="large-3 columns">
+  <h3>Options</h3>
+    <ul>
+      <li><%= link_to "Edit Venue", edit_venue_url(@venue) %></li>
+      <li><%= link_to "Delete Venue", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %></li>
+    </ul>
+  </div>
+</aside>

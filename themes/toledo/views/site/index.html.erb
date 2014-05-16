@@ -1,0 +1,52 @@
+<% tabindex_on '#search_field' %>
+
+<% cache(CacheObserver.daily_key_for("site_index", request)) do %>
+<div id="whats_happening" class="content-left large-9 columns">
+  <h2>Welcome</h2>
+  <p class="descr"><strong>Toledo Tech Events</strong> is your complete guide to technology related events in the Toledo region.</p>
+  <h2 id="happening">What&#39;s Happening&#63;</h2>
+  <% if @times_to_events[:today].any? or @times_to_events[:tomorrow].any? %>
+  <section id='coming_events'>
+    <% if @times_to_events[:today].any? %>
+    <h3>Today</h3>
+      <%= render 'events/list', :events => @times_to_events[:today], :dates => false %>
+    <% end %>
+    <% if @times_to_events[:tomorrow].any? %>
+    <h3>Tomorrow</h3>
+    <%= render 'events/list', :events => @times_to_events[:tomorrow], :dates => false %>
+    <% end %>
+  </section>
+  <% end %>
+  <section id='recently_added_events'>
+    <h3>Future Events</h3>
+    <%= render 'events/list', :events => @times_to_events[:later] %>
+  </section>
+  <%= link_to("View More".html_safe, 
+  events_path(:anchor => "event-#{@times_to_events[:more].id}"),
+  :id => "future_events_link") if @times_to_events[:more] %>
+</div>
+<% end %>
+<aside id="homepage_sidebar" class="large-3 columns">
+  <% tags =
+        @tagcloud_items_deferred.call.map{ |item|
+          tag_link(:event, item[:tag], "tagcloud_level_#{item[:level]}") 
+        }.join('<span class="spacer"> &middot; </span>').html_safe -%>
+  <% if tags.present? %>
+    <h3>Popular Tags</h3>
+    <div id="tagcloud">
+      <%= tags -%>
+    </div>
+  <% end %>
+  <h3>Subscribe To</h3>
+  <ul>
+    <li><%= link_to "iCalendar feed", icalendar_feed_link %></li>
+    <li><%= link_to "Atom feed", atom_feed_link %></li>
+  </ul>
+  <h3>Get Involved</h3>
+    <ul>
+      <li><%= link_to "Blog", "http://calagator.wordpress.com/" %></li>
+      <li><%= link_to "Forum", "http://groups.google.com/group/tol-calagator/" %></li>
+      <li><%= link_to "Code", "https://github.com/jmslagle/calagator" %></li>
+      <li><%= link_to "File an issue", "http://github.com/jmslagle/calagator/issues" %></li>
+    </ul>
+</aside>

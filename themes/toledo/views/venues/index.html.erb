@@ -1,0 +1,81 @@
+<% tabindex_on '#search_field' %>
+<aside class="large-3 columns">
+<div id='venues_search'>
+  <h3>Find a venue:</h3>
+  <%= form_tag venues_path, :method => 'get' do %>
+    <div class='keywords'>
+      <%= label_tag :query, "Keywords" %>
+      <%= text_field_tag :query, params[:query] %>
+    </div>
+    <div class='wifi'>
+      <%= check_box_tag :wifi, '1', params[:wifi] %>
+      <%= label_tag :wifi, "Public WiFi" %>
+    </div>
+
+    <div class='submit'>
+      <%= submit_tag "Search" %>
+    </div>
+    <ul>
+      <li><%= link_to 'List all venues', venues_path(:all => 1) %></li>
+      <li><%= link_to 'View a big map', map_venues_path %></li>
+    </ul>    
+  <% end %>
+</aside>
+<div class="content-left large-7 columns venues">
+<% if @venues %>
+    <div id='list_description'>
+      <% if @tag %>
+        <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%= @tag %></strong></h2>
+      <% else -%>
+        <h2>
+          <% if @venues.size == 0 -%>
+            Sorry, there are no venues
+          <% else -%>
+            Showing <%= "all " if params[:all] %><strong><%= @venues.size %></strong> <%= 'venue'.pluralize(@venues.size) %>
+          <% end %>
+          <% if params[:query].present? %>
+            matching &#8220;<%= params[:query] %>&#8221;
+          <% end %>
+          <%= "with public WiFi" if params[:wifi] %>
+        </h2>
+      <% end -%>
+
+    <ul>
+      <% for venue in @venues %>
+        <li>
+          <%= link_to(venue.title, venue_url(venue)) %>
+          <% if venue.has_full_address? %>
+            <p class='detail'><%= venue.full_address %></p>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <div id='venue_portal'>
+    <h2>Venues</h1>
+
+      <h3>Most Active</h3>
+      <ul>
+        <% for venue in @most_active_venues %>
+          <li>
+            <%= link_to(venue.title, venue_url(venue)) %>
+          </li>
+        <% end %>
+      </ul>
+    
+
+  </div>
+  <% end %>
+</div>
+<div class="large-2 columns">
+  <%= link_to "Add Venue", new_venue_path %>
+  <div id="exports">
+
+    <h3>Export venues</h3>
+    <ul class="bullets">
+      <li><%= link_to 'KML', '/venues.kml' %></li>
+      <li><%= link_to 'JSON', '/venues.json' %></li>
+    </ul>
+  </div>  
+</div>

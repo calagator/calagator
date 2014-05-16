@@ -1,0 +1,587 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary, time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+
+ol, ul {
+	list-style: none;
+}
+
+
+body{
+	background: url('../images/graph.png');
+	font-family: "Open Sans", sans-serif;	
+}
+
+#wrap{ 
+	background: #fefefe;
+	max-width: 62.5em;
+	margin: auto;
+	border: 1px solid #0c4964;
+	border-top: none;
+	border-radius: 0 0 3px 3px;
+
+}
+
+/* Header Styles */
+header{
+	padding-top: 1.5em;
+}
+
+header h1{ 
+	letter-spacing: .04em;
+	font-size: 2.5em;
+	text-shadow:#8dc641 1px 1px 0px;
+}
+
+header h1 a, header h1 a:hover{
+	color: #8dc641;
+}
+
+.headfirst{
+	color: #0c4964;
+	text-shadow:#0c4964 1px 1px 0px;
+}
+
+header p a{
+	color: inherit;
+}
+
+header p{
+	margin-top: .4em;
+}
+
+header p a:hover{
+	color: inherit;
+	text-decoration: underline;
+}
+
+nav li{
+	float: left;
+	padding-right: 1.55rem;
+}
+
+nav{
+	background: #0c4964;	
+	font-size: 1.2em;
+	overflow: auto;
+	padding: .35em 1em;
+	text-transform: uppercase;
+	letter-spacing: .08rem;
+	font-weight: 600;
+}
+
+nav a{
+	color: #fff;
+}
+
+nav a:hover{
+	color: #ddd;
+}
+
+a{
+	color: #0c4964;
+}
+
+.content-left a{
+	color: #64952f;
+}
+
+.content-left a:hover{
+	color: #8dc641;
+}
+#search_form{
+	padding-top: 2.4em;
+	text-align: right;
+}
+
+#search_form label{
+	display: inline;
+}
+
+#search_form input{
+	display: inline;
+	width: 60%;
+	vertical-align: baseline;
+}
+#content p{
+	line-height: 1.4;
+	margin: .8em 0;
+}
+/* end header */
+
+/* Footer Styles */
+footer{
+	max-width: 62.5em;
+	margin: auto;
+	padding: .6em;
+	text-align: center;
+}
+
+footer ul{
+	display: inline;
+	font-weight: 500;
+	font-size: .85em;
+}
+
+footer ul li{
+	display: inline;
+	border-left: 1px solid #ccc;
+	padding: 0 .6em;
+}
+
+footer ul li:first-child{
+	border-left: none;
+}
+
+/* End Footer */
+
+/* Sidebar Styles */
+
+
+aside h3{
+	font-size: 1.1em;
+	margin-top: .5em;
+}
+
+aside p, aside ul{
+	padding: .7em 0;
+	font-size: .9em;
+}
+
+aside ul{
+	list-style: disc;
+	padding: 0 0 .9em 1.25em;
+}
+
+aside li{
+	padding: .2em .1em;
+}
+
+aside.columns{
+	padding-left: 1.1em;
+}
+/* end sidebar */
+
+/* Form Styles */
+.content-left form{
+	padding: 1em 0;
+}
+
+li.button{
+	padding: 0;
+	background: none;
+	border: none;
+}
+
+li.button:hover{
+	background: none;
+}
+
+#content label{
+	font-weight: 600;
+	color: #211407;
+}
+
+input[type=text], input[type=search], textarea, input[type=tel], input[type=url], input[type=email]{
+	border-radius:5px;
+}
+
+.button input{
+	border-radius: 30px;
+	border: none;
+}
+
+.trap{
+	display: none;
+}
+
+#ui-datepicker-div{
+	background: #eee;
+	border: 1px solid #0c4964;
+	border-bottom: none;
+	width: 40%;
+}
+
+#ui-datepicker-div table{
+	border-spacing: 0;	
+}
+
+.ui-datepicker-header{
+	padding: 0 .5em;
+}
+
+#ui-datepicker-div td{
+	border: 1px solid #aaa;
+}
+
+.ui-datepicker-title{
+	font-weight: bold;
+	text-align: center;
+}
+
+.ui-autocomplete{
+	background: #F2EBD5;
+	border: 1px solid #0c4964;
+	border-top:none;
+	width: 43%;
+}
+
+.ui-datepicker-calendar{
+	width: 100%;
+}
+
+.ui-datepicker-next{
+	float: right;
+}
+
+.flash.flash_failure, .errorExplanation {
+	color: #C00;
+	border: 2px solid #C00;
+	background: #F5DBD7;
+	padding: 1em;
+	margin: 1em 0;
+	border-radius: .2em;
+}
+
+textarea#event_description{
+	height: 16em;
+}
+
+select{ 
+	font-size: .8em;
+	padding: .15em 0;
+}
+/* end forms */
+
+/* Global Styles */
+h1, h2, h3, h4, h5, h6, th, .date{
+	color: #111;
+	font-family: 'Ubuntu', sans-serif;
+	font-weight: bold;
+}
+
+#content a:hover{
+	text-decoration: underline;
+}
+
+#cotent h1 a, #content h2 a, #content h3 a{
+	color: inherit;
+}
+
+.content-left h2, #about-us, h2{
+	font-size: 1.4em;
+	margin: 1em 0;
+}
+
+#content h2:first-child{
+	margin-top: 0;
+}
+
+#content aside h3:first-child{
+	margin-top: .2em;
+}
+
+h4{
+	margin: .8em 0;
+}
+
+strong{
+	font-weight: bold;
+}
+
+#content{
+	padding: 2em 1.2em 1.3em 1.2em;
+	word-wrap: break-word; 
+}
+
+#content section{
+	margin: 1.25em 0;
+	max-width: 90%;
+}
+
+.bullets, .about-us ul{
+	list-style: disc;
+	padding: .8em .75em;
+	margin: 0 .6em;
+}
+
+
+
+.content-left h2{
+	font-size: 1.6em;
+	margin: .8em 0;
+	padding-right: 5%;	
+}
+
+#content h3{ 
+	font-size: 1.15em;
+	margin: .7em 0;
+}
+
+tr.even, table tr.alt, table tr:nth-of-type(even){
+	background: #f3f3f3;
+}
+
+table{
+	border-collapse: collapse;
+}
+
+td{
+	border-width: 0;
+}
+/* end global */
+.add-tabs{
+	overflow: auto;
+	clear: both;
+	padding-bottom: 1px;
+	margin-bottom: 1em;
+	border-bottom: 1px solid #ccc;
+}
+.add-tabs li{
+	float:  left;
+	border: 1px solid #ccc;
+	border-radius: 5px 5px 0 0;
+	padding: .2em 1em;
+	margin-right: .5em;
+	border-bottom: none;
+}
+
+.contain-border{
+	border: 1px solid #ccc;	
+}
+
+
+/* Index Page */
+#whats_happening section h3{
+	margin-top: 1.2em;
+}
+
+#whats_happening h3{
+	color: #0c4964;
+}
+
+#whats_happening h2:first-child{
+	font-size: 1.35rem;
+}
+
+h2#happening{
+	text-align: center;
+	width: 90%;
+	padding-right: 0;
+	margin-bottom: 1em;
+}
+
+.event_list{
+	padding: .6em 0;
+	width: 90%;	
+}
+
+.descr{
+	width: 80%;
+	margin-bottom: 2em;
+}
+.event_list .url{
+
+}
+
+.event_list th, .event_list td, .event_table td, .event_table th{
+	line-height: 1.4;
+	font-size: 1em;
+}
+
+.event_list .date{
+	text-align: right;
+	font-size: .95rem;
+	width: 30%;
+	padding-right: 3%;
+	font-weight: 400;
+}
+
+.day_of_week{
+	font-size: .9em;
+}
+
+#future_events_link{
+	width: 90%;
+	text-align: right;
+	padding: .7em 0;
+	font-size: 1.2em;
+	font-weight: 700;
+	display: block;
+	color: #0c4964;
+}
+
+#future_events_link:after{
+	content:" \00BB";
+}
+
+#tagcloud{
+	margin-bottom: 2em;
+	font-size:.9em;
+}
+
+#tagcloud h3{
+	font-size: 1.111em;
+}
+
+#tagcloud .tagcloud_level_0 { font-size: 85%; }
+#tagcloud .tagcloud_level_1 { font-size: 100%; }
+#tagcloud .tagcloud_level_2 { font-size: 125%; }
+#tagcloud .tagcloud_level_3 { font-size: 150%; }
+#tagcloud .tagcloud_level_4 { font-size: 175%; }
+#tagcloud .tagcloud_level_5 { font-size: 200%; }
+/* end index */
+
+/* Events Page */
+.event_table .description, .event_table .url, .event_list .url{
+	display: none;
+}
+
+.event_table{
+	width: 95%;
+	margin: 1em 0;
+}
+
+.event_table .date{
+	width: 20%;
+	text-align: right;
+	font-weight: 400;
+}
+
+.event_sort_by li, .event_sort_by{
+	display: inline;
+}
+
+.event_sort_by li:after{
+	content:", ";
+}
+
+.event_sort_by li:last-child:after{
+	content: none;
+}
+
+.importlink{
+	font-size: 1.3rem;
+}
+
+#list_filters input{
+	padding: 0 .5em;
+}
+
+#date_filter{
+	padding-bottom: 1em;
+}
+
+#date_filter input{
+	height: 1.8em;
+	font-size: .9em;
+}
+/* end events */
+
+/* Singe Event Page */
+.metadata{
+	font-size: .7em;
+}
+
+#single_event section{
+	margin: .5em 0;
+}
+
+#single_event h2{
+	margin-bottom: 1em;
+}
+
+#single_event h3{
+	font-size: 1em;
+	margin-bottom: 0;
+	padding: 0;
+}
+
+#event_description{
+	padding: .7em 0;
+}
+
+#event_description ul {
+list-style: disc;
+padding: 1em;
+}
+
+#event_description li{
+margin-bottom: .5em;
+}
+
+#venue_details h3{
+	font-size: 1.1em;
+}
+
+#event_details{
+	padding: .3em 0;
+}
+
+.event_info th{
+	font-weight: 400;
+	text-align: right;
+}
+
+#google_map {
+	height: 320px;
+	width: 500;
+	margin: 1.5em 0;
+	max-width: 90%;
+}
+
+#event_tags{
+	padding-bottom: 1.2em;
+}
+/* end single event */
+
+/* Add Event page */
+.appropriateness_message{
+	padding-bottom: 1em;
+}
+/* End Add event *.
+
+/* Venues Page */
+#venues_search label, #venue_search input{
+	display: inline;
+}
+
+.venues li{
+	padding-bottom: 1em;
+}
+/* end venues */
+
+/* About Page */
+.about-us{
+	max-width: 80%;
+}
+
+
+@media only screen and (max-width:400px)
+{
+  header h1{ font-size: 7.2vw; }
+  nav li{ float: none; font-size:1.4em; }
+  footer ul{ display: none; }
+}
+
+@media only screen and (max-width:480px),  
+       (min-resolution: 2dppx) and (max-width:960px),            
+       (min-resolution: 192dpi) and (max-width:960px){
+  #search_form{ text-align: center; }
+  #search_form input{ width: 40%;}
+}

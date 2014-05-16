@@ -34,3 +34,6 @@
 \bxanax\b
 \bКупить\s+участок\b
 \bзнакомства\s+свингеры\s+тюмень\b
+\bsouthfieldcitycentre.com\b
+\bphentermine\b
+\bvalium\b

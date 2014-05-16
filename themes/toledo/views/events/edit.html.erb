@@ -1,0 +1,6 @@
+<div id="new_event_form" class="large-7 columns">
+	<h2>Edit Event</h2>
+	<%= render 'versions/edit_with_chooser', :record => @event %>
+	<%= render :partial => 'form', :locals => {:event => @event} %>
+
+</div>

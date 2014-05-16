@@ -1,0 +1,58 @@
+<%= semantic_form_for(venue, :html => {:id => 'venue_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
+  <%= f.inputs :name => "#{'Editing: ' unless venue.new_record?} <em>#{venue.title}</em>".html_safe do %>
+    <li class='input'>
+      <p class='inline-hints'>You can <%= venue.new_record? ? "enter" : "edit" %> the details of your venue below.  The more information we have about your venue, the easier it will be for people to find it.</p>
+    </li>
+    <%= f.input :title, :label => "Venue Name" %>
+    <% focus_on '#venue_title' %>
+    <%= f.input :address, :label => "Full Address", :hint => "(one-line version of full address)" %>
+
+    <% unless venue.new_record? %>
+      <%= f.input :street_address %>
+      <%= f.input :locality, :label => "City" %>
+      <%= f.input :region, :label => "State" %>
+      <%= f.input :postal_code, :label => "Zip Code" %>
+      <%= f.input :latitude %>
+      <%= f.input :longitude %>
+    <% end %>
+
+    <%= f.input :url, :label => "Web Link" %>
+    <%= f.input :email %>
+    <%= f.input :telephone %>
+    <%= f.input :wifi, :label => "This venue has public wireless internet access" %>
+    <%= f.input :description,
+                :input_html => {:rows => 12},
+                :hint => "(Format text using #{link_to("Markdown", "http://www.simpleeditions.com/59001/markdown-an-introduction", :target => "_blank")} and HTML)".html_safe %>
+    <%= f.input :access_notes,
+                :input_html => {:rows => 4},
+                :hint => "(Details about how to access the space, and any accessibility restrictions that visitors may want to know about.)" %>
+
+    <%= f.input(:closed, :label => "This venue is no longer open for business") unless venue.new_record? %>
+
+    <%= f.input :tag_list, :required => false,
+                :label => 'Tags',
+                :hint => "(Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>plancast:plan=ABCD</code> to associate this with a particular <a href='http://plancast.com/'>Plancast</a> event, or a tag like <code>epdx:group=1234</code> to associate the event with a particular <a href='http://epdx.org/'>ePDX</a> group)".html_safe %>
+
+    <% unless venue.new_record? %>
+      <%= f.input :force_geocoding,
+                  :label => venue.location ? "Re-geocode?" : "Geocode?",
+                  :as => :boolean,
+                  :hint => venue.location \
+                            ? "([#{venue.latitude}, #{venue.longitude}] currently; if checked, we'll try again.)" \
+                            : "(if checked, we'll try to determine a map position for this venue.)" %>
+    <% end %>
+
+    <li class='trap'>
+      <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
+      <%= text_field_tag 'trap_field', params[:trap_field] %>
+    </li>
+
+    <% if !params[:from_event].blank? %>
+      <%= hidden_field_tag(:from_event, params[:from_event]) %>
+    <% end %>
+  <% end %>
+
+  <%= f.buttons do %>
+    <%= f.commit_button :button_html => { :class => "button"} %>
+  <% end %>
+<% end %>
