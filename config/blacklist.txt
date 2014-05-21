@@ -32,6 +32,7 @@
 \btramadol\b
 \bugg\s+boots\b
 \buiouoiuiuoi\b
+\bvalium\b
 \bviagra\b
 \bvicodin\b
 \bxanax\b
