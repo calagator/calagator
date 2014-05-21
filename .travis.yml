@@ -28,3 +28,4 @@ before_script:
   - cp "config/secrets.yml.sample" "config/secrets.yml"
 script:
   - bundle exec rake spec --trace
+cache: bundler
