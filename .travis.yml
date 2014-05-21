@@ -3,7 +3,7 @@ rvm:
   - 1.8.7
   - 1.9.3
   - 2.0.0
-  - rbx-2.1.1
+  - rbx-2
 
   ## Don't test 1.9.2 because people shouldn't be using it.
   # - 1.9.2
@@ -28,3 +28,4 @@ before_script:
   - cp "config/secrets.yml.sample" "config/secrets.yml"
 script:
   - bundle exec rake spec --trace
+cache: bundler

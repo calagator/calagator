@@ -95,12 +95,6 @@ platform :jruby do
   gem 'jdbc-sqlite3'
 end
 
-platform :rbx do
-  gem "rubysl"
-  gem "rubysl-test-unit", :require => false
-  gem "racc"
-end
-
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
 #   bundle install --without development:test
