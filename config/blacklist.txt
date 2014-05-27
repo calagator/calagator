@@ -24,9 +24,11 @@
 \blevitra\b
 \bmichael\s+jackson\s+died\b
 \bnaivahita\b
+\bnexium\b
 \bnude\b
 \bpayday\s+loans\b
 \bpropecia\b
+\ritalin\b
 \bsex\s+tape\b
 \btamiflu\b
 \btramadol\b
@@ -35,6 +37,7 @@
 \bvalium\b
 \bviagra\b
 \bvicodin\b
+\walgreens\b
 \bxanax\b
 \bКупить\s+участок\b
 \bзнакомства\s+свингеры\s+тюмень\b
