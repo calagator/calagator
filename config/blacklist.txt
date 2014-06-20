@@ -27,6 +27,7 @@
 \bnexium\b
 \bnude\b
 \bpayday\s+loans\b
+\bpharmacy\b
 \bpropecia\b
 \ritalin\b
 \bsex\s+tape\b
