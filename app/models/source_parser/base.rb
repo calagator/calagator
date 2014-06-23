@@ -2,16 +2,16 @@ require "net/http"
 require "net/https"
 require "open-uri"
 
-$SourceParserImplementations = []
-
 class SourceParser
   # == SourceParser::Base
   #
   # The base class for all format-specific parsers. Do not use this class
   # directly, use a subclass of Base to do the parsing instead.
   class Base
+    cattr_accessor(:parsers) { Set.new }
+
     def self.inherited(subclass)
-      $SourceParserImplementations << subclass unless $SourceParserImplementations.include?(subclass)
+      parsers << subclass
     end
 
     class_attribute :_label, :_url_pattern

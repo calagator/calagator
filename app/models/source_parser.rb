@@ -29,7 +29,7 @@ class SourceParser
 
   # Returns an Array of parser classes for the various formats
   def self.parsers
-    $SourceParserImplementations.compact
+    ::SourceParser::Base.parsers.to_a
   end
 
   # Returns an Array of sorted string labels for the parsers.
