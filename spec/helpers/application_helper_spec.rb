@@ -52,7 +52,7 @@ describe ApplicationHelper do
     it "should force rendering of non-mobile site if given a param of '0' and save it as cookie" do
       controller.params[:mobile] = "0"
 
-      helper.mobile_stylesheet_media("hello").should be_false
+      helper.mobile_stylesheet_media("hello").should be_falsey
 
       mobile_cookie.should eq "0"
     end
@@ -77,7 +77,7 @@ describe ApplicationHelper do
     it "should use non-mobile rendering if cookie's mobile preference is set to '0'" do
       mobile_cookie "0"
 
-      helper.mobile_stylesheet_media("hello").should be_false
+      helper.mobile_stylesheet_media("hello").should be_falsey
 
       mobile_cookie.should eq "0"
     end

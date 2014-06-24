@@ -219,7 +219,7 @@ describe SourceParser::Ical, "when importing events with non-local times" do
 
   it "should store time ending in Z as UTC" do
     url = "http://foo.bar/"
-    SourceParser::Base.stub!(:read_url).and_return(read_sample('ical_z.ics'))
+    SourceParser::Base.stub(:read_url).and_return(read_sample('ical_z.ics'))
     @source = Source.new(:title => "Non-local time", :url => url)
     events = @source.create_events!(:skip_old => false)
     event = events.first
@@ -235,7 +235,7 @@ describe SourceParser::Ical, "when importing events with non-local times" do
   end
 
   it "should store time with TZID=GMT in UTC" do
-    pending "RiCal doesn't consider the time zone data in this file valid"
+    skip "RiCal doesn't consider the time zone data in this file valid"
     events = events_from_ical_at('ical_gmt.ics')
     events.size.should eq 1
     abstract_event = events.first
@@ -247,7 +247,7 @@ end
 
 describe SourceParser::Ical, "when skipping old events" do
   before(:each) do
-    SourceParser::Base.stub!(:read_url).and_return(<<-HERE)
+    SourceParser::Base.stub(:read_url).and_return(<<-HERE)
 BEGIN:VCALENDAR
 X-WR-CALNAME;VALUE=TEXT:NERV
 VERSION:2.0

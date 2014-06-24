@@ -8,7 +8,7 @@ describe EventsController do
       it "should produce HTML" do
         get :index, :format => "html"
 
-        response.should have_selector "table.event_table"
+        response.body.should have_selector "table.event_table"
       end
     end
 
@@ -220,25 +220,25 @@ describe EventsController do
           it "should use the default if given a malformed parameter" do
             get :index, :date => "omgkittens"
             assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
-            response.should have_selector(".flash_failure", :content => 'malformed')
+            response.body.should have_selector(".flash_failure", text: 'malformed')
           end
 
           it "should use the default if given a missing parameter" do
             get :index, :date => {:foo => "bar"}
             assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
-            response.should have_selector(".flash_failure", :content => 'missing')
+            response.body.should have_selector(".flash_failure", text: 'missing')
           end
 
           it "should use the default if given an empty parameter" do
             get :index, :date => {@date_kind => ""}
             assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
-            response.should have_selector(".flash_failure", :content => 'empty')
+            response.body.should have_selector(".flash_failure", text: 'empty')
           end
 
           it "should use the default if given an invalid parameter" do
             get :index, :date => {@date_kind => "omgkittens"}
             assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
-            response.should have_selector(".flash_failure", :content => 'invalid')
+            response.body.should have_selector(".flash_failure", text: 'invalid')
           end
 
           it "should use the value if valid" do
@@ -345,8 +345,8 @@ describe EventsController do
 
       it "should create a new event without a venue" do
         Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.stub!(:associate_with_venue).with(@params[:venue_name])
-        @event.stub!(:venue).and_return(nil)
+        @event.stub(:associate_with_venue).with(@params[:venue_name])
+        @event.stub(:venue).and_return(nil)
         @event.should_receive(:save).and_return(true)
 
         post "create", @params
@@ -357,7 +357,7 @@ describe EventsController do
         @params[:event]["venue_id"] = @venue.id.to_s
         Event.should_receive(:new).with(@params[:event]).and_return(@event)
         @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:save).and_return(true)
 
         post "create", @params
@@ -367,7 +367,7 @@ describe EventsController do
         @params[:venue_name] = "My Venue"
         Event.should_receive(:new).with(@params[:event]).and_return(@event)
         @event.should_receive(:associate_with_venue).with("My Venue")
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:save).and_return(true)
 
         post "create", @params
@@ -378,7 +378,7 @@ describe EventsController do
         @params[:venue_name] = "Some Event"
         Event.should_receive(:new).with(@params[:event]).and_return(@event)
         @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:save).and_return(true)
 
         post "create", @params
@@ -387,10 +387,10 @@ describe EventsController do
       it "should create a new event for an existing venue" do
         @params[:venue_name] = "Old Venue"
         Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.stub!(:associate_with_venue).with(@params[:venue_name])
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:associate_with_venue).with(@params[:venue_name])
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:save).and_return(true)
-        @venue.stub!(:new_record?).and_return(false)
+        @venue.stub(:new_record?).and_return(false)
 
         post "create", @params
         response.should redirect_to(event_path(@event))
@@ -399,10 +399,10 @@ describe EventsController do
       it "should create a new event and new venue, and redirect to venue edit form" do
         @params[:venue_name] = "New Venue"
         Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.stub!(:associate_with_venue).with(@params[:venue_name])
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:associate_with_venue).with(@params[:venue_name])
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:save).and_return(true)
-        @venue.stub!(:new_record?).and_return(true)
+        @venue.stub(:new_record?).and_return(true)
 
         post "create", @params
         response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
@@ -458,7 +458,7 @@ describe EventsController do
                         :preview => "Preview",
                         :venue_name => "This venue had better not exist"
         response.should render_template :new
-        response.should have_selector '#event_preview'
+        response.body.should have_selector '#event_preview'
         event.should be_valid
       end
 
@@ -491,7 +491,7 @@ describe EventsController do
         @event = FactoryGirl.build(:event_with_venue, :id => 42)
         @venue = @event.venue
         @params.merge!(:id => 42)
-        Event.stub!(:find).and_return(@event)
+        Event.stub(:find).and_return(@event)
       end
 
       it "should display form for editing event" do
@@ -504,8 +504,8 @@ describe EventsController do
 
       it "should update an event without a venue" do
         Event.should_receive(:find).and_return(@event)
-        @event.stub!(:associate_with_venue).with(@params[:venue_name])
-        @event.stub!(:venue).and_return(nil)
+        @event.stub(:associate_with_venue).with(@params[:venue_name])
+        @event.stub(:venue).and_return(nil)
         @event.should_receive(:update_attributes).and_return(true)
 
         put "update", @params
@@ -516,7 +516,7 @@ describe EventsController do
         @params[:event]["venue_id"] = @venue.id.to_s
         Event.should_receive(:find).and_return(@event)
         @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:update_attributes).and_return(true)
 
         put "update", @params
@@ -526,7 +526,7 @@ describe EventsController do
         @params[:venue_name] = "Some Event"
         Event.should_receive(:find).and_return(@event)
         @event.should_receive(:associate_with_venue).with("Some Event")
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:update_attributes).and_return(true)
 
         put "update", @params
@@ -537,7 +537,7 @@ describe EventsController do
         @params[:venue_name] = "Some Event"
         Event.should_receive(:find).and_return(@event)
         @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:update_attributes).and_return(true)
 
         put "update", @params
@@ -546,10 +546,10 @@ describe EventsController do
       it "should update an event and associate it with an existing venue" do
         @params[:venue_name] = "Old Venue"
         Event.should_receive(:find).and_return(@event)
-        @event.stub!(:associate_with_venue).with(@params[:venue_name])
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:associate_with_venue).with(@params[:venue_name])
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:update_attributes).and_return(true)
-        @venue.stub!(:new_record?).and_return(false)
+        @venue.stub(:new_record?).and_return(false)
 
         put "update", @params
         response.should redirect_to(event_path(@event))
@@ -558,10 +558,10 @@ describe EventsController do
       it "should update an event and create a new venue, and redirect to the venue edit form" do
         @params[:venue_name] = "New Venue"
         Event.should_receive(:find).and_return(@event)
-        @event.stub!(:associate_with_venue).with(@params[:venue_name])
-        @event.stub!(:venue).and_return(@venue)
+        @event.stub(:associate_with_venue).with(@params[:venue_name])
+        @event.stub(:venue).and_return(@venue)
         @event.should_receive(:update_attributes).and_return(true)
-        @venue.stub!(:new_record?).and_return(true)
+        @venue.stub(:new_record?).and_return(true)
 
         put "update", @params
         response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
@@ -569,8 +569,8 @@ describe EventsController do
 
       it "should catch errors and redisplay the new event form" do
         Event.should_receive(:find).and_return(@event)
-        @event.stub!(:associate_with_venue)
-        @event.stub!(:venue).and_return(nil)
+        @event.stub(:associate_with_venue)
+        @event.stub(:venue).and_return(nil)
         @event.should_receive(:update_attributes).and_return(false)
 
         put "update", :id => 1234
@@ -615,7 +615,7 @@ describe EventsController do
       before do
         @event = FactoryGirl.create(:event)
 
-        Event.stub!(:find).and_return(@event)
+        Event.stub(:find).and_return(@event)
 
         get "clone", :id => 1
       end
@@ -686,7 +686,7 @@ describe EventsController do
       get 'duplicates', :type => 'omgwtfbbq'
 
       response.should be_success
-      response.should have_selector('.failure', :content => 'omgwtfbbq')
+      response.body.should have_selector('.failure', text: 'omgwtfbbq')
     end
 
   end

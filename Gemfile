@@ -92,8 +92,10 @@ end
 # production servers, you can skip their installation by running:
 #   bundle install --without development:test
 group :development, :test do
-  gem 'rspec-rails', '2.11.0'
-  gem 'webrat', '0.7.3'
+  gem 'rspec-activemodel-mocks', '1.0.1'
+  gem 'rspec-its', '1.0.1'
+  gem 'rspec-rails', '3.0.1'
+  gem 'capybara', '2.3.0'
   gem 'factory_girl_rails', '4.4.1'
   gem 'spork', '~> 0.9.2'
   gem 'database_cleaner', '~> 0.8.0'

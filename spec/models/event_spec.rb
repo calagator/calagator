@@ -201,20 +201,20 @@ describe Event do
     it "should fail to validate if start time is nil" do
       @event.start_time = nil
       @event.should_not be_valid
-      @event.should have(1).error_on(:start_time)
+      @event.errors[:start_time].size.should eq(1)
     end
 
     it "should fail to validate if start time is blank" do
       @event.start_time = ""
       @event.should_not be_valid
-      @event.should have(1).error_on(:start_time)
+      @event.errors[:start_time].size.should eq(1)
     end
 
     it "should fail to validate if end_time is earlier than start time " do
       @event.start_time = now
       @event.end_time = @event.start_time - 2.hours
-      @event.save.should be_false
-      @event.should have(1).error_on(:end_time)
+      @event.save.should be_falsey
+      @event.errors[:end_time].size.should eq(1)
     end
 
   end
@@ -808,7 +808,7 @@ describe Event do
       original.to_clone
     end
 
-    its(:new_record?) { should be_true }
+    its(:new_record?) { should be_truthy }
 
     its(:id) { should be_nil }
 

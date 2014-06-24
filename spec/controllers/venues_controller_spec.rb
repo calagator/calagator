@@ -31,7 +31,7 @@ describe VenuesController do
     get 'duplicates', :type => 'omgwtfbbq'
 
     response.should be_success
-    response.should have_selector('.failure', :content => 'omgwtfbbq')
+    response.body.should have_selector('.failure', text: 'omgwtfbbq')
   end
 
   describe "when creating venues" do
@@ -44,7 +44,7 @@ describe VenuesController do
   describe "when updating venues" do
     before do
       @venue = FactoryGirl.build(:venue, :versions => [])
-      Venue.stub!(:find).and_return(@venue)
+      Venue.stub(:find).and_return(@venue)
     end
 
     it "should stop evil robots" do
@@ -166,7 +166,7 @@ describe VenuesController do
       describe "with events" do
         before do
           @venue = FactoryGirl.build(:venue, :id => 123)
-          Venue.stub!(:find).and_return(@venue)
+          Venue.stub(:find).and_return(@venue)
         end
 
         it "should produce JSON" do
@@ -201,15 +201,15 @@ describe VenuesController do
         end
 
         it "should have a venue" do
-          response.should have_selector(".location .fn", :content => @venue.title)
+          response.body.should have_selector(".location .fn", text: @venue.title)
         end
 
         it "should have a future event" do
-          response.should have_selector("#events #future_events .summary", :content => @future_event.title)
+          response.body.should have_selector("#events #future_events .summary", text: @future_event.title)
         end
 
         it "should have a past event" do
-          response.should have_selector("#events #past_events .summary", :content => @past_event.title)
+          response.body.should have_selector("#events #past_events .summary", text: @past_event.title)
         end
       end
     end
