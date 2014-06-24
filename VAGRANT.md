@@ -9,7 +9,6 @@ Setup
 Setup Vagrant and its dependencies:
 
 1. Install Ruby: [http://www.ruby-lang.org/](http://www.ruby-lang.org/)
-2. Install Rubygems: [http://rubygems.org/pages/download](http://rubygems.org/pages/download)
 3. Install VirtualBox: [http://www.virtualbox.org/](http://www.virtualbox.org/)
 4. Install Vagrant:
 

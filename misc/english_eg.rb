@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'rubygems'
-
 # On-line algorithms
 require 'english/levenshtein'
 

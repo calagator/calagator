@@ -12,12 +12,12 @@ namespace :db do
       case adapter
       when 'sqlite3'
         source = struct.database
-        sh "sqlite3 #{shellescape source} .dump > #{shellescape target}"
+        sh "sqlite3 #{Shellwords.escape source} .dump > #{Shellwords.escape target}"
       when 'mysql'
-        sh "mysqldump --add-locks --create-options --disable-keys --extended-insert --quick --set-charset #{mysql_credentials_for struct} > #{shellescape target_tmp}"
+        sh "mysqldump --add-locks --create-options --disable-keys --extended-insert --quick --set-charset #{mysql_credentials_for struct} > #{Shellwords.escape target_tmp}"
         mv target_tmp, target
       when 'postgresql'
-        sh "pg_dump #{postgresql_credentials_for struct} --clean --no-owner --no-privileges --file #{shellescape target_tmp}"
+        sh "pg_dump #{postgresql_credentials_for struct} --clean --no-owner --no-privileges --file #{Shellwords.escape target_tmp}"
         mv target_tmp, target
       else
         raise ArgumentError, "Unknown database adapter: #{adapter}"
@@ -39,11 +39,11 @@ namespace :db do
         target = struct.database
         mv target, "#{target}.old" if File.exist?(target)
         # Ignore the "no such table: sqlite_sequence" errors
-        sh "sqlite3 #{shellescape target} < #{shellescape source} || true"
+        sh "sqlite3 #{Shellwords.escape target} < #{Shellwords.escape source} || true"
       when 'mysql'
-        sh "mysql #{mysql_credentials_for struct} < #{shellescape source}"
+        sh "mysql #{mysql_credentials_for struct} < #{Shellwords.escape source}"
       when 'postgresql'
-        sh "psql #{postgresql_credentials_for struct} < #{shellescape source}"
+        sh "psql #{postgresql_credentials_for struct} < #{Shellwords.escape source}"
       else
         raise ArgumentError, "Unknown database adapter: #{adapter}"
       end
@@ -51,25 +51,6 @@ namespace :db do
       Rake::Task['clear'].invoke
       Rake::Task['db:migrate'].invoke
     end
-  end
-
-  # Return string escaped for use in shell.
-  # Copied from MRI 1.8.7, earlier Ruby versions don't have this.
-  def shellescape(str)
-    # An empty argument will be skipped, so return empty quotes.
-    return "''" if str.empty?
-
-    str = str.dup
-
-    # Process as a single byte sequence because not all shell
-    # implementations are multibyte aware.
-    str.gsub!(/([^A-Za-z0-9_\-.,:\/@\n])/n, "\\\\\\1")
-
-    # A LF cannot be escaped with a backslash because a backslash + LF
-    # combo is regarded as line continuation and simply ignored.
-    str.gsub!(/\n/, "'\n'")
-
-    return str
   end
 
   # Return OpenStruct representing current environment's database.yml file.
@@ -88,20 +69,20 @@ namespace :db do
   # Return string with MySQL credentials for use on a command-line.
   def mysql_credentials_for(struct)
     result = []
-    result << "--user=#{shellescape struct.username}" if struct.username
-    result << "--password=#{shellescape struct.password}" if struct.password
-    result << "--host=#{shellescape struct.host}" if struct.host
-    result << "#{shellescape struct.database}"
+    result << "--user=#{Shellwords.escape struct.username}" if struct.username
+    result << "--password=#{Shellwords.escape struct.password}" if struct.password
+    result << "--host=#{Shellwords.escape struct.host}" if struct.host
+    result << "#{Shellwords.escape struct.database}"
     return result.join(' ')
   end
 
   # Return string with PostgreSQL credentials for use on a command-line.
   def postgresql_credentials_for(struct)
     result = []
-    result << "-U #{shellescape struct.username}" if struct.username
-    result << "-h #{shellescape struct.host}" if struct.host
-    result << "-p #{shellescape struct.port}" if struct.port
-    result << "#{shellescape struct.database}"
+    result << "-U #{Shellwords.escape struct.username}" if struct.username
+    result << "-h #{Shellwords.escape struct.host}" if struct.host
+    result << "-p #{Shellwords.escape struct.port}" if struct.port
+    result << "#{Shellwords.escape struct.database}"
     return result.join(' ')
   end
 end
