@@ -51,7 +51,6 @@ describe Event do
 
     it "should just cache tagging if it is a new record" do
       @event.should_not_receive :save
-      @event.should_not_receive :tag_with
       @event.should be_new_record
       @event.tag_list = @tags
       @event.tag_list.to_s.should eq @tags

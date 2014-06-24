@@ -21,7 +21,11 @@ describe SourceParser, "when reading content" do
 
   it "should unescape ATOM feeds" do
     content = "ATOM"
-    content.stub(:content_type).and_return("application/atom+xml")
+    # manually stub, because rspec's verifying doubles will complain that
+    # String#content_type doesn't really exist.
+    def content.content_type
+      "application/atom+xml"
+    end
 
     SourceParser::Base.should_receive(:read_url).and_return(content)
     CGI.should_receive(:unescapeHTML).and_return("42")

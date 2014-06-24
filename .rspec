@@ -1,3 +1,2 @@
---colour
---format progress
---backtrace
+--color
+--require spec_helper
