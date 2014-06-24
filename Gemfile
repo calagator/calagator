@@ -97,7 +97,8 @@ group :development, :test do
   gem 'rspec-rails', '3.0.1'
   gem 'capybara', '2.3.0'
   gem 'factory_girl_rails', '4.4.1'
-  gem 'spork', '~> 0.9.2'
+  gem 'spring', '1.1.3'
+  gem 'spring-commands-rspec', '1.0.2'
   gem 'database_cleaner', '~> 0.8.0'
 
   # Do not install these interactive libraries onto the continuous integration server.
@@ -111,7 +112,6 @@ group :development, :test do
     platforms :ruby_19, :ruby_20 do
       gem 'guard', '~> 1.3.0'
       gem 'guard-rspec', '~> 1.2.1'
-      gem 'guard-spork', '~> 1.1.0'
     end
 
     # Guard notifier
