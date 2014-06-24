@@ -100,13 +100,13 @@ class Event < ActiveRecord::Base
   # Return the title but strip out any whitespace.
   def title
     # TODO Generalize this code so we can use it on other attributes in the different model classes. The solution should use an #alias_method_chain to make sure it's not breaking any explicit overrides for an attribute.
-    return read_attribute(:title).to_s.strip
+    read_attribute(:title).to_s.strip
   end
 
   # Return description without those pesky carriage-returns.
   def description
     # TODO Generalize this code so we can reuse it on other attributes.
-    return read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
+    read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
   end
 
   if (table_exists? rescue nil)
@@ -116,14 +116,14 @@ class Event < ActiveRecord::Base
     # Set the start_time from one of a number of time values, a string, or an
     # array of strings.
     def start_time_with_smarter_setter=(value)
-      return self.class.set_time_on(self, :start_time, value)
+      self.class.set_time_on(self, :start_time, value)
     end
     alias_method_chain :start_time=, :smarter_setter
 
     # Set the end_time to the given +value+, which could be a Time, Date,
     # DateTime, String, Array of Strings, etc.
     def end_time_with_smarter_setter=(value)
-      return self.class.set_time_on(self, :end_time, value)
+      self.class.set_time_on(self, :end_time, value)
     end
     alias_method_chain :end_time=, :smarter_setter
   end
@@ -140,9 +140,9 @@ class Event < ActiveRecord::Base
       result = self.time_for(value)
     rescue Exception => e
       record.errors.add(attribute, "is invalid")
-      return record.send("#{attribute}_without_smarter_setter=", nil)
+      result = nil
     end
-    return record.send("#{attribute}_without_smarter_setter=", result)
+    record.send("#{attribute}_without_smarter_setter=", result)
   end
 
   # Returns time for the value, which can be a Time, Date, DateTime, String,
@@ -158,16 +158,14 @@ class Event < ActiveRecord::Base
     value = value.join(' ') if value.kind_of?(Array)
     case value
     when NilClass
-      return nil
+      nil
     when String
       # This can throw an exception
-      return value.present? ?
-        Time.zone.parse(value) :
-        nil
+      value.present? ? Time.zone.parse(value) : nil
     when Date, DateTime, ActiveSupport::TimeWithZone
-      return value.to_time
+      value.to_time
     when Time
-      return value # Accept as-is.
+      value # Accept as-is.
     else
       raise TypeError, "Unknown type #{value.class.to_s.inspect} with value #{value.inspect}"
     end
@@ -195,7 +193,7 @@ class Event < ActiveRecord::Base
       self.venue = nil
     end
 
-    return self.venue
+    self.venue
   end
 
   # Returns groups of records for the site overview screen in the following format:
@@ -235,17 +233,17 @@ class Event < ActiveRecord::Base
     # Find next item beyond the future_cuttoff for use in making links to it:
     times_to_events[:more] = Event.first(:conditions => ["start_time >= ?", future_cutoff], :order => 'start_time asc')
 
-    return times_to_events
+    times_to_events
   end
 
   # Return Hash of Events grouped by the +type+.
   def self.find_duplicates_by_type(type='na')
     case type.to_s.strip
     when 'na', ''
-      return { [] => self.future }
+      { [] => self.future }
     else
       kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
-      return self.find_duplicates_by(kind,
+      self.find_duplicates_by(kind,
         :grouped => true,
         :where => "a.start_time >= #{self.connection.quote(Time.now - 1.day)}")
     end
@@ -307,7 +305,7 @@ class Event < ActiveRecord::Base
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
     result[:error] = error
-    return result
+    result
   end
 
   # Return events grouped by their currentness. Accepts the same +args+ as
@@ -318,7 +316,7 @@ class Event < ActiveRecord::Base
     if events[:past] && opts[:order].to_s == "date"
       events[:past].reverse!
     end
-    return events
+    events
   end
 
   # Return +events+ grouped by currentness using a data structure like:
@@ -329,7 +327,7 @@ class Event < ActiveRecord::Base
   #   }
   def self.group_by_currentness(events)
     grouped = events.group_by(&:current?)
-    return {:current => grouped[true] || [], :past => grouped[false] || []}
+    {:current => grouped[true] || [], :past => grouped[false] || []}
   end
 
   #---[ Transformations ]-------------------------------------------------
@@ -349,7 +347,7 @@ class Event < ActiveRecord::Base
 
     duplicates = event.find_exact_duplicates
     event = duplicates.first.progenitor if duplicates
-    return event
+    event
   end
 
   # Returns an hCalendar string representing this Event.
@@ -443,7 +441,7 @@ EOF
     end
 
     # Add the calendar name, normalize line-endings to UNIX LF, then replace them with DOS CF-LF.
-    return icalendar.
+    icalendar.
       export.
       sub(/(CALSCALE:\w+)/i, "\\1\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH").
       gsub(/\r\n/,"\n").
@@ -477,14 +475,14 @@ EOF
     if self.end_time
       clone.end_time = self.class._clone_time_for_today(self.end_time)
     end
-    return clone
+    clone
   end
 
   # Return a time that's today but has the time-of-day component from the
   # +source+ time argument.
   def self._clone_time_for_today(source)
     today = Time.today
-    return Time.local(today.year, today.mon, today.day, source.hour, source.min, source.sec, source.usec)
+    Time.local(today.year, today.mon, today.day, source.hour, source.min, source.sec, source.usec)
   end
 
   #---[ Date related ]----------------------------------------------------
@@ -503,9 +501,9 @@ EOF
   # Returns an array of the dates spanned by the event.
   def dates
     if self.start_time && self.end_time
-      return (self.start_time.to_date..self.end_time.to_date).to_a
+      (self.start_time.to_date..self.end_time.to_date).to_a
     elsif self.start_time
-      return [self.start_time.to_date]
+      [self.start_time.to_date]
     else
       raise ArgumentError, "can't get dates for an event with no start time"
     end
@@ -514,13 +512,13 @@ EOF
   # Is this event current? Default cutoff is today
   def current?(cutoff=nil)
     cutoff ||= Time.today
-    return (self.end_time || self.start_time) >= cutoff
+    (self.end_time || self.start_time) >= cutoff
   end
 
   # Is this event old? Default cutoff is yesterday
   def old?(cutoff=nil)
     cutoff ||= Time.zone.now.midnight # midnight today is the end of yesterday
-    return (self.end_time || self.start_time + 1.hour) <= cutoff
+    (self.end_time || self.start_time + 1.hour) <= cutoff
   end
 
   # Did this event start before today but ends today or later?
@@ -534,9 +532,9 @@ EOF
 
   def duration
     if self.end_time && self.start_time
-      return (self.end_time - self.start_time)
+      (self.end_time - self.start_time)
     else
-      return 0
+      0
     end
   end
 
