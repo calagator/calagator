@@ -8,10 +8,9 @@ Setup
 You will need to:
 
   * [Install git](http://git-scm.com/), a distributed version control system. Read the [Github Git Guides](http://github.com/guides/home) to learn how to use *git*.
-  * [Install Ruby](http://www.ruby-lang.org/), a programming language. You can use MRI Ruby 1.8.7, or [Phusion REE (Ruby Enterprise Edition)](http://rubyenterpriseedition.com/). Your operating system may already have it installed or offer it as a pre-built package.
-  * [Install RubyGems](http://rubyforge.org/projects/rubygems/) 1.3.x or newer, a tool for managing software packages for Ruby.
+  * [Install Ruby](http://www.ruby-lang.org/), a programming language. You can use MRI Ruby 1.9.3+, or Rubinius 2.0+. Your operating system may already have it installed or offer it as a pre-built package.
   * [Install SQLite3](http://www.sqlite.org/), a database engine. Your operating system may already have it installed or offer it as a pre-built package.
-  * [Install Bundler](http://gembundler.com/), a Ruby dependency management tool. You should run `gem install bundler` as root or an administrator after installing Ruby and RubyGems.
+  * [Install Bundler](http://gembundler.com/), a Ruby dependency management tool. You should run `gem install bundler` as root or an administrator after installing Ruby.
   * Checkout the source code. Run `git clone git://github.com/calagator/calagator.git`, which will create a `calagator` directory with the source code. Go into this directory and run the remaining commands from there.
   * Install Bundler-managed gems, the actual libraries that this application uses, like Ruby on Rails. You should run `bundle`, which may take a long time to complete.
   * Optionally specify the theme to use, see the **Customizing** section for details.
@@ -49,7 +48,7 @@ To run Calagator in `production` mode, which runs more quickly, but doesn't relo
     bundle exec rake themes:create_cache
     ```
 
-The Calagator.org site runs on [Ubuntu Linux](http://ubuntu.com/), [Phusion REE (Ruby Enterprise Edition)](http://rubyenterpriseedition.com/) and [Phusion Passenger](http://www.modrails.com/).
+The Calagator.org site runs on [Ubuntu Linux](http://ubuntu.com/), [MRI Ruby](http://ruby-lang.org/) and [Phusion Passenger](http://www.modrails.com/).
 
 
 Customization

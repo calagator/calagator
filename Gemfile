@@ -21,13 +21,6 @@ end
 
 basedir = File.dirname(__FILE__)
 
-# Use "syck" YAML engine on Ruby 1.9.2 with early versions (e.g. p180) because
-# the default "psyche" engine is broken -- it doesn't support merge keys,
-# produce output it can't parse, etc.
-if defined?(Syck::Syck) and defined?(YAML::ENGINE)
-  YAML::ENGINE.yamler = 'syck'
-end
-
 # Database driver
 require 'erb'
 require 'yaml'
@@ -101,7 +94,7 @@ end
 group :development, :test do
   gem 'rspec-rails', '2.11.0'
   gem 'webrat', '0.7.3'
-  gem 'factory_girl_rails', '1.7.0' # 2.0 and above don't support Ruby 1.8.7 :(
+  gem 'factory_girl_rails', '1.7.0'
   gem 'spork', '~> 0.9.2'
   gem 'database_cleaner', '~> 0.8.0'
 
@@ -133,14 +126,16 @@ group :development, :test do
   #
   #   touch .dev && bundle
   if File.exist?(File.join(File.dirname(File.expand_path(__FILE__)), ".dev"))
-    platform :mri_18 do
-      gem 'ruby-debug'
-      gem 'rcov'
-    end
-
-    platforms :mri_19, :mri_20 do
+    platforms :mri_19 do
       gem 'debugger'
       gem 'debugger-ruby_core_source'
+    end
+
+    platforms :mri_20, :mri_21 do
+      gem 'byebug'
+    end
+
+    platforms :mri_19, :mri_20, :mri_21 do
       gem 'simplecov'
     end
 

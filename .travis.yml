@@ -1,24 +1,20 @@
 language: ruby
 rvm:
-  - 1.8.7
   - 1.9.3
   - 2.0.0
+  - 2.1.0
   - rbx-2
 
-  ## Don't test 1.9.2 because people shouldn't be using it.
-  # - 1.9.2
-
-  ## Don't test REE because it's compatible enough with 1.8.7.
-  # - ree
-
   ## JRuby is not compatible, see Gemfile for details.
-  # - jruby-18mode
   # - jruby-19mode
   # - jruby-head
 env:
-  - DB=mysql
-  - DB=postgresql
-  - DB=sqlite
+  global:
+    - BUNDLE_JOBS=4
+  matrix:
+    - DB=mysql
+    - DB=postgresql
+    - DB=sqlite
 before_install:
   - ruby ci/copy_database_config.rb
 before_script:
