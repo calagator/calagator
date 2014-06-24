@@ -24,7 +24,7 @@ describe SourceParser::Hcal, "with hCalendar events" do
   it "should strip html from the venue title" do
     hcal_content = read_sample('hcal_upcoming_v1.html')
     hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-    SourceParser::Base.stub!(:read_url).and_return(hcal_content)
+    SourceParser::Base.stub(:read_url).and_return(hcal_content)
     events = hcal_source.to_events
 
     events.first.venue.title.should eq 'Jive Software Office'
@@ -50,7 +50,7 @@ describe SourceParser::Hcal, "with hCalendar to AbstractLocation parsing" do
   it "should extract an AbstractLocation from an hCalendar text" do
     hcal_upcoming = read_sample('hcal_upcoming_v1.html')
 
-    SourceParser::Hcal.stub!(:read_url).and_return(hcal_upcoming)
+    SourceParser::Hcal.stub(:read_url).and_return(hcal_upcoming)
     abstract_events = SourceParser::Hcal.to_abstract_events(:url => "http://foo.bar/")
     abstract_event = abstract_events.first
     abstract_location = abstract_event.location

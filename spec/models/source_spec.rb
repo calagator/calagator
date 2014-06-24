@@ -126,6 +126,6 @@ describe Source, "find_or_create_from" do
     Source.should_receive(:find_or_create_by_url).and_return(record)
 
     result = Source.find_or_create_from(:url => @url, :reimport => true)
-    result.reimport.should be_true
+    result.reimport.should be_truthy
   end
 end

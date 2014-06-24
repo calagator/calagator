@@ -19,11 +19,11 @@ describe SourcesController do
         :duplicate_of_id => nil)
 
       @source = Source.new(:url => "http://my.url/")
-      @source.stub!(:save!).and_return(true)
-      @source.stub!(:to_events).and_return([@event])
+      @source.stub(:save!).and_return(true)
+      @source.stub(:to_events).and_return([@event])
 
-      Source.stub!(:new).and_return(@source)
-      Source.stub!(:find_or_create_by_url).and_return(@source)
+      Source.stub(:new).and_return(@source)
+      Source.stub(:find_or_create_by_url).and_return(@source)
     end
 
     it "should provide a way to create new sources" do
@@ -95,7 +95,7 @@ describe SourcesController do
 
     before(:each) do
       @source = mock_model(Source)
-      Source.stub!(:listing).and_return([@source])
+      Source.stub(:listing).and_return([@source])
     end
 
     def do_get
@@ -126,8 +126,8 @@ describe SourcesController do
   describe "handling GET /sources.xml" do
 
     before(:each) do
-      @sources = mock("Array of Sources", :to_xml => "XML")
-      Source.stub!(:find).and_return(@sources)
+      @sources = double("Array of Sources", :to_xml => "XML")
+      Source.stub(:find).and_return(@sources)
     end
 
     def do_get
@@ -164,7 +164,7 @@ describe SourcesController do
 
     before(:each) do
       @source = mock_model(Source)
-      Source.stub!(:find).and_return(@source)
+      Source.stub(:find).and_return(@source)
     end
 
     def do_get
@@ -196,7 +196,7 @@ describe SourcesController do
 
     before(:each) do
       @source = mock_model(Source, :to_xml => "XML")
-      Source.stub!(:find).and_return(@source)
+      Source.stub(:find).and_return(@source)
     end
 
     def do_get
@@ -225,7 +225,7 @@ describe SourcesController do
 
     before(:each) do
       @source = mock_model(Source)
-      Source.stub!(:new).and_return(@source)
+      Source.stub(:new).and_return(@source)
     end
 
     def do_get
@@ -262,7 +262,7 @@ describe SourcesController do
 
     before(:each) do
       @source = mock_model(Source)
-      Source.stub!(:find).and_return(@source)
+      Source.stub(:find).and_return(@source)
     end
 
     def do_get
@@ -294,7 +294,7 @@ describe SourcesController do
 
     before(:each) do
       @source = mock_model(Source, :to_param => "1")
-      Source.stub!(:new).and_return(@source)
+      Source.stub(:new).and_return(@source)
     end
 
     describe "with successful save" do
@@ -335,7 +335,7 @@ describe SourcesController do
 
     before(:each) do
       @source = mock_model(Source, :to_param => "1")
-      Source.stub!(:find).and_return(@source)
+      Source.stub(:find).and_return(@source)
     end
 
     describe "with successful update" do
@@ -386,7 +386,7 @@ describe SourcesController do
 
     before(:each) do
       @source = mock_model(Source, :destroy => true)
-      Source.stub!(:find).and_return(@source)
+      Source.stub(:find).and_return(@source)
     end
 
     def do_delete

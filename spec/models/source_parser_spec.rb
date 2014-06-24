@@ -12,8 +12,8 @@ describe SourceParser, "when reading content" do
   it "should read from a wacky URL" do
     uri = URI.parse('fake')
     # please retain space betwen "?" and ")" on following line; it avoids a SciTE issue
-    uri.should_receive(:respond_to? ).any_number_of_times.and_return(false)
-    URI.should_receive(:parse).any_number_of_times.and_return(uri)
+    uri.stub(:respond_to? ).and_return(false)
+    URI.stub(:parse).and_return(uri)
 
     error_type = RUBY_PLATFORM.match(/mswin/) ? Errno::EINVAL : Errno::ENOENT
     lambda { SourceParser.read_url("not://a.real/~url") }.should raise_error(error_type)
@@ -81,7 +81,7 @@ describe SourceParser, "checking duplicates when importing" do
         <abbr class="summary" title="Bastille Day"></abbr>
         <abbr class="location" title="Arc de Triomphe"></abbr>
       </div>})
-      SourceParser::Base.stub!(:read_url).and_return(@cal_content)
+      SourceParser::Base.stub(:read_url).and_return(@cal_content)
       @abstract_events = @cal_source.to_events
       @created_events = @cal_source.create_events!(:skip_old => false)
     end
@@ -91,12 +91,12 @@ describe SourceParser, "checking duplicates when importing" do
     end
 
     it "should create only one event" do
-      pending "Fails because code checks imported calendar for duplicates against only saved objects, but not against itself. TODO: fix code. See Issue241"
+      skip "Fails because code checks imported calendar for duplicates against only saved objects, but not against itself. TODO: fix code. See Issue241"
       @created_events.size.should eq 1
     end
 
     it "should create only one venue" do
-      pending "Fails because code checks imported calendar for duplicates against only saved objects, but not against itself. TODO: fix code. See Issue241"
+      skip "Fails because code checks imported calendar for duplicates against only saved objects, but not against itself. TODO: fix code. See Issue241"
       Venue.find(:all).size.should eq @venue_size_before_import + 1
     end
   end
@@ -105,7 +105,7 @@ describe SourceParser, "checking duplicates when importing" do
     it "should retrieve an existing event if it's an exact duplicate" do
       hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
       hcal_content = read_sample('hcal_event_duplicates_fixture.xml')
-      SourceParser::Base.stub!(:read_url).and_return(hcal_content)
+      SourceParser::Base.stub(:read_url).and_return(hcal_content)
 
       event = hcal_source.to_events.first
       event.save!
@@ -122,7 +122,7 @@ describe SourceParser, "checking duplicates when importing" do
         <abbr class="dtstart" title="20080714"></abbr>
         </div>
       HERE
-      SourceParser::Base.stub!(:read_url).and_return(cal_content)
+      SourceParser::Base.stub(:read_url).and_return(cal_content)
 
       cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
       imported_event = cal_source.create_events!(:skip_old => false).first
@@ -150,7 +150,7 @@ describe SourceParser, "checking duplicates when importing" do
           <abbr class="location" title="Bastille"></abbr>
         </div>
       HERE
-      SourceParser::Base.stub!(:read_url).and_return(cal_content)
+      SourceParser::Base.stub(:read_url).and_return(cal_content)
 
       cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
       @parsed_events  = cal_source.to_events
@@ -189,7 +189,7 @@ describe SourceParser, "checking duplicates when importing" do
       </div>
     HERE
 
-    SourceParser::Base.stub!(:read_url).and_return(cal_content)
+    SourceParser::Base.stub(:read_url).and_return(cal_content)
 
     source = Source.new(
       :title => "Event with squashed venue",
@@ -203,7 +203,7 @@ describe SourceParser, "checking duplicates when importing" do
     venue = Venue.create!(:title => "Custom Urban Airship", :tag_list => "plancast:place=1520153")
 
     content = read_sample('plancast.json')
-    SourceParser::Base.stub!(:read_url).and_return("this content doesn't matter")
+    SourceParser::Base.stub(:read_url).and_return("this content doesn't matter")
     HTTParty.should_receive(:get).and_return(MultiJson.decode(content))
 
     source = Source.new(
@@ -227,7 +227,7 @@ describe SourceParser, "checking duplicates when importing" do
           other_parser.should_not_receive :to_abstract_events
         end
 
-        SourceParser::Base.stub!(:read_url).and_return("this content doesn't matter")
+        SourceParser::Base.stub(:read_url).and_return("this content doesn't matter")
         Source.new(:title => parser_name, :url => url).to_events
       end
     end
