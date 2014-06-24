@@ -157,6 +157,7 @@ group :assets do
   gem 'sass', '~> 3.2.14'
   # gem 'coffee-rails', '~> 3.2.1'
 
+  gem 'execjs', '2.0.2'
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platforms => :ruby
 
