@@ -9,9 +9,12 @@ rvm:
   # - jruby-19mode
   # - jruby-head
 env:
-  - DB=mysql
-  - DB=postgresql
-  - DB=sqlite
+  global:
+    - BUNDLE_JOBS=4
+  matrix:
+    - DB=mysql
+    - DB=postgresql
+    - DB=sqlite
 before_install:
   - ruby ci/copy_database_config.rb
 before_script:
