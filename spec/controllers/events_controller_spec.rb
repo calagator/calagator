@@ -597,9 +597,6 @@ describe EventsController do
 
       it "should allow the user to preview the event" do
         tags = []
-        # manually stub, because rspec's verifying doubles will complain that
-        # Array#reload doesn't really exist.
-        def tags.reload; end
         tags.should_receive(:reload)
 
         Event.should_receive(:find).and_return(@event)
