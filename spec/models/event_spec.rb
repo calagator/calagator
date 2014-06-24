@@ -15,19 +15,19 @@ describe Event do
 
   describe "when checking time status" do
     it "should be old if event ended before today" do
-      Factory.build(:event, :start_time => today - 1.hour).should be_old
+      FactoryGirl.build(:event, :start_time => today - 1.hour).should be_old
     end
 
     it "should be current if event is happening today" do
-      Factory.build(:event, :start_time => today + 1.hour).should be_current
+      FactoryGirl.build(:event, :start_time => today + 1.hour).should be_current
     end
 
     it "should be ongoing if it began before today but ends today or later" do
-      Factory.build(:event, :start_time => today - 1.day, :end_time => today + 1.day).should be_ongoing
+      FactoryGirl.build(:event, :start_time => today - 1.day, :end_time => today + 1.day).should be_ongoing
     end
 
     it "should be considered a multi-day event if it spans multiple days" do
-      Factory.build(:event, :start_time => today - 1.day, :end_time => now + 1.day).should be_multiday
+      FactoryGirl.build(:event, :start_time => today - 1.day, :end_time => now + 1.day).should be_multiday
     end
 
     it "should be considered a multi-day event if it crosses a day boundry and is longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
@@ -295,7 +295,7 @@ describe Event do
     end
 
     it "should flag an invalid time" do
-      event = Factory.build(:event)
+      event = FactoryGirl.build(:event)
       event.start_time = "1/0"
       event.errors[:start_time].should be_present
     end
@@ -533,8 +533,8 @@ describe Event do
 
   describe "when associating with venues" do
     before do
-      @event = Factory(:event)
-      @venue = Factory(:venue)
+      @event = FactoryGirl.create(:event)
+      @venue = FactoryGirl.create(:venue)
     end
 
     it "should not change a venue to a nil venue" do
@@ -546,7 +546,7 @@ describe Event do
     end
 
     it "should change an existing venue to a different one" do
-      @event.venue = Factory(:venue, :duplicate_of => @venue)
+      @event.venue = FactoryGirl.create(:venue, :duplicate_of => @venue)
 
       @event.associate_with_venue(@venue).should eq @venue
     end
@@ -569,8 +569,8 @@ describe Event do
     end
 
     it "should raise an exception if there's a loop in the duplicates chain" do
-      venue1 = Factory(:venue)
-      venue2 = Factory(:venue, :duplicate_of => venue1)
+      venue1 = FactoryGirl.create(:venue)
+      venue2 = FactoryGirl.create(:venue, :duplicate_of => venue1)
       venue1.update_attribute(:duplicate_of, venue2)
 
       lambda { @event.associate_with_venue(venue1.id) }.should raise_error DuplicateCheckingError
@@ -615,8 +615,8 @@ describe Event do
 
     describe "with sample records" do
       before do
-        @non_duplicate_event = Factory(:event)
-        @duplicate_event = Factory(:duplicate_event)
+        @non_duplicate_event = FactoryGirl.create(:event)
+        @duplicate_event = FactoryGirl.create(:duplicate_event)
         @events = [@non_duplicate_event, @duplicate_event]
       end
 
@@ -636,7 +636,7 @@ describe Event do
 
   describe "with finding duplicates (integration test)" do
     before do
-      @event = Factory(:event)
+      @event = FactoryGirl.create(:event)
     end
 
     # Find duplicates, create another event with the given attributes, and find duplicates again
@@ -689,7 +689,7 @@ describe Event do
 
   describe "when squashing duplicates (integration test)" do
     before do
-      @event = Factory(:event)
+      @event = FactoryGirl.create(:event)
     end
 
     it "should consolidate associations, and merge tags" do
@@ -796,7 +796,7 @@ describe Event do
 
   describe "when cloning" do
     let :original do
-      Factory.build(:event,
+      FactoryGirl.build(:event,
         :id => 42,
         :start_time => Time.parse("2008-01-19 10:00 PST"),
         :end_time => Time.parse("2008-01-19 17:00 PST"),
@@ -834,11 +834,11 @@ describe Event do
     end
 
     it "should produce parsable iCal output" do
-      lambda { ical_roundtrip( Factory.build(:event) ) }.should_not raise_error
+      lambda { ical_roundtrip( FactoryGirl.build(:event) ) }.should_not raise_error
     end
 
     it "should represent an event without an end time as a 1-hour block" do
-      event = Factory.build(:event, :start_time => now, :end_time => nil)
+      event = FactoryGirl.build(:event, :start_time => now, :end_time => nil)
       event.end_time.should be_blank
 
       rt = ical_roundtrip(event)
@@ -846,14 +846,14 @@ describe Event do
     end
 
     it "should set the appropriate end time if one is given" do
-      event = Factory.build(:event, :start_time => now, :end_time => now + 2.hours)
+      event = FactoryGirl.build(:event, :start_time => now, :end_time => now + 2.hours)
 
       rt = ical_roundtrip(event)
       (rt.dtend - rt.dtstart).should eq 2.hours
     end
 
     describe "when comparing Event's attributes to its iCalendar output" do
-      let(:event) { Factory.build(:event, :id => 123, :created_at => now) }
+      let(:event) { FactoryGirl.build(:event, :id => 123, :created_at => now) }
       let(:ical) { ical_roundtrip(event) }
 
       { :summary => :title,
@@ -880,34 +880,34 @@ describe Event do
     end
 
     it "should call the URL helper to generate a UID" do
-      event = Factory.build(:event)
+      event = FactoryGirl.build(:event)
       ical_roundtrip(event, :url_helper => lambda {|e| "UID'D!" }).uid.should eq "UID'D!"
     end
 
     it "should strip HTML from the description" do
-      event = Factory(:event, :description => "<blink>OMFG HTML IS TEH AWESOME</blink>")
+      event = FactoryGirl.create(:event, :description => "<blink>OMFG HTML IS TEH AWESOME</blink>")
       ical_roundtrip(event).description.should_not include "<blink>"
     end
 
     it "should include tags in the description" do
-      event = Factory.build(:event)
+      event = FactoryGirl.build(:event)
       event.tag_list = "tags, folksonomy, categorization"
       ical_roundtrip(event).description.should include event.tag_list.to_s
     end
 
     it "should leave URL blank if no URL is provided" do
-      event = Factory.build(:event, :url => nil)
+      event = FactoryGirl.build(:event, :url => nil)
       ical_roundtrip(event).url.should be_nil
     end
 
     it "should have Source URL if URL helper is given)" do
-      event = Factory.build(:event)
+      event = FactoryGirl.build(:event)
       ical_roundtrip(event, :url_helper => lambda{|e| "FAKE"} ).description.should match /FAKE/
     end
 
     it "should create multi-day entries for multi-day events" do
       time = Time.now
-      event = Factory.build(:event, :start_time => time, :end_time => time + 4.days)
+      event = FactoryGirl.build(:event, :start_time => time, :end_time => time + 4.days)
       parsed_event = ical_roundtrip( event )
 
       start_time = Date.today
@@ -921,13 +921,13 @@ describe Event do
       end
 
       it "should set an initial sequence on a new event" do
-        event = Factory(:event)
+        event = FactoryGirl.create(:event)
         ical = event_to_ical(event)
         ical.sequence.should eq 1
       end
 
       it "should increment the sequence if it is updated" do
-        event = Factory(:event)
+        event = FactoryGirl.create(:event)
         event.update_attribute(:title, "Update 1")
         ical = event_to_ical(event)
         ical.sequence.should eq 2
@@ -935,7 +935,7 @@ describe Event do
 
       # it "should offset the squence based the global SECRETS.icalendar_sequence_offset" do
         # SECRETS.should_receive(:icalendar_sequence_offset).and_return(41)
-        # event = Factory.build(:event)
+        # event = FactoryGirl.build(:event)
         # ical = event_to_ical(event)
         # ical.sequence.should eq 42
       # end
@@ -943,7 +943,7 @@ describe Event do
 
     describe "- the headers" do
       before do
-        @data = Factory.build(:event).to_ical
+        @data = FactoryGirl.build(:event).to_ical
       end
 
       it "should include the calendar name" do

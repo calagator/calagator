@@ -27,8 +27,8 @@ describe EventsController do
 
       describe "with events" do
         before do
-          Factory(:event_with_venue)
-          Factory(:event_with_venue)
+          FactoryGirl.create(:event_with_venue)
+          FactoryGirl.create(:event_with_venue)
 
           get :index, :format => "xml"
 
@@ -78,7 +78,7 @@ describe EventsController do
 
       describe "with events" do
         before do
-          @event = Factory(:event_with_venue)
+          @event = FactoryGirl.create(:event_with_venue)
           @venue = @event.venue
 
           post :index, :format => "json"
@@ -124,8 +124,8 @@ describe EventsController do
 
       describe "with events" do
         before do
-          Factory(:event_with_venue)
-          Factory(:event_with_venue)
+          FactoryGirl.create(:event_with_venue)
+          FactoryGirl.create(:event_with_venue)
 
           post :index, :format => "atom"
 
@@ -174,8 +174,8 @@ describe EventsController do
 
       describe "with events" do
         before do
-          @current_event = Factory(:event, :start_time => today + 1.hour)
-          @past_event = Factory(:event, :start_time => today - 1.hour)
+          @current_event = FactoryGirl.create(:event, :start_time => today + 1.hour)
+          @past_event = FactoryGirl.create(:event, :start_time => today - 1.hour)
 
           post :index, :format => "ics"
         end
@@ -297,7 +297,7 @@ describe EventsController do
     end
 
     it "should redirect from a duplicate event to its master" do
-      master = Factory.build(:event, :id => 4321)
+      master = FactoryGirl.build(:event, :id => 4321)
       event = Event.new(:start_time => now, :duplicate_of => master)
       Event.should_receive(:find).and_return(event)
 
@@ -328,8 +328,8 @@ describe EventsController do
         "end_time"       => "",
         "start_time"     => ""
       }.with_indifferent_access
-      @venue = Factory.build(:venue, :id => 12)
-      @event = Factory.build(:event, :id => 34, :venue => @venue)
+      @venue = FactoryGirl.build(:venue, :id => 12)
+      @event = FactoryGirl.build(:event, :id => 34, :venue => @venue)
     end
 
     describe "#new" do
@@ -463,7 +463,7 @@ describe EventsController do
       end
 
       it "should create an event for an existing venue" do
-        venue = Factory(:venue)
+        venue = FactoryGirl.create(:venue)
 
         post "create",
           :start_time => now.strftime("%Y-%m-%d"),
@@ -488,7 +488,7 @@ describe EventsController do
 
     describe "#update" do
       before(:each) do
-        @event = Factory.build(:event_with_venue, :id => 42)
+        @event = FactoryGirl.build(:event_with_venue, :id => 42)
         @venue = @event.venue
         @params.merge!(:id => 42)
         Event.stub!(:find).and_return(@event)
@@ -613,7 +613,7 @@ describe EventsController do
 
     describe "#clone" do
       before do
-        @event = Factory(:event)
+        @event = FactoryGirl.create(:event)
 
         Event.stub!(:find).and_return(@event)
 
@@ -648,11 +648,11 @@ describe EventsController do
     render_views
 
     it "should find current duplicates and not past duplicates" do
-      current_master = Factory(:event, :title => "Current")
-      current_duplicate = Factory(:event, :title => current_master.title)
+      current_master = FactoryGirl.create(:event, :title => "Current")
+      current_duplicate = FactoryGirl.create(:event, :title => current_master.title)
 
-      past_master = Factory(:event, :title => "Past", :start_time => now - 2.days)
-      past_duplicate = Factory(:event, :title => past_master.title, :start_time => now - 1.day)
+      past_master = FactoryGirl.create(:event, :title => "Past", :start_time => now - 2.days)
+      past_duplicate = FactoryGirl.create(:event, :title => past_master.title, :start_time => now - 1.day)
 
       get 'duplicates', :type => 'title'
 
@@ -667,8 +667,8 @@ describe EventsController do
     end
 
     it "should redirect duplicate events to their master" do
-      event_master = Factory(:event)
-      event_duplicate = Factory(:event)
+      event_master = FactoryGirl.create(:event)
+      event_duplicate = FactoryGirl.create(:event)
 
       get 'show', :id => event_duplicate.id
       response.should_not be_redirect
@@ -738,9 +738,9 @@ describe EventsController do
     describe "when returning results" do
       render_views
 
-      let(:current_event) { Factory(:event_with_venue) }
-      let(:current_event_2) { Factory(:event_with_venue) }
-      let(:past_event) { Factory(:event_with_venue) }
+      let(:current_event) { FactoryGirl.create(:event_with_venue) }
+      let(:current_event_2) { FactoryGirl.create(:event_with_venue) }
+      let(:past_event) { FactoryGirl.create(:event_with_venue) }
       let(:results) do
         {
           :current => [current_event, current_event_2],
@@ -856,7 +856,7 @@ describe EventsController do
 
   describe "#destroy" do
     it "should destroy events" do
-      event = Factory.build(:event)
+      event = FactoryGirl.build(:event)
       event.should_receive(:destroy)
       Event.should_receive(:find).and_return(event)
 

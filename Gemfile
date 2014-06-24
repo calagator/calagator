@@ -94,7 +94,7 @@ end
 group :development, :test do
   gem 'rspec-rails', '2.11.0'
   gem 'webrat', '0.7.3'
-  gem 'factory_girl_rails', '1.7.0'
+  gem 'factory_girl_rails', '4.4.1'
   gem 'spork', '~> 0.9.2'
   gem 'database_cleaner', '~> 0.8.0'
 

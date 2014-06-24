@@ -27,7 +27,7 @@ describe VersionsController do
       @update_title = "myevent v2"
       @final_title = "myevent v3"
 
-      @event = Factory(:event, :title => @create_title)
+      @event = FactoryGirl.create(:event, :title => @create_title)
 
       @event.title = @update_title
       @event.save!
