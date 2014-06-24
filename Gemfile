@@ -58,24 +58,16 @@ gem 'ri_cal', '0.8.8'
 gem 'rubyzip', '0.9.9', :require =>  'zip/zip'
 gem 'will_paginate', '3.0.5'
 gem 'httparty', '0.11.0'
-gem 'multi_json' # Use whichever version 'httparty' wants, needed for our specs
 gem 'loofah', '1.2.1'
-# NOTE: 'loofah-activerecord' doesn't support Rails 3.2, so use my fork:
-gem 'loofah-activerecord', :git => 'git://github.com/igal/loofah-activerecord.git', :branch => 'with_rails_3.1_and_3.2'
+gem 'loofah-activerecord', '1.1.0'
 gem 'bluecloth', '2.2.0'
 gem 'formtastic', '2.2.1'
-# validation_reflection 1.0.0 doesn't support Rails 3.2, so use unofficial patches:
-#gem 'validation_reflection', :git => 'git://github.com/ncri/validation_reflection.git', :ref => '60320e6beb088808fd625a8d958dbd0d2661d494'
 gem 'acts-as-taggable-on', '2.4.1'
 gem 'jquery-rails', '1.0.19'
 gem 'progress_bar', '1.0.0'
 gem 'exception_notification', '2.6.1'
 gem 'font-awesome-rails', '3.2.1.3'
-
-# gem 'paper_trail_manager', :git => 'https://github.com/igal/paper_trail_manager.git'
-# gem 'paper_trail_manager', :path => '../paper_trail_manager'
 gem 'paper_trail_manager', '>= 0.2.0'
-
 gem 'utf8-cleaner', '~> 0.0.6'
 
 platform :jruby do
