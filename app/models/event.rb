@@ -137,7 +137,7 @@ class Event < ActiveRecord::Base
   # @return [Time]
   def self.set_time_on(record, attribute, value)
     begin
-      result = self.time_for(value)
+      result = time_for(value)
     rescue Exception => e
       record.errors.add(attribute, "is invalid")
       result = nil
@@ -175,25 +175,25 @@ class Event < ActiveRecord::Base
 
   # Associate this event with the +venue+. The +venue+ can be given as a Venue
   # instance, an ID, or a title.
-  def associate_with_venue(venue)
-    venue = \
-      case venue
-      when Venue    then venue
+  def associate_with_venue(new_venue)
+    new_venue = \
+      case new_venue
+      when Venue    then new_venue
       when NilClass then nil
-      when String   then Venue.find_or_initialize_by_title(venue)
-      when Fixnum   then Venue.find(venue)
-      else raise TypeError, "Unknown type: #{venue.class}"
+      when String   then Venue.find_or_initialize_by_title(new_venue)
+      when Fixnum   then Venue.find(new_venue)
+      else raise TypeError, "Unknown type: #{new_venue.class}"
       end
 
-    if venue && ((self.venue && self.venue != venue) || (!self.venue))
+    if new_venue && ((venue && venue != new_venue) || (!venue))
       # Set venue if one is provided and it's different than the current, or no venue is currently set.
-      self.venue = venue.progenitor
-    elsif !venue && self.venue
+      self.venue = new_venue.progenitor
+    elsif !new_venue && venue
       # Clear the event's venue field
       self.venue = nil
     end
 
-    self.venue
+    venue
   end
 
   # Returns groups of records for the site overview screen in the following format:
@@ -219,7 +219,7 @@ class Event < ActiveRecord::Base
 
     # Find all events between today and future_cutoff, sorted by start_time
     # includes events any part of which occurs on or after today through on or after future_cutoff
-    overview_events = self.non_duplicates.within_dates(today, future_cutoff)
+    overview_events = non_duplicates.within_dates(today, future_cutoff)
     overview_events.each do |event|
       if event.start_time < tomorrow
         times_to_events[:today]    << event
@@ -240,12 +240,12 @@ class Event < ActiveRecord::Base
   def self.find_duplicates_by_type(type='na')
     case type.to_s.strip
     when 'na', ''
-      { [] => self.future }
+      { [] => future }
     else
       kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
-      self.find_duplicates_by(kind,
+      find_duplicates_by(kind,
         :grouped => true,
-        :where => "a.start_time >= #{self.connection.quote(Time.now - 1.day)}")
+        :where => "a.start_time >= #{connection.quote(Time.now - 1.day)}")
     end
   end
 
@@ -301,7 +301,7 @@ class Event < ActiveRecord::Base
       error = "Unknown ordering option #{opts[:order].inspect}, sorting by date instead."
     end
 
-    result = self.group_by_currentness(self.includes(:venue).tagged_with(tag, tagged_with_opts))
+    result = group_by_currentness(includes(:venue).tagged_with(tag, tagged_with_opts))
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
     result[:error] = error
@@ -312,7 +312,7 @@ class Event < ActiveRecord::Base
   # #search. The results hash is keyed by whether the event is current
   # (true/false) and the values are arrays of events.
   def self.search_keywords_grouped_by_currentness(query, opts={})
-    events = self.group_by_currentness(self.search(query, opts))
+    events = group_by_currentness(search(query, opts))
     if events[:past] && opts[:order].to_s == "date"
       events[:past].reverse!
     end
@@ -453,8 +453,8 @@ EOF
   end
 
   def normalize_url!
-    unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
-      self.url = 'http://' + self.url
+    unless url.blank? || url.match(/^[\d\D]+:\/\//)
+      self.url = 'http://' + url
     end
   end
 
@@ -467,13 +467,13 @@ EOF
   def to_clone
     clone = self.class.new
     for attribute in CLONE_ATTRIBUTES
-      clone.send("#{attribute}=", self.send(attribute))
+      clone.send("#{attribute}=", send(attribute))
     end
-    if self.start_time
-      clone.start_time = self.class._clone_time_for_today(self.start_time)
+    if start_time
+      clone.start_time = self.class._clone_time_for_today(start_time)
     end
-    if self.end_time
-      clone.end_time = self.class._clone_time_for_today(self.end_time)
+    if end_time
+      clone.end_time = self.class._clone_time_for_today(end_time)
     end
     clone
   end
@@ -489,10 +489,10 @@ EOF
 
   # Returns a range of time spanned by the event.
   def time_range
-    if self.start_time && self.end_time
-      self.start_time..self.end_time
-    elsif self.start_time
-      self.start_time..(self.start_time + 1.hour)
+    if start_time && end_time
+      start_time..end_time
+    elsif start_time
+      start_time..(start_time + 1.hour)
     else
       raise ArgumentError, "can't get a time range for an event with no start time"
     end
@@ -500,10 +500,10 @@ EOF
 
   # Returns an array of the dates spanned by the event.
   def dates
-    if self.start_time && self.end_time
-      (self.start_time.to_date..self.end_time.to_date).to_a
-    elsif self.start_time
-      [self.start_time.to_date]
+    if start_time && end_time
+      (start_time.to_date..end_time.to_date).to_a
+    elsif start_time
+      [start_time.to_date]
     else
       raise ArgumentError, "can't get dates for an event with no start time"
     end
@@ -512,27 +512,27 @@ EOF
   # Is this event current? Default cutoff is today
   def current?(cutoff=nil)
     cutoff ||= Time.today
-    (self.end_time || self.start_time) >= cutoff
+    (end_time || start_time) >= cutoff
   end
 
   # Is this event old? Default cutoff is yesterday
   def old?(cutoff=nil)
     cutoff ||= Time.zone.now.midnight # midnight today is the end of yesterday
-    (self.end_time || self.start_time + 1.hour) <= cutoff
+    (end_time || start_time + 1.hour) <= cutoff
   end
 
   # Did this event start before today but ends today or later?
   def ongoing?
-    self.start_time < Time.today && self.end_time && self.end_time >= Time.today
+    start_time < Time.today && end_time && end_time >= Time.today
   end
 
   def multiday?
-    ( self.dates.size > 1 ) && ( self.duration.seconds > MIN_MULTIDAY_DURATION )
+    ( dates.size > 1 ) && ( duration.seconds > MIN_MULTIDAY_DURATION )
   end
 
   def duration
-    if self.end_time && self.start_time
-      (self.end_time - self.start_time)
+    if end_time && start_time
+      (end_time - start_time)
     else
       0
     end
