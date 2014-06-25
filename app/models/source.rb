@@ -67,7 +67,7 @@ class Source < ActiveRecord::Base
   def create_events!(opts={})
     cutoff = Time.now.yesterday # All events before this date will be skipped
     events = []
-    for event in self.to_events(opts)
+    self.to_events(opts).each do |event|
       if opts[:skip_old]
         next if event.title.blank? && event.description.blank? && event.url.blank?
         next if event.old?

@@ -388,7 +388,7 @@ EOF
 
     icalendar = RiCal.Calendar do |calendar|
       calendar.prodid = "-//Calagator//EN"
-      for item in events
+      events.each do |item|
         calendar.event do |entry|
           entry.summary(item.title || 'Untitled Event')
 
@@ -466,7 +466,7 @@ EOF
   # their time-of-day is set to the original record's time-of-day.
   def to_clone
     clone = self.class.new
-    for attribute in CLONE_ATTRIBUTES
+    CLONE_ATTRIBUTES.each do |attribute| 
       clone.send("#{attribute}=", send(attribute))
     end
     if start_time
