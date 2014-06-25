@@ -220,7 +220,7 @@ module DuplicateChecking
 
       squashed = []
 
-      for duplicate in duplicates
+      duplicates.each do |duplicate|
         duplicate = _record_for(duplicate)
 
         next if !master.new_record? && !duplicate.new_record? && duplicate.id == master.id
@@ -246,7 +246,7 @@ module DuplicateChecking
           end
 
           foreign_objects = duplicate.send(association.name)
-          for object in foreign_objects
+          foreign_objects.each do |object|
             object.update_attribute(association.foreign_key, master.id) unless object.new_record?
             Rails.logger.debug(%{#{self.name}#squash: transferring foreign object "#{object.class.name}##{object.id}" from duplicate "#{self.name}##{duplicate.id}" to master "#{self.name}##{master.id}" via association "#{association.name}" using attribute "#{association.foreign_key}"})
           end

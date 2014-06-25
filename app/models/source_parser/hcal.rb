@@ -101,13 +101,13 @@ class SourceParser
           end
 
           if raw.respond_to?(:geo)
-            for field in %w(latitude longitude)
+            %w(latitude longitude).each do |field|
               a[field] = raw.geo.send(field) if raw.geo.respond_to?(field)
             end
           end
 
           if raw.respond_to?(:adr)
-            for field in %w(street_address locality region country_name postal_code)
+            %w(street_address locality region country_name postal_code).each do |field|
               case field
               when 'country_name'
                 a[:country] = raw.adr.send(field) if raw.adr.respond_to?(field)
