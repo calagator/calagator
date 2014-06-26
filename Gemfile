@@ -19,8 +19,6 @@ unless defined?($BUNDLER_INTERPRETER_CHECKED)
   $BUNDLER_INTERPRETER_CHECKED = true
 end
 
-basedir = File.dirname(__FILE__)
-
 # Database driver
 require 'erb'
 require 'yaml'
@@ -157,7 +155,7 @@ group :assets do
 end
 
 # Some dependencies are activated through server settings.
-require "#{basedir}/lib/secrets_reader"
+require "./lib/secrets_reader"
 secrets = SecretsReader.read(:silent => true)
 case secrets.search_engine
 when 'sunspot'
