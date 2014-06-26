@@ -26,8 +26,8 @@ class VenuesController < ApplicationController
       scoped_venues = scoped_venues.with_public_wifi if params[:wifi]
 
       if params[:term].present? # for the ajax autocomplete widget
-        conditions = ["title LIKE :query", {:query => "%#{params[:term]}%"}]
-        @venues = scoped_venues.find(:all, :order => 'lower(title)', :conditions => conditions)
+        conditions = ["title LIKE ?", "%#{params[:term]}%"]
+        @venues = scoped_venues.where(conditions).order('LOWER(title)')
       elsif params[:query].present?
         @venues = Venue.search(params[:query], :include_closed => params[:include_closed], :wifi => params[:wifi])
       else
