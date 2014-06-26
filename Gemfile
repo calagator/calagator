@@ -111,7 +111,7 @@ group :development, :test do
   # activate them, create a `.dev` file and rerun Bundler, e.g.:
   #
   #   touch .dev && bundle
-  if File.exist?(File.join(File.dirname(File.expand_path(__FILE__)), ".dev"))
+  if File.exist?(".dev")
     platforms :mri_19 do
       gem 'debugger'
       gem 'debugger-ruby_core_source'
