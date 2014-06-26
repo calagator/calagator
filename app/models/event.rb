@@ -65,6 +65,9 @@ class Event < ActiveRecord::Base
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
 
   # Named scopes
+  scope :after_date, lambda { |date|
+    where(["start_time >= ?", date]).order(:start_time)
+  }
   scope :on_or_after_date, lambda { |date|
     time = date.beginning_of_day
     where("(start_time >= :time) OR (end_time IS NOT NULL AND end_time > :time)",
@@ -231,7 +234,7 @@ class Event < ActiveRecord::Base
     end
 
     # Find next item beyond the future_cuttoff for use in making links to it:
-    times_to_events[:more] = Event.first(:conditions => ["start_time >= ?", future_cutoff], :order => 'start_time asc')
+    times_to_events[:more] = Event.after_date(future_cutoff).first
 
     times_to_events
   end
