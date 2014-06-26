@@ -5,7 +5,4 @@ class ConvertTimesToUtc < ActiveRecord::Migration
       e.save
     end
   end
-
-  def self.down
-  end
 end

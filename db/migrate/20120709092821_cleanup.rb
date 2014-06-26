@@ -11,7 +11,4 @@ class Cleanup < ActiveRecord::Migration
       end
     end
   end
-
-  def self.down
-  end
 end
