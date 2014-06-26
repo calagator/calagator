@@ -167,10 +167,5 @@ when 'sunspot'
   gem 'lucene_query', '0.1'
 end
 
-# Load additional gems from "Gemfile.local" if it exists, has same format as this file.
-begin
-  data = File.read("#{basedir}/Gemfile.local")
-rescue Errno::ENOENT
-  # Ignore
-end
-eval data if data
+# Load additional gems from "Gemfile.local" if it exists
+eval_gemfile "Gemfile.local" if File.exist?("Gemfile.local")
