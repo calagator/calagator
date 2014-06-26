@@ -164,6 +164,7 @@ when 'sunspot'
   sunspot_version = '2.1.0'
   gem 'sunspot_rails', sunspot_version
   gem 'sunspot_solr',  sunspot_version
+  gem 'lucene_query', '0.1'
 end
 
 # Load additional gems from "Gemfile.local" if it exists, has same format as this file.

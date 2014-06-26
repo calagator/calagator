@@ -23,10 +23,6 @@ module Calagator
     require 'set'
     require 'uri'
 
-    # Bundled libraries
-    $LOAD_PATH << Rails.root.join('vendor','gems','lucene_query-0.1','lib')
-    require 'lucene_query'
-
     # Load from "/lib"
     $LOAD_PATH << Rails.root.join('lib')
     ### libraries
