@@ -19,18 +19,9 @@ unless defined?($BUNDLER_INTERPRETER_CHECKED)
   $BUNDLER_INTERPRETER_CHECKED = true
 end
 
-basedir = File.dirname(__FILE__)
-
 # Database driver
-require 'erb'
-require 'yaml'
-filename = File.join(File.dirname(__FILE__), 'config', 'database.yml')
-raise "Can't find database configuration at: #{filename}" unless File.exist?(filename)
-databases = YAML.load(ERB.new(File.read(filename)).result)
-railsenv = ENV['RAILS_ENV'] || 'development'
-raise "Can't find database configuration for environment '#{railsenv}' in: #{filename}" unless databases[railsenv]
-adapter = databases[railsenv]['adapter']
-raise "Can't find database adapter for environment '#{railsenv}' in: #{filename}" unless databases[railsenv]['adapter']
+require "./lib/database_yml_reader"
+adapter = DatabaseYmlReader.read.adapter
 case adapter
 when 'pg', 'postgresql'
   gem 'pg'
@@ -69,6 +60,7 @@ gem 'exception_notification', '2.6.1'
 gem 'font-awesome-rails', '3.2.1.3'
 gem 'paper_trail_manager', '>= 0.2.0'
 gem 'utf8-cleaner', '~> 0.0.6'
+gem 'mofo', path: 'vendor/gems/mofo-0.2.8' # vendored fork with hpricot dependency replaced with nokogiri
 
 platform :jruby do
   gem 'activerecord-jdbc-adapter'
@@ -119,7 +111,7 @@ group :development, :test do
   # activate them, create a `.dev` file and rerun Bundler, e.g.:
   #
   #   touch .dev && bundle
-  if File.exist?(File.join(File.dirname(File.expand_path(__FILE__)), ".dev"))
+  if File.exist?(".dev")
     platforms :mri_19 do
       gem 'debugger'
       gem 'debugger-ruby_core_source'
@@ -156,19 +148,15 @@ group :assets do
 end
 
 # Some dependencies are activated through server settings.
-require "#{basedir}/lib/secrets_reader"
+require "./lib/secrets_reader"
 secrets = SecretsReader.read(:silent => true)
 case secrets.search_engine
 when 'sunspot'
   sunspot_version = '2.1.0'
   gem 'sunspot_rails', sunspot_version
   gem 'sunspot_solr',  sunspot_version
+  gem 'lucene_query', '0.1'
 end
 
-# Load additional gems from "Gemfile.local" if it exists, has same format as this file.
-begin
-  data = File.read("#{basedir}/Gemfile.local")
-rescue Errno::ENOENT
-  # Ignore
-end
-eval data if data
+# Load additional gems from "Gemfile.local" if it exists
+eval_gemfile "Gemfile.local" if File.exist?("Gemfile.local")
