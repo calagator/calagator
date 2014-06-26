@@ -24,7 +24,7 @@ class Source < ActiveRecord::Base
   has_many :venues,  :dependent => :destroy
   has_many :updates, :dependent => :destroy
 
-  scope :listing, :order => 'created_at DESC'
+  scope :listing, -> { order('created_at DESC') }
 
   has_paper_trail
 
