@@ -224,30 +224,31 @@ describe Event do
       @time = "03:45"
       @date_time = "#{@date} #{@time}"
       @value = Time.zone.parse(@date_time)
+      @test_event = Event.new
     end
 
     it "should return nil for a NilClass" do
-      Event.time_for(nil).should be_nil
+      @test_event.time_for(nil).should be_nil
     end
 
     it "should return time for a String" do
-      Event.time_for(@date_time).should eq @value
+      @test_event.time_for(@date_time).should eq @value
     end
 
     it "should return time for an Array of Strings" do
-      Event.time_for([@date, @time]).should eq @value
+      @test_event.time_for([@date, @time]).should eq @value
     end
 
     it "should return time for a DateTime" do
-      Event.time_for(@value).should eq @value
+      @test_event.time_for(@value).should eq @value
     end
 
     it "should return exception for an invalid date expressed as a String" do
-      lambda { Event.time_for("0/0/0") }.should raise_error
+      lambda { @test_event.time_for("0/0/0") }.should raise_error
     end
 
     it "should raise exception for an invalid type" do
-      lambda { Event.time_for(Event) }.should raise_error TypeError
+      lambda { @test_event.time_for(Event) }.should raise_error TypeError
     end
   end
 

@@ -119,14 +119,14 @@ class Event < ActiveRecord::Base
     # Set the start_time from one of a number of time values, a string, or an
     # array of strings.
     def start_time_with_smarter_setter=(value)
-      self.class.set_time_on(self, :start_time, value)
+      set_time_on(self, :start_time, value)
     end
     alias_method_chain :start_time=, :smarter_setter
 
     # Set the end_time to the given +value+, which could be a Time, Date,
     # DateTime, String, Array of Strings, etc.
     def end_time_with_smarter_setter=(value)
-      self.class.set_time_on(self, :end_time, value)
+      set_time_on(self, :end_time, value)
     end
     alias_method_chain :end_time=, :smarter_setter
   end
@@ -138,7 +138,7 @@ class Event < ActiveRecord::Base
   # @param [Time] value The time.
   #
   # @return [Time]
-  def self.set_time_on(record, attribute, value)
+  def set_time_on(record, attribute, value)
     begin
       result = time_for(value)
     rescue Exception => e
@@ -157,7 +157,7 @@ class Event < ActiveRecord::Base
   #
   # @raise TypeError Thrown if given an unknown type.
   # @raise Exception Thrown if value can't be parsed.
-  def self.time_for(value)
+  def time_for(value)
     value = value.join(' ') if value.kind_of?(Array)
     case value
     when NilClass
