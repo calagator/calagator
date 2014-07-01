@@ -248,8 +248,10 @@ describe Event do
       event.start_time.should eq Time.zone.parse("2009-01-01 05:30")
     end
 
-    it "should flag an invalid time" do
-      event = Event.new(:start_time => "1/0")
+    it "should flag an invalid time and reset to nil" do
+      event = Event.new(:start_time => "2010/1/1")
+      event.start_time = "1/0"
+      event.start_time.should be_nil
       event.errors[:start_time].should be_present
     end
   end
