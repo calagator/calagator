@@ -53,7 +53,7 @@ module MappingHelper
 
         var venueIcon = L.AwesomeMarkers.icon({
           icon: 'star',
-          color: 'green'
+          color: '#{SECRETS.mapping['marker_color']}'
         })
 
         var markers = [#{markers.join(", ")}];
