@@ -147,6 +147,7 @@ class Event < ActiveRecord::Base
     end
     send("#{attribute}_without_smarter_setter=", result)
   end
+  private :set_time_on
 
   # Returns time for the value, which can be a Time, Date, DateTime, String,
   # Array of Strings, nil, etc.
@@ -173,6 +174,7 @@ class Event < ActiveRecord::Base
       raise TypeError, "Unknown type #{value.class.to_s.inspect} with value #{value.inspect}"
     end
   end
+  private :time_for
 
   #---[ Queries ]---------------------------------------------------------
 
