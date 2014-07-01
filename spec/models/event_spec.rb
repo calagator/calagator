@@ -218,84 +218,38 @@ describe Event do
 
   end
 
-  describe "#time_for" do
-    before do
-      @date = "2009-01-02"
-      @time = "03:45"
-      @date_time = "#{@date} #{@time}"
-      @value = Time.zone.parse(@date_time)
-    end
-
-    it "should return nil for a NilClass" do
-      Event.time_for(nil).should be_nil
-    end
-
-    it "should return time for a String" do
-      Event.time_for(@date_time).should eq @value
-    end
-
-    it "should return time for an Array of Strings" do
-      Event.time_for([@date, @time]).should eq @value
-    end
-
-    it "should return time for a DateTime" do
-      Event.time_for(@value).should eq @value
-    end
-
-    it "should return exception for an invalid date expressed as a String" do
-      lambda { Event.time_for("0/0/0") }.should raise_error
-    end
-
-    it "should raise exception for an invalid type" do
-      lambda { Event.time_for(Event) }.should raise_error TypeError
-    end
-  end
-
-  describe "#set_time_on" do
+  describe "#start_time=" do
     it "should clear with nil" do
       Event.new(:start_time => nil).start_time.should be_nil
     end
 
     it "should set from date String" do
-      event = Event.new(:start_time => today.to_date.to_s(:db))
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
+      event = Event.new(:start_time => "2009-01-02")
+      event.start_time.should eq Time.zone.parse("2009-01-02")
     end
 
     it "should set from date-time String" do
-      event = Event.new(:start_time => today.localtime.to_s(:db))
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
+      event = Event.new(:start_time => "2009-01-02 03:45")
+      event.start_time.should eq Time.zone.parse("2009-01-02 03:45")
+    end
+
+    it "should set from an Array of Strings" do 
+      event = Event.new(:start_time => ["2009-01-03", "02:14"])
+      event.start_time.should eq Time.zone.parse("2009-01-03 02:14")
     end
 
     it "should set from Date" do
-      event = Event.new(:start_time => today.to_date)
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
+      event = Event.new(:start_time => Date.parse("2009-02-01"))
+      event.start_time.should eq Time.zone.parse("2009-02-01")
     end
 
     it "should set from DateTime" do
-      event = Event.new(:start_time => today.to_datetime)
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
-    end
-
-    it "should set from TimeWithZone" do
-      event = Event.new(:start_time => ActiveSupport::TimeWithZone.new(Time.now.midnight, Time.zone))
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
-    end
-
-    it "should set from Time" do
-      time = today
-      event = Event.new(:start_time => time)
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq time
+      event = Event.new(:start_time => Time.zone.parse("2009-01-01 05:30"))
+      event.start_time.should eq Time.zone.parse("2009-01-01 05:30")
     end
 
     it "should flag an invalid time" do
-      event = FactoryGirl.build(:event)
-      event.start_time = "1/0"
+      event = Event.new(:start_time => "1/0")
       event.errors[:start_time].should be_present
     end
   end
