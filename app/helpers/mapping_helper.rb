@@ -17,6 +17,8 @@ module MappingHelper
       when "google"
         scripts << "https://maps.googleapis.com/maps/api/js?key=#{SECRETS.mapping["google_maps_api_key"]}&sensor=false"
         scripts << "leaflet_google_layer"
+      when "esri"
+        scripts << "http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"
     end
 
     scripts
@@ -74,6 +76,8 @@ module MappingHelper
         "L.mapbox.tileLayer"
       when "google"
         "L.Google"
+      when "esri"
+        "L.esri.basemapLayer"
       else
         "L.tileLayer"
     end
