@@ -475,20 +475,21 @@ EOF
       clone.send("#{attribute}=", send(attribute))
     end
     if start_time
-      clone.start_time = self.class._clone_time_for_today(start_time)
+      clone.start_time = clone_time_for_today(start_time)
     end
     if end_time
-      clone.end_time = self.class._clone_time_for_today(end_time)
+      clone.end_time = clone_time_for_today(end_time)
     end
     clone
   end
 
   # Return a time that's today but has the time-of-day component from the
   # +source+ time argument.
-  def self._clone_time_for_today(source)
+  def clone_time_for_today(source)
     today = Time.today
     Time.local(today.year, today.mon, today.day, source.hour, source.min, source.sec, source.usec)
   end
+  private :clone_time_for_today
 
   #---[ Date related ]----------------------------------------------------
 
