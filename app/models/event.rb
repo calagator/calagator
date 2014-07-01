@@ -141,7 +141,7 @@ class Event < ActiveRecord::Base
   def set_time_on(attribute, value)
     begin
       result = time_for(value)
-    rescue Exception => e
+    rescue ArgumentError
       errors.add(attribute, "is invalid")
       result = nil
     end
