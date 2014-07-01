@@ -130,30 +130,10 @@ class Event < ActiveRecord::Base
     super nil
   end
 
-  # Returns time for the value, which can be a Time, Date, DateTime, String,
-  # Array of Strings, nil, etc.
-  #
-  # @param [nil, String, Date, DateTime, ActiveSupport::TimeWithZone, Time] value The time to parse.
-  #
-  # @return [Time]
-  #
-  # @raise TypeError Thrown if given an unknown type.
-  # @raise Exception Thrown if value can't be parsed.
   def time_for(value)
     value = value.join(' ') if value.kind_of?(Array)
-    case value
-    when NilClass
-      nil
-    when String
-      # This can throw an exception
-      value.present? ? Time.zone.parse(value) : nil
-    when Date, DateTime, ActiveSupport::TimeWithZone
-      value.to_time
-    when Time
-      value # Accept as-is.
-    else
-      raise TypeError, "Unknown type #{value.class.to_s.inspect} with value #{value.inspect}"
-    end
+    value = Time.zone.parse(value) if value.kind_of?(String) # this will throw ArgumentError if invalid
+    value
   end
   private :time_for
 
