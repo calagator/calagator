@@ -25,3 +25,6 @@ before_script:
 script:
   - bundle exec rake spec --trace
 cache: bundler
+matrix:
+  allow_failures:
+    rvm: rbx-2
