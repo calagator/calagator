@@ -454,17 +454,6 @@ EOF
 
   #---[ Date related ]----------------------------------------------------
 
-  # Returns a range of time spanned by the event.
-  def time_range
-    if start_time && end_time
-      start_time..end_time
-    elsif start_time
-      start_time..(start_time + 1.hour)
-    else
-      raise ArgumentError, "can't get a time range for an event with no start time"
-    end
-  end
-
   # Returns an array of the dates spanned by the event.
   def dates
     if start_time && end_time
