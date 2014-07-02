@@ -292,6 +292,26 @@ describe Event do
     end
   end
 
+  describe "#dates" do
+    it "returns an array of dates spanned by the event" do
+      event = Event.new(start_time: "2010-01-01", end_time: "2010-01-03")
+      event.dates.should == [
+        Date.parse("2010-01-01"),
+        Date.parse("2010-01-02"),
+        Date.parse("2010-01-03"),
+      ]
+    end
+
+    it "returns an array of one date when there is no end time" do
+      event = Event.new(start_time: "2010-01-01")
+      event.dates.should == [Date.parse("2010-01-01")]
+    end
+
+    it "throws ArgumentError when there is no start time" do
+      expect { Event.new.dates }.to raise_error(ArgumentError)
+    end
+  end
+
   describe "when finding by dates" do
 
     before do
