@@ -112,67 +112,28 @@ class Event < ActiveRecord::Base
     read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
   end
 
-  if (table_exists? rescue nil)
-    # XXX Horrible hack to materialize the #start_time= and #end_time= methods so they can be aliased by #start_time_with_smarter_setter= and #end_time_with_smarter_setter=.
-    Event.new(:start_time => Time.now, :end_time => Time.now)
-
-    # Set the start_time from one of a number of time values, a string, or an
-    # array of strings.
-    def start_time_with_smarter_setter=(value)
-      set_time_on(:start_time, value)
-    end
-    alias_method_chain :start_time=, :smarter_setter
-
-    # Set the end_time to the given +value+, which could be a Time, Date,
-    # DateTime, String, Array of Strings, etc.
-    def end_time_with_smarter_setter=(value)
-      set_time_on(:end_time, value)
-    end
-    alias_method_chain :end_time=, :smarter_setter
+  # Set the start_time to the given +value+, which could be a Time, Date,
+  # DateTime, String, Array of Strings, or nil.
+  def start_time=(value)
+    super time_for(value)
+  rescue ArgumentError
+    errors.add :start_time, "is invalid"
+    super nil
   end
 
-  # Sets record's attribute to time value. If time is invalid, marks record as invalid.
-  #
-  # @param [ActiveRecord::Base] record The record to modify.
-  # @param [String, Symbol] attribute The attribute to set, e.g. :start_time.
-  # @param [Time] value The time.
-  #
-  # @return [Time]
-  def set_time_on(attribute, value)
-    begin
-      result = time_for(value)
-    rescue ArgumentError
-      errors.add(attribute, "is invalid")
-      result = nil
-    end
-    send("#{attribute}_without_smarter_setter=", result)
+  # Set the end_time to the given +value+, which could be a Time, Date,
+  # DateTime, String, Array of Strings, or nil.
+  def end_time=(value)
+    super time_for(value)
+  rescue ArgumentError
+    errors.add :end_time, "is invalid"
+    super nil
   end
-  private :set_time_on
 
-  # Returns time for the value, which can be a Time, Date, DateTime, String,
-  # Array of Strings, nil, etc.
-  #
-  # @param [nil, String, Date, DateTime, ActiveSupport::TimeWithZone, Time] value The time to parse.
-  #
-  # @return [Time]
-  #
-  # @raise TypeError Thrown if given an unknown type.
-  # @raise Exception Thrown if value can't be parsed.
   def time_for(value)
     value = value.join(' ') if value.kind_of?(Array)
-    case value
-    when NilClass
-      nil
-    when String
-      # This can throw an exception
-      value.present? ? Time.zone.parse(value) : nil
-    when Date, DateTime, ActiveSupport::TimeWithZone
-      value.to_time
-    when Time
-      value # Accept as-is.
-    else
-      raise TypeError, "Unknown type #{value.class.to_s.inspect} with value #{value.inspect}"
-    end
+    value = Time.zone.parse(value) if value.kind_of?(String) # this will throw ArgumentError if invalid
+    value
   end
   private :time_for
 
