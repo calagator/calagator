@@ -256,6 +256,42 @@ describe Event do
     end
   end
 
+  describe "#end_time=" do
+    it "should clear with nil" do
+      Event.new(:end_time => nil).end_time.should be_nil
+    end
+
+    it "should set from date String" do
+      event = Event.new(:end_time => "2009-01-02")
+      event.end_time.should eq Time.zone.parse("2009-01-02")
+    end
+
+    it "should set from date-time String" do
+      event = Event.new(:end_time => "2009-01-02 03:45")
+      event.end_time.should eq Time.zone.parse("2009-01-02 03:45")
+    end
+
+    it "should set from an Array of Strings" do
+      event = Event.new(:end_time => ["2009-01-03", "02:14"])
+      event.end_time.should eq Time.zone.parse("2009-01-03 02:14")
+    end
+
+    it "should set from Date" do
+      event = Event.new(:end_time => Date.parse("2009-02-01"))
+      event.end_time.should eq Time.zone.parse("2009-02-01")
+    end
+
+    it "should set from DateTime" do
+      event = Event.new(:end_time => Time.zone.parse("2009-01-01 05:30"))
+      event.end_time.should eq Time.zone.parse("2009-01-01 05:30")
+    end
+
+    it "should flag an invalid time" do
+      event = Event.new(:end_time => "1/0")
+      event.errors[:end_time].should be_present
+    end
+  end
+
   describe "when finding by dates" do
 
     before do
