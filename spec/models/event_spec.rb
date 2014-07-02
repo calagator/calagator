@@ -312,6 +312,17 @@ describe Event do
     end
   end
 
+  describe "#duration" do
+    it "returns the event length in seconds" do
+      event = Event.new(start_time: "2010-01-01", end_time: "2010-01-03")
+      event.duration.should == 172800
+    end
+
+    it "returns zero if start and end times aren't present" do
+      Event.new.duration.should == 0
+    end
+  end
+
   describe "when finding by dates" do
 
     before do
