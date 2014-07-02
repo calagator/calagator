@@ -564,7 +564,6 @@ describe Event do
         Event.search_tag_grouped_by_currentness("yes").should eq({
           current: [@current_event],
           past:    [@past_event],
-          error:   nil,
         })
       end
 
@@ -572,8 +571,12 @@ describe Event do
         Event.search_tag_grouped_by_currentness("yes", current: true).should eq({
           current: [@current_event],
           past:    [],
-          error:   nil,
         })
+      end
+
+      it "warns if unknown order supplied" do
+        Event.search_tag_grouped_by_currentness("yes", order: "kittens")[:error].should \
+          eq 'Unknown ordering option "kittens", sorting by date instead.'
       end
     end
 
