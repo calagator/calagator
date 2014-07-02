@@ -489,6 +489,37 @@ describe Event do
     end
   end
 
+  describe "when ordering" do
+    describe "with .ordered_by_ui_field" do
+      it "defaults to order by start time" do
+        event1 = FactoryGirl.create(:event, start_time: Date.parse("2003-01-01"))
+        event2 = FactoryGirl.create(:event, start_time: Date.parse("2002-01-01"))
+        event3 = FactoryGirl.create(:event, start_time: Date.parse("2001-01-01"))
+
+        events = Event.ordered_by_ui_field(nil)
+        events.should == [event3, event2, event1]
+      end
+
+      it "can order by event name" do
+        event1 = FactoryGirl.create(:event, title: "CU there")
+        event2 = FactoryGirl.create(:event, title: "Be there")
+        event3 = FactoryGirl.create(:event, title: "An event")
+
+        events = Event.ordered_by_ui_field("name")
+        events.should == [event3, event2, event1]
+      end
+
+      it "can order by venue name" do
+        event1 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "C venue"))
+        event2 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "B venue"))
+        event3 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "A venue"))
+
+        events = Event.ordered_by_ui_field("venue")
+        events.should == [event3, event2, event1]
+      end
+    end
+  end
+
   describe "when searching" do
     it "should find events" do
       Event.should_receive(:search).and_return([])
