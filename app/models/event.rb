@@ -57,8 +57,6 @@ class Event < ActiveRecord::Base
 
   include UpdateUpdatedAtMixin
 
-  include VersionDiff
-
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
