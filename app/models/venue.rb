@@ -61,8 +61,6 @@ class Venue < ActiveRecord::Base
   include ValidatesBlacklistOnMixin
   validates_blacklist_on :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone
 
-  include UpdateUpdatedAtMixin
-
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi, :access_notes

@@ -55,8 +55,6 @@ class Event < ActiveRecord::Base
   include ValidatesBlacklistOnMixin
   validates_blacklist_on :title, :description, :url
 
-  include UpdateUpdatedAtMixin
-
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
