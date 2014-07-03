@@ -33,6 +33,26 @@ module SquashManyDuplicatesMixin
         redirect_to :action => "duplicates", :type => params[:type]
       end
 
+      def duplicates
+        @type = params[:type]
+        begin
+          instance_variable = "@grouped_#{self.controller_name}".to_sym
+          model_class_name = self.controller_name.classify
+          model_class_object = model_class_name.constantize
+          self.instance_variable_set(instance_variable, model_class_object.find_duplicates_by_type(@type))
+        rescue ArgumentError => e
+          self.instance_variable_set(instance_variable, {})
+          flash[:failure] = "#{e}"
+        end
+
+        @page_title = "Duplicate #{model_class_name} Squasher"
+
+        respond_to do |format|
+          format.html # index.html.erb
+          format.xml  { render :xml => self.instance_variable_get(instance_variable) }
+        end
+      end
+
     end
   end
 end

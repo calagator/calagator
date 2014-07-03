@@ -152,24 +152,6 @@ class EventsController < ApplicationController
     end
   end
 
-  # GET /events/duplicates
-  def duplicates
-    @type = params[:type]
-    begin
-      @grouped_events = Event.find_duplicates_by_type(@type)
-    rescue ArgumentError => e
-      @grouped_events = {}
-      flash[:failure] = "#{e}"
-    end
-
-    @page_title = "Duplicate Event Squasher"
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @grouped_events }
-    end
-  end
-
   # Search!!!
   def search
     # TODO Refactor this method and move much of it to the record-managing
