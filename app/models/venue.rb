@@ -35,8 +35,6 @@ class Venue < ActiveRecord::Base
   has_paper_trail
   acts_as_taggable
 
-  include VersionDiff
-
   xss_foliate :sanitize => [:description, :access_notes]
   include DecodeHtmlEntitiesHack
 
