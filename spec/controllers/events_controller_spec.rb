@@ -201,6 +201,15 @@ describe EventsController do
     describe "and filtering by date range" do
       [:start, :end].each do |date_kind|
         describe "for #{date_kind} date" do
+          let(:start_time) { Date.parse("2010-01-01") }
+          let(:end_time) { Date.parse("2010-04-01") }
+
+          around do |example|
+            Timecop.freeze(start_time) do
+              example.run
+            end
+          end
+
           before :each do
             @date_kind = date_kind
             @date_kind_other = \
@@ -213,31 +222,31 @@ describe EventsController do
 
           it "should use the default if not given the parameter" do
             get :index, :date => {}
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            assigns["#{@date_kind}_date"].should eq send("#{@date_kind}_time")
             flash[:failure].should be_nil
           end
 
           it "should use the default if given a malformed parameter" do
             get :index, :date => "omgkittens"
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            assigns["#{@date_kind}_date"].should eq send("#{@date_kind}_time")
             response.body.should have_selector(".flash_failure", text: 'malformed')
           end
 
           it "should use the default if given a missing parameter" do
             get :index, :date => {:foo => "bar"}
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            assigns["#{@date_kind}_date"].should eq send("#{@date_kind}_time")
             response.body.should have_selector(".flash_failure", text: 'missing')
           end
 
           it "should use the default if given an empty parameter" do
             get :index, :date => {@date_kind => ""}
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            assigns["#{@date_kind}_date"].should eq send("#{@date_kind}_time")
             response.body.should have_selector(".flash_failure", text: 'empty')
           end
 
           it "should use the default if given an invalid parameter" do
             get :index, :date => {@date_kind => "omgkittens"}
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            assigns["#{@date_kind}_date"].should eq send("#{@date_kind}_time")
             response.body.should have_selector(".flash_failure", text: 'invalid')
           end
 
