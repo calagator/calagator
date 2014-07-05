@@ -248,25 +248,12 @@ class Event < ActiveRecord::Base
   # Options:
   # * :current => Limit results to only current events? Defaults to false.
   def self.search_tag_grouped_by_currentness(tag, opts={})
-    error = nil
-    tagged_with_opts = {}
-    case opts[:order]
-    when 'date', '', nil
-      tagged_with_opts[:order] = 'events.start_time'
-    when 'name', 'title'
-      tagged_with_opts[:order] = 'events.title'
-    when 'venue'
-      tagged_with_opts[:order] = 'venues.title'
-      tagged_with_opts[:include] = :venue
-    else
-      tagged_with_opts[:order] = 'events.start_time'
-      error = "Unknown ordering option #{opts[:order].inspect}, sorting by date instead."
-    end
-
-    result = group_by_currentness(includes(:venue).tagged_with(tag, tagged_with_opts))
+    result = group_by_currentness(includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order]))
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
-    result[:error] = error
+    unless %w(date name title venue).include?(opts[:order]) || opts[:order].blank?
+      result[:error] = "Unknown ordering option #{opts[:order].inspect}, sorting by date instead."
+    end
     result
   end
 
@@ -449,17 +436,6 @@ EOF
   private :clone_time_for_today
 
   #---[ Date related ]----------------------------------------------------
-
-  # Returns a range of time spanned by the event.
-  def time_range
-    if start_time && end_time
-      start_time..end_time
-    elsif start_time
-      start_time..(start_time + 1.hour)
-    else
-      raise ArgumentError, "can't get a time range for an event with no start time"
-    end
-  end
 
   # Returns an array of the dates spanned by the event.
   def dates

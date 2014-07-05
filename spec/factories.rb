@@ -22,7 +22,7 @@ FactoryGirl.define do
     sequence(:title) { |n| "Event #{n}" }
     sequence(:description) { |n| "Description of Event #{n}." }
     start_time { Time.now + 1.hour }
-    end_time { self.start_time + 1.hours }
+    end_time { start_time + 1.hour }
   end
 
   factory :event_with_venue, :parent => :event do

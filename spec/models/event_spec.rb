@@ -256,6 +256,81 @@ describe Event do
     end
   end
 
+  describe "#end_time=" do
+    it "should clear with nil" do
+      Event.new(:end_time => nil).end_time.should be_nil
+    end
+
+    it "should set from date String" do
+      event = Event.new(:end_time => "2009-01-02")
+      event.end_time.should eq Time.zone.parse("2009-01-02")
+    end
+
+    it "should set from date-time String" do
+      event = Event.new(:end_time => "2009-01-02 03:45")
+      event.end_time.should eq Time.zone.parse("2009-01-02 03:45")
+    end
+
+    it "should set from an Array of Strings" do
+      event = Event.new(:end_time => ["2009-01-03", "02:14"])
+      event.end_time.should eq Time.zone.parse("2009-01-03 02:14")
+    end
+
+    it "should set from Date" do
+      event = Event.new(:end_time => Date.parse("2009-02-01"))
+      event.end_time.should eq Time.zone.parse("2009-02-01")
+    end
+
+    it "should set from DateTime" do
+      event = Event.new(:end_time => Time.zone.parse("2009-01-01 05:30"))
+      event.end_time.should eq Time.zone.parse("2009-01-01 05:30")
+    end
+
+    it "should flag an invalid time" do
+      event = Event.new(:end_time => "1/0")
+      event.errors[:end_time].should be_present
+    end
+  end
+
+  describe "#dates" do
+    it "returns an array of dates spanned by the event" do
+      event = Event.new(start_time: "2010-01-01", end_time: "2010-01-03")
+      event.dates.should == [
+        Date.parse("2010-01-01"),
+        Date.parse("2010-01-02"),
+        Date.parse("2010-01-03"),
+      ]
+    end
+
+    it "returns an array of one date when there is no end time" do
+      event = Event.new(start_time: "2010-01-01")
+      event.dates.should == [Date.parse("2010-01-01")]
+    end
+
+    it "throws ArgumentError when there is no start time" do
+      expect { Event.new.dates }.to raise_error(ArgumentError)
+    end
+  end
+
+  describe "#duration" do
+    it "returns the event length in seconds" do
+      event = Event.new(start_time: "2010-01-01", end_time: "2010-01-03")
+      event.duration.should == 172800
+    end
+
+    it "returns zero if start and end times aren't present" do
+      Event.new.duration.should == 0
+    end
+  end
+
+  describe "#location" do
+    it "delegates to the venue's location" do
+      event = Event.new
+      event.build_venue latitude: 45.5200, longitude: 122.6819
+      event.location.should == [45.5200, 122.6819]
+    end
+  end
+
   describe "when finding by dates" do
 
     before do
@@ -453,36 +528,90 @@ describe Event do
     end
   end
 
+  describe "when ordering" do
+    describe "with .ordered_by_ui_field" do
+      it "defaults to order by start time" do
+        event1 = FactoryGirl.create(:event, start_time: Date.parse("2003-01-01"))
+        event2 = FactoryGirl.create(:event, start_time: Date.parse("2002-01-01"))
+        event3 = FactoryGirl.create(:event, start_time: Date.parse("2001-01-01"))
+
+        events = Event.ordered_by_ui_field(nil)
+        events.should == [event3, event2, event1]
+      end
+
+      it "can order by event name" do
+        event1 = FactoryGirl.create(:event, title: "CU there")
+        event2 = FactoryGirl.create(:event, title: "Be there")
+        event3 = FactoryGirl.create(:event, title: "An event")
+
+        events = Event.ordered_by_ui_field("name")
+        events.should == [event3, event2, event1]
+      end
+
+      it "can order by venue name" do
+        event1 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "C venue"))
+        event2 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "B venue"))
+        event3 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "A venue"))
+
+        events = Event.ordered_by_ui_field("venue")
+        events.should == [event3, event2, event1]
+      end
+    end
+  end
+
   describe "when searching" do
-    it "should find events" do
-      Event.should_receive(:search).and_return([])
+    describe "with .search_tag_grouped_by_currentness" do
+      before do
+        @untagged_current_event = FactoryGirl.create(:event, tag_list: ["no"], start_time: Time.now)
+        @current_event = FactoryGirl.create(:event, tag_list: ["no", "yes"], start_time: Time.now)
+        @past_event = FactoryGirl.create(:event, tag_list: ["yes", "no"], start_time: 1.year.ago)
+        @untagged_past_event = FactoryGirl.create(:event, tag_list: ["no"], start_time: 1.year.ago)
+      end
 
-      Event.search("myquery").should be_empty
+      it "should find events by tag and group them" do
+        Event.search_tag_grouped_by_currentness("yes").should eq({
+          current: [@current_event],
+          past:    [@past_event],
+        })
+      end
+
+      it "discards past event if passed the current option" do
+        Event.search_tag_grouped_by_currentness("yes", current: true).should eq({
+          current: [@current_event],
+          past:    [],
+        })
+      end
+
+      it "warns if unknown order supplied" do
+        Event.search_tag_grouped_by_currentness("yes", order: "kittens")[:error].should \
+          eq 'Unknown ordering option "kittens", sorting by date instead.'
+      end
     end
 
-    it "should find events and group them" do
-      current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
-      past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
-      Event.should_receive(:search).and_return([current_event, past_event])
+    describe "with .search_keywords_grouped_by_currentness" do
+      before do
+        @current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
+        @past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
+        @other_past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
+      end
 
-      Event.search_keywords_grouped_by_currentness("myquery").should eq({
-        :current => [current_event],
-        :past    => [past_event],
-      })
-    end
+      it "should find events and group them" do
+        Event.should_receive(:search).with("query", {})
+          .and_return([@current_event, @past_event, @other_past_event])
+        Event.search_keywords_grouped_by_currentness("query").should eq({
+          current: [@current_event],
+          past:    [@past_event, @other_past_event],
+        })
+      end
 
-    it "should find events" do
-      event_Z = Event.new(:title => "Zipadeedoodah", :start_time => (now + 1.week))
-      event_A = Event.new(:title => "Antidisestablishmentarism", :start_time => (now + 2.weeks))
-      event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (now + 3.weeks))
-      event_o = Event.new(:title => "ommmmmmmmmmm...", :start_time => (now + 4.weeks))
-
-      Event.should_receive(:search).and_return([event_A, event_Z, event_O, event_o])
-
-      Event.search_keywords_grouped_by_currentness("myquery", :order => 'name').should eq({
-        :current => [event_A, event_Z, event_O, event_o],
-        :past => []
-      })
+      it "orders past events by date desc if passed date to the order option" do
+        Event.should_receive(:search).with("query", order: "date")
+          .and_return([@current_event, @past_event, @other_past_event])
+        Event.search_keywords_grouped_by_currentness("query", order: "date").should eq({
+          current: [@current_event],
+          past:    [@other_past_event, @past_event],
+        })
+      end
     end
   end
 
