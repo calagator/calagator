@@ -25,16 +25,12 @@ class Event < ActiveRecord::Base
       attributes[:tag].presence
     end
 
-    def current
-      ["1", "true"].include?(attributes[:current])
+    def order
+      attributes[:order].presence
     end
 
-    def order
-      if attributes[:order].presence == "score" && tag
-        nil
-      else
-        attributes[:order].presence
-      end
+    def current
+      ["1", "true"].include?(attributes[:current])
     end
 
     def failure_message
@@ -48,11 +44,11 @@ class Event < ActiveRecord::Base
     private
 
     def validate!
-      unless %w(date name title venue).include?(attributes[:order]) || attributes[:order].blank?
+      unless %w(date name title venue score).include?(order) || order.blank?
         @failure_message = "Unknown ordering option #{attributes[:order].inspect}, sorting by date instead."
       end
 
-      if attributes[:order].presence == "score" && tag
+      if tag && order == "score"
         @failure_message = "You cannot sort tags by score"
       end
 

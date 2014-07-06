@@ -728,7 +728,7 @@ describe EventsController do
 
       it "should warn if user tries ordering tags by score" do
         Event.should_receive(:search_tag_grouped_by_currentness)
-          .with("foo", current: false, order: nil).and_return(current: [], past: [])
+          .with("foo", current: false, order: "score").and_return(current: [], past: [])
 
         post :search, :tag => "foo", :order => "score"
         flash[:failure].should_not be_blank
