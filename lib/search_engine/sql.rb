@@ -77,7 +77,8 @@ class SearchEngine::Sql < SearchEngine::Base
             scope = scope.where("events.start_time >= ?", Date.yesterday.to_time)
           end
 
-          column_names = Event.columns.map(&:name).map{|attribute| "events.#{attribute}"}.join(', ')
+          column_names = Event.column_names.map { |name| "events.#{name}"}
+          column_names << "venues.id"
           scope = scope.group(column_names)
 
           order = case opts[:order].try(:to_sym)
