@@ -705,6 +705,13 @@ describe EventsController do
       response.should redirect_to(root_path)
     end
 
+    it "should fail if searching by both query and tag" do
+      post :search, query: "omg", tag: "bbq"
+
+      flash[:failure].should_not be_blank
+      response.should redirect_to(root_path)
+    end
+
     it "should be able to only return current events" do
       Event.should_receive(:search).with("myquery", :order => nil, :skip_old => true).and_return([])
 
