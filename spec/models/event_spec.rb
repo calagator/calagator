@@ -581,11 +581,6 @@ describe Event do
           past:    [],
         })
       end
-
-      it "warns if unknown order supplied" do
-        Event.search_tag_grouped_by_currentness("yes", order: "kittens")[:error].should \
-          eq 'Unknown ordering option "kittens", sorting by date instead.'
-      end
     end
 
     describe "with .search_keywords_grouped_by_currentness" do

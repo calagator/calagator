@@ -48,6 +48,10 @@ class Event < ActiveRecord::Base
     private
 
     def validate!
+      unless %w(date name title venue).include?(attributes[:order]) || attributes[:order].blank?
+        @failure_message = "Unknown ordering option #{attributes[:order].inspect}, sorting by date instead."
+      end
+
       if attributes[:order].presence == "score" && tag
         @failure_message = "You cannot sort tags by score"
       end

@@ -251,9 +251,6 @@ class Event < ActiveRecord::Base
     result = group_by_currentness(includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order]))
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
-    unless %w(date name title venue).include?(opts[:order]) || opts[:order].blank?
-      result[:error] = "Unknown ordering option #{opts[:order].inspect}, sorting by date instead."
-    end
     result
   end
 

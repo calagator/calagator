@@ -181,11 +181,8 @@ class EventsController < ApplicationController
     @tag = search.tag
     @current = search.current
     @order = search.order
-
     @grouped_events = search.grouped_events
-    if @grouped_events[:error]
-      flash[:failure] = escape_once(@grouped_events[:error])
-    end
+
     # setting @events so that we can reuse the index atom builder
     @events = search.events
 
