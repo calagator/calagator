@@ -170,23 +170,17 @@ class EventsController < ApplicationController
     end
   end
 
-  # Search!!!
+  # GET /events/search
   def search
-    search = Event::Search.new(params)
+    @search = Event::Search.new(params)
 
-    flash[:failure] = search.failure_message
-    return redirect_to root_path if search.hard_failure?
-
-    @query = search.query
-    @tag = search.tag
-    @current = search.current
-    @order = search.order
-    @grouped_events = search.grouped_events
+    flash[:failure] = @search.failure_message
+    return redirect_to root_path if @search.hard_failure?
 
     # setting @events so that we can reuse the index atom builder
-    @events = search.events
+    @events = @search.events
 
-    @page_title = @tag ? "Events tagged with '#{@tag}'" : "Search Results for '#{@query}'"
+    @page_title = @search.tag ? "Events tagged with '#{@search.tag}'" : "Search Results for '#{@search.query}'"
 
     render_events(@events)
   end
