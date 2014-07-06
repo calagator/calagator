@@ -172,39 +172,22 @@ class EventsController < ApplicationController
 
   # Search!!!
   def search
-    # TODO Refactor this method and move much of it to the record-managing
-    # logic into a generalized Event::search method.
+    search = Event::Search.new(params)
 
-    @query = params[:query].presence
-    @tag = params[:tag].presence
-    @current = ["1", "true"].include?(params[:current])
-    @order = params[:order].presence
+    flash[:failure] = search.failure_message
+    return redirect_to root_path if search.hard_failure?
 
-    if @order && @order == "score" && @tag
-      flash[:failure] = "You cannot sort tags by score"
-      @order = nil
+    @query = search.query
+    @tag = search.tag
+    @current = search.current
+    @order = search.order
+
+    @grouped_events = search.grouped_events
+    if @grouped_events[:error]
+      flash[:failure] = escape_once(@grouped_events[:error])
     end
-
-    if !@query && !@tag
-      flash[:failure] = "You must enter a search query"
-      return redirect_to(root_path)
-    end
-
-    if @query && @tag
-      # TODO make it possible to search by tag and query simultaneously
-      flash[:failure] = "You can't search by tag and query at the same time"
-      return redirect_to(root_path)
-    elsif @query
-      @grouped_events = Event.search_keywords_grouped_by_currentness(@query, :order => @order, :skip_old => @current)
-    elsif @tag
-      @grouped_events = Event.search_tag_grouped_by_currentness(@tag, :order => @order, :current => @current)
-      if @grouped_events[:error]
-        flash[:failure] = escape_once(@grouped_events[:error])
-      end
-    end
-
     # setting @events so that we can reuse the index atom builder
-    @events = @grouped_events[:past] + @grouped_events[:current]
+    @events = search.events
 
     @page_title = @tag ? "Events tagged with '#{@tag}'" : "Search Results for '#{@query}'"
 
