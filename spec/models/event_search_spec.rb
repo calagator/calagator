@@ -5,7 +5,7 @@ describe Event do
     it "returns everything when searching by empty string" do
       event1 = FactoryGirl.create(:event)
       event2 = FactoryGirl.create(:event)
-      Event.search("").should == [event1, event2]
+      Event.search("").should =~ [event1, event2]
     end
 
     it "searches event titles by substring" do
@@ -36,7 +36,7 @@ describe Event do
       event1 = FactoryGirl.create(:event, title: "wtf")
       event2 = FactoryGirl.create(:event, title: "zomg!")
       event3 = FactoryGirl.create(:event, title: "bbq")
-      Event.search("wtf omg").should == [event1, event2]
+      Event.search("wtf omg").should =~ [event1, event2]
     end
 
     it "searches case-insensitively" do
@@ -71,9 +71,9 @@ describe Event do
     end
 
     it "can limit number of events" do
-      event1 = FactoryGirl.create(:event, title: "omg")
-      event2 = FactoryGirl.create(:event, title: "zomg")
-      Event.search("omg", limit: 1).should == [event1]
+      event1 = FactoryGirl.create(:event, start_time: 1.day.ago)
+      event2 = FactoryGirl.create(:event, start_time: 2.days.ago)
+      Event.search("", limit: 1).should == [event1]
     end
   end
 end
