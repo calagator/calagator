@@ -692,74 +692,20 @@ describe EventsController do
   end
 
   describe "#search" do
-    it "should search" do
-      Event.should_receive(:search_keywords_grouped_by_currentness).and_return({:current => [], :past => []})
-
-      post :search, :query => "myquery"
-    end
-
-    it "should fail if given no search query" do
-      post :search
-
-      flash[:failure].should_not be_blank
-      response.should redirect_to(root_path)
-    end
-
-    it "should fail if searching by both query and tag" do
-      post :search, query: "omg", tag: "bbq"
-
-      flash[:failure].should_not be_blank
-      response.should redirect_to(root_path)
-    end
-
-    it "should be able to only return current events" do
-      Event.should_receive(:search).with("myquery", :order => nil, :skip_old => true).and_return([])
-
-      post :search, :query => "myquery", :current => "1"
-    end
-
-    describe "by tag" do
-      it "should be able to only return events matching specific tag" do
-        Event.should_receive(:search_tag_grouped_by_currentness)
-          .with("foo", current: false, order: nil).and_return(current: [], past: [])
-
-        post :search, :tag => "foo"
-      end
-
-      it "should warn if user tries ordering tags by score" do
-        Event.should_receive(:search_tag_grouped_by_currentness)
-          .with("foo", current: false, order: "score").and_return(current: [], past: [])
-
-        post :search, :tag => "foo", :order => "score"
-        flash[:failure].should_not be_blank
-      end
-
-      it "should warn if user tries ordering tags by invalid order" do
-        Event.should_receive(:search_tag_grouped_by_currentness)
-          .with("foo", current: false, order: "kittens").and_return(current: [], past: [], error: "OMG")
-
-        post :search, :tag => "foo", :order => "kittens"
-        flash[:failure].should_not be_blank
-      end
-
-      # TODO Add subscribe and other links
-    end
-
     describe "when returning results" do
       render_views
 
       let(:current_event) { FactoryGirl.create(:event_with_venue) }
       let(:current_event_2) { FactoryGirl.create(:event_with_venue) }
       let(:past_event) { FactoryGirl.create(:event_with_venue) }
-      let(:results) do
-        {
-          :current => [current_event, current_event_2],
-          :past    => [past_event],
-        }
-      end
+      let(:search) { Event::Search.new(query: "myquery") }
 
       before do
-        Event.should_receive(:search_keywords_grouped_by_currentness).and_return(results)
+        search.stub grouped_events: {
+          current: [current_event, current_event_2],
+          past:    [past_event],
+        }
+        Event::Search.should_receive(:new).and_return(search)
       end
 
       describe "in HTML format" do
@@ -767,8 +713,12 @@ describe EventsController do
           post :search, :query => "myquery", :format => "html"
         end
 
+        it "should assign search result" do
+          assigns[:search].should eq search
+        end
+
         it "should assign matching events" do
-          assigns[:events].should eq results[:past] + results[:current]
+          assigns[:events].should eq search.events
         end
 
         it "should render matching events" do
@@ -792,7 +742,6 @@ describe EventsController do
       end
 
       describe "in XML format" do
-
         it "should produce XML" do
           post :search, :query => "myquery", :format => "xml"
 
@@ -810,11 +759,9 @@ describe EventsController do
           venue_title.should be_a_kind_of String
           venue_title.length.should be_present
         end
-
       end
 
       describe "in JSON format" do
-
         it "should produce JSON" do
           post :search, :query => "myquery", :format => "json"
 
@@ -825,7 +772,7 @@ describe EventsController do
         it "should accept a JSONP callback" do
           post :search, :query => "myquery", :format => "json", :callback => "some_function"
 
-          response.body.split("\n").join.should match /^\s*some_function\(.*\);?\s*$/
+          response.body.should match /^\s*some_function\(.*\);?\s*$/
         end
 
         it "should include venue details" do
@@ -836,18 +783,18 @@ describe EventsController do
           event["venue"]["title"].should be_a_kind_of String
           event["venue"]["title"].length.should be_present
         end
-
       end
 
-      it "should produce ATOM" do
-        post :search, :query => "myquery", :format => "atom"
+      describe "in ATOM format" do
+        it "should produce ATOM" do
+          post :search, :query => "myquery", :format => "atom"
 
-        hash = Hash.from_xml(response.body)
-        hash["feed"]["entry"].should be_a_kind_of Array
+          hash = Hash.from_xml(response.body)
+          hash["feed"]["entry"].should be_a_kind_of Array
+        end
       end
 
       describe "in ICS format" do
-
         it "should produce ICS" do
           post :search, :query => "myquery", :format => "ics"
 
@@ -859,7 +806,20 @@ describe EventsController do
           response.body.should match /SUMMARY:#{current_event_2.title}/
           response.body.should match /SUMMARY:#{past_event.title}/
         end
+      end
 
+      describe "failures" do
+        it "sets search failures in the flash message" do
+          search.stub failure_message: "OMG"
+          post :search
+          flash[:failure].should == "OMG"
+        end
+
+        it "redirects to home if hard failure" do
+          search.stub hard_failure?: true
+          post :search
+          response.should redirect_to(root_path)
+        end
       end
     end
   end
