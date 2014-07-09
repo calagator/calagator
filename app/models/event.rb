@@ -137,15 +137,8 @@ class Event < ActiveRecord::Base
 
   # Associate this event with the +venue+. The +venue+ can be given as a Venue
   # instance, an ID, or a title.
-  def associate_with_venue(new_venue)
-    new_venue = \
-      case new_venue
-      when Venue    then new_venue
-      when NilClass then nil
-      when String   then Venue.find_or_initialize_by_title(new_venue)
-      when Fixnum   then Venue.find(new_venue)
-      else raise TypeError, "Unknown type: #{new_venue.class}"
-      end
+  def associate_with_venue(venue_identifier)
+    new_venue = venue_from_i_dont_know(venue_identifier)
 
     if new_venue && ((venue && venue != new_venue) || (!venue))
       # Set venue if one is provided and it's different than the current, or no venue is currently set.
@@ -156,6 +149,15 @@ class Event < ActiveRecord::Base
     end
 
     venue
+  end
+
+  def venue_from_i_dont_know(venue_identifier)
+    case venue_identifier
+    when Venue, NilClass  then venue_identifier
+    when String           then Venue.find_or_initialize_by_title(venue_identifier)
+    when Fixnum           then Venue.find(venue_identifier)
+    else raise TypeError, "Unknown type: #{venue_identifier.class}"
+    end
   end
 
   # Returns groups of records for the site overview screen in the following format:
