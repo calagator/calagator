@@ -436,25 +436,22 @@ EOF
 
   # Returns an array of the dates spanned by the event.
   def dates
-    if start_time && end_time
+    raise ArgumentError, "can't get dates for an event with no start time" unless start_time
+    if end_time
       (start_time.to_date..end_time.to_date).to_a
-    elsif start_time
-      [start_time.to_date]
     else
-      raise ArgumentError, "can't get dates for an event with no start time"
+      [start_time.to_date]
     end
   end
 
-  # Is this event current? Default cutoff is today
-  def current?(cutoff=nil)
-    cutoff ||= Time.today
-    (end_time || start_time) >= cutoff
+  # Is this event current?
+  def current?
+    (end_time || start_time) >= Time.today
   end
 
-  # Is this event old? Default cutoff is yesterday
-  def old?(cutoff=nil)
-    cutoff ||= Time.zone.now.midnight # midnight today is the end of yesterday
-    (end_time || start_time + 1.hour) <= cutoff
+  # Is this event old?
+  def old?
+    (end_time || start_time + 1.hour) <= Time.zone.now.beginning_of_day
   end
 
   # Did this event start before today but ends today or later?
