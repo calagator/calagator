@@ -436,12 +436,11 @@ EOF
 
   # Returns an array of the dates spanned by the event.
   def dates
-    if start_time && end_time
+    raise ArgumentError, "can't get dates for an event with no start time" unless start_time
+    if end_time
       (start_time.to_date..end_time.to_date).to_a
-    elsif start_time
-      [start_time.to_date]
     else
-      raise ArgumentError, "can't get dates for an event with no start time"
+      [start_time.to_date]
     end
   end
 
