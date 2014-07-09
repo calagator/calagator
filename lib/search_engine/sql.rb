@@ -91,7 +91,7 @@ class SearchEngine::Sql < SearchEngine::Base
           end
           scope = scope.order(order)
 
-          limit = opts[:limit] || 50
+          limit = opts.fetch(:limit, 50)
           scope = scope.limit(limit)
 
           scope
