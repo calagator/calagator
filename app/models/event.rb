@@ -139,16 +139,7 @@ class Event < ActiveRecord::Base
   # instance, an ID, or a title.
   def associate_with_venue(venue_identifier)
     new_venue = Venue.find_by_identifier(venue_identifier)
-
-    if new_venue && ((venue && venue != new_venue) || (!venue))
-      # Set venue if one is provided and it's different than the current, or no venue is currently set.
-      self.venue = new_venue.progenitor
-    elsif !new_venue && venue
-      # Clear the event's venue field
-      self.venue = nil
-    end
-
-    venue
+    self.venue = new_venue && new_venue.progenitor
   end
 
   # Returns groups of records for the site overview screen in the following format:
