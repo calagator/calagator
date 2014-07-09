@@ -71,9 +71,8 @@ describe Event do
     end
 
     it "can limit number of events" do
-      event1 = FactoryGirl.create(:event, start_time: 1.day.ago)
-      event2 = FactoryGirl.create(:event, start_time: 2.days.ago)
-      Event.search("", limit: 1).should == [event1]
+      2.times { FactoryGirl.create(:event) }
+      Event.search("", limit: 1).length.should == 1
     end
   end
 end
