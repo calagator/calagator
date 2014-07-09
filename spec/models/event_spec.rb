@@ -616,10 +616,6 @@ describe Event do
       @venue = FactoryGirl.create(:venue)
     end
 
-    it "should not change a venue to a nil venue" do
-      @event.associate_with_venue(nil).should be_nil
-    end
-
     it "should associate a venue if one wasn't set before" do
       @event.associate_with_venue(@venue).should eq @venue
     end
