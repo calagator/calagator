@@ -444,10 +444,9 @@ EOF
     end
   end
 
-  # Is this event current? Default cutoff is today
-  def current?(cutoff=nil)
-    cutoff ||= Time.today
-    (end_time || start_time) >= cutoff
+  # Is this event current?
+  def current?
+    (end_time || start_time) >= Time.today
   end
 
   # Is this event old? Default cutoff is yesterday
