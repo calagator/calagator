@@ -7,18 +7,23 @@ class Event < ActiveRecord::Base
       validate!
     end
 
+    # Return +events+ grouped by currentness using a data structure like:
+    #
+    #   {
+    #     :current => [ my_current_event, my_other_current_event ],
+    #     :past => [ my_past_event ],
+    #   }
     def grouped_events
-      @grouped_events ||= if query
-        events = self.class.group_by_currentness(Event.search(query, order: order, skip_old: current))
-        if events[:past] && order.to_s == "date"
-          events[:past].reverse!
+      @grouped_events ||= begin
+        events = if query
+          Event.search(query, order: order, skip_old: current)
+        elsif tag
+          Event.search_tag(tag, order: order, current: current)
         end
-        events
-      elsif tag
-        result = self.class.group_by_currentness(Event.search_tag(tag, order: order, current: current))
-        # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
-        result[:past] = [] if current
-        result
+        grouped_events = self.class.group_by_currentness(events)
+        grouped_events[:past].reverse! if grouped_events[:past] && order.to_s == "date"
+        grouped_events[:past] = [] if current
+        grouped_events
       end
     end
 
@@ -38,12 +43,6 @@ class Event < ActiveRecord::Base
       @hard_failure
     end
 
-    # Return +events+ grouped by currentness using a data structure like:
-    #
-    #   {
-    #     :current => [ my_current_event, my_other_current_event ],
-    #     :past => [ my_past_event ],
-    #   }
     def self.group_by_currentness(events)
       grouped = events.group_by(&:current?)
       {:current => grouped[true] || [], :past => grouped[false] || []}
