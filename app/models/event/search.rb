@@ -14,17 +14,11 @@ class Event < ActiveRecord::Base
     #     :past => [ my_past_event ],
     #   }
     def grouped_events
-      @grouped_events ||= begin
-        events = if query
-          Event.search(query, order: order, skip_old: current)
-        elsif tag
-          Event.search_tag(tag, order: order, current: current)
-        end
-        grouped_events = self.class.group_by_currentness(events)
-        grouped_events[:past].reverse! if grouped_events[:past] && order.to_s == "date"
-        grouped_events[:past] = [] if current
-        grouped_events
-      end
+      grouped = events.group_by(&:current?)
+      grouped = { current: grouped[true] || [], past: grouped[false] || [] }
+      grouped[:past].reverse! if grouped[:past] && order.to_s == "date"
+      grouped[:past] = [] if current
+      grouped
     end
 
     def current
@@ -32,7 +26,11 @@ class Event < ActiveRecord::Base
     end
 
     def events
-      grouped_events[:past] + grouped_events[:current]
+      @events ||= if tag
+        Event.search_tag(tag, order: order, current: current)
+      else
+        Event.search(query, order: order, skip_old: current)
+      end
     end
 
     def failure_message
@@ -41,11 +39,6 @@ class Event < ActiveRecord::Base
 
     def hard_failure?
       @hard_failure
-    end
-
-    def self.group_by_currentness(events)
-      grouped = events.group_by(&:current?)
-      {:current => grouped[true] || [], :past => grouped[false] || []}
     end
 
     private
