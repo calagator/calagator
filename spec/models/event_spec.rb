@@ -559,57 +559,6 @@ describe Event do
     end
   end
 
-  describe "when searching" do
-    describe "with .search_tag_grouped_by_currentness" do
-      before do
-        @untagged_current_event = FactoryGirl.create(:event, tag_list: ["no"], start_time: Time.now)
-        @current_event = FactoryGirl.create(:event, tag_list: ["no", "yes"], start_time: Time.now)
-        @past_event = FactoryGirl.create(:event, tag_list: ["yes", "no"], start_time: 1.year.ago)
-        @untagged_past_event = FactoryGirl.create(:event, tag_list: ["no"], start_time: 1.year.ago)
-      end
-
-      it "should find events by tag and group them" do
-        Event.search_tag_grouped_by_currentness("yes").should eq({
-          current: [@current_event],
-          past:    [@past_event],
-        })
-      end
-
-      it "discards past event if passed the current option" do
-        Event.search_tag_grouped_by_currentness("yes", current: true).should eq({
-          current: [@current_event],
-          past:    [],
-        })
-      end
-    end
-
-    describe "with .search_keywords_grouped_by_currentness" do
-      before do
-        @current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
-        @past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
-        @other_past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
-      end
-
-      it "should find events and group them" do
-        Event.should_receive(:search).with("query", {})
-          .and_return([@current_event, @past_event, @other_past_event])
-        Event.search_keywords_grouped_by_currentness("query").should eq({
-          current: [@current_event],
-          past:    [@past_event, @other_past_event],
-        })
-      end
-
-      it "orders past events by date desc if passed date to the order option" do
-        Event.should_receive(:search).with("query", order: "date")
-          .and_return([@current_event, @past_event, @other_past_event])
-        Event.search_keywords_grouped_by_currentness("query", order: "date").should eq({
-          current: [@current_event],
-          past:    [@other_past_event, @past_event],
-        })
-      end
-    end
-  end
-
   describe "when associating with venues" do
     before do
       @event = FactoryGirl.create(:event)

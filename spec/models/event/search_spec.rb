@@ -3,21 +3,29 @@ require 'spec_helper'
 describe Event::Search do
   describe "by keyword" do
     it "should be able to only return events that include a specific keyword" do
-      grouped_events = double(:grouped_events)
-      Event.should_receive(:search_keywords_grouped_by_currentness)
-        .with("myquery", skip_old: false, order: nil).and_return(grouped_events)
+      past_event = double(:event, current?: false)
+      current_event = double(:event, current?: true)
+      events = [past_event, current_event]
+      Event.should_receive(:search).with("myquery", skip_old: false, order: nil).and_return(events)
 
       subject = Event::Search.new query: "myquery"
-      subject.grouped_events.should == grouped_events
+      subject.grouped_events.should == {
+        past: [past_event],
+        current: [current_event],
+      }
     end
 
-    it "should be able to only return current events" do
-      grouped_events = double(:grouped_events)
-      Event.should_receive(:search_keywords_grouped_by_currentness)
-        .with("myquery", order: nil, skip_old: true).and_return(grouped_events)
+    xit "should be able to only return current events" do
+      past_event = double(:event, current?: false)
+      current_event = double(:event, current?: true)
+      events = [past_event, current_event]
+      Event.should_receive(:search).with("myquery", order: nil, skip_old: true).and_return(events)
 
       subject = Event::Search.new query: "myquery", current: "1"
-      subject.grouped_events.should == grouped_events
+      subject.grouped_events.should == {
+        past: [],
+        current: [current_event],
+      }
     end
 
     it "should warn if user tries ordering by invalid order" do
@@ -29,12 +37,16 @@ describe Event::Search do
 
   describe "by tag" do
     it "should be able to only return events matching specific tag" do
-      grouped_events = double(:grouped_events)
-      Event.should_receive(:search_tag_grouped_by_currentness)
-        .with("foo", current: false, order: nil).and_return(grouped_events)
+      past_event = double(:event, current?: false)
+      current_event = double(:event, current?: true)
+      events = [past_event, current_event]
+      Event.should_receive(:search_tag).with("foo", current: false, order: nil).and_return(events)
 
       subject = Event::Search.new tag: "foo"
-      subject.grouped_events.should == grouped_events
+      subject.grouped_events.should == {
+        past: [past_event],
+        current: [current_event],
+      }
     end
 
     it "should warn if user tries ordering by invalid order" do
@@ -62,4 +74,56 @@ describe Event::Search do
       subject.should be_hard_failure
     end
   end
+
+  describe "when searching" do
+    describe "with .search_tag_grouped_by_currentness" do
+      before do
+        @untagged_current_event = FactoryGirl.create(:event, tag_list: ["no"], start_time: Time.now)
+        @current_event = FactoryGirl.create(:event, tag_list: ["no", "yes"], start_time: Time.now)
+        @past_event = FactoryGirl.create(:event, tag_list: ["yes", "no"], start_time: 1.year.ago)
+        @untagged_past_event = FactoryGirl.create(:event, tag_list: ["no"], start_time: 1.year.ago)
+      end
+
+      it "should find events by tag and group them" do
+        Event::Search.search_tag_grouped_by_currentness("yes").should eq({
+          current: [@current_event],
+          past:    [@past_event],
+        })
+      end
+
+      it "discards past event if passed the current option" do
+        Event::Search.search_tag_grouped_by_currentness("yes", current: true).should eq({
+          current: [@current_event],
+          past:    [],
+        })
+      end
+    end
+
+    describe "with .search_keywords_grouped_by_currentness" do
+      before do
+        @current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
+        @past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
+        @other_past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
+      end
+
+      it "should find events and group them" do
+        Event.should_receive(:search).with("query", {})
+          .and_return([@current_event, @past_event, @other_past_event])
+        Event::Search.search_keywords_grouped_by_currentness("query").should eq({
+          current: [@current_event],
+          past:    [@past_event, @other_past_event],
+        })
+      end
+
+      it "orders past events by date desc if passed date to the order option" do
+        Event.should_receive(:search).with("query", order: "date")
+          .and_return([@current_event, @past_event, @other_past_event])
+        Event::Search.search_keywords_grouped_by_currentness("query", order: "date").should eq({
+          current: [@current_event],
+          past:    [@other_past_event, @past_event],
+        })
+      end
+    end
+  end
+
 end

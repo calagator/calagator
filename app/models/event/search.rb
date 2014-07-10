@@ -9,9 +9,9 @@ class Event < ActiveRecord::Base
 
     def grouped_events
       @grouped_events ||= if query
-        Event.search_keywords_grouped_by_currentness(query, order: order, skip_old: current)
+        self.class.search_keywords_grouped_by_currentness(query, order: order, skip_old: current)
       elsif tag
-        Event.search_tag_grouped_by_currentness(tag, order: order, current: current)
+        self.class.search_tag_grouped_by_currentness(tag, order: order, current: current)
       end
     end
 
@@ -29,6 +29,43 @@ class Event < ActiveRecord::Base
 
     def hard_failure?
       @hard_failure
+    end
+
+    # Return events matching the given +tag+ are grouped by their currentness,
+    # see ::group_by_currentness for data structure details.
+    #
+    # Will also set :error key if there was a non-fatal problem, e.g. invalid
+    # sort order.
+    #
+    # Options:
+    # * :current => Limit results to only current events? Defaults to false.
+    def self.search_keywords_grouped_by_currentness(query, opts={})
+      events = group_by_currentness(Event.search(query, opts))
+      if events[:past] && opts[:order].to_s == "date"
+        events[:past].reverse!
+      end
+      events
+    end
+
+    # Return events grouped by their currentness. Accepts the same +args+ as
+    # #search. The results hash is keyed by whether the event is current
+    # (true/false) and the values are arrays of events.
+    def self.search_tag_grouped_by_currentness(tag, opts={})
+      result = group_by_currentness(Event.search_tag(tag, opts))
+      # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
+      result[:past] = [] if opts[:current]
+      result
+    end
+
+    # Return +events+ grouped by currentness using a data structure like:
+    #
+    #   {
+    #     :current => [ my_current_event, my_other_current_event ],
+    #     :past => [ my_past_event ],
+    #   }
+    def self.group_by_currentness(events)
+      grouped = events.group_by(&:current?)
+      {:current => grouped[true] || [], :past => grouped[false] || []}
     end
 
     private
