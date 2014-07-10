@@ -695,18 +695,9 @@ describe EventsController do
     describe "when returning results" do
       render_views
 
-      let(:current_event) { FactoryGirl.create(:event_with_venue) }
-      let(:current_event_2) { FactoryGirl.create(:event_with_venue) }
-      let(:past_event) { FactoryGirl.create(:event_with_venue) }
-      let(:search) { Event::Search.new(query: "myquery") }
-
-      before do
-        search.stub grouped_events: {
-          current: [current_event, current_event_2],
-          past:    [past_event],
-        }
-        Event::Search.should_receive(:new).and_return(search)
-      end
+      let!(:current_event) { FactoryGirl.create(:event_with_venue, title: "MyQuery") }
+      let!(:current_event_2) { FactoryGirl.create(:event_with_venue, description: "WOW myquery!") }
+      let!(:past_event) { FactoryGirl.create(:event_with_venue, title: "old myquery") }
 
       describe "in HTML format" do
         before do
@@ -714,11 +705,11 @@ describe EventsController do
         end
 
         it "should assign search result" do
-          assigns[:search].should eq search
+          assigns[:search].should be_a Event::Search
         end
 
         it "should assign matching events" do
-          assigns[:events].should eq search.events
+          assigns[:events].should =~ [current_event, current_event_2, past_event]
         end
 
         it "should render matching events" do
@@ -810,13 +801,13 @@ describe EventsController do
 
       describe "failures" do
         it "sets search failures in the flash message" do
-          search.stub failure_message: "OMG"
+          Event::Search.any_instance.stub failure_message: "OMG"
           post :search
           flash[:failure].should == "OMG"
         end
 
         it "redirects to home if hard failure" do
-          search.stub hard_failure?: true
+          Event::Search.any_instance.stub hard_failure?: true
           post :search
           response.should redirect_to(root_path)
         end
