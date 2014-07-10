@@ -248,7 +248,7 @@ class Event < ActiveRecord::Base
   # Options:
   # * :current => Limit results to only current events? Defaults to false.
   def self.search_tag_grouped_by_currentness(tag, opts={})
-    result = group_by_currentness(includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order]))
+    result = group_by_currentness(search_tag(tag, opts))
     # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
     result[:past] = [] if opts[:current]
     result
@@ -263,6 +263,10 @@ class Event < ActiveRecord::Base
       events[:past].reverse!
     end
     events
+  end
+
+  def self.search_tag(tag, opts={})
+    includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order])
   end
 
   # Return +events+ grouped by currentness using a data structure like:
