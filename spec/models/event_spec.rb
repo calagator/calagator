@@ -607,27 +607,6 @@ describe Event do
     it "should raise an exception if associated with an unknown type" do
       lambda { @event.associate_with_venue(double('SourceParser')) }.should raise_error TypeError
     end
-
-    describe "and searching" do
-      it "should find events" do
-        event_A = Event.new(:title => "Zipadeedoodah", :start_time => (now + 1.week))
-        event_o = Event.new(:title => "Antidisestablishmentarism", :start_time => (now + 2.weeks))
-        event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (now + 3.weeks))
-        event_Z = Event.new(:title => "ommmmmmmmmmm...", :start_time => (now + 4.weeks))
-
-        event_A.venue = Venue.new(:title => "Acme Hotel")
-        event_o.venue = Venue.new(:title => "opbmusic Studios")
-        event_O.venue = Venue.new(:title => "Oz")
-        event_Z.venue = Venue.new(:title => "Zippers and Things")
-
-        Event.should_receive(:search).and_return([event_A, event_Z, event_O, event_o])
-
-        Event.search_keywords_grouped_by_currentness("myquery", :order => 'venue').should eq({
-          :current => [event_A, event_Z, event_O, event_o],
-          :past => []
-        })
-      end
-    end
   end
 
   describe "with finding duplicates" do

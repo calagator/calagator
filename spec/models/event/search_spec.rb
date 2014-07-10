@@ -85,14 +85,14 @@ describe Event::Search do
       end
 
       it "should find events by tag and group them" do
-        Event::Search.search_tag_grouped_by_currentness("yes").should eq({
+        Event::Search.new(query: "yes").grouped_events.should eq({
           current: [@current_event],
           past:    [@past_event],
         })
       end
 
       it "discards past event if passed the current option" do
-        Event::Search.search_tag_grouped_by_currentness("yes", current: true).should eq({
+        Event::Search.new(query: "yes", current: "true").grouped_events.should eq({
           current: [@current_event],
           past:    [],
         })
@@ -107,18 +107,18 @@ describe Event::Search do
       end
 
       it "should find events and group them" do
-        Event.should_receive(:search).with("query", {})
+        Event.should_receive(:search).with("query", order: nil, skip_old: false)
           .and_return([@current_event, @past_event, @other_past_event])
-        Event::Search.search_keywords_grouped_by_currentness("query").should eq({
+        Event::Search.new(query: "query").grouped_events.should eq({
           current: [@current_event],
           past:    [@past_event, @other_past_event],
         })
       end
 
       it "orders past events by date desc if passed date to the order option" do
-        Event.should_receive(:search).with("query", order: "date")
+        Event.should_receive(:search).with("query", order: "date", skip_old: false)
           .and_return([@current_event, @past_event, @other_past_event])
-        Event::Search.search_keywords_grouped_by_currentness("query", order: "date").should eq({
+        Event::Search.new(query: "query", order: "date").grouped_events.should eq({
           current: [@current_event],
           past:    [@other_past_event, @past_event],
         })
