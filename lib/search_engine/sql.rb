@@ -64,14 +64,15 @@ class SearchEngine::Sql < SearchEngine::Base
             .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
             .includes(:venue)
 
-          conditions_texts = []
-          conditions_arguments = []
-          query.scan(/\w+/).each do |keyword|
+          query_conditions = query.split.inject(scope) do |query_conditions, keyword|
             like = "%#{keyword.downcase}%"
-            conditions_texts.push 'LOWER(events.title) LIKE ? OR LOWER(events.description) LIKE ? OR LOWER(events.url) LIKE ? OR LOWER(tags.name) = ?'
-            conditions_arguments += [like, like, like, keyword]
+            query_conditions
+              .where(['LOWER(events.title) LIKE ?', like])
+              .where(['LOWER(events.description) LIKE ?', like])
+              .where(['LOWER(events.url) LIKE ?', like])
+              .where(['LOWER(tags.name) = ?', keyword])
           end
-          scope = scope.where([conditions_texts.join(' OR '), *conditions_arguments])
+          scope = scope.where(query_conditions.where_values.join(' OR '))
 
           if opts[:skip_old] == true
             scope = scope.where("events.start_time >= ?", Date.yesterday.to_time)
