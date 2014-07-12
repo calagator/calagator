@@ -16,13 +16,26 @@ class Event < ActiveRecord::Base
       end
 
       def search
-        limit order skip_old keywords scope
+        base.keywords.skip_old.order.limit.scope
       end
 
-      private
+      protected
+
+      attr_accessor :scope
+
+      def base
+        column_names = Event.column_names.map { |name| "events.#{name}"}
+        column_names << "venues.id"
+        @scope = Event.scoped
+          .group(column_names)
+          .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type = 'Event'")
+          .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
+          .includes(:venue)
+        self
+      end
       
-      def keywords scope
-        query_conditions = query.split.inject(scope) do |query_conditions, keyword|
+      def keywords
+        query_conditions = query.split.inject(@scope) do |query_conditions, keyword|
           like = "%#{keyword.downcase}%"
           query_conditions
             .where(['LOWER(events.title) LIKE ?', like])
@@ -30,18 +43,18 @@ class Event < ActiveRecord::Base
             .where(['LOWER(events.url) LIKE ?', like])
             .where(['LOWER(tags.name) = ?', keyword])
         end
-        scope.where(query_conditions.where_values.join(' OR '))
+        @scope = @scope.where(query_conditions.where_values.join(' OR '))
+        self
       end
 
-      def skip_old scope
+      def skip_old
         if opts[:skip_old] == true
-          scope.where("events.start_time >= ?", Date.yesterday.to_time)
-        else
-          scope
+          @scope = @scope.where("events.start_time >= ?", Date.yesterday.to_time)
         end
+        self
       end
 
-      def order scope
+      def order
         order = case opts[:order].try(:to_sym)
         when :name, :title
           'LOWER(events.title) ASC'
@@ -50,22 +63,14 @@ class Event < ActiveRecord::Base
         else
           'events.start_time DESC'
         end
-        scope.order(order)
+        @scope = @scope.order(order)
+        self
       end
 
-      def limit scope
+      def limit
         limit = opts.fetch(:limit, 50)
-        scope.limit(limit)
-      end
-
-      def scope
-        column_names = Event.column_names.map { |name| "events.#{name}"}
-        column_names << "venues.id"
-        Event.scoped
-          .group(column_names)
-          .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type = 'Event'")
-          .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
-          .includes(:venue)
+        @scope = @scope.limit(limit)
+        self
       end
     end
   end
