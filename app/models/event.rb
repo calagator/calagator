@@ -243,6 +243,15 @@ class Event < ActiveRecord::Base
     includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order])
   end
 
+  def self.search(query, opts={})
+    search_engine = if SearchEngine.kind == :sunspot
+      Event::Search::Sunspot
+    else
+      Event::Search::Sql
+    end
+    search_engine.search(query, opts)
+  end
+
   #---[ Transformations ]-------------------------------------------------
 
   # Returns an Event created from an AbstractEvent.

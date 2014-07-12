@@ -79,14 +79,6 @@ class SearchEngine::Sunspot < SearchEngine::Base
           end
         end
       end
-    when Event
-      model.class_eval do
-        def self.search(query, opts={})
-          Event::Search::Sunspot.search(query, opts)
-        end
-      end
-    else
-      raise TypeError, "Unknown model class: #{model.name}"
     end
   end
 end
