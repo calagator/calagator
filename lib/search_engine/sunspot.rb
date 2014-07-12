@@ -120,66 +120,49 @@ class SearchEngine::Sunspot < SearchEngine::Base
               nil
             end
 
-          events = []
-
           searcher = self.solr_search do
-            keywords(query)
+            keywords query, minimum_match: 1
+            # FIXME figure out how to implement selective substring matching
+            # keywords "*#{query}*", minimum_match: 1, fields: :url
             ordering ?
               order_by(*ordering) :
               order_by(:score, :desc)
+              order_by(:start_time, :desc)
             with(:duplicate_for_solr, false)
-            with(:start_time).greater_than(Date.yesterday.to_time)
+            with(:start_time).greater_than(Date.yesterday.to_time) if opts[:skip_old]
             data_accessor_for(self).include = [:venue]
           end
-          events += searcher.results
-
-          unless skip_old
-            searcher = self.solr_search do
-              keywords(query)
-              ordering ?
-                order_by(*ordering) :
-                order_by(:start_time, :desc)
-              with(:duplicate_for_solr, false)
-              with(:start_time).less_than(Date.yesterday.to_time + 1.second)
-              data_accessor_for(self).include = [:venue]
-            end
-            events += searcher.results
-          end
-
-          return events.uniq
+          searcher.results.take(limit)
         end
-          # return events
 
         def venue_title_for_solr
           return self.venue.try(:title)
         end
 
         # Do this last to prevent Sunspot from taking over our ::search method.
-        unless Rails.env == 'test'
-          # Why aren't these loaded by default!?
-          include Sunspot::Rails::Searchable unless defined?(self.solr_search)
-          Sunspot::Adapters::InstanceAdapter.register(Sunspot::Rails::Adapters::ActiveRecordInstanceAdapter, self)
-          Sunspot::Adapters::DataAccessor.register(Sunspot::Rails::Adapters::ActiveRecordDataAccessor, self)
+        # Why aren't these loaded by default!?
+        include Sunspot::Rails::Searchable unless defined?(self.solr_search)
+        Sunspot::Adapters::InstanceAdapter.register(Sunspot::Rails::Adapters::ActiveRecordInstanceAdapter, self)
+        Sunspot::Adapters::DataAccessor.register(Sunspot::Rails::Adapters::ActiveRecordDataAccessor, self)
 
-          searchable do
-            text :title, :default_boost => 3
-            string :title
+        searchable do
+          text :title, :default_boost => 3
+          string :title
 
-            text :description
+          text :description
 
-            text :tag_list, :default_boost => 3
+          text :tag_list, :default_boost => 3
 
-            text :url
+          text :url
 
-            time :start_time
-            time :end_time
+          time :start_time
+          time :end_time
 
-            text :venue_title_for_solr
-            string :venue_title_for_solr
+          text :venue_title_for_solr
+          string :venue_title_for_solr
 
-            boolean :duplicate_for_solr do |record|
-              record.duplicate_of_id.present?
-            end
+          boolean :duplicate_for_solr do |record|
+            record.duplicate_of_id.present?
           end
         end
       end

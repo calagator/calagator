@@ -23,6 +23,8 @@ FactoryGirl.define do
     sequence(:description) { |n| "Description of Event #{n}." }
     start_time { Time.now + 1.hour }
     end_time { start_time + 1.hour }
+
+    after(:create) { Sunspot.commit if defined?(Sunspot) }
   end
 
   factory :event_with_venue, :parent => :event do
