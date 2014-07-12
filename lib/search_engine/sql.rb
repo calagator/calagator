@@ -47,14 +47,6 @@ class SearchEngine::Sql < SearchEngine::Base
                                      'LEFT OUTER JOIN tags ON tags.id = taggings.tag_id').where(conditions).order(order).group(Venue.columns.map(&:name).map{|attribute| "venues.#{attribute}"}.join(', ')).limit(limit)
         end
       end
-    when Event
-      model.class_eval do
-        def self.search(query, opts={})
-          Event::Search::Sql.search(query, opts)
-        end
-      end
-    else
-      raise TypeError, "Unknown model class: #{model.name}"
     end
   end
 end

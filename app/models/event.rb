@@ -276,6 +276,15 @@ class Event < ActiveRecord::Base
     {:current => grouped[true] || [], :past => grouped[false] || []}
   end
 
+  def self.search(query, opts={})
+    search_engine = if SearchEngine.kind == :sunspot
+      Event::Search::Sunspot
+    else
+      Event::Search::Sql
+    end
+    search_engine.search(query, opts)
+  end
+
   #---[ Transformations ]-------------------------------------------------
 
   # Returns an Event created from an AbstractEvent.
