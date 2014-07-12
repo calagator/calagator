@@ -51,31 +51,22 @@ class SearchEngine::Sunspot < SearchEngine::Base
 
           return searcher.results.uniq
         end
-          # return venues
 
-        # Do this last to prevent Sunspot from taking over our ::search method.
-        unless Rails.env == 'test'
-          # Why aren't these loaded by default!?
-          include Sunspot::Rails::Searchable unless defined?(self.solr_search)
-          Sunspot::Adapters::InstanceAdapter.register(Sunspot::Rails::Adapters::ActiveRecordInstanceAdapter, self)
-          Sunspot::Adapters::DataAccessor.register(Sunspot::Rails::Adapters::ActiveRecordDataAccessor, self)
-
-          searchable do
-            text :title, :default_boost => 3
-            string :title
-            text :description
-            text :address
-            text :street_address
-            text :postal_code
-            text :locality
-            text :region
-            text :tag_list, :default_boost => 3
-            text :url
-            boolean :closed
-            boolean :wifi
-            boolean :duplicate_for_solr do |record|
-              record.duplicate_of_id.present?
-            end
+        searchable do
+          text :title, :default_boost => 3
+          string :title
+          text :description
+          text :address
+          text :street_address
+          text :postal_code
+          text :locality
+          text :region
+          text :tag_list, :default_boost => 3
+          text :url
+          boolean :closed
+          boolean :wifi
+          boolean :duplicate_for_solr do |record|
+            record.duplicate_of_id.present?
           end
         end
       end
