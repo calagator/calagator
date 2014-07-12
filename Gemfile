@@ -154,9 +154,8 @@ require "./lib/secrets_reader"
 secrets = SecretsReader.read(:silent => true)
 case secrets.search_engine
 when 'sunspot'
-  sunspot_version = '2.1.0'
-  gem 'sunspot_rails', sunspot_version
-  gem 'sunspot_solr',  sunspot_version
+  gem 'sunspot_rails', '2.1.1'
+  gem 'sunspot_solr',  '2.1.1'
   gem 'lucene_query', '0.1'
 end
 
