@@ -270,7 +270,7 @@ class Event < ActiveRecord::Base
 <a class="url" href="#{url}">#{url}</a>
 <span class="summary">#{title}</span>:
 <abbr class="dtstart" title="#{start_time.to_s(:yyyymmdd)}">#{start_time.to_s(:long_date).gsub(/\b[0](\d)/, '\1')}</abbr>,
-at the <span class="location">#{venue && venue.title}</span>
+at the <span class="location">#{venue_title}</span>
 </div>
 EOF
   end
@@ -341,7 +341,7 @@ EOF
           end
 
           if item.venue
-            entry.location [item.venue.title, item.venue.full_address].compact.join(": ")
+            entry.location [item.venue_title, item.venue.full_address].compact.join(": ")
           end
 
           # dtstamp and uid added because of a bug in Outlook;
@@ -363,6 +363,10 @@ EOF
 
   def location
     venue && venue.location
+  end
+
+  def venue_title
+    venue && venue.title
   end
 
   def normalize_url!

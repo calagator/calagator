@@ -111,7 +111,7 @@ class SearchEngine::Sunspot < SearchEngine::Base
             when :date
               [:start_time, :desc]
             when :venue, :location
-              [:venue_title_for_solr, :asc]
+              [:venue_title, :asc]
             when :name, :title
               [:title, :asc]
             when :score
@@ -128,15 +128,11 @@ class SearchEngine::Sunspot < SearchEngine::Base
               order_by(*ordering) :
               order_by(:score, :desc)
               order_by(:start_time, :desc)
-            with(:duplicate_for_solr, false)
+            with(:duplicate, false)
             with(:start_time).greater_than(Date.yesterday.to_time) if opts[:skip_old]
             data_accessor_for(self).include = [:venue]
           end
           searcher.results.take(limit)
-        end
-
-        def venue_title_for_solr
-          return self.venue.try(:title)
         end
 
         # Do this last to prevent Sunspot from taking over our ::search method.
@@ -158,12 +154,10 @@ class SearchEngine::Sunspot < SearchEngine::Base
           time :start_time
           time :end_time
 
-          text :venue_title_for_solr
-          string :venue_title_for_solr
+          text :venue_title
+          string :venue_title
 
-          boolean :duplicate_for_solr do |record|
-            record.duplicate_of_id.present?
-          end
+          boolean(:duplicate) { |event| event.duplicate? }
         end
       end
     else
