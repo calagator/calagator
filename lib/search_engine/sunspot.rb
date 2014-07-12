@@ -101,11 +101,6 @@ class SearchEngine::Sunspot < SearchEngine::Base
           # that the most meaningful events are at the top. Past events are
           # fetched and sorted by default using date, so that the most recent
           # events involving the search term are at the top.
-
-          # Sunspot 1.2.1 seems to ignore pagination, e.g.:
-          ### paginate(:page => 1, :per_page => 100)
-          Sunspot.config.pagination.default_per_page = 100
-
           ordering = \
             case opts[:order].try(:to_sym)
             when :date
@@ -120,7 +115,7 @@ class SearchEngine::Sunspot < SearchEngine::Base
               nil
             end
 
-          searcher = self.solr_search do
+          searcher = Event.solr_search do
             keywords query, minimum_match: 1
             # FIXME figure out how to implement selective substring matching
             # keywords "*#{query}*", minimum_match: 1, fields: :url
@@ -135,13 +130,7 @@ class SearchEngine::Sunspot < SearchEngine::Base
           searcher.results.take(limit)
         end
 
-        # Do this last to prevent Sunspot from taking over our ::search method.
-        # Why aren't these loaded by default!?
-        include Sunspot::Rails::Searchable unless defined?(self.solr_search)
-        Sunspot::Adapters::InstanceAdapter.register(Sunspot::Rails::Adapters::ActiveRecordInstanceAdapter, self)
-        Sunspot::Adapters::DataAccessor.register(Sunspot::Rails::Adapters::ActiveRecordDataAccessor, self)
-
-        searchable do
+        Event.searchable do
           text :title, :default_boost => 3
           string :title
 
@@ -166,19 +155,3 @@ class SearchEngine::Sunspot < SearchEngine::Base
   end
 end
 
-if defined?(Sunspot)
-  # Monkeypatch Sunspot to connect to Solr server. Sigh. For details, see:
-  # http://groups.google.com/group/ruby-sunspot/browse_thread/thread/34772773b4b5682d
-  module Sunspot::Rails
-    def slave_config(sunspot_rails_configuration)
-      config = Sunspot::Configuration.build
-      config.solr.url = URI::HTTP.build(
-          :host => sunspot_rails_configuration.hostname,
-          :port => sunspot_rails_configuration.port,
-          :path => sunspot_rails_configuration.path
-        ).to_s
-      config
-    end
-  end
-  Sunspot.session = Sunspot::Rails.build_session
-end
