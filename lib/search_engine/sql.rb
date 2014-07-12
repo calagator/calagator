@@ -60,36 +60,42 @@ class SearchEngine::Sql < SearchEngine::Base
         # * :limit => Maximum number of entries to return. Defaults to +solr_search_matches+.
         # * :skip_old => Return old entries? Defaults to false.
         def self.search(query, opts={})
-          skip_old = opts[:skip_old] == true
-          limit = opts[:limit] || 50
+          scope = Event.joins("LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type = 'Event'")
+            .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
+            .includes(:venue)
 
-          order = \
-            case opts[:order].try(:to_sym)
-            when nil, '', :date, :score
-              'events.start_time DESC'
-            when :name, :title
-              'LOWER(events.title) ASC'
-            when :location, :venue
-              'LOWER(venues.title) ASC'
-            else
-              raise ArgumentError, "Unknown order: #{order}"
-            end
-
-          conditions_text = ''
-          conditions_arguments = []
-          query.scan(/\w+/).each do |keyword|
+          query_conditions = query.split.inject(scope) do |query_conditions, keyword|
             like = "%#{keyword.downcase}%"
-            conditions_text << ' OR ' if conditions_text.present?
-            conditions_text << 'LOWER(events.title) LIKE ? OR LOWER(events.description) LIKE ? OR LOWER(events.url) LIKE ? OR LOWER(tags.name) = ?'
-            conditions_arguments += [like, like, like, keyword]
+            query_conditions
+              .where(['LOWER(events.title) LIKE ?', like])
+              .where(['LOWER(events.description) LIKE ?', like])
+              .where(['LOWER(events.url) LIKE ?', like])
+              .where(['LOWER(tags.name) = ?', keyword])
           end
-          if skip_old
-            conditions_text = "events.start_time >= ? AND (#{conditions_text})"
-            conditions_arguments = [Date.yesterday.to_time] + conditions_arguments
+          scope = scope.where(query_conditions.where_values.join(' OR '))
+
+          if opts[:skip_old] == true
+            scope = scope.where("events.start_time >= ?", Date.yesterday.to_time)
           end
-          conditions = [conditions_text, *conditions_arguments]
-          return Event.joins("LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type = 'Event'",
-                             'LEFT OUTER JOIN tags ON tags.id = taggings.tag_id').includes(:venue).where(conditions).order(order).group(Event.columns.map(&:name).map{|attribute| "events.#{attribute}"}.join(', ')).limit(limit)
+
+          column_names = Event.column_names.map { |name| "events.#{name}"}
+          column_names << "venues.id"
+          scope = scope.group(column_names)
+
+          order = case opts[:order].try(:to_sym)
+          when :name, :title
+            'LOWER(events.title) ASC'
+          when :location, :venue
+            'LOWER(venues.title) ASC'
+          else
+            'events.start_time DESC'
+          end
+          scope = scope.order(order)
+
+          limit = opts.fetch(:limit, 50)
+          scope = scope.limit(limit)
+
+          scope
         end
       end
     else
