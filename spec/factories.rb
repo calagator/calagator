@@ -17,7 +17,7 @@ FactoryGirl.define do
     wifi true
     access_notes "Access permitted."
 
-    after(:create) { Sunspot.commit if ::SearchEngine.kind == :sunspot }
+    after(:create) { Sunspot.commit if Venue::SearchEngine.kind == :sunspot }
   end
 
   factory :event do

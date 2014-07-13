@@ -121,11 +121,6 @@ module Calagator
       # Set cookie session
       config.session_store :cookie_store, :key => SECRETS.session_name || "calagator"
       config.secret_token = SECRETS.session_secret
-
-
-      # Activate search engine
-      require 'search_engine'
-      ::SearchEngine.kind = SECRETS.search_engine
     end
 
     # Set timezone for OS
