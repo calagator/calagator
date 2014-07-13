@@ -11,7 +11,16 @@ class Venue < ActiveRecord::Base
       # * :limit => Maximum number of entries to return. Defaults to +solr_search_matches+.
       # * :wifi => Require wifi
       # * :include_closed => Include closed venues? Defaults to false.
-      def self.search(query, opts={})
+      def self.search(*args)
+        new(*args).search
+      end
+
+      def initialize(*args)
+        super
+        configure unless configured?
+      end
+
+      def search
         wifi = opts[:wifi]
         include_closed = opts[:include_closed] == true
         limit = opts[:limit] || 50
@@ -43,22 +52,30 @@ class Venue < ActiveRecord::Base
         searcher.results.take(limit)
       end
 
-      Venue.searchable do
-        text :title, :default_boost => 3
-        string :title
-        text :description
-        text :address
-        text :street_address
-        text :postal_code
-        text :locality
-        text :region
-        text :tag_list, :default_boost => 3
-        text :url
-        boolean :closed
-        boolean :wifi
-        boolean :duplicate_for_solr do |record|
-          record.duplicate_of_id.present?
+      def configure
+        Venue.searchable do
+          text :title, :default_boost => 3
+          string :title
+          text :description
+          text :address
+          text :street_address
+          text :postal_code
+          text :locality
+          text :region
+          text :tag_list, :default_boost => 3
+          text :url
+          boolean :closed
+          boolean :wifi
+          boolean :duplicate_for_solr do |record|
+            record.duplicate_of_id.present?
+          end
         end
+        Venue.reindex
+        ::Sunspot.commit
+      end
+
+      def configured?
+        Venue.respond_to?(:solr_search)
       end
     end
   end
