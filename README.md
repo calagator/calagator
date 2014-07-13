@@ -1,4 +1,4 @@
-[![Build Status](https://secure.travis-ci.org/calagator/calagator.png)](http://travis-ci.org/calagator/calagator)
+[![Build Status](https://travis-ci.org/calagator/calagator.svg?branch=master)](http://travis-ci.org/calagator/calagator)
 [![Code Climate](https://codeclimate.com/github/calagator/calagator.png)](https://codeclimate.com/github/calagator/calagator)
 [![Coverage Status](https://coveralls.io/repos/calagator/calagator/badge.png)](https://coveralls.io/r/calagator/calagator)
 [![Dependency Status](https://gemnasium.com/calagator/calagator.svg)](https://gemnasium.com/calagator/calagator)
