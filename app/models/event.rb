@@ -242,10 +242,10 @@ class Event < ActiveRecord::Base
   end
 
   def self.search(query, opts={})
-    search_engine = if ::SearchEngine.kind == :sunspot
-      Event::SearchEngine::Sunspot
+    search_engine = if SearchEngine.kind == :sunspot
+      SearchEngine::Sunspot
     else
-      Event::SearchEngine::Sql
+      SearchEngine::Sql
     end
     search_engine.search(query, opts)
   end
