@@ -23,8 +23,6 @@
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
-  include SearchEngine
-
   # Treat any event with a duration of at least this many hours as a multiday
   # event. This constant is used by the #multiday? method and is primarily
   # meant to make iCalendar exports display this event as covering a range of
