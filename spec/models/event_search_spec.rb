@@ -107,7 +107,7 @@ describe Event do
     it_should_behave_like "#search"
 
     it "searches event urls by substring" do
-      pending "figure how to implement selective substring matching in Sunspot"
+      skip "figure how to implement selective substring matching in Sunspot"
       event1 = FactoryGirl.create(:event, url: "http://example.com/wtfbbq.html")
       event2 = FactoryGirl.create(:event, url: "http://example.com/zomg.html")
       Event.search("zomg").should == [event2]
