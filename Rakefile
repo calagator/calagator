@@ -10,3 +10,16 @@ require 'rake'
 # require 'tasks/rails'
 
 Calagator::Application.load_tasks
+
+task "sunspot:solr:start" do
+  def solr_responding(port)
+    system %(curl -o /dev/null "http://localhost:#{port}/solr" > /dev/null 2>&1)
+  end
+
+  print "Waiting for Solr."
+  while !solr_responding(8981) do
+    print "."
+    sleep 1
+  end
+  puts "done."
+end
