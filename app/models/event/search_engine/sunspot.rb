@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  class Search
+  class SearchEngine
     Sunspot = Struct.new(:query, :opts) do
       # Return an Array of non-duplicate Event instances matching the search +query+..
       #
