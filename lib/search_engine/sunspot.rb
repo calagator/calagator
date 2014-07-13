@@ -47,7 +47,7 @@ class SearchEngine::Sunspot < SearchEngine::Base
             with(:closed, false) unless include_closed
           end
 
-          return searcher.results.uniq
+          searcher.results.take(limit)
         end
 
         searchable do
