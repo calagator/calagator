@@ -5,8 +5,6 @@ class SearchEngine::Sunspot < SearchEngine::Base
 
   def self.add_searching_to(model)
     case model.new
-    when Source
-      # Do nothing
     when Venue
       # Add search to venues
       model.class_eval do

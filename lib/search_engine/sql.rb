@@ -5,8 +5,6 @@ class SearchEngine::Sql < SearchEngine::Base
 
   def self.add_searching_to(model)
     case model.new
-    when Source
-      # Do nothing
     when Venue
       model.class_eval do
       # Return an Array of non-duplicate Venue instances matching the search +query+..
