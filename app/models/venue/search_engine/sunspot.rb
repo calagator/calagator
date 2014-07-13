@@ -21,35 +21,36 @@ class Venue < ActiveRecord::Base
       end
 
       def search
-        wifi = opts[:wifi]
-        include_closed = opts[:include_closed] == true
-        limit = opts[:limit] || 50
+        Venue.solr_search do
+          keywords query
+          order_by *order
+          with :duplicate_for_solr, false
+          with :wifi, true if wifi
+          with :closed, false unless include_closed
+        end.results.take(limit)
+      end
 
-        # Sunspot 1.2.1 seems to ignore pagination, e.g.:
-        ### paginate(:page => 1, :per_page => 100)
-        ::Sunspot.config.pagination.default_per_page = 100
+      private
 
-        ordering = \
-          case opts[:order].try(:to_sym)
-          when :name, :title
-            [:title, :asc]
-          when :score
-            [:score, :desc]
-          else
-            nil
-          end
-
-        searcher = Venue.solr_search do
-          keywords(query)
-          ordering ?
-            order_by(*ordering) :
-            order_by(:score, :desc)
-          with(:duplicate_for_solr, false)
-          with(:wifi, true) if wifi
-          with(:closed, false) unless include_closed
+      def order
+        case opts[:order].try(:to_sym)
+        when :name, :title
+          [:title, :asc]
+        else
+          [:score, :desc]
         end
+      end
 
-        searcher.results.take(limit)
+      def wifi
+        opts[:wifi]
+      end
+
+      def include_closed
+        opts[:include_closed]
+      end
+
+      def limit
+        opts[:limit] || 50
       end
 
       def configure
