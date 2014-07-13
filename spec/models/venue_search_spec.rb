@@ -62,7 +62,34 @@ describe Venue do
     end
   end
 
-  describe "Sql" do
+  # describe "Sql" do
+  #   around do |example|
+  #     original = Venue::SearchEngine.kind
+  #     Venue::SearchEngine.kind = :sql
+  #     example.run
+  #     Venue::SearchEngine.kind = original
+  #   end
+
+  #   it_should_behave_like "#search"
+  # end
+
+  describe "Sunspot" do
+    #around do |example|
+    #  server_running = begin
+    #    solr = Sunspot::Rails::Server.new
+    #    Process.getpgid(File.read(solr.pid_path).to_i)
+    #  rescue Errno::ESRCH, Errno::ENOENT; end
+
+    #  if server_running
+    #    original = ::SearchEngine.kind
+    #    ::SearchEngine.kind = :sunspot
+    #    example.run
+    #    ::SearchEngine.kind = original
+    #  else
+    #    pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"
+    #  end
+    #end
+
     it_should_behave_like "#search"
   end
 end
