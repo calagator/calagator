@@ -24,7 +24,7 @@ FactoryGirl.define do
     start_time { Time.now + 1.hour }
     end_time { start_time + 1.hour }
 
-    after(:create) { Sunspot.commit if ::SearchEngine.kind == :sunspot }
+    after(:create) { Sunspot.commit if Event::SearchEngine.kind == :sunspot }
   end
 
   factory :event_with_venue, :parent => :event do

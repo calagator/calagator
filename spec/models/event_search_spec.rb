@@ -88,9 +88,9 @@ describe Event do
       rescue Errno::ESRCH, Errno::ENOENT; end
 
       if server_running
-        ::SearchEngine.kind = :sunspot
+        Event::SearchEngine.kind = :sunspot
         example.run
-        ::SearchEngine.kind = :sql
+        Event::SearchEngine.kind = :sql
       else
         pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"
       end
