@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Event do
-  describe "#search" do
+  shared_examples_for "#search" do
     it "returns everything when searching by empty string" do
       event1 = FactoryGirl.create(:event)
       event2 = FactoryGirl.create(:event)
@@ -17,13 +17,6 @@ describe Event do
     it "searches event descriptions by substring" do
       event1 = FactoryGirl.create(:event, description: "wtfbbq")
       event2 = FactoryGirl.create(:event, description: "zomg!")
-      Event.search("zomg").should == [event2]
-    end
-
-    it "searches event urls by substring" do
-      pending "figure how to implement selective substring matching in Sunspot" if defined?(Sunspot)
-      event1 = FactoryGirl.create(:event, url: "http://example.com/wtfbbq.html")
-      event2 = FactoryGirl.create(:event, url: "http://example.com/zomg.html")
       Event.search("zomg").should == [event2]
     end
 
@@ -74,6 +67,50 @@ describe Event do
     it "can limit number of events" do
       2.times { FactoryGirl.create(:event) }
       Event.search("", limit: 1).length.should == 1
+    end
+  end
+
+  describe "Sql" do
+    around do |example|
+      original = SearchEngine.kind
+      SearchEngine.kind = :sql
+      example.run
+      SearchEngine.kind = original
+    end
+
+    it_should_behave_like "#search"
+
+    it "searches event urls by substring" do
+      event1 = FactoryGirl.create(:event, url: "http://example.com/wtfbbq.html")
+      event2 = FactoryGirl.create(:event, url: "http://example.com/zomg.html")
+      Event.search("zomg").should == [event2]
+    end
+  end
+
+  describe "Sunspot" do
+    around do |example|
+      server_running = begin
+        solr = Sunspot::Rails::Server.new
+        Process.getpgid(File.read(solr.pid_path).to_i)
+      rescue Errno::ESRCH, Errno::ENOENT; end
+
+      if server_running
+        original = SearchEngine.kind
+        SearchEngine.kind = :sunspot
+        example.run
+        SearchEngine.kind = original
+      else
+        pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"
+      end
+    end
+
+    it_should_behave_like "#search"
+
+    it "searches event urls by substring" do
+      pending "figure how to implement selective substring matching in Sunspot"
+      event1 = FactoryGirl.create(:event, url: "http://example.com/wtfbbq.html")
+      event2 = FactoryGirl.create(:event, url: "http://example.com/zomg.html")
+      Event.search("zomg").should == [event2]
     end
   end
 end

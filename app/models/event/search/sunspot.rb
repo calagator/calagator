@@ -13,6 +13,25 @@ class Event < ActiveRecord::Base
       # * :limit => Maximum number of entries to return. Defaults to +solr_search_matches+.
       # * :skip_old => Return old entries? Defaults to false.
       def self.search(query, opts={})
+        Event.searchable do
+          text :title, :default_boost => 3
+          string :title
+
+          text :description
+
+          text :tag_list, :default_boost => 3
+
+          text :url
+
+          time :start_time
+          time :end_time
+
+          text :venue_title
+          string :venue_title
+
+          boolean(:duplicate) { |event| event.duplicate? }
+        end
+
         skip_old = opts[:skip_old] == true
         limit = opts[:limit] || 50
 
@@ -48,25 +67,6 @@ class Event < ActiveRecord::Base
           data_accessor_for(Event).include = [:venue]
         end
         searcher.results.take(limit)
-      end
-
-      Event.searchable do
-        text :title, :default_boost => 3
-        string :title
-
-        text :description
-
-        text :tag_list, :default_boost => 3
-
-        text :url
-
-        time :start_time
-        time :end_time
-
-        text :venue_title
-        string :venue_title
-
-        boolean(:duplicate) { |event| event.duplicate? }
       end
     end
   end
