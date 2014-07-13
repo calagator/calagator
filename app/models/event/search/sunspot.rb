@@ -74,6 +74,8 @@ class Event < ActiveRecord::Base
 
           boolean(:duplicate) { |event| event.duplicate? }
         end
+        Event.reindex
+        ::Sunspot.commit
       end
 
       def configured?
