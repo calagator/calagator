@@ -71,6 +71,13 @@ describe Event do
   end
 
   describe "Sql" do
+    around do |example|
+      original = Event::SearchEngine.kind
+      Event::SearchEngine.kind = :sql
+      example.run
+      Event::SearchEngine.kind = original
+    end
+
     it_should_behave_like "#search"
 
     it "searches event urls by substring" do
@@ -88,9 +95,10 @@ describe Event do
       rescue Errno::ESRCH, Errno::ENOENT; end
 
       if server_running
+        original = Event::SearchEngine.kind
         Event::SearchEngine.kind = :sunspot
         example.run
-        Event::SearchEngine.kind = :sql
+        Event::SearchEngine.kind = original
       else
         pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"
       end
