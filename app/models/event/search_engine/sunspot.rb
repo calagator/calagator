@@ -16,6 +16,10 @@ class Event < ActiveRecord::Base
         new(*args).search
       end
 
+      def self.score?
+        true
+      end
+
       def initialize(*args)
         super
         configure unless configured?

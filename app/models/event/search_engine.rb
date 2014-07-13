@@ -6,6 +6,10 @@ class Event < ActiveRecord::Base
       search_engine.search(*args)
     end
 
+    def self.score?
+      search_engine.score?
+    end
+
     private_class_method
 
     def self.search_engine
