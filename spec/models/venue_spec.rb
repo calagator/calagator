@@ -117,6 +117,32 @@ describe Venue, "when finding duplicates [integration test]" do
   end
 end
 
+describe Venue, "when finding by an identifier" do 
+  
+  it "should return nil for nil" do 
+    Venue.find_by_identifier(nil).should be_nil 
+  end
+  
+  it "should return an instance of Venue if it is a Venue" do 
+    record = FactoryGirl.create(:venue)
+    Venue.find_by_identifier(record).should eq record
+  end
+  
+  it "should return an new venue for a string" do 
+    Venue.find_by_identifier("Moda Center").should be_an_instance_of Venue
+  end
+  
+  it "should return an existing venue for a string that matches an existing venue" do 
+    record = FactoryGirl.create(:venue, :title => "Tilt")
+    Venue.find_by_identifier("Tilt").should eq record
+  end
+  
+  it "should return a venue for an id that matches an existing venue" do 
+    record = FactoryGirl.create(:venue, :id => 8002)
+    Venue.find_by_identifier(8002).should eq record
+  end
+end
+
 describe Venue, "when checking for squashing" do
   before do
     @master = Venue.create!(:title => "Master")
