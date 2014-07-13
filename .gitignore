@@ -16,6 +16,7 @@ config/database~custom.yml
 config/mongrel_cluster.yml
 config/newrelic.yml
 config/thin.yml
+config/secrets.yml
 coverage.info*
 config/thin.yml
 coverage/*
