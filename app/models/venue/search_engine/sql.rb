@@ -23,8 +23,9 @@ class Venue < ActiveRecord::Base
           end
 
         keywords = query.split
+        like = "%#{query.downcase}%"
         tag_conditions = Array.new(keywords.size, "LOWER(tags.name) = ?").join(" OR ")
-        conditions = ["title LIKE ? OR description LIKE ? OR (#{tag_conditions})", *(["%#{query}%", "%#{query}%"] + keywords) ]
+        conditions = ["LOWER(title) LIKE ? OR LOWER(description) LIKE ? OR (#{tag_conditions})", *([like, like] + keywords) ]
         scoped_venues = scoped_venues.where(conditions) if keywords.any?
 
         scoped_venues = scoped_venues.joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type = 'Venue'",
