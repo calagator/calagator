@@ -37,12 +37,14 @@ class SearchEngine::Sql < SearchEngine::Base
               raise ArgumentError, "Unknown order: #{order}"
             end
 
-          keywords = query.split(" ")
+          keywords = query.split
           tag_conditions = Array.new(keywords.size, "LOWER(tags.name) = ?").join(" OR ")
-
           conditions = ["title LIKE ? OR description LIKE ? OR (#{tag_conditions})", *(["%#{query}%", "%#{query}%"] + keywords) ]
-          return scoped_venues.joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type = 'Venue'",
-                                     'LEFT OUTER JOIN tags ON tags.id = taggings.tag_id').where(conditions).order(order).group(Venue.columns.map(&:name).map{|attribute| "venues.#{attribute}"}.join(', ')).limit(limit)
+          scoped_venues = scoped_venues.where(conditions) if keywords.any?
+
+          scoped_venues = scoped_venues.joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type = 'Venue'",
+                                     'LEFT OUTER JOIN tags ON tags.id = taggings.tag_id').order(order).group(Venue.columns.map(&:name).map{|attribute| "venues.#{attribute}"}.join(', ')).limit(limit)
+
         end
       end
     end
