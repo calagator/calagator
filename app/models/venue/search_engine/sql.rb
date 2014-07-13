@@ -1,35 +1,62 @@
 class Venue < ActiveRecord::Base
   class SearchEngine
     Sql = Struct.new(:query, :opts) do
-      def self.search(query, opts={})
-        wifi = opts[:wifi]
-        include_closed = opts[:include_closed] == true
-        limit = opts[:limit] || 50
+      def self.search(*args)
+        new(*args).search
+      end
 
-        scoped_venues = Venue.non_duplicates
-        # Pick a subset of venues (we want in_business by default)
-        unless include_closed
-          scoped_venues = scoped_venues.in_business
+      def search
+        base.keywords.non_duplicates.with_wifi.in_business.order.limit.scope
+      end
+
+      protected
+
+      attr_accessor :scope
+
+      def base
+        column_names = Venue.column_names.map { |name| "venues.#{name}" }
+        @scope = Venue.scoped
+          .group(column_names)
+          .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type = 'Venue'")
+          .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
+        self
+      end
+
+      def keywords
+        query_conditions = query.split.inject(@scope) do |query_conditions, keyword|
+          like = "%#{keyword.downcase}%"
+          query_conditions
+            .where(['LOWER(title) LIKE ?', like])
+            .where(['LOWER(description) LIKE ?', like])
+            .where(['LOWER(tags.name) = ?', keyword])
         end
+        @scope = @scope.where(query_conditions.where_values.join(' OR '))
+        self
+      end
 
-        scoped_venues = scoped_venues.with_public_wifi if wifi
+      def non_duplicates
+        @scope = @scope.non_duplicates
+        self
+      end
 
-        order = \
-          case opts[:order].try(:to_sym)
-          when nil, :name, :title
-            'LOWER(venues.title) ASC'
-          else
-            raise ArgumentError, "Unknown order: #{order}"
-          end
+      def order
+        @scope = @scope.order('LOWER(venues.title) ASC')
+        self
+      end
 
-        keywords = query.split
-        like = "%#{query.downcase}%"
-        tag_conditions = Array.new(keywords.size, "LOWER(tags.name) = ?").join(" OR ")
-        conditions = ["LOWER(title) LIKE ? OR LOWER(description) LIKE ? OR (#{tag_conditions})", *([like, like] + keywords) ]
-        scoped_venues = scoped_venues.where(conditions) if keywords.any?
+      def limit
+        @scope = @scope.limit(opts[:limit] || 50)
+        self
+      end
 
-        scoped_venues = scoped_venues.joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type = 'Venue'",
-                                   'LEFT OUTER JOIN tags ON tags.id = taggings.tag_id').order(order).group(Venue.columns.map(&:name).map{|attribute| "venues.#{attribute}"}.join(', ')).limit(limit)
+      def with_wifi
+        @scope = @scope.with_public_wifi if opts[:wifi]
+        self
+      end
+
+      def in_business
+        @scope = @scope.in_business unless opts[:include_closed]
+        self
       end
     end
   end
