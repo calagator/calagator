@@ -29,7 +29,6 @@
 #
 
 class Venue < ActiveRecord::Base
-  include SearchEngine
   include StripWhitespace
 
   has_paper_trail
@@ -130,6 +129,12 @@ class Venue < ActiveRecord::Base
         :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL'
       )
     end
+  end
+
+  #===[ Search ]==========================================================
+
+  def self.search(query, opts={})
+    SearchEngine.search(query, opts)
   end
 
   #===[ Address helpers ]=================================================
