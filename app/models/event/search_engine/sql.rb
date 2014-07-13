@@ -15,6 +15,10 @@ class Event < ActiveRecord::Base
         new(*args).search
       end
 
+      def self.score?
+        false
+      end
+
       def search
         base.keywords.skip_old.order.limit.scope
       end

@@ -11,5 +11,5 @@ Locals:
 </div>
 
 <div id='list_items'>
-  <%= render partial: 'events/table', locals: { events: events, scores: search.query.present? && SearchEngine.score? } %>
+  <%= render partial: 'events/table', locals: { events: events, scores: search.query.present? && Event::SearchEngine.score? } %>
 </div>
