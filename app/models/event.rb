@@ -23,8 +23,6 @@
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
-  include SearchEngine
-
   # Treat any event with a duration of at least this many hours as a multiday
   # event. This constant is used by the #multiday? method and is primarily
   # meant to make iCalendar exports display this event as covering a range of
@@ -276,6 +274,10 @@ class Event < ActiveRecord::Base
     {:current => grouped[true] || [], :past => grouped[false] || []}
   end
 
+  def self.search(query, opts={})
+    SearchEngine.search(query, opts)
+  end
+
   #---[ Transformations ]-------------------------------------------------
 
   # Returns an Event created from an AbstractEvent.
@@ -303,7 +305,7 @@ class Event < ActiveRecord::Base
 <a class="url" href="#{url}">#{url}</a>
 <span class="summary">#{title}</span>:
 <abbr class="dtstart" title="#{start_time.to_s(:yyyymmdd)}">#{start_time.to_s(:long_date).gsub(/\b[0](\d)/, '\1')}</abbr>,
-at the <span class="location">#{venue && venue.title}</span>
+at the <span class="location">#{venue_title}</span>
 </div>
 EOF
   end
@@ -374,7 +376,7 @@ EOF
           end
 
           if item.venue
-            entry.location [item.venue.title, item.venue.full_address].compact.join(": ")
+            entry.location [item.venue_title, item.venue.full_address].compact.join(": ")
           end
 
           # dtstamp and uid added because of a bug in Outlook;
@@ -396,6 +398,10 @@ EOF
 
   def location
     venue && venue.location
+  end
+
+  def venue_title
+    venue && venue.title
   end
 
   def normalize_url!
