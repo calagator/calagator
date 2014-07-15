@@ -47,59 +47,6 @@ class SearchEngine::Sql < SearchEngine::Base
                                      'LEFT OUTER JOIN tags ON tags.id = taggings.tag_id').where(conditions).order(order).group(Venue.columns.map(&:name).map{|attribute| "venues.#{attribute}"}.join(', ')).limit(limit)
         end
       end
-    when Event
-      model.class_eval do
-        # Return an Array of non-duplicate Event instances matching the search +query+..
-        #
-        # Options:
-        # * :order => How to order the entries? Defaults to :date. Permitted values:
-        #   * :date => Sort by date
-        #   * :name => Sort by event title
-        #   * :title => same as :name
-        #   * :venue => Sort by venue title
-        # * :limit => Maximum number of entries to return. Defaults to +solr_search_matches+.
-        # * :skip_old => Return old entries? Defaults to false.
-        def self.search(query, opts={})
-          scope = Event.joins("LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type = 'Event'")
-            .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
-            .includes(:venue)
-
-          query_conditions = query.split.inject(scope) do |query_conditions, keyword|
-            like = "%#{keyword.downcase}%"
-            query_conditions
-              .where(['LOWER(events.title) LIKE ?', like])
-              .where(['LOWER(events.description) LIKE ?', like])
-              .where(['LOWER(events.url) LIKE ?', like])
-              .where(['LOWER(tags.name) = ?', keyword])
-          end
-          scope = scope.where(query_conditions.where_values.join(' OR '))
-
-          if opts[:skip_old] == true
-            scope = scope.where("events.start_time >= ?", Date.yesterday.to_time)
-          end
-
-          column_names = Event.column_names.map { |name| "events.#{name}"}
-          column_names << "venues.id"
-          scope = scope.group(column_names)
-
-          order = case opts[:order].try(:to_sym)
-          when :name, :title
-            'LOWER(events.title) ASC'
-          when :location, :venue
-            'LOWER(venues.title) ASC'
-          else
-            'events.start_time DESC'
-          end
-          scope = scope.order(order)
-
-          limit = opts.fetch(:limit, 50)
-          scope = scope.limit(limit)
-
-          scope
-        end
-      end
-    else
-      raise TypeError, "Unknown model class: #{model.name}"
     end
   end
 end
