@@ -1,6 +1,6 @@
 class Venue < ActiveRecord::Base
   class SearchEngine
-    Sql = Struct.new(:query, :opts) do
+    class Sql < Struct.new(:query, :opts)
       def self.search(*args)
         new(*args).search
       end

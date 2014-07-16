@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
   class SearchEngine
-    Sql = Struct.new(:query, :opts) do
+    class Sql < Struct.new(:query, :opts)
       # Return an Array of non-duplicate Event instances matching the search +query+..
       #
       # Options:
