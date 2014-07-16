@@ -1,4 +1,5 @@
 require 'spec_helper'
+require './spec/controllers/squash_many_duplicates_examples'
 
 describe EventsController do
   describe "#index" do
@@ -690,63 +691,8 @@ describe EventsController do
     end
   end
 
-  describe "#squash_many_duplicates" do
-    before do
-      @master = FactoryGirl.create(:event, title: "master")
-      @dup1 = FactoryGirl.create(:event, title: "dup1")
-      @dup2 = FactoryGirl.create(:event, title: "dup2")
-    end
-
-    context "happy path" do
-      before do
-        post :squash_many_duplicates, master_id: @master.id, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id
-      end
-
-      it "squashes the duplicates into the master" do
-        @master.duplicates.should == [@dup1, @dup2]
-      end
-
-      it "redirects to duplicates page for more duplicate squashing" do
-        response.should redirect_to("/events/duplicates")
-      end
-
-      it "sets the flash success message" do
-        flash[:success].should == %(Squashed duplicate events ["dup1", "dup2"] into master #{@master.id}.)
-      end
-    end
-
-    context "with no master" do
-      it "redirects with a failure message" do
-        post :squash_many_duplicates, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id
-        flash[:failure].should == "A master event must be selected."
-        response.should redirect_to("/events/duplicates")
-      end
-    end
-
-    context "with no duplicates" do
-      it "redirects with a failure message" do
-        post :squash_many_duplicates, master_id: @master.id
-        flash[:failure].should == "At least one duplicate event must be selected."
-        response.should redirect_to("/events/duplicates")
-      end
-    end
-
-    context "with duplicates containing master" do
-      it "redirects with a failure message" do
-        post :squash_many_duplicates, master_id: @master.id, duplicate_id_1: @master.id
-        flash[:failure].should == "The master event could not be squashed into itself."
-        response.should redirect_to("/events/duplicates")
-      end
-    end
-
-    context "with no duplicates squashed" do
-      # FIXME is it even possible to get to this state?
-      it "redirects with a failure message" do
-        Event.stub(squash: [])
-        post :squash_many_duplicates, master_id: @master.id, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id
-        flash[:failure].should == "No duplicate events were squashed."
-      end
-    end
+  context do
+    include_examples "#squash_many_duplicates", :event
   end
 
   describe "#search" do
