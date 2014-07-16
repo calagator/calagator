@@ -38,11 +38,8 @@ module DuplicateChecking
   def self.included(base)
     base.extend ClassMethods
     base.class_eval do
-      cattr_accessor :_duplicate_checking_ignores_attributes
-      self._duplicate_checking_ignores_attributes = Set.new
-
-      cattr_accessor :_duplicate_squashing_ignores_associations
-      self._duplicate_squashing_ignores_associations = Set.new
+      cattr_accessor(:_duplicate_checking_ignores_attributes) { Set.new }
+      cattr_accessor(:_duplicate_squashing_ignores_associations) { Set.new }
 
       belongs_to :duplicate_of, :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
       has_many   :duplicates,   :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
@@ -52,22 +49,14 @@ module DuplicateChecking
     end
   end
 
-  # Is this record marked as a duplicate?
-  def marked_as_duplicate?
-    !self.duplicate_of_id.blank?
-  end
-  
-  # Is this record a squashed duplicate of an existing record?
   def duplicate?
-    !self.duplicate_of.blank?
+    duplicate_of
   end
-
-  def slave?
-    self.duplicate?
-  end
+  alias_method :marked_as_duplicate?, :duplicate?
+  alias_method :slave?, :duplicate?
   
   def master?
-    !self.slave?
+    !slave?
   end
   
   # Return the ultimate master for a record, which may be the record itself.
@@ -75,17 +64,11 @@ module DuplicateChecking
     parent = self
     seen = Set.new
 
-    while true
-      if parent.master?
-        return parent
-      else
-        if seen.include?(parent)
-          raise DuplicateCheckingError, "Loop detected in duplicates chain at #{parent.class}##{parent.id}"
-        else
-          seen << parent
-          parent = parent.duplicate_of
-        end
-      end
+    loop do
+      return parent if parent.master?
+      raise DuplicateCheckingError, "Loop detected in duplicates chain at #{parent.class}##{parent.id}" if seen.include?(parent)
+      seen << parent
+      parent = parent.duplicate_of
     end
   end
   
@@ -93,29 +76,24 @@ module DuplicateChecking
   #
   # Note that this method requires that all associations are set before this method is called.
   def find_exact_duplicates
-    matchable_attributes = self.attributes.reject { |key, value|
+    matchable_attributes = attributes.reject { |key, value|
       self.class.duplicate_checking_ignores_attributes.include?(key.to_sym)
     }
-    duplicates = self.class.where(matchable_attributes).reject{|t| t.id == self.id}
-    return duplicates.blank? ? nil : duplicates
+    duplicates = self.class.where(matchable_attributes).reject{|t| t.id == id}
+    duplicates.blank? ? nil : duplicates
   end
 
   module ClassMethods
-
     # Return set of attributes that should be ignored for duplicate checking
     def duplicate_checking_ignores_attributes(*args)
-      unless args.empty?
-        self._duplicate_checking_ignores_attributes.merge(args.map(&:to_sym))
-      end
-      return(DUPLICATE_CHECKING_IGNORES_ATTRIBUTES + self._duplicate_checking_ignores_attributes)
+      _duplicate_checking_ignores_attributes.merge(args.map(&:to_sym)) unless args.empty?
+      DUPLICATE_CHECKING_IGNORES_ATTRIBUTES + _duplicate_checking_ignores_attributes
     end
 
     # Return set of associations that will be ignored during duplicate squashing
     def duplicate_squashing_ignores_associations(*args)
-      unless args.empty?
-        self._duplicate_squashing_ignores_associations.merge(args.map(&:to_sym))
-      end
-      return self._duplicate_squashing_ignores_associations
+      _duplicate_squashing_ignores_associations.merge(args.map(&:to_sym)) unless args.empty?
+      _duplicate_squashing_ignores_associations
     end
 
     # Return events with duplicate values for a given set of fields.
@@ -232,10 +210,10 @@ module DuplicateChecking
         end
 
         # Transfer any has_many associations of this model to the master
-        self.reflect_on_all_associations(:has_many).each do |association|
+        reflect_on_all_associations(:has_many).each do |association|
           next if association.name == :duplicates
-          if self.duplicate_squashing_ignores_associations.include?(association.name.to_sym)
-            Rails.logger.debug(%{#{self.name}#squash: skipping assocation '#{association.name}'})
+          if duplicate_squashing_ignores_associations.include?(association.name.to_sym)
+            Rails.logger.debug(%{#{name}#squash: skipping assocation '#{association.name}'})
             next
           end
 
@@ -248,7 +226,7 @@ module DuplicateChecking
           foreign_objects = duplicate.send(association.name)
           foreign_objects.each do |object|
             object.update_attribute(association.foreign_key, master.id) unless object.new_record?
-            Rails.logger.debug(%{#{self.name}#squash: transferring foreign object "#{object.class.name}##{object.id}" from duplicate "#{self.name}##{duplicate.id}" to master "#{self.name}##{master.id}" via association "#{association.name}" using attribute "#{association.foreign_key}"})
+            Rails.logger.debug(%{#{name}#squash: transferring foreign object "#{object.class.name}##{object.id}" from duplicate "#{name}##{duplicate.id}" to master "#{name}##{master.id}" via association "#{association.name}" using attribute "#{association.foreign_key}"})
           end
         end
 
@@ -258,9 +236,9 @@ module DuplicateChecking
         duplicate.duplicate_of = master
         duplicate.update_attribute(:duplicate_of, master) unless duplicate.new_record?
         squashed << duplicate
-        Rails.logger.debug("#{self.name}#squash: marking #{self.name}@#{duplicate.id} as duplicate of #{self.name}@{master.id}")
+        Rails.logger.debug("#{name}#squash: marking #{name}@#{duplicate.id} as duplicate of #{name}@{master.id}")
       end
-      return squashed
+      squashed
     end
 
     # custom behavior for tags, concatentate the two objects tag strings together
@@ -268,7 +246,6 @@ module DuplicateChecking
       master.tag_list = master.tag_list + duplicate.tag_list
       master.save_tags
     end
-
   end
 end
 
