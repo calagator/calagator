@@ -92,7 +92,7 @@ describe Venue, "when finding duplicates [integration test]" do
 
   it "should match similar records when searching by :any" do
     record = FactoryGirl.create(:venue, :title => @existing.title)
-    Venue.find_duplicates_by(:title).should be_present
+    Venue.find_duplicates_by(:any).should be_present
   end
 
   it "should not match similar records when searching by multiple fields where not all are duplicated" do
