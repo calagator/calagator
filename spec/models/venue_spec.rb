@@ -171,8 +171,6 @@ describe Venue, "when squashing duplicates" do
     @event_at_child_venue = Event.create!(:title => "Event at child venue", :venue => @child_venue, :start_time => Time.now)
     @event_at_submaster_venue = Event.create!(:title => "Event at submaster venue", :venue => @submaster_venue, :start_time => Time.now)
     @events          = [@event_at_child_venue, @event_at_submaster_venue]
-
-    @venues.map(&:reload) # Make venues recognize changes to associated events
   end
 
   it "should squash a single duplicate" do
@@ -202,7 +200,6 @@ describe Venue, "when squashing duplicates" do
 
     Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
 
-    @venues.map(&:reload)
     @venues.map{|venue| venue.events.count}.should eq [2, 0, 0]
 
     events = @venues.map(&:events).flatten
@@ -210,14 +207,6 @@ describe Venue, "when squashing duplicates" do
     for event in events
       event.venue.should eq @master_venue
     end
-  end
-
-  it "should squash duplicates by ID" do
-    Venue.squash(:master => @master_venue.id, :duplicates => @submaster_venue.id)
-
-    @submaster_venue.reload
-    @master_venue.reload
-    @submaster_venue.duplicate_of.should eq @master_venue
   end
 end
 

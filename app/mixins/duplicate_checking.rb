@@ -173,15 +173,6 @@ module DuplicateChecking
       end
     end
 
-    # Returns an ActiveRecord object associated with the +value+, which can be either a record or an ID
-    def _record_for(value)
-      case value
-      when self then value # Expected class already, do nothing
-      when String, Fixnum, Bignum then self.find(value.to_i)
-      else raise TypeError, "Unknown type: #{value.class}"
-      end
-    end
-
     # Squash duplicates. Options accept ActiveRecord instances or IDs.
     #
     # Options:
@@ -189,18 +180,14 @@ module DuplicateChecking
     # :master => ActiveRecord instance to use as master
     def squash(opts)
       master     = opts[:master]
-      duplicates = [opts[:duplicates]].flatten
+      duplicates = Array(opts[:duplicates])
 
       raise(ArgumentError, ":master not specified")     if master.blank?
       raise(ArgumentError, ":duplicates not specified") if duplicates.blank?
 
-      master = _record_for(master)
-
       squashed = []
 
       duplicates.each do |duplicate|
-        duplicate = _record_for(duplicate)
-
         next if !master.new_record? && !duplicate.new_record? && duplicate.id == master.id
 
         # Transfer any venues that use this now duplicate venue as a master
@@ -236,7 +223,7 @@ module DuplicateChecking
         duplicate.duplicate_of = master
         duplicate.update_attribute(:duplicate_of, master) unless duplicate.new_record?
         squashed << duplicate
-        Rails.logger.debug("#{name}#squash: marking #{name}@#{duplicate.id} as duplicate of #{name}@{master.id}")
+        Rails.logger.debug("#{name}#squash: marking #{name}@#{duplicate.id} as duplicate of #{name}@#{master.id}")
       end
       squashed
     end
