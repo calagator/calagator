@@ -47,17 +47,15 @@ module Calagator
 
     #---[ Path -------------------------------------------------------------
 
-    config.autoload_paths += [
-      # App
-      Rails.root.join('app','mixins'),
-      Rails.root.join('app','observers'),
-      # Plugins
-      Rails.root.join('lib','catch_cookie_exception', 'lib'),
-      Rails.root.join('lib','exception_notification', 'lib'),
-      Rails.root.join('lib','has_many_polymorphs', 'lib'),
-      Rails.root.join('lib','gmaps_on_rails', 'lib'),
-      Rails.root.join('lib')
-    ]
+    config.autoload_paths += %W(
+      #{config.root}/app/mixins
+      #{config.root}/app/observers
+      #{config.root}/lib/catch_cookie_exception/lib
+      #{config.root}/lib/exception_notification/lib
+      #{config.root}/lib/has_many_polymorphs/lib
+      #{config.root}/lib/gmaps_on_rails/lib
+      #{config.root}/lib
+    )
 
     #---[ Rails ]-----------------------------------------------------------
 
@@ -123,11 +121,6 @@ module Calagator
       # Set cookie session
       config.session_store :cookie_store, :key => SECRETS.session_name || "calagator"
       config.secret_token = SECRETS.session_secret
-
-
-      # Activate search engine
-      require 'search_engine'
-      SearchEngine.kind = Rails.env.test? ? "sql" : SECRETS.search_engine
     end
 
     # Set timezone for OS

@@ -16,8 +16,6 @@
 #
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
 class Source < ActiveRecord::Base
-  include SearchEngine
-
   validate :assert_url
 
   has_many :events,  :dependent => :destroy

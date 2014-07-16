@@ -1,5 +1,5 @@
 class Event < ActiveRecord::Base
-  class Search
+  class SearchEngine
     Sql = Struct.new(:query, :opts) do
       # Return an Array of non-duplicate Event instances matching the search +query+..
       #
@@ -13,6 +13,10 @@ class Event < ActiveRecord::Base
       # * :skip_old => Return old entries? Defaults to false.
       def self.search(*args)
         new(*args).search
+      end
+
+      def self.score?
+        false
       end
 
       def search
@@ -33,7 +37,7 @@ class Event < ActiveRecord::Base
           .includes(:venue)
         self
       end
-      
+
       def keywords
         query_conditions = query.split.inject(@scope) do |query_conditions, keyword|
           like = "%#{keyword.downcase}%"
@@ -75,4 +79,3 @@ class Event < ActiveRecord::Base
     end
   end
 end
-
