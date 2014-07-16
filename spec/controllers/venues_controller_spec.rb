@@ -3,11 +3,6 @@ require 'spec_helper'
 describe VenuesController do
   render_views
 
-  #Delete this example and add some real ones
-  it "should use VenuesController" do
-    controller.should be_an_instance_of VenuesController
-  end
-
   it "should redirect duplicate venues to their master" do
     venue_master = FactoryGirl.create(:venue)
     venue_duplicate = FactoryGirl.create(:venue)
@@ -35,6 +30,11 @@ describe VenuesController do
   end
 
   describe "when creating venues" do
+    it "should redirect to the newly created venue" do
+      post :create, venue: FactoryGirl.attributes_for(:venue)
+      response.should redirect_to(assigns(:venue))
+    end
+
     it "should stop evil robots" do
       post :create, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
       response.should render_template :new
@@ -43,13 +43,52 @@ describe VenuesController do
 
   describe "when updating venues" do
     before do
-      @venue = FactoryGirl.build(:venue, :versions => [])
-      Venue.stub(:find).and_return(@venue)
+      @venue = FactoryGirl.create(:venue)
+    end
+
+    it "should redirect to the updated venue" do
+      put :update, id: @venue.id, venue: FactoryGirl.attributes_for(:venue)
+      response.should redirect_to(@venue)
+    end
+
+    it "should redirect to any associated event" do
+      @event = FactoryGirl.create(:event, venue: @venue)
+      put :update, id: @venue.id, from_event: @event.id, venue: FactoryGirl.attributes_for(:venue)
+      response.should redirect_to(@event)
     end
 
     it "should stop evil robots" do
-      put :update,:id => '1', :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+      put :update, id: @venue.id, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
       response.should render_template :edit
+    end
+  end
+
+  describe "when rendering the new venue page" do
+    it "passes the template a new venue" do
+      get :new
+      assigns[:venue].should be_a Venue
+      assigns[:venue].should be_new_record
+    end
+  end
+
+  describe "when rendering the edit venue page" do
+    it "passes the template the specified venue" do
+      @venue = FactoryGirl.create(:venue)
+      get :edit, id: @venue.id
+      assigns[:venue].should == @venue
+    end
+  end
+
+  describe "when rendering the map page" do
+    before do
+      @open_venue = FactoryGirl.create(:venue)
+      @closed_venue = FactoryGirl.create(:venue, closed: true)
+      @duplicate_venue = FactoryGirl.create(:venue, duplicate_of: @open_venue)
+    end
+
+    it "only shows open non-duplicate venues" do
+      get :map
+      assigns[:venues].should == [@open_venue]
     end
   end
 
@@ -162,6 +201,11 @@ describe VenuesController do
   end
 
   describe "when showing venues" do
+    it "redirects to all venues if venue doesn't exist" do
+      get :show, id: "garbage"
+      response.should redirect_to("/venues")
+    end
+
     describe "in JSON format" do
       describe "with events" do
         before do
