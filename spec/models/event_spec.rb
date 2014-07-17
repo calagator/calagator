@@ -211,7 +211,7 @@ describe Event do
     it "should fail to validate if end_time is earlier than start time " do
       @event.start_time = now
       @event.end_time = @event.start_time - 2.hours
-      @event.save.should be_falsey
+      @event.should be_invalid
       @event.errors[:end_time].size.should eq(1)
     end
   end
@@ -243,14 +243,14 @@ describe Event do
     it "should validate with valid urls (with scheme included or not)" do
       valid_urls.each do |valid_url|
         @event.url = valid_url
-        @event.save.should be_truthy
+        @event.should be_valid
       end
     end
 
     it "should fail to validate with invalid urls (with scheme included or not)" do
       invalid_urls.each do |invalid_url|
         @event.url = invalid_url
-        @event.save.should be_falsey
+        @event.should be_invalid
       end
     end
   end
