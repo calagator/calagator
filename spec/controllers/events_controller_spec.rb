@@ -1,4 +1,5 @@
 require 'spec_helper'
+require './spec/controllers/squash_many_duplicates_examples'
 
 describe EventsController do
   describe "#index" do
@@ -688,7 +689,10 @@ describe EventsController do
       response.should be_success
       response.body.should have_selector('.failure', text: 'omgwtfbbq')
     end
+  end
 
+  context do
+    include_examples "#squash_many_duplicates", :event
   end
 
   describe "#search" do

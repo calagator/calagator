@@ -1,4 +1,5 @@
 require 'spec_helper'
+require './spec/controllers/squash_many_duplicates_examples'
 
 describe VenuesController do
   render_views
@@ -32,6 +33,10 @@ describe VenuesController do
 
     response.should be_success
     response.body.should have_selector('.failure', text: 'omgwtfbbq')
+  end
+
+  context do
+    include_examples "#squash_many_duplicates", :venue
   end
 
   describe "when creating venues" do
