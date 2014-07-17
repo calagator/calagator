@@ -61,36 +61,24 @@ class EventsController < ApplicationController
 
   def create_or_update
     @event.attributes = params[:event]
-    @event.associate_with_venue(venue_ref(params))
-    has_new_venue = @event.venue.try(:new_record?)
-
+    @venue = @event.associate_with_venue(venue_ref(params))
     @event.start_time = [ params[:start_date], params[:start_time] ]
     @event.end_time   = [ params[:end_date], params[:end_time] ]
-
     @event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
 
-    if evil_robot = params[:trap_field].present?
-      flash[:failure] = "<h3>Evil Robot</h3> We didn't save this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
-    end
-
-    if too_many_links = too_many_links?(@event.description)
-      flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
-    end
-
     respond_to do |format|
-      if !evil_robot && !too_many_links && params[:preview].nil? && @event.save
-        flash[:success] = 'Event was successfully updated. '
+      if attempt_save?
         format.html {
-          if has_new_venue && !params[:venue_name].blank?
-            flash[:success] += "Please tell us more about where it's being held."
-            redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
+          flash[:success] = 'Event was successfully saved.'
+          if has_new_venue?
+            flash[:success] += " Please tell us more about where it's being held."
+            redirect_to edit_venue_url(@event.venue, from_event: @event.id)
           else
             redirect_to @event
           end
         }
         format.xml  { render :xml => @event, :status => :created, :location => @event }
       else
-        @event.valid? if params[:preview]
         format.html { render action: @event.new_record? ? "new" : "edit" }
         format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }
       end
@@ -132,18 +120,53 @@ class EventsController < ApplicationController
     render "new"
   end
 
-protected
+  private
 
-  # Checks if the description has too many links
-  # which is probably spam
-  def too_many_links?(description)
-    description.present? && description.scan(/https?:\/\//i).size > 3
+  # Venues may be referred to in the params hash either by id or by name. This
+  # method looks for whichever type of reference is present and returns that
+  # reference. If both a venue id and a venue name are present, then the venue
+  # id is returned.
+  #
+  # If a venue id is returned it is cast to an integer for compatibility with
+  # Event#associate_with_venue.
+  def venue_ref(p)
+    if (p[:event] && !p[:event][:venue_id].blank?)
+      p[:event][:venue_id].to_i
+    else
+      p[:venue_name]
+    end
   end
 
-  # Export +events+ to an iCalendar file.
-  def ical_export(events=nil)
-    events = events || Event.future.non_duplicates
-    render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
+  def attempt_save?
+    !spam? && !preview? && @event.save
+  end
+
+  def spam?
+    evil_robot? || too_many_links?
+  end
+
+  def evil_robot?
+    if params[:trap_field].present?
+      flash[:failure] = "<h3>Evil Robot</h3> We didn't save this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
+    end
+  end
+
+  # if the description has too many links its probably spam
+  def too_many_links?
+    if @event.description.present? && @event.description.scan(/https?:\/\//i).size > 3
+      flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
+    end
+  end
+
+  def has_new_venue?
+    return unless @venue
+    @venue.previous_changes["id"] == [nil, @venue.id] && params[:venue_name].present?
+  end
+
+  def preview?
+    if params[:preview]
+      @event.valid?
+    end
   end
 
   def render_event(event)
@@ -167,19 +190,10 @@ protected
     end
   end
 
-  # Venues may be referred to in the params hash either by id or by name. This
-  # method looks for whichever type of reference is present and returns that
-  # reference. If both a venue id and a venue name are present, then the venue
-  # id is returned.
-  #
-  # If a venue id is returned it is cast to an integer for compatibility with
-  # Event#associate_with_venue.
-  def venue_ref(p)
-    if (p[:event] && !p[:event][:venue_id].blank?)
-      p[:event][:venue_id].to_i
-    else
-      p[:venue_name]
-    end
+  # Export +events+ to an iCalendar file.
+  def ical_export(events=nil)
+    events = events || Event.future.non_duplicates
+    render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
   end
 
   # Return the default start date.
