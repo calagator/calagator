@@ -1,6 +1,6 @@
 module DuplicateChecking
-  class DuplicateSquasher < Struct.new(:model, :master, :duplicate)
-    def self.squash(model, opts)
+  class DuplicateSquasher < Struct.new(:master, :duplicate)
+    def self.squash(opts)
       master = opts[:master]
       duplicates = Array(opts[:duplicates])
 
@@ -8,14 +8,14 @@ module DuplicateChecking
       raise(ArgumentError, ":duplicates not specified") if duplicates.empty?
 
       duplicates.each do |duplicate|
-        new(model, master, duplicate).squash
+        new(master, duplicate).squash
       end
     end
 
     def squash
       # Transfer any venues that use this now duplicate venue as a master
       if duplicate.duplicates.any?
-        self.class.squash model, master: master, duplicates: duplicate.duplicates
+        self.class.squash master: master, duplicates: duplicate.duplicates
       end
 
       squash_associations
@@ -29,9 +29,9 @@ module DuplicateChecking
     # TODO: Add support for habtm and other associations
     def squash_associations
       # Transfer any has_many associations of this model to the master
-      model.reflect_on_all_associations(:has_many).each do |association|
+      master.class.reflect_on_all_associations(:has_many).each do |association|
         next if association.name == :duplicates
-        next if model.duplicate_squashing_ignores_associations.include?(association.name)
+        next if master.class.duplicate_squashing_ignores_associations.include?(association.name)
 
         # Handle tags - can't simply reassign, need to be unique, and they may have some of the same tags
         if association.name == :tag_taggings
