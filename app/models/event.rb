@@ -46,7 +46,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time
   validates_format_of :url,
-    :with => /^https?:\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:\.?+=&%@!\-\/]))?/,
+    :with => /\Ahttps?:\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\Z/,
     :allow_blank => true,
     :allow_nil => true
 

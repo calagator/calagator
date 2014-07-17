@@ -222,21 +222,22 @@ describe Event do
     end
 
     let(:valid_urls) {[
-      'hackoregon.org',
-      'http://www.meetup.com/Hack_Oregon-Data/events/',
-      'example.com',
-      'sub.example.com/',
-      'sub.domain.my-example.com',
-      'example.com/?stuff=true',
-      'example.com:5000/?stuff=true',
-      'sub.domain.my-example.com/path/to/file/hello.html',
-      'hello.museum',
-      'http://example.com'
+      "hackoregon.org",
+      "http://www.meetup.com/Hack_Oregon-Data/events/",
+      "example.com",
+      "sub.example.com/",
+      "sub.domain.my-example.com",
+      "example.com/?stuff=true",
+      "example.com:5000/?stuff=true",
+      "sub.domain.my-example.com/path/to/file/hello.html",
+      "hello.museum",
+      "http://example.com",
     ]}
 
     let(:invalid_urls){[
-      'hackoregon.org, http://www.meetup.com/Hack_Oregon-Data/events/',
-      'htttp://www.example.com'
+      "hackoregon.org, http://www.meetup.com/Hack_Oregon-Data/events/",
+      "hackoregon.org\nhttp://www.meetup.com/",
+      "htttp://www.example.com"
     ]}
 
     it "should validate with valid urls (with scheme included or not)" do
@@ -249,7 +250,6 @@ describe Event do
     it "should fail to validate with invalid urls (with scheme included or not)" do
       invalid_urls.each do |invalid_url|
         @event.url = invalid_url
-        p invalid_url
         @event.save.should be_falsey
       end
     end
