@@ -1,30 +1,33 @@
 module DuplicateChecking
-  class DuplicateSquasher < Struct.new(:model, :opts)
-    def squash
+  class DuplicateSquasher < Struct.new(:model, :master, :duplicate)
+    def self.squash(model, opts)
+      master = opts[:master]
+      duplicates = Array(opts[:duplicates])
+
       raise(ArgumentError, ":master not specified")     if master.blank?
-      raise(ArgumentError, ":duplicates not specified") if duplicates.blank?
+      raise(ArgumentError, ":duplicates not specified") if duplicates.empty?
 
       duplicates.each do |duplicate|
-        squash_duplicate duplicate
+        new(model, master, duplicate).squash
       end
+    end
+
+    def squash
+      # Transfer any venues that use this now duplicate venue as a master
+      if duplicate.duplicates.any?
+        self.class.squash model, master: master, duplicates: duplicate.duplicates
+      end
+
+      squash_associations
+
+      duplicate.update_attribute(:duplicate_of, master)
+      duplicate
     end
 
     private
 
-    def master
-      opts[:master]
-    end
-
-    def duplicates
-      Array(opts[:duplicates])
-    end
-
-    def squash_duplicate duplicate
-      # Transfer any venues that use this now duplicate venue as a master
-      if duplicate.duplicates.any?
-        self.class.new(model, :master => master, :duplicates => duplicate.duplicates).squash
-      end
-
+    # TODO: Add support for habtm and other associations
+    def squash_associations
       # Transfer any has_many associations of this model to the master
       model.reflect_on_all_associations(:has_many).each do |association|
         next if association.name == :duplicates
@@ -32,25 +35,20 @@ module DuplicateChecking
 
         # Handle tags - can't simply reassign, need to be unique, and they may have some of the same tags
         if association.name == :tag_taggings
-          squash_tags(duplicate)
+          squash_tags
         else
-          squash_association(duplicate, association)
+          squash_association association
         end
       end
-
-      # TODO: Add support for habtm and other associations
-
-      duplicate.update_attribute(:duplicate_of, master)
-      duplicate
     end
 
     # custom behavior for tags, concatentate the two objects tag strings together
-    def squash_tags(duplicate)
+    def squash_tags
       master.tag_list = master.tag_list + duplicate.tag_list
       master.save_tags
     end
 
-    def squash_association(duplicate, association)
+    def squash_association(association)
       foreign_objects = duplicate.send(association.name)
       foreign_objects.each do |object|
         object.update_attribute(association.foreign_key, master.id)
