@@ -16,30 +16,20 @@ class EventsController < ApplicationController
 
     @page_title = "Events"
 
-    render_events(@events)
+    render_events @events
   end
 
   # GET /events/1
   # GET /events/1.xml
   def show
-    begin
-      @event = Event.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      return redirect_to events_path, :flash => {:failure => e.to_s}
-    end
-
-    if @event.duplicate?
-      return redirect_to(event_path(@event.duplicate_of))
-    end
+    @event = Event.find(params[:id])
+    return redirect_to(@event.progenitor) if @event.duplicate?
 
     @page_title = @event.title
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml  => @event.to_xml(:include => :venue) }
-      format.json { render :json => @event.to_json(:include => :venue), :callback => params[:callback] }
-      format.ics { ical_export([@event]) }
-    end
+    render_event @event
+  rescue ActiveRecord::RecordNotFound => e
+    return redirect_to events_path, flash: { failure: e.to_s }
   end
 
   # GET /events/new
@@ -60,7 +50,7 @@ class EventsController < ApplicationController
   def create
     @event = Event.new(params[:event])
     @event.associate_with_venue(venue_ref(params))
-    has_new_venue = @event.venue && @event.venue.new_record?
+    has_new_venue = @event.venue.try(:new_record?)
 
     @event.start_time = [ params[:start_date], params[:start_time] ]
     @event.end_time   = [ params[:end_date], params[:end_time] ]
@@ -98,7 +88,7 @@ class EventsController < ApplicationController
   def update
     @event = Event.find(params[:id])
     @event.associate_with_venue(venue_ref(params))
-    has_new_venue = @event.venue && @event.venue.new_record?
+    has_new_venue = @event.venue.try(:new_record?)
 
     @event.start_time = [ params[:start_date], params[:start_time] ]
     @event.end_time   = [ params[:end_date], params[:end_time] ]
@@ -195,6 +185,15 @@ protected
   def ical_export(events=nil)
     events = events || Event.future.non_duplicates
     render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
+  end
+
+  def render_event(event)
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml  => event.to_xml(:include => :venue) }
+      format.json { render :json => event.to_json(:include => :venue), :callback => params[:callback] }
+      format.ics { ical_export([event]) }
+    end
   end
 
   # Render +events+ for a particular format.

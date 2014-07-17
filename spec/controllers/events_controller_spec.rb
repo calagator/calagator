@@ -298,7 +298,7 @@ describe EventsController do
     end
 
     it "should redirect from a duplicate event to its master" do
-      master = FactoryGirl.build(:event, :id => 4321)
+      master = FactoryGirl.create(:event, id: 4321)
       event = Event.new(:start_time => now, :duplicate_of => master)
       Event.should_receive(:find).and_return(event)
 
