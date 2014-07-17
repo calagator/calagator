@@ -1,13 +1,23 @@
 class Event < ActiveRecord::Base
-  class Saver < Struct.new(:event, :params, :failure)
+  class Saver < Struct.new(:event, :params, :venue, :failure)
     def save
+      self.venue = event.associate_with_venue(venue_ref)
+
       event.attributes = params[:event]
-      @venue = event.associate_with_venue(venue_ref(params))
       event.start_time = [ params[:start_date], params[:start_time] ]
       event.end_time   = [ params[:end_date], params[:end_time] ]
       event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
+
       attempt_save?
     end
+
+    def has_new_venue?
+      return unless venue
+      venue.previous_changes["id"] == [nil, venue.id] && params[:venue_name].present?
+    end
+
+    private
+
     # Venues may be referred to in the params hash either by id or by name. This
     # method looks for whichever type of reference is present and returns that
     # reference. If both a venue id and a venue name are present, then the venue
@@ -15,11 +25,11 @@ class Event < ActiveRecord::Base
     #
     # If a venue id is returned it is cast to an integer for compatibility with
     # Event#associate_with_venue.
-    def venue_ref(p)
-      if (p[:event] && !p[:event][:venue_id].blank?)
-        p[:event][:venue_id].to_i
+    def venue_ref
+      if (params[:event] && params[:event][:venue_id].present?)
+        params[:event][:venue_id].to_i
       else
-        p[:venue_name]
+        params[:venue_name]
       end
     end
 
@@ -37,16 +47,10 @@ class Event < ActiveRecord::Base
       end
     end
 
-    # if the description has too many links its probably spam
     def too_many_links?
       if event.description.present? && event.description.scan(/https?:\/\//i).size > 3
         self.failure = "We allow a maximum of 3 links in a description. You have too many links."
       end
-    end
-
-    def has_new_venue?
-      return unless @venue
-      @venue.previous_changes["id"] == [nil, @venue.id] && params[:venue_name].present?
     end
 
     def preview?
