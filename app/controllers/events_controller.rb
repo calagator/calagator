@@ -137,19 +137,6 @@ class EventsController < ApplicationController
     end
   end
 
-  # GET /events/duplicates
-  def duplicates
-    @type = params[:type]
-    begin
-      @grouped_events = Event.find_duplicates_by_type(@type)
-    rescue ArgumentError => e
-      @grouped_events = {}
-      flash[:failure] = "#{e}"
-    end
-
-    @page_title = "Duplicate Event Squasher"
-  end
-
   # GET /events/search
   def search
     @search = Event::Search.new(params)
