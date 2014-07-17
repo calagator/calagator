@@ -1,21 +1,23 @@
 module DuplicateChecking
   class DuplicateFinder < Struct.new(:model, :fields, :options)
     def find
-      query = "SELECT DISTINCT a.* FROM #{model.table_name} a, #{model.table_name} b WHERE"
-      query << " #{options[:where]} AND " if options[:where]
-      query << " a.id <> b.id AND ("
+      scope = model.select("a.*")
+      scope.distinct
+      scope = scope.from("#{model.table_name} a, #{model.table_name} b")
+      scope = scope.where(options[:where]) if options[:where]
+      scope = scope.where("a.id <> b.id")
 
-      if fields == :all
-        query << query_from_all
+      query = if fields == :all
+        query_from_all
       elsif fields == :any
-        query << query_from_any
+        query_from_any
       else
-        query << query_from_fields
+        query_from_fields
       end
 
-      query << ")"
+      scope = scope.where(query)
 
-      records = model.find_by_sql(query) || []
+      records = scope.all
 
       # Reject known duplicates
       records.reject!(&:duplicate_of_id)
