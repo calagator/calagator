@@ -23,7 +23,7 @@ module DuplicateChecking
       if grouped
         matched_fields = lambda {|r| fields.map {|f| r.read_attribute(f.to_sym) }} if Array === fields
         # Group by the field values we're matching on; skip any values for which we only have one record
-        records.group_by! { |record| matched_fields.call(record) if matched_fields }
+        records = records.group_by { |record| matched_fields.call(record) if matched_fields }
         records.reject! { |value, group| group.size <= 1 }
       end
       records

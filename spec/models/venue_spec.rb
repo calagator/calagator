@@ -58,18 +58,6 @@ describe Venue, "when finding exact duplicates" do
   end
 end
 
-describe Venue, "with finding unmarked duplicates" do
-  it "should find all venues with duplicate titles" do
-    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* FROM venues a, venues b WHERE a.id <> b.id AND (a.title = b.title)")
-    Venue.find_duplicates_by(:title )
-  end
-
-  it "should find all venues with duplicate titles and urls" do
-    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* FROM venues a, venues b WHERE a.id <> b.id AND (a.title = b.title AND a.url = b.url)")
-    Venue.find_duplicates_by([:title,:url])
-  end
-end
-
 describe Venue, "when finding duplicates [integration test]" do
   before do
     @existing = FactoryGirl.create(:venue)
