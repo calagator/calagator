@@ -1,6 +1,6 @@
 class Venue < ActiveRecord::Base
   class SearchEngine
-    Sunspot = Struct.new(:query, :opts) do
+    class Sunspot < Struct.new(:query, :opts)
       # Return an Array of non-duplicate Venue instances matching the search +query+..
       #
       # Options:

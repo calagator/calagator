@@ -1,9 +1,7 @@
 class Event < ActiveRecord::Base
-  class Search
-    attr_accessor :query, :tag, :order, :current
-
-    def initialize(attributes={})
-      [:query, :tag, :order, :current].each do |key|
+  class Search < Struct.new(:query, :tag, :order, :current)
+    def initialize attributes = {}
+      members.each do |key|
         send "#{key}=", attributes[key]
       end
       validate!
@@ -24,7 +22,7 @@ class Event < ActiveRecord::Base
     end
 
     def current
-      ["1", "true"].include?(@current)
+      ["1", "true"].include?(super)
     end
 
     def events

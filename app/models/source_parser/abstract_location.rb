@@ -1,5 +1,5 @@
 class SourceParser
-  AbstractLocation = Struct.new(
+  class AbstractLocation < Struct.new(
     :title,
     :description,
 
@@ -19,7 +19,6 @@ class SourceParser
     :telephone,
     :tags)
 
-  class AbstractLocation
     def initialize(*args)
       super
       self.tags ||= []
