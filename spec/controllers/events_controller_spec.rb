@@ -298,7 +298,7 @@ describe EventsController do
     end
 
     it "should redirect from a duplicate event to its master" do
-      master = FactoryGirl.build(:event, :id => 4321)
+      master = FactoryGirl.create(:event, id: 4321)
       event = Event.new(:start_time => now, :duplicate_of => master)
       Event.should_receive(:find).and_return(event)
 
@@ -316,8 +316,7 @@ describe EventsController do
   end
 
   describe "when creating and updating events" do
-    before(:each) do
-      # Fields marked with "###" may be filled in by examples to alter behavior
+    before do
       @params = {
         "end_date"       => "2008-06-04",
         "start_date"     => "2008-06-03",
@@ -329,8 +328,8 @@ describe EventsController do
         "end_time"       => "",
         "start_time"     => ""
       }.with_indifferent_access
-      @venue = FactoryGirl.build(:venue, :id => 12)
-      @event = FactoryGirl.build(:event, :id => 34, :venue => @venue)
+      @venue = FactoryGirl.build(:venue)
+      @event = FactoryGirl.build(:event, :venue => @venue)
     end
 
     describe "#new" do
@@ -345,67 +344,47 @@ describe EventsController do
       render_views
 
       it "should create a new event without a venue" do
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(nil)
-        @event.should_receive(:save).and_return(true)
-
+        @params[:event][:venue_id] = nil
         post "create", @params
-        response.should redirect_to(event_path(@event))
+        @event = Event.find_by_title(@params[:event][:title])
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue id" do
-        @params[:event]["venue_id"] = @venue.id.to_s
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-
+        @venue.save!
+        @params[:event][:venue_id] = @venue.id.to_s
         post "create", @params
+        @event = Event.find_by_title(@params[:event][:title])
+        @event.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue name" do
-        @params[:venue_name] = "My Venue"
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.should_receive(:associate_with_venue).with("My Venue")
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-
+        @venue.save!
+        @params[:venue_name] = @venue.title
         post "create", @params
+        @event = Event.find_by_title(@params[:event][:title])
+        @event.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue by id when both an id and a name are provided" do
-        @params[:event]["venue_id"] = @venue.id.to_s
-        @params[:venue_name] = "Some Event"
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-
+        @venue.save!
+        @venue2 = FactoryGirl.create(:venue)
+        @params[:event][:venue_id] = @venue.id.to_s
+        @params[:venue_name] = @venue2.title
         post "create", @params
-      end
-
-      it "should create a new event for an existing venue" do
-        @params[:venue_name] = "Old Venue"
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-        @venue.stub(:new_record?).and_return(false)
-
-        post "create", @params
-        response.should redirect_to(event_path(@event))
+        @event = Event.find_by_title(@params[:event][:title])
+        @event.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should create a new event and new venue, and redirect to venue edit form" do
         @params[:venue_name] = "New Venue"
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-        @venue.stub(:new_record?).and_return(true)
-
         post "create", @params
+        @event = Event.find_by_title(@params[:event][:title])
+        @venue = Venue.find_by_title("New Venue")
+        @event.venue.should == @venue
         response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
       end
 
@@ -448,19 +427,10 @@ describe EventsController do
       end
 
       it "should allow the user to preview the event" do
-        event = Event.new(:title => "Awesomeness")
-        Event.should_receive(:new).and_return(event)
-
-        event.should_not_receive(:save)
-
-        post "create", :event => { :title => "Awesomeness" },
-                        :start_time => now, :start_date => today,
-                        :end_time => now, :end_date => today,
-                        :preview => "Preview",
-                        :venue_name => "This venue had better not exist"
+        @params[:preview] = "Preview"
+        post "create", @params
         response.should render_template :new
         response.body.should have_selector '#event_preview'
-        event.should be_valid
       end
 
       it "should create an event for an existing venue" do
@@ -489,97 +459,65 @@ describe EventsController do
 
     describe "#update" do
       before(:each) do
-        @event = FactoryGirl.build(:event_with_venue, :id => 42)
+        @event = FactoryGirl.create(:event_with_venue, id: 42)
         @venue = @event.venue
-        @params.merge!(:id => 42)
-        Event.stub(:find).and_return(@event)
+        @params.merge!(id: 42)
       end
 
       it "should display form for editing event" do
-        Event.should_receive(:find).and_return(@event)
-
-        get "edit", :id => 1
+        get "edit", id: 42
         response.should be_success
         response.should render_template :edit
       end
 
       it "should update an event without a venue" do
-        Event.should_receive(:find).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(nil)
-        @event.should_receive(:update_attributes).and_return(true)
-
+        @event.venue = nil
         put "update", @params
-        response.should redirect_to(event_path(@event))
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue id" do
-        @params[:event]["venue_id"] = @venue.id.to_s
-        Event.should_receive(:find).and_return(@event)
-        @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-
+        @venue = FactoryGirl.create(:venue)
+        @params[:event][:venue_id] = @venue.id.to_s
         put "update", @params
+        @event.reload.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue name" do
-        @params[:venue_name] = "Some Event"
-        Event.should_receive(:find).and_return(@event)
-        @event.should_receive(:associate_with_venue).with("Some Event")
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-
+        @venue = FactoryGirl.create(:venue)
+        @params[:venue_name] = @venue.title
         put "update", @params
+        @event.reload.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue by id when both an id and a name are provided" do
-        @params[:event]["venue_id"] = @venue.id.to_s
-        @params[:venue_name] = "Some Event"
-        Event.should_receive(:find).and_return(@event)
-        @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-
+        @venue = FactoryGirl.create(:venue)
+        @venue2 = FactoryGirl.create(:venue)
+        @params[:event][:venue_id] = @venue.id.to_s
+        @params[:venue_name] = @venue2.title
         put "update", @params
-      end
-
-      it "should update an event and associate it with an existing venue" do
-        @params[:venue_name] = "Old Venue"
-        Event.should_receive(:find).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-        @venue.stub(:new_record?).and_return(false)
-
-        put "update", @params
-        response.should redirect_to(event_path(@event))
+        @event.reload.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should update an event and create a new venue, and redirect to the venue edit form" do
         @params[:venue_name] = "New Venue"
-        Event.should_receive(:find).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-        @venue.stub(:new_record?).and_return(true)
-
         put "update", @params
+        @venue = Venue.find_by_title("New Venue")
         response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
       end
 
       it "should catch errors and redisplay the new event form" do
-        Event.should_receive(:find).and_return(@event)
-        @event.stub(:associate_with_venue)
-        @event.stub(:venue).and_return(nil)
-        @event.should_receive(:update_attributes).and_return(false)
-
-        put "update", :id => 1234
+        @params[:event][:title] = nil
+        put "update", @params
         response.should render_template :edit
       end
 
       it "should stop evil robots" do
-        put "update", :id => 1234, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+        @params[:trap_field] = "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+        put "update", @params
         response.should render_template :edit
         flash[:failure].should match /evil robot/i
       end
@@ -597,19 +535,9 @@ describe EventsController do
       end
 
       it "should allow the user to preview the event" do
-        tags = []
-        tags.should_receive(:reload)
-
-        Event.should_receive(:find).and_return(@event)
-        @event.should_not_receive(:update_attributes)
-        @event.should_receive(:attributes=)
-        @event.should_receive(:valid?).and_return(true)
-        @event.should_receive(:tags).and_return(tags)
-
         put "update", @params.merge(:preview => "Preview")
         response.should render_template :edit
       end
-
     end
 
     describe "#clone" do

@@ -16,30 +16,20 @@ class EventsController < ApplicationController
 
     @page_title = "Events"
 
-    render_events(@events)
+    render_events @events
   end
 
   # GET /events/1
   # GET /events/1.xml
   def show
-    begin
-      @event = Event.find(params[:id])
-    rescue ActiveRecord::RecordNotFound => e
-      return redirect_to events_path, :flash => {:failure => e.to_s}
-    end
-
-    if @event.duplicate?
-      return redirect_to(event_path(@event.duplicate_of))
-    end
+    @event = Event.find(params[:id])
+    return redirect_to(@event.progenitor) if @event.duplicate?
 
     @page_title = @event.title
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml  => @event.to_xml(:include => :venue) }
-      format.json { render :json => @event.to_json(:include => :venue), :callback => params[:callback] }
-      format.ics { ical_export([@event]) }
-    end
+    render_event @event
+  rescue ActiveRecord::RecordNotFound => e
+    return redirect_to events_path, flash: { failure: e.to_s }
   end
 
   # GET /events/new
@@ -47,11 +37,6 @@ class EventsController < ApplicationController
   def new
     @event = Event.new(params[:event])
     @page_title = "Add an Event"
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @event }
-    end
   end
 
   # GET /events/1/edit
@@ -63,78 +48,36 @@ class EventsController < ApplicationController
   # POST /events
   # POST /events.xml
   def create
-    @event = Event.new(params[:event])
-    @event.associate_with_venue(venue_ref(params))
-    has_new_venue = @event.venue && @event.venue.new_record?
-
-    @event.start_time = [ params[:start_date], params[:start_time] ]
-    @event.end_time   = [ params[:end_date], params[:end_time] ]
-
-    if evil_robot = params[:trap_field].present?
-      flash[:failure] = "<h3>Evil Robot</h3> We didn't create this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
-    end
-
-    if too_many_links = too_many_links?(@event.description)
-      flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
-    end
-
-    respond_to do |format|
-      if !evil_robot && !too_many_links && params[:preview].nil? && @event.save
-        flash[:success] = 'Your event was successfully created. '
-        format.html {
-          if has_new_venue && !params[:venue_name].blank?
-            flash[:success] += " Please tell us more about where it's being held."
-            redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
-          else
-            redirect_to( event_path(@event) )
-          end
-        }
-        format.xml  { render :xml => @event, :status => :created, :location => @event }
-      else
-        @event.valid? if params[:preview]
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }
-      end
-    end
+    @event = Event.new
+    create_or_update
   end
 
   # PUT /events/1
   # PUT /events/1.xml
   def update
     @event = Event.find(params[:id])
-    @event.associate_with_venue(venue_ref(params))
-    has_new_venue = @event.venue && @event.venue.new_record?
+    create_or_update
+  end
 
-    @event.start_time = [ params[:start_date], params[:start_time] ]
-    @event.end_time   = [ params[:end_date], params[:end_time] ]
-
-    if evil_robot = !params[:trap_field].blank?
-      flash[:failure] = "<h3>Evil Robot</h3> We didn't update this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
-    end
-
-    if too_many_links = too_many_links?(params[:event] && params[:event][:description])
-      flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
-    end
-
+  def create_or_update
+    saver = Event::Saver.new(@event, params)
     respond_to do |format|
-      if !evil_robot && !too_many_links && params[:preview].nil? && @event.update_attributes(params[:event])
-        flash[:success] = 'Event was successfully updated.'
+      if saver.save
         format.html {
-          if has_new_venue && !params[:venue_name].blank?
-            flash[:success] += "Please tell us more about where it's being held."
-            redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
+          flash[:success] = 'Event was successfully saved.'
+          if saver.has_new_venue?
+            flash[:success] += " Please tell us more about where it's being held."
+            redirect_to edit_venue_url(@event.venue, from_event: @event.id)
           else
-            redirect_to( event_path(@event) )
+            redirect_to @event
           end
         }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @event, :status => :created, :location => @event }
       else
-        if params[:preview]
-          @event.attributes = params[:event]
-          @event.valid?
-          @event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
-        end
-        format.html { render :action => "edit" }
+        format.html {
+          flash[:failure] = saver.failure
+          render action: @event.new_record? ? "new" : "edit"
+        }
         format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }
       end
     end
@@ -149,24 +92,6 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to(events_url, :flash => {:success => "\"#{@event.title}\" has been deleted"}) }
       format.xml  { head :ok }
-    end
-  end
-
-  # GET /events/duplicates
-  def duplicates
-    @type = params[:type]
-    begin
-      @grouped_events = Event.find_duplicates_by_type(@type)
-    rescue ArgumentError => e
-      @grouped_events = {}
-      flash[:failure] = "#{e}"
-    end
-
-    @page_title = "Duplicate Event Squasher"
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @grouped_events }
     end
   end
 
@@ -185,32 +110,24 @@ class EventsController < ApplicationController
     render_events(@events)
   end
 
-  # Display a new event form pre-filled with the contents of an existing record.
   def clone
     @event = Event.find(params[:id]).to_clone
     @page_title = "Clone an existing Event"
 
+    flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
+    render "new"
+  end
+
+  private
+
+
+  def render_event(event)
     respond_to do |format|
-      format.html {
-        flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
-        render "new"
-      }
-      format.xml  { render :xml => @event }
+      format.html # show.html.erb
+      format.xml  { render :xml  => event.to_xml(:include => :venue) }
+      format.json { render :json => event.to_json(:include => :venue), :callback => params[:callback] }
+      format.ics { ical_export([event]) }
     end
-  end
-
-protected
-
-  # Checks if the description has too many links
-  # which is probably spam
-  def too_many_links?(description)
-    description.present? && description.scan(/https?:\/\//i).size > 3
-  end
-
-  # Export +events+ to an iCalendar file.
-  def ical_export(events=nil)
-    events = events || Event.future.non_duplicates
-    render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
   end
 
   # Render +events+ for a particular format.
@@ -225,19 +142,10 @@ protected
     end
   end
 
-  # Venues may be referred to in the params hash either by id or by name. This
-  # method looks for whichever type of reference is present and returns that
-  # reference. If both a venue id and a venue name are present, then the venue
-  # id is returned.
-  #
-  # If a venue id is returned it is cast to an integer for compatibility with
-  # Event#associate_with_venue.
-  def venue_ref(p)
-    if (p[:event] && !p[:event][:venue_id].blank?)
-      p[:event][:venue_id].to_i
-    else
-      p[:venue_name]
-    end
+  # Export +events+ to an iCalendar file.
+  def ical_export(events=nil)
+    events = events || Event.future.non_duplicates
+    render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
   end
 
   # Return the default start date.

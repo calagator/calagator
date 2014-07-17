@@ -11,7 +11,7 @@ shared_examples "#squash_many_duplicates" do |model|
     end
 
     it "squashes the duplicates into the master" do
-      @master.duplicates.should == [@dup1, @dup2]
+      @master.duplicate_ids.should =~ [@dup1.id, @dup2.id]
     end
 
     it "redirects to duplicates page for more duplicate squashing" do

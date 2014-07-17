@@ -2,10 +2,19 @@ module SquashManyDuplicatesMixin
   def self.included(mixee)
     mixee.class_eval do
 
+      # GET /venues/duplicates
+      def duplicates
+        @page_title = "Duplicate #{model_class} Squasher"
+        @type = params[:type]
+        @grouped_venues = @grouped_events = model_class.find_duplicates_by_type(@type)
+      rescue ArgumentError => e
+        @grouped_venues = @grouped_events = {}
+        flash[:failure] = e.to_s
+      end
+
       # POST /venues/squash_multiple_duplicates
       def squash_many_duplicates
         # Derive model class from controller name
-        model_class = self.controller_name.singularize.titleize.constantize
 
         master = model_class.find_by_id(params[:master_id])
         duplicate_ids = params.keys.grep(/^duplicate_id_\d+$/){|t| params[t].to_i}
@@ -34,6 +43,11 @@ module SquashManyDuplicatesMixin
         redirect_to :action => "duplicates", :type => params[:type]
       end
 
+      private
+
+      def model_class
+        self.controller_name.singularize.titleize.constantize
+      end
     end
   end
 end
