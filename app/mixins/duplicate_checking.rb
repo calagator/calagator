@@ -37,16 +37,6 @@ module DuplicateChecking
 
   def self.included(base)
     base.extend ClassMethods
-    base.class_eval do
-      cattr_accessor(:_duplicate_checking_ignores_attributes) { Set.new }
-      cattr_accessor(:_duplicate_squashing_ignores_associations) { Set.new }
-
-      belongs_to :duplicate_of, :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
-      has_many   :duplicates,   :class_name => self.name, :foreign_key => DUPLICATE_MARK_COLUMN
-
-      scope :marked_duplicates, -> { where("#{self.table_name}.#{DUPLICATE_MARK_COLUMN} IS NOT NULL") }
-      scope :non_duplicates, -> { where("#{self.table_name}.#{DUPLICATE_MARK_COLUMN} IS NULL") }
-    end
   end
 
   def duplicate?
@@ -84,6 +74,19 @@ module DuplicateChecking
   end
 
   module ClassMethods
+    def self.extended(klass)
+      klass.instance_eval do
+        cattr_accessor(:_duplicate_checking_ignores_attributes) { Set.new }
+        cattr_accessor(:_duplicate_squashing_ignores_associations) { Set.new }
+
+        belongs_to :duplicate_of, :class_name => name, :foreign_key => DUPLICATE_MARK_COLUMN
+        has_many   :duplicates,   :class_name => name, :foreign_key => DUPLICATE_MARK_COLUMN
+
+        scope :marked_duplicates, -> { where("#{table_name}.#{DUPLICATE_MARK_COLUMN} IS NOT NULL") }
+        scope :non_duplicates, -> { where("#{table_name}.#{DUPLICATE_MARK_COLUMN} IS NULL") }
+      end
+    end
+
     # Return set of attributes that should be ignored for duplicate checking
     def duplicate_checking_ignores_attributes(*args)
       _duplicate_checking_ignores_attributes.merge(args.map(&:to_sym)) unless args.empty?
