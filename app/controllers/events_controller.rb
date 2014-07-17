@@ -48,15 +48,29 @@ class EventsController < ApplicationController
   # POST /events
   # POST /events.xml
   def create
-    @event = Event.new(params[:event])
+    @event = Event.new
+    create_or_update
+  end
+
+  # PUT /events/1
+  # PUT /events/1.xml
+  def update
+    @event = Event.find(params[:id])
+    create_or_update
+  end
+
+  def create_or_update
+    @event.attributes = params[:event]
     @event.associate_with_venue(venue_ref(params))
     has_new_venue = @event.venue.try(:new_record?)
 
     @event.start_time = [ params[:start_date], params[:start_time] ]
     @event.end_time   = [ params[:end_date], params[:end_time] ]
 
+    @event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
+
     if evil_robot = params[:trap_field].present?
-      flash[:failure] = "<h3>Evil Robot</h3> We didn't create this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
+      flash[:failure] = "<h3>Evil Robot</h3> We didn't save this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
     end
 
     if too_many_links = too_many_links?(@event.description)
@@ -65,61 +79,19 @@ class EventsController < ApplicationController
 
     respond_to do |format|
       if !evil_robot && !too_many_links && params[:preview].nil? && @event.save
-        flash[:success] = 'Your event was successfully created. '
-        format.html {
-          if has_new_venue && !params[:venue_name].blank?
-            flash[:success] += " Please tell us more about where it's being held."
-            redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
-          else
-            redirect_to( event_path(@event) )
-          end
-        }
-        format.xml  { render :xml => @event, :status => :created, :location => @event }
-      else
-        @event.valid? if params[:preview]
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # PUT /events/1
-  # PUT /events/1.xml
-  def update
-    @event = Event.find(params[:id])
-    @event.associate_with_venue(venue_ref(params))
-    has_new_venue = @event.venue.try(:new_record?)
-
-    @event.start_time = [ params[:start_date], params[:start_time] ]
-    @event.end_time   = [ params[:end_date], params[:end_time] ]
-
-    if evil_robot = !params[:trap_field].blank?
-      flash[:failure] = "<h3>Evil Robot</h3> We didn't update this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
-    end
-
-    if too_many_links = too_many_links?(params[:event] && params[:event][:description])
-      flash[:failure] = "We allow a maximum of 3 links in a description. You have too many links."
-    end
-
-    respond_to do |format|
-      if !evil_robot && !too_many_links && params[:preview].nil? && @event.update_attributes(params[:event])
-        flash[:success] = 'Event was successfully updated.'
+        flash[:success] = 'Event was successfully updated. '
         format.html {
           if has_new_venue && !params[:venue_name].blank?
             flash[:success] += "Please tell us more about where it's being held."
             redirect_to(edit_venue_url(@event.venue, :from_event => @event.id))
           else
-            redirect_to( event_path(@event) )
+            redirect_to @event
           end
         }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @event, :status => :created, :location => @event }
       else
-        if params[:preview]
-          @event.attributes = params[:event]
-          @event.valid?
-          @event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
-        end
-        format.html { render :action => "edit" }
+        @event.valid? if params[:preview]
+        format.html { render action: @event.new_record? ? "new" : "edit" }
         format.xml  { render :xml => @event.errors, :status => :unprocessable_entity }
       end
     end
