@@ -46,7 +46,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time
   validates_format_of :url,
-    :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
+    :with => /^https?:\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:\.?+=&%@!\-\/]))?/,
     :allow_blank => true,
     :allow_nil => true
 
@@ -385,7 +385,7 @@ EOF
   # their time-of-day is set to the original record's time-of-day.
   def to_clone
     clone = self.class.new
-    CLONE_ATTRIBUTES.each do |attribute| 
+    CLONE_ATTRIBUTES.each do |attribute|
       clone.send("#{attribute}=", send(attribute))
     end
     if start_time
