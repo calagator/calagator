@@ -2,32 +2,15 @@ module DuplicateChecking
   class DuplicateFinder < Struct.new(:model, :fields, :options)
     def find
       scope = model.select("a.*")
-      scope.distinct
       scope = scope.from("#{model.table_name} a, #{model.table_name} b")
       scope = scope.where(options[:where]) if options[:where]
       scope = scope.where("a.id <> b.id")
-
-      query = if fields == :all
-        query_from_all
-      elsif fields == :any
-        query_from_any
-      else
-        query_from_fields
-      end
-
+      scope = scope.where("a.duplicate_of_id" => nil)
       scope = scope.where(query)
+      scope.distinct
 
       records = scope.all
-
-      # Reject known duplicates
-      records.reject!(&:duplicate_of_id)
-
-      if grouped
-        matched_fields = lambda {|r| fields.map {|f| r.read_attribute(f.to_sym) }} if Array === fields
-        # Group by the field values we're matching on; skip any values for which we only have one record
-        records = records.group_by { |record| matched_fields.call(record) if matched_fields }
-        records.reject! { |value, group| group.size <= 1 }
-      end
+      records = group_by_fields(records) if grouped
       records
     end
 
@@ -37,8 +20,26 @@ module DuplicateChecking
 
     private
 
+    def query
+      case fields
+        when :all then query_from_all
+        when :any then query_from_any
+        else query_from_fields
+      end
+    end
+
     def grouped
       options[:grouped] || false
+    end
+
+    def group_by_fields records
+      # Group by the field values we're matching on; skip any values for which we only have one record
+      records = records.group_by do |record|
+        fields.map do |field|
+          record.read_attribute(field)
+        end
+      end
+      records.reject { |value, group| group.size <= 1 }
     end
 
     def query_from_all
