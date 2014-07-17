@@ -122,7 +122,7 @@ class Venue < ActiveRecord::Base
         self.where('venues.duplicate_of_id IS NULL').order('LOWER(venues.title)')
       }
     else
-      kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
+      kind = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
 
       return self.find_duplicates_by(kind, 
         :grouped  => true, 

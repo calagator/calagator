@@ -144,18 +144,6 @@ describe Event do
 
   end
 
-  describe "when finding duplicates" do
-    it "should find all events with duplicate titles" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
-      Event.find_duplicates_by(:title)
-    end
-
-    it "should find all events with duplicate titles and urls" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-      Event.find_duplicates_by([:title,:url])
-    end
-  end
-
   describe "when finding duplicates by type" do
     def assert_default_find_duplicates_by_type(type)
       Event.should_receive(:future).and_return 42
@@ -188,7 +176,7 @@ describe Event do
     end
 
     it "should find events with duplicate titles if called with 'title'" do
-      assert_specific_find_by_duplicates_by('title', ['title'])
+      assert_specific_find_by_duplicates_by('title', [:title])
     end
   end
 
@@ -610,34 +598,22 @@ describe Event do
   end
 
   describe "with finding duplicates" do
-    it "should find all events with duplicate titles" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
-      Event.find_duplicates_by(:title )
+    before do
+      @non_duplicate_event = FactoryGirl.create(:event)
+      @duplicate_event = FactoryGirl.create(:duplicate_event)
+      @events = [@non_duplicate_event, @duplicate_event]
     end
 
-    it "should find all events with duplicate titles and urls" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-      Event.find_duplicates_by([:title,:url])
+    it "should find all events that have not been marked as duplicate" do
+      non_duplicates = Event.non_duplicates
+      non_duplicates.should include @non_duplicate_event
+      non_duplicates.should_not include @duplicate_event
     end
 
-    describe "with sample records" do
-      before do
-        @non_duplicate_event = FactoryGirl.create(:event)
-        @duplicate_event = FactoryGirl.create(:duplicate_event)
-        @events = [@non_duplicate_event, @duplicate_event]
-      end
-
-      it "should find all events that have not been marked as duplicate" do
-        non_duplicates = Event.non_duplicates
-        non_duplicates.should include @non_duplicate_event
-        non_duplicates.should_not include @duplicate_event
-      end
-
-      it "should find all events that have been marked as duplicate" do
-        duplicates = Event.marked_duplicates
-        duplicates.should include @duplicate_event
-        duplicates.should_not include @non_duplicate_event
-      end
+    it "should find all events that have been marked as duplicate" do
+      duplicates = Event.marked_duplicates
+      duplicates.should include @duplicate_event
+      duplicates.should_not include @non_duplicate_event
     end
   end
 

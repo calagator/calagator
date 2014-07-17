@@ -58,18 +58,6 @@ describe Venue, "when finding exact duplicates" do
   end
 end
 
-describe Venue, "with finding unmarked duplicates" do
-  it "should find all venues with duplicate titles" do
-    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title )")
-    Venue.find_duplicates_by(:title )
-  end
-
-  it "should find all venues with duplicate titles and urls" do
-    Venue.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from venues a, venues b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-    Venue.find_duplicates_by([:title,:url])
-  end
-end
-
 describe Venue, "when finding duplicates [integration test]" do
   before do
     @existing = FactoryGirl.create(:venue)
@@ -92,7 +80,7 @@ describe Venue, "when finding duplicates [integration test]" do
 
   it "should match similar records when searching by :any" do
     record = FactoryGirl.create(:venue, :title => @existing.title)
-    Venue.find_duplicates_by(:title).should be_present
+    Venue.find_duplicates_by(:any).should be_present
   end
 
   it "should not match similar records when searching by multiple fields where not all are duplicated" do
@@ -171,8 +159,6 @@ describe Venue, "when squashing duplicates" do
     @event_at_child_venue = Event.create!(:title => "Event at child venue", :venue => @child_venue, :start_time => Time.now)
     @event_at_submaster_venue = Event.create!(:title => "Event at submaster venue", :venue => @submaster_venue, :start_time => Time.now)
     @events          = [@event_at_child_venue, @event_at_submaster_venue]
-
-    @venues.map(&:reload) # Make venues recognize changes to associated events
   end
 
   it "should squash a single duplicate" do
@@ -202,7 +188,6 @@ describe Venue, "when squashing duplicates" do
 
     Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
 
-    @venues.map(&:reload)
     @venues.map{|venue| venue.events.count}.should eq [2, 0, 0]
 
     events = @venues.map(&:events).flatten
@@ -210,14 +195,6 @@ describe Venue, "when squashing duplicates" do
     for event in events
       event.venue.should eq @master_venue
     end
-  end
-
-  it "should squash duplicates by ID" do
-    Venue.squash(:master => @master_venue.id, :duplicates => @submaster_venue.id)
-
-    @submaster_venue.reload
-    @master_venue.reload
-    @submaster_venue.duplicate_of.should eq @master_venue
   end
 end
 
