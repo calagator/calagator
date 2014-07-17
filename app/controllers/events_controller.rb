@@ -121,13 +121,12 @@ class EventsController < ApplicationController
 
   private
 
-
   def render_event(event)
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml  => event.to_xml(:include => :venue) }
       format.json { render :json => event.to_json(:include => :venue), :callback => params[:callback] }
-      format.ics { ical_export([event]) }
+      format.ics  { render :ics  => [event] }
     end
   end
 
@@ -136,18 +135,11 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html # *.html.erb
       format.kml  # *.kml.erb
-      format.ics  { ical_export(events) }
+      format.ics  { render :ics => events || Event.future.non_duplicates }
       format.atom { render :template => 'events/index' }
       format.xml  { render :xml  => events.to_xml(:include => :venue) }
       format.json { render :json => events.to_json(:include => :venue), :callback => params[:callback] }
     end
-  end
-
-  # Export +events+ to an iCalendar file.
-  def ical_export(events=nil)
-    events ||= Event.future.non_duplicates
-    ical = Event::IcalRenderer.render(events, url_helper: -> (event) { event_url(event) })
-    render text: ical, mime_type: "text/calendar"
   end
 
   # Return the default start date.
