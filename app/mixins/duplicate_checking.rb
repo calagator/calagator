@@ -40,7 +40,7 @@ module DuplicateChecking
   end
 
   def duplicate?
-    duplicate_of
+    duplicate_of.present?
   end
   alias_method :marked_as_duplicate?, :duplicate?
   alias_method :slave?, :duplicate?
