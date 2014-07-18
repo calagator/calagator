@@ -141,7 +141,6 @@ describe Event do
 
       abstract_event.location.title.should match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
     end
-
   end
 
   describe "when finding duplicates by type" do
@@ -200,10 +199,48 @@ describe Event do
     it "should fail to validate if end_time is earlier than start time " do
       @event.start_time = now
       @event.end_time = @event.start_time - 2.hours
-      @event.save.should be_falsey
+      @event.should be_invalid
       @event.errors[:end_time].size.should eq(1)
     end
+  end
 
+  describe "when processing url" do
+    before do
+      @event = Event.new(:title => 'MyEvent', :start_time => now)
+    end
+
+    let(:valid_urls) {[
+      "hackoregon.org",
+      "http://www.meetup.com/Hack_Oregon-Data/events/",
+      "example.com",
+      "sub.example.com/",
+      "sub.domain.my-example.com",
+      "example.com/?stuff=true",
+      "example.com:5000/?stuff=true",
+      "sub.domain.my-example.com/path/to/file/hello.html",
+      "hello.museum",
+      "http://example.com",
+    ]}
+
+    let(:invalid_urls){[
+      "hackoregon.org, http://www.meetup.com/Hack_Oregon-Data/events/",
+      "hackoregon.org\nhttp://www.meetup.com/",
+      "htttp://www.example.com"
+    ]}
+
+    it "should validate with valid urls (with scheme included or not)" do
+      valid_urls.each do |valid_url|
+        @event.url = valid_url
+        @event.should be_valid
+      end
+    end
+
+    it "should fail to validate with invalid urls (with scheme included or not)" do
+      invalid_urls.each do |invalid_url|
+        @event.url = invalid_url
+        @event.should be_invalid
+      end
+    end
   end
 
   describe "#start_time=" do
@@ -221,7 +258,7 @@ describe Event do
       event.start_time.should eq Time.zone.parse("2009-01-02 03:45")
     end
 
-    it "should set from an Array of Strings" do 
+    it "should set from an Array of Strings" do
       event = Event.new(:start_time => ["2009-01-03", "02:14"])
       event.start_time.should eq Time.zone.parse("2009-01-03 02:14")
     end
