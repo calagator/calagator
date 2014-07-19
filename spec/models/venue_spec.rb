@@ -123,13 +123,16 @@ describe Venue, "when finding by an identifier" do
     Venue.find_by_identifier(nil).should be_nil 
   end
   
-  it "should return an instance of Venue if it is a Venue" do 
+  it "should return the argument if it is a Venue" do 
     record = FactoryGirl.create(:venue)
     Venue.find_by_identifier(record).should eq record
   end
   
-  it "should return an new venue for a string" do 
-    Venue.find_by_identifier("Moda Center").should be_an_instance_of Venue
+  it "should return a new venue record for a string" do 
+    new_venue = Venue.find_by_identifier("Moda Center")
+    new_venue.should be_an_instance_of Venue
+    new_venue.title.should eq "Moda Center"
+    new_venue.should be_new_record
   end
   
   it "should return an existing venue for a string that matches an existing venue" do 
