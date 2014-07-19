@@ -6,7 +6,11 @@ class Venue < ActiveRecord::Base
     end
 
     def venues
-      @venues ||= base.in_business.wifi.stuff
+      @venues ||= if query
+        Venue.search(query, include_closed: include_closed?, wifi: wifi?)
+      else
+        base.business.wifi.search
+      end
     end
 
     def tag
@@ -20,7 +24,7 @@ class Venue < ActiveRecord::Base
       self
     end
 
-    def in_business
+    def business
       if only_closed?
         @scope = @scope.out_of_business
       elsif only_open?
@@ -34,21 +38,18 @@ class Venue < ActiveRecord::Base
       self
     end
 
-    def stuff
+    def search
       if tag.present? # searching by tag
         @scope.tagged_with(tag)
       elsif term.present? # for the ajax autocomplete widget
-        conditions = ["title LIKE ?", "%#{term}%"]
-        @scope.where(conditions).order('LOWER(title)')
-      elsif query
-        Venue.search(query, include_closed: include_closed?, wifi: wifi?)
-      elsif !all # default view
+        @scope.where(["title LIKE ?", "%#{term}%"]).order('LOWER(title)')
+      elsif all
+        @scope
+      else # default view
         self.most_active_venues = @scope.limit(10).order('events_count DESC')
         self.newest_venues = @scope.limit(10).order('created_at DESC')
         self.scoped_venues = @scope
         nil
-      else
-        @scope
       end
     end
 
