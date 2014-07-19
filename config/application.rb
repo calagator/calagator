@@ -60,22 +60,13 @@ module Calagator
       # Read theme
       require 'theme_reader'
       ::THEME_NAME = ThemeReader.read
-      Kernel.class_eval do
-        def theme_file(filename)
-          return Rails.root.join('themes',THEME_NAME,filename)
-        end
-      end
 
       # Read theme settings
       require 'settings_reader'
-      ::SETTINGS = SettingsReader.read(
-        theme_file("settings.yml"), {
-          'timezone' => 'Pacific Time (US & Canada)',
-        }
-      )
+      ::SETTINGS = SettingsReader.read(Rails.root.join('themes',THEME_NAME,'settings.yml'))
 
       # Set timezone for Rails
-      config.time_zone = SETTINGS.timezone
+      config.time_zone = SETTINGS.timezone || 'Pacific Time (US & Canada)'
     end
 
     # Set timezone for OS
