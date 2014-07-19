@@ -26,7 +26,6 @@ module Calagator
     # Load from "/lib"
     $LOAD_PATH << Rails.root.join('lib')
     ### libraries
-    require 'metaclass'
     require 'tag_model_extensions'
     ### monkeypatches
     require 'ext/nil_strip_html'

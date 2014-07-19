@@ -7,12 +7,10 @@ class SourceParser
   # directly, use a subclass of Base to do the parsing instead.
   class Base
     def self.inherited(subclass)
-      # Add class-wide ::_label accessor to subclasses.
-      subclass.meta_eval {attr_accessor :_label}
-      subclass.meta_eval {attr_accessor :_url_pattern}
-
       $SourceParserImplementations << subclass unless $SourceParserImplementations.include?(subclass)
     end
+
+    class_attribute :_label, :_url_pattern
 
     # Gets or sets the human-readable label for this parser.
     def self.label(value=nil)
