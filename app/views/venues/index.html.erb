@@ -9,7 +9,7 @@
       <%= text_field_tag :query, @search.query %>
     </div>
     <div class='wifi'>
-      <%= check_box_tag :wifi, '1', @search.wifi? %>
+      <%= check_box_tag :wifi, '1', @search.wifi %>
       <%= label_tag :wifi, "Public WiFi" %>
     </div>
 
@@ -29,12 +29,12 @@
           <% if @venues.size == 0 -%>
             Sorry, there are no venues
           <% else -%>
-            Showing <%= "all " if @search.all? %><strong><%= @venues.size %></strong> <%= 'venue'.pluralize(@venues.size) %>
+            Showing <%= "all " if @search.all %><strong><%= @venues.size %></strong> <%= 'venue'.pluralize(@venues.size) %>
           <% end %>
           <% if @search.query.present? %>
             matching &#8220;<%= @search.query %>&#8221;
           <% end %>
-          <%= "with public WiFi" if @search.wifi? %>
+          <%= "with public WiFi" if @search.wifi %>
         </h2>
       <% end -%>
     </div>
