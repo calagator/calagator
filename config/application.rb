@@ -116,11 +116,6 @@ module Calagator
 
       # Set timezone for Rails
       config.time_zone = SETTINGS.timezone
-
-
-      # Set cookie session
-      config.session_store :cookie_store, :key => SECRETS.session_name || "calagator"
-      config.secret_token = SECRETS.session_secret
     end
 
     # Set timezone for OS
