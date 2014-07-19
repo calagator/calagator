@@ -107,21 +107,9 @@ class VenuesController < ApplicationController
 
   def create_or_update
     @venue.attributes = params[:venue]
-
-    if evil_robot = params[:trap_field].present?
-      flash[:failure] = "<h3>Evil Robot</h3> We didn't save this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
-    end
-
     respond_to do |format|
-      if !evil_robot && @venue.save
-        format.html do
-          flash[:success] = 'Venue was successfully saved.'
-          if params[:from_event].present?
-            redirect_to event_url(params[:from_event])
-          else
-            redirect_to @venue
-          end
-        end
+      if !evil_robot? && @venue.save
+        format.html { redirect_to from_event || @venue, flash: { success: "Venue was successfully saved." } }
         format.xml  { render xml: @venue, status: :created, location: @venue }
       else
         format.html { render action: @venue.new_record? ? "new" : "edit" }
@@ -150,7 +138,17 @@ class VenuesController < ApplicationController
     end
   end
 
-protected
+  private
+
+  def evil_robot?
+    if params[:trap_field].present?
+      flash[:failure] = "<h3>Evil Robot</h3> We didn't save this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
+    end
+  end
+
+  def from_event
+    Event.find_by_id(params[:from_event])
+  end
 
   def ical_export(venue)
     events = venue.events.order("start_time ASC").non_duplicates
