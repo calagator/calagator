@@ -100,22 +100,8 @@ class VenuesController < ApplicationController
   # POST /venues
   # POST /venues.xml
   def create
-    @venue = Venue.new(params[:venue])
-
-    if evil_robot = !params[:trap_field].blank?
-      flash[:failure] = "<h3>Evil Robot</h3> We didn't create this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
-    end
-
-    respond_to do |format|
-      if !evil_robot && @venue.save
-        flash[:success] = 'Venue was successfully created.'
-        format.html { redirect_to( venue_path(@venue) ) }
-        format.xml  { render :xml => @venue, :status => :created, :location => @venue }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @venue.errors, :status => :unprocessable_entity }
-      end
-    end
+    @venue = Venue.new
+    create_or_update
   end
 
   # PUT /venues/1
@@ -123,14 +109,19 @@ class VenuesController < ApplicationController
   def update
     params[:venue][:latitude] = params[:venue][:longitude] = nil if params[:venue][:force_geocoding]=="1" unless params[:venue].blank?
     @venue = Venue.find(params[:id])
-    
+    create_or_update
+  end
+
+  def create_or_update
+    @venue.attributes = params[:venue]
+
     if evil_robot = !params[:trap_field].blank?
-      flash[:failure] = "<h3>Evil Robot</h3> We didn't update this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
+      flash[:failure] = "<h3>Evil Robot</h3> We didn't save this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
     end
 
     respond_to do |format|
-      if !evil_robot && @venue.update_attributes(params[:venue])
-        flash[:success] = 'Venue was successfully updated.'
+      if !evil_robot && @venue.save
+        flash[:success] = 'Venue was successfully saved.'
         format.html { 
           if(!params[:from_event].blank?)
             redirect_to(event_url(params[:from_event]))
@@ -138,9 +129,9 @@ class VenuesController < ApplicationController
             redirect_to( venue_path(@venue) )
           end
           }
-        format.xml  { head :ok }
+        format.xml  { render :xml => @venue, :status => :created, :location => @venue }
       else
-        format.html { render :action => "edit" }
+        format.html { render action: @venue.new_record? ? "new" : "edit" }
         format.xml  { render :xml => @venue.errors, :status => :unprocessable_entity }
       end
     end
