@@ -19,11 +19,11 @@
   <% end %>
 </div>
 
-<% if @venues %>
+<% if @search.results? %>
   <div id='venues_search_results'>
     <div id='list_description'>
-      <% if @tag %>
-        <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%= @tag %></strong></h2>
+      <% if @search.tag %>
+        <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%= @search.tag %></strong></h2>
       <% else -%>
         <h2>
           <% if @venues.size == 0 -%>
@@ -55,7 +55,7 @@
     <div id='most_active'>
       <h3>Most Active</h3>
       <ul>
-        <% for venue in @most_active_venues %>
+        <% @search.most_active_venues.each do |venue| %>
           <li>
             <%= link_to(venue.title, venue_url(venue)) %>
             <p class='detail'><%= venue.events_count %> events</p>
@@ -66,7 +66,7 @@
     <div id='newest'>
       <h3>Newest</h3>
       <ul>
-        <% for venue in @newest_venues %>
+        <% @search.newest_venues.each do |venue| %>
           <li>
             <%= link_to(venue.title, venue_url(venue)) %>
             <p class='detail'>Added <%= time_ago_in_words(venue.created_at) %> ago</p>

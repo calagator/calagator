@@ -4,24 +4,24 @@ class Venue < ActiveRecord::Base
       @venues ||= if query
         Venue.search(query, include_closed: include_closed?, wifi: wifi?)
       else
-        base.business.wifi.search
+        base.business.wifi.search.scope
       end
+    end
+
+    def most_active_venues
+      base.business.wifi.scope.order('events_count DESC').limit(10)
+    end
+
+    def newest_venues
+      base.business.wifi.scope.order('created_at DESC').limit(10)
+    end
+
+    def results?
+      !query && !tag && !all
     end
 
     def tag
       params[:tag]
-    end
-
-    def most_active_venues
-      base.business.scope.order('events_count DESC').limit(10)
-    end
-
-    def newest_venues
-      base.business.scope.order('created_at DESC').limit(10)
-    end
-
-    def scoped_venues
-      @scope
     end
 
     protected
@@ -46,13 +46,8 @@ class Venue < ActiveRecord::Base
     end
 
     def search
-      if tag.present? # searching by tag
-        @scope.tagged_with(tag)
-      elsif all
-        @scope
-      else # default view
-        nil
-      end
+      @scope = @scope.tagged_with(tag) if tag.present? # searching by tag
+      self
     end
 
     def scope

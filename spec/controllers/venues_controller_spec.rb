@@ -109,14 +109,14 @@ describe VenuesController do
         get :index
       end
 
-      it "should assign @most_active_venues and @newest_venues by default" do
+      it "should assign @search.most_active_venues and @search.newest_venues by default" do
         get :index
-        assigns[:most_active_venues].should be_present
-        assigns[:newest_venues].should be_present
+        assigns[:search].most_active_venues.should be_present
+        assigns[:search].newest_venues.should be_present
       end
 
       it "should not included closed venues" do
-        assigns[:newest_venues].should_not include @closed_venue
+        assigns[:search].newest_venues.should_not include @closed_venue
       end
     end
 

@@ -4,21 +4,17 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
-    search = Venue::Search.new(params)
-    @venues = search.venues
-    @tag = search.tag
-    @most_active_venues = search.most_active_venues
-    @newest_venues = search.newest_venues
-    scoped_venues = search.scoped_venues
+    @search = Venue::Search.new(params)
+    @venues = @search.venues
 
     @page_title = "Venues"
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml  => @venues || scoped_venues }
-      format.json { render :json => @venues || scoped_venues, :callback => params[:callback] }
-      format.js   { render :json => @venues || scoped_venues, :callback => params[:callback] }
-      format.kml  { @venues ||= scoped_venues; render } # index.kml.erb
+      format.kml  # index.kml.erb
+      format.xml  { render :xml  => @venues }
+      format.json { render :json => @venues, :callback => params[:callback] }
+      format.js   { render :json => @venues, :callback => params[:callback] }
     end
   end
 
