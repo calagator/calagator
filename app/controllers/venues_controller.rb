@@ -1,5 +1,6 @@
 class VenuesController < ApplicationController
-  include SquashManyDuplicatesMixin # Provides squash_many_duplicates
+  # Provides #duplicates and #squash_many_duplicates
+  include DuplicateChecking::ControllerActions
 
   # GET /venues
   # GET /venues.xml
