@@ -57,14 +57,9 @@ class VenuesController < ApplicationController
   # GET /venues/1
   # GET /venues/1.xml
   def show
-    begin
-      @venue = Venue.find(params[:id], :include => :source)
-    rescue ActiveRecord::RecordNotFound => e
-      flash[:failure] = e.to_s
-      return redirect_to(venues_path)
-    end
+    @venue = Venue.find(params[:id], include: :source)
 
-    return redirect_to(venue_url(@venue.duplicate_of)) if @venue.duplicate?
+    return redirect_to @venue.duplicate_of if @venue.duplicate?
 
     @page_title = @venue.title
 
@@ -73,10 +68,14 @@ class VenuesController < ApplicationController
         @future_events = @venue.events.order("start_time ASC").future.non_duplicates.includes(:venue)
         @past_events = @venue.events.order("start_time DESC").past.non_duplicates.includes(:venue)
       }
-      format.xml  { render :xml => @venue }
-      format.json  { render :json => @venue, :callback => params[:callback] }
+      format.xml  { render xml: @venue }
+      format.json { render json: @venue, callback: params[:callback] }
       format.ics  { ical_export(@venue) }
     end
+
+  rescue ActiveRecord::RecordNotFound => e
+    flash[:failure] = e.to_s
+    redirect_to venues_path
   end
 
   # GET /venues/new
@@ -85,10 +84,7 @@ class VenuesController < ApplicationController
     @venue = Venue.new
     @page_title = "Add a Venue"
 
-    respond_to do |format|
-      format.html { render :layout => !(params[:layout]=="false") }
-      format.xml  { render :xml => @venue }
-    end
+    render layout: params[:layout] != "false"
   end
 
   # GET /venues/1/edit
@@ -115,24 +111,24 @@ class VenuesController < ApplicationController
   def create_or_update
     @venue.attributes = params[:venue]
 
-    if evil_robot = !params[:trap_field].blank?
+    if evil_robot = params[:trap_field].present?
       flash[:failure] = "<h3>Evil Robot</h3> We didn't save this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
     end
 
     respond_to do |format|
       if !evil_robot && @venue.save
-        flash[:success] = 'Venue was successfully saved.'
-        format.html { 
-          if(!params[:from_event].blank?)
-            redirect_to(event_url(params[:from_event]))
+        format.html do
+          flash[:success] = 'Venue was successfully saved.'
+          if params[:from_event].present?
+            redirect_to event_url(params[:from_event])
           else
-            redirect_to( venue_path(@venue) )
+            redirect_to @venue
           end
-          }
-        format.xml  { render :xml => @venue, :status => :created, :location => @venue }
+        end
+        format.xml  { render xml: @venue, status: :created, location: @venue }
       else
         format.html { render action: @venue.new_record? ? "new" : "edit" }
-        format.xml  { render :xml => @venue.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @venue.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -142,22 +138,17 @@ class VenuesController < ApplicationController
   def destroy
     @venue = Venue.find(params[:id])
 
-    if @venue.events.count > 0
+    if @venue.events.any?
       message = "Cannot destroy venue that has associated events, you must reassociate all its events first."
       respond_to do |format|
-        format.html {
-          flash[:failure] = message
-          redirect_to( venue_path(@venue) )
-        }
-        format.xml {
-          render :xml => message, :status => :unprocessable_entity
-        }
+        format.html { redirect_to @venue, flash: { failure: message } }
+        format.xml  { render xml: message, status: :unprocessable_entity }
       end
     else
       @venue.destroy
       respond_to do |format|
-        format.html { redirect_to(venues_path, :flash => {:success => "\"#{@venue.title}\" has been deleted"}) }
-        format.xml { head :ok }
+        format.html { redirect_to venues_path, flash: { success: %("#{@venue.title}" has been deleted) } }
+        format.xml  { head :ok }
       end
     end
   end
