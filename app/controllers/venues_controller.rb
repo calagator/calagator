@@ -121,7 +121,6 @@ class VenuesController < ApplicationController
   # PUT /venues/1
   # PUT /venues/1.xml
   def update
-    params[:venue][:latitude] = params[:venue][:longitude] = nil if params[:venue][:force_geocoding]=="1" unless params[:venue].blank?
     @venue = Venue.find(params[:id])
     
     if evil_robot = !params[:trap_field].blank?

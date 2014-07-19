@@ -270,10 +270,20 @@ describe "Venue geocoding" do
     end
   end
 
-  it "should strip location when geocoding is forced" do
-    @venue.force_geocoding=true
-    @venue.latitude.should be_nil
-    @venue.longitude.should be_nil
+  describe "forcing geocoding" do
+    before { @venue.latitude = @venue.longitude = double }
+
+    it "should strip location when geocoding is forced" do
+      @venue.force_geocoding = "1"
+      @venue.latitude.should be_nil
+      @venue.longitude.should be_nil
+    end
+
+    it "should not strip location when geocoding is forced" do
+      @venue.force_geocoding = "0"
+      @venue.latitude.should_not be_nil
+      @venue.longitude.should_not be_nil
+    end
   end
 end
 
