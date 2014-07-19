@@ -16,7 +16,6 @@ module Calagator
     config.autoload_paths += %W(
       #{config.root}/app/mixins
       #{config.root}/app/observers
-      #{config.root}/lib/has_many_polymorphs/lib
       #{config.root}/lib
     )
 
