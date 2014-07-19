@@ -46,14 +46,4 @@ shared_examples "#squash_many_duplicates" do |model|
       response.should redirect_to("/#{model}s/duplicates")
     end
   end
-
-  context "with no duplicates squashed" do
-    # FIXME is it even possible to get to this state?
-    it "redirects with a failure message" do
-      klass = model.to_s.capitalize.constantize
-      klass.stub(squash: [])
-      post :squash_many_duplicates, master_id: @master.id, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id
-      flash[:failure].should == "No duplicate #{model}s were squashed."
-    end
-  end
 end
