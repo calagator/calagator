@@ -1,10 +1,5 @@
 class Venue < ActiveRecord::Base
-  class Search < Struct.new(:params, :venues, :most_active_venues, :newest_venues, :scoped_venues)
-    def initialize(params)
-      self.params = params
-      venues
-    end
-
+  class Search < Struct.new(:params)
     def venues
       @venues ||= if query
         Venue.search(query, include_closed: include_closed?, wifi: wifi?)
@@ -15,6 +10,18 @@ class Venue < ActiveRecord::Base
 
     def tag
       params[:tag]
+    end
+
+    def most_active_venues
+      base.business.scope.order('events_count DESC').limit(10)
+    end
+
+    def newest_venues
+      base.business.scope.order('created_at DESC').limit(10)
+    end
+
+    def scoped_venues
+      @scope
     end
 
     protected
@@ -44,11 +51,12 @@ class Venue < ActiveRecord::Base
       elsif all
         @scope
       else # default view
-        self.most_active_venues = @scope.limit(10).order('events_count DESC')
-        self.newest_venues = @scope.limit(10).order('created_at DESC')
-        self.scoped_venues = @scope
         nil
       end
+    end
+
+    def scope
+      @scope
     end
 
     private
