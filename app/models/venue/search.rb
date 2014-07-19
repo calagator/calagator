@@ -1,45 +1,86 @@
 class Venue < ActiveRecord::Base
-  class Search < Struct.new(:venues, :tag, :most_active_venues, :newest_venues, :scoped_venues)
+  class Search < Struct.new(:params, :venues, :most_active_venues, :newest_venues, :scoped_venues)
     def initialize(params)
-      scoped_venues = Venue.non_duplicates
+      self.params = params
+      venues
+    end
 
-      # Pick a subset of venues (we want in_business by default)
-      if params[:include_closed]
-        scoped_venues = scoped_venues
-      elsif params[:closed]
-        scoped_venues = scoped_venues.out_of_business
+    def venues
+      @venues ||= base.in_business.wifi.stuff
+    end
+
+    def tag
+      params[:tag]
+    end
+
+    protected
+
+    def base
+      @scope = Venue.non_duplicates
+      self
+    end
+
+    def in_business
+      if only_closed?
+        @scope = @scope.out_of_business
+      elsif only_open?
+        @scope = @scope.in_business
+      end
+      self
+    end
+
+    def wifi
+      @scope = @scope.with_public_wifi if wifi?
+      self
+    end
+
+    def stuff
+      if tag.present? # searching by tag
+        @scope.tagged_with(tag)
+      elsif term.present? # for the ajax autocomplete widget
+        conditions = ["title LIKE ?", "%#{term}%"]
+        @scope.where(conditions).order('LOWER(title)')
+      elsif query
+        Venue.search(query, include_closed: include_closed?, wifi: wifi?)
+      elsif !all # default view
+        self.most_active_venues = @scope.limit(10).order('events_count DESC')
+        self.newest_venues = @scope.limit(10).order('created_at DESC')
+        self.scoped_venues = @scope
+        nil
       else
-        scoped_venues = scoped_venues.in_business
+        @scope
       end
+    end
 
-      # Support old ajax autocomplete parameter name
-      params[:term] = params[:val] if params[:val]
+    private
 
-      @tag = nil
-      if params[:tag].present? # searching by tag
-        @tag = params[:tag]
-        @venues = scoped_venues.tagged_with(@tag)
-      elsif params.has_key?(:query) || params.has_key?(:term) || params[:all] == '1' # searching by query
-        scoped_venues = scoped_venues.with_public_wifi if params[:wifi]
+    # Support old ajax autocomplete parameter name
+    def term
+      params[:val] || params[:term]
+    end
 
-        if params[:term].present? # for the ajax autocomplete widget
-          conditions = ["title LIKE ?", "%#{params[:term]}%"]
-          @venues = scoped_venues.where(conditions).order('LOWER(title)')
-        elsif params[:query].present?
-          @venues = Venue.search(params[:query], :include_closed => params[:include_closed], :wifi => params[:wifi])
-        else
-          @venues = scoped_venues.all
-        end
-      else # default view
-        @most_active_venues = scoped_venues.limit(10).order('events_count DESC')
-        @newest_venues = scoped_venues.limit(10).order('created_at DESC')
-      end
+    def query
+      params[:query]
+    end
 
-      self.venues = @venues
-      self.tag = @tag
-      self.most_active_venues = @most_active_venues
-      self.newest_venues = @newest_venues
-      self.scoped_venues = scoped_venues
+    def only_closed?
+      params[:closed]
+    end
+
+    def only_open?
+      !include_closed?
+    end
+
+    def include_closed?
+      params[:include_closed]
+    end
+
+    def wifi?
+      params[:wifi]
+    end
+
+    def all
+      params[:all] == '1'
     end
   end
 end
