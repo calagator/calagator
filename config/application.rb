@@ -11,19 +11,11 @@ end
 
 module Calagator
   class Application < Rails::Application
-    #---[ Plugins ]---------------------------------------------------------
-
-    # Load these plugins first, or they won't work
-    config.plugins = [
-      :exception_notification,
-    ]
-
     #---[ Path -------------------------------------------------------------
 
     config.autoload_paths += %W(
       #{config.root}/app/mixins
       #{config.root}/app/observers
-      #{config.root}/lib/exception_notification/lib
       #{config.root}/lib/has_many_polymorphs/lib
       #{config.root}/lib/gmaps_on_rails/lib
       #{config.root}/lib
