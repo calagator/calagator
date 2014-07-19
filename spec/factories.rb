@@ -16,6 +16,8 @@ FactoryGirl.define do
     closed false
     wifi true
     access_notes "Access permitted."
+
+    after(:create) { Sunspot.commit if Venue::SearchEngine.kind == :sunspot }
   end
 
   factory :event do
@@ -23,6 +25,8 @@ FactoryGirl.define do
     sequence(:description) { |n| "Description of Event #{n}." }
     start_time { Time.now + 1.hour }
     end_time { start_time + 1.hour }
+
+    after(:create) { Sunspot.commit if Event::SearchEngine.kind == :sunspot }
   end
 
   factory :event_with_venue, :parent => :event do

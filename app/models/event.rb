@@ -23,8 +23,6 @@
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
-  include SearchEngine
-
   # Treat any event with a duration of at least this many hours as a multiday
   # event. This constant is used by the #multiday? method and is primarily
   # meant to make iCalendar exports display this event as covering a range of
@@ -48,7 +46,7 @@ class Event < ActiveRecord::Base
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time
   validates_format_of :url,
-    :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
+    :with => /\Ahttps?:\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\Z/,
     :allow_blank => true,
     :allow_nil => true
 
@@ -188,7 +186,7 @@ class Event < ActiveRecord::Base
     when 'na', ''
       { [] => future }
     else
-      kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
+      kind = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
       find_duplicates_by(kind,
         :grouped => true,
         :where => "a.start_time >= #{connection.quote(Time.now - 1.day)}")
@@ -223,41 +221,12 @@ class Event < ActiveRecord::Base
   # NOTE: The `Event.search` method is implemented elsewhere! For example, it's
   # added by SearchEngine::ActsAsSolr if you're using that search engine.
 
-  # Return events matching the given +tag+ are grouped by their currentness,
-  # see ::group_by_currentness for data structure details.
-  #
-  # Will also set :error key if there was a non-fatal problem, e.g. invalid
-  # sort order.
-  #
-  # Options:
-  # * :current => Limit results to only current events? Defaults to false.
-  def self.search_tag_grouped_by_currentness(tag, opts={})
-    result = group_by_currentness(includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order]))
-    # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
-    result[:past] = [] if opts[:current]
-    result
+  def self.search_tag(tag, opts={})
+    includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order])
   end
 
-  # Return events grouped by their currentness. Accepts the same +args+ as
-  # #search. The results hash is keyed by whether the event is current
-  # (true/false) and the values are arrays of events.
-  def self.search_keywords_grouped_by_currentness(query, opts={})
-    events = group_by_currentness(search(query, opts))
-    if events[:past] && opts[:order].to_s == "date"
-      events[:past].reverse!
-    end
-    events
-  end
-
-  # Return +events+ grouped by currentness using a data structure like:
-  #
-  #   {
-  #     :current => [ my_current_event, my_other_current_event ],
-  #     :past => [ my_past_event ],
-  #   }
-  def self.group_by_currentness(events)
-    grouped = events.group_by(&:current?)
-    {:current => grouped[true] || [], :past => grouped[false] || []}
+  def self.search(query, opts={})
+    SearchEngine.search(query, opts)
   end
 
   #---[ Transformations ]-------------------------------------------------
@@ -287,7 +256,7 @@ class Event < ActiveRecord::Base
 <a class="url" href="#{url}">#{url}</a>
 <span class="summary">#{title}</span>:
 <abbr class="dtstart" title="#{start_time.to_s(:yyyymmdd)}">#{start_time.to_s(:long_date).gsub(/\b[0](\d)/, '\1')}</abbr>,
-at the <span class="location">#{venue && venue.title}</span>
+at the <span class="location">#{venue_title}</span>
 </div>
 EOF
   end
@@ -358,7 +327,7 @@ EOF
           end
 
           if item.venue
-            entry.location [item.venue.title, item.venue.full_address].compact.join(": ")
+            entry.location [item.venue_title, item.venue.full_address].compact.join(": ")
           end
 
           # dtstamp and uid added because of a bug in Outlook;
@@ -382,6 +351,10 @@ EOF
     venue && venue.location
   end
 
+  def venue_title
+    venue && venue.title
+  end
+
   def normalize_url!
     unless url.blank? || url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + url
@@ -396,7 +369,7 @@ EOF
   # their time-of-day is set to the original record's time-of-day.
   def to_clone
     clone = self.class.new
-    CLONE_ATTRIBUTES.each do |attribute| 
+    CLONE_ATTRIBUTES.each do |attribute|
       clone.send("#{attribute}=", send(attribute))
     end
     if start_time
@@ -420,25 +393,22 @@ EOF
 
   # Returns an array of the dates spanned by the event.
   def dates
-    if start_time && end_time
+    raise ArgumentError, "can't get dates for an event with no start time" unless start_time
+    if end_time
       (start_time.to_date..end_time.to_date).to_a
-    elsif start_time
-      [start_time.to_date]
     else
-      raise ArgumentError, "can't get dates for an event with no start time"
+      [start_time.to_date]
     end
   end
 
-  # Is this event current? Default cutoff is today
-  def current?(cutoff=nil)
-    cutoff ||= Time.today
-    (end_time || start_time) >= cutoff
+  # Is this event current?
+  def current?
+    (end_time || start_time) >= Time.today
   end
 
-  # Is this event old? Default cutoff is yesterday
-  def old?(cutoff=nil)
-    cutoff ||= Time.zone.now.midnight # midnight today is the end of yesterday
-    (end_time || start_time + 1.hour) <= cutoff
+  # Is this event old?
+  def old?
+    (end_time || start_time + 1.hour) <= Time.zone.now.beginning_of_day
   end
 
   # Did this event start before today but ends today or later?

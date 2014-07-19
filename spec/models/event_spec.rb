@@ -141,19 +141,6 @@ describe Event do
 
       abstract_event.location.title.should match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
     end
-
-  end
-
-  describe "when finding duplicates" do
-    it "should find all events with duplicate titles" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
-      Event.find_duplicates_by(:title)
-    end
-
-    it "should find all events with duplicate titles and urls" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-      Event.find_duplicates_by([:title,:url])
-    end
   end
 
   describe "when finding duplicates by type" do
@@ -188,7 +175,7 @@ describe Event do
     end
 
     it "should find events with duplicate titles if called with 'title'" do
-      assert_specific_find_by_duplicates_by('title', ['title'])
+      assert_specific_find_by_duplicates_by('title', [:title])
     end
   end
 
@@ -212,10 +199,48 @@ describe Event do
     it "should fail to validate if end_time is earlier than start time " do
       @event.start_time = now
       @event.end_time = @event.start_time - 2.hours
-      @event.save.should be_falsey
+      @event.should be_invalid
       @event.errors[:end_time].size.should eq(1)
     end
+  end
 
+  describe "when processing url" do
+    before do
+      @event = Event.new(:title => 'MyEvent', :start_time => now)
+    end
+
+    let(:valid_urls) {[
+      "hackoregon.org",
+      "http://www.meetup.com/Hack_Oregon-Data/events/",
+      "example.com",
+      "sub.example.com/",
+      "sub.domain.my-example.com",
+      "example.com/?stuff=true",
+      "example.com:5000/?stuff=true",
+      "sub.domain.my-example.com/path/to/file/hello.html",
+      "hello.museum",
+      "http://example.com",
+    ]}
+
+    let(:invalid_urls){[
+      "hackoregon.org, http://www.meetup.com/Hack_Oregon-Data/events/",
+      "hackoregon.org\nhttp://www.meetup.com/",
+      "htttp://www.example.com"
+    ]}
+
+    it "should validate with valid urls (with scheme included or not)" do
+      valid_urls.each do |valid_url|
+        @event.url = valid_url
+        @event.should be_valid
+      end
+    end
+
+    it "should fail to validate with invalid urls (with scheme included or not)" do
+      invalid_urls.each do |invalid_url|
+        @event.url = invalid_url
+        @event.should be_invalid
+      end
+    end
   end
 
   describe "#start_time=" do
@@ -233,7 +258,7 @@ describe Event do
       event.start_time.should eq Time.zone.parse("2009-01-02 03:45")
     end
 
-    it "should set from an Array of Strings" do 
+    it "should set from an Array of Strings" do
       event = Event.new(:start_time => ["2009-01-03", "02:14"])
       event.start_time.should eq Time.zone.parse("2009-01-03 02:14")
     end
@@ -559,57 +584,6 @@ describe Event do
     end
   end
 
-  describe "when searching" do
-    describe "with .search_tag_grouped_by_currentness" do
-      before do
-        @untagged_current_event = FactoryGirl.create(:event, tag_list: ["no"], start_time: Time.now)
-        @current_event = FactoryGirl.create(:event, tag_list: ["no", "yes"], start_time: Time.now)
-        @past_event = FactoryGirl.create(:event, tag_list: ["yes", "no"], start_time: 1.year.ago)
-        @untagged_past_event = FactoryGirl.create(:event, tag_list: ["no"], start_time: 1.year.ago)
-      end
-
-      it "should find events by tag and group them" do
-        Event.search_tag_grouped_by_currentness("yes").should eq({
-          current: [@current_event],
-          past:    [@past_event],
-        })
-      end
-
-      it "discards past event if passed the current option" do
-        Event.search_tag_grouped_by_currentness("yes", current: true).should eq({
-          current: [@current_event],
-          past:    [],
-        })
-      end
-    end
-
-    describe "with .search_keywords_grouped_by_currentness" do
-      before do
-        @current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
-        @past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
-        @other_past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
-      end
-
-      it "should find events and group them" do
-        Event.should_receive(:search).with("query", {})
-          .and_return([@current_event, @past_event, @other_past_event])
-        Event.search_keywords_grouped_by_currentness("query").should eq({
-          current: [@current_event],
-          past:    [@past_event, @other_past_event],
-        })
-      end
-
-      it "orders past events by date desc if passed date to the order option" do
-        Event.should_receive(:search).with("query", order: "date")
-          .and_return([@current_event, @past_event, @other_past_event])
-        Event.search_keywords_grouped_by_currentness("query", order: "date").should eq({
-          current: [@current_event],
-          past:    [@other_past_event, @past_event],
-        })
-      end
-    end
-  end
-
   describe "when associating with venues" do
     before do
       @event = FactoryGirl.create(:event)
@@ -654,58 +628,25 @@ describe Event do
     it "should raise an exception if associated with an unknown type" do
       lambda { @event.associate_with_venue(double('SourceParser')) }.should raise_error TypeError
     end
-
-    describe "and searching" do
-      it "should find events" do
-        event_A = Event.new(:title => "Zipadeedoodah", :start_time => (now + 1.week))
-        event_o = Event.new(:title => "Antidisestablishmentarism", :start_time => (now + 2.weeks))
-        event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (now + 3.weeks))
-        event_Z = Event.new(:title => "ommmmmmmmmmm...", :start_time => (now + 4.weeks))
-
-        event_A.venue = Venue.new(:title => "Acme Hotel")
-        event_o.venue = Venue.new(:title => "opbmusic Studios")
-        event_O.venue = Venue.new(:title => "Oz")
-        event_Z.venue = Venue.new(:title => "Zippers and Things")
-
-        Event.should_receive(:search).and_return([event_A, event_Z, event_O, event_o])
-
-        Event.search_keywords_grouped_by_currentness("myquery", :order => 'venue').should eq({
-          :current => [event_A, event_Z, event_O, event_o],
-          :past => []
-        })
-      end
-    end
   end
 
   describe "with finding duplicates" do
-    it "should find all events with duplicate titles" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
-      Event.find_duplicates_by(:title )
+    before do
+      @non_duplicate_event = FactoryGirl.create(:event)
+      @duplicate_event = FactoryGirl.create(:duplicate_event)
+      @events = [@non_duplicate_event, @duplicate_event]
     end
 
-    it "should find all events with duplicate titles and urls" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-      Event.find_duplicates_by([:title,:url])
+    it "should find all events that have not been marked as duplicate" do
+      non_duplicates = Event.non_duplicates
+      non_duplicates.should include @non_duplicate_event
+      non_duplicates.should_not include @duplicate_event
     end
 
-    describe "with sample records" do
-      before do
-        @non_duplicate_event = FactoryGirl.create(:event)
-        @duplicate_event = FactoryGirl.create(:duplicate_event)
-        @events = [@non_duplicate_event, @duplicate_event]
-      end
-
-      it "should find all events that have not been marked as duplicate" do
-        non_duplicates = Event.non_duplicates
-        non_duplicates.should include @non_duplicate_event
-        non_duplicates.should_not include @duplicate_event
-      end
-
-      it "should find all events that have been marked as duplicate" do
-        duplicates = Event.marked_duplicates
-        duplicates.should include @duplicate_event
-        duplicates.should_not include @non_duplicate_event
-      end
+    it "should find all events that have been marked as duplicate" do
+      duplicates = Event.marked_duplicates
+      duplicates.should include @duplicate_event
+      duplicates.should_not include @non_duplicate_event
     end
   end
 

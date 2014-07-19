@@ -7,12 +7,18 @@ class Event < ActiveRecord::Base
       validate!
     end
 
+    # Return +events+ grouped by currentness using a data structure like:
+    #
+    #   {
+    #     :current => [ my_current_event, my_other_current_event ],
+    #     :past => [ my_past_event ],
+    #   }
     def grouped_events
-      @grouped_events ||= if query
-        Event.search_keywords_grouped_by_currentness(query, order: order, skip_old: current)
-      elsif tag
-        Event.search_tag_grouped_by_currentness(tag, order: order, current: current)
-      end
+      grouped = events.group_by(&:current?)
+      grouped = { current: grouped[true] || [], past: grouped[false] || [] }
+      grouped[:past].reverse! if grouped[:past] && order.to_s == "date"
+      grouped[:past] = [] if current
+      grouped
     end
 
     def current
@@ -20,7 +26,11 @@ class Event < ActiveRecord::Base
     end
 
     def events
-      grouped_events[:past] + grouped_events[:current]
+      @events ||= if tag
+        Event.search_tag(tag, order: order, current: current)
+      else
+        Event.search(query, order: order, skip_old: current)
+      end
     end
 
     def failure_message

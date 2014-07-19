@@ -3,21 +3,19 @@ require 'spec_helper'
 describe Event::Search do
   describe "by keyword" do
     it "should be able to only return events that include a specific keyword" do
-      grouped_events = double(:grouped_events)
-      Event.should_receive(:search_keywords_grouped_by_currentness)
-        .with("myquery", skip_old: false, order: nil).and_return(grouped_events)
+      events = double
+      Event.should_receive(:search).with("myquery", skip_old: false, order: nil).and_return(events)
 
       subject = Event::Search.new query: "myquery"
-      subject.grouped_events.should == grouped_events
+      subject.events.should == events
     end
 
     it "should be able to only return current events" do
-      grouped_events = double(:grouped_events)
-      Event.should_receive(:search_keywords_grouped_by_currentness)
-        .with("myquery", order: nil, skip_old: true).and_return(grouped_events)
+      events = double
+      Event.should_receive(:search).with("myquery", order: nil, skip_old: true).and_return(events)
 
       subject = Event::Search.new query: "myquery", current: "1"
-      subject.grouped_events.should == grouped_events
+      subject.events.should == events
     end
 
     it "should warn if user tries ordering by invalid order" do
@@ -29,12 +27,11 @@ describe Event::Search do
 
   describe "by tag" do
     it "should be able to only return events matching specific tag" do
-      grouped_events = double(:grouped_events)
-      Event.should_receive(:search_tag_grouped_by_currentness)
-        .with("foo", current: false, order: nil).and_return(grouped_events)
+      events = double
+      Event.should_receive(:search_tag).with("foo", current: false, order: nil).and_return(events)
 
       subject = Event::Search.new tag: "foo"
-      subject.grouped_events.should == grouped_events
+      subject.events.should == events
     end
 
     it "should warn if user tries ordering by invalid order" do
@@ -47,6 +44,43 @@ describe Event::Search do
       subject = Event::Search.new tag: "omg", order: "score"
       subject.failure_message.should == "You cannot sort tags by score"
       subject.should_not be_hard_failure
+    end
+  end
+
+  describe "#grouped_events" do
+    it "groups events into a hash by currentness" do
+      past_event = double(:event, current?: false)
+      current_event = double(:event, current?: true)
+      events = [past_event, current_event]
+      Event.should_receive(:search).and_return(events)
+
+      subject.grouped_events.should == {
+        past: [past_event],
+        current: [current_event],
+      }
+    end
+
+    it "discards past events when passed the current option" do
+      past_event = double(:event, current?: false)
+      current_event = double(:event, current?: true)
+      events = [past_event, current_event]
+      Event.should_receive(:search).and_return(events)
+
+      subject = Event::Search.new(current: "true").grouped_events.should == {
+        past: [],
+        current: [current_event],
+      }
+    end
+
+    it "orders past events by date desc if passed date to the order option" do
+      current_event = double(:event, current?: true)
+      past_event = double(:event, current?: false)
+      other_past_event = double(:event, current?: false)
+      Event.should_receive(:search).and_return([current_event, past_event, other_past_event])
+      Event::Search.new(order: "date").grouped_events.should eq({
+        current: [current_event],
+        past:    [other_past_event, past_event],
+      })
     end
   end
 
@@ -63,3 +97,4 @@ describe Event::Search do
     end
   end
 end
+

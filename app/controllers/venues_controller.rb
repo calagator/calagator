@@ -171,24 +171,6 @@ class VenuesController < ApplicationController
     end
   end
 
-  # GET /venues/duplicates
-  def duplicates
-    @type = params[:type]
-    begin
-      @grouped_venues = Venue.find_duplicates_by_type(@type)
-    rescue ArgumentError => e
-      @grouped_venues = {}
-      flash[:failure] = "#{e}"
-    end
-
-    @page_title = "Duplicate Venue Squasher"
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @grouped_venues }
-    end
-  end
-
 protected
 
   def ical_export(venue)

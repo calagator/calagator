@@ -1,5 +1,5 @@
 class SourceParser
-  AbstractEvent = Struct.new(
+  class AbstractEvent < Struct.new(
     :title,
     :description,
     :start_time,
@@ -8,7 +8,6 @@ class SourceParser
     :location,
     :tags)
 
-  class AbstractEvent
     def initialize(*args)
       super
       self.tags ||= []
