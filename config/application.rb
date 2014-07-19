@@ -15,7 +15,6 @@ module Calagator
 
     # Load these plugins first, or they won't work
     config.plugins = [
-      :catch_cookie_exception,
       :exception_notification,
     ]
 
@@ -24,7 +23,6 @@ module Calagator
     config.autoload_paths += %W(
       #{config.root}/app/mixins
       #{config.root}/app/observers
-      #{config.root}/lib/catch_cookie_exception/lib
       #{config.root}/lib/exception_notification/lib
       #{config.root}/lib/has_many_polymorphs/lib
       #{config.root}/lib/gmaps_on_rails/lib
