@@ -116,8 +116,8 @@ module DuplicateChecking
     # Options:
     # :duplicates => ActiveRecord instance(s) to mark as duplicates
     # :master => ActiveRecord instance to use as master
-    def squash(opts)
-      DuplicateSquasher.new(opts).squash
+    def squash(master, duplicates)
+      DuplicateSquasher.new(master, duplicates, name.downcase).squash
     end
   end
 end

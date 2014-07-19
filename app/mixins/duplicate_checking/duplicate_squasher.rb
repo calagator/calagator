@@ -1,24 +1,31 @@
 module DuplicateChecking
-  class DuplicateSquasher < Struct.new(:master, :duplicates)
-    def initialize(opts)
-      self.master = opts[:master]
-      self.duplicates = Array(opts[:duplicates])
+  class DuplicateSquasher < Struct.new(:master, :duplicates, :singular, :failure, :success)
+    def duplicates
+      Array(super)
+    end
+
+    def valid?
+      self.failure = "A master #{singular} must be selected." if master.blank?
+      self.failure = "At least one duplicate #{singular} must be selected." if duplicates.empty?
+      self.failure = "The master #{singular} could not be squashed into itself." if duplicates.include?(master)
+      failure.blank?
     end
 
     def squash
-      raise(ArgumentError, ":master not specified")     if master.blank?
-      raise(ArgumentError, ":duplicates not specified") if duplicates.empty?
-
-      duplicates.each do |duplicate|
-        SingleSquasher.new(master, duplicate).squash
+      if valid?
+        duplicates.each do |duplicate|
+          SingleSquasher.new(master, duplicate, singular).squash
+        end
+        self.success = "Squashed duplicate #{singular}s #{duplicates.map(&:title)} into master #{master.id}."
       end
+      self
     end
 
-    class SingleSquasher < Struct.new(:master, :duplicate)
+    class SingleSquasher < Struct.new(:master, :duplicate, :singular)
       def squash
         # Transfer any venues that use this now duplicate venue as a master
         if duplicate.duplicates.any?
-          self.class.squash master: master, duplicates: duplicate.duplicates
+          DuplicateSquasher.new(master, duplicate.duplicates, singular).squash
         end
 
         squash_associations

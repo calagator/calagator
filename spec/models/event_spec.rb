@@ -721,7 +721,7 @@ describe Event do
       clone.reload
       clone.should_not be_duplicate
 
-      Event.squash(:master => @event, :duplicates => clone)
+      Event.squash(@event, clone)
       @event.tag_list.to_a.sort.should eq %w[first second third] # master now contains all three tags
       clone.duplicate_of.should eq @event
     end
