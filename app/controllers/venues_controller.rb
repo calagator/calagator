@@ -64,10 +64,7 @@ class VenuesController < ApplicationController
     @page_title = @venue.title
 
     respond_to do |format|
-      format.html {
-        @future_events = @venue.events.order("start_time ASC").future.non_duplicates.includes(:venue)
-        @past_events = @venue.events.order("start_time DESC").past.non_duplicates.includes(:venue)
-      }
+      format.html
       format.xml  { render xml: @venue }
       format.json { render json: @venue, callback: params[:callback] }
       format.ics  { ical_export(@venue) }
