@@ -165,22 +165,6 @@ describe VenuesController do
           end
         end
       end
-
-      describe "when searching by title (for the ajax selector)" do
-        it "should find venues by title" do
-          get :index, :term => 'Open Town'
-          assigns[:venues].should include @open_venue
-          assigns[:venues].should_not include @wifi_venue
-        end
-        it "should NOT find venues by description" do
-          get :index, :term => 'baz'
-          assigns[:venues].should_not include @open_venue
-        end
-        it "should NOT find closed venues" do
-          get :index, :term => 'closed'
-          assigns[:venues].should_not include @closed_venue
-        end
-      end
     end
 
     it "should be able to return events matching specific tag" do

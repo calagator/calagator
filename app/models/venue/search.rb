@@ -41,8 +41,6 @@ class Venue < ActiveRecord::Base
     def search
       if tag.present? # searching by tag
         @scope.tagged_with(tag)
-      elsif term.present? # for the ajax autocomplete widget
-        @scope.where(["title LIKE ?", "%#{term}%"]).order('LOWER(title)')
       elsif all
         @scope
       else # default view
@@ -54,11 +52,6 @@ class Venue < ActiveRecord::Base
     end
 
     private
-
-    # Support old ajax autocomplete parameter name
-    def term
-      params[:val] || params[:term]
-    end
 
     def query
       params[:query]
