@@ -14,7 +14,6 @@ module Calagator
     #---[ Libraries ]-------------------------------------------------------
 
     ### monkeypatches
-    require 'ext/nil_strip_html'
     require 'ext/time_today'
     require 'ext/time_get_zone'
 
