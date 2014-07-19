@@ -17,7 +17,6 @@ module SquashManyDuplicatesMixin
         master = model_class.find_by_id(params[:master_id])
         duplicate_ids = params.keys.grep(/^duplicate_id_\d+$/){|t| params[t].to_i}
         duplicates = model_class.where(id: duplicate_ids)
-        plural = model_class.name.pluralize.downcase
 
         squasher = model_class.squash(master, duplicates)
         if squasher.success
@@ -25,8 +24,7 @@ module SquashManyDuplicatesMixin
         else
           flash[:failure] = squasher.failure
         end
-
-        redirect_to :action => "duplicates", :type => params[:type]
+        redirect_to action: "duplicates", type: params[:type]
       end
 
       private
