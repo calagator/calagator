@@ -13,27 +13,10 @@ module Calagator
   class Application < Rails::Application
     #---[ Libraries ]-------------------------------------------------------
 
-    # Gems are packaged in "Gemfile", run `bundle` to install them.
-
-    # Standard libraries
-    require 'fileutils'
-    require 'net/http'
-    require 'net/https'
-    require 'open-uri'
-    require 'set'
-    require 'uri'
-
-    # Load from "/lib"
-    $LOAD_PATH << Rails.root.join('lib')
-    ### libraries
-    require 'tag_model_extensions'
     ### monkeypatches
     require 'ext/nil_strip_html'
     require 'ext/time_today'
     require 'ext/time_get_zone'
-
-    # Adds Array#paginate
-    require 'will_paginate/array'
 
     #---[ Plugins ]---------------------------------------------------------
 
@@ -75,6 +58,7 @@ module Calagator
 
     #---[ Caching ]---------------------------------------------------------
 
+    require 'fileutils'
     cache_path = Rails.root.join('tmp','cache',Rails.env)
     config.cache_store = :file_store, cache_path
     FileUtils.mkdir_p(cache_path)

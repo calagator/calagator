@@ -1,3 +1,7 @@
+require "net/http"
+require "net/https"
+require "open-uri"
+
 $SourceParserImplementations = []
 
 class SourceParser
