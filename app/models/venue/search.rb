@@ -17,11 +17,23 @@ class Venue < ActiveRecord::Base
     end
 
     def results?
-      !query && !tag && !all
+      !query && !tag && !all?
     end
 
     def tag
       params[:tag]
+    end
+
+    def query
+      params[:query]
+    end
+
+    def wifi?
+      params[:wifi]
+    end
+
+    def all?
+      params[:all] == '1'
     end
 
     protected
@@ -56,10 +68,6 @@ class Venue < ActiveRecord::Base
 
     private
 
-    def query
-      params[:query]
-    end
-
     def only_closed?
       params[:closed]
     end
@@ -70,14 +78,6 @@ class Venue < ActiveRecord::Base
 
     def include_closed?
       params[:include_closed]
-    end
-
-    def wifi?
-      params[:wifi]
-    end
-
-    def all
-      params[:all] == '1'
     end
   end
 end
