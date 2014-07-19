@@ -38,15 +38,9 @@ class Venue < ActiveRecord::Base
   include DecodeHtmlEntitiesHack
 
   # Associations
-  has_many :events, :dependent => :nullify do
-    def future_events
-      order("start_time ASC").future.non_duplicates.includes(:venue)
-    end
-    def past_events
-      order("start_time DESC").past.non_duplicates.includes(:venue)
-    end
-  end
-  delegate :future_events, :past_events, to: :events
+  has_many :events, dependent: :nullify
+  def future_events; events.future_with_venue; end
+  def past_events; events.past_with_venue; end
   belongs_to :source
 
   # Triggers
