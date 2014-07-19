@@ -30,7 +30,6 @@ module Calagator
     require 'tag_model_extensions'
     ### monkeypatches
     require 'ext/nil_strip_html'
-    require 'ext/object_logit'
     require 'ext/time_today'
     require 'ext/time_get_zone'
 
