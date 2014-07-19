@@ -11,11 +11,6 @@ end
 
 module Calagator
   class Application < Rails::Application
-    #---[ Libraries ]-------------------------------------------------------
-
-    ### monkeypatches
-    require 'ext/time_get_zone'
-
     #---[ Plugins ]---------------------------------------------------------
 
     # Load these plugins first, or they won't work
