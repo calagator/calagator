@@ -99,9 +99,9 @@ describe VenuesController do
 
   describe "when rendering the venues index" do
     before do
-      @open_venue = FactoryGirl.create(:venue, :title => 'Open Town', :description => 'baz', :wifi => false)
-      @closed_venue = FactoryGirl.create(:venue, :title => 'Closed Down', :closed => true, :wifi => false)
-      @wifi_venue = FactoryGirl.create(:venue, :title => "Internetful", :wifi => true)
+      @open_venue = FactoryGirl.create(:venue, title: 'Open Town', description: 'baz', wifi: false, tag_list: %w(foo))
+      @closed_venue = FactoryGirl.create(:venue, title: 'Closed Down', closed: true, wifi: false, tag_list: %w(bar))
+      @wifi_venue = FactoryGirl.create(:venue, title: "Internetful", wifi: true, tag_list: %w(foo bar))
     end
 
     describe "with no parameters" do
@@ -184,8 +184,8 @@ describe VenuesController do
     end
 
     it "should be able to return events matching specific tag" do
-      Venue.should_receive(:tagged_with).with("foo").and_return([])
       get :index, :tag => "foo"
+      assigns[:venues].should =~ [@open_venue, @wifi_venue]
     end
 
     describe "in JSON format" do
