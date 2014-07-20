@@ -15,19 +15,19 @@ class CacheObserver < ActiveRecord::Observer
 
   # Expires all cached data.
   def self.expire_all
-    logit "invoked"
+    Rails.logger.info "CacheObserver::expire_all: invoked"
     Rails.cache.clear
   end
 
   #---[ Triggers ]--------------------------------------------------------
 
   def after_save(record)
-    logit "invoked"
+    Rails.logger.info "CacheObserver#after_save: invoked"
     self.class.expire_all
   end
 
   def after_destroy(record)
-    logit "invoked"
+    Rails.logger.info "CacheObserver#after_destroy: invoked"
     self.class.expire_all
   end
 end

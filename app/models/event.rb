@@ -391,7 +391,7 @@ EOF
   # Return a time that's today but has the time-of-day component from the
   # +source+ time argument.
   def clone_time_for_today(source)
-    today = Time.today
+    today = Date.today
     Time.local(today.year, today.mon, today.day, source.hour, source.min, source.sec, source.usec)
   end
   private :clone_time_for_today
@@ -410,7 +410,7 @@ EOF
 
   # Is this event current?
   def current?
-    (end_time || start_time) >= Time.today
+    (end_time || start_time) >= Date.today.to_time
   end
 
   # Is this event old?
@@ -420,7 +420,7 @@ EOF
 
   # Did this event start before today but ends today or later?
   def ongoing?
-    start_time < Time.today && end_time && end_time >= Time.today
+    start_time < Date.today.to_time && end_time && end_time >= Date.today.to_time
   end
 
   def multiday?
