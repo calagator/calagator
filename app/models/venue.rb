@@ -196,8 +196,8 @@ class Venue < ActiveRecord::Base
   end
 
   # Maybe trigger geocoding when we save
-  def force_geocoding=(force_it)
-    self.latitude = self.longitude = nil if force_it
+  def force_geocoding=(value)
+    self.latitude = self.longitude = nil if value == "1"
   end
 
   # Try to geocode, but don't complain if we can't.
