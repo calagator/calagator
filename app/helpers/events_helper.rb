@@ -2,12 +2,6 @@ module EventsHelper
   include TimeRangeHelper # provides normalize_time
 
   def today_tomorrow_or_weekday(record)
-    # TODO Figure out if there's any need for this method beyond having a way of conditionally displaying the 'Started' information. As far as I can tell, there's no need to display the 'Today' or 'Tomorrow' rather than the weekday because each event already has a header to its left that can say 'Today' or 'Tomorrow'.
-#    if record.start_time.to_date == Date.today
-#      'Today'
-#    elsif record.start_time.to_date == (Date.today+1.day)
-#      'Tomorrow'
-#    elsif record.ongoing?
     if record.ongoing?
       "Started #{record.start_time.strftime('%A')}"
     else
