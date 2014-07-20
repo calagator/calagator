@@ -80,6 +80,13 @@ class Event < ActiveRecord::Base
     on_or_after_date(start_date).before_date(end_date)
   }
 
+  scope :future_with_venue, -> {
+    future.order("start_time ASC").non_duplicates.includes(:venue)
+  }
+  scope :past_with_venue, -> {
+    past.order("start_time DESC").non_duplicates.includes(:venue)
+  }
+
   # Expand the simple sort order names from the URL into more intelligent SQL order strings
   scope :ordered_by_ui_field, lambda{|ui_field|
     case ui_field
