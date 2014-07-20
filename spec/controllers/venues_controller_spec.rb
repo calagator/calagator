@@ -99,9 +99,9 @@ describe VenuesController do
 
   describe "when rendering the venues index" do
     before do
-      @open_venue = FactoryGirl.create(:venue, :title => 'Open Town', :description => 'baz', :wifi => false)
-      @closed_venue = FactoryGirl.create(:venue, :title => 'Closed Down', :closed => true, :wifi => false)
-      @wifi_venue = FactoryGirl.create(:venue, :title => "Internetful", :wifi => true)
+      @open_venue = FactoryGirl.create(:venue, title: 'Open Town', description: 'baz', wifi: false, tag_list: %w(foo))
+      @closed_venue = FactoryGirl.create(:venue, title: 'Closed Down', closed: true, wifi: false, tag_list: %w(bar))
+      @wifi_venue = FactoryGirl.create(:venue, title: "Internetful", wifi: true, tag_list: %w(foo bar))
     end
 
     describe "with no parameters" do
@@ -109,14 +109,14 @@ describe VenuesController do
         get :index
       end
 
-      it "should assign @most_active_venues and @newest_venues by default" do
+      it "should assign @search.most_active_venues and @search.newest_venues by default" do
         get :index
-        assigns[:most_active_venues].should be_present
-        assigns[:newest_venues].should be_present
+        assigns[:search].most_active_venues.should be_present
+        assigns[:search].newest_venues.should be_present
       end
 
       it "should not included closed venues" do
-        assigns[:newest_venues].should_not include @closed_venue
+        assigns[:search].newest_venues.should_not include @closed_venue
       end
     end
 
@@ -165,27 +165,11 @@ describe VenuesController do
           end
         end
       end
-
-      describe "when searching by title (for the ajax selector)" do
-        it "should find venues by title" do
-          get :index, :term => 'Open Town'
-          assigns[:venues].should include @open_venue
-          assigns[:venues].should_not include @wifi_venue
-        end
-        it "should NOT find venues by description" do
-          get :index, :term => 'baz'
-          assigns[:venues].should_not include @open_venue
-        end
-        it "should NOT find closed venues" do
-          get :index, :term => 'closed'
-          assigns[:venues].should_not include @closed_venue
-        end
-      end
     end
 
     it "should be able to return events matching specific tag" do
-      Venue.should_receive(:tagged_with).with("foo").and_return([])
       get :index, :tag => "foo"
+      assigns[:venues].should =~ [@open_venue, @wifi_venue]
     end
 
     describe "in JSON format" do
