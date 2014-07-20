@@ -1,5 +1,6 @@
 class EventsController < ApplicationController
-  include SquashManyDuplicatesMixin # Provides squash_many_duplicates
+  # Provides #duplicates and #squash_many_duplicates
+  include DuplicateChecking::ControllerActions
 
   # GET /events
   # GET /events.xml

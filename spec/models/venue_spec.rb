@@ -162,21 +162,21 @@ describe Venue, "when squashing duplicates" do
   end
 
   it "should squash a single duplicate" do
-    Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
+    Venue.squash(@master_venue, @submaster_venue)
 
     @submaster_venue.duplicate_of.should eq @master_venue
     @submaster_venue.duplicate?.should be_truthy
   end
 
   it "should squash multiple duplicates" do
-    Venue.squash(:master => @master_venue, :duplicates => [@submaster_venue, @child_venue])
+    Venue.squash(@master_venue, [@submaster_venue, @child_venue])
 
     @submaster_venue.duplicate_of.should eq @master_venue
     @child_venue.duplicate_of.should eq @master_venue
   end
 
   it "should squash duplicates recursively" do
-    Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
+    Venue.squash(@master_venue, @submaster_venue)
 
     @submaster_venue.duplicate_of.should eq @master_venue
     @child_venue.reload # Needed because child was queried through DB, not object graph
@@ -186,7 +186,7 @@ describe Venue, "when squashing duplicates" do
   it "should transfer events of duplicates" do
     @venues.map{|venue| venue.events.count}.should eq [0, 1, 1]
 
-    Venue.squash(:master => @master_venue, :duplicates => @submaster_venue)
+    Venue.squash(@master_venue, @submaster_venue)
 
     @venues.map{|venue| venue.events.count}.should eq [2, 0, 0]
 
