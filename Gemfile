@@ -60,6 +60,7 @@ gem 'exception_notification', '2.6.1'
 gem 'font-awesome-rails', '3.2.1.3'
 gem 'paper_trail_manager', '>= 0.2.0'
 gem 'utf8-cleaner', '~> 0.0.6'
+gem 'rack-robustness', '~> 1.1.0'
 gem 'mofo', path: 'vendor/gems/mofo-0.2.8' # vendored fork with hpricot dependency replaced with nokogiri
 gem 'sunspot_rails', '2.1.1'
 gem 'sunspot_solr',  '2.1.1'
