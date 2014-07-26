@@ -128,13 +128,3 @@ class SourceParser
 
   end
 end
-
-=begin
-reload!
-
-url = 'http://upcoming.yahoo.com/event/428964/'
-hcals = SourceParser::Hcal.to_hcals(:url => url)
-hcal = hcals.first
-al = SourceParser::Hcal.to_abstract_location(:value => hcal.location)
-venue = Venue.from_abstract_location(al)
-=end
