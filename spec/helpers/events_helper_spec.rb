@@ -184,7 +184,20 @@ describe EventsHelper do
   end
 
   describe "format_google_timespan" do
-    # TODO
-  end
+    it "should use the google time format" do
+      event = Event.new(
+        start_time: '2013-05-13T05:00:00z',
+        end_time: '2013-05-13T15:30:00z',
+      )
 
+      helper.format_google_timespan(event).should eq \
+        "20130513T050000Z/20130513T153000Z"
+    end
+
+    it "should the end time to the start time" do
+      event = Event.new(start_time: '2014-07-26T13:00:00-0700')
+      helper.format_google_timespan(event).should eq \
+        "20140726T200000Z/20140726T200000Z"
+    end
+  end
 end
