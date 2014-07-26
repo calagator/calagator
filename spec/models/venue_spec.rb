@@ -1,7 +1,5 @@
 require 'spec_helper'
 
-# TODO consider converting this to nested describe statements, similar to event_spec
-
 describe Venue do
 
   it "should be valid" do
@@ -33,196 +31,194 @@ describe Venue do
     end
   end
 
-end
+  describe "when finding exact duplicates" do
+    it "should ignore attributes like created_at" do
+      venue1 = Venue.create!(:title => "this", :description => "desc",:created_at => Time.now)
+      venue2 = Venue.new(    :title => "this", :description => "desc",:created_at => Time.now.yesterday)
 
-describe Venue, "when finding exact duplicates" do
-  it "should ignore attributes like created_at" do
-    venue1 = Venue.create!(:title => "this", :description => "desc",:created_at => Time.now)
-    venue2 = Venue.new(    :title => "this", :description => "desc",:created_at => Time.now.yesterday)
+      venue2.find_exact_duplicates.should include(venue1)
+    end
 
-    venue2.find_exact_duplicates.should include(venue1)
+    it "should ignore source_id" do
+      venue1 = Venue.create!(:title => "this", :description => "desc",:source_id => "1")
+      venue2 = Venue.new(    :title => "this", :description => "desc",:source_id => "2")
+
+      venue2.find_exact_duplicates.should include(venue1)
+    end
+
+    it "should not match non-duplicates" do
+      Venue.create!(:title => "this", :description => "desc")
+      venue2 = Venue.new(:title => "that", :description => "desc")
+
+      venue2.find_exact_duplicates.should be_blank
+    end
   end
 
-  it "should ignore source_id" do
-    venue1 = Venue.create!(:title => "this", :description => "desc",:source_id => "1")
-    venue2 = Venue.new(    :title => "this", :description => "desc",:source_id => "2")
+  describe "when finding duplicates [integration test]" do
+    before do
+      @existing = FactoryGirl.create(:venue)
+    end
 
-    venue2.find_exact_duplicates.should include(venue1)
+    it "should not match totally different records" do
+      FactoryGirl.create(:venue)
+      Venue.find_duplicates_by(:title).should be_empty
+    end
+
+    it "should not match similar records when not searching by duplicated fields" do
+      FactoryGirl.create :venue, title: @existing.title
+      Venue.find_duplicates_by(:description).should be_empty
+    end
+
+    it "should match similar records when searching by duplicated fields" do
+      FactoryGirl.create :venue, title: @existing.title
+      Venue.find_duplicates_by(:title).should be_present
+    end
+
+    it "should match similar records when searching by :any" do
+      FactoryGirl.create :venue, title: @existing.title
+      Venue.find_duplicates_by(:any).should be_present
+    end
+
+    it "should not match similar records when searching by multiple fields where not all are duplicated" do
+      FactoryGirl.create :venue, title: @existing.title
+      Venue.find_duplicates_by([:title, :description]).should be_empty
+    end
+
+    it "should match similar records when searching by multiple fields where all are duplicated" do
+      FactoryGirl.create(:venue, :title => @existing.title, :description => @existing.description)
+      Venue.find_duplicates_by([:title, :description]).should be_present
+    end
+
+    it "should not match dissimilar records when searching by :all" do
+      FactoryGirl.create(:venue)
+      Venue.find_duplicates_by(:all).should be_empty
+    end
+
+    it "should match similar records when searching by :all" do
+      attributes = @existing.attributes.reject{ |k,v| k == 'id'}
+      Venue.create!(attributes)
+      Venue.find_duplicates_by(:all).should be_present
+    end
   end
 
-  it "should not match non-duplicates" do
-    venue1 = Venue.create!(:title => "this", :description => "desc")
-    venue2 = Venue.new(    :title => "that", :description => "desc")
+  describe "when finding by an identifier" do
 
-    venue2.find_exact_duplicates.should be_blank
-  end
-end
+    it "should return nil for nil" do
+      Venue.find_by_identifier(nil).should be_nil
+    end
 
-describe Venue, "when finding duplicates [integration test]" do
-  before do
-    @existing = FactoryGirl.create(:venue)
-  end
+    it "should return the argument if it is a Venue" do
+      record = FactoryGirl.create(:venue)
+      Venue.find_by_identifier(record).should eq record
+    end
 
-  it "should not match totally different records" do
-    record = FactoryGirl.create(:venue)
-    Venue.find_duplicates_by(:title).should be_empty
-  end
+    it "should return a new venue record for a string" do
+      new_venue = Venue.find_by_identifier("Moda Center")
+      new_venue.should be_an_instance_of Venue
+      new_venue.title.should eq "Moda Center"
+      new_venue.should be_new_record
+    end
 
-  it "should not match similar records when not searching by duplicated fields" do
-    record = FactoryGirl.create(:venue, :title => @existing.title)
-    Venue.find_duplicates_by(:description).should be_empty
-  end
+    it "should return an existing venue for a string that matches an existing venue" do
+      record = FactoryGirl.create(:venue, :title => "Tilt")
+      Venue.find_by_identifier("Tilt").should eq record
+    end
 
-  it "should match similar records when searching by duplicated fields" do
-    record = FactoryGirl.create(:venue, :title => @existing.title)
-    Venue.find_duplicates_by(:title).should be_present
-  end
-
-  it "should match similar records when searching by :any" do
-    record = FactoryGirl.create(:venue, :title => @existing.title)
-    Venue.find_duplicates_by(:any).should be_present
+    it "should return a venue for an id that matches an existing venue" do
+      record = FactoryGirl.create(:venue, :id => 8002)
+      Venue.find_by_identifier(8002).should eq record
+    end
   end
 
-  it "should not match similar records when searching by multiple fields where not all are duplicated" do
-    record = FactoryGirl.create(:venue, :title => @existing.title)
-    Venue.find_duplicates_by([:title, :description]).should be_empty
+  describe "when checking for squashing" do
+    before do
+      @master = Venue.create!(:title => "Master")
+      @slave_first = Venue.create!(:title => "1st slave", :duplicate_of_id => @master.id)
+      @slave_second = Venue.create!(:title => "2nd slave", :duplicate_of_id => @slave_first.id)
+    end
+
+    it "should recognize a master" do
+      @master.should be_a_master
+    end
+
+    it "should recognize a slave" do
+      @slave_first.should be_a_slave
+    end
+
+    it "should not think that a slave is a master" do
+      @slave_second.should_not be_a_master
+    end
+
+    it "should not think that a master is a slave" do
+      @master.should_not be_a_slave
+    end
+
+    it "should return the progenitor of a child" do
+      @slave_first.progenitor.should eq @master
+    end
+
+    it "should return the progenitor of a grandchild" do
+      @slave_second.progenitor.should eq @master
+    end
+
+    it "should return a master as its own progenitor" do
+      @master.progenitor.should eq @master
+    end
+
+    it "should return the progenitor if an imported venue has an exact duplicate" do
+      @abstract_location = SourceParser::AbstractLocation.new
+      @abstract_location.title = @slave_second.title
+
+      Venue.from_abstract_location(@abstract_location).should eq @master
+    end
   end
 
-  it "should match similar records when searching by multiple fields where all are duplicated" do
-    record = FactoryGirl.create(:venue, :title => @existing.title, :description => @existing.description)
-    Venue.find_duplicates_by([:title, :description]).should be_present
-  end
+  describe "when squashing duplicates" do
+    before do
+      @master_venue    = Venue.create!(:title => "Master")
+      @submaster_venue = Venue.create!(:title => "Submaster")
+      @child_venue     = Venue.create!(:title => "Child", :duplicate_of => @submaster_venue)
+      @venues          = [@master_venue, @submaster_venue, @child_venue]
 
-  it "should not match dissimilar records when searching by :all" do
-    record = FactoryGirl.create(:venue)
-    Venue.find_duplicates_by(:all).should be_empty
-  end
+      @event_at_child_venue = Event.create!(:title => "Event at child venue", :venue => @child_venue, :start_time => Time.now)
+      @event_at_submaster_venue = Event.create!(:title => "Event at submaster venue", :venue => @submaster_venue, :start_time => Time.now)
+      @events          = [@event_at_child_venue, @event_at_submaster_venue]
+    end
 
-  it "should match similar records when searching by :all" do
-    attributes = @existing.attributes.reject{ |k,v| k == 'id'}
-    Venue.create!(attributes)
-    Venue.find_duplicates_by(:all).should be_present
-  end
-end
+    it "should squash a single duplicate" do
+      Venue.squash(@master_venue, @submaster_venue)
 
-describe Venue, "when finding by an identifier" do 
-  
-  it "should return nil for nil" do 
-    Venue.find_by_identifier(nil).should be_nil 
-  end
-  
-  it "should return the argument if it is a Venue" do 
-    record = FactoryGirl.create(:venue)
-    Venue.find_by_identifier(record).should eq record
-  end
-  
-  it "should return a new venue record for a string" do 
-    new_venue = Venue.find_by_identifier("Moda Center")
-    new_venue.should be_an_instance_of Venue
-    new_venue.title.should eq "Moda Center"
-    new_venue.should be_new_record
-  end
-  
-  it "should return an existing venue for a string that matches an existing venue" do 
-    record = FactoryGirl.create(:venue, :title => "Tilt")
-    Venue.find_by_identifier("Tilt").should eq record
-  end
-  
-  it "should return a venue for an id that matches an existing venue" do 
-    record = FactoryGirl.create(:venue, :id => 8002)
-    Venue.find_by_identifier(8002).should eq record
-  end
-end
+      @submaster_venue.duplicate_of.should eq @master_venue
+      @submaster_venue.duplicate?.should be_truthy
+    end
 
-describe Venue, "when checking for squashing" do
-  before do
-    @master = Venue.create!(:title => "Master")
-    @slave_first = Venue.create!(:title => "1st slave", :duplicate_of_id => @master.id)
-    @slave_second = Venue.create!(:title => "2nd slave", :duplicate_of_id => @slave_first.id)
-  end
+    it "should squash multiple duplicates" do
+      Venue.squash(@master_venue, [@submaster_venue, @child_venue])
 
-  it "should recognize a master" do
-    @master.should be_a_master
-  end
+      @submaster_venue.duplicate_of.should eq @master_venue
+      @child_venue.duplicate_of.should eq @master_venue
+    end
 
-  it "should recognize a slave" do
-    @slave_first.should be_a_slave
-  end
+    it "should squash duplicates recursively" do
+      Venue.squash(@master_venue, @submaster_venue)
 
-  it "should not think that a slave is a master" do
-    @slave_second.should_not be_a_master
-  end
+      @submaster_venue.duplicate_of.should eq @master_venue
+      @child_venue.reload # Needed because child was queried through DB, not object graph
+      @child_venue.duplicate_of.should eq @master_venue
+    end
 
-  it "should not think that a master is a slave" do
-    @master.should_not be_a_slave
-  end
+    it "should transfer events of duplicates" do
+      @venues.map{|venue| venue.events.count}.should eq [0, 1, 1]
 
-  it "should return the progenitor of a child" do
-    @slave_first.progenitor.should eq @master
-  end
+      Venue.squash(@master_venue, @submaster_venue)
 
-  it "should return the progenitor of a grandchild" do
-    @slave_second.progenitor.should eq @master
-  end
+      @venues.map{|venue| venue.events.count}.should eq [2, 0, 0]
 
-  it "should return a master as its own progenitor" do
-    @master.progenitor.should eq @master
-  end
-
-  it "should return the progenitor if an imported venue has an exact duplicate" do
-    @abstract_location = SourceParser::AbstractLocation.new
-    @abstract_location.title = @slave_second.title
-
-    Venue.from_abstract_location(@abstract_location).should eq @master
-  end
-
-end
-
-describe Venue, "when squashing duplicates" do
-  before do
-    @master_venue    = Venue.create!(:title => "Master")
-    @submaster_venue = Venue.create!(:title => "Submaster")
-    @child_venue     = Venue.create!(:title => "Child", :duplicate_of => @submaster_venue)
-    @venues          = [@master_venue, @submaster_venue, @child_venue]
-
-    @event_at_child_venue = Event.create!(:title => "Event at child venue", :venue => @child_venue, :start_time => Time.now)
-    @event_at_submaster_venue = Event.create!(:title => "Event at submaster venue", :venue => @submaster_venue, :start_time => Time.now)
-    @events          = [@event_at_child_venue, @event_at_submaster_venue]
-  end
-
-  it "should squash a single duplicate" do
-    Venue.squash(@master_venue, @submaster_venue)
-
-    @submaster_venue.duplicate_of.should eq @master_venue
-    @submaster_venue.duplicate?.should be_truthy
-  end
-
-  it "should squash multiple duplicates" do
-    Venue.squash(@master_venue, [@submaster_venue, @child_venue])
-
-    @submaster_venue.duplicate_of.should eq @master_venue
-    @child_venue.duplicate_of.should eq @master_venue
-  end
-
-  it "should squash duplicates recursively" do
-    Venue.squash(@master_venue, @submaster_venue)
-
-    @submaster_venue.duplicate_of.should eq @master_venue
-    @child_venue.reload # Needed because child was queried through DB, not object graph
-    @child_venue.duplicate_of.should eq @master_venue
-  end
-
-  it "should transfer events of duplicates" do
-    @venues.map{|venue| venue.events.count}.should eq [0, 1, 1]
-
-    Venue.squash(@master_venue, @submaster_venue)
-
-    @venues.map{|venue| venue.events.count}.should eq [2, 0, 0]
-
-    events = @venues.map(&:events).flatten
-    events.should be_present
-    for event in events
-      event.venue.should eq @master_venue
+      events = @venues.map(&:events).flatten
+      events.should be_present
+      for event in events
+        event.venue.should eq @master_venue
+      end
     end
   end
 end
