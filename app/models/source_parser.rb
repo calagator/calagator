@@ -63,7 +63,6 @@ end
 # Load format-specific drivers in the following order:
 SourceParser::Plancast
 SourceParser::Meetup
-SourceParser::Upcoming
 SourceParser::Facebook
 SourceParser::Ical
 SourceParser::Hcal

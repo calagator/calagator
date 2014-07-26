@@ -4,10 +4,9 @@ class SourceParser # :nodoc:
   # Reads iCalendar events.
   #
   # Example:
-  #   abstract_events = SourceParser::Ical.to_abstract_events('http://upcoming.yahoo.com/calendar/v2/event/349225')
+  #   abstract_events = SourceParser::Ical.to_abstract_events('http://appendix.23ae.com/calendars/AlternateHolidays.ics')
   #
   # Sample sources:
-  #   http://upcoming.yahoo.com/calendar/v2/event/349225
   #   webcal://appendix.23ae.com/calendars/AlternateHolidays.ics
   #   http://appendix.23ae.com/calendars/AlternateHolidays.ics
   class Ical < Base
@@ -47,7 +46,6 @@ class SourceParser # :nodoc:
     VENUE_CONTENT_RE       = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
     VENUE_CONTENT_BEGIN_RE = /^BEGIN:VVENUE$/m
     VENUE_CONTENT_END_RE   = /^END:VVENUE$/m
-    IS_UPCOMING_RE         = /^PRODID:\W+Upcoming/m
 
     # Return an Array of AbstractEvent instances extracted from an iCalendar input.
     #
@@ -63,18 +61,6 @@ class SourceParser # :nodoc:
 
       content = content_for(opts).gsub(/\r\n/, "\n")
       content = munge_gmt_dates(content)
-
-      # Provide special handling for Upcoming's broken implementation of iCalendar
-      if content.match(IS_UPCOMING_RE)
-        # Strip out superflous self-referential Upcoming link
-        content.sub!(%r{\s*\[\s*Full details at http://upcoming.yahoo.com/event/\d+/?\s*\]\s*}m, '')
-
-        # Fix newlines in DESCRIPTION, replace them with escaped '\n' strings.
-        matches = content.scan(/^(DESCRIPTION:.+?)(?:^\w+[:;])/m)
-        matches.each do |match|
-          content.sub!(match[0], match[0].strip.gsub(/\n/, '\n')+"\r\n")
-        end
-      end
 
       return [].tap do |events|
         begin
@@ -100,21 +86,14 @@ class SourceParser # :nodoc:
 
             content_venue = \
             begin
-              if content_calendar.to_s.match(%r{VALUE=URI:http://upcoming.yahoo.com/})
-                # Special handling for Upcoming, where each event maps 1:1 to a venue
-                content_venues[index]
-              else
-                begin
-                  # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
-                  venue_uid = component.location_property.params["VVENUE"]
-                  # finding in the content_venues array an item matching the uid
-                  venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
-                rescue Exception => e
-                  # Ignore
-                  Rails.logger.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for non-Upcoming event -- #{e}")
-                  nil
-                end
-              end
+              # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
+              venue_uid = component.location_property.params["VVENUE"]
+              # finding in the content_venues array an item matching the uid
+              venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
+            rescue Exception => e
+              # Ignore
+              Rails.logger.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for event -- #{e}")
+              nil
             end
 
             event.location = to_abstract_location(content_venue, :fallback => component.location)
