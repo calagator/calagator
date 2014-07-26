@@ -98,7 +98,7 @@ class Source < ActiveRecord::Base
       url = URI.parse(value.strip)
       url.scheme = 'http' unless ['http','https','ftp'].include?(url.scheme) || url.scheme.nil?
       write_attribute(:url, url.scheme.nil? ? 'http://'+value.strip : url.to_s)
-    rescue URI::InvalidURIError => e
+    rescue URI::InvalidURIError
       false
     end
   end
