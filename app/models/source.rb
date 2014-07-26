@@ -112,7 +112,7 @@ class Source < ActiveRecord::Base
     self.imported_at = Time.now
     if valid?
       opts[:url] ||= self.url
-      SourceParser.to_abstract_events(opts).map do |abstract_event|
+      SourceParser.to_abstract_events(opts).uniq.map do |abstract_event|
         Event.from_abstract_event(abstract_event, self)
       end
     else
