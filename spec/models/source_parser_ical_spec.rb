@@ -235,14 +235,54 @@ describe SourceParser::Ical, "when importing events with non-local times" do
   end
 
   it "should store time with TZID=GMT in UTC" do
-    skip "RiCal doesn't consider the time zone data in this file valid"
     events = events_from_ical_at('ical_gmt.ics')
     events.size.should eq 1
     abstract_event = events.first
     abstract_event.start_time.should eq Time.parse('Fri May 07 08:00:00 +0000 2020')
     abstract_event.end_time.should eq Time.parse('Fri May 07 09:00:00 +0000 2020')
   end
+end
 
+describe SourceParser::Ical, "munge_gmt_dates" do
+  it "should return unexpected-format strings unmodified" do
+    munged = SourceParser::Ical.munge_gmt_dates('justin bieber on a train')
+    munged.should eq 'justin bieber on a train'
+  end
+
+  it "should return GMT-less ical strings unmodified" do
+    icard = %{
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+DTSTART:20200507T080000
+DTEND:20200507T090000
+END:VEVENT
+END:VCALENDAR
+    }
+
+    SourceParser::Ical.munge_gmt_dates(icard).should eq icard
+  end
+
+  it "should replace TZID=GMT with a TZID-less UTC time" do
+    icard = %{
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+DTSTART;TZID=GMT:20200507T080000
+DTEND;TZID=GMT:20200507T090000
+END:VEVENT
+END:VCALENDAR
+    }
+
+    munged = %{
+BEGIN:VCALENDAR
+BEGIN:VEVENT
+DTSTART:20200507T080000Z
+DTEND:20200507T090000Z
+END:VEVENT
+END:VCALENDAR
+    }
+
+    SourceParser::Ical.munge_gmt_dates(icard).should eq munged
+  end
 end
 
 describe SourceParser::Ical, "when skipping old events" do
