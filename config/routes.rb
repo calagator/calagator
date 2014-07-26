@@ -11,6 +11,7 @@ Calagator::Application.routes.draw do
       post :squash_many_duplicates
       get :search
       get :duplicates
+      match 'tag/:tag', {:via => :get, :to => :search }
     end
 
     member do
