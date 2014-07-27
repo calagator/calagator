@@ -36,7 +36,6 @@ module DuplicateChecking
 
       private
 
-      # TODO: Add support for habtm and other associations
       def squash_associations
         # Transfer any has_many associations of this model to the master
         master.class.reflect_on_all_associations(:has_many).each do |association|

@@ -43,7 +43,6 @@
     <li>
       <%= link_to_function 'hCalendar markup', '$("#hcal_field").toggle()' %>
       <div id="hcal_field" style="display: none;">
-        <%# TODO: Do we actually want to keep providing this? %>
         <%= text_area_tag 'hCalendar',
           h(
             render :partial => 'hcal',

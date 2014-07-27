@@ -79,15 +79,12 @@ class Venue < ActiveRecord::Base
   def self.from_abstract_location(abstract_location, source=nil)
     venue = Venue.new
 
-    # TODO Figure out if +abstract_location+ can ever be blank. If it can be blank, rework the later code in this method so that #geocode and duplicate finders aren't called on an effectively blank record. If it can't be blank, remove this unnecessary "unless" conditional.
-    unless abstract_location.blank?
-      venue.source = source if source
-      abstract_location.each_pair do |key, value|
-        next if key == :tags
-        venue[key] = value unless value.blank?
-      end
-      venue.tag_list = abstract_location.tags.join(',')
+    venue.source = source if source
+    abstract_location.each_pair do |key, value|
+      next if key == :tags
+      venue[key] = value unless value.blank?
     end
+    venue.tag_list = abstract_location.tags.join(',')
 
     # We must add geocoding information so this venue can be compared to existing ones.
     venue.geocode
