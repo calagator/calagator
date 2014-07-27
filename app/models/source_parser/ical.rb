@@ -62,6 +62,7 @@ class SourceParser # :nodoc:
       cutoff = Time.now.yesterday
 
       content = content_for(opts).gsub(/\r\n/, "\n")
+      content = munge_gmt_dates(content)
 
       # Provide special handling for Upcoming's broken implementation of iCalendar
       if content.match(IS_UPCOMING_RE)
@@ -121,6 +122,10 @@ class SourceParser # :nodoc:
           end
         end
       end
+    end
+
+    def self.munge_gmt_dates(content)
+      content.gsub(/;TZID=GMT:(.*)/, ':\1Z')
     end
 
     # Return an AbstractLocation extracted from an iCalendar input.

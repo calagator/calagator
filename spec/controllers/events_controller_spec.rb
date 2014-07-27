@@ -660,7 +660,11 @@ describe EventsController do
             have_selector ".sidebar a", :href => search_events_url(:query => @query, :format => "atom")
           end
 
-          it "should have Google subscription" # TODO
+          it "should have Google subscription" do
+            ics_url = search_events_url(query: @query, format: 'ics')
+            google_url = "https://www.google.com/calendar/render?cid=#{ics_url}"
+            have_selector ".sidebar a", href: google_url
+          end
         end
       end
 

@@ -98,7 +98,7 @@ class Source < ActiveRecord::Base
       url = URI.parse(value.strip)
       url.scheme = 'http' unless ['http','https','ftp'].include?(url.scheme) || url.scheme.nil?
       write_attribute(:url, url.scheme.nil? ? 'http://'+value.strip : url.to_s)
-    rescue URI::InvalidURIError => e
+    rescue URI::InvalidURIError
       false
     end
   end
@@ -112,12 +112,8 @@ class Source < ActiveRecord::Base
     self.imported_at = Time.now
     if valid?
       opts[:url] ||= self.url
-      [].tap do |events|
-        SourceParser.to_abstract_events(opts).each do |abstract_event|
-          event = Event.from_abstract_event(abstract_event, self)
-
-          events << event
-        end
+      SourceParser.to_abstract_events(opts).uniq.map do |abstract_event|
+        Event.from_abstract_event(abstract_event, self)
       end
     else
       raise ActiveRecord::RecordInvalid, self

@@ -86,17 +86,15 @@ describe SourceParser, "checking duplicates when importing" do
       @created_events = @cal_source.create_events!(:skip_old => false)
     end
 
-    it "should parse two events" do
-      @abstract_events.size.should eq 2
+    it "should only parse one event" do
+      @abstract_events.size.should eq 1
     end
 
     it "should create only one event" do
-      skip "Fails because code checks imported calendar for duplicates against only saved objects, but not against itself. TODO: fix code. See Issue241"
       @created_events.size.should eq 1
     end
 
     it "should create only one venue" do
-      skip "Fails because code checks imported calendar for duplicates against only saved objects, but not against itself. TODO: fix code. See Issue241"
       Venue.count.should eq @venue_size_before_import + 1
     end
   end
