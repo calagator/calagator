@@ -17,7 +17,7 @@ task "sunspot:solr:start" do
   end
 
   print "Waiting for Solr."
-  while !solr_responding(8981) do
+  while !solr_responding(Sunspot::Rails.configuration.port) do
     print "."
     sleep 1
   end
