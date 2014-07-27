@@ -83,4 +83,9 @@ RSpec.configure do |config|
     # a real object. This is generally recommended.
     # mocks.verify_partial_doubles = true
   end
+
+  # Reset to the Sql search engine before each test.
+  config.before(:each) do
+    Event::SearchEngine.kind = Venue::SearchEngine.kind = :sql
+  end
 end
