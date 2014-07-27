@@ -1,3 +1,6 @@
+require_relative 'search_engine/sunspot'
+require_relative 'search_engine/sql'
+
 class Venue < ActiveRecord::Base
   class SearchEngine
     cattr_accessor(:kind) { :sql }
