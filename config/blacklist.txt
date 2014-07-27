@@ -22,6 +22,7 @@
 \bhydrocodone\b
 \bklonopin\b
 \blevitra\b
+\bmegashare\b
 \bmichael\s+jackson\s+died\b
 \bnaivahita\b
 \bnexium\b

@@ -37,7 +37,7 @@ end
 gem 'puma', '2.6.0'
 
 # Run-time dependencies
-gem 'rails', '3.2.17'
+gem 'rails', '3.2.19'
 gem 'rails_autolink', '1.1.3'
 gem 'nokogiri', '1.5.11'
 gem 'columnize', '0.3.6'
@@ -47,7 +47,7 @@ gem 'htmlentities', '4.3.1'
 gem 'paper_trail', '2.7.2'
 gem 'ri_cal', '0.8.8'
 gem 'rubyzip', '0.9.9', :require =>  'zip/zip'
-gem 'will_paginate', '3.0.5'
+gem 'will_paginate', '3.0.5', require: 'will_paginate/array'
 gem 'httparty', '0.11.0'
 gem 'loofah', '1.2.1'
 gem 'loofah-activerecord', '1.1.0'
@@ -60,7 +60,11 @@ gem 'exception_notification', '2.6.1'
 gem 'font-awesome-rails', '3.2.1.3'
 gem 'paper_trail_manager', '>= 0.2.0'
 gem 'utf8-cleaner', '~> 0.0.6'
+gem 'rack-robustness', '~> 1.1.0'
 gem 'mofo', path: 'vendor/gems/mofo-0.2.8' # vendored fork with hpricot dependency replaced with nokogiri
+gem 'sunspot_rails', '2.1.1'
+gem 'sunspot_solr',  '2.1.1'
+gem 'lucene_query', '0.1'
 
 platform :jruby do
   gem 'activerecord-jdbc-adapter'
@@ -81,9 +85,11 @@ group :development, :test do
   gem 'rspec-rails', '3.0.1'
   gem 'capybara', '2.3.0'
   gem 'factory_girl_rails', '4.4.1'
+  gem 'timecop', '0.7.1'
   gem 'spring', '1.1.3'
   gem 'spring-commands-rspec', '1.0.2'
   gem 'database_cleaner', '1.3.0'
+  gem 'coveralls', '0.7.0', require: false
 
   # Do not install these interactive libraries onto the continuous integration server.
   unless ENV['CI'] || ENV['TRAVIS']
@@ -145,17 +151,6 @@ group :assets do
   # above. You will also need to set 'config.assets.compress' to true in
   # config/environments/production.rb
   gem 'uglifier', '>= 1.0.3'
-end
-
-# Some dependencies are activated through server settings.
-require "./lib/secrets_reader"
-secrets = SecretsReader.read(:silent => true)
-case secrets.search_engine
-when 'sunspot'
-  sunspot_version = '2.1.0'
-  gem 'sunspot_rails', sunspot_version
-  gem 'sunspot_solr',  sunspot_version
-  gem 'lucene_query', '0.1'
 end
 
 # Load additional gems from "Gemfile.local" if it exists

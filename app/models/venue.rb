@@ -29,19 +29,18 @@
 #
 
 class Venue < ActiveRecord::Base
-  include SearchEngine
   include StripWhitespace
 
   has_paper_trail
   acts_as_taggable
 
-  include VersionDiff
-
   xss_foliate :sanitize => [:description, :access_notes]
   include DecodeHtmlEntitiesHack
 
   # Associations
-  has_many :events, :dependent => :nullify
+  has_many :events, dependent: :nullify
+  def future_events; events.future_with_venue; end
+  def past_events; events.past_with_venue; end
   belongs_to :source
 
   # Triggers
@@ -62,8 +61,6 @@ class Venue < ActiveRecord::Base
 
   include ValidatesBlacklistOnMixin
   validates_blacklist_on :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone
-
-  include UpdateUpdatedAtMixin
 
   # Duplicates
   include DuplicateChecking
@@ -127,13 +124,27 @@ class Venue < ActiveRecord::Base
         self.where('venues.duplicate_of_id IS NULL').order('LOWER(venues.title)')
       }
     else
-      kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
+      kind = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
 
       return self.find_duplicates_by(kind, 
         :grouped  => true, 
         :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL'
       )
     end
+  end
+
+  def self.find_by_identifier(venue_identifier)
+    case venue_identifier
+    when Venue, NilClass  then venue_identifier
+    when String           then find_or_initialize_by_title(venue_identifier)
+    when Fixnum           then find(venue_identifier)
+    else raise TypeError, "Unknown type: #{venue_identifier.class}"
+    end
+  end
+  #===[ Search ]==========================================================
+
+  def self.search(query, opts={})
+    SearchEngine.search(query, opts)
   end
 
   #===[ Address helpers ]=================================================
@@ -195,8 +206,8 @@ class Venue < ActiveRecord::Base
   end
 
   # Maybe trigger geocoding when we save
-  def force_geocoding=(force_it)
-    self.latitude = self.longitude = nil if force_it
+  def force_geocoding=(value)
+    self.latitude = self.longitude = nil if value == "1"
   end
 
   # Try to geocode, but don't complain if we can't.

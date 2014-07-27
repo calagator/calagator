@@ -1,12 +1,8 @@
 require 'spec_helper'
+require './spec/controllers/squash_many_duplicates_examples'
 
 describe VenuesController do
   render_views
-
-  #Delete this example and add some real ones
-  it "should use VenuesController" do
-    controller.should be_an_instance_of VenuesController
-  end
 
   it "should redirect duplicate venues to their master" do
     venue_master = FactoryGirl.create(:venue)
@@ -34,7 +30,16 @@ describe VenuesController do
     response.body.should have_selector('.failure', text: 'omgwtfbbq')
   end
 
+  context do
+    include_examples "#squash_many_duplicates", :venue
+  end
+
   describe "when creating venues" do
+    it "should redirect to the newly created venue" do
+      post :create, venue: FactoryGirl.attributes_for(:venue)
+      response.should redirect_to(assigns(:venue))
+    end
+
     it "should stop evil robots" do
       post :create, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
       response.should render_template :new
@@ -43,21 +48,60 @@ describe VenuesController do
 
   describe "when updating venues" do
     before do
-      @venue = FactoryGirl.build(:venue, :versions => [])
-      Venue.stub(:find).and_return(@venue)
+      @venue = FactoryGirl.create(:venue)
+    end
+
+    it "should redirect to the updated venue" do
+      put :update, id: @venue.id, venue: FactoryGirl.attributes_for(:venue)
+      response.should redirect_to(@venue)
+    end
+
+    it "should redirect to any associated event" do
+      @event = FactoryGirl.create(:event, venue: @venue)
+      put :update, id: @venue.id, from_event: @event.id, venue: FactoryGirl.attributes_for(:venue)
+      response.should redirect_to(@event)
     end
 
     it "should stop evil robots" do
-      put :update,:id => '1', :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+      put :update, id: @venue.id, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
       response.should render_template :edit
+    end
+  end
+
+  describe "when rendering the new venue page" do
+    it "passes the template a new venue" do
+      get :new
+      assigns[:venue].should be_a Venue
+      assigns[:venue].should be_new_record
+    end
+  end
+
+  describe "when rendering the edit venue page" do
+    it "passes the template the specified venue" do
+      @venue = FactoryGirl.create(:venue)
+      get :edit, id: @venue.id
+      assigns[:venue].should == @venue
+    end
+  end
+
+  describe "when rendering the map page" do
+    before do
+      @open_venue = FactoryGirl.create(:venue)
+      @closed_venue = FactoryGirl.create(:venue, closed: true)
+      @duplicate_venue = FactoryGirl.create(:venue, duplicate_of: @open_venue)
+    end
+
+    it "only shows open non-duplicate venues" do
+      get :map
+      assigns[:venues].should == [@open_venue]
     end
   end
 
   describe "when rendering the venues index" do
     before do
-      @open_venue = FactoryGirl.create(:venue, :title => 'Open Town', :description => 'baz', :wifi => false)
-      @closed_venue = FactoryGirl.create(:venue, :title => 'Closed Down', :closed => true, :wifi => false)
-      @wifi_venue = FactoryGirl.create(:venue, :title => "Internetful", :wifi => true)
+      @open_venue = FactoryGirl.create(:venue, title: 'Open Town', description: 'baz', wifi: false, tag_list: %w(foo))
+      @closed_venue = FactoryGirl.create(:venue, title: 'Closed Down', closed: true, wifi: false, tag_list: %w(bar))
+      @wifi_venue = FactoryGirl.create(:venue, title: "Internetful", wifi: true, tag_list: %w(foo bar))
     end
 
     describe "with no parameters" do
@@ -65,14 +109,14 @@ describe VenuesController do
         get :index
       end
 
-      it "should assign @most_active_venues and @newest_venues by default" do
+      it "should assign @search.most_active_venues and @search.newest_venues by default" do
         get :index
-        assigns[:most_active_venues].should be_present
-        assigns[:newest_venues].should be_present
+        assigns[:search].most_active_venues.should be_present
+        assigns[:search].newest_venues.should be_present
       end
 
       it "should not included closed venues" do
-        assigns[:newest_venues].should_not include @closed_venue
+        assigns[:search].newest_venues.should_not include @closed_venue
       end
     end
 
@@ -121,27 +165,11 @@ describe VenuesController do
           end
         end
       end
-
-      describe "when searching by title (for the ajax selector)" do
-        it "should find venues by title" do
-          get :index, :term => 'Open Town'
-          assigns[:venues].should include @open_venue
-          assigns[:venues].should_not include @wifi_venue
-        end
-        it "should NOT find venues by description" do
-          get :index, :term => 'baz'
-          assigns[:venues].should_not include @open_venue
-        end
-        it "should NOT find closed venues" do
-          get :index, :term => 'closed'
-          assigns[:venues].should_not include @closed_venue
-        end
-      end
     end
 
     it "should be able to return events matching specific tag" do
-      Venue.should_receive(:tagged_with).with("foo").and_return([])
       get :index, :tag => "foo"
+      assigns[:venues].should =~ [@open_venue, @wifi_venue]
     end
 
     describe "in JSON format" do
@@ -162,6 +190,11 @@ describe VenuesController do
   end
 
   describe "when showing venues" do
+    it "redirects to all venues if venue doesn't exist" do
+      get :show, id: "garbage"
+      response.should redirect_to("/venues")
+    end
+
     describe "in JSON format" do
       describe "with events" do
         before do

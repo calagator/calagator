@@ -1,4 +1,5 @@
 require 'spec_helper'
+require './spec/controllers/squash_many_duplicates_examples'
 
 describe EventsController do
   describe "#index" do
@@ -201,50 +202,50 @@ describe EventsController do
     describe "and filtering by date range" do
       [:start, :end].each do |date_kind|
         describe "for #{date_kind} date" do
-          before :each do
-            @date_kind = date_kind
-            @date_kind_other = \
-              case date_kind
-              when :start then :end
-              when :end then :start
-              else raise ArgumentError, "Unknown date_kind: #{date_kind}"
-              end
+          let(:start_date) { Date.parse("2010-01-01") }
+          let(:end_date) { Date.parse("2010-04-01") }
+          let(:date_field) { "#{date_kind}_date" }
+
+          around do |example|
+            Timecop.freeze(start_date) do
+              example.run
+            end
           end
 
           it "should use the default if not given the parameter" do
             get :index, :date => {}
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            assigns[date_field].should eq send(date_field)
             flash[:failure].should be_nil
           end
 
           it "should use the default if given a malformed parameter" do
             get :index, :date => "omgkittens"
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            assigns[date_field].should eq send(date_field)
             response.body.should have_selector(".flash_failure", text: 'malformed')
           end
 
           it "should use the default if given a missing parameter" do
             get :index, :date => {:foo => "bar"}
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            assigns[date_field].should eq send(date_field)
             response.body.should have_selector(".flash_failure", text: 'missing')
           end
 
           it "should use the default if given an empty parameter" do
-            get :index, :date => {@date_kind => ""}
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            get :index, :date => {date_kind => ""}
+            assigns[date_field].should eq send(date_field)
             response.body.should have_selector(".flash_failure", text: 'empty')
           end
 
           it "should use the default if given an invalid parameter" do
-            get :index, :date => {@date_kind => "omgkittens"}
-            assigns["#{@date_kind}_date"].should eq controller.send("default_#{@date_kind}_date")
+            get :index, :date => {date_kind => "omgkittens"}
+            assigns[date_field].should eq send(date_field)
             response.body.should have_selector(".flash_failure", text: 'invalid')
           end
 
           it "should use the value if valid" do
             expected = Date.yesterday
-            get :index, :date => {@date_kind => expected.to_s("%Y-%m-%d")}
-            assigns["#{@date_kind}_date"].should eq expected
+            get :index, :date => {date_kind => expected.to_s("%Y-%m-%d")}
+            assigns[date_field].should eq expected
           end
         end
       end
@@ -297,7 +298,7 @@ describe EventsController do
     end
 
     it "should redirect from a duplicate event to its master" do
-      master = FactoryGirl.build(:event, :id => 4321)
+      master = FactoryGirl.create(:event, id: 4321)
       event = Event.new(:start_time => now, :duplicate_of => master)
       Event.should_receive(:find).and_return(event)
 
@@ -315,8 +316,7 @@ describe EventsController do
   end
 
   describe "when creating and updating events" do
-    before(:each) do
-      # Fields marked with "###" may be filled in by examples to alter behavior
+    before do
       @params = {
         "end_date"       => "2008-06-04",
         "start_date"     => "2008-06-03",
@@ -328,8 +328,8 @@ describe EventsController do
         "end_time"       => "",
         "start_time"     => ""
       }.with_indifferent_access
-      @venue = FactoryGirl.build(:venue, :id => 12)
-      @event = FactoryGirl.build(:event, :id => 34, :venue => @venue)
+      @venue = FactoryGirl.build(:venue)
+      @event = FactoryGirl.build(:event, :venue => @venue)
     end
 
     describe "#new" do
@@ -344,67 +344,47 @@ describe EventsController do
       render_views
 
       it "should create a new event without a venue" do
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(nil)
-        @event.should_receive(:save).and_return(true)
-
+        @params[:event][:venue_id] = nil
         post "create", @params
-        response.should redirect_to(event_path(@event))
+        @event = Event.find_by_title(@params[:event][:title])
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue id" do
-        @params[:event]["venue_id"] = @venue.id.to_s
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-
+        @venue.save!
+        @params[:event][:venue_id] = @venue.id.to_s
         post "create", @params
+        @event = Event.find_by_title(@params[:event][:title])
+        @event.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue name" do
-        @params[:venue_name] = "My Venue"
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.should_receive(:associate_with_venue).with("My Venue")
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-
+        @venue.save!
+        @params[:venue_name] = @venue.title
         post "create", @params
+        @event = Event.find_by_title(@params[:event][:title])
+        @event.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue by id when both an id and a name are provided" do
-        @params[:event]["venue_id"] = @venue.id.to_s
-        @params[:venue_name] = "Some Event"
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-
+        @venue.save!
+        @venue2 = FactoryGirl.create(:venue)
+        @params[:event][:venue_id] = @venue.id.to_s
+        @params[:venue_name] = @venue2.title
         post "create", @params
-      end
-
-      it "should create a new event for an existing venue" do
-        @params[:venue_name] = "Old Venue"
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-        @venue.stub(:new_record?).and_return(false)
-
-        post "create", @params
-        response.should redirect_to(event_path(@event))
+        @event = Event.find_by_title(@params[:event][:title])
+        @event.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should create a new event and new venue, and redirect to venue edit form" do
         @params[:venue_name] = "New Venue"
-        Event.should_receive(:new).with(@params[:event]).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:save).and_return(true)
-        @venue.stub(:new_record?).and_return(true)
-
         post "create", @params
+        @event = Event.find_by_title(@params[:event][:title])
+        @venue = Venue.find_by_title("New Venue")
+        @event.venue.should == @venue
         response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
       end
 
@@ -447,19 +427,10 @@ describe EventsController do
       end
 
       it "should allow the user to preview the event" do
-        event = Event.new(:title => "Awesomeness")
-        Event.should_receive(:new).and_return(event)
-
-        event.should_not_receive(:save)
-
-        post "create", :event => { :title => "Awesomeness" },
-                        :start_time => now, :start_date => today,
-                        :end_time => now, :end_date => today,
-                        :preview => "Preview",
-                        :venue_name => "This venue had better not exist"
+        @params[:preview] = "Preview"
+        post "create", @params
         response.should render_template :new
         response.body.should have_selector '#event_preview'
-        event.should be_valid
       end
 
       it "should create an event for an existing venue" do
@@ -488,97 +459,65 @@ describe EventsController do
 
     describe "#update" do
       before(:each) do
-        @event = FactoryGirl.build(:event_with_venue, :id => 42)
+        @event = FactoryGirl.create(:event_with_venue, id: 42)
         @venue = @event.venue
-        @params.merge!(:id => 42)
-        Event.stub(:find).and_return(@event)
+        @params.merge!(id: 42)
       end
 
       it "should display form for editing event" do
-        Event.should_receive(:find).and_return(@event)
-
-        get "edit", :id => 1
+        get "edit", id: 42
         response.should be_success
         response.should render_template :edit
       end
 
       it "should update an event without a venue" do
-        Event.should_receive(:find).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(nil)
-        @event.should_receive(:update_attributes).and_return(true)
-
+        @event.venue = nil
         put "update", @params
-        response.should redirect_to(event_path(@event))
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue id" do
-        @params[:event]["venue_id"] = @venue.id.to_s
-        Event.should_receive(:find).and_return(@event)
-        @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-
+        @venue = FactoryGirl.create(:venue)
+        @params[:event][:venue_id] = @venue.id.to_s
         put "update", @params
+        @event.reload.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue name" do
-        @params[:venue_name] = "Some Event"
-        Event.should_receive(:find).and_return(@event)
-        @event.should_receive(:associate_with_venue).with("Some Event")
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-
+        @venue = FactoryGirl.create(:venue)
+        @params[:venue_name] = @venue.title
         put "update", @params
+        @event.reload.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should associate a venue by id when both an id and a name are provided" do
-        @params[:event]["venue_id"] = @venue.id.to_s
-        @params[:venue_name] = "Some Event"
-        Event.should_receive(:find).and_return(@event)
-        @event.should_receive(:associate_with_venue).with(@venue.id)
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-
+        @venue = FactoryGirl.create(:venue)
+        @venue2 = FactoryGirl.create(:venue)
+        @params[:event][:venue_id] = @venue.id.to_s
+        @params[:venue_name] = @venue2.title
         put "update", @params
-      end
-
-      it "should update an event and associate it with an existing venue" do
-        @params[:venue_name] = "Old Venue"
-        Event.should_receive(:find).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-        @venue.stub(:new_record?).and_return(false)
-
-        put "update", @params
-        response.should redirect_to(event_path(@event))
+        @event.reload.venue.should == @venue
+        response.should redirect_to(@event)
       end
 
       it "should update an event and create a new venue, and redirect to the venue edit form" do
         @params[:venue_name] = "New Venue"
-        Event.should_receive(:find).and_return(@event)
-        @event.stub(:associate_with_venue).with(@params[:venue_name])
-        @event.stub(:venue).and_return(@venue)
-        @event.should_receive(:update_attributes).and_return(true)
-        @venue.stub(:new_record?).and_return(true)
-
         put "update", @params
+        @venue = Venue.find_by_title("New Venue")
         response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
       end
 
       it "should catch errors and redisplay the new event form" do
-        Event.should_receive(:find).and_return(@event)
-        @event.stub(:associate_with_venue)
-        @event.stub(:venue).and_return(nil)
-        @event.should_receive(:update_attributes).and_return(false)
-
-        put "update", :id => 1234
+        @params[:event][:title] = nil
+        put "update", @params
         response.should render_template :edit
       end
 
       it "should stop evil robots" do
-        put "update", :id => 1234, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+        @params[:trap_field] = "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+        put "update", @params
         response.should render_template :edit
         flash[:failure].should match /evil robot/i
       end
@@ -596,19 +535,9 @@ describe EventsController do
       end
 
       it "should allow the user to preview the event" do
-        tags = []
-        tags.should_receive(:reload)
-
-        Event.should_receive(:find).and_return(@event)
-        @event.should_not_receive(:update_attributes)
-        @event.should_receive(:attributes=)
-        @event.should_receive(:valid?).and_return(true)
-        @event.should_receive(:tags).and_return(tags)
-
         put "update", @params.merge(:preview => "Preview")
         response.should render_template :edit
       end
-
     end
 
     describe "#clone" do
@@ -688,77 +617,31 @@ describe EventsController do
       response.should be_success
       response.body.should have_selector('.failure', text: 'omgwtfbbq')
     end
+  end
 
+  context do
+    include_examples "#squash_many_duplicates", :event
   end
 
   describe "#search" do
-    it "should search" do
-      Event.should_receive(:search_keywords_grouped_by_currentness).and_return({:current => [], :past => []})
-
-      post :search, :query => "myquery"
-    end
-
-    it "should fail if given no search query" do
-      post :search
-
-      flash[:failure].should_not be_blank
-      response.should redirect_to(root_path)
-    end
-
-    it "should be able to only return current events" do
-      Event.should_receive(:search).with("myquery", :order => nil, :skip_old => true).and_return([])
-
-      post :search, :query => "myquery", :current => "1"
-    end
-
-    describe "by tag" do
-      it "should be able to only return events matching specific tag" do
-        Event.should_receive(:tagged_with).with("foo", :order => "events.start_time").and_return([])
-
-        post :search, :tag => "foo"
-      end
-
-      it "should warn if user tries ordering tags by score" do
-        Event.should_receive(:tagged_with).with("foo", :order => "events.start_time").and_return([])
-
-        post :search, :tag => "foo", :order => "score"
-        flash[:failure].should_not be_blank
-      end
-
-      it "should warn if user tries ordering tags by invalid order" do
-        Event.should_receive(:tagged_with).with("foo", :order => "events.start_time").and_return([])
-
-        post :search, :tag => "foo", :order => "kittens"
-        flash[:failure].should_not be_blank
-      end
-
-      # TODO Add subscribe and other links
-    end
-
     describe "when returning results" do
       render_views
 
-      let(:current_event) { FactoryGirl.create(:event_with_venue) }
-      let(:current_event_2) { FactoryGirl.create(:event_with_venue) }
-      let(:past_event) { FactoryGirl.create(:event_with_venue) }
-      let(:results) do
-        {
-          :current => [current_event, current_event_2],
-          :past    => [past_event],
-        }
-      end
-
-      before do
-        Event.should_receive(:search_keywords_grouped_by_currentness).and_return(results)
-      end
+      let!(:current_event) { FactoryGirl.create(:event_with_venue, title: "MyQuery") }
+      let!(:current_event_2) { FactoryGirl.create(:event_with_venue, description: "WOW myquery!") }
+      let!(:past_event) { FactoryGirl.create(:event_with_venue, title: "old myquery") }
 
       describe "in HTML format" do
         before do
           post :search, :query => "myquery", :format => "html"
         end
 
+        it "should assign search result" do
+          assigns[:search].should be_a Event::Search
+        end
+
         it "should assign matching events" do
-          assigns[:events].should eq results[:past] + results[:current]
+          assigns[:events].should =~ [current_event, current_event_2, past_event]
         end
 
         it "should render matching events" do
@@ -782,7 +665,6 @@ describe EventsController do
       end
 
       describe "in XML format" do
-
         it "should produce XML" do
           post :search, :query => "myquery", :format => "xml"
 
@@ -800,11 +682,9 @@ describe EventsController do
           venue_title.should be_a_kind_of String
           venue_title.length.should be_present
         end
-
       end
 
       describe "in JSON format" do
-
         it "should produce JSON" do
           post :search, :query => "myquery", :format => "json"
 
@@ -815,7 +695,7 @@ describe EventsController do
         it "should accept a JSONP callback" do
           post :search, :query => "myquery", :format => "json", :callback => "some_function"
 
-          response.body.split("\n").join.should match /^\s*some_function\(.*\);?\s*$/
+          response.body.should match /^\s*some_function\(.*\);?\s*$/
         end
 
         it "should include venue details" do
@@ -826,18 +706,18 @@ describe EventsController do
           event["venue"]["title"].should be_a_kind_of String
           event["venue"]["title"].length.should be_present
         end
-
       end
 
-      it "should produce ATOM" do
-        post :search, :query => "myquery", :format => "atom"
+      describe "in ATOM format" do
+        it "should produce ATOM" do
+          post :search, :query => "myquery", :format => "atom"
 
-        hash = Hash.from_xml(response.body)
-        hash["feed"]["entry"].should be_a_kind_of Array
+          hash = Hash.from_xml(response.body)
+          hash["feed"]["entry"].should be_a_kind_of Array
+        end
       end
 
       describe "in ICS format" do
-
         it "should produce ICS" do
           post :search, :query => "myquery", :format => "ics"
 
@@ -849,7 +729,20 @@ describe EventsController do
           response.body.should match /SUMMARY:#{current_event_2.title}/
           response.body.should match /SUMMARY:#{past_event.title}/
         end
+      end
 
+      describe "failures" do
+        it "sets search failures in the flash message" do
+          Event::Search.any_instance.stub failure_message: "OMG"
+          post :search
+          flash[:failure].should == "OMG"
+        end
+
+        it "redirects to home if hard failure" do
+          Event::Search.any_instance.stub hard_failure?: true
+          post :search
+          response.should redirect_to(root_path)
+        end
       end
     end
   end

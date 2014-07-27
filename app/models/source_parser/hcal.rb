@@ -97,7 +97,7 @@ class SourceParser
         when HCard
           ABSTRACT_LOCATION_TO_HCARD_FIELD_MAP.each do |abstract_field, mofo_field|
             mofo_field = abstract_field if mofo_field == true
-            a[abstract_field] = raw.send(mofo_field).strip_html if raw.respond_to?(mofo_field)
+            a[abstract_field] = raw.send(mofo_field).try(:strip_html) if raw.respond_to?(mofo_field)
           end
 
           if raw.respond_to?(:geo)

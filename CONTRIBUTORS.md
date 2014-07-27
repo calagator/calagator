@@ -36,6 +36,7 @@ These people have contributed to Calagator's design and implementation:
   * Leif Warner
   * Mark Dilley
   * Markus Roberts
+  * Maureen Dugan
   * Michael Bunsen
   * Paige Saez
   * Pam Selle

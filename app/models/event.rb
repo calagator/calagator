@@ -23,8 +23,6 @@
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
-  include SearchEngine
-
   # Treat any event with a duration of at least this many hours as a multiday
   # event. This constant is used by the #multiday? method and is primarily
   # meant to make iCalendar exports display this event as covering a range of
@@ -48,16 +46,12 @@ class Event < ActiveRecord::Base
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time
   validates_format_of :url,
-    :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
+    :with => /\Ahttps?:\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\Z/,
     :allow_blank => true,
     :allow_nil => true
 
   include ValidatesBlacklistOnMixin
   validates_blacklist_on :title, :description, :url
-
-  include UpdateUpdatedAtMixin
-
-  include VersionDiff
 
   # Duplicates
   include DuplicateChecking
@@ -86,6 +80,13 @@ class Event < ActiveRecord::Base
     on_or_after_date(start_date).before_date(end_date)
   }
 
+  scope :future_with_venue, -> {
+    future.order("start_time ASC").non_duplicates.includes(:venue)
+  }
+  scope :past_with_venue, -> {
+    past.order("start_time DESC").non_duplicates.includes(:venue)
+  }
+
   # Expand the simple sort order names from the URL into more intelligent SQL order strings
   scope :ordered_by_ui_field, lambda{|ui_field|
     case ui_field
@@ -112,91 +113,38 @@ class Event < ActiveRecord::Base
     read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
   end
 
-  if (table_exists? rescue nil)
-    # XXX Horrible hack to materialize the #start_time= and #end_time= methods so they can be aliased by #start_time_with_smarter_setter= and #end_time_with_smarter_setter=.
-    Event.new(:start_time => Time.now, :end_time => Time.now)
-
-    # Set the start_time from one of a number of time values, a string, or an
-    # array of strings.
-    def start_time_with_smarter_setter=(value)
-      self.class.set_time_on(self, :start_time, value)
-    end
-    alias_method_chain :start_time=, :smarter_setter
-
-    # Set the end_time to the given +value+, which could be a Time, Date,
-    # DateTime, String, Array of Strings, etc.
-    def end_time_with_smarter_setter=(value)
-      self.class.set_time_on(self, :end_time, value)
-    end
-    alias_method_chain :end_time=, :smarter_setter
+  # Set the start_time to the given +value+, which could be a Time, Date,
+  # DateTime, String, Array of Strings, or nil.
+  def start_time=(value)
+    super time_for(value)
+  rescue ArgumentError
+    errors.add :start_time, "is invalid"
+    super nil
   end
 
-  # Sets record's attribute to time value. If time is invalid, marks record as invalid.
-  #
-  # @param [ActiveRecord::Base] record The record to modify.
-  # @param [String, Symbol] attribute The attribute to set, e.g. :start_time.
-  # @param [Time] value The time.
-  #
-  # @return [Time]
-  def self.set_time_on(record, attribute, value)
-    begin
-      result = time_for(value)
-    rescue Exception => e
-      record.errors.add(attribute, "is invalid")
-      result = nil
-    end
-    record.send("#{attribute}_without_smarter_setter=", result)
+  # Set the end_time to the given +value+, which could be a Time, Date,
+  # DateTime, String, Array of Strings, or nil.
+  def end_time=(value)
+    super time_for(value)
+  rescue ArgumentError
+    errors.add :end_time, "is invalid"
+    super nil
   end
 
-  # Returns time for the value, which can be a Time, Date, DateTime, String,
-  # Array of Strings, nil, etc.
-  #
-  # @param [nil, String, Date, DateTime, ActiveSupport::TimeWithZone, Time] value The time to parse.
-  #
-  # @return [Time]
-  #
-  # @raise TypeError Thrown if given an unknown type.
-  # @raise Exception Thrown if value can't be parsed.
-  def self.time_for(value)
+  def time_for(value)
     value = value.join(' ') if value.kind_of?(Array)
-    case value
-    when NilClass
-      nil
-    when String
-      # This can throw an exception
-      value.present? ? Time.zone.parse(value) : nil
-    when Date, DateTime, ActiveSupport::TimeWithZone
-      value.to_time
-    when Time
-      value # Accept as-is.
-    else
-      raise TypeError, "Unknown type #{value.class.to_s.inspect} with value #{value.inspect}"
-    end
+    value = Time.zone.parse(value) if value.kind_of?(String) # this will throw ArgumentError if invalid
+    value
   end
+  private :time_for
 
   #---[ Queries ]---------------------------------------------------------
 
   # Associate this event with the +venue+. The +venue+ can be given as a Venue
   # instance, an ID, or a title.
-  def associate_with_venue(new_venue)
-    new_venue = \
-      case new_venue
-      when Venue    then new_venue
-      when NilClass then nil
-      when String   then Venue.find_or_initialize_by_title(new_venue)
-      when Fixnum   then Venue.find(new_venue)
-      else raise TypeError, "Unknown type: #{new_venue.class}"
-      end
-
-    if new_venue && ((venue && venue != new_venue) || (!venue))
-      # Set venue if one is provided and it's different than the current, or no venue is currently set.
-      self.venue = new_venue.progenitor
-    elsif !new_venue && venue
-      # Clear the event's venue field
-      self.venue = nil
-    end
-
-    venue
+  def associate_with_venue(venue_identifier)
+    new_venue = Venue.find_by_identifier(venue_identifier)
+    self.venue = new_venue && new_venue.progenitor
   end
 
   # Returns groups of records for the site overview screen in the following format:
@@ -245,7 +193,7 @@ class Event < ActiveRecord::Base
     when 'na', ''
       { [] => future }
     else
-      kind = %w[all any].include?(type) ? type.to_sym : type.split(',')
+      kind = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
       find_duplicates_by(kind,
         :grouped => true,
         :where => "a.start_time >= #{connection.quote(Time.now - 1.day)}")
@@ -280,57 +228,12 @@ class Event < ActiveRecord::Base
   # NOTE: The `Event.search` method is implemented elsewhere! For example, it's
   # added by SearchEngine::ActsAsSolr if you're using that search engine.
 
-  # Return events matching the given +tag+ are grouped by their currentness,
-  # see ::group_by_currentness for data structure details.
-  #
-  # Will also set :error key if there was a non-fatal problem, e.g. invalid
-  # sort order.
-  #
-  # Options:
-  # * :current => Limit results to only current events? Defaults to false.
-  def self.search_tag_grouped_by_currentness(tag, opts={})
-    error = nil
-    tagged_with_opts = {}
-    case opts[:order]
-    when 'date', '', nil
-      tagged_with_opts[:order] = 'events.start_time'
-    when 'name', 'title'
-      tagged_with_opts[:order] = 'events.title'
-    when 'venue'
-      tagged_with_opts[:order] = 'venues.title'
-      tagged_with_opts[:include] = :venue
-    else
-      tagged_with_opts[:order] = 'events.start_time'
-      error = "Unknown ordering option #{opts[:order].inspect}, sorting by date instead."
-    end
-
-    result = group_by_currentness(includes(:venue).tagged_with(tag, tagged_with_opts))
-    # TODO Avoid searching for :past results. Currently finding them and discarding them when not wanted.
-    result[:past] = [] if opts[:current]
-    result[:error] = error
-    result
+  def self.search_tag(tag, opts={})
+    includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order])
   end
 
-  # Return events grouped by their currentness. Accepts the same +args+ as
-  # #search. The results hash is keyed by whether the event is current
-  # (true/false) and the values are arrays of events.
-  def self.search_keywords_grouped_by_currentness(query, opts={})
-    events = group_by_currentness(search(query, opts))
-    if events[:past] && opts[:order].to_s == "date"
-      events[:past].reverse!
-    end
-    events
-  end
-
-  # Return +events+ grouped by currentness using a data structure like:
-  #
-  #   {
-  #     :current => [ my_current_event, my_other_current_event ],
-  #     :past => [ my_past_event ],
-  #   }
-  def self.group_by_currentness(events)
-    grouped = events.group_by(&:current?)
-    {:current => grouped[true] || [], :past => grouped[false] || []}
+  def self.search(query, opts={})
+    SearchEngine.search(query, opts)
   end
 
   #---[ Transformations ]-------------------------------------------------
@@ -360,7 +263,7 @@ class Event < ActiveRecord::Base
 <a class="url" href="#{url}">#{url}</a>
 <span class="summary">#{title}</span>:
 <abbr class="dtstart" title="#{start_time.to_s(:yyyymmdd)}">#{start_time.to_s(:long_date).gsub(/\b[0](\d)/, '\1')}</abbr>,
-at the <span class="location">#{venue && venue.title}</span>
+at the <span class="location">#{venue_title}</span>
 </div>
 EOF
   end
@@ -431,7 +334,7 @@ EOF
           end
 
           if item.venue
-            entry.location [item.venue.title, item.venue.full_address].compact.join(": ")
+            entry.location [item.venue_title, item.venue.full_address].compact.join(": ")
           end
 
           # dtstamp and uid added because of a bug in Outlook;
@@ -455,6 +358,10 @@ EOF
     venue && venue.location
   end
 
+  def venue_title
+    venue && venue.title
+  end
+
   def normalize_url!
     unless url.blank? || url.match(/^[\d\D]+:\/\//)
       self.url = 'http://' + url
@@ -469,64 +376,51 @@ EOF
   # their time-of-day is set to the original record's time-of-day.
   def to_clone
     clone = self.class.new
-    CLONE_ATTRIBUTES.each do |attribute| 
+    CLONE_ATTRIBUTES.each do |attribute|
       clone.send("#{attribute}=", send(attribute))
     end
     if start_time
-      clone.start_time = self.class._clone_time_for_today(start_time)
+      clone.start_time = clone_time_for_today(start_time)
     end
     if end_time
-      clone.end_time = self.class._clone_time_for_today(end_time)
+      clone.end_time = clone_time_for_today(end_time)
     end
     clone
   end
 
   # Return a time that's today but has the time-of-day component from the
   # +source+ time argument.
-  def self._clone_time_for_today(source)
-    today = Time.today
+  def clone_time_for_today(source)
+    today = Date.today
     Time.local(today.year, today.mon, today.day, source.hour, source.min, source.sec, source.usec)
   end
+  private :clone_time_for_today
 
   #---[ Date related ]----------------------------------------------------
 
-  # Returns a range of time spanned by the event.
-  def time_range
-    if start_time && end_time
-      start_time..end_time
-    elsif start_time
-      start_time..(start_time + 1.hour)
-    else
-      raise ArgumentError, "can't get a time range for an event with no start time"
-    end
-  end
-
   # Returns an array of the dates spanned by the event.
   def dates
-    if start_time && end_time
+    raise ArgumentError, "can't get dates for an event with no start time" unless start_time
+    if end_time
       (start_time.to_date..end_time.to_date).to_a
-    elsif start_time
-      [start_time.to_date]
     else
-      raise ArgumentError, "can't get dates for an event with no start time"
+      [start_time.to_date]
     end
   end
 
-  # Is this event current? Default cutoff is today
-  def current?(cutoff=nil)
-    cutoff ||= Time.today
-    (end_time || start_time) >= cutoff
+  # Is this event current?
+  def current?
+    (end_time || start_time) >= Date.today.to_time
   end
 
-  # Is this event old? Default cutoff is yesterday
-  def old?(cutoff=nil)
-    cutoff ||= Time.zone.now.midnight # midnight today is the end of yesterday
-    (end_time || start_time + 1.hour) <= cutoff
+  # Is this event old?
+  def old?
+    (end_time || start_time + 1.hour) <= Time.zone.now.beginning_of_day
   end
 
   # Did this event start before today but ends today or later?
   def ongoing?
-    start_time < Time.today && end_time && end_time >= Time.today
+    start_time < Date.today.to_time && end_time && end_time >= Date.today.to_time
   end
 
   def multiday?

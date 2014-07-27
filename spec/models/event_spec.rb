@@ -141,19 +141,6 @@ describe Event do
 
       abstract_event.location.title.should match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
     end
-
-  end
-
-  describe "when finding duplicates" do
-    it "should find all events with duplicate titles" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
-      Event.find_duplicates_by(:title)
-    end
-
-    it "should find all events with duplicate titles and urls" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-      Event.find_duplicates_by([:title,:url])
-    end
   end
 
   describe "when finding duplicates by type" do
@@ -188,7 +175,7 @@ describe Event do
     end
 
     it "should find events with duplicate titles if called with 'title'" do
-      assert_specific_find_by_duplicates_by('title', ['title'])
+      assert_specific_find_by_duplicates_by('title', [:title])
     end
   end
 
@@ -212,91 +199,160 @@ describe Event do
     it "should fail to validate if end_time is earlier than start time " do
       @event.start_time = now
       @event.end_time = @event.start_time - 2.hours
-      @event.save.should be_falsey
+      @event.should be_invalid
       @event.errors[:end_time].size.should eq(1)
     end
-
   end
 
-  describe "#time_for" do
+  describe "when processing url" do
     before do
-      @date = "2009-01-02"
-      @time = "03:45"
-      @date_time = "#{@date} #{@time}"
-      @value = Time.zone.parse(@date_time)
+      @event = Event.new(:title => 'MyEvent', :start_time => now)
     end
 
-    it "should return nil for a NilClass" do
-      Event.time_for(nil).should be_nil
+    let(:valid_urls) {[
+      "hackoregon.org",
+      "http://www.meetup.com/Hack_Oregon-Data/events/",
+      "example.com",
+      "sub.example.com/",
+      "sub.domain.my-example.com",
+      "example.com/?stuff=true",
+      "example.com:5000/?stuff=true",
+      "sub.domain.my-example.com/path/to/file/hello.html",
+      "hello.museum",
+      "http://example.com",
+    ]}
+
+    let(:invalid_urls){[
+      "hackoregon.org, http://www.meetup.com/Hack_Oregon-Data/events/",
+      "hackoregon.org\nhttp://www.meetup.com/",
+      "htttp://www.example.com"
+    ]}
+
+    it "should validate with valid urls (with scheme included or not)" do
+      valid_urls.each do |valid_url|
+        @event.url = valid_url
+        @event.should be_valid
+      end
     end
 
-    it "should return time for a String" do
-      Event.time_for(@date_time).should eq @value
-    end
-
-    it "should return time for an Array of Strings" do
-      Event.time_for([@date, @time]).should eq @value
-    end
-
-    it "should return time for a DateTime" do
-      Event.time_for(@value).should eq @value
-    end
-
-    it "should return exception for an invalid date expressed as a String" do
-      lambda { Event.time_for("0/0/0") }.should raise_error
-    end
-
-    it "should raise exception for an invalid type" do
-      lambda { Event.time_for(Event) }.should raise_error TypeError
+    it "should fail to validate with invalid urls (with scheme included or not)" do
+      invalid_urls.each do |invalid_url|
+        @event.url = invalid_url
+        @event.should be_invalid
+      end
     end
   end
 
-  describe "#set_time_on" do
+  describe "#start_time=" do
     it "should clear with nil" do
       Event.new(:start_time => nil).start_time.should be_nil
     end
 
     it "should set from date String" do
-      event = Event.new(:start_time => today.to_date.to_s(:db))
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
+      event = Event.new(:start_time => "2009-01-02")
+      event.start_time.should eq Time.zone.parse("2009-01-02")
     end
 
     it "should set from date-time String" do
-      event = Event.new(:start_time => today.localtime.to_s(:db))
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
+      event = Event.new(:start_time => "2009-01-02 03:45")
+      event.start_time.should eq Time.zone.parse("2009-01-02 03:45")
+    end
+
+    it "should set from an Array of Strings" do
+      event = Event.new(:start_time => ["2009-01-03", "02:14"])
+      event.start_time.should eq Time.zone.parse("2009-01-03 02:14")
     end
 
     it "should set from Date" do
-      event = Event.new(:start_time => today.to_date)
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
+      event = Event.new(:start_time => Date.parse("2009-02-01"))
+      event.start_time.should eq Time.zone.parse("2009-02-01")
     end
 
     it "should set from DateTime" do
-      event = Event.new(:start_time => today.to_datetime)
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
+      event = Event.new(:start_time => Time.zone.parse("2009-01-01 05:30"))
+      event.start_time.should eq Time.zone.parse("2009-01-01 05:30")
     end
 
-    it "should set from TimeWithZone" do
-      event = Event.new(:start_time => ActiveSupport::TimeWithZone.new(Time.now.midnight, Time.zone))
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq today
+    it "should flag an invalid time and reset to nil" do
+      event = Event.new(:start_time => "2010/1/1")
+      event.start_time = "1/0"
+      event.start_time.should be_nil
+      event.errors[:start_time].should be_present
+    end
+  end
+
+  describe "#end_time=" do
+    it "should clear with nil" do
+      Event.new(:end_time => nil).end_time.should be_nil
     end
 
-    it "should set from Time" do
-      time = today
-      event = Event.new(:start_time => time)
-      event.start_time.should be_a_kind_of Time
-      event.start_time.should eq time
+    it "should set from date String" do
+      event = Event.new(:end_time => "2009-01-02")
+      event.end_time.should eq Time.zone.parse("2009-01-02")
+    end
+
+    it "should set from date-time String" do
+      event = Event.new(:end_time => "2009-01-02 03:45")
+      event.end_time.should eq Time.zone.parse("2009-01-02 03:45")
+    end
+
+    it "should set from an Array of Strings" do
+      event = Event.new(:end_time => ["2009-01-03", "02:14"])
+      event.end_time.should eq Time.zone.parse("2009-01-03 02:14")
+    end
+
+    it "should set from Date" do
+      event = Event.new(:end_time => Date.parse("2009-02-01"))
+      event.end_time.should eq Time.zone.parse("2009-02-01")
+    end
+
+    it "should set from DateTime" do
+      event = Event.new(:end_time => Time.zone.parse("2009-01-01 05:30"))
+      event.end_time.should eq Time.zone.parse("2009-01-01 05:30")
     end
 
     it "should flag an invalid time" do
-      event = FactoryGirl.build(:event)
-      event.start_time = "1/0"
-      event.errors[:start_time].should be_present
+      event = Event.new(:end_time => "1/0")
+      event.errors[:end_time].should be_present
+    end
+  end
+
+  describe "#dates" do
+    it "returns an array of dates spanned by the event" do
+      event = Event.new(start_time: "2010-01-01", end_time: "2010-01-03")
+      event.dates.should == [
+        Date.parse("2010-01-01"),
+        Date.parse("2010-01-02"),
+        Date.parse("2010-01-03"),
+      ]
+    end
+
+    it "returns an array of one date when there is no end time" do
+      event = Event.new(start_time: "2010-01-01")
+      event.dates.should == [Date.parse("2010-01-01")]
+    end
+
+    it "throws ArgumentError when there is no start time" do
+      expect { Event.new.dates }.to raise_error(ArgumentError)
+    end
+  end
+
+  describe "#duration" do
+    it "returns the event length in seconds" do
+      event = Event.new(start_time: "2010-01-01", end_time: "2010-01-03")
+      event.duration.should == 172800
+    end
+
+    it "returns zero if start and end times aren't present" do
+      Event.new.duration.should == 0
+    end
+  end
+
+  describe "#location" do
+    it "delegates to the venue's location" do
+      event = Event.new
+      event.build_venue latitude: 45.5200, longitude: 122.6819
+      event.location.should == [45.5200, 122.6819]
     end
   end
 
@@ -497,36 +553,34 @@ describe Event do
     end
   end
 
-  describe "when searching" do
-    it "should find events" do
-      Event.should_receive(:search).and_return([])
+  describe "when ordering" do
+    describe "with .ordered_by_ui_field" do
+      it "defaults to order by start time" do
+        event1 = FactoryGirl.create(:event, start_time: Date.parse("2003-01-01"))
+        event2 = FactoryGirl.create(:event, start_time: Date.parse("2002-01-01"))
+        event3 = FactoryGirl.create(:event, start_time: Date.parse("2001-01-01"))
 
-      Event.search("myquery").should be_empty
-    end
+        events = Event.ordered_by_ui_field(nil)
+        events.should == [event3, event2, event1]
+      end
 
-    it "should find events and group them" do
-      current_event = mock_model(Event, :current? => true, :duplicate_of_id => nil)
-      past_event = mock_model(Event, :current? => false, :duplicate_of_id => nil)
-      Event.should_receive(:search).and_return([current_event, past_event])
+      it "can order by event name" do
+        event1 = FactoryGirl.create(:event, title: "CU there")
+        event2 = FactoryGirl.create(:event, title: "Be there")
+        event3 = FactoryGirl.create(:event, title: "An event")
 
-      Event.search_keywords_grouped_by_currentness("myquery").should eq({
-        :current => [current_event],
-        :past    => [past_event],
-      })
-    end
+        events = Event.ordered_by_ui_field("name")
+        events.should == [event3, event2, event1]
+      end
 
-    it "should find events" do
-      event_Z = Event.new(:title => "Zipadeedoodah", :start_time => (now + 1.week))
-      event_A = Event.new(:title => "Antidisestablishmentarism", :start_time => (now + 2.weeks))
-      event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (now + 3.weeks))
-      event_o = Event.new(:title => "ommmmmmmmmmm...", :start_time => (now + 4.weeks))
+      it "can order by venue name" do
+        event1 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "C venue"))
+        event2 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "B venue"))
+        event3 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "A venue"))
 
-      Event.should_receive(:search).and_return([event_A, event_Z, event_O, event_o])
-
-      Event.search_keywords_grouped_by_currentness("myquery", :order => 'name').should eq({
-        :current => [event_A, event_Z, event_O, event_o],
-        :past => []
-      })
+        events = Event.ordered_by_ui_field("venue")
+        events.should == [event3, event2, event1]
+      end
     end
   end
 
@@ -534,10 +588,6 @@ describe Event do
     before do
       @event = FactoryGirl.create(:event)
       @venue = FactoryGirl.create(:venue)
-    end
-
-    it "should not change a venue to a nil venue" do
-      @event.associate_with_venue(nil).should be_nil
     end
 
     it "should associate a venue if one wasn't set before" do
@@ -578,58 +628,25 @@ describe Event do
     it "should raise an exception if associated with an unknown type" do
       lambda { @event.associate_with_venue(double('SourceParser')) }.should raise_error TypeError
     end
-
-    describe "and searching" do
-      it "should find events" do
-        event_A = Event.new(:title => "Zipadeedoodah", :start_time => (now + 1.week))
-        event_o = Event.new(:title => "Antidisestablishmentarism", :start_time => (now + 2.weeks))
-        event_O = Event.new(:title => "Ooooooo! Oooooooooooooo!", :start_time => (now + 3.weeks))
-        event_Z = Event.new(:title => "ommmmmmmmmmm...", :start_time => (now + 4.weeks))
-
-        event_A.venue = Venue.new(:title => "Acme Hotel")
-        event_o.venue = Venue.new(:title => "opbmusic Studios")
-        event_O.venue = Venue.new(:title => "Oz")
-        event_Z.venue = Venue.new(:title => "Zippers and Things")
-
-        Event.should_receive(:search).and_return([event_A, event_Z, event_O, event_o])
-
-        Event.search_keywords_grouped_by_currentness("myquery", :order => 'venue').should eq({
-          :current => [event_A, event_Z, event_O, event_o],
-          :past => []
-        })
-      end
-    end
   end
 
   describe "with finding duplicates" do
-    it "should find all events with duplicate titles" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title )")
-      Event.find_duplicates_by(:title )
+    before do
+      @non_duplicate_event = FactoryGirl.create(:event)
+      @duplicate_event = FactoryGirl.create(:duplicate_event)
+      @events = [@non_duplicate_event, @duplicate_event]
     end
 
-    it "should find all events with duplicate titles and urls" do
-      Event.should_receive(:find_by_sql).with("SELECT DISTINCT a.* from events a, events b WHERE a.id <> b.id AND ( a.title = b.title AND a.url = b.url )")
-      Event.find_duplicates_by([:title,:url])
+    it "should find all events that have not been marked as duplicate" do
+      non_duplicates = Event.non_duplicates
+      non_duplicates.should include @non_duplicate_event
+      non_duplicates.should_not include @duplicate_event
     end
 
-    describe "with sample records" do
-      before do
-        @non_duplicate_event = FactoryGirl.create(:event)
-        @duplicate_event = FactoryGirl.create(:duplicate_event)
-        @events = [@non_duplicate_event, @duplicate_event]
-      end
-
-      it "should find all events that have not been marked as duplicate" do
-        non_duplicates = Event.non_duplicates
-        non_duplicates.should include @non_duplicate_event
-        non_duplicates.should_not include @duplicate_event
-      end
-
-      it "should find all events that have been marked as duplicate" do
-        duplicates = Event.marked_duplicates
-        duplicates.should include @duplicate_event
-        duplicates.should_not include @non_duplicate_event
-      end
+    it "should find all events that have been marked as duplicate" do
+      duplicates = Event.marked_duplicates
+      duplicates.should include @duplicate_event
+      duplicates.should_not include @non_duplicate_event
     end
   end
 
@@ -700,7 +717,7 @@ describe Event do
       clone.reload
       clone.should_not be_duplicate
 
-      Event.squash(:master => @event, :duplicates => clone)
+      Event.squash(@event, clone)
       @event.tag_list.to_a.sort.should eq %w[first second third] # master now contains all three tags
       clone.duplicate_of.should eq @event
     end
