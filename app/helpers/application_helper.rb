@@ -121,11 +121,7 @@ module ApplicationHelper
   end
 
   def tag_link(type, tag, link_class=nil)
-    internal_url = \
-      case type
-      when :event then search_events_path(:tag => tag.name)
-      when :venue then venues_path(:tag => tag.name)
-      end
+    internal_url = "/#{type.to_s.pluralize}/tag/#{tag.name}"
 
     link_classes = [link_class, "p-category"]
     link_classes << "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" if tag.machine_tag[:url]

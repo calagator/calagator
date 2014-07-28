@@ -100,9 +100,6 @@ module TagModelExtensions
   end
 
   module ClassMethods
-    # TODO: Look at replacing this with the built-in acts_as_taggable_on tag cloud stuff
-    #       See https://github.com/mbleigh/acts-as-taggable-on for details.
-    #
     # Return data structure that can be used to make a tag cloud.
     #
     # Options:
