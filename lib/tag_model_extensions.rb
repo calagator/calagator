@@ -19,8 +19,8 @@ module TagModelExtensions
       'project' => 'http://epdx.org/projects/%s',
     },
     'upcoming' => {
-      'event' => "http://upcoming.yahoo.com/event/%s",
-      'venue' => "http://upcoming.yahoo.com/venue/%s"
+      'event' => "/",
+      'venue' => "/"
     },
       'plancast' => {
       'activity' => "http://plancast.com/a/%s",
@@ -33,10 +33,10 @@ module TagModelExtensions
       'venue' => "http://foursquare.com/venue/%s"
     },
       'gowalla' => {
-      'spot' => "http://gowalla.com/spots/%s"
+      'spot' => "/"
     },
       'shizzow' => {
-      'place' => "http://www.shizzow.com/places/%s"
+      'place' => "/"
     },
       'meetup' => {
       'group' => "http://www.meetup.com/%s"
