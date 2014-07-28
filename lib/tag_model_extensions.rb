@@ -60,16 +60,16 @@ module TagModelExtensions
   # key-value pairs. It may also contain an :url if one is known.
   #
   # Machine tags describe references to remote resources. For example, a
-  # Calagator event imported from an Upcoming event may have a machine
-  # linking it back to the Upcoming event.
+  # Calagator event imported from an Meetup event may have a machine
+  # linking it back to the Meetup event.
   #
   # Example:
-  #   # A tag named "upcoming:event=1234" will produce this machine tag:
+  #   # A tag named "meetup:group=1234" will produce this machine tag:
   #   tag.machine_tag == {
-  #     :namespace => "upcoming",
-  #     :predicate => "event",
+  #     :namespace => "meetup",
+  #     :predicate => "group",
   #     :value     => "1234",
-  #     :url       => "http://upcoming.yahoo.com/event/1234",
+  #     :url       => "http://www.meetup.com/1234",
   def machine_tag
     if components = self.name.match(MACHINE_TAG_PATTERN)
       namespace, predicate, value = components.captures
