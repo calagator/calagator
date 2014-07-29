@@ -71,12 +71,7 @@ describe Event do
   end
 
   describe "Sql" do
-    around do |example|
-      original = Event::SearchEngine.kind
-      Event::SearchEngine.kind = :sql
-      example.run
-      Event::SearchEngine.kind = original
-    end
+    # spec_helper defaults all tests to sql
 
     it_should_behave_like "#search"
 
@@ -90,15 +85,16 @@ describe Event do
   describe "Sunspot" do
     around do |example|
       server_running = begin
-        solr = Sunspot::Rails::Server.new
-        Process.getpgid(File.read(solr.pid_path).to_i)
-      rescue Errno::ESRCH, Errno::ENOENT; end
+        # Try opening the configured port. If it works, it's running.
+        TCPSocket.new('127.0.0.1', Sunspot::Rails.configuration.port).close
+        true
+      rescue Errno::ECONNREFUSED
+        false
+      end
 
       if server_running
-        original = Event::SearchEngine.kind
-        Event::SearchEngine.kind = :sunspot
+        Event::SearchEngine.kind = Venue::SearchEngine.kind = :sunspot
         example.run
-        Event::SearchEngine.kind = original
       else
         pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"
       end
