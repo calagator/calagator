@@ -1,0 +1,15 @@
+<div class='copy_block'>
+  <h1>You've found the missing link!</a></h1>
+
+  <p class="replace-this-text">
+    Unfortunately, the tag you clicked points to a site or service that no longer exists. Lucky for you, nothing ever disappears from the Internet!
+  </p>
+
+  <p>
+    Here's the most recent viewable version of the page you were looking for, courtesy of the <%= link_to 'Wayback Machine', 'https://archive.org/web/' %>:
+  </p>
+
+  <p>
+    <%= link_to params[:url], params[:url] %>
+  </p>
+</div>

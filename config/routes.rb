@@ -5,6 +5,7 @@ Calagator::Application.routes.draw do
   match 'about' => 'site#about'
 
   match 'opensearch.:format' => 'site#opensearch'
+  match 'defunct' => 'site#defunct'
 
   resources :events do
     collection do

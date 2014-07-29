@@ -18,7 +18,7 @@ class SiteController < ApplicationController
       format.any  { redirect_to(events_path(:format => params[:format])) }
     end
   end
-  
+
   # Displays the about page.
   def about; end
 
@@ -26,5 +26,8 @@ class SiteController < ApplicationController
     respond_to do |format|
       format.xml { render :content_type => 'application/opensearchdescription+xml' }
     end
+  end
+
+  def defunct
   end
 end
