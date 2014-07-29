@@ -31,31 +31,18 @@ module ApplicationHelper
     time.strftime(format).gsub(/\*0*/,'').html_safe
   end
 
-  # Retrun a string describing the source code version being used, or false/nil if it can't figure out how to find the version.
   def self.source_code_version_raw
-    begin
-      if File.directory?(Rails.root.join(".svn"))
-        s = `svn info 2>&1`
-        m = s.match(/^Revision: (\d+)/s)
-        return " - SVN revision: #{m[1]}"
-      elsif File.directory?(Rails.root.join(".git"))
-        s = `git log -1 --format=medium 2>&1`
-        m = s.match(/^Date: (.+?)$/s)
-        return " - Git timestamp: #{m[1]}"
-      elsif File.directory?(Rails.root.join(".hg"))
-        s = `hg id -nibt 2>&1`
-        return " - Mercurial revision: #{s}"
-      end
-    rescue Errno::ENOENT
-      # Platform (e.g., Windows) has the checkout directory but not the command-line command to manipulate it.
-      return ""
-    end
+    # Return a string describing the source code version being used
+    " - Git timestamp: #{`git log -1 --format=format:"%ad" 2>&1`}"
+  rescue
+    # Fail quietly if that didn't work; we don't want to get in the way.
+    ""
   end
 
   ApplicationController::SOURCE_CODE_VERSION = self.source_code_version_raw
 
   def source_code_version
-    return ApplicationController::SOURCE_CODE_VERSION
+    ApplicationController::SOURCE_CODE_VERSION
   end
 
   # returns html markup with source (if any), imported/created time, and - if modified - modified time
