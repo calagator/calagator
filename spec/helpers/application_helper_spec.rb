@@ -103,4 +103,16 @@ describe ApplicationHelper do
         '<p><a href="https://github.com/socketstream/socketstream">SocketStream</a>, a phenomenally fast real-time web framework for Node.js</p>'
     end
   end
+
+  describe "the source code version date" do
+    it "should come from git if possible" do
+      ApplicationHelper.should_receive(:`).with(/git/).and_return("Tue Jul 29 01:22:49 2014 -0700")
+      ApplicationHelper.source_code_version_raw.should match /Git timestamp: Tue Jul 29 01:22:49 2014 -0700/
+    end
+
+    it "should be blank if we can't ask git" do
+      ApplicationHelper.should_receive(:`).with(/git/).and_raise(Errno::ENOENT)
+      ApplicationHelper.source_code_version_raw.should == ""
+    end
+  end
 end
