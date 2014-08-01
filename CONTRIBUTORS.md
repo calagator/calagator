@@ -19,6 +19,7 @@ These people have contributed to Calagator's design and implementation:
   * Chris Faulkner
   * Colby Aley
   * Craig Fisk
+  * Dale Hollocher
   * Daniel Etra
   * Daniel Hedlund
   * Don Park
