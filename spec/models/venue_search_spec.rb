@@ -71,6 +71,10 @@ describe Venue do
     end
 
     it_should_behave_like "#search"
+
+    it "is using the sql search engine" do
+      Venue::SearchEngine.kind.should == :sql
+    end
   end
 
   describe "Sunspot" do
@@ -92,5 +96,9 @@ describe Venue do
     end
 
     it_should_behave_like "#search"
+
+    it "is using the sunspot search engine" do
+      Venue::SearchEngine.kind.should == :sunspot
+    end
   end
 end
