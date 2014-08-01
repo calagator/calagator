@@ -71,7 +71,12 @@ describe Event do
   end
 
   describe "Sql" do
-    # spec_helper defaults all tests to sql
+    around do |example|
+      original = Event::SearchEngine.kind
+      Event::SearchEngine.kind = :sql
+      example.run
+      Event::SearchEngine.kind = original
+    end
 
     it_should_behave_like "#search"
 
@@ -97,8 +102,10 @@ describe Event do
       end
 
       if server_running
-        Event::SearchEngine.kind = Venue::SearchEngine.kind = :sunspot
+        original = Event::SearchEngine.kind
+        Event::SearchEngine.kind = :sunspot
         example.run
+        Event::SearchEngine.kind = original
       else
         pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"
       end
