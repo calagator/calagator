@@ -1,6 +1,3 @@
-require_relative 'search_engine/sunspot'
-require_relative 'search_engine/sql'
-
 class Event < ActiveRecord::Base
   class SearchEngine
     cattr_accessor(:kind) { :sql }
@@ -16,7 +13,11 @@ class Event < ActiveRecord::Base
     private_class_method
 
     def self.search_engine
-      kind == :sunspot ? Sunspot : Sql
+      if kind == :sunspot
+        Event::SearchEngine::Sunspot
+      else
+        Event::SearchEngine::Sql
+      end
     end
   end
 end
