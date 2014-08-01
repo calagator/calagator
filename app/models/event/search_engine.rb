@@ -1,5 +1,5 @@
-require_relative 'search_engine/sunspot'
-require_relative 'search_engine/sql'
+require 'event/search_engine/sunspot'
+require 'event/search_engine/sql'
 
 class Event < ActiveRecord::Base
   class SearchEngine

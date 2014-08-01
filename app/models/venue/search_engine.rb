@@ -1,5 +1,5 @@
-require_relative 'search_engine/sunspot'
-require_relative 'search_engine/sql'
+require 'venue/search_engine/sunspot'
+require 'venue/search_engine/sql'
 
 class Venue < ActiveRecord::Base
   class SearchEngine
