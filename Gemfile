@@ -80,6 +80,8 @@ end
 # production servers, you can skip their installation by running:
 #   bundle install --without development:test
 group :development, :test do
+  gem 'better_errors', '1.1.0'
+  gem 'binding_of_caller', '0.7.2'
   gem 'rspec-activemodel-mocks', '1.0.1'
   gem 'rspec-its', '1.0.1'
   gem 'rspec-rails', '3.0.1'
