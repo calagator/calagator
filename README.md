@@ -44,7 +44,7 @@ Contributing
 
 Bug fixes and features are welcomed. Please fork the source code and submit a pull request: <http://github.com/calagator/calagator/tree/master>
 
-When you make a pull request, make sure to add your name to the list of contributors.
+When you make a pull request, make sure to add your name to the list of contributors in [CONTRIBUTORS.md](http://github.com/calagator/calagator/blob/master/CONTRIBUTORS.md).
 
 Contributors
 ------------
