@@ -974,22 +974,5 @@ describe Event do
         @data.should match /\sCALSCALE:Gregorian\s/i
       end
     end
-
   end
-
-  describe "sorting labels" do
-
-    it "should display human-friendly label for a known value" do
-      Event::sorting_label_for('name').should eq 'Event Name'
-    end
-
-    it "should display a default label" do
-      Event::sorting_label_for(nil).should eq 'Relevance'
-    end
-
-    it "should display a different default label when searching by tag" do
-      Event::sorting_label_for(nil, true).should eq 'Date'
-    end
-  end
-
 end

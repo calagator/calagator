@@ -211,4 +211,18 @@ describe EventsHelper do
         "20140726T200000Z/20140726T200000Z"
     end
   end
+
+  describe "sorting labels" do
+    it "should display human-friendly label for a known value" do
+      helper.sorting_label_for('name').should eq 'Event Name'
+    end
+
+    it "should display a default label" do
+      helper.sorting_label_for(nil).should eq 'Relevance'
+    end
+
+    it "should display a different default label when searching by tag" do
+      helper.sorting_label_for(nil, true).should eq 'Date'
+    end
+  end
 end
