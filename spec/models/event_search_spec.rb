@@ -68,6 +68,14 @@ describe Event do
       2.times { FactoryGirl.create(:event) }
       Event.search("", limit: 1).length.should == 1
     end
+
+    it "limit applies to current and past queries separately" do
+      event1 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.ago)
+      event2 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.ago)
+      event3 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.from_now)
+      event4 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.from_now)
+      Event.search("omg", limit: 1).to_a.count.should == 2
+    end
   end
 
   describe "Sql" do
@@ -101,14 +109,6 @@ describe Event do
     end
 
     it_should_behave_like "#search"
-
-    it "limit applies to current and past queries separately" do
-      event1 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.ago)
-      event2 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.ago)
-      event3 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.from_now)
-      event4 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.from_now)
-      Event.search("omg", limit: 1).to_a.count.should == 2
-    end
   end
 end
 

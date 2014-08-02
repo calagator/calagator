@@ -12,15 +12,33 @@ class Event < ActiveRecord::Base
       # * :limit => Maximum number of entries to return. Defaults to 50.
       # * :skip_old => Return old entries? Defaults to false.
       def self.search(*args)
-        new(*args).search
+        new(*args).all
       end
 
       def self.score?
         false
       end
 
+      def all
+        current_events + past_events
+      end
+
+      private
+
+      def current_events
+        search.current.scope.to_a
+      end
+
+      def past_events
+        skip_old ? [] : search.past.scope.to_a
+      end
+
       def search
-        base.keywords.skip_old.order.limit.scope
+        base.keywords.order.limit
+      end
+
+      def skip_old
+        opts[:skip_old] == true
       end
 
       protected
@@ -51,13 +69,6 @@ class Event < ActiveRecord::Base
         self
       end
 
-      def skip_old
-        if opts[:skip_old] == true
-          @scope = @scope.where("events.start_time >= ?", Date.yesterday.to_time)
-        end
-        self
-      end
-
       def order
         order = case opts[:order].try(:to_sym)
         when :name, :title
@@ -74,6 +85,16 @@ class Event < ActiveRecord::Base
       def limit
         limit = opts.fetch(:limit, 50)
         @scope = @scope.limit(limit)
+        self
+      end
+
+      def current
+        @scope = @scope.where("events.start_time >= ?", Date.yesterday.to_time)
+        self
+      end
+
+      def past
+        @scope = @scope.where("events.start_time < ?", Date.yesterday.to_time)
         self
       end
     end
