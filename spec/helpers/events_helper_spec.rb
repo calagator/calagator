@@ -19,16 +19,16 @@ describe EventsHelper do
     end
 
     it "should return string for a string key" do
-      helper.events_sort_label("score").should match(/ by .+#{Event::SORTING_LABELS['score']}.+/)
+      helper.events_sort_label("score").should == " by <strong>Relevance.</strong>"
     end
 
     it "should return string for a symbol key" do
-      helper.events_sort_label(:score).should match(/ by .+#{Event::SORTING_LABELS['score']}.+/)
+      helper.events_sort_label(:score).should == " by <strong>Relevance.</strong>"
     end
 
-    it "should return special string when using a tag" do
+    it "should use the label Date when using a tag" do
       assign :tag, ActsAsTaggableOn::Tag.new
-      helper.events_sort_label(nil).should match(/ by .+#{Event::SORTING_LABELS['default']}.+/)
+      helper.events_sort_label(nil).should == " by <strong>Date.</strong>"
     end
   end
 
