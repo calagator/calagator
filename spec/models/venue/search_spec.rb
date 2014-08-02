@@ -77,7 +77,7 @@ describe Venue::Search do
 
     it "should be able to return events matching specific tag" do
       subject = Venue::Search.new tag: "foo"
-      subject.venues.should == [@open_venue, @wifi_venue]
+      subject.venues.should =~ [@open_venue, @wifi_venue]
     end
 
     it "should declare results" do
