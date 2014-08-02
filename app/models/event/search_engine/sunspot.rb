@@ -10,7 +10,7 @@ class Event < ActiveRecord::Base
       #   * :name => Sort by event title
       #   * :title => same as :name
       #   * :venue => Sort by venue title
-      # * :limit => Maximum number of entries to return. Defaults to +solr_search_matches+.
+      # * :limit => Maximum number of entries to return. Defaults to 50.
       # * :skip_old => Return old entries? Defaults to false.
       def self.search(*args)
         new(*args).search

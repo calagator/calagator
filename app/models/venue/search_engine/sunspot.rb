@@ -8,7 +8,7 @@ class Venue < ActiveRecord::Base
       #   * :score => Sort with most relevant matches first
       #   * :name => Sort by event title
       #   * :title => same as :name
-      # * :limit => Maximum number of entries to return. Defaults to +solr_search_matches+.
+      # * :limit => Maximum number of entries to return. Defaults to 50.
       # * :wifi => Require wifi
       # * :include_closed => Include closed venues? Defaults to false.
       def self.search(*args)
