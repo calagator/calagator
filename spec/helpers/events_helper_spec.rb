@@ -1,5 +1,4 @@
 require 'spec_helper'
-include EventsHelper
 
 describe EventsHelper do
   describe "#events_sort_label" do
