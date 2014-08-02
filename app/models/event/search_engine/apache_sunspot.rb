@@ -13,7 +13,7 @@ class Event < ActiveRecord::Base
       # * :limit => Maximum number of entries to return. Defaults to 50.
       # * :skip_old => Return old entries? Defaults to false.
       def self.search(*args)
-        new(*args).search
+        new(*args).all
       end
 
       def self.score?
@@ -25,18 +25,32 @@ class Event < ActiveRecord::Base
         configure unless configured?
       end
 
-      def search
+      def all
+        current_events + past_events
+      end
+
+      private
+
+      def current_events
+        search(true)
+      end
+
+      def past_events
+        skip_old ? [] : search(false)
+      end
+
+      def search(current)
         Event.solr_search do
           keywords query, minimum_match: 1
           order_by *order
           order_by :start_time, :desc
           with :duplicate, false
-          with(:start_time).greater_than(Date.yesterday.to_time) if skip_old
           data_accessor_for(Event).include = [:venue]
+
+          method = current ? :greater_than_or_equal_to : :less_than
+          with(:start_time).send(method, Date.yesterday.to_time)
         end.results.take(limit)
       end
-
-      private
 
       def order
         case opts[:order].try(:to_sym)
