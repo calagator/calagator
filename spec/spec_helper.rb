@@ -84,8 +84,11 @@ RSpec.configure do |config|
     # mocks.verify_partial_doubles = true
   end
 
-  # Reset to the Sql search engine before each test.
-  config.before(:each) do
+  # Reset to the Sql search engine before each test. Individual tests that
+  # override this use "around"; we'll use "around" here too to ensure that
+  # this block runs before the individual test's override.
+  config.around do |example|
     Event::SearchEngine.kind = Venue::SearchEngine.kind = :sql
+    example.run
   end
 end
