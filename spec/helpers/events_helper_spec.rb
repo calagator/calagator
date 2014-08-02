@@ -1,6 +1,18 @@
 require 'spec_helper'
 
 describe EventsHelper do
+  describe "#events_sort_link" do
+    it "renders a sorting link with the field for the supplied key" do
+      params.merge! action: "index", controller: "events"
+      helper.events_sort_link("score").should == %(<a href="/events?order=score">Relevance</a>)
+    end
+    
+    it "removes any existing order if no key is entered" do 
+      params.merge! action: "index", controller: "events", order: "score"
+      helper.events_sort_link(nil).should == %(<a href="/events">Default</a>)
+    end
+  end
+
   describe "#events_sort_label" do
     it "should return nil without arguments" do
       helper.events_sort_label(nil).should be_nil
