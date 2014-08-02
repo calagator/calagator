@@ -978,9 +978,6 @@ describe Event do
   end
 
   describe "sorting labels" do
-    it "should have sorting labels" do
-      Event::SORTING_LABELS.should be_a_kind_of Hash
-    end
 
     it "should display human-friendly label for a known value" do
       Event::sorting_label_for('name').should eq 'Event Name'
