@@ -13,11 +13,7 @@ class Event < ActiveRecord::Base
     private_class_method
 
     def self.search_engine
-      if kind == :sunspot
-        Event::SearchEngine::Sunspot
-      else
-        Event::SearchEngine::Sql
-      end
+      kind == :sunspot ? ApacheSunspot : Sql
     end
   end
 end

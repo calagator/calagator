@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
   class SearchEngine
-    class Sunspot < Struct.new(:query, :opts)
+    class ApacheSunspot < Struct.new(:query, :opts)
       # Return an Array of non-duplicate Event instances matching the search +query+..
       #
       # Options:
@@ -79,7 +79,7 @@ class Event < ActiveRecord::Base
           boolean(:duplicate) { |event| event.duplicate? }
         end
         Event.reindex
-        ::Sunspot.commit
+        Sunspot.commit
       end
 
       def configured?
