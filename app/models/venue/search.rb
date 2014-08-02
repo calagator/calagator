@@ -23,7 +23,7 @@ class Venue < ActiveRecord::Base
     end
 
     def results?
-      !query && !tag && !all
+      query || tag || all
     end
 
     protected

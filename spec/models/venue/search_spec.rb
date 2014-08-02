@@ -14,6 +14,10 @@ describe Venue::Search do
       it "should not include closed venues" do
         subject.venues.should == [@open_venue, @wifi_venue]
       end
+
+      it "should not declare results" do
+        subject.results?.should be_falsey
+      end
     end
 
     describe "and showing all venues" do
@@ -26,6 +30,11 @@ describe Venue::Search do
         subject = Venue::Search.new all: '1', closed: '1'
         subject.venues.should == [@closed_venue]
       end
+
+      it "should declare results" do
+        subject = Venue::Search.new all: '1'
+        subject.results?.should be_truthy
+      end
     end
 
     describe "when searching" do
@@ -33,6 +42,11 @@ describe Venue::Search do
         it "should only include results with public wifi" do
           subject = Venue::Search.new query: '', wifi: '1'
           subject.venues.should == [@wifi_venue]
+        end
+
+        it "should declare results" do
+          subject = Venue::Search.new query: '', wifi: '1'
+          subject.results?.should be_truthy
         end
       end
 
@@ -53,12 +67,22 @@ describe Venue::Search do
             subject.venues.should be_empty
           end
         end
+
+        it "should declare results" do
+          subject = Venue::Search.new query: 'Open Town'
+          subject.results?.should be_truthy
+        end
       end
     end
 
     it "should be able to return events matching specific tag" do
       subject = Venue::Search.new tag: "foo"
       subject.venues.should == [@open_venue, @wifi_venue]
+    end
+
+    it "should declare results" do
+      subject = Venue::Search.new tag: "foo"
+      subject.results?.should be_truthy
     end
   end
 end
