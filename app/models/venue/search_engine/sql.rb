@@ -6,7 +6,7 @@ class Venue < ActiveRecord::Base
       end
 
       def search
-        base.keywords.non_duplicates.with_wifi.in_business.order.limit.scope
+        base.keywords.non_duplicates.with_wifi.in_business.order.limit.scope.to_a
       end
 
       protected

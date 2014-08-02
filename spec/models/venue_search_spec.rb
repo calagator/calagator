@@ -58,7 +58,7 @@ describe Venue do
 
     it "can limit number of venues" do
       2.times { FactoryGirl.create(:venue) }
-      Venue.search("", limit: 1).length.should == 1
+      Venue.search("", limit: 1).count.should == 1
     end
   end
 
