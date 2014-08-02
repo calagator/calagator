@@ -99,77 +99,17 @@ describe VenuesController do
 
   describe "when rendering the venues index" do
     before do
-      @open_venue = FactoryGirl.create(:venue, title: 'Open Town', description: 'baz', wifi: false, tag_list: %w(foo))
-      @closed_venue = FactoryGirl.create(:venue, title: 'Closed Down', closed: true, wifi: false, tag_list: %w(bar))
-      @wifi_venue = FactoryGirl.create(:venue, title: "Internetful", wifi: true, tag_list: %w(foo bar))
+      @venues = [FactoryGirl.create(:venue), FactoryGirl.create(:venue)]
     end
 
-    describe "with no parameters" do
-      before do
-        get :index
-      end
-
-      it "should assign @search.most_active_venues and @search.newest_venues by default" do
-        get :index
-        assigns[:search].most_active_venues.should be_present
-        assigns[:search].newest_venues.should be_present
-      end
-
-      it "should not included closed venues" do
-        assigns[:search].newest_venues.should_not include @closed_venue
-      end
+    it "should assign the search object to @search" do
+      get :index
+      assigns[:search].should be_a Venue::Search
     end
 
-    describe "and showing all venues" do
-      it "should include closed venues when asked to with the include_closed parameter" do
-        get :index, :all => '1', :include_closed => '1'
-        assigns[:venues].should include @closed_venue
-      end
-
-      it "should include ONLY closed venues when asked to with the closed parameter" do
-        get :index, :all => '1', :closed => '1'
-        assigns[:venues].should include @closed_venue
-        assigns[:venues].should_not include @open_venue
-      end
-    end
-
-    describe "when searching" do
-      describe "for public wifi (and no keyword)" do
-        before do
-          get :index, :query => '', :wifi => '1'
-        end
-
-        it "should only include results with public wifi" do
-          assigns[:venues].should include @wifi_venue
-          assigns[:venues].should_not include @open_venue
-        end
-      end
-
-      describe "when searching by keyword" do
-        it "should find venues by title" do
-          get :index, :query => 'Open Town'
-          assigns[:venues].should include @open_venue
-          assigns[:venues].should_not include @wifi_venue
-        end
-        it "should find venues by description" do
-          get :index, :query => 'baz'
-          assigns[:venues].should include @open_venue
-          assigns[:venues].should_not include @wifi_venue
-        end
-
-        describe "and requiring public wifi" do
-          it "should not find venues without public wifi" do
-            get :index, :query => 'baz', :wifi => '1'
-            assigns[:venues].should_not include @open_venue
-            assigns[:venues].should_not include @wifi_venue
-          end
-        end
-      end
-    end
-
-    it "should be able to return events matching specific tag" do
-      get :index, :tag => "foo"
-      assigns[:venues].should =~ [@open_venue, @wifi_venue]
+    it "should assign search results to @venues" do
+      get :index
+      assigns[:venues].should == @venues
     end
 
     describe "in JSON format" do
