@@ -71,6 +71,10 @@ describe Venue do
     end
 
     it_should_behave_like "#search"
+
+    it "is using the sql search engine" do
+      Venue::SearchEngine.kind.should == :sql
+    end
   end
 
   describe "Sunspot" do
@@ -84,13 +88,19 @@ describe Venue do
       end
 
       if server_running
-        Event::SearchEngine.kind = Venue::SearchEngine.kind = :sunspot
+        original = Venue::SearchEngine.kind
+        Venue::SearchEngine.kind = :sunspot
         example.run
+        Venue::SearchEngine.kind = original
       else
         pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"
       end
     end
 
     it_should_behave_like "#search"
+
+    it "is using the sunspot search engine" do
+      Venue::SearchEngine.kind.should == :sunspot
+    end
   end
 end

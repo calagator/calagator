@@ -71,7 +71,12 @@ describe Event do
   end
 
   describe "Sql" do
-    # spec_helper defaults all tests to sql
+    around do |example|
+      original = Event::SearchEngine.kind
+      Event::SearchEngine.kind = :sql
+      example.run
+      Event::SearchEngine.kind = original
+    end
 
     it_should_behave_like "#search"
 
@@ -79,6 +84,10 @@ describe Event do
       event1 = FactoryGirl.create(:event, url: "http://example.com/wtfbbq.html")
       event2 = FactoryGirl.create(:event, url: "http://example.com/zomg.html")
       Event.search("zomg").should == [event2]
+    end
+
+    it "is using the sql search engine" do
+      Event::SearchEngine.kind.should == :sql
     end
   end
 
@@ -93,14 +102,20 @@ describe Event do
       end
 
       if server_running
-        Event::SearchEngine.kind = Venue::SearchEngine.kind = :sunspot
+        original = Event::SearchEngine.kind
+        Event::SearchEngine.kind = :sunspot
         example.run
+        Event::SearchEngine.kind = original
       else
         pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"
       end
     end
 
     it_should_behave_like "#search"
+
+    it "is using the sunspot search engine" do
+      Event::SearchEngine.kind.should == :sunspot
+    end
   end
 end
 
