@@ -1,5 +1,4 @@
 require 'spec_helper'
-include ApplicationHelper
 
 describe ApplicationHelper do
   describe "when escaping HTML while preserving entities (cleanse)" do
@@ -22,7 +21,7 @@ describe ApplicationHelper do
 
   describe "#helper.mobile_stylesheet_media" do
     def mobile_cookie(value=nil)
-      cookie_name = ApplicationController::MOBILE_COOKIE_NAME
+      cookie_name = ApplicationHelper::MOBILE_COOKIE_NAME
       if value
         @request.cookies[cookie_name] = value
       end

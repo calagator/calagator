@@ -40,7 +40,7 @@ module EventsHelper
   # Return a link for sorting by +key+ (e.g., "name").
   def events_sort_link(key)
     if key.present?
-      link_to(Event::sorting_label_for(key, @tag.present?), url_for(params.merge(:order => key)))
+      link_to(sorting_label_for(key, @tag.present?), url_for(params.merge(:order => key)))
     else
       link_to('Default', url_for(params.tap { |o| o.delete :order }))
     end
@@ -49,7 +49,7 @@ module EventsHelper
   # Return a human-readable label describing what the sorting +key+ is.
   def events_sort_label(key)
     if key.present? or @tag.present?
-      sanitize " by <strong>#{Event::sorting_label_for(key, @tag.present?)}.</strong>"
+      sanitize " by <strong>#{sorting_label_for(key, @tag.present?)}.</strong>"
     else
       nil
     end
@@ -201,4 +201,27 @@ module EventsHelper
     end
   end
 
+  #---[ Sort labels ]-------------------------------------------
+
+  # Return the label for the +sorting_key+ (e.g. 'score'). Optionally set the
+  # +is_searching_by_tag+, to constrain options available for tag searches.
+  def sorting_label_for(sorting_key=nil, is_searching_by_tag=false)
+    sorting_key = sorting_key.to_s
+    if sorting_key.present? and SORTING_LABELS.has_key?(sorting_key)
+      SORTING_LABELS[sorting_key]
+    elsif is_searching_by_tag
+      SORTING_LABELS['date']
+    else
+      SORTING_LABELS['score']
+    end
+  end
+
+  # Labels displayed for sorting options:
+  SORTING_LABELS = {
+    'name'  => 'Event Name',
+    'venue' => 'Location',
+    'score' => 'Relevance',
+    'date'  => 'Date',
+  }
+  private_constant :SORTING_LABELS
 end

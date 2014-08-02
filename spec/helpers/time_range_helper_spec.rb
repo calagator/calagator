@@ -1,5 +1,4 @@
 require 'spec_helper'
-include TimeRangeHelper
 
 describe "Time formatting" do
   before(:each) do
