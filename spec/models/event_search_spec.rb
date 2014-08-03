@@ -105,7 +105,8 @@ describe Event do
       end
 
       if server_running
-        Event::SearchEngine.kind = Venue::SearchEngine.kind = :sunspot
+        Event::SearchEngine.use(:sunspot)
+        Venue::SearchEngine.use(:sunspot)
         example.run
       else
         pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"

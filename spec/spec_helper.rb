@@ -88,7 +88,8 @@ RSpec.configure do |config|
   # override this use "around"; we'll use "around" here too to ensure that
   # this block runs before the individual test's override.
   config.around do |example|
-    Event::SearchEngine.kind = Venue::SearchEngine.kind = :sql
+    Event::SearchEngine.use(:sql)
+    Venue::SearchEngine.use(:sql)
     example.run
   end
 end

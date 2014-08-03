@@ -15,6 +15,32 @@ class Venue < ActiveRecord::Base
         new(*args).search
       end
 
+      def self.configure
+        Venue.searchable do
+          text :title, :default_boost => 3
+          string :title
+          text :description
+          text :address
+          text :street_address
+          text :postal_code
+          text :locality
+          text :region
+          text :tag_list, :default_boost => 3
+          text :url
+          boolean :closed
+          boolean :wifi
+          boolean :duplicate_for_solr do |record|
+            record.duplicate_of_id.present?
+          end
+        end
+        Venue.reindex
+        Sunspot.commit
+      end
+
+      def configured?
+        Venue.respond_to?(:solr_search)
+      end
+
       def initialize(*args)
         super
         configure unless configured?
@@ -51,32 +77,6 @@ class Venue < ActiveRecord::Base
 
       def limit
         opts[:limit] || 50
-      end
-
-      def configure
-        Venue.searchable do
-          text :title, :default_boost => 3
-          string :title
-          text :description
-          text :address
-          text :street_address
-          text :postal_code
-          text :locality
-          text :region
-          text :tag_list, :default_boost => 3
-          text :url
-          boolean :closed
-          boolean :wifi
-          boolean :duplicate_for_solr do |record|
-            record.duplicate_of_id.present?
-          end
-        end
-        Venue.reindex
-        Sunspot.commit
-      end
-
-      def configured?
-        Venue.respond_to?(:solr_search)
       end
     end
   end
