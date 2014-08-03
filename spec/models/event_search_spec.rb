@@ -88,6 +88,10 @@ describe Event do
       event2 = FactoryGirl.create(:event, url: "http://example.com/zomg.html")
       Event.search("zomg").should == [event2]
     end
+
+    it "is using the sql search engine" do
+      Event::SearchEngine.kind.should == :sql
+    end
   end
 
   describe "Sunspot" do
@@ -109,6 +113,10 @@ describe Event do
     end
 
     it_should_behave_like "#search"
+
+    it "is using the sunspot search engine" do
+      Event::SearchEngine.kind.should == :sunspot
+    end
   end
 end
 
