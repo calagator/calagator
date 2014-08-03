@@ -33,8 +33,6 @@ class Venue < ActiveRecord::Base
             record.duplicate_of_id.present?
           end
         end
-        Venue.reindex
-        Sunspot.commit
       end
 
       def configured?
