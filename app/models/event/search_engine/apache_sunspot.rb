@@ -1,6 +1,6 @@
 class Event < ActiveRecord::Base
   class SearchEngine
-    class Sunspot < Struct.new(:query, :opts)
+    class ApacheSunspot < Struct.new(:query, :opts)
       # Return an Array of non-duplicate Event instances matching the search +query+..
       #
       # Options:
@@ -10,10 +10,10 @@ class Event < ActiveRecord::Base
       #   * :name => Sort by event title
       #   * :title => same as :name
       #   * :venue => Sort by venue title
-      # * :limit => Maximum number of entries to return. Defaults to +solr_search_matches+.
+      # * :limit => Maximum number of entries to return. Defaults to 50.
       # * :skip_old => Return old entries? Defaults to false.
       def self.search(*args)
-        new(*args).search
+        new(*args).all
       end
 
       def self.score?
@@ -25,18 +25,32 @@ class Event < ActiveRecord::Base
         configure unless configured?
       end
 
-      def search
+      def all
+        current_events + past_events
+      end
+
+      private
+
+      def current_events
+        search(true)
+      end
+
+      def past_events
+        skip_old ? [] : search(false)
+      end
+
+      def search(current)
         Event.solr_search do
           keywords query, minimum_match: 1
           order_by *order
           order_by :start_time, :desc
           with :duplicate, false
-          with(:start_time).greater_than(Date.yesterday.to_time) if skip_old
           data_accessor_for(Event).include = [:venue]
+
+          method = current ? :greater_than_or_equal_to : :less_than
+          with(:start_time).send(method, Date.yesterday.to_time)
         end.results.take(limit)
       end
-
-      private
 
       def order
         case opts[:order].try(:to_sym)
@@ -79,7 +93,7 @@ class Event < ActiveRecord::Base
           boolean(:duplicate) { |event| event.duplicate? }
         end
         Event.reindex
-        ::Sunspot.commit
+        Sunspot.commit
       end
 
       def configured?

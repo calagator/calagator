@@ -9,11 +9,7 @@ class Venue < ActiveRecord::Base
     private_class_method
 
     def self.search_engine
-      if kind == :sunspot
-        Venue::SearchEngine::Sunspot
-      else
-        Venue::SearchEngine::Sql
-      end
+      kind == :sunspot ? ApacheSunspot : Sql
     end
   end
 end
