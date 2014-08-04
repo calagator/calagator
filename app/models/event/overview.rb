@@ -9,19 +9,19 @@ class Event < ActiveRecord::Base
     #     :more => ...,       # First event after the two week window or nil
     #   }
     def today
-      times_to_events[:today]
+      Event.non_duplicates.within_dates(today_date, tomorrow_date)
     end
 
     def tomorrow
-      times_to_events[:tomorrow]
+      Event.non_duplicates.within_dates(tomorrow_date, after_tomorrow_date)
     end
 
     def later
-      times_to_events[:later]
+      Event.non_duplicates.within_dates(after_tomorrow_date, future_cutoff_date)
     end
 
     def more
-      times_to_events[:more]
+      Event.after_date(future_cutoff_date).first
     end
 
     def tags
@@ -29,37 +29,6 @@ class Event < ActiveRecord::Base
     end
 
     private
-
-    def times_to_events
-      @times_to_events ||= select_for_overview
-    end
-
-    def select_for_overview
-      times_to_events = {
-        :today    => [],
-        :tomorrow => [],
-        :later    => [],
-        :more     => nil,
-      }
-
-      # Find all events between today and future_cutoff, sorted by start_time
-      # includes events any part of which occurs on or after today through on or after future_cutoff
-      overview_events = Event.non_duplicates.within_dates(today_date, future_cutoff_date)
-      overview_events.each do |event|
-        if event.start_time < tomorrow_date
-          times_to_events[:today]    << event
-        elsif event.start_time >= tomorrow_date && event.start_time < after_tomorrow_date
-          times_to_events[:tomorrow] << event
-        else
-          times_to_events[:later]    << event
-        end
-      end
-
-      # Find next item beyond the future_cuttoff for use in making links to it:
-      times_to_events[:more] = Event.after_date(future_cutoff_date).first
-
-      times_to_events
-    end
 
     def today_date
       @today_date ||= Time.zone.now.beginning_of_day
