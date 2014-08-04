@@ -12,6 +12,22 @@ class Event < ActiveRecord::Base
       @times_to_events ||= select_for_overview
     end
 
+    def today
+      times_to_events[:today]
+    end
+
+    def tomorrow
+      times_to_events[:tomorrow]
+    end
+
+    def later
+      times_to_events[:later]
+    end
+
+    def more
+      times_to_events[:more]
+    end
+
     def tags
       @tags ||= Event.tag_counts_on(:tags, limit: 100, conditions: "tags_count >= 10").sort_by(&:name)
     end

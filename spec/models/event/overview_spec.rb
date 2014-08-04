@@ -55,29 +55,29 @@ describe Event::Overview do
 
     describe "events today" do
       it "should include events that started before today and end after today" do
-        subject.times_to_events[:today].should include @started_before_today_and_ends_after_today
+        subject.today.should include @started_before_today_and_ends_after_today
       end
 
       it "should include events that started earlier today" do
-        subject.times_to_events[:today].should include @started_midnight_and_continuing_after
+        subject.today.should include @started_midnight_and_continuing_after
       end
 
       it "should not include events that ended before today" do
-        subject.times_to_events[:today].should_not include @started_and_ended_yesterday
+        subject.today.should_not include @started_and_ended_yesterday
       end
 
       it "should not include events that start tomorrow" do
-        subject.times_to_events[:today].should_not include @starts_and_ends_tomorrow
+        subject.today.should_not include @starts_and_ends_tomorrow
       end
 
       it "should not include events that ended at midnight today" do
-        subject.times_to_events[:today].should_not include @started_before_today_and_ends_at_midnight
+        subject.today.should_not include @started_before_today_and_ends_at_midnight
       end
     end
 
     describe "events tomorrow" do
       it "should not include events that start after tomorrow" do
-        subject.times_to_events[:tomorrow].should_not include @starts_after_tomorrow
+        subject.tomorrow.should_not include @starts_after_tomorrow
       end
     end
 
@@ -86,14 +86,14 @@ describe Event::Overview do
         event = stub_model(Event)
         Event.should_receive(:after_date).with(today + 2.weeks).and_return([event])
 
-        subject.times_to_events[:more].should eq event
+        subject.more.should eq event
       end
 
       it "should set :more item if there are no events past the future cutoff" do
         event = stub_model(Event)
         Event.should_receive(:after_date).with(today + 2.weeks).and_return([])
 
-        subject.times_to_events[:more].should be_blank
+        subject.more.should be_blank
       end
     end
   end
