@@ -11,9 +11,6 @@ class SiteController < ApplicationController
 
   def index
     @overview = Event::Overview.new
-    @times_to_events = @overview.times_to_events
-    @tags_deferred = @overview.tags_deferred
-
     respond_to do |format|
       format.html { }
       format.any  { redirect_to events_path(format: params[:format]) }
