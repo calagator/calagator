@@ -10,12 +10,13 @@ class SiteController < ApplicationController
   end
 
   def index
-    @times_to_events = Event.select_for_overview
-    @tags_deferred = lambda { Event.tag_counts_on(:tags, limit: 100, conditions: "tags_count >= 10").sort_by(&:name) }
+    @overview = Event::Overview.new
+    @times_to_events = @overview.times_to_events
+    @tags_deferred = @overview.tags_deferred
 
     respond_to do |format|
-      format.html { } # Default
-      format.any  { redirect_to(events_path(:format => params[:format])) }
+      format.html { }
+      format.any  { redirect_to events_path(format: params[:format]) }
     end
   end
 
