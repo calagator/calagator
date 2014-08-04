@@ -7,14 +7,14 @@
     <%= render :partial => "description" %>
   </div>
 
-  <% tags =
-        @tagcloud_items_deferred.call.map{ |item|
-          tag_link(:event, item[:tag], "tagcloud_level_#{item[:level]}") 
-        }.join('<span class="spacer"> &middot; </span>').html_safe -%>
+  <% tags = @tags_deferred.call %>
   <% if tags.present? %>
     <div id="tagcloud">
       <h2>Popular tags</h2>
-      <%= tags -%>
+      <% tag_cloud tags, %w(tagcloud_level_0 tagcloud_level_1 tagcloud_level_2 tagcloud_level_3 tagcloud_level_4) do |tag, css_class| %>
+        <%= link_to tag.name, search_events_path(tag: tag.name), class: css_class %>
+        <span class="spacer">&middot;</span>
+      <% end %>
     </div>
   <% end %>
 </div>

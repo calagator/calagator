@@ -11,7 +11,7 @@ class SiteController < ApplicationController
 
   def index
     @times_to_events = Event.select_for_overview
-    @tagcloud_items_deferred = lambda { ActsAsTaggableOn::Tag.for_tagcloud }
+    @tags_deferred = lambda { Event.tag_counts_on(:tags, limit: 100, conditions: "tags_count >= 10").sort_by(&:name) }
 
     respond_to do |format|
       format.html { } # Default
