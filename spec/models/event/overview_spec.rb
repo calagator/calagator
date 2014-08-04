@@ -6,99 +6,68 @@ describe Event::Overview do
       @today_midnight = today
       @yesterday = @today_midnight.yesterday
       @tomorrow = @today_midnight.tomorrow
-
-      @this_venue = Venue.create!(:title => "This venue")
-
-      @started_before_today_and_ends_after_today = Event.create!(
-        :title => "Event in progress",
-        :start_time => @yesterday,
-        :end_time => @tomorrow,
-        :venue_id => @this_venue.id)
-
-      @started_midnight_and_continuing_after = Event.create!(
-        :title => "Midnight start",
-        :start_time => @today_midnight,
-        :end_time => @tomorrow,
-        :venue_id => @this_venue.id)
-
-      @started_and_ended_yesterday = Event.create!(
-        :title => "Yesterday start",
-        :start_time => @yesterday,
-        :end_time => @yesterday.end_of_day,
-        :venue_id => @this_venue.id)
-
-      @started_today_and_no_end_time = Event.create!(
-        :title => "nil end time",
-        :start_time => @today_midnight,
-        :end_time => nil,
-        :venue_id => @this_venue.id)
-
-      @starts_and_ends_tomorrow = Event.create!(
-        :title => "starts and ends tomorrow",
-        :start_time => @tomorrow,
-        :end_time => @tomorrow.end_of_day,
-        :venue_id => @this_venue.id)
-
-      @starts_after_tomorrow = Event.create!(
-        :title => "Starting after tomorrow",
-        :start_time => @tomorrow + 1.day,
-        :venue_id => @this_venue.id)
-
-      @started_before_today_and_ends_at_midnight = Event.create!(
-        :title => "Midnight end",
-        :start_time => @yesterday,
-        :end_time => @today_midnight,
-        :venue_id => @this_venue.id)
-
-      @future_events_for_this_venue = @this_venue.events.future
+      @day_after_tomorrow = @tomorrow.tomorrow
     end
 
     describe "#today" do
       it "should include events that started before today and end after today" do
-        subject.today.should include @started_before_today_and_ends_after_today
+        event = FactoryGirl.create(:event, start_time: @yesterday, end_time: @tomorrow)
+        subject.today.should include event
       end
 
       it "should include events that started earlier today" do
-        subject.today.should include @started_midnight_and_continuing_after
+        event = FactoryGirl.create(:event, start_time: @today_midnight)
+        subject.today.should include event
       end
 
       it "should not include events that ended before today" do
-        subject.today.should_not include @started_and_ended_yesterday
+        event = FactoryGirl.create(:event, start_time: @yesterday, end_time: @yesterday.end_of_day)
+        subject.today.should_not include event
       end
 
       it "should not include events that start tomorrow" do
-        subject.today.should_not include @starts_and_ends_tomorrow
+        event = FactoryGirl.create(:event, start_time: @tomorrow)
+        subject.today.should_not include event
       end
 
       it "should not include events that ended at midnight today" do
-        subject.today.should_not include @started_before_today_and_ends_at_midnight
+        event = FactoryGirl.create(:event, start_time: @yesterday, end_time: @today_midnight)
+        subject.today.should_not include event
       end
     end
 
     describe "#tomorrow" do
+      it "should include events that start tomorrow" do
+        event = FactoryGirl.create(:event, start_time: @tomorrow)
+        subject.tomorrow.should include event
+      end
+
       it "should not include events that start after tomorrow" do
-        subject.tomorrow.should_not include @starts_after_tomorrow
+        event = FactoryGirl.create(:event, start_time: @day_after_tomorrow)
+        subject.tomorrow.should_not include event
       end
     end
 
     describe "#later" do
-      it "should not include events that start after tomorrow" do
-        subject.tomorrow.should_not include @starts_after_tomorrow
+      it "should include events that start after tomorrow" do
+        event = FactoryGirl.create(:event, start_time: @day_after_tomorrow)
+        subject.later.should include event
+      end
+
+      it "should not include events that start after two weeks" do
+        event = FactoryGirl.create(:event, start_time: 2.weeks.from_now)
+        subject.later.should_not include event
       end
     end
 
     describe "#more" do
       it "should provide an event if there are events past the future cutoff" do
-        event = stub_model(Event)
-        Event.should_receive(:after_date).with(today + 2.weeks).and_return([event])
-
-        subject.more.should eq event
+        event = FactoryGirl.create(:event, start_time: 2.weeks.from_now)
+        subject.more.should == event
       end
 
       it "should be nil if there are no events past the future cutoff" do
-        event = stub_model(Event)
-        Event.should_receive(:after_date).with(today + 2.weeks).and_return([])
-
+        event = FactoryGirl.create(:event, start_time: 2.weeks.from_now - 1.day)
         subject.more.should be_blank
       end
     end
