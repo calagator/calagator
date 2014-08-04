@@ -90,6 +90,8 @@ describe Venue do
       if server_running
         Event::SearchEngine.use(:sunspot)
         Venue::SearchEngine.use(:sunspot)
+        Event.reindex
+        Venue.reindex
         example.run
       else
         pending "Solr not running. Start with `rake sunspot:solr:start RAILS_ENV=test`"
