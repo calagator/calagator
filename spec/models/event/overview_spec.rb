@@ -53,7 +53,7 @@ describe Event::Overview do
       @future_events_for_this_venue = @this_venue.events.future
     end
 
-    describe "events today" do
+    describe "#today" do
       it "should include events that started before today and end after today" do
         subject.today.should include @started_before_today_and_ends_after_today
       end
@@ -75,21 +75,27 @@ describe Event::Overview do
       end
     end
 
-    describe "events tomorrow" do
+    describe "#tomorrow" do
       it "should not include events that start after tomorrow" do
         subject.tomorrow.should_not include @starts_after_tomorrow
       end
     end
 
-    describe "determining if we should show the more link" do
-      it "should provide :more item if there are events past the future cutoff" do
+    describe "#later" do
+      it "should not include events that start after tomorrow" do
+        subject.tomorrow.should_not include @starts_after_tomorrow
+      end
+    end
+
+    describe "#more" do
+      it "should provide an event if there are events past the future cutoff" do
         event = stub_model(Event)
         Event.should_receive(:after_date).with(today + 2.weeks).and_return([event])
 
         subject.more.should eq event
       end
 
-      it "should set :more item if there are no events past the future cutoff" do
+      it "should be nil if there are no events past the future cutoff" do
         event = stub_model(Event)
         Event.should_receive(:after_date).with(today + 2.weeks).and_return([])
 

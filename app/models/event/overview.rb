@@ -1,13 +1,5 @@
 class Event < ActiveRecord::Base
   class Overview
-    # Returns groups of records for the site overview screen in the following format:
-    #
-    #   {
-    #     :today => [...],    # Events happening today or empty array
-    #     :tomorrow => [...], # Events happening tomorrow or empty array
-    #     :later => [...],    # Events happening within two weeks or empty array
-    #     :more => ...,       # First event after the two week window or nil
-    #   }
     def today
       Event.non_duplicates.within_dates(today_date, tomorrow_date)
     end
