@@ -21,9 +21,7 @@ class TimeRange
     # or an object that responds_to start_time and end_time, and
     # several options
     #
-    # By default (unless :format => :text) include <abbr> tags 
-    # for hCalendar, and (unless :relative => false) refer to 
-    # "today", "yesterday", and "tomorrow" using those labels;
+    # By default (unless :format => :text) include <abbr> tags for hCalendar,
     # if a :context date is provided, omit unnecessary date parts.
     if end_time.is_a? Hash
       opts = end_time
@@ -39,7 +37,6 @@ class TimeRange
       @end_time = end_time
     end
     @format = opts[:format] || :hcal
-    @relative = opts[:relative] || false
     @context_date = opts[:context]
   end
 
@@ -140,30 +137,17 @@ protected
   def date_details(d)
     # Get the parts for formatting a date, as a hash of 
     # strings: keys (roughly) match the equivalent methods on Date, but only
-    # relevant keys will be filled in. If relative is true (the default):
-    # - if it's today, tomorrow, or yesterday, :wday will be eg "today"
-    #   (with no other date fields)
-    case @relative && d.to_date - Date.today
-      when 1
-        { :wday => "tomorrow" }
-      when 0
-        { :wday => "today" }
-      when -1
-        { :wday => "yesterday" }
-      else
-        { :wday => Date::DAYNAMES[d.wday],
-          :month => Date::MONTHNAMES[d.month],
-          :day => d.day.to_s,
-          :year => d.year.to_s }
-    end
+    # relevant keys will be filled in.
+    { :wday => Date::DAYNAMES[d.wday],
+      :month => Date::MONTHNAMES[d.month],
+      :day => d.day.to_s,
+      :year => d.year.to_s }
   end
 
   def time_details(t)
     # Get the parts for formatting this time, as a hash of 
     # strings: keys (roughly) match the equivalent methods on DateTime, but only
-    # relevant keys will be filled in. If relative is true (the default):
-    # - if it's today, tomorrow, or yesterday, :wday will be eg "today"
-    #   (with no other date fields)
+    # relevant keys will be filled in.
     # - if it's exactly noon or midnight, :hour will be eg "noon"
     #   (with no other time fields)
     details = date_details(t)
