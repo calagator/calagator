@@ -20,9 +20,29 @@ class Event < ActiveRecord::Base
         true
       end
 
-      def initialize(*args)
-        super
-        configure unless configured?
+      def self.configure
+        Event.searchable do
+          text :title, :default_boost => 3
+          string :title
+
+          text :description
+
+          text :tag_list, :default_boost => 3
+
+          text :url
+
+          time :start_time
+          time :end_time
+
+          text :venue_title
+          string :venue_title
+
+          boolean(:duplicate) { |event| event.duplicate? }
+        end
+      end
+
+      def self.configured?
+        Event.respond_to?(:solr_search)
       end
 
       def all
@@ -71,33 +91,6 @@ class Event < ActiveRecord::Base
 
       def limit
         opts[:limit] || 50
-      end
-
-      def configure
-        Event.searchable do
-          text :title, :default_boost => 3
-          string :title
-
-          text :description
-
-          text :tag_list, :default_boost => 3
-
-          text :url
-
-          time :start_time
-          time :end_time
-
-          text :venue_title
-          string :venue_title
-
-          boolean(:duplicate) { |event| event.duplicate? }
-        end
-        Event.reindex
-        Sunspot.commit
-      end
-
-      def configured?
-        Event.respond_to?(:solr_search)
       end
     end
   end

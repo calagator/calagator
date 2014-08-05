@@ -6,6 +6,11 @@ class Venue < ActiveRecord::Base
       search_engine.search(*args)
     end
 
+    def self.use(kind)
+      self.kind = kind
+      search_engine.configure if search_engine.respond_to?(:configure)
+    end
+
     private_class_method
 
     def self.search_engine
