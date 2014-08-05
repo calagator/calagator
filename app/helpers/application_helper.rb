@@ -115,6 +115,7 @@ module ApplicationHelper
 
     link_to escape_once(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
   end
+  private :tag_link
 
   def subnav_class_for(controller_name, action_name)
     return [

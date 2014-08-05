@@ -19,6 +19,15 @@ describe ApplicationHelper do
     end
   end
 
+  describe "#tag_links_for" do
+    it "renders tag links for the supplied model" do
+      event = FactoryGirl.create(:event, tag_list: %w(a b))
+      tag_links_for(event).should ==
+        %(<a href="/events/tag/a" class="p-category">a</a>, ) +
+        %(<a href="/events/tag/b" class="p-category">b</a>)
+    end
+  end
+
   describe "#helper.mobile_stylesheet_media" do
     def mobile_cookie(value=nil)
       cookie_name = ApplicationHelper::MOBILE_COOKIE_NAME
