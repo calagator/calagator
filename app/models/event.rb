@@ -233,18 +233,6 @@ class Event < ActiveRecord::Base
     event
   end
 
-  # Returns an hCalendar string representing this Event.
-  def to_hcal
-    <<-EOF
-<div class="vevent">
-<a class="url" href="#{url}">#{url}</a>
-<span class="summary">#{title}</span>:
-<abbr class="dtstart" title="#{start_time.to_s(:yyyymmdd)}">#{start_time.to_s(:long_date).gsub(/\b[0](\d)/, '\1')}</abbr>,
-at the <span class="location">#{venue_title}</span>
-</div>
-EOF
-  end
-
   # Returns an iCalendar string representing this Event.
   #
   # Options:

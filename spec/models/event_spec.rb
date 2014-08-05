@@ -106,12 +106,6 @@ describe Event do
       Event.from_abstract_event(abstract_event).should eq event
     end
 
-    it "should parse an Event into an hCalendar" do
-      actual_hcal = @basic_event.to_hcal
-      pattern = Regexp.new(@basic_hcal.gsub(/\s+/, '\s+')) # Ignore spacing changes
-      actual_hcal.should match pattern
-    end
-
     it "should parse an Event into an iCalendar" do
       actual_ical = @basic_event.to_ical
 
