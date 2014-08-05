@@ -157,30 +157,9 @@ module EventsHelper
 
   #--[ Sharing buttons ]-----------------------------------------
 
-  # Will increase the maximum length of either the event title or venue
-  # if one of the two is shorter than the maximum: 46
-
-  def tweet_text_sizer(event)
-    title_length = event.title.length
-    venue_length = (event.venue.try(:title) || "").length
-    if (title_length > 46) && (venue_length < 46)
-      title_length = 46 + (46-venue_length)
-    elsif (title_length > 46)
-      title_length = 46
-    end
-
-    if (venue_length > 46) && (title_length < 46)
-      venue_length = 46 + (46-title_length)
-    elsif (venue_length > 46)
-      venue_length = 46
-    end
-    result = {:title => title_length, :venue => title_length}
-  end
-
   # Tweet button text
 
   def tweet_text(event)
-
     lengths = tweet_text_sizer(event)
 
     result = []
@@ -191,14 +170,29 @@ module EventsHelper
     return result.join(" ")
   end
 
-  def shareable_event_url(event)
-    if event.persisted?
-      if Rails.env.development?
-        SETTINGS.url.sub(/\/$/,'') + event_path(event)
-      else
-        event_url(event)
-      end
+  # Will increase the maximum length of either the event title or venue
+  # if one of the two is shorter than the maximum: 46
+
+  def tweet_text_sizer(event)
+    title_length = event.title.length
+    venue_length = (event.venue.try(:title) || "").length
+    title_length = tweet_length(title_length, venue_length)
+    venue_length = tweet_length(venue_length, title_length)
+    { title: title_length, venue: title_length }
+  end
+  private :tweet_text_sizer
+
+  def tweet_length length_a, length_b
+    if length_a > 46
+      length_a = 46
+      length_a += (46-length_b) if length_b < 46
     end
+    length_a
+  end
+  private :tweet_length
+
+  def shareable_event_url(event)
+    event_url(event) if event.persisted?
   end
 
   #---[ Sort labels ]-------------------------------------------

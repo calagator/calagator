@@ -194,6 +194,17 @@ describe EventsHelper do
     end
   end
 
+  describe "#tweet_text" do
+    it "contructs a tweet" do
+      event = FactoryGirl.create(:event,
+        title: "hip and/or hop",
+        start_time: "2010-01-01 12:00:00",
+        end_time: "2010-01-02 12:00:00")
+      event.venue = FactoryGirl.create(:venue, title: "holocene")
+      tweet_text(event).should == "hip and/or hop - 12:00PM 01.01.2010 @ holocene"
+    end
+  end
+
   describe "format_google_timespan" do
     it "should use the google time format" do
       event = Event.new(
