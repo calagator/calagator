@@ -8,20 +8,16 @@ module MappingHelper
   end
 
   def mapping_js_includes
-    scripts = ["http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"]
-    case map_provider
-      when "stamen"
-        scripts << "http://maps.stamen.com/js/tile.stamen.js?v1.2.3"
-      when "mapbox"
-        scripts << "https://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.standalone.js"
-      when "google"
-        scripts << "https://maps.googleapis.com/maps/api/js?key=#{SECRETS.mapping["google_maps_api_key"]}&sensor=false"
-        scripts << "leaflet_google_layer"
-      when "esri"
-        scripts << "http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"
-    end
-
-    scripts
+    js_dependency_map = {
+      "stamen" => "http://maps.stamen.com/js/tile.stamen.js?v1.2.3",
+      "mapbox" => "https://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.standalone.js",
+      "esri"   => "http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js",
+      "google" => [
+        "https://maps.googleapis.com/maps/api/js?key=#{SECRETS.mapping["google_maps_api_key"]}&sensor=false",
+        "leaflet_google_layer",
+      ]
+    }
+    ["http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"] + Array(js_dependency_map[map_provider])
   end
 
   def map(locatable_items, options = {})
@@ -69,18 +65,14 @@ module MappingHelper
   alias_method :google_map, :map
 
   def layer_constructor
-    case map_provider
-      when "stamen"
-        "L.StamenTileLayer"
-      when "mapbox"
-        "L.mapbox.tileLayer"
-      when "google"
-        "L.Google"
-      when "esri"
-        "L.esri.basemapLayer"
-      else
-        "L.tileLayer"
-    end
+    constructor_map = {
+      "stamen"  => "L.StamenTileLayer",
+      "mapbox"  => "L.mapbox.tileLayer",
+      "esri"    => "L.esri.basemapLayer",
+      "google"  => "L.Google",
+      "leaflet" => "L.tileLayer",
+    }
+    constructor_map[map_provider]
   end
 
   def map_markers(locatable_items)
