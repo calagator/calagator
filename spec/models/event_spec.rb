@@ -403,59 +403,6 @@ describe Event do
       @future_events_for_this_venue = @this_venue.events.future
     end
 
-    describe "for overview" do
-      # TODO:  consider writing the following specs as view specs
-      # either in addition to, or instead of, model specs
-
-      before do
-        @overview = Event.select_for_overview
-      end
-
-      describe "events today" do
-        it "should include events that started before today and end after today" do
-          @overview[:today].should include @started_before_today_and_ends_after_today
-        end
-
-        it "should include events that started earlier today" do
-          @overview[:today].should include @started_midnight_and_continuing_after
-        end
-
-        it "should not include events that ended before today" do
-          @overview[:today].should_not include @started_and_ended_yesterday
-        end
-
-        it "should not include events that start tomorrow" do
-          @overview[:today].should_not include @starts_and_ends_tomorrow
-        end
-
-        it "should not include events that ended at midnight today" do
-          @overview[:today].should_not include @started_before_today_and_ends_at_midnight
-        end
-      end
-
-      describe "events tomorrow" do
-        it "should not include events that start after tomorrow" do
-          @overview[:tomorrow].should_not include @starts_after_tomorrow
-        end
-      end
-
-      describe "determining if we should show the more link" do
-        it "should provide :more item if there are events past the future cutoff" do
-          event = stub_model(Event)
-          Event.should_receive(:after_date).with(today + 2.weeks).and_return([event])
-
-          Event.select_for_overview[:more].should eq event
-        end
-
-        it "should set :more item if there are no events past the future cutoff" do
-          event = stub_model(Event)
-          Event.should_receive(:after_date).with(today + 2.weeks).and_return([event])
-
-          Event.select_for_overview[:more?].should be_blank
-        end
-      end
-    end
-
     describe "for future events" do
       before do
         @future_events = Event.future
