@@ -19,6 +19,15 @@ describe ApplicationHelper do
     end
   end
 
+  describe "#tag_links_for" do
+    it "renders tag links for the supplied model" do
+      event = FactoryGirl.create(:event, tag_list: %w(b a))
+      tag_links_for(event).should ==
+        %(<a href="/events/tag/a" class="p-category">a</a>, ) +
+        %(<a href="/events/tag/b" class="p-category">b</a>)
+    end
+  end
+
   describe "#helper.mobile_stylesheet_media" do
     def mobile_cookie(value=nil)
       cookie_name = ApplicationHelper::MOBILE_COOKIE_NAME
@@ -112,6 +121,18 @@ describe ApplicationHelper do
     it "should be blank if we can't ask git" do
       ApplicationHelper.should_receive(:`).with(/git/).and_raise(Errno::ENOENT)
       ApplicationHelper.source_code_version_raw.should == ""
+    end
+  end
+
+  describe "#datestamp" do
+    it "constructs a sentence describing the item's history" do
+      event = FactoryGirl.create(:event, created_at: "2010-01-01", updated_at: "2010-01-02")
+      event.create_source! title: "google", url: "http://google.com"
+      event.source.stub id: 1
+      datestamp(event).should == 
+        %(This item was imported from <a href="/sources/1">google</a> <br />) +
+        %(<strong>Friday, January 1, 2010 at midnight</strong> ) +
+        %(and last updated <br /><strong>Saturday, January 2, 2010 at midnight</strong>.)
     end
   end
 end

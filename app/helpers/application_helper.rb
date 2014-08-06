@@ -1,5 +1,6 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  include TimeRangeHelper
 
   # Returns HTML string of an event or venue description for display in a view.
   def format_description(string)
@@ -104,7 +105,7 @@ module ApplicationHelper
   end
 
   def tag_links_for(model)
-    model.tags.map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
+    model.tags.sort_by(&:name).map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
   end
 
   def tag_link(type, tag, link_class=nil)
@@ -115,6 +116,7 @@ module ApplicationHelper
 
     link_to escape_once(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
   end
+  private :tag_link
 
   def subnav_class_for(controller_name, action_name)
     return [

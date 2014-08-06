@@ -156,11 +156,9 @@ class SourceParser # :nodoc:
         return a
       end
 
-      if opts[:fallback].blank?
-        return nil
-      else
+      if opts[:fallback].present?
         a.title = opts[:fallback]
-        return a
+        a
       end
     end
 
@@ -177,7 +175,7 @@ class SourceParser # :nodoc:
       # Extract all properties, including non-standard ones, into an array of "KEY;meta-qualifier:value" strings
       vcard_lines = vcard.export_properties_to(StringIO.new(''))
 
-      return self.hash_from_vcard_lines(vcard_lines)
+      hash_from_vcard_lines(vcard_lines)
     end
 
     # Return hash parsed from VCARD lines.
@@ -185,7 +183,7 @@ class SourceParser # :nodoc:
     # Arguments:
     # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
     def self.hash_from_vcard_lines(vcard_lines)
-      return {}.tap do |vcard_hash|
+      {}.tap do |vcard_hash|
         # Turn a String-like object into an Enumerable.
         lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
         lines.each do |vcard_line|

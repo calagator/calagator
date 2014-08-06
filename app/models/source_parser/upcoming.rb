@@ -39,7 +39,7 @@ class SourceParser # :nodoc:
       begin
         data = Hash.from_xml(content)
         leaf = data['rsp']['event']
-      rescue Exception => e
+      rescue Exception
         return false
       end
 
@@ -74,7 +74,7 @@ class SourceParser # :nodoc:
       location.tags           = ["upcoming:venue=#{leaf['venue_id']}"]
       event.location          = location
 
-      return [event]
+      [event]
     end
   end
 end
