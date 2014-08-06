@@ -33,7 +33,7 @@ class SourceParser
       content.gsub!(/(class="event-title") class="vevent"/, '\1')
 
       something = hCalendar.find(:text => content)
-      return(something.is_a?(hCalendar) ? [something] : something)
+      something.is_a?(hCalendar) ? [something] : something
     end
 
     ABSTRACT_EVENT_TO_HCALENDAR_FIELD_MAP = {

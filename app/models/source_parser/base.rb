@@ -19,7 +19,7 @@ class SourceParser
     # Gets or sets the human-readable label for this parser.
     def self.label(value=nil)
       self._label = value if value
-      return self._label
+      self._label
     end
 
     # Gets or sets the applicable URL pattern for this parser.
@@ -31,16 +31,16 @@ class SourceParser
     #   url_pattern %r{^https?://facebook\.com/events/([^/]+)}
     def self.url_pattern(value=nil)
       self._url_pattern = value if value
-      return self._url_pattern
+      self._url_pattern
     end
 
     # Returns content from either the :content option or by reading a :url.
     def self.content_for(opts)
       content = opts[:content] || self.read_url(opts[:url])
       if content.respond_to?(:content_type) && ["application/atom+xml"].include?(content.content_type)
-        return CGI::unescapeHTML(content.to_str)
+        CGI::unescapeHTML(content.to_str)
       else
-        return content
+        content
       end
     end
 
@@ -56,15 +56,13 @@ class SourceParser
           request = Net::HTTP::Get.new(path_and_query)
           request.basic_auth(uri.user, uri.password)
           response = SourceParser::Base::http_response_for(http, request)
-          if response.code == "401"
-            raise SourceParser::HttpAuthenticationRequiredError.new
-          end
-          return response.body
+          raise SourceParser::HttpAuthenticationRequiredError.new if response.code == "401"
+          response.body
         else
-          return uri.read
+          uri.read
         end
       else
-        return open(url){|h| h.read}
+        open(url) { |h| h.read }
       end
     end
 
@@ -119,12 +117,10 @@ class SourceParser
 
       # Stop if API tells us there's an error.
       opts[:error] ||= 'error'
-      if error = data[opts[:error]]
-        raise SourceParser::NotFound, error
-      end
+      raise SourceParser::NotFound, error if error = data[opts[:error]]
 
       # Process the JSON data into AbstractEvents.
-      return yield(data, event_id)
+      yield(data, event_id)
     end
 
     # Wrapper for invoking a driver from another, e.g. if given a Plancast URL,
@@ -163,8 +159,6 @@ class SourceParser
         driver.to_abstract_events(opts.merge(
           :content => self.read_url(target.call(matcher)
         )))
-      else
-        return nil
       end
     end
   end

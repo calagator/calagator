@@ -47,7 +47,6 @@ class SourceParser # :nodoc:
     end
 
     def self.to_abstract_location(value, opts={})
-      value ||= {}
       if value.present?
         location = AbstractLocation.new
         location.title   = value['name']
@@ -57,11 +56,8 @@ class SourceParser # :nodoc:
         location.country = value['country']
         location.latitude = value['latitude']
         location.longitude = value['longitude']
-      else
-        location = nil
+        location
       end
-
-      return location
     end
   end
 end

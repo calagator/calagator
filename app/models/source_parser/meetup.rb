@@ -52,11 +52,8 @@ class SourceParser # :nodoc:
         location.country = value['country']
         location.telephone = value['phone']
         location.tags = ["meetup:venue=#{value['id']}"]
-      else
-        location = nil
+        location
       end
-
-      return location
     end
   end
 end
