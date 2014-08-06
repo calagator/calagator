@@ -58,5 +58,19 @@ describe VersionsController do
     it "should render the final content for a 'destroy'" do
       title_for(:destroy).should eq @final_title
     end
+
+    it "should render html" do
+      version_id = @event.versions.first.id
+      get :edit, id: version_id
+      response.should be_success
+      response.should render_template "events/edit"
+    end
+
+    it "should render html via xhr" do
+      version_id = @event.versions.first.id
+      xhr :get, :edit, id: version_id
+      response.should be_success
+      response.should render_template "events/_form"
+    end
   end
 end
