@@ -21,7 +21,7 @@ describe ApplicationHelper do
 
   describe "#tag_links_for" do
     it "renders tag links for the supplied model" do
-      event = FactoryGirl.create(:event, tag_list: %w(a b))
+      event = FactoryGirl.create(:event, tag_list: %w(b a))
       tag_links_for(event).should ==
         %(<a href="/events/tag/a" class="p-category">a</a>, ) +
         %(<a href="/events/tag/b" class="p-category">b</a>)

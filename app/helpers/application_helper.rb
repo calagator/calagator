@@ -105,7 +105,7 @@ module ApplicationHelper
   end
 
   def tag_links_for(model)
-    model.tags.map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
+    model.tags.sort_by(&:name).map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
   end
 
   def tag_link(type, tag, link_class=nil)
