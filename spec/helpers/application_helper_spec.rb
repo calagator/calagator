@@ -128,6 +128,7 @@ describe ApplicationHelper do
     it "constructs a sentence describing the item's history" do
       event = FactoryGirl.create(:event, created_at: "2010-01-01", updated_at: "2010-01-02")
       event.create_source! title: "google", url: "http://google.com"
+      event.source.stub id: 1
       datestamp(event).should == 
         %(This item was imported from <a href="/sources/1">google</a> <br />) +
         %(<strong>Friday, January 1, 2010 at midnight</strong> ) +
