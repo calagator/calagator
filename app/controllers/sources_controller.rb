@@ -59,37 +59,28 @@ class SourcesController < ApplicationController
     @sources = Source.listing
 
     respond_to do |format|
-      format.html { @sources = @sources.paginate(:page => params[:page], :per_page => params[:per_page]) }
-      format.xml  { render :xml => @sources }
+      format.html { @sources = @sources.paginate(page: params[:page], per_page: params[:per_page]) }
+      format.xml  { render xml: @sources }
     end
   end
 
   # GET /sources/1
   # GET /sources/1.xml
   def show
-    begin
-      @source = Source.find(params[:id], :include => [:events, :venues])
-    rescue ActiveRecord::RecordNotFound => e
-      flash[:failure] = e.to_s if params[:id] != "import"
-      return redirect_to(new_source_path)
-    end
-
+    @source = Source.find(params[:id], include: [:events, :venues])
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @source }
+      format.xml  { render xml: @source }
     end
+  rescue ActiveRecord::RecordNotFound => error
+    flash[:failure] = error.to_s if params[:id] != "import"
+    redirect_to new_source_path
   end
 
   # GET /sources/new
-  # GET /sources/new.xml
   def new
     @source = Source.new
     @source.url = params[:url] if params[:url].present?
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @source }
-    end
   end
 
   # GET /sources/1/edit
@@ -104,12 +95,11 @@ class SourcesController < ApplicationController
 
     respond_to do |format|
       if @source.save
-        flash[:notice] = 'Source was successfully created.'
-        format.html { redirect_to( source_path(@source) ) }
-        format.xml  { render :xml => @source, :status => :created, :location => @source }
+        format.html { redirect_to @source, notice: 'Source was successfully created.' }
+        format.xml  { render xml: @source, status: :created, location: @source }
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @source.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.xml  { render xml: @source.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -121,12 +111,11 @@ class SourcesController < ApplicationController
 
     respond_to do |format|
       if @source.update_attributes(params[:source])
-        flash[:notice] = 'Source was successfully updated.'
-        format.html { redirect_to( source_path(@source) ) }
+        format.html { redirect_to @source, notice: 'Source was successfully updated.' }
         format.xml  { head :ok }
       else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @source.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.xml  { render xml: @source.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -138,7 +127,7 @@ class SourcesController < ApplicationController
     @source.destroy
 
     respond_to do |format|
-      format.html { redirect_to(sources_url) }
+      format.html { redirect_to sources_url }
       format.xml  { head :ok }
     end
   end
