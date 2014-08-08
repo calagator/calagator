@@ -8,7 +8,7 @@ class SourcesController < ApplicationController
     @events = @importer.events
 
     respond_to do |format|
-      if @importer.valid? && @events && @events.size > 0
+      if @importer.events?
         # TODO move this to a view, it currently causes a CGI::Session::CookieStore::CookieOverflow if the flash gets too big when too many events are imported at once
         s = "<p>Imported #{@events.size} entries:</p><ul>"
         @events.each_with_index do |event, i|
