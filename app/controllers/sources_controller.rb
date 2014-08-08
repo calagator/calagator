@@ -3,16 +3,13 @@ class SourcesController < ApplicationController
   # POST /import.xml
   def import
     @importer = Source::Importer.new(params[:source])
-    @source = @importer.source
-    @events = @importer.events
-
     respond_to do |format|
-      if @importer.events?
+      if @importer.import
         format.html { redirect_to events_path, flash: { success: render_to_string } }
-        format.xml  { render xml: @source, events: @events }
+        format.xml  { render xml: @importer.source, events: @importer.events }
       else
-        format.html { render action: "new"; flash[:failure] = @importer.failure_message }
-        format.xml  { render xml: @source.errors, status: :unprocessable_entity }
+        format.html { redirect_to new_event_path(url: @importer.source.url), flash: { failure: @importer.failure_message } }
+        format.xml  { render xml: @importer.source.errors, status: :unprocessable_entity }
       end
     end
   end

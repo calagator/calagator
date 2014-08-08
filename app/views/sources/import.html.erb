@@ -1,10 +1,10 @@
-<p>Imported <%= @events.size %> entries:</p>
+<p>Imported <%= @importer.events.size %> entries:</p>
 <ul>
-  <% @events.take(5).each do |event| %>
+  <% @importer.events.take(5).each do |event| %>
     <li><%= link_to event.title, event_url(event) %></li>
   <% end %>
-  <% if @events.size > 5 %>
-    <li>And <%= @events.size - 5 %> other events.</li>
+  <% if @importer.events.size > 5 %>
+    <li>And <%= @importer.events.size - 5 %> other events.</li>
   <% end %>
 </ul>
 

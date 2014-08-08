@@ -36,7 +36,6 @@ describe SourcesController do
       render_views
 
       it "should save the source object when creating events" do
-
         @source.should_receive(:save!)
         post :import, :source => {:url => @source.url}
         flash[:success].should match /Imported/i
