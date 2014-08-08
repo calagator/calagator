@@ -3,30 +3,12 @@ class SourcesController < ApplicationController
   
   # Import sources
   def import
-    @source = Source.find_or_create_from(params[:source])
-    @events = nil # nil means events were never assigned, while [] means no events were found
-
-    valid = @source.valid?
-    if valid
-      begin
-        @events = @source.create_events!
-      rescue SourceParser::NotFound => e
-        @source.errors.add(:base, "No events found at remote site. Is the event identifier in the URL correct?")
-      rescue SourceParser::HttpAuthenticationRequiredError => e
-        @source.errors.add(:base, "Couldn't import events, remote site requires authentication.")
-      rescue OpenURI::HTTPError => e
-        @source.errors.add(:base, "Couldn't download events, remote site may be experiencing connectivity problems. ")
-      rescue Errno::EHOSTUNREACH => e
-        @source.errors.add(:base, "Couldn't connect to remote site.")
-      rescue SocketError => e
-        @source.errors.add(:base, "Couldn't find IP address for remote site. Is the URL correct?")
-      rescue Exception => e
-        @source.errors.add(:base, "Unknown error: #{e}")
-      end
-    end
+    @importer = Source::Importer.new(params[:source])
+    @source = @importer.source
+    @events = @importer.events
 
     respond_to do |format|
-      if valid && @events && @events.size > 0
+      if @importer.valid? && @events && @events.size > 0
         # TODO move this to a view, it currently causes a CGI::Session::CookieStore::CookieOverflow if the flash gets too big when too many events are imported at once
         s = "<p>Imported #{@events.size} entries:</p><ul>"
         @events.each_with_index do |event, i|
