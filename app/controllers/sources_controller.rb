@@ -1,7 +1,6 @@
 class SourcesController < ApplicationController
-  MAXIMUM_EVENTS_TO_DISPLAY_IN_FLASH = 5
-  
-  # Import sources
+  # POST /import
+  # POST /import.xml
   def import
     @importer = Source::Importer.new(params[:source])
     @source = @importer.source
@@ -9,24 +8,11 @@ class SourcesController < ApplicationController
 
     respond_to do |format|
       if @importer.events?
-        # TODO move this to a view, it currently causes a CGI::Session::CookieStore::CookieOverflow if the flash gets too big when too many events are imported at once
-        s = "<p>Imported #{@events.size} entries:</p><ul>"
-        @events.each_with_index do |event, i|
-          if i >= MAXIMUM_EVENTS_TO_DISPLAY_IN_FLASH
-            s << "<li>And #{@events.size - i} other events.</li>"
-            break
-          else
-            s << "<li>#{help.link_to(event.title, event_url(event))}</li>"
-          end
-        end
-        s << "</ul>"
-        flash[:success] = s
-
-        format.html { redirect_to(events_path) }
-        format.xml  { render :xml => @source, :events => @events }
+        format.html { redirect_to events_path, flash: { success: render_to_string } }
+        format.xml  { render xml: @source, events: @events }
       else
         format.html { render action: "new"; flash[:failure] = @importer.failure_message }
-        format.xml  { render :xml => @source.errors, :status => :unprocessable_entity }
+        format.xml  { render xml: @source.errors, status: :unprocessable_entity }
       end
     end
   end
