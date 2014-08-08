@@ -91,34 +91,29 @@ class SourcesController < ApplicationController
   # POST /sources
   # POST /sources.xml
   def create
-    @source = Source.new(params[:source])
-
-    respond_to do |format|
-      if @source.save
-        format.html { redirect_to @source, notice: 'Source was successfully created.' }
-        format.xml  { render xml: @source, status: :created, location: @source }
-      else
-        format.html { render action: "new" }
-        format.xml  { render xml: @source.errors, status: :unprocessable_entity }
-      end
-    end
+    @source = Source.new
+    create_or_update
   end
 
   # PUT /sources/1
   # PUT /sources/1.xml
   def update
     @source = Source.find(params[:id])
+    create_or_update
+  end
 
+  def create_or_update
     respond_to do |format|
       if @source.update_attributes(params[:source])
-        format.html { redirect_to @source, notice: 'Source was successfully updated.' }
-        format.xml  { head :ok }
+        format.html { redirect_to @source, notice: 'Source was successfully saved.' }
+        format.xml  { render xml: @source, status: :created, location: @source }
       else
-        format.html { render action: "edit" }
+        format.html { render action: @source.new_record? ? "new" : "edit" }
         format.xml  { render xml: @source.errors, status: :unprocessable_entity }
       end
     end
   end
+  private :create_or_update
 
   # DELETE /sources/1
   # DELETE /sources/1.xml

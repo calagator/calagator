@@ -300,12 +300,12 @@ describe SourcesController do
     describe "with successful save" do
 
       def do_post
-        @source.should_receive(:save).and_return(true)
+        @source.should_receive(:update_attributes).and_return(true)
         post :create, :source => {}
       end
 
       it "should create a new source" do
-        Source.should_receive(:new).with({}).and_return(@source)
+        Source.should_receive(:new).and_return(@source)
         do_post
       end
 
@@ -319,7 +319,8 @@ describe SourcesController do
     describe "with failed save" do
 
       def do_post
-        @source.should_receive(:save).and_return(false)
+        @source.should_receive(:update_attributes).and_return(false)
+        @source.stub(new_record?: true)
         post :create, :source => {}
       end
 
