@@ -25,11 +25,7 @@ class SourcesController < ApplicationController
         format.html { redirect_to(events_path) }
         format.xml  { render :xml => @source, :events => @events }
       else
-        flash[:failure] = @events.nil? \
-          ? "Unable to import: #{@source.errors.full_messages.to_sentence}" \
-          : "Unable to find any upcoming events to import from this source"
-
-        format.html { render :action => "new" }
+        format.html { render action: "new"; flash[:failure] = @importer.failure_message }
         format.xml  { render :xml => @source.errors, :status => :unprocessable_entity }
       end
     end

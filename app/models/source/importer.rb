@@ -29,6 +29,14 @@ class Source < ActiveRecord::Base
     def events?
       events.try(:any?)
     end
+
+    def failure_message
+      if events.nil?
+        "Unable to import: #{source.errors.full_messages.to_sentence}"
+      else
+        "Unable to find any upcoming events to import from this source"
+      end
+    end
   end
 end
 
