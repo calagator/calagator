@@ -32,10 +32,23 @@ describe SourcesController do
       assigns(:source).should be_a_new_record
     end
 
-    it "should save the source object when creating events" do
-      @source.should_receive(:save!)
-      post :import, :source => {:url => @source.url}
-      flash[:success].should match /Imported/i
+    describe "with render views" do
+      render_views
+
+      it "should save the source object when creating events" do
+        @source.should_receive(:save!)
+        post :import, :source => {:url => @source.url}
+        flash[:success].should match /Imported/i
+      end
+
+      it "should limit the number of created events to list in the flash" do
+        excess = 5
+        events = (1..(5+excess))\
+          .inject([]){|result,i| result << @event; result}
+        @source.should_receive(:to_events).and_return(events)
+        post :import, :source => {:url => @source.url}
+        flash[:success].should match /And #{excess} other events/si
+      end
     end
 
     it "should assign newly-created events to the source" do
@@ -48,14 +61,6 @@ describe SourcesController do
       post :import, :source => {:url => @source.url}
     end
 
-    it "should limit the number of created events to list in the flash" do
-      excess = 5
-      events = (1..(SourcesController::MAXIMUM_EVENTS_TO_DISPLAY_IN_FLASH+excess))\
-        .inject([]){|result,i| result << @event; result}
-      @source.should_receive(:to_events).and_return(events)
-      post :import, :source => {:url => @source.url}
-      flash[:success].should match /And #{excess} other events/si
-    end
 
     describe "is given problematic sources" do
       before do
@@ -300,12 +305,12 @@ describe SourcesController do
     describe "with successful save" do
 
       def do_post
-        @source.should_receive(:save).and_return(true)
+        @source.should_receive(:update_attributes).and_return(true)
         post :create, :source => {}
       end
 
       it "should create a new source" do
-        Source.should_receive(:new).with({}).and_return(@source)
+        Source.should_receive(:new).and_return(@source)
         do_post
       end
 
@@ -319,7 +324,8 @@ describe SourcesController do
     describe "with failed save" do
 
       def do_post
-        @source.should_receive(:save).and_return(false)
+        @source.should_receive(:update_attributes).and_return(false)
+        @source.stub(new_record?: true)
         post :create, :source => {}
       end
 
