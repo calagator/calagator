@@ -28,69 +28,6 @@ describe ApplicationHelper do
     end
   end
 
-  describe "#helper.mobile_stylesheet_media" do
-    def mobile_cookie(value=nil)
-      cookie_name = ApplicationHelper::MOBILE_COOKIE_NAME
-      if value
-        @request.cookies[cookie_name] = value
-      end
-      return @request.cookies[cookie_name]
-    end
-
-    before :each do
-      @request.cookies.delete(:mobile)
-    end
-
-    after :each do
-      @request.cookies.delete(:mobile)
-    end
-
-    it "should use default media if no overrides in params or cookies were specified" do
-      helper.mobile_stylesheet_media("hello").should eq "hello"
-    end
-
-    it "should force rendering of mobile site if given a param of '1' and save it as cookie" do
-      controller.params[:mobile] = "1"
-
-      helper.mobile_stylesheet_media("hello").should eq :all
-
-      mobile_cookie.should eq "1"
-    end
-
-    it "should force rendering of non-mobile site if given a param of '0' and save it as cookie" do
-      controller.params[:mobile] = "0"
-
-      helper.mobile_stylesheet_media("hello").should be_falsey
-
-      mobile_cookie.should eq "0"
-    end
-
-    it "should use default media if given a param of '' and clear :mobile cookie" do
-      mobile_cookie "1"
-      controller.params[:mobile] = "-1"
-
-      helper.mobile_stylesheet_media("hello").should eq "hello"
-
-      mobile_cookie.should be_nil
-    end
-
-    it "should use mobile rendering if cookie's mobile preference is set to '1'" do
-      mobile_cookie "1"
-
-      helper.mobile_stylesheet_media("hello").should eq :all
-
-      mobile_cookie.should eq "1"
-    end
-
-    it "should use non-mobile rendering if cookie's mobile preference is set to '0'" do
-      mobile_cookie "0"
-
-      helper.mobile_stylesheet_media("hello").should be_falsey
-
-      mobile_cookie.should eq "0"
-    end
-  end
-
   describe "#format_description" do
     it "should autolink" do
       helper.format_description("foo http://mysite.com/~user bar").should eq \
@@ -129,7 +66,7 @@ describe ApplicationHelper do
       event = FactoryGirl.create(:event, created_at: "2010-01-01", updated_at: "2010-01-02")
       event.create_source! title: "google", url: "http://google.com"
       event.source.stub id: 1
-      datestamp(event).should == 
+      datestamp(event).should ==
         %(This item was imported from <a href="/sources/1">google</a> <br />) +
         %(<strong>Friday, January 1, 2010 at midnight</strong> ) +
         %(and last updated <br /><strong>Saturday, January 2, 2010 at midnight</strong>.)
