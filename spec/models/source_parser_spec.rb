@@ -45,7 +45,6 @@ describe SourceParser, "when parsing events" do
     SourceParser.parsers.should eq [
       SourceParser::Plancast,
       SourceParser::Meetup,
-      SourceParser::Upcoming,
       SourceParser::Facebook,
       SourceParser::Ical,
       SourceParser::Hcal,
@@ -55,7 +54,6 @@ describe SourceParser, "when parsing events" do
 
   it "should use first successful parser's results" do
     events = [double(SourceParser::AbstractEvent)]
-    SourceParser::Upcoming.should_receive(:to_abstract_events).and_return(false)
     SourceParser::Ical.should_receive(:to_abstract_events).and_raise(NotImplementedError)
     SourceParser::Hcal.should_receive(:to_abstract_events).and_return(events)
     SourceParser::FakeParser.should_not_receive(:to_abstract_events)
@@ -215,7 +213,6 @@ describe SourceParser, "checking duplicates when importing" do
 
   describe "choosing parsers by matching URLs" do
     { "SourceParser::Plancast" => "http://plancast.com/p/3cos/indiewebcamp",
-      "SourceParser::Upcoming" => "http://upcoming.yahoo.com/event/6585499/OR/Portland/Caritas-GothicIndustrial-Karaoke/The-Red-Room/;_ylt=AtfkkSUv7.5QHcfMuDarPUGea80F;_ylu=X3oDMTFiM2c3NDlvBF9wAzEEY2IDcmFuZARwaWQDRS02NTg1NDk5BHBvcwMxBHNlYwNobWVwb3A-;_ylv=3",
       "SourceParser::Meetup"   => "http://www.meetup.com/pdxweb/events/23287271/" }.each do |parser_name, url|
 
       it "should only invoke the #{parser_name} parser when given #{url}" do

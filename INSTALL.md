@@ -86,8 +86,6 @@ API Keys<a name="api_keys"></a>
 
 The application uses a number of API keys to communicate with external services.
 
-* Yahoo! Upcoming: To import events from Upcoming, the application can use a public key, but for production use, you should really get and use your own API key. See the [config/secrets.yml.sample](config/secrets.yml.sample) file's `upcoming_api_key` section for details.
-
 * Google Maps: To use Google's geocoder, and to use Google to display maps, you must get an API key.  See [config/secrets.yml.sample](config/secrets.yml.sample) for details.
 
 Mapping
