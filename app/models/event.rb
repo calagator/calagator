@@ -215,7 +215,7 @@ class Event < ActiveRecord::Base
   #   ics1 = Event.to_ical(myevent)
   #   ics2 = Event.to_ical(myevents, :url_helper => lambda{|event| event_url(event)})
   def self.to_ical(events, opts={})
-    Event::IcalRenderer.new(events, opts).render
+    Event::IcalRenderer.render(events, opts)
   end
 
   def location

@@ -1,20 +1,13 @@
 class Event < ActiveRecord::Base
   class IcalRenderer
-    
-    attr_reader :events, :opts
-
-    def initialize(events, opts)
-      @events = Array(events)
-      @opts = opts
-    end
-
-    def render
+    def self.render(events, opts)
       icalendar = RiCal.Calendar do |calendar|
         calendar.prodid = "-//Calagator//EN"
 
-        events.each do |item|
+        Array(events).each do |item|
           calendar.event do |entry|
-            add_event(item, entry)
+            renderer = new(item, entry, opts)
+            renderer.add_event
           end
         end
       end
@@ -27,19 +20,25 @@ class Event < ActiveRecord::Base
         gsub(/\n/,"\r\n")
     end
 
-    private
+    attr_reader :item, :entry, :opts
 
-    def add_event(item, entry)
+    def initialize(item, entry, opts)
+      @item = item
+      @entry = entry
+      @opts = opts
+    end
+
+    def add_event
       entry.summary(item.title || 'Untitled Event')
       
-      desc = build_description(item)
+      desc = build_description
       entry.description(desc) unless desc.blank?
 
-      set_start_end(item, entry)
+      set_start_end
 
-      set_url(item, entry)
+      set_url
 
-      set_location(item, entry)
+      set_location
 
       entry.created       item.created_at if item.created_at
       entry.last_modified item.updated_at if item.updated_at
@@ -55,10 +54,12 @@ class Event < ActiveRecord::Base
       # Outlook 2003 will not import an .ics file unless it has DTSTAMP, UID, and METHOD
       # use created_at for DTSTAMP; if there's no created_at, use event.start_time;
       entry.dtstamp item.created_at || item.start_time
-      entry.uid     "#{opts[:url_helper].call(item)}" if opts[:url_helper]
+      entry.uid opts[:url_helper].call(item).to_s if opts[:url_helper]
     end
 
-    def build_description(item)
+    private
+
+    def build_description
       desc = ""
       if item.multiday?
         desc << "This event runs from #{TimeRange.new(item.start_time, item.end_time, :format => :text).to_s}."
@@ -71,7 +72,7 @@ class Event < ActiveRecord::Base
       desc
     end
 
-    def set_start_end(item, entry)
+    def set_start_end
       if item.multiday?
         entry.dtstart item.dates.first
         entry.dtend   item.dates.last + 1.day
@@ -81,13 +82,13 @@ class Event < ActiveRecord::Base
       end
     end
 
-    def set_url(item, entry)
+    def set_url
       if item.url.present?
         entry.url item.url
       end
     end
 
-    def set_location(item, entry)
+    def set_location
       if item.venue
         entry.location [item.venue_title, item.venue.full_address].compact.join(": ")
       end
