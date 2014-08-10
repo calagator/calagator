@@ -8,7 +8,7 @@ feature "Event Creation" do
 
     visit "/events/new"
     fill_in "Event Name", with: 'Something'
-    fill_in "Venue", with: "urban"
+    fill_in "venue_name", with: "urban"
 
     expect(page).to_not have_text("New Relic")
     expect(page).to have_text("Urban Airship")
