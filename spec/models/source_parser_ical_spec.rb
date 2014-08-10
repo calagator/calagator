@@ -38,38 +38,6 @@ describe SourceParser::Ical, "when parsing events and their locations" do
 
 end
 
-describe SourceParser::Ical, "when parsing multiple items in an Upcoming feed" do
-  before(:each) do
-    SourceParser::Base.should_receive(:read_url).and_return(read_sample('ical_upcoming_many.ics'))
-    @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
-  end
-
-  it "should find multiple events" do
-    @events.size.should eq 20
-  end
-
-  it "should find venues for events" do
-    @events.each do |event|
-      event.location.title.should_not be_nil
-    end
-  end
-
-  it "should match each event with its venue" do
-    event_titles_and_street_addresses = [
-      ["Substance Summit", "1945 NW Quimby"],
-      ["Mobile Love, Android Style #4", "915 SE Hawthorne Boulevard"],
-      ["SEMpdx Networking Event", "65 SW Yamhill St."],
-    ]
-
-    # Make sure each of the above events has the expected street address
-    event_titles_and_street_addresses.each do |event_title, street_address|
-      @events.find{|event|
-        event.title == event_title && event.location.street_address == street_address
-      }.should_not be_nil
-    end
-  end
-end
-
 describe SourceParser::Ical, "when parsing multiple items in an Eventful feed" do
   before(:each) do
     SourceParser::Base.should_receive(:read_url).and_return(read_sample('ical_eventful_many.ics'))
