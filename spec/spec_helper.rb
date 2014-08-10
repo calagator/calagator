@@ -1,8 +1,7 @@
 require 'factory_girl'
-
-RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
-end
+# require 'capybara/rspec'
+# require 'capybara/webkit/matchers'
+# Capybara.javascript_driver = :webkit
 
 
 unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
@@ -34,6 +33,18 @@ require "rails_helper"
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
+  config.use_transactional_fixtures = false
+  config.before(:each) do |example|
+    DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
+    DatabaseCleaner.start
+  end
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end
+
+  # config.include(Capybara::Webkit::RspecMatchers, :type => :feature)
+
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
   # `:focus` metadata. When nothing is tagged with `:focus`, all examples
