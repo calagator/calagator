@@ -23,14 +23,16 @@ body {
   clear: both;
 }
 
+@import url(http://fonts.googleapis.com/css?family=Sanchez);
 
-#project_title {
-  background: image-url("head_calagator.gif") no-repeat;
+#global_header #project_title {
+  font-family: Sanchez;
+  color: #445544;
+  font-size: 29px;
+  line-height: 31px;
   height: 31px;
   left: 40px;
-  overflow: hidden;
   position: absolute;
-  text-indent: -999px;
   top: 25px;
   width: 135px;
 }
