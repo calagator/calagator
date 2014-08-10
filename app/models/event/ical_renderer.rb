@@ -30,9 +30,8 @@ class Event < ActiveRecord::Base
 
     def add_event
       entry.summary(item.title || 'Untitled Event')
-      
-      desc = build_description
-      entry.description(desc) unless desc.blank?
+
+      entry.description(description) unless description.blank?
 
       set_start_end
 
@@ -59,7 +58,8 @@ class Event < ActiveRecord::Base
 
     private
 
-    def build_description
+    def description
+      return @desc if defined?(@desc) # memoize
       desc = ""
       if item.multiday?
         desc << "This event runs from #{TimeRange.new(item.start_time, item.end_time, :format => :text).to_s}."
@@ -69,7 +69,7 @@ class Event < ActiveRecord::Base
       desc << Loofah::Helpers::strip_tags(item.description) if item.description.present?
       desc << "\n\nTags: #{item.tag_list}" unless item.tag_list.blank?
       desc << "\n\nImported from: #{opts[:url_helper].call(item)}" if opts[:url_helper]
-      desc
+      @desc = desc
     end
 
     def set_start_end
