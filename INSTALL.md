@@ -111,17 +111,21 @@ This optional search engine uses the Sunspot gem. This option requires additiona
 
 To use Sunspot, you will need to [install Java 1.6.x](http://www.java.com/getjava), a programming language used to run the search service.
 
-You can start the Solr search service with:
+You can start the Solr search service for local development with:
 
-    bundle exec rake RAILS_ENV=production sunspot:solr:start
+    bundle exec rake sunspot:solr:start
 
 You will then need to initially populate your records by running:
 
-    bundle exec rake RAILS_ENV=production sunspot:reindex:calagator
+    bundle exec rake sunspot:reindex:calagator
 
 You can stop the Solr search service with:
 
-    bundle exec rake RAILS_ENV=production sunspot:solr:stop
+    bundle exec rake sunspot:solr:stop
+
+Calagator has tests that verify functionality against Solr automatically, if the tests find the service running; you'll see pending tests if Solr isn't found. To start a test instance of Solr, do:
+
+    bundle exec rake RAILS_ENV=test sunspot:solr:start
 
 You should set up a firewall to protect the ports utilized by the Solr search service. These ports are described in the [config/sunspot.yml](config/sunspot.yml) file.
 
