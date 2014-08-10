@@ -88,6 +88,8 @@ The application uses a number of API keys to communicate with external services.
 
 * Google Maps: To use Google's geocoder, and to use Google to display maps, you must get an API key.  See [config/secrets.yml.sample](config/secrets.yml.sample) for details.
 
+* Meetup.com: To import events from Meetup.com, you need an API key. See [config/secrets.yml.sample](config/secrets.yml.sample) for details.
+
 Mapping
 -------
 
