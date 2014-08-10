@@ -29,15 +29,13 @@ class Event < ActiveRecord::Base
     end
 
     def add_event
-      entry.summary(item.title || 'Untitled Event')
+      entry.summary item.title || 'Untitled Event'
 
-      entry.description(description) unless description.blank?
-
-      set_start_end
-
-      set_url
-
-      set_location
+      entry.description description unless description.blank?
+      entry.url item.url if item.url.present?
+      entry.location location if location
+      entry.dtstart start_time
+      entry.dtend end_time
 
       entry.created       item.created_at if item.created_at
       entry.last_modified item.updated_at if item.updated_at
@@ -72,27 +70,24 @@ class Event < ActiveRecord::Base
       @desc = desc
     end
 
-    def set_start_end
+    def location
+      [item.venue_title, item.venue.full_address].compact.join(": ") if item.venue
+    end
+
+    def start_time
       if item.multiday?
-        entry.dtstart item.dates.first
-        entry.dtend   item.dates.last + 1.day
+        item.dates.first
       else
-        entry.dtstart item.start_time
-        entry.dtend   item.end_time || item.start_time + 1.hour
+        item.start_time 
       end
     end
 
-    def set_url
-      if item.url.present?
-        entry.url item.url
+    def end_time
+      if item.multiday?
+        item.dates.last + 1.day 
+      else
+        item.end_time || item.start_time + 1.hour
       end
     end
-
-    def set_location
-      if item.venue
-        entry.location [item.venue_title, item.venue.full_address].compact.join(": ")
-      end
-    end
-
   end
 end
