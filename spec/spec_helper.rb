@@ -1,3 +1,10 @@
+require 'factory_girl'
+
+RSpec.configure do |config|
+  config.include FactoryGirl::Syntax::Methods
+end
+
+
 unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
   require 'simplecov'
   require 'coveralls'
