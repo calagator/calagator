@@ -32,21 +32,17 @@ describe EventsHelper do
     end
   end
 
-  # TODO Do we need a helper to return 'Today' and 'Tomorrow' at all? See app/helpers/events_helper.rb #today_tomorrow_or_weekday
+  describe "#today_tomorrow_or_weekday" do
+    it "should display day of the week" do
+      event = Event.new start_time: "2010-01-01"
+      helper.today_tomorrow_or_weekday(event).should == "Friday"
+    end
 
-=begin
-  it "should display today as 'Today'" do
-    @event = Event.new
-    @event.start_time = Time.now
-    helper.today_tomorrow_or_weekday(@event).should eq 'Today'
+    it "should display tomorrow as 'Tomorrow'" do
+      event = Event.new start_time: "2010-01-01", end_time: 1.day.from_now
+      helper.today_tomorrow_or_weekday(event).should == "Started Friday"
+    end
   end
-
-  it "should display tomorrow as 'Tomorrow'" do
-    @event = Event.new
-    @event.start_time = Time.now+1.days
-    helper.today_tomorrow_or_weekday(@event).should eq 'Tomorrow'
-  end
-=end
 
   describe "google_event_export_link" do
     def escape(string)
@@ -191,6 +187,17 @@ describe EventsHelper do
 
     it "should generate a tag link" do
       method(:tag => "mytag").should eq "http://test.host/events/search.atom?tag=mytag"
+    end
+  end
+
+  describe "#tweet_text" do
+    it "contructs a tweet" do
+      event = FactoryGirl.create(:event,
+        title: "hip and/or hop",
+        start_time: "2010-01-01 12:00:00",
+        end_time: "2010-01-02 12:00:00")
+      event.venue = FactoryGirl.create(:venue, title: "holocene")
+      tweet_text(event).should == "hip and/or hop - 12:00PM 01.01.2010 @ holocene"
     end
   end
 
