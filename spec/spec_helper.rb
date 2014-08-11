@@ -1,8 +1,4 @@
 require 'factory_girl'
-# require 'capybara/rspec'
-# require 'capybara/webkit/matchers'
-# Capybara.javascript_driver = :webkit
-
 
 unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
   require 'simplecov'
