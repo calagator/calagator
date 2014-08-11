@@ -80,15 +80,15 @@
                     </ul>
                 </div>
                 <xsl:if test="response/lst[@name='index']">
-                    <h2><a name="index"/>Index Statistics</h2>
+                    <h2 id="index"/>Index Statistics</h2>
                     <xsl:apply-templates select="response/lst[@name='index']"/>
                 </xsl:if>
                 <xsl:if test="response/lst[@name='fields']">
-                    <h2><a name="fields"/>Field Statistics</h2>
+                    <h2 id="fields"/>Field Statistics</h2>
                     <xsl:apply-templates select="response/lst[@name='fields']"/>
                 </xsl:if>
                 <xsl:if test="response/lst[@name='doc']">
-                    <h2><a name="doc"/>Document statistics</h2>
+                    <h2 id="doc"/>Document statistics</h2>
                     <xsl:apply-templates select="response/lst[@name='doc']"/>
                 </xsl:if>
             </body>
