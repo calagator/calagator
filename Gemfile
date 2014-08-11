@@ -46,7 +46,7 @@ gem 'geokit', '1.6.5'
 gem 'htmlentities', '4.3.1'
 gem 'paper_trail', '2.7.2'
 gem 'ri_cal', '0.8.8'
-gem 'rubyzip', '0.9.9', :require =>  'zip/zip'
+gem 'rubyzip'
 gem 'will_paginate', '3.0.5', require: ['will_paginate', 'will_paginate/array']
 gem 'httparty', '0.11.0'
 gem 'loofah', '1.2.1'
@@ -82,16 +82,19 @@ end
 group :development, :test do
   gem 'better_errors', '1.1.0'
   gem 'binding_of_caller', '0.7.2'
-  gem 'rspec-activemodel-mocks', '1.0.1'
-  gem 'rspec-its', '1.0.1'
-  gem 'rspec-rails', '3.0.1'
-  gem 'capybara', '2.3.0'
-  gem 'factory_girl_rails', '4.4.1'
-  gem 'timecop', '0.7.1'
+  gem 'rspec-activemodel-mocks'
+  gem 'rspec-its'
+  gem 'rspec-rails', '~> 3'
+  gem 'capybara'
+  gem 'factory_girl_rails'
+  gem 'timecop', '~> 0.7'
   gem 'spring', '1.1.3'
   gem 'spring-commands-rspec', '1.0.2'
-  gem 'database_cleaner', '1.3.0'
+  gem 'database_cleaner'
   gem 'coveralls', '0.7.0', require: false
+  gem "selenium-webdriver"
+
+  # gem 'capybara-webkit'
 
   # Do not install these interactive libraries onto the continuous integration server.
   unless ENV['CI'] || ENV['TRAVIS']
