@@ -9,6 +9,8 @@ feature 'Event Creation' do
     fill_in 'event_title', with: 'A Ruby meeting'
     fill_in 'venue_name',  with: 'urban'
 
+    wait_for_ajax
+
     expect(page).to have_text('Urban Airship')
     expect(page).to have_no_text('New Relic')
   end
