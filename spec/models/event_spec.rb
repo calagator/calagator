@@ -107,7 +107,7 @@ describe Event do
     end
 
     it "should parse an Event into an iCalendar" do
-      actual_ical = @basic_event.to_ical
+      actual_ical = Event.to_ical(@basic_event)
 
       abstract_events = SourceParser.to_abstract_events(:content => actual_ical, :skip_old => false)
 
@@ -123,7 +123,7 @@ describe Event do
     it "should parse an Event into an iCalendar without a URL and generate it" do
       generated_url = "http://foo.bar/"
       @basic_event.url = nil
-      actual_ical = @basic_event.to_ical(:url_helper => lambda{|event| generated_url})
+      actual_ical = Event.to_ical(@basic_event, :url_helper => lambda{|event| generated_url})
 
       abstract_events = SourceParser.to_abstract_events(:content => actual_ical, :skip_old => false)
 
@@ -900,7 +900,7 @@ describe Event do
 
     describe "- the headers" do
       before do
-        @data = FactoryGirl.build(:event).to_ical
+        @data = Event.to_ical(FactoryGirl.build(:event))
       end
 
       it "should include the calendar name" do
