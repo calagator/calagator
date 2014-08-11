@@ -17,7 +17,7 @@
       
       // Initialize autocompletion for venues
       $("input.autocomplete").attr('autocomplete', 'off').autocomplete({
-        source: "/venues.js",
+        source: "/venues/autocomplete.json",
         minLength: 2,
         search: function(event, ui) {
           //$("#event_venue_loading").show();
