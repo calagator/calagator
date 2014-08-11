@@ -23,13 +23,14 @@ class Venue < ActiveRecord::Base
       end
 
       def keywords
-        query_conditions = query.split.inject(@scope) do |query_conditions, keyword|
-          like = "%#{keyword.downcase}%"
-          query_conditions
-            .where(['LOWER(title) LIKE ?', like])
-            .where(['LOWER(description) LIKE ?', like])
-            .where(['LOWER(tags.name) = ?', keyword])
+        query_conditions = @scope
+          .where(['LOWER(title) LIKE ?', "%#{query.downcase}%"])
+          .where(['LOWER(description) LIKE ?', "%#{query.downcase}%"])
+
+        query_conditions = query.split.inject(query_conditions) do |query_conditions, keyword|
+          query_conditions.where(['LOWER(tags.name) = ?', keyword])
         end
+
         @scope = @scope.where(query_conditions.where_values.join(' OR '))
         self
       end

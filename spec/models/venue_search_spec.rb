@@ -60,6 +60,19 @@ describe Venue do
       2.times { FactoryGirl.create(:venue) }
       Venue.search("", limit: 1).count.should == 1
     end
+
+    it "does not search multiple terms" do
+      venue2 = FactoryGirl.create(:venue, title: "zomg")
+      venue1 = FactoryGirl.create(:venue, title: "omg")
+      Venue.search("zomg omg").should == []
+    end
+
+    it "ANDs terms together to narrow search results" do
+      venue2 = FactoryGirl.create(:venue, title: "zomg omg")
+      venue1 = FactoryGirl.create(:venue, title: "zomg cats")
+      Venue.search("zomg omg").should == [venue2]
+    end
+
   end
 
   describe "Sql" do

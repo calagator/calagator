@@ -26,11 +26,11 @@ describe Event do
       Event.search("omg").should == [event2]
     end
 
-    it "searches multiple terms" do
+    it "does not search multiple terms" do
       event1 = FactoryGirl.create(:event, title: "wtf")
       event2 = FactoryGirl.create(:event, title: "zomg!")
       event3 = FactoryGirl.create(:event, title: "bbq")
-      Event.search("wtf zomg").should =~ [event1, event2]
+      Event.search("wtf zomg").should =~ []
     end
 
     it "searches case-insensitively" do
@@ -75,6 +75,13 @@ describe Event do
       event3 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.from_now)
       event4 = FactoryGirl.create(:event, title: "omg", start_time: 1.year.from_now)
       Event.search("omg", limit: 1).to_a.count.should == 2
+    end
+
+    it "ANDs terms together to narrow search results" do
+      event1 = FactoryGirl.create(:event, title: "women who hack")
+      event2 = FactoryGirl.create(:event, title: "women who bike")
+      event3 = FactoryGirl.create(:event, title: "omg")
+      Event.search("women who hack").should == [event1]
     end
   end
 

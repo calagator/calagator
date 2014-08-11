@@ -61,7 +61,7 @@ class Event < ActiveRecord::Base
 
       def search(current)
         Event.solr_search do
-          keywords query, minimum_match: 1
+          keywords query
           order_by *order
           order_by :start_time, :desc
           with :duplicate, false

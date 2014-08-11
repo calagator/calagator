@@ -23,6 +23,7 @@ These people have contributed to Calagator's design and implementation:
   * Daniel Etra
   * Daniel Hedlund
   * Don Park
+  * Donald Plummer
   * Ed Borasky
   * Gabrielle Roth
   * Igal Koshevoy
