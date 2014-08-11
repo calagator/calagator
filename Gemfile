@@ -85,16 +85,14 @@ group :development, :test do
   gem 'rspec-activemodel-mocks'
   gem 'rspec-its'
   gem 'rspec-rails', '~> 3'
-  gem 'capybara'
+  gem 'capybara', '2.3.0'
   gem 'factory_girl_rails'
   gem 'timecop', '~> 0.7'
   gem 'spring', '1.1.3'
   gem 'spring-commands-rspec', '1.0.2'
   gem 'database_cleaner'
   gem 'coveralls', '0.7.0', require: false
-  gem "selenium-webdriver"
-
-  # gem 'capybara-webkit'
+  gem 'poltergeist', '1.5.1'
 
   # Do not install these interactive libraries onto the continuous integration server.
   unless ENV['CI'] || ENV['TRAVIS']

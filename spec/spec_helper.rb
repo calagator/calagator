@@ -39,6 +39,9 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
+  require 'capybara/poltergeist'
+  Capybara.javascript_driver = :poltergeist
+
   # config.include(Capybara::Webkit::RspecMatchers, :type => :feature)
 
   # These two settings work together to allow you to limit a spec run
