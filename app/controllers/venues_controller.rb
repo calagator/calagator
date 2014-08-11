@@ -23,7 +23,7 @@ class VenuesController < ApplicationController
     @venues = Venue
       .non_duplicates
       .in_business
-      .where(["title LIKE ?", "%#{params[:term]}%"])
+      .where(["LOWER(title) LIKE ?", "%#{params[:term]}%".downcase])
       .order('LOWER(title)')
 
     respond_to do |format|
