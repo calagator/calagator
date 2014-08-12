@@ -25,18 +25,6 @@ describe Event do
     it "should be ongoing if it began before today but ends today or later" do
       FactoryGirl.build(:event, :start_time => today - 1.day, :end_time => today + 1.day).should be_ongoing
     end
-
-    it "should be considered a multi-day event if it spans multiple days" do
-      FactoryGirl.build(:event, :start_time => today - 1.day, :end_time => now + 1.day).should be_multiday
-    end
-
-    it "should be considered a multi-day event if it crosses a day boundry and is longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
-      Event.new(:start_time => today - 1.second, :end_time => today + Event::MIN_MULTIDAY_DURATION).should be_multiday
-    end
-
-    it "should not be considered a multi-day event if it crosses a day boundry, but is not longer than the minimum duration (#{Event::MIN_MULTIDAY_DURATION.inspect})" do
-      Event.new(:start_time => today - 1.second, :end_time => today - 1.second + Event::MIN_MULTIDAY_DURATION).should_not be_multiday
-    end
   end
 
   describe "dealing with tags" do

@@ -62,7 +62,7 @@ class Event < ActiveRecord::Base
     end
 
     def description_range
-      return unless event.multiday?
+      return unless multiday?
       time_range = TimeRange.new(event.start_time, event.end_time, format: :text)
       "This event runs from #{time_range}.\n\nDescription:\n"
     end
@@ -88,7 +88,7 @@ class Event < ActiveRecord::Base
     end
 
     def dtstart
-      if event.multiday?
+      if multiday?
         event.dates.first
       else
         event.start_time
@@ -96,7 +96,7 @@ class Event < ActiveRecord::Base
     end
 
     def dtend
-      if event.multiday?
+      if multiday?
         event.dates.last + 1.day
       else
         event.end_time || event.start_time + 1.hour
@@ -129,6 +129,11 @@ class Event < ActiveRecord::Base
 
     def uid
       imported_from
+    end
+
+    # Treat any event with a duration of at least 20 hours as a multiday event.
+    def multiday?
+      event.dates.size > 1 && event.duration.seconds > 20.hours
     end
   end
 end
