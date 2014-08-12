@@ -2,7 +2,7 @@ Calagator
 =========
 
 
-Setup<a name="setup"></a>
+Setup
 -----
 
 You will need to:
@@ -65,13 +65,13 @@ To run Calagator in `production` mode, which runs more quickly, but doesn't relo
 The Calagator.org site runs on [Ubuntu Linux](http://ubuntu.com/), [MRI Ruby](http://ruby-lang.org/) and [Phusion Passenger](https://www.phusionpassenger.com/).
 
 
-Customization<a name="customization"></a>
+Customization
 -------------
 
 If you want to customize your Calagator instance, do NOT just start modifying files in `app/`, `public/` and `themes/default`. Please read the instructions in `themes/README.txt` for how to use the theming system.
 
 
-Security and secrets.yml<a name="security"></a>
+Security and secrets.yml
 ------------------------
 
 This application runs with insecure settings by default to make it easy to get started. These default settings include publicly-known cryptography keys that can allow attackers to gain admin privileges to your application. You should create a `config/secrets.yml` file with your secret settings if you intend to run this application on a server that can be accessed by untrusted users. Read the [config/secrets.yml.sample](config/secrets.yml.sample) file for details.
@@ -81,7 +81,7 @@ Spam Blacklist
 
 A default set of blacklist words is provided in `config/blacklist.txt`. You can create your own by adding a config/blacklist-local.txt file with one regular expression per line (see [config/blacklist.txt](config/blacklist.txt) for examples).
 
-API Keys<a name="api_keys"></a>
+API Keys
 --------
 
 The application uses a number of API keys to communicate with external services.
@@ -96,7 +96,7 @@ Mapping
 Calagator can use a number of map tile providers when displaying maps. This can be configured in [config/secrets.yml](config/secrets.yml).
 
 
-Search engine<a name="search_engine"></a>
+Search engine
 -------------
 
 You can specify the search engine to use in your [config/secrets.yml](config/secrets.yml) file:
