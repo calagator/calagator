@@ -51,18 +51,32 @@ class Event < ActiveRecord::Base
     end
 
     def description
-      desc = ""
+      parts = [
+        description_range,
+        description_description,
+        description_tags,
+        description_imported_from,
+      ].compact
 
-      if event.multiday?
-        time_range = TimeRange.new(event.start_time, event.end_time, format: :text)
-        desc << "This event runs from #{time_range}.\n\n Description:\n"
-      end
+      parts.join if parts.any?
+    end
 
-      desc << Loofah::Helpers.strip_tags(event.description) if event.description.present?
-      desc << "\n\nTags: #{event.tag_list}" unless event.tag_list.blank?
-      desc << "\n\nImported from: #{imported_from}" if imported_from
+    def description_range
+      return unless event.multiday?
+      time_range = TimeRange.new(event.start_time, event.end_time, format: :text)
+      "This event runs from #{time_range}.\n\nDescription:\n"
+    end
 
-      desc
+    def description_description
+      Loofah::Helpers.strip_tags(event.description) if event.description.present?
+    end
+
+    def description_tags
+      "\n\nTags: #{event.tag_list}" if event.tag_list.present?
+    end
+
+    def description_imported_from
+      "\n\nImported from: #{imported_from}" if imported_from
     end
 
     def url
