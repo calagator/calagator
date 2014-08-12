@@ -18,21 +18,20 @@ class Event < ActiveRecord::Base
 
         Array(events).each do |event|
           calendar.event do |entry|
-            new(event, entry, opts).add_event
+            new(event, opts).add_event_to(entry)
           end
         end
       end
     end
 
-    attr_reader :event, :entry, :imported_from
+    attr_reader :event, :imported_from
 
-    def initialize(event, entry, opts)
+    def initialize(event, opts)
       @event = event
-      @entry = entry
       @imported_from = opts[:url_helper].call(event).to_s if opts[:url_helper]
     end
 
-    def add_event
+    def add_event_to(entry)
       entry.summary summary
       entry.description description if description
       entry.url url if url
