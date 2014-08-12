@@ -23,12 +23,6 @@
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
-  # Treat any event with a duration of at least this many hours as a multiday
-  # event. This constant is used by the #multiday? method and is primarily
-  # meant to make iCalendar exports display this event as covering a range of
-  # days, rather than hours.
-  MIN_MULTIDAY_DURATION = 20.hours
-
   has_paper_trail
   acts_as_taggable
 
@@ -285,10 +279,6 @@ class Event < ActiveRecord::Base
   # Did this event start before today but ends today or later?
   def ongoing?
     start_time < Date.today.to_time && end_time && end_time >= Date.today.to_time
-  end
-
-  def multiday?
-    ( dates.size > 1 ) && ( duration.seconds > MIN_MULTIDAY_DURATION )
   end
 
   def duration
