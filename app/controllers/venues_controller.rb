@@ -19,6 +19,18 @@ class VenuesController < ApplicationController
     end
   end
 
+  def autocomplete
+    @venues = Venue
+      .non_duplicates
+      .in_business
+      .where(["LOWER(title) LIKE ?", "%#{params[:term]}%".downcase])
+      .order('LOWER(title)')
+
+    respond_to do |format|
+      format.json { render :json => @venues, :callback => params[:callback] }
+    end
+  end
+
   # GET /venues/map
   def map
     @venues = Venue.non_duplicates.in_business

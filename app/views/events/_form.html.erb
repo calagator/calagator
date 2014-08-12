@@ -17,7 +17,7 @@
       
       // Initialize autocompletion for venues
       $("input.autocomplete").attr('autocomplete', 'off').autocomplete({
-        source: "/venues.js",
+        source: "/venues/autocomplete.json",
         minLength: 2,
         search: function(event, ui) {
           //$("#event_venue_loading").show();
@@ -89,7 +89,7 @@
     <%= f.input :title, :label => "Event Name" %>
     <% focus_on '#event_title' %>
     <li class="string input required stringish" id="event_venue_title_input">
-      <%= f.label :venue_id, "Venue", :class => 'label' %>
+      <%= label_tag :venue_name, "Venue", :class => 'label' %>
       <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !event.venue.nil? ? event.venue.title : params[:venue_name] %>
       <%= hidden_field(:event, :venue_id, :value => (!event.venue.nil? ? event.venue.id : params[:event_venue_id])) %>
       <%= image_tag "spinner.gif", :id=> "event_venue_loading", :style => "display: none; margin-left: 0.5em;" %>
