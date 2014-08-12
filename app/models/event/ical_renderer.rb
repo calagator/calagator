@@ -32,29 +32,25 @@ class Event < ActiveRecord::Base
     end
 
     def add_event_to(entry)
-      entry.summary summary
-      entry.description description if description
-      entry.url url if url
-      entry.location location if location
-      entry.dtstart dtstart
-      entry.dtend dtend
-      entry.created created if created
-      entry.last_modified last_modified if last_modified
-      entry.sequence sequence
-      entry.dtstamp dtstamp
-      entry.uid uid if uid
+      fields.each do |field|
+        value = send(field)              # value = summary
+        entry.send field, value if value # entry.summary summary if summary
+      end
     end
 
     private
+
+    def fields
+      %w(summary description url location dtstart dtend created last_modified sequence dtstamp uid)
+    end
 
     def summary
       event.title || 'Untitled Event'
     end
 
     def description
-      return @desc if defined?(@desc) # memoize
-
       desc = ""
+
       if event.multiday?
         time_range = TimeRange.new(event.start_time, event.end_time, format: :text)
         desc << "This event runs from #{time_range}.\n\n Description:\n"
@@ -64,7 +60,7 @@ class Event < ActiveRecord::Base
       desc << "\n\nTags: #{event.tag_list}" unless event.tag_list.blank?
       desc << "\n\nImported from: #{imported_from}" if imported_from
 
-      @desc = desc.present? ? desc : nil
+      desc
     end
 
     def url
