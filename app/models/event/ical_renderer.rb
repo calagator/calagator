@@ -1,18 +1,12 @@
 class Event < ActiveRecord::Base
   class IcalRenderer
     def self.render(events, opts)
-      icalendar = build_icalendar(events, opts)
-
-      output = icalendar.export
-
-      # add the calendar name
-      output.sub!(/(CALSCALE:\w+)/i, "\\1\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH")
-
-      # normalize line-endings to DOS CF-LF.
-      output.gsub!(/\r?\n/,"\r\n")
+      output = render_icalendar(events, opts)
+      output = add_name(output)
+      output = normalize_line_endings(output)
     end
 
-    def self.build_icalendar(events, opts)
+    def self.render_icalendar(events, opts)
       RiCal.Calendar do |calendar|
         calendar.prodid = "-//Calagator//EN"
 
@@ -21,7 +15,15 @@ class Event < ActiveRecord::Base
             new(event, opts).add_event_to(entry)
           end
         end
-      end
+      end.export
+    end
+
+    def self.add_name(output)
+      output.sub(/(CALSCALE:\w+)/i, "\\1\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH")
+    end
+
+    def self.normalize_line_endings(output)
+      output.gsub(/\r?\n/,"\r\n")
     end
 
     attr_reader :event, :imported_from
