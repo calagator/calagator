@@ -5,16 +5,13 @@
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <title>Oops! Your change was rejected! Confused Alligator got a 422 error</title>
+  <title>Oops! Change rejected! Confused Alligator got a 422 error</title>
   <style type="text/css">
     body { background-color: #fff; color: #666; text-align: center; font-family: arial, sans-serif; }
     div.dialog {
       width: 30em;
       padding: 0 4em;
       margin: 4em auto 0 auto;
-      border: 1px solid #ccc;
-      border-right-color: #999;
-      border-bottom-color: #999;
     }
     h1 { font-size: 200%; color: #f00; }
     h2 { font-size: 150%; color: #f00; }
@@ -29,10 +26,13 @@
 <body>
   <!-- This file lives in public/422.html -->
   <div class="dialog">
-    <h1>Oops! Your change was rejected!</h1>
-    <h2>Confused Alligator got a 500 error</h2>
+    <h1>Oops! Change rejected!</h1>
+    <h2>Confused Alligator got a 422 error</h2>
     <img src="http://i.imgur.com/MjH9UUQ.png" />
-    <p>What have you done to make Confused Alligator so confused?!?</p>
+    <p>What did you submit to make Confused Alligator so confused?!?</p>
+    <script>
+      document.write('<a href="' + document.referrer + '">Back to Safety</a>');
+    </script>
   </div>
 </body>
 </html>

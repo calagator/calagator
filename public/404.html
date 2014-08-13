@@ -12,9 +12,6 @@
       width: 30em;
       padding: 0 4em;
       margin: 4em auto 0 auto;
-      border: 1px solid #ccc;
-      border-right-color: #999;
-      border-bottom-color: #999;
     }
     h1 { font-size: 200%; color: #f00; }
     h2 { font-size: 150%; color: #f00; }
@@ -33,6 +30,9 @@
     <h2>Confused Alligator got a 404 error</h2>
     <img src="http://i.imgur.com/MjH9UUQ.png" />
     <p>Please help Confused Alligator by checking the URL and trying again.</p>
+    <script>
+      document.write('<a href="' + document.referrer + '">Back to Safety</a>');
+    </script>
   </div>
 </body>
 </html>
