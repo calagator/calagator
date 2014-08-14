@@ -1,3 +1,14 @@
+@import "variables";
+
+$box_background: $lt_blue;
+$closed: $red;
+$default_text: $beige;
+$footer: $dk_green;
+$header: $green;
+$header_text: $dk_green;
+$wifi: $wifi_blue;
+
+
 /* @group Global Layout
 ----------------------------------------*/
 
@@ -6,18 +17,18 @@ body {
 }
 
 #global_header {
-  background: #82c555;
+  background: $header;
   position: relative;
   height: 95px;
 }
 
 #global_header a {
-  color: #f9ffec
+  color: $default_text;
 }
 
 #top_footer {
-  background: #445544;
-  color: #f9ffec;
+  background: $footer;
+  color: $default_text;
   padding: .5em 30px .5em 40px;
   font-size: 70%;
   clear: both;
@@ -27,7 +38,7 @@ body {
 
 #global_header #project_title {
   font-family: Sanchez;
-  color: #445544;
+  color: $header_text;
   font-size: 29px;
   line-height: 31px;
   height: 31px;
@@ -76,7 +87,7 @@ body {
 
 .subnav {
   font-size: 1.2em;
-  background: #bcf794;
+  background: saturate(lighten($header, 20%), 25%);
   padding-left: 40px;
   line-height: 2em;
 }
@@ -92,7 +103,7 @@ body {
 }
 
 .subnav a {
-  color: #445544;
+  color: $header_text;
   padding-bottom: .42em;
 }
 
@@ -132,7 +143,7 @@ body {
 }
 
 .appropriateness_message {
-  background: #e8fbfe;
+  background: $box_background;
   padding: 1em;
   margin: 1em 0;
 }
@@ -180,7 +191,7 @@ ul.event_list .day_of_week {
 
 
 .sidebar {
-  background: #e8fbfe;
+  background: $box_background;
   padding: 2em 30px 1em 1em;
   position: absolute;
   top: 0;
@@ -356,7 +367,7 @@ ul.event_list .list_date {
 }
 
 #venues_search {
-  background: #e8fbfe;
+  background: $box_background;
   padding: 1em;
   border-bottom: 1px solid #e9e9e9;
 }
@@ -433,7 +444,7 @@ ul.event_list .list_date {
 
 .location .closed_callout {
   margin-top: 0;
-  color: #CE421D;
+  color: $closed;
   font-weight: bold;
 }
 
@@ -442,7 +453,7 @@ ul.event_list .list_date {
   padding-left: 20px;
   background: image-url("transmit_blue.png") no-repeat;
   font-weight: bold;
-  color: #6098E6
+  color: $wifi;
 }
 
 .location .access_notes h3,
@@ -482,7 +493,7 @@ ul.event_list .list_date {
 }
 
 .single_venue .description {
-  background: #e8fbfe;
+  background: $box_background;
   padding: 1em;
   margin: 1em 0;
 }
@@ -533,7 +544,7 @@ fieldset .no_label, fieldset .help {
 }
 
 #project_description {
-  background: #e8fbfe;
+  background: $box_background;
   padding: 1em;
   width: 20em;
   margin: 0 2em 0 -1em;
