@@ -15,9 +15,12 @@
 
 /*  Default font settings.
     The font-size percentage is of 16px. (0.75 * 16px = 12px) */
+
+@import "variables";
+
 body {
   font-size: 75%;
-  color: #445544;
+  color: $dk_green;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -99,7 +102,7 @@ dd          { margin-left: 1.5em;}
 table       { margin-bottom: 1.4em; width:100%; }
 th          { font-weight: bold; }
 th,td       { padding: 4px 10px 4px 5px; }
-tr.even td  { background: #E5ECF9; }
+tr.even td  { background: $lt_blue; }
 tfoot       { font-style: italic; }
 caption     { background: #eee; }
 
