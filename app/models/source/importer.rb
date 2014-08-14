@@ -7,6 +7,9 @@ class Source < ActiveRecord::Base
     def import
       return unless source.valid?
       self.events = source.create_events!
+
+      self.events.present?
+
     rescue SourceParser::NotFound
       add_error "No events found at remote site. Is the event identifier in the URL correct?"
     rescue SourceParser::HttpAuthenticationRequiredError
