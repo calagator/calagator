@@ -1,24 +1,62 @@
+@import url(http://fonts.googleapis.com/css?family=Sanchez);
+
 body {
-  background-color: #fff;
-  color: #59a12d;
+  background: #BEF598;
+  color: #445545;
   text-align: center;
-  font-family: inherit;
-  font-weight: inherit;
-  font-style: inherit;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  margin: 2em 0;
+}
+h1, h2 { 
+  font-family: Sanchez;
+  line-height: 1.1;
+}
+h1 { 
+  font-size: 150%;
+}
+h2 { 
+  font-size: 120%;
+  color: #377B15;
 }
 a {
-  color: #66baa9;
+  color: #fff;
+  background: #377B15;
   text-decoration: none;
+  display: inline-block;
+  border-radius: .5em;
+  padding: .5em;
+  font-weight: bold;
 }
-div.dialog {
-  width: 30em;
-  padding: 0 1em;
-  margin: 1em auto 0 auto;
+#alligator {
+  background: #fff;
+  border-radius: 50%;
+  border: 1px solid #9CD579;
+  position: relative;
+  width: 340px;
+  height: 340px;
+  margin: 2em auto 1.5em;
 }
-h1 { font-size: 150%; }
-h2 { font-size: 120%; }
-img {
-  width: 22em;
-  padding: 0 1em;
-  margin: 1em auto 0 auto;
+#alligator:before {
+   content: " ";
+   position: absolute;
+   top: 10px;
+   left: 10px;
+   right: 10px;
+   bottom: 10px;
+   border: 2px solid #7FAB4C;
+   border-radius: 50%;
 }
+#alligator img {
+  z-index: 10;
+  position: absolute;
+  top: 35px;
+  left: 30px;
+  width: 300px;
+}
+.guide {
+  border: 1px solid #9CD579;
+  padding: 2em;
+  background: #fff;
+}
+

@@ -6,16 +6,18 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <title>Oops! Page doesn't exist. Confused Alligator got a 404 error</title>
-  <link rel="stylesheet" type="text/css" href="/assets/errors.css">
+  <link rel="stylesheet" type="text/css" href="/assets/errors.css" />
 </head>
 
 <body>
   <!-- This file lives in public/404.html -->
   <div class="dialog">
-    <h1>Oops! Page doesn't exist</h1>
-    <h2>Confused Alligator got a 404 error</h2>
-    <img src="confused-alligator-sm.png" />
-    <p>Please help Confused Alligator by checking the URL and trying again.</p>
+    <h1>Oops! This page doesn't exist.</h1>
+    <h2>Confused Alligator got a 404 error.</h2>
+    <div id="alligator">
+      <img src="confused-alligator-sm.png" />
+    </div>
+    <p class="guide">Please help Confused Alligator by checking the URL and trying again.</p>
     <script>
       document.write('<a href="' + document.referrer + '">Back to Safety</a>');
     </script>
