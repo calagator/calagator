@@ -8,7 +8,7 @@ class SourcesController < ApplicationController
         format.html { redirect_to events_path, flash: { success: render_to_string(layout: false) } }
         format.xml  { render xml: @importer.source, events: @importer.events }
       else
-        format.html { redirect_to new_event_path(url: @importer.source.url), flash: { failure: @importer.failure_message } }
+        format.html { redirect_to new_source_path(url: @importer.source.url), flash: { failure: @importer.failure_message } }
         format.xml  { render xml: @importer.source.errors, status: :unprocessable_entity }
       end
     end
