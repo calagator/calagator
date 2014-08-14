@@ -1,0 +1,24 @@
+body {
+  background-color: #fff;
+  color: #59a12d;
+  text-align: center;
+  font-family: inherit;
+  font-weight: inherit;
+  font-style: inherit;
+}
+a {
+  color: #66baa9;
+  text-decoration: none;
+}
+div.dialog {
+  width: 30em;
+  padding: 0 1em;
+  margin: 1em auto 0 auto;
+}
+h1 { font-size: 150%; }
+h2 { font-size: 120%; }
+img {
+  width: 22em;
+  padding: 0 1em;
+  margin: 1em auto 0 auto;
+}
