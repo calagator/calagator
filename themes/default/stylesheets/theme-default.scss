@@ -127,7 +127,8 @@
   .standard_form textarea,
   .standard_form .text textarea
   {
-    width: 170px;
+    width: 90%;
+    max-width: 375px;
   }
 
   textarea {
@@ -200,9 +201,9 @@
       width: 70px; }
     .events_change #event_times .to {
       clear: both;
-      text-align: right;
+      text-align: left;
       font-weight: bold;
-      width: 7em; }
+      width: 100%; }
     .events_change #time_start,
     .events_change #date_end {
       margin: 0; }

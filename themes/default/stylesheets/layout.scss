@@ -38,7 +38,7 @@ body {
 }
 
 #app_menu ul {
-  font-size: 1.3em;
+  font-size: 1.1em;
   line-height: 1.3em;
   font-weight: bold;
   list-style: none;
@@ -75,7 +75,6 @@ body {
 }
 
 .subnav {
-  font-size: 1.2em;
   background: #bcf794;
   padding-left: 40px;
   line-height: 2em;
@@ -260,8 +259,7 @@ ul.event_list .list_date {
 
 .single_event .location.vcard {
   background: #e8fbfe;
-  width: 45em;
-  /* height: 16em;*/
+  width: 40em;
   padding: 1em;
   margin: 2em 0 2em -1em;
 }
@@ -271,7 +269,8 @@ ul.event_list .list_date {
 }
 
 .single_event .location #map {
-  width: 25em;
+  width: 50%;
+  padding: 1%;
   height: 16em;
   float: right;
 }
