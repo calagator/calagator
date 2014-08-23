@@ -46,6 +46,8 @@ Bug fixes and features are welcomed. Please fork the source code and submit a pu
 
 When you make a pull request, make sure to add your name to the list of contributors in [CONTRIBUTORS.md](http://github.com/calagator/calagator/blob/master/CONTRIBUTORS.md).
 
+All Calagator contributors are expected to read and follow our [code of conduct](https://github.com/calagator/calagator/wiki/Code-of-Conduct).
+
 Contributors
 ------------
 
