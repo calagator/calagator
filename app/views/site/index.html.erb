@@ -20,6 +20,7 @@
 
 <div id="whats_happening">
   <h1>What's happening?</h1>
+  <h3><%= link_to("View All &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) %></h3>
   <div id='coming_events'>
     <h3>Today</h3>
       <%= render 'events/list', :events => @overview.today, :dates => false %>
