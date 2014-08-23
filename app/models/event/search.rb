@@ -4,6 +4,7 @@ class Event < ActiveRecord::Base
       members.each do |key|
         send "#{key}=", attributes[key]
       end
+      self.order ||= "date"
       validate!
     end
 
@@ -16,7 +17,7 @@ class Event < ActiveRecord::Base
     def grouped_events
       grouped = events.group_by(&:current?)
       grouped = { current: grouped[true] || [], past: grouped[false] || [] }
-      grouped[:past].reverse! if grouped[:past] && order.to_s == "date"
+      grouped[:current].reverse! if order.to_s == "date"
       grouped[:past] = [] if current
       grouped
     end
