@@ -77,7 +77,7 @@ class Event < ActiveRecord::Base
         when :location, :venue
           'LOWER(venues.title) ASC'
         else
-          'events.start_time DESC'
+          'events.start_time ASC'
         end
         @scope = @scope.order(order)
         self

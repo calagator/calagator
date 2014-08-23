@@ -39,10 +39,10 @@ describe Event do
       Event.search("zomg").should == [event2]
     end
 
-    it "sorts by start time descending" do
+    it "sorts by start time ascending" do
       event2 = FactoryGirl.create(:event, start_time: 1.day.ago)
       event1 = FactoryGirl.create(:event, start_time: 1.day.from_now)
-      Event.search("").should == [event1, event2]
+      Event.search("").should == [event2, event1]
     end
 
     it "can sort by event title" do
@@ -61,7 +61,7 @@ describe Event do
       event1 = FactoryGirl.create(:event, start_time: 1.year.ago)
       event2 = FactoryGirl.create(:event, start_time: Time.zone.today)
       event3 = FactoryGirl.create(:event, start_time: 1.year.from_now)
-      Event.search("", skip_old: true).should == [event3, event2]
+      Event.search("", skip_old: true).should == [event2, event3]
     end
 
     it "can limit number of events" do

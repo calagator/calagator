@@ -63,7 +63,7 @@ class Event < ActiveRecord::Base
         Event.solr_search do
           keywords query
           order_by *order
-          order_by :start_time, :desc
+          order_by :start_time, :asc
           with :duplicate, false
           data_accessor_for(Event).include = [:venue]
 
@@ -75,7 +75,7 @@ class Event < ActiveRecord::Base
       def order
         case opts[:order].try(:to_sym)
         when :date
-          [:start_time, :desc]
+          [:start_time, :asc]
         when :venue, :location
           [:venue_title, :asc]
         when :name, :title
