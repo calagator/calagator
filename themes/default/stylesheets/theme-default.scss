@@ -1,4 +1,9 @@
+@import "variables";
 @charset "UTF-8";
+
+$header: $green;
+$background: $beige;
+$text_highlight: $teal;
 
 @media (max-width: 960px) {
   .expander_toggle,
@@ -6,7 +11,7 @@
   .expander_toggle:visited {
     display: block;
     margin: 1em 0;
-    color:  #66BAA9;
+    color:  $text_highlight;
     font-style: italic; }
     a.expander_toggle {
       padding: 0.25em;
@@ -15,7 +20,7 @@
       content: "» "; }
 
   #global_header {
-    background: none repeat scroll 0 0 #82C555;
+    background: none repeat scroll 0 0 $header;
     height: 80px;
     position: relative;
   }
@@ -64,7 +69,7 @@
       -moz-border-radius: 4px;
       border-radius: 4px;
       color: white;
-      background: #82C555; }
+      background: $header; }
 
   #app_menu ul {
 	padding:.5em 10px 0 10px;
@@ -188,7 +193,7 @@
       .site_index #whats_happening > h1 {
         display: none; }
     .site_index #coming_events h3 {
-      background: #E8FFD9;
+      background: $background;
       color: inherit;
       padding: 0.25em;
       padding-right: 0;

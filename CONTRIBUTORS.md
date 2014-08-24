@@ -45,6 +45,7 @@ These people have contributed to Calagator's design and implementation:
   * Micah Geisel
   * Michael Bunsen
   * Michael Xavier
+  * Natalie Blackburn
   * Paige Saez
   * Pam Selle
   * Patrick McSweeny
