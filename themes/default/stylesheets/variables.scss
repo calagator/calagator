@@ -1,4 +1,3 @@
-
 //color definitions
 $white: #ffffff;
 $teal: #66baa9;
@@ -9,3 +8,14 @@ $lt_blue: #e8fbfe;
 $wifi_blue: #6098e6;
 $red: #CE421D;
 
+$box_background: $lt_blue;
+$closed: $red;
+$default_text: $beige;
+$footer: $dk_green;
+$header: $green;
+$header_text: $dk_green;
+$subnav: saturate(lighten($header, 20%), 25%);
+$wifi: $wifi_blue;
+
+$section_head_background: $beige;
+$text_highlight: $teal;

@@ -1,14 +1,5 @@
 @import "variables";
 
-$box_background: $lt_blue;
-$closed: $red;
-$default_text: $beige;
-$footer: $dk_green;
-$header: $green;
-$header_text: $dk_green;
-$wifi: $wifi_blue;
-
-
 /* @group Global Layout
 ----------------------------------------*/
 
@@ -87,7 +78,7 @@ body {
 
 .subnav {
   font-size: 1.2em;
-  background: saturate(lighten($header, 20%), 25%);
+  background: $subnav;
   padding-left: 40px;
   line-height: 2em;
 }

@@ -1,9 +1,6 @@
 @import "variables";
 @charset "UTF-8";
 
-$header: $green;
-$background: $beige;
-$text_highlight: $teal;
 
 @media (max-width: 960px) {
   .expander_toggle,
@@ -69,26 +66,7 @@ $text_highlight: $teal;
       -moz-border-radius: 4px;
       border-radius: 4px;
       color: white;
-      background: $header; }
-
-  #app_menu ul {
-	padding:.5em 10px 0 10px;
-	left: 0px;
-  }
-
-  #project_menu {
-	font-weight: bold;
-	text-align: right;
-	float: right;
-	position: absolute;
-	right: 30px;
-	bottom: 10px;
-  }
-
-  #search_form {
-	float: right;
-	margin: 0;
-	background: white;
+      background: white;
 	padding: 0.25em;
 	border: 1px solid #999;
 	-moz-border-radius: 4px;
@@ -193,7 +171,7 @@ $text_highlight: $teal;
       .site_index #whats_happening > h1 {
         display: none; }
     .site_index #coming_events h3 {
-      background: $background;
+      background: $section_head_background;
       color: inherit;
       padding: 0.25em;
       padding-right: 0;
