@@ -1,36 +1,49 @@
 FactoryGirl.define do
   factory :venue do
-    sequence(:title) { |n| "Venue #{n}" }
-    sequence(:description) { |n| "Description of Venue #{n}." }
-    sequence(:address) { |n| "Address #{n}" }
-    sequence(:street_address) { |n| "Street #{n}" }
-    sequence(:locality) { |n| "City #{n}" }
-    sequence(:region) { |n| "Region #{n}" }
-    sequence(:postal_code) { |n| "#{n}-#{n}-#{n}" }
-    sequence(:country) { |n| "Country #{n}" }
-    sequence(:latitude) { |n| "45.#{n}".to_f }
-    sequence(:longitude) { |n| "122.#{n}".to_f }
-    sequence(:email) { |n| "info@venue#{n}.com" }
-    sequence(:telephone) { |n| "(#{n}#{n}#{n}) #{n}#{n}#{n}-#{n}#{n}#{n}#{n}" }
-    sequence(:url) { |n| "http://#{n}.com" }
-    closed false
-    wifi true
-    access_notes "Access permitted."
+    mock_loc = Faker::Address
+    mock_web = Faker::Internet
+    mock_num = Faker::Number
 
-    after(:create) { Sunspot.commit if Venue::SearchEngine.kind == :sunspot }
+    title { Faker::Company.name }
+    description { Faker::Lorem.paragraph }
+    address { "#{mock_loc.street_address},
+      #{mock_loc.city},
+      #{mock_loc.state}
+      #{mock_loc.zip_code}" }
+    street_address { mock_loc.street_address }
+    locality { mock_loc.city }
+    region { mock_loc.state }
+    postal_code { [mock_loc.zip_code, mock_loc.postcode].sample }
+    country { mock_loc.country }
+    latitude { mock_loc.latitude }
+    longitude { mock_loc.longitude }
+    email { mock_web.email }
+    telephone { Faker::PhoneNumber.phone_number }
+    url { mock_web.url }
+    closed [true, false].sample
+    wifi [true, false].sample
+    access_notes Faker::Lorem.paragraph
+
+    after(:create) do | venue |
+      create(:event, venue: venue)
+    end
+
   end
 
   factory :event do
-    sequence(:title) { |n| "Event #{n}" }
-    sequence(:description) { |n| "Description of Event #{n}." }
-    start_time { Time.now + 1.hour }
-    end_time { start_time + 1.hour }
+    from = ::Date.today - (2*365)
+    to = ::Date.today + (2*365)
 
-    after(:create) { Sunspot.commit if Event::SearchEngine.kind == :sunspot }
-  end
+    title { Faker::Lorem.sentence }
+    description { Faker::Lorem.paragraph }
+    start_time { [Faker::Time.between(from, to), 
+      ::Date.today, 
+      ::Date.tomorrow, 
+      1.week.from_now].sample }
+    created_at { start_time - 1.days }
+    end_time { start_time + 3.hours }
+    venue
 
-  factory :event_with_venue, :parent => :event do
-    association :venue
   end
 
   factory :duplicate_event, :parent => :event do
