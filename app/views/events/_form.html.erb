@@ -33,7 +33,7 @@
         var short_address = (item.street_address && item.street_address.length > 0)
                               ? item.street_address+", "+item.locality+" "+item.region
                               : item.address;
-        return $( "<li><a><strong>"+item.title+"</strong><br />"+short_address+"</a></li>" )
+        return $( "<li><a href='javascript:void(0);'><strong>"+item.title+"</strong><br />"+short_address+"</a></li>" )
                 .data( "item.autocomplete", item )
                 .appendTo(ul);
       };
