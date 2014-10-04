@@ -114,6 +114,8 @@ RSpec.configure do |config|
     example.run
   end
 
+  config.alias_example_to :fscenario, focus: true
+
   # all features should run using the capybara js driver
   config.alias_example_group_to :feature, capybara_feature: true, type: :feature, js: true
 end
