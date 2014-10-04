@@ -9,7 +9,7 @@ feature 'Event Creation' do
 
     fill_in 'Event Name', with: 'Ruby Newbies'
     find_field('Venue').native.send_keys 'Empire State'
-    find('a', text: 'Empire State Building').click # click_on is preferable, but didn't work with jquery UI autocomplete
+    click_on 'Empire State Building'
 
     fill_in 'start_date', with: '2014-08-05'
     fill_in 'start_time', with: '06:00 PM'
