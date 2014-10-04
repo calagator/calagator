@@ -1,7 +1,6 @@
 require 'rails_helper'
 
-feature 'Event Creation', js: true do
-
+feature 'Event Creation' do
   scenario 'User adds an event at an existing venue' do
     create :venue, title: 'Empire State Building'
 
