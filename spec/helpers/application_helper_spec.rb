@@ -50,14 +50,25 @@ describe ApplicationHelper do
   end
 
   describe "the source code version date" do
-    it "should come from git if possible" do
+    it "returns the timestamp from git" do
+      ApplicationHelper.should_receive(:system).with(/git/).and_return(true)
       ApplicationHelper.should_receive(:`).with(/git/).and_return("Tue Jul 29 01:22:49 2014 -0700")
-      ApplicationHelper.source_code_version_raw.should match /Git timestamp: Tue Jul 29 01:22:49 2014 -0700/
+      ApplicationHelper.source_code_version_raw.should match(/Git timestamp: Tue Jul 29 01:22:49 2014 -0700/)
     end
 
-    it "should be blank if we can't ask git" do
-      ApplicationHelper.should_receive(:`).with(/git/).and_raise(Errno::ENOENT)
-      ApplicationHelper.source_code_version_raw.should == ""
+    describe "when the git command can't be found" do
+      it "returns empty string" do
+        ApplicationHelper.should_receive(:system).with(/git/).and_return(true)
+        ApplicationHelper.should_receive(:`).with(/git/).and_raise(Errno::ENOENT)
+        ApplicationHelper.source_code_version_raw.should == ""
+      end
+    end
+
+    describe "when the git command returns a non-zero exit status" do
+      it "returns empty string" do
+        ApplicationHelper.should_receive(:system).with(/git/).and_return(false)
+        ApplicationHelper.source_code_version_raw.should == ""
+      end
     end
   end
 
