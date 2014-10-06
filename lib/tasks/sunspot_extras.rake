@@ -8,22 +8,17 @@ namespace :sunspot do
   end
 
   namespace :solr do
-    def running?
-      pidfile = "#{Rails.root}/tmp/pids/sunspot-solr-#{Rails.env}.pid"
-
-      begin
-        pid = File.read(pidfile).to_i
-      rescue Errno::ENOENT
-        return false
+    task :start do
+      def solr_responding(port)
+        system %(curl -o /dev/null "http://localhost:#{port}/solr" > /dev/null 2>&1)
       end
 
-      begin
-        Process.kill(0, pid)
-        return pid
-      rescue Errno::ESRCH
-        File.delete(pidfile) # Remove stale pidfile
-        return false
+      print "Waiting for Solr."
+      while !solr_responding(Sunspot::Rails.configuration.port) do
+        print "."
+        sleep 1
       end
+      puts "done."
     end
 
     desc "Start Sunspot's Solr if not already running"
@@ -43,6 +38,18 @@ namespace :sunspot do
         Rake.application.invoke_task('sunspot:solr:stop')
       end
       Rake.application.invoke_task('sunspot:solr:start')
+    end
+
+    def running?
+      pidfile = "#{Rails.root}/tmp/pids/sunspot-solr-#{Rails.env}.pid"
+      pid = File.read(pidfile).to_i
+      Process.kill(0, pid)
+      pid
+    rescue Errno::ENOENT
+      false
+    rescue Errno::ESRCH
+      File.delete(pidfile) # Remove stale pidfile
+      false
     end
   end
 end
