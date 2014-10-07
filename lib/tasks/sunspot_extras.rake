@@ -20,35 +20,17 @@ namespace :sunspot do
     Rake.application.alias_task 'sunspot:solr:start'
 
     task :start do
+      port = Sunspot::Rails.configuration.port
+
+      next puts "Solr already running" if WaitForSolr.running_on?(port)
+
+      puts "Starting Solr ..."
       Rake.application.invoke_task('sunspot:solr:start:original')
 
-      print "* Waiting for Solr"
-      WaitForSolr.on Sunspot::Rails.configuration.port do
-        print "."
-      end
-      puts "done."
-    end
+      print "Waiting for Solr "
+      WaitForSolr.on(port) { print "." }
 
-    desc "Start Sunspot's Solr if not already running"
-    task :condstart do
-      if running?
-        puts "* Solr already running"
-      else
-        puts "* Starting Solr"
-        Rake.application.invoke_task('sunspot:solr:start')
-      end
-    end
-
-    def running?
-      pidfile = "#{Rails.root}/tmp/pids/sunspot-solr-#{Rails.env}.pid"
-      pid = File.read(pidfile).to_i
-      Process.kill(0, pid)
-      pid
-    rescue Errno::ENOENT
-      false
-    rescue Errno::ESRCH
-      File.delete(pidfile) # Remove stale pidfile
-      false
+      puts " done"
     end
   end
 end

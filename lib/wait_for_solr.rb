@@ -5,18 +5,20 @@ class WaitForSolr < Struct.new(:port)
     new(port).wait &block
   end
 
+  def self.running_on? port
+    new(port).responding?
+  end
+
   def wait &block
     Timeout::timeout 10 do
-      until solr_responds? do
+      until responding? do
         block.call
         sleep 1
       end
     end
   end
 
-  private
-
-  def solr_responds?
+  def responding?
     system %(curl -o /dev/null "http://localhost:#{port}/solr" > /dev/null 2>&1)
   end
 end
