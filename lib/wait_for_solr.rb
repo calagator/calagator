@@ -1,8 +1,8 @@
 require "timeout"
 
-class WaitForSolr < Struct.new(:port)
-  def self.on port, &block
-    new(port).wait &block
+class WaitForSolr < Struct.new(:port, :timeout)
+  def self.on port, timeout, &block
+    new(port, timeout).wait &block
   end
 
   def self.running_on? port
@@ -10,7 +10,7 @@ class WaitForSolr < Struct.new(:port)
   end
 
   def wait &block
-    Timeout::timeout 10 do
+    Timeout::timeout timeout do
       until responding? do
         block.call
         sleep 1

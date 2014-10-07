@@ -10,7 +10,7 @@ override_task "sunspot:solr:start" do
   Rake.application.invoke_task('sunspot:solr:start:original')
 
   print "Waiting for Solr "
-  WaitForSolr.on(port) { print "." }
+  WaitForSolr.on(port, 15) { print "." }
 
   puts " done"
 end
