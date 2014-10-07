@@ -1,5 +1,12 @@
 require "wait_for_solr"
 
+Rake::TaskManager.class_eval do
+  def alias_task name
+    new_name = "#{name}:original"
+    @tasks[new_name] = @tasks.delete(name)
+  end
+end
+
 namespace :sunspot do
   namespace :reindex do
     desc "Reindex Calagator models with Sunspot"
@@ -10,8 +17,10 @@ namespace :sunspot do
   end
 
   namespace :solr do
+    Rake.application.alias_task 'sunspot:solr:start'
+
     task :start do
-      # implicit super to existing task
+      Rake.application.invoke_task('sunspot:solr:start:original')
 
       print "* Waiting for Solr"
       WaitForSolr.on Sunspot::Rails.configuration.port do
