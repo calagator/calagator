@@ -30,15 +30,6 @@ namespace :sunspot do
       end
     end
 
-    desc "Restart Sunspot's Solr"
-    task :restart do
-      puts "* Restarting Solr"
-      if running?
-        Rake.application.invoke_task('sunspot:solr:stop')
-      end
-      Rake.application.invoke_task('sunspot:solr:start')
-    end
-
     def running?
       pidfile = "#{Rails.root}/tmp/pids/sunspot-solr-#{Rails.env}.pid"
       pid = File.read(pidfile).to_i
