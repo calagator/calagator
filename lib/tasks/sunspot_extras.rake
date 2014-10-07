@@ -1,3 +1,5 @@
+require "wait_for_solr"
+
 namespace :sunspot do
   namespace :reindex do
     desc "Reindex Calagator models with Sunspot"
@@ -9,14 +11,11 @@ namespace :sunspot do
 
   namespace :solr do
     task :start do
-      def solr_responding(port)
-        system %(curl -o /dev/null "http://localhost:#{port}/solr" > /dev/null 2>&1)
-      end
+      # implicit super to existing task
 
-      print "Waiting for Solr."
-      while !solr_responding(Sunspot::Rails.configuration.port) do
+      print "* Waiting for Solr"
+      WaitForSolr.on Sunspot::Rails.configuration.port do
         print "."
-        sleep 1
       end
       puts "done."
     end
