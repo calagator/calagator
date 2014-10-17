@@ -34,7 +34,7 @@ module ApplicationHelper
 
   def self.source_code_version_raw
     # Return a string describing the source code version being used
-    return "" unless system("which git")
+    return "" unless system("git status")
     " - Git timestamp: #{`git log -1 --format=format:"%ad" 2>&1`}"
   rescue Errno::ENOENT
     # Fail quietly if that didn't work; we don't want to get in the way.
