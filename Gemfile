@@ -93,6 +93,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'coveralls', '0.7.0', require: false
   gem 'poltergeist', '1.5.1'
+  gem 'faker', '1.4.3'
 
   # Do not install these interactive libraries onto the continuous integration server.
   unless ENV['CI'] || ENV['TRAVIS']
