@@ -144,11 +144,11 @@ body {
 /* @group Event Table
 ----------------------------------------*/
 
-#list_description {
+.list_description {
   padding-top: 1em;
 }
 
-#list_items { margin-right: 20em; }
+.list_items { margin-right: 20em; }
 
 .event_table .description,
 .event_table .url,
