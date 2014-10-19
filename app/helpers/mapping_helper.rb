@@ -17,7 +17,7 @@ module MappingHelper
         "leaflet_google_layer",
       ]
     }
-    ["http://cdn.leafletjs.com/leaflet-0.6.4/leaflet.js"] + Array(js_dependency_map[map_provider])
+    ["https://d591zijq8zntj.cloudfront.net/leaflet-0.6.4/leaflet.js"] + Array(js_dependency_map[map_provider])
   end
 
   def map(locatable_items, options = {})
