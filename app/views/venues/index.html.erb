@@ -21,7 +21,7 @@
 
 <% if @search.results? %>
   <div id='venues_search_results'>
-    <div id='list_description'>
+    <div class='list_description'>
       <% if @search.tag %>
         <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%= @search.tag %></strong></h2>
       <% else -%>
