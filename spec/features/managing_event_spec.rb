@@ -87,3 +87,26 @@ feature 'Event Cloning' do
     page.should have_content 'Ruby Event Part Two'
   end
 end
+
+feature 'Event Deletion' do
+  background do
+    create :event, title: 'Ruby and You', start_time: today + 1.day
+  end
+
+  scenario 'A user deletes an event' do
+    visit '/'
+
+    within '#tomorrow' do
+      click_on 'Ruby and You'
+    end
+
+    click_on 'delete'
+
+    page.should have_content '"Ruby and You" has been deleted'
+
+    click_on 'Calagator'
+    within '#tomorrow' do
+      page.should have_content '- No events -'
+    end
+  end
+end
