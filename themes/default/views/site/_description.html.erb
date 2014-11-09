@@ -3,10 +3,10 @@
 
 <h4>Get Started</h4>
 <ul>
-  <li><a href='/about#find_local_events'>Find local events</a></li>
-  <li><a href='/about#share_local_events'>Share local events</a></li>
-  <li><a href='/about#get_involved'>Get involved</a></li>
-  <li><a href='/about'>Find out about us</a></li>
+  <li><%= link_to "Find local events", about_url(anchor: "find_local_events") %></li>
+  <li><%= link_to "Share local events", about_url(anchor: "share_local_events") %></li>
+  <li><%= link_to "Get involved", about_url(anchor: "get_involved") %></li>
+  <li><%= link_to "Find out about us", about_url %></li>
 </ul>
 
 <h4>Subscribe To</h4>
