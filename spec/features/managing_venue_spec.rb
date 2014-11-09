@@ -8,7 +8,7 @@ feature 'Venue Editing' do
     visit "/venues/#{venue.id}"
     click_on 'edit'
 
-    find_field('Venue Name').value.should have_content '??'
+    find_field('Venue Name').value.should have_content "#{venue.title}"
     fill_in 'Venue Name', with: 'Space Needle'
     fill_in 'Full Address', with: '400 Broad Street, Seattle, WA 98109, US'
     # fill_in 'Latitude*', with: ??
@@ -17,8 +17,8 @@ feature 'Venue Editing' do
     fill_in 'Email', with: 'SpaceNeedle@hotmail.com'
     fill_in 'Telephone', with: '(298)587-7825'
     check('venue_wifi')
-    fill_in 'Description', 'Seattle\'s most famous pointy building'
-    fill_in 'Access Notes', 'Just pay the exorbitant ticket price.'
+    fill_in 'Description', with: 'Most famous pointy building in Seattle'
+    fill_in 'Access notes', with: 'Just pay the exorbitant ticket price.'
     check('venue_closed')
     check('venue_force_geocoding')
 
