@@ -12,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <link rel='search' type='application/opensearchdescription+xml' href='/opensearch.xml' title='<%= SETTINGS.name %>' />
+    <link rel='search' type='application/opensearchdescription+xml' href='<%= "#{root_path}opensearch.xml" %>'  title='<%= SETTINGS.name %>' />
 
     <!-- Stylesheets, static -->
     <%= stylesheet_link_tag 'application', 'theme', :media => :all %>
@@ -59,7 +59,7 @@
           <br />
           <strong>Something not right?</strong> <%= link_to "File an issue", "https://github.com/calagator/calagator/issues" %>
         </div>
-        <%= form_tag '/events/search', :method => :get do %>
+        <%= form_tag search_events_path, :method => :get do %>
           <div id='search_form'>
           <label for="search_field">Search Events</label>
           <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
