@@ -24,12 +24,14 @@
 \blevitra\b
 \bmegashare\b
 \bmichael\s+jackson\s+died\b
+\bmodafinil\b
 \bnaivahita\b
 \bnexium\b
 \bnude\b
 \bpayday\s+loans\b
 \bpharmacy\b
 \bpropecia\b
+\bprovigil\b
 \ritalin\b
 \bsex\s+tape\b
 \btamiflu\b
