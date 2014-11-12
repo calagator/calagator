@@ -1,16 +1,18 @@
 language: ruby
-rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.0
-  - rbx-2
+matrix:
+  include:
+    - rvm: 1.9.3
+    - rvm: 2.0.0
+    - rvm: 2.1.0
+    - rvm: rbx-2
+      env: BUNDLE_JOBS=1
+  allow_failures:
+    - rvm: rbx-2
 
   ## JRuby is not compatible, see Gemfile for details.
   # - jruby-19mode
   # - jruby-head
 env:
-  global:
-    - BUNDLE_JOBS=4
   matrix:
     - DB=mysql
     - DB=postgresql
@@ -26,6 +28,3 @@ before_script:
 script:
   - bundle exec rake spec --trace
 cache: bundler
-matrix:
-  allow_failures:
-    - rvm: rbx-2
