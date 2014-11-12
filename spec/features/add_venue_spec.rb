@@ -18,14 +18,14 @@ feature 'Venue Creation' do
 
     click_on 'Create Venue'
 
-    page.should have_content 'Venue was successfully saved.'
-    page.should have_content 'Empire State Building'
-    page.should have_content '350 5th Ave, New York, NY 10118, US'
-    page.should have_content 'EmpireStateBuildi.ng'
-    page.should have_content 'empire@state_building.com'
-    page.should have_content '(298)943-1337'
-    page.should have_content 'Public WiFi'
-    page.should have_content 'Famous New York City Skyscraper'
-    page.should have_content 'Just knock I guess?'
+    expect(page).to have_content 'Venue was successfully saved.'
+    expect(page).to have_content 'Empire State Building'
+    expect(page).to have_content '350 5th Ave, New York, NY 10118, US'
+    expect(page).to have_content 'EmpireStateBuildi.ng'
+    expect(page).to have_content 'empire@state_building.com'
+    expect(page).to have_content '(298)943-1337'
+    expect(page).to have_content 'Public WiFi'
+    expect(page).to have_content 'Famous New York City Skyscraper'
+    expect(page).to have_content 'Just knock I guess?'
   end
 end

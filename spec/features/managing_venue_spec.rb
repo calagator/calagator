@@ -20,8 +20,19 @@ feature 'Venue Editing' do
     fill_in 'Description', with: 'Most famous pointy building in Seattle'
     fill_in 'Access notes', with: 'Just pay the exorbitant ticket price.'
     check('venue_closed')
-    check('venue_force_geocoding')
+    # check('venue_force_geocoding')
 
     click_on 'Update Venue'
+
+    expect(page).to have_content 'Venue was successfully saved.'
+    expect(page).to have_content 'Space Needle'
+    expect(page).to have_content '400 Broad Street, Seattle, WA 98109, US'
+    expect(page).to have_content 'SpaceNeed.le'
+    expect(page).to have_content 'SpaceNeedle@hotmail.com'
+    expect(page).to have_content '(298)587-7825'
+    expect(page).to have_content 'Public WiFi'
+    expect(page).to have_content 'Most famous pointy building in Seattle'
+    expect(page).to have_content 'Just pay the exorbitant ticket price.'
+    expect(page).to have_content 'This venue is no longer open for business.'
   end
 end
