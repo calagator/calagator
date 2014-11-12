@@ -18,8 +18,6 @@ feature 'Venue Editing' do
     fill_in 'State', with: new_venue.region
     fill_in 'Zip Code', with: new_venue.postal_code
     fill_in 'Country', with: new_venue.country
-    # fill_in 'Latitude*', with: ??
-    # fill_in 'Longitude*', with: ??
     fill_in 'Web Link', with: new_venue.url
     fill_in 'Email', with: new_venue.email
     fill_in 'Telephone', with: new_venue.telephone
@@ -27,7 +25,6 @@ feature 'Venue Editing' do
     fill_in 'Description', with: new_venue.description
     fill_in 'Access notes', with: 'Just pay the ticket price.'
     check('venue_closed') if new_venue.closed
-    # check('venue_force_geocoding')
 
     click_on 'Update Venue'
 
