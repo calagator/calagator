@@ -1,5 +1,4 @@
 require 'rails_helper'
-require 'pry'
 
 feature 'Venue Editing' do
   let(:venue) { create(:venue) }
