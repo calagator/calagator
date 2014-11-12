@@ -1,9 +1,20 @@
 language: ruby
 rvm:
-  - 1.9.3
-  - 2.0.0
-  - 2.1.0
+  #- 1.9.3
+  #- 2.0.0
+  #- 2.1.0
   - rbx-2
+matrix:
+  allow_failures:
+    - rvm: rbx-2
+  exclude:
+    - rvm: rbx-2
+      env: BUNDLE_JOBS=4
+  include:
+    - rvm: rbx-2
+      env: BUNDLE_JOBS=1
+
+install: bundle install --retry=3
 
   ## JRuby is not compatible, see Gemfile for details.
   # - jruby-19mode
@@ -26,6 +37,4 @@ before_script:
 script:
   - bundle exec rake spec --trace
 cache: bundler
-matrix:
-  allow_failures:
-    - rvm: rbx-2
+
