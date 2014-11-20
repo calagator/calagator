@@ -3,7 +3,7 @@ new_day ||= nil
 opts ||= {}
 opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
 show_year ||= false
-tag_icons = %w(free pizza beer ruby rails javascript python swift linux angular golang html sass bitcoin php) # Add to this as new icon image files are added
+tag_icons = %w(free pizza beer ruby javascript python linux angular golang html sass bitcoin php) # Add to this as new icon image files are added
 %>
 <div class='vevent h-event'>
   <% date_class = (opts[:dates]==false || !new_day) ? ' hidden' : '' -%>
