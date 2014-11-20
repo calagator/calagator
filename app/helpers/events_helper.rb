@@ -218,4 +218,8 @@ module EventsHelper
     'date'  => 'Date',
   }
   private_constant :SORTING_LABELS
+
+  def icon_exists_for(tag_name)
+    File.exists? Rails.root.join("app", "assets", "images", "tag_icons", "#{tag_name}.png")
+  end
 end

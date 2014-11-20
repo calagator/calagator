@@ -3,7 +3,6 @@ new_day ||= nil
 opts ||= {}
 opts[:dates] = opts.has_key?(:dates) ? opts[:dates] : true
 show_year ||= false
-tag_icons = %w(free pizza beer ruby javascript python linux angular golang html sass bitcoin php) # Add to this as new icon image files are added
 %>
 <div class='vevent h-event'>
   <% date_class = (opts[:dates]==false || !new_day) ? ' hidden' : '' -%>
@@ -17,9 +16,11 @@ tag_icons = %w(free pizza beer ruby javascript python linux angular golang html 
   <div class='list_content'>
     <a class='summary p-name u-url' href='<%= url_for event_url(event) %>'><%= event.title %></a>
     <div>
-      <% tag_icons.each do |tag_icon_name| %>
-        <% if event.tag_list.include? tag_icon_name %>
-          <img src="/assets/tag_icons/<%= tag_icon_name %>.png" />
+      <% event.tag_list.each do |tag_name| %>
+        <% if icon_exists_for(tag_name) %>
+          <abbr title="<%= tag_name %>">
+            <img src="/assets/tag_icons/<%= tag_name %>.png" />
+          </abbr>
         <% end %>
       <% end %>
     </div>
