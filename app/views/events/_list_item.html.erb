@@ -16,13 +16,7 @@ show_year ||= false
   <div class='list_content'>
     <a class='summary p-name u-url' href='<%= url_for event_url(event) %>'><%= event.title %></a>
     <div>
-      <% event.tag_list.each do |tag_name| %>
-        <% if icon_exists_for(tag_name) %>
-          <abbr title="<%= tag_name %>">
-            <img src="/assets/tag_icons/<%= tag_name %>.png" />
-          </abbr>
-        <% end %>
-      <% end %>
+      <%= display_tag_icons(event) %>
     </div>
     <div>
     <%= normalize_time(event, :context => event.start_time.to_date) -%>
