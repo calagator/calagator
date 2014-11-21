@@ -6,7 +6,7 @@ describe EventsHelper do
       helper.icon_exists_for?("pizza").should eq true
     end
 
-    it "should return true if there is not a PNG file in tag_icons with the name of the argument" do
+    it "should return false if there is not a PNG file in tag_icons with the name of the argument" do
       helper.icon_exists_for?("no_image").should eq false
     end
   end
@@ -23,7 +23,13 @@ describe EventsHelper do
     include_context "tag icons"
 
     it "should generate an array of image tags for event tags" do
-      helper.get_tag_icons(@event).should eq ["<img alt=\"Ruby\" src=\"/assets/tag_icons/ruby.png\" title=\"ruby\" />", "<img alt=\"Pizza\" src=\"/assets/tag_icons/pizza.png\" title=\"pizza\" />"]
+      helper.get_tag_icons(@event).should be_an_instance_of Array
+      helper.get_tag_icons(@event)[0].should include "alt=\"Ruby\""
+      helper.get_tag_icons(@event)[0].should include "title=\"ruby\""
+      helper.get_tag_icons(@event)[0].should include "src=\"/assets/tag_icons/ruby.png\""
+      helper.get_tag_icons(@event)[1].should include "alt=\"Pizza\""
+      helper.get_tag_icons(@event)[1].should include "title=\"pizza\""
+      helper.get_tag_icons(@event)[1].should include "src=\"/assets/tag_icons/pizza.png\""
     end
 
     it "should return nil values for tags that do not correspond to images" do
@@ -39,7 +45,12 @@ describe EventsHelper do
     include_context "tag icons"
 
     it "should render image tags inline and whitespace separated" do
-      helper.display_tag_icons(@event).should eq '<img alt="Ruby" src="/assets/tag_icons/ruby.png" title="ruby" /> <img alt="Pizza" src="/assets/tag_icons/pizza.png" title="pizza" />'
+      helper.display_tag_icons(@event).should include "alt=\"Ruby\""
+      helper.display_tag_icons(@event).should include "title=\"ruby\""
+      helper.display_tag_icons(@event).should include "src=\"/assets/tag_icons/ruby.png\""
+      helper.display_tag_icons(@event).should include "alt=\"Pizza\""
+      helper.display_tag_icons(@event).should include "title=\"pizza\""
+      helper.display_tag_icons(@event).should include "src=\"/assets/tag_icons/pizza.png\""
     end
 
     it "should render nothing if no image tags" do
