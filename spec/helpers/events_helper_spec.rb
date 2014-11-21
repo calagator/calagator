@@ -1,13 +1,63 @@
 require 'spec_helper'
 
 describe EventsHelper do
+  describe "#icon_exists_for?" do
+    it "should return true if there is a PNG file in tag_icons with the name of the argument" do
+      helper.icon_exists_for?("pizza").should eq true
+    end
+
+    it "should return true if there is not a PNG file in tag_icons with the name of the argument" do
+      helper.icon_exists_for?("no_image").should eq false
+    end
+  end
+
+  shared_context "tag icons" do
+    before do
+      @event = FactoryGirl.create(:event, :tag_list => ['ruby', 'pizza'])
+      @event2 = FactoryGirl.create(:event, :tag_list => ['no_image', 'also_no_image'])
+      @untagged_event = Event.new
+    end
+  end
+
+  describe "#get_tag_icons" do
+    include_context "tag icons"
+
+    it "should generate an array of image tags for event tags" do
+      helper.get_tag_icons(@event).should eq ["<img alt=\"Ruby\" src=\"/assets/tag_icons/ruby.png\" title=\"ruby\" />", "<img alt=\"Pizza\" src=\"/assets/tag_icons/pizza.png\" title=\"pizza\" />"]
+    end
+
+    it "should return nil values for tags that do not correspond to images" do
+      helper.get_tag_icons(@event2).should eq [nil, nil]
+    end
+
+    it "should return a blank array if event has no tags" do
+      helper.get_tag_icons(@untagged_event).should eq []
+    end
+  end
+
+  describe "#display_tag_icons" do
+    include_context "tag icons"
+
+    it "should render image tags inline and whitespace separated" do
+      helper.display_tag_icons(@event).should eq '<img alt="Ruby" src="/assets/tag_icons/ruby.png" title="ruby" /> <img alt="Pizza" src="/assets/tag_icons/pizza.png" title="pizza" />'
+    end
+
+    it "should render nothing if no image tags" do
+      helper.display_tag_icons(@event2).should eq " "
+    end
+
+    it "should render nothing if event has no tags" do
+      helper.display_tag_icons(@untagged_event).should eq ""
+    end
+  end
+
   describe "#events_sort_link" do
     it "renders a sorting link with the field for the supplied key" do
       params.merge! action: "index", controller: "events"
       helper.events_sort_link("score").should == %(<a href="/events?order=score">Relevance</a>)
     end
-    
-    it "removes any existing order if no key is entered" do 
+
+    it "removes any existing order if no key is entered" do
       params.merge! action: "index", controller: "events", order: "score"
       helper.events_sort_link(nil).should == %(<a href="/events">Default</a>)
     end
