@@ -23,13 +23,10 @@ describe EventsHelper do
     include_context "tag icons"
 
     it "should generate an array of image tags for event tags" do
-      helper.get_tag_icons(@event).should be_an_instance_of Array
-      helper.get_tag_icons(@event)[0].should include "alt=\"Ruby\""
-      helper.get_tag_icons(@event)[0].should include "title=\"ruby\""
-      helper.get_tag_icons(@event)[0].should include "src=\"/assets/tag_icons/ruby.png\""
-      helper.get_tag_icons(@event)[1].should include "alt=\"Pizza\""
-      helper.get_tag_icons(@event)[1].should include "title=\"pizza\""
-      helper.get_tag_icons(@event)[1].should include "src=\"/assets/tag_icons/pizza.png\""
+      helper.get_tag_icons(@event)[0].should include "Ruby"
+      helper.get_tag_icons(@event)[0].should include "ruby.png"
+      helper.get_tag_icons(@event)[1].should include "Pizza"
+      helper.get_tag_icons(@event)[1].should include "pizza.png"
     end
 
     it "should return nil values for tags that do not correspond to images" do
@@ -45,12 +42,10 @@ describe EventsHelper do
     include_context "tag icons"
 
     it "should render image tags inline and whitespace separated" do
-      helper.display_tag_icons(@event).should include "alt=\"Ruby\""
-      helper.display_tag_icons(@event).should include "title=\"ruby\""
-      helper.display_tag_icons(@event).should include "src=\"/assets/tag_icons/ruby.png\""
-      helper.display_tag_icons(@event).should include "alt=\"Pizza\""
-      helper.display_tag_icons(@event).should include "title=\"pizza\""
-      helper.display_tag_icons(@event).should include "src=\"/assets/tag_icons/pizza.png\""
+      helper.display_tag_icons(@event).should include "Ruby"
+      helper.display_tag_icons(@event).should include "ruby.png"
+      helper.display_tag_icons(@event).should include "Pizza"
+      helper.display_tag_icons(@event).should include "pizza.png"
     end
 
     it "should render nothing if no image tags" do
