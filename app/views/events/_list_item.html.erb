@@ -16,6 +16,9 @@ show_year ||= false
   <div class='list_content'>
     <a class='summary p-name u-url' href='<%= url_for event_url(event) %>'><%= event.title %></a>
     <div>
+      <%= display_tag_icons(event) %>
+    </div>
+    <div>
     <%= normalize_time(event, :context => event.start_time.to_date) -%>
     <% if event.venue && !event.venue.title.blank? %>
       <br/><a class='location p-location h-card' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
