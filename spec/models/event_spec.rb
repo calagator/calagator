@@ -11,6 +11,11 @@ describe Event do
       event = Event.new(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'), :url => 'google.com')
       event.should be_valid
     end
+
+    it "validates blacklisted words" do
+      event = Event.new(:title => "Foo bar cialis", :start_time => Time.zone.parse('2008.04.12'), :url => 'google.com')
+      event.should_not be_valid
+    end
   end
 
   describe "when checking time status" do
