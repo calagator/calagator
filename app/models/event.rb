@@ -104,8 +104,7 @@ class Event < ActiveRecord::Base
   end
 
   def url=(value)
-    value = "http://#{value}" unless value.blank? || value.include?("://")
-    super
+    super UrlPrefixer.prefix(value)
   end
 
   # Set the start_time to the given +value+, which could be a Time, Date,

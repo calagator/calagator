@@ -141,8 +141,7 @@ class Venue < ActiveRecord::Base
   #===[ Overrides ]=======================================================
 
   def url=(value)
-    value = "http://#{value}" unless value.blank? || value.include?("://")
-    super
+    super UrlPrefixer.prefix(value)
   end
 
   #===[ Address helpers ]=================================================
