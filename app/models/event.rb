@@ -44,8 +44,7 @@ class Event < ActiveRecord::Base
     :allow_blank => true,
     :allow_nil => true
 
-  include ValidatesBlacklistOnMixin
-  validates_blacklist_on :title, :description, :url
+  validates :title, :description, :url, blacklist: true
 
   # Duplicates
   include DuplicateChecking

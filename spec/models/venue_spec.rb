@@ -12,6 +12,11 @@ describe Venue do
     venue.should be_valid
   end
 
+  it "validates blacklisted words" do
+    venue = Venue.new(:title => "Foo bar cialis")
+    venue.should_not be_valid
+  end
+
   describe "when validating" do
     let(:attributes) { {:title => 'My Venue'} }
     let(:bad_data) { ' blargie ' }
