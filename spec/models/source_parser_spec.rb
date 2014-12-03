@@ -3,46 +3,46 @@ require 'spec_helper'
 class SourceParser::FakeParser < SourceParser::Base
 end
 
-describe SourceParser, "when reading content" do
+describe SourceParser, "when reading content", :type => :model do
   it "should read from a normal URL" do
     stub_source_parser_http_response!(:body => 42)
-    SourceParser.read_url("http://a.real/~url").should eq 42
+    expect(SourceParser.read_url("http://a.real/~url")).to eq 42
   end
 
   it "should read from a wacky URL" do
     uri = URI.parse('fake')
     # please retain space betwen "?" and ")" on following line; it avoids a SciTE issue
-    uri.stub(:respond_to? ).and_return(false)
-    URI.stub(:parse).and_return(uri)
+    allow(uri).to receive(:respond_to? ).and_return(false)
+    allow(URI).to receive(:parse).and_return(uri)
 
     error_type = RUBY_PLATFORM.match(/mswin/) ? Errno::EINVAL : Errno::ENOENT
-    lambda { SourceParser.read_url("not://a.real/~url") }.should raise_error(error_type)
+    expect { SourceParser.read_url("not://a.real/~url") }.to raise_error(error_type)
   end
 
   it "should unescape ATOM feeds" do
     content = "ATOM"
-    content.stub(:content_type).and_return("application/atom+xml")
+    allow(content).to receive(:content_type).and_return("application/atom+xml")
 
-    SourceParser::Base.should_receive(:read_url).and_return(content)
-    CGI.should_receive(:unescapeHTML).and_return("42")
+    expect(SourceParser::Base).to receive(:read_url).and_return(content)
+    expect(CGI).to receive(:unescapeHTML).and_return("42")
 
-    SourceParser.content_for(:fake => :argument).should eq "42"
+    expect(SourceParser.content_for(:fake => :argument)).to eq "42"
   end
 end
 
-describe SourceParser, "when subclassing" do
+describe SourceParser, "when subclassing", :type => :model do
   it "should demand that to_hcals is implemented" do
-    lambda{ SourceParser::FakeParser.to_hcals }.should raise_error(NotImplementedError)
+    expect{ SourceParser::FakeParser.to_hcals }.to raise_error(NotImplementedError)
   end
 
   it "should demand that to_abstract_events is implemented" do
-    lambda{ SourceParser::FakeParser.to_abstract_events }.should raise_error NotImplementedError
+    expect{ SourceParser::FakeParser.to_abstract_events }.to raise_error NotImplementedError
   end
 end
 
-describe SourceParser, "when parsing events" do
+describe SourceParser, "when parsing events", :type => :model do
   it "should have expected parsers plus FakeParser" do
-    SourceParser.parsers.should eq [
+    expect(SourceParser.parsers).to eq [
       SourceParser::Plancast,
       SourceParser::Meetup,
       SourceParser::Facebook,
@@ -54,16 +54,16 @@ describe SourceParser, "when parsing events" do
 
   it "should use first successful parser's results" do
     events = [double(SourceParser::AbstractEvent)]
-    SourceParser::Ical.should_receive(:to_abstract_events).and_raise(NotImplementedError)
-    SourceParser::Hcal.should_receive(:to_abstract_events).and_return(events)
-    SourceParser::FakeParser.should_not_receive(:to_abstract_events)
-    SourceParser::Base.should_receive(:content_for).and_return("fake content")
+    expect(SourceParser::Ical).to receive(:to_abstract_events).and_raise(NotImplementedError)
+    expect(SourceParser::Hcal).to receive(:to_abstract_events).and_return(events)
+    expect(SourceParser::FakeParser).not_to receive(:to_abstract_events)
+    expect(SourceParser::Base).to receive(:content_for).and_return("fake content")
 
-    SourceParser.to_abstract_events(:fake => :argument).should eq events
+    expect(SourceParser.to_abstract_events(:fake => :argument)).to eq events
   end
 end
 
-describe SourceParser, "checking duplicates when importing" do
+describe SourceParser, "checking duplicates when importing", :type => :model do
   describe "with two identical events" do
     before :each do
       @venue_size_before_import = Venue.count
@@ -79,21 +79,21 @@ describe SourceParser, "checking duplicates when importing" do
         <abbr class="summary" title="Bastille Day"></abbr>
         <abbr class="location" title="Arc de Triomphe"></abbr>
       </div>})
-      SourceParser::Base.stub(:read_url).and_return(@cal_content)
+      allow(SourceParser::Base).to receive(:read_url).and_return(@cal_content)
       @abstract_events = @cal_source.to_events
       @created_events = @cal_source.create_events!(:skip_old => false)
     end
 
     it "should only parse one event" do
-      @abstract_events.size.should eq 1
+      expect(@abstract_events.size).to eq 1
     end
 
     it "should create only one event" do
-      @created_events.size.should eq 1
+      expect(@created_events.size).to eq 1
     end
 
     it "should create only one venue" do
-      Venue.count.should eq @venue_size_before_import + 1
+      expect(Venue.count).to eq @venue_size_before_import + 1
     end
   end
 
@@ -101,13 +101,13 @@ describe SourceParser, "checking duplicates when importing" do
     it "should retrieve an existing event if it's an exact duplicate" do
       hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
       hcal_content = read_sample('hcal_event_duplicates_fixture.xml')
-      SourceParser::Base.stub(:read_url).and_return(hcal_content)
+      allow(SourceParser::Base).to receive(:read_url).and_return(hcal_content)
 
       event = hcal_source.to_events.first
       event.save!
 
       event2 = hcal_source.to_events.first
-      event2.should_not be_a_new_record
+      expect(event2).not_to be_a_new_record
     end
 
     it "an event with a orphaned exact duplicate should should remove duplicate marking" do
@@ -118,11 +118,11 @@ describe SourceParser, "checking duplicates when importing" do
         <abbr class="dtstart" title="20080714"></abbr>
         </div>
       HERE
-      SourceParser::Base.stub(:read_url).and_return(cal_content)
+      allow(SourceParser::Base).to receive(:read_url).and_return(cal_content)
 
       cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
       imported_event = cal_source.create_events!(:skip_old => false).first
-      imported_event.should_not be_marked_as_duplicate
+      expect(imported_event).not_to be_marked_as_duplicate
     end
   end
 
@@ -146,7 +146,7 @@ describe SourceParser, "checking duplicates when importing" do
           <abbr class="location" title="Bastille"></abbr>
         </div>
       HERE
-      SourceParser::Base.stub(:read_url).and_return(cal_content)
+      allow(SourceParser::Base).to receive(:read_url).and_return(cal_content)
 
       cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
       @parsed_events  = cal_source.to_events
@@ -154,19 +154,19 @@ describe SourceParser, "checking duplicates when importing" do
     end
 
     it "should parse two events" do
-      @parsed_events.size.should eq 2
+      expect(@parsed_events.size).to eq 2
     end
 
     it "should create two events" do
-      @created_events.size.should eq 2
+      expect(@created_events.size).to eq 2
     end
 
      it "should have different venues for the parsed events" do
-      @parsed_events[0].venue.should_not eq @parsed_events[1].venue
+      expect(@parsed_events[0].venue).not_to eq @parsed_events[1].venue
     end
 
      it "should have different venues for the created events" do
-      @created_events[0].venue.should_not eq @created_events[1].venue
+      expect(@created_events[0].venue).not_to eq @created_events[1].venue
     end
   end
 
@@ -185,22 +185,22 @@ describe SourceParser, "checking duplicates when importing" do
       </div>
     HERE
 
-    SourceParser::Base.stub(:read_url).and_return(cal_content)
+    allow(SourceParser::Base).to receive(:read_url).and_return(cal_content)
 
     source = Source.new(
       :title => "Event with squashed venue",
       :url   => "http://IcalEventWithSquashedVenue.com/")
 
     event = source.to_events(:skip_old => false).first
-    event.venue.title.should eq "Master"
+    expect(event.venue.title).to eq "Master"
   end
 
   it "should use an existing venue when importing an event with a matching machine tag that describes a venue" do
     venue = Venue.create!(:title => "Custom Urban Airship", :tag_list => "plancast:place=1520153")
 
     content = read_sample('plancast.json')
-    SourceParser::Base.stub(:read_url).and_return("this content doesn't matter")
-    HTTParty.should_receive(:get).and_return(MultiJson.decode(content))
+    allow(SourceParser::Base).to receive(:read_url).and_return("this content doesn't matter")
+    expect(HTTParty).to receive(:get).and_return(MultiJson.decode(content))
 
     source = Source.new(
       :title => "Event with duplicate machine-tagged venue",
@@ -208,7 +208,7 @@ describe SourceParser, "checking duplicates when importing" do
 
     event = source.to_events(:skip_old => false).first
 
-    event.venue.should eq venue
+    expect(event.venue).to eq venue
   end
 
   describe "choosing parsers by matching URLs" do
@@ -217,36 +217,36 @@ describe SourceParser, "checking duplicates when importing" do
 
       it "should only invoke the #{parser_name} parser when given #{url}" do
         parser = parser_name.constantize
-        parser.should_receive(:to_abstract_events).and_return([Event.new])
+        expect(parser).to receive(:to_abstract_events).and_return([Event.new])
         SourceParser.parsers.reject{|p| p == parser }.each do |other_parser|
-          other_parser.should_not_receive :to_abstract_events
+          expect(other_parser).not_to receive :to_abstract_events
         end
 
-        SourceParser::Base.stub(:read_url).and_return("this content doesn't matter")
+        allow(SourceParser::Base).to receive(:read_url).and_return("this content doesn't matter")
         Source.new(:title => parser_name, :url => url).to_events
       end
     end
   end
 end
 
-describe SourceParser, "labels" do
+describe SourceParser, "labels", :type => :model do
   it "should have labels" do
-    SourceParser.labels.should_not be_blank
+    expect(SourceParser.labels).not_to be_blank
   end
 
   it "should have labels for each parser" do
-    SourceParser.labels.size.should eq SourceParser.parsers.size
+    expect(SourceParser.labels.size).to eq SourceParser.parsers.size
   end
 
   it "should use the label of the parser, as a string" do
     label = SourceParser.parsers.first.label.to_s
-    SourceParser.labels.should include label
+    expect(SourceParser.labels).to include label
   end
 
   it "should have sorted labels" do
     labels = SourceParser.labels
     sorted = labels.sort_by(&:downcase)
 
-    labels.should eq sorted
+    expect(labels).to eq sorted
   end
 end

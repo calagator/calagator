@@ -1,7 +1,7 @@
 require 'spec_helper'
 require './spec/controllers/squash_many_duplicates_examples'
 
-describe EventsController do
+describe EventsController, :type => :controller do
   describe "#index" do
     render_views
 
@@ -9,7 +9,7 @@ describe EventsController do
       it "should produce HTML" do
         get :index, :format => "html"
 
-        response.body.should have_selector "table.event_table"
+        expect(response.body).to have_selector "table.event_table"
       end
     end
 
@@ -22,7 +22,7 @@ describe EventsController do
         end
 
         it "should not have entries" do
-          @struct.should be_blank
+          expect(@struct).to be_blank
         end
       end
 
@@ -37,19 +37,19 @@ describe EventsController do
         end
 
         it "should return an array" do
-          @struct.should be_a_kind_of Array
+          expect(@struct).to be_a_kind_of Array
         end
 
         it "should have entries" do
-          @struct.should be_present
+          expect(@struct).to be_present
         end
 
         it "should include venue details" do
           event = @struct.first
           venue = event["venue"]
           venue_title = venue["title"]  # Why XML? Why?
-          venue_title.should be_a_kind_of String
-          venue_title.should be_present
+          expect(venue_title).to be_a_kind_of String
+          expect(venue_title).to be_present
         end
       end
     end
@@ -58,7 +58,7 @@ describe EventsController do
       it "should accept a JSONP callback" do
         post :index, :format => "json", :callback => "some_function"
 
-        response.body.split("\n").join.should match /^\s*some_function\(.*\);?\s*$/
+        expect(response.body.split("\n").join).to match /^\s*some_function\(.*\);?\s*$/
       end
 
       describe "without events" do
@@ -69,11 +69,11 @@ describe EventsController do
         end
 
         it "should return an array" do
-          @struct.should be_a_kind_of Array
+          expect(@struct).to be_a_kind_of Array
         end
 
         it "should not have entries" do
-          @struct.should be_empty
+          expect(@struct).to be_empty
         end
       end
 
@@ -88,21 +88,21 @@ describe EventsController do
         end
 
         it "should return an array" do
-          @struct.should be_a_kind_of Array
+          expect(@struct).to be_a_kind_of Array
         end
 
         it "should return an event" do
           event = @struct.first
-          event['id'].should eq @event.id
-          event['title'].should eq @event.title
+          expect(event['id']).to eq @event.id
+          expect(event['title']).to eq @event.title
         end
 
         it "should return an event's venue" do
           event = @struct.first
           venue = event['venue']
 
-          venue['id'].should eq @venue.id
-          venue['title'].should eq @venue.title
+          expect(venue['id']).to eq @venue.id
+          expect(venue['title']).to eq @venue.title
         end
       end
     end
@@ -115,11 +115,11 @@ describe EventsController do
         end
 
         it "should be a feed" do
-          @struct['feed']['xmlns'].should be_present
+          expect(@struct['feed']['xmlns']).to be_present
         end
 
         it "should not have events" do
-          @struct['feed']['entry'].should be_blank
+          expect(@struct['feed']['entry']).to be_blank
         end
       end
 
@@ -136,24 +136,24 @@ describe EventsController do
         let(:entries) { @struct["feed"]["entry"] }
 
         it "should be a feed" do
-          @struct['feed']['xmlns'].should be_present
+          expect(@struct['feed']['xmlns']).to be_present
         end
 
         it "should have entries" do
-          entries.should be_present
+          expect(entries).to be_present
         end
 
         it "should have an event" do
           entry = entries.first
           record = Event.find(entry['id'][%r{(\d+)$}, 1])
 
-          Nokogiri.parse(entry['content']).search('.description p').inner_html.should eq record.description
-          entry['end_time'].should eq record.end_time.xmlschema
-          entry['start_time'].should eq record.start_time.xmlschema
-          entry['summary'].should be_present
-          entry['title'].should eq record.title
-          entry['updated'].should eq record.updated_at.xmlschema
-          entry['url'].should eq event_url(record)
+          expect(Nokogiri.parse(entry['content']).search('.description p').inner_html).to eq record.description
+          expect(entry['end_time']).to eq record.end_time.xmlschema
+          expect(entry['start_time']).to eq record.start_time.xmlschema
+          expect(entry['summary']).to be_present
+          expect(entry['title']).to eq record.title
+          expect(entry['updated']).to eq record.updated_at.xmlschema
+          expect(entry['url']).to eq event_url(record)
         end
       end
     end
@@ -165,11 +165,11 @@ describe EventsController do
         end
 
         it "should have a calendar" do
-          response.body.should match /BEGIN:VCALENDAR/
+          expect(response.body).to match /BEGIN:VCALENDAR/
         end
 
         it "should not have events" do
-          response.body.should_not match /BEGIN:VEVENT/
+          expect(response.body).not_to match /BEGIN:VEVENT/
         end
       end
 
@@ -182,19 +182,19 @@ describe EventsController do
         end
 
         it "should have a calendar" do
-          response.body.should match /BEGIN:VCALENDAR/
+          expect(response.body).to match /BEGIN:VCALENDAR/
         end
 
         it "should have events" do
-          response.body.should match /BEGIN:VEVENT/
+          expect(response.body).to match /BEGIN:VEVENT/
         end
 
         it "should render all future events" do
-          response.body.should match /SUMMARY:#{@current_event.title}/
+          expect(response.body).to match /SUMMARY:#{@current_event.title}/
         end
 
         it "should not render past events" do
-          response.body.should_not =~ /SUMMARY:#{@past_event.title}/
+          expect(response.body).not_to match(/SUMMARY:#{@past_event.title}/)
         end
       end
     end
@@ -214,38 +214,38 @@ describe EventsController do
 
           it "should use the default if not given the parameter" do
             get :index, :date => {}
-            assigns[date_field].should eq send(date_field)
-            flash[:failure].should be_nil
+            expect(assigns[date_field]).to eq send(date_field)
+            expect(flash[:failure]).to be_nil
           end
 
           it "should use the default if given a malformed parameter" do
             get :index, :date => "omgkittens"
-            assigns[date_field].should eq send(date_field)
-            response.body.should have_selector(".flash_failure", text: 'malformed')
+            expect(assigns[date_field]).to eq send(date_field)
+            expect(response.body).to have_selector(".flash_failure", text: 'malformed')
           end
 
           it "should use the default if given a missing parameter" do
             get :index, :date => {:foo => "bar"}
-            assigns[date_field].should eq send(date_field)
-            response.body.should have_selector(".flash_failure", text: 'missing')
+            expect(assigns[date_field]).to eq send(date_field)
+            expect(response.body).to have_selector(".flash_failure", text: 'missing')
           end
 
           it "should use the default if given an empty parameter" do
             get :index, :date => {date_kind => ""}
-            assigns[date_field].should eq send(date_field)
-            response.body.should have_selector(".flash_failure", text: 'empty')
+            expect(assigns[date_field]).to eq send(date_field)
+            expect(response.body).to have_selector(".flash_failure", text: 'empty')
           end
 
           it "should use the default if given an invalid parameter" do
             get :index, :date => {date_kind => "omgkittens"}
-            assigns[date_field].should eq send(date_field)
-            response.body.should have_selector(".flash_failure", text: 'invalid')
+            expect(assigns[date_field]).to eq send(date_field)
+            expect(response.body).to have_selector(".flash_failure", text: 'invalid')
           end
 
           it "should use the value if valid" do
             expected = Date.yesterday
             get :index, :date => {date_kind => expected.to_s("%Y-%m-%d")}
-            assigns[date_field].should eq expected
+            expect(assigns[date_field]).to eq expected
           end
         end
       end
@@ -282,8 +282,8 @@ describe EventsController do
         results = assigns[:events]
 
         # Then
-        results.size.should eq 2
-        results.should eq matching
+        expect(results.size).to eq 2
+        expect(results).to eq matching
       end
     end
   end
@@ -291,27 +291,27 @@ describe EventsController do
   describe "#show" do
     it "should show an event" do
       event = Event.new(:start_time => now)
-      Event.should_receive(:find).and_return(event)
+      expect(Event).to receive(:find).and_return(event)
 
       get "show", :id => 1234
-      response.should be_success
+      expect(response).to be_success
     end
 
     it "should redirect from a duplicate event to its master" do
       master = FactoryGirl.create(:event, id: 4321)
       event = Event.new(:start_time => now, :duplicate_of => master)
-      Event.should_receive(:find).and_return(event)
+      expect(Event).to receive(:find).and_return(event)
 
       get "show", :id => 1234
-      response.should redirect_to(event_path(master))
+      expect(response).to redirect_to(event_path(master))
     end
 
     it "should show an error when asked to display a non-existent event" do
-      Event.should_receive(:find).and_raise(ActiveRecord::RecordNotFound)
+      expect(Event).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
 
       get "show", :id => 1234
-      response.should redirect_to(events_path)
-      flash[:failure].should_not be_blank
+      expect(response).to redirect_to(events_path)
+      expect(flash[:failure]).not_to be_blank
     end
   end
 
@@ -335,8 +335,8 @@ describe EventsController do
     describe "#new" do
       it "should display form for creating new event" do
         get "new"
-        response.should be_success
-        response.should render_template :new
+        expect(response).to be_success
+        expect(response).to render_template :new
       end
     end
 
@@ -347,7 +347,7 @@ describe EventsController do
         @params[:event][:venue_id] = nil
         post "create", @params
         @event = Event.find_by_title(@params[:event][:title])
-        response.should redirect_to(@event)
+        expect(response).to redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue id" do
@@ -355,8 +355,8 @@ describe EventsController do
         @params[:event][:venue_id] = @venue.id.to_s
         post "create", @params
         @event = Event.find_by_title(@params[:event][:title])
-        @event.venue.should == @venue
-        response.should redirect_to(@event)
+        expect(@event.venue).to eq(@venue)
+        expect(response).to redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue name" do
@@ -364,8 +364,8 @@ describe EventsController do
         @params[:venue_name] = @venue.title
         post "create", @params
         @event = Event.find_by_title(@params[:event][:title])
-        @event.venue.should == @venue
-        response.should redirect_to(@event)
+        expect(@event.venue).to eq(@venue)
+        expect(response).to redirect_to(@event)
       end
 
       it "should associate a venue by id when both an id and a name are provided" do
@@ -375,8 +375,8 @@ describe EventsController do
         @params[:venue_name] = @venue2.title
         post "create", @params
         @event = Event.find_by_title(@params[:event][:title])
-        @event.venue.should == @venue
-        response.should redirect_to(@event)
+        expect(@event.venue).to eq(@venue)
+        expect(response).to redirect_to(@event)
       end
 
       it "should create a new event and new venue, and redirect to venue edit form" do
@@ -384,19 +384,19 @@ describe EventsController do
         post "create", @params
         @event = Event.find_by_title(@params[:event][:title])
         @venue = Venue.find_by_title("New Venue")
-        @event.venue.should == @venue
-        response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
+        expect(@event.venue).to eq(@venue)
+        expect(response).to redirect_to(edit_venue_url(@venue, :from_event => @event.id))
       end
 
       it "should catch errors and redisplay the new event form" do
         post "create"
-        response.should render_template :new
+        expect(response).to render_template :new
       end
 
       it "should stop evil robots" do
         post "create", :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
-        response.should render_template :new
-        flash[:failure].should match /evil robot/i
+        expect(response).to render_template :new
+        expect(flash[:failure]).to match /evil robot/i
       end
 
       it "should not allow too many links in the description" do
@@ -407,8 +407,8 @@ describe EventsController do
           https://example.net
         DESC
         post "create", @params
-        response.should render_template :new
-        flash[:failure].should match /too many links/i
+        expect(response).to render_template :new
+        expect(flash[:failure]).to match /too many links/i
       end
 
       it "should accept HTTP-rich presentation descriptions without too many links" do
@@ -423,14 +423,14 @@ describe EventsController do
           vs HTTP::Client vs HTTP::Client::Parallel
         DESC
         post "create", @params
-        flash[:failure].should be_nil
+        expect(flash[:failure]).to be_nil
       end
 
       it "should allow the user to preview the event" do
         @params[:preview] = "Preview"
         post "create", @params
-        response.should render_template :new
-        response.body.should have_selector '#event_preview'
+        expect(response).to render_template :new
+        expect(response.body).to have_selector '#event_preview'
       end
 
       it "should create an event for an existing venue" do
@@ -445,15 +445,15 @@ describe EventsController do
           },
           :venue_name => venue.title
 
-        response.should be_redirect
+        expect(response).to be_redirect
 
-        flash[:success].should be_present
+        expect(flash[:success]).to be_present
 
         event = assigns[:event]
-        event.title.should eq "My Event"
-        event.venue.title.should eq venue.title
-        event.venue.id.should eq venue.id
-        event.tag_list.to_a.sort.should eq %w[bar baz foo]
+        expect(event.title).to eq "My Event"
+        expect(event.venue.title).to eq venue.title
+        expect(event.venue.id).to eq venue.id
+        expect(event.tag_list.to_a.sort).to eq %w[bar baz foo]
       end
     end
 
@@ -466,30 +466,30 @@ describe EventsController do
 
       it "should display form for editing event" do
         get "edit", id: 42
-        response.should be_success
-        response.should render_template :edit
+        expect(response).to be_success
+        expect(response).to render_template :edit
       end
 
       it "should update an event without a venue" do
         @event.venue = nil
         put "update", @params
-        response.should redirect_to(@event)
+        expect(response).to redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue id" do
         @venue = FactoryGirl.create(:venue)
         @params[:event][:venue_id] = @venue.id.to_s
         put "update", @params
-        @event.reload.venue.should == @venue
-        response.should redirect_to(@event)
+        expect(@event.reload.venue).to eq(@venue)
+        expect(response).to redirect_to(@event)
       end
 
       it "should associate a venue based on a given venue name" do
         @venue = FactoryGirl.create(:venue)
         @params[:venue_name] = @venue.title
         put "update", @params
-        @event.reload.venue.should == @venue
-        response.should redirect_to(@event)
+        expect(@event.reload.venue).to eq(@venue)
+        expect(response).to redirect_to(@event)
       end
 
       it "should associate a venue by id when both an id and a name are provided" do
@@ -498,28 +498,28 @@ describe EventsController do
         @params[:event][:venue_id] = @venue.id.to_s
         @params[:venue_name] = @venue2.title
         put "update", @params
-        @event.reload.venue.should == @venue
-        response.should redirect_to(@event)
+        expect(@event.reload.venue).to eq(@venue)
+        expect(response).to redirect_to(@event)
       end
 
       it "should update an event and create a new venue, and redirect to the venue edit form" do
         @params[:venue_name] = "New Venue"
         put "update", @params
         @venue = Venue.find_by_title("New Venue")
-        response.should redirect_to(edit_venue_url(@venue, :from_event => @event.id))
+        expect(response).to redirect_to(edit_venue_url(@venue, :from_event => @event.id))
       end
 
       it "should catch errors and redisplay the new event form" do
         @params[:event][:title] = nil
         put "update", @params
-        response.should render_template :edit
+        expect(response).to render_template :edit
       end
 
       it "should stop evil robots" do
         @params[:trap_field] = "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
         put "update", @params
-        response.should render_template :edit
-        flash[:failure].should match /evil robot/i
+        expect(response).to render_template :edit
+        expect(flash[:failure]).to match /evil robot/i
       end
 
       it "should not allow too many links in the description" do
@@ -530,13 +530,13 @@ describe EventsController do
           https://example.net
         DESC
         put "update", @params
-        response.should render_template :edit
-        flash[:failure].should match /too many links/i
+        expect(response).to render_template :edit
+        expect(flash[:failure]).to match /too many links/i
       end
 
       it "should allow the user to preview the event" do
         put "update", @params.merge(:preview => "Preview")
-        response.should render_template :edit
+        expect(response).to render_template :edit
       end
     end
 
@@ -544,31 +544,31 @@ describe EventsController do
       before do
         @event = FactoryGirl.create(:event)
 
-        Event.stub(:find).and_return(@event)
+        allow(Event).to receive(:find).and_return(@event)
 
         get "clone", :id => 1
       end
 
       it "should build an unsaved record" do
         record = assigns[:event]
-        record.should be_a_new_record
-        record.id.should be_nil
+        expect(record).to be_a_new_record
+        expect(record.id).to be_nil
       end
 
       it "should build a cloned record similar to the existing record" do
         record = assigns[:event]
         %w[title description venue_id venue_details].each do |field|
-          record.attributes[field].should eq @event.attributes[field]
+          expect(record.attributes[field]).to eq @event.attributes[field]
         end
       end
 
       it "should display a new event form" do
-        response.should be_success
-        response.should render_template :new
+        expect(response).to be_success
+        expect(response).to render_template :new
       end
 
       it "should have notice with cloning instructions" do
-        flash[:success].should match /clone/i
+        expect(flash[:success]).to match /clone/i
       end
     end
   end
@@ -587,12 +587,12 @@ describe EventsController do
 
       # Current duplicates
       assigns[:grouped_events].select{|keys,values| keys.include?(current_master.title)}.tap do |events|
-        events.should_not be_empty
-        events.first.last.size.should eq 2
+        expect(events).not_to be_empty
+        expect(events.first.last.size).to eq 2
       end
 
       # Past duplicates
-      assigns[:grouped_events].select{|keys,values| keys.include?(past_master.title)}.should be_empty
+      expect(assigns[:grouped_events].select{|keys,values| keys.include?(past_master.title)}).to be_empty
     end
 
     it "should redirect duplicate events to their master" do
@@ -600,22 +600,22 @@ describe EventsController do
       event_duplicate = FactoryGirl.create(:event)
 
       get 'show', :id => event_duplicate.id
-      response.should_not be_redirect
-      assigns(:event).id.should eq event_duplicate.id
+      expect(response).not_to be_redirect
+      expect(assigns(:event).id).to eq event_duplicate.id
 
       event_duplicate.duplicate_of = event_master
       event_duplicate.save!
 
       get 'show', :id => event_duplicate.id
-      response.should be_redirect
-      response.should redirect_to(event_url(event_master.id))
+      expect(response).to be_redirect
+      expect(response).to redirect_to(event_url(event_master.id))
     end
 
     it "should display an error message if given invalid arguments" do
       get 'duplicates', :type => 'omgwtfbbq'
 
-      response.should be_success
-      response.body.should have_selector('.failure', text: 'omgwtfbbq')
+      expect(response).to be_success
+      expect(response.body).to have_selector('.failure', text: 'omgwtfbbq')
     end
   end
 
@@ -637,11 +637,11 @@ describe EventsController do
         end
 
         it "should assign search result" do
-          assigns[:search].should be_a Event::Search
+          expect(assigns[:search]).to be_a Event::Search
         end
 
         it "should assign matching events" do
-          assigns[:events].should =~ [current_event, current_event_2, past_event]
+          expect(assigns[:events]).to match_array([current_event, current_event_2, past_event])
         end
 
         it "should render matching events" do
@@ -673,7 +673,7 @@ describe EventsController do
           post :search, :query => "myquery", :format => "xml"
 
           hash = Hash.from_xml(response.body)
-          hash["events"].should be_a_kind_of Array
+          expect(hash["events"]).to be_a_kind_of Array
         end
 
         it "should include venue details" do
@@ -683,8 +683,8 @@ describe EventsController do
           event = hash["events"].first
           venue = event["venue"]
           venue_title = venue["title"]
-          venue_title.should be_a_kind_of String
-          venue_title.length.should be_present
+          expect(venue_title).to be_a_kind_of String
+          expect(venue_title.length).to be_present
         end
       end
 
@@ -693,13 +693,13 @@ describe EventsController do
           post :search, :query => "myquery", :format => "json"
 
           struct = ActiveSupport::JSON.decode(response.body)
-          struct.should be_a_kind_of Array
+          expect(struct).to be_a_kind_of Array
         end
 
         it "should accept a JSONP callback" do
           post :search, :query => "myquery", :format => "json", :callback => "some_function"
 
-          response.body.should match /^\s*some_function\(.*\);?\s*$/
+          expect(response.body).to match /^\s*some_function\(.*\);?\s*$/
         end
 
         it "should include venue details" do
@@ -707,8 +707,8 @@ describe EventsController do
 
           struct = ActiveSupport::JSON.decode(response.body)
           event = struct.first
-          event["venue"]["title"].should be_a_kind_of String
-          event["venue"]["title"].length.should be_present
+          expect(event["venue"]["title"]).to be_a_kind_of String
+          expect(event["venue"]["title"].length).to be_present
         end
       end
 
@@ -717,7 +717,7 @@ describe EventsController do
           post :search, :query => "myquery", :format => "atom"
 
           hash = Hash.from_xml(response.body)
-          hash["feed"]["entry"].should be_a_kind_of Array
+          expect(hash["feed"]["entry"]).to be_a_kind_of Array
         end
       end
 
@@ -725,27 +725,27 @@ describe EventsController do
         it "should produce ICS" do
           post :search, :query => "myquery", :format => "ics"
 
-          response.body.should match /BEGIN:VEVENT/
+          expect(response.body).to match /BEGIN:VEVENT/
         end
 
         it "should produce events matching the query" do
           post :search, :query => "myquery", :format => "ics"
-          response.body.should match /SUMMARY:#{current_event_2.title}/
-          response.body.should match /SUMMARY:#{past_event.title}/
+          expect(response.body).to match /SUMMARY:#{current_event_2.title}/
+          expect(response.body).to match /SUMMARY:#{past_event.title}/
         end
       end
 
       describe "failures" do
         it "sets search failures in the flash message" do
-          Event::Search.any_instance.stub failure_message: "OMG"
+          allow_any_instance_of(Event::Search).to receive_messages failure_message: "OMG"
           post :search
-          flash[:failure].should == "OMG"
+          expect(flash[:failure]).to eq("OMG")
         end
 
         it "redirects to home if hard failure" do
-          Event::Search.any_instance.stub hard_failure?: true
+          allow_any_instance_of(Event::Search).to receive_messages hard_failure?: true
           post :search
-          response.should redirect_to(root_path)
+          expect(response).to redirect_to(root_path)
         end
       end
     end
@@ -754,11 +754,11 @@ describe EventsController do
   describe "#destroy" do
     it "should destroy events" do
       event = FactoryGirl.build(:event)
-      event.should_receive(:destroy)
-      Event.should_receive(:find).and_return(event)
+      expect(event).to receive(:destroy)
+      expect(Event).to receive(:find).and_return(event)
 
       delete 'destroy', :id => 1234
-      response.should redirect_to(events_url)
+      expect(response).to redirect_to(events_url)
     end
   end
 end

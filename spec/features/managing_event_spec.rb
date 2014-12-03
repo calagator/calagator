@@ -20,7 +20,7 @@ feature 'Event Editing' do
 
     click_on 'edit'
 
-    find_field('Event Name').value.should have_content 'Ruby Future'
+    expect(find_field('Event Name').value).to have_content 'Ruby Future'
     fill_in 'Event Name', with: 'Ruby ABCs'
     fill_in 'start_date', with: '2014-10-10'
     fill_in 'start_time', with: '06:00 PM'
@@ -31,16 +31,16 @@ feature 'Event Editing' do
     fill_in 'Tags', with: 'beginners,ruby'
     click_on 'Update Event'
 
-    page.should have_content 'Event was successfully saved'
-    page.should have_content 'Ruby ABCs'
-    page.should have_content 'Friday, October 10, 2014 from 6–7pm'
-    page.should have_content 'Website http://www.rubynewbies.com'
-    page.should have_content 'Description An event for beginners'
-    page.should have_content 'Tags beginners, ruby'
+    expect(page).to have_content 'Event was successfully saved'
+    expect(page).to have_content 'Ruby ABCs'
+    expect(page).to have_content 'Friday, October 10, 2014 from 6–7pm'
+    expect(page).to have_content 'Website http://www.rubynewbies.com'
+    expect(page).to have_content 'Description An event for beginners'
+    expect(page).to have_content 'Tags beginners, ruby'
 
     click_on 'Calagator'
     within '#tomorrow' do
-      page.should have_content 'Ruby ABCs'
+      expect(page).to have_content 'Ruby ABCs'
     end
   end
 end
@@ -63,7 +63,7 @@ feature 'Event Cloning' do
     end
     click_on 'clone'
 
-    find_field('Event Name').value.should have_content 'Ruby Event Part One'
+    expect(find_field('Event Name').value).to have_content 'Ruby Event Part One'
 
     fill_in 'Event Name', with: 'Ruby Event Part Two'
     fill_in 'start_date', with: '2014-10-27'
@@ -75,16 +75,16 @@ feature 'Event Cloning' do
     fill_in 'Tags', with: 'beginners,ruby'
     click_on 'Create Event'
 
-    page.should have_content 'Event was successfully saved'
-    page.should have_content 'Ruby Event Part Two'
-    page.should have_content 'Monday, October 27, 2014 at 6pm'
-    page.should have_content 'Website http://www.rubynewbies.com'
-    page.should have_content 'Description An event for beginners'
-    page.should have_content 'Tags beginners, ruby'
+    expect(page).to have_content 'Event was successfully saved'
+    expect(page).to have_content 'Ruby Event Part Two'
+    expect(page).to have_content 'Monday, October 27, 2014 at 6pm'
+    expect(page).to have_content 'Website http://www.rubynewbies.com'
+    expect(page).to have_content 'Description An event for beginners'
+    expect(page).to have_content 'Tags beginners, ruby'
 
     click_on 'Calagator'
     click_on 'View future events »'
-    page.should have_content 'Ruby Event Part Two'
+    expect(page).to have_content 'Ruby Event Part Two'
   end
 end
 
@@ -102,11 +102,11 @@ feature 'Event Deletion' do
 
     click_on 'delete'
 
-    page.should have_content '"Ruby and You" has been deleted'
+    expect(page).to have_content '"Ruby and You" has been deleted'
 
     click_on 'Calagator'
     within '#tomorrow' do
-      page.should have_content '- No events -'
+      expect(page).to have_content '- No events -'
     end
   end
 end
