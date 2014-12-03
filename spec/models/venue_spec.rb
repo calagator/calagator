@@ -1,20 +1,20 @@
 require 'spec_helper'
 
-describe Venue do
+describe Venue, :type => :model do
 
   it "should be valid" do
     venue = Venue.new(:title => 'My Event')
-    venue.should be_valid
+    expect(venue).to be_valid
   end
 
   it "should add an http prefix to urls missing this before save" do
     venue = Venue.new(:title => 'My Event', :url => 'google.com')
-    venue.should be_valid
+    expect(venue).to be_valid
   end
 
   it "validates blacklisted words" do
     venue = Venue.new(:title => "Foo bar cialis")
-    venue.should_not be_valid
+    expect(venue).not_to be_valid
   end
 
   describe "when validating" do
@@ -25,14 +25,14 @@ describe Venue do
       it "should strip whitespace from #{field}" do
         venue = Venue.new(attributes.merge(field => bad_data))
         venue.valid?
-        venue.send(field).should == expected_data
+        expect(venue.send(field)).to eq(expected_data)
       end
     end
 
     it "should strip whitespace from url" do
       venue = Venue.new(attributes.merge(:url => bad_data))
       venue.valid?
-      venue.url.should == "http://#{expected_data}"
+      expect(venue.url).to eq("http://#{expected_data}")
     end
   end
 
@@ -41,21 +41,21 @@ describe Venue do
       venue1 = Venue.create!(:title => "this", :description => "desc",:created_at => Time.now)
       venue2 = Venue.new(    :title => "this", :description => "desc",:created_at => Time.now.yesterday)
 
-      venue2.find_exact_duplicates.should include(venue1)
+      expect(venue2.find_exact_duplicates).to include(venue1)
     end
 
     it "should ignore source_id" do
       venue1 = Venue.create!(:title => "this", :description => "desc",:source_id => "1")
       venue2 = Venue.new(    :title => "this", :description => "desc",:source_id => "2")
 
-      venue2.find_exact_duplicates.should include(venue1)
+      expect(venue2.find_exact_duplicates).to include(venue1)
     end
 
     it "should not match non-duplicates" do
       Venue.create!(:title => "this", :description => "desc")
       venue2 = Venue.new(:title => "that", :description => "desc")
 
-      venue2.find_exact_duplicates.should be_blank
+      expect(venue2.find_exact_duplicates).to be_blank
     end
   end
 
@@ -66,72 +66,72 @@ describe Venue do
 
     it "should not match totally different records" do
       FactoryGirl.create(:venue)
-      Venue.find_duplicates_by(:title).should be_empty
+      expect(Venue.find_duplicates_by(:title)).to be_empty
     end
 
     it "should not match similar records when not searching by duplicated fields" do
       FactoryGirl.create :venue, title: @existing.title
-      Venue.find_duplicates_by(:description).should be_empty
+      expect(Venue.find_duplicates_by(:description)).to be_empty
     end
 
     it "should match similar records when searching by duplicated fields" do
       FactoryGirl.create :venue, title: @existing.title
-      Venue.find_duplicates_by(:title).should be_present
+      expect(Venue.find_duplicates_by(:title)).to be_present
     end
 
     it "should match similar records when searching by :any" do
       FactoryGirl.create :venue, title: @existing.title
-      Venue.find_duplicates_by(:any).should be_present
+      expect(Venue.find_duplicates_by(:any)).to be_present
     end
 
     it "should not match similar records when searching by multiple fields where not all are duplicated" do
       FactoryGirl.create :venue, title: @existing.title
-      Venue.find_duplicates_by([:title, :description]).should be_empty
+      expect(Venue.find_duplicates_by([:title, :description])).to be_empty
     end
 
     it "should match similar records when searching by multiple fields where all are duplicated" do
       FactoryGirl.create(:venue, :title => @existing.title, :description => @existing.description)
-      Venue.find_duplicates_by([:title, :description]).should be_present
+      expect(Venue.find_duplicates_by([:title, :description])).to be_present
     end
 
     it "should not match dissimilar records when searching by :all" do
       FactoryGirl.create(:venue)
-      Venue.find_duplicates_by(:all).should be_empty
+      expect(Venue.find_duplicates_by(:all)).to be_empty
     end
 
     it "should match similar records when searching by :all" do
       attributes = @existing.attributes.reject{ |k,v| k == 'id'}
       Venue.create!(attributes)
-      Venue.find_duplicates_by(:all).should be_present
+      expect(Venue.find_duplicates_by(:all)).to be_present
     end
   end
 
   describe "when finding by an identifier" do
 
     it "should return nil for nil" do
-      Venue.find_by_identifier(nil).should be_nil
+      expect(Venue.find_by_identifier(nil)).to be_nil
     end
 
     it "should return the argument if it is a Venue" do
       record = FactoryGirl.create(:venue)
-      Venue.find_by_identifier(record).should eq record
+      expect(Venue.find_by_identifier(record)).to eq record
     end
 
     it "should return a new venue record for a string" do
       new_venue = Venue.find_by_identifier("Moda Center")
-      new_venue.should be_an_instance_of Venue
-      new_venue.title.should eq "Moda Center"
-      new_venue.should be_new_record
+      expect(new_venue).to be_an_instance_of Venue
+      expect(new_venue.title).to eq "Moda Center"
+      expect(new_venue).to be_new_record
     end
 
     it "should return an existing venue for a string that matches an existing venue" do
       record = FactoryGirl.create(:venue, :title => "Tilt")
-      Venue.find_by_identifier("Tilt").should eq record
+      expect(Venue.find_by_identifier("Tilt")).to eq record
     end
 
     it "should return a venue for an id that matches an existing venue" do
       record = FactoryGirl.create(:venue, :id => 8002)
-      Venue.find_by_identifier(8002).should eq record
+      expect(Venue.find_by_identifier(8002)).to eq record
     end
   end
 
@@ -143,38 +143,38 @@ describe Venue do
     end
 
     it "should recognize a master" do
-      @master.should be_a_master
+      expect(@master).to be_a_master
     end
 
     it "should recognize a slave" do
-      @slave_first.should be_a_slave
+      expect(@slave_first).to be_a_slave
     end
 
     it "should not think that a slave is a master" do
-      @slave_second.should_not be_a_master
+      expect(@slave_second).not_to be_a_master
     end
 
     it "should not think that a master is a slave" do
-      @master.should_not be_a_slave
+      expect(@master).not_to be_a_slave
     end
 
     it "should return the progenitor of a child" do
-      @slave_first.progenitor.should eq @master
+      expect(@slave_first.progenitor).to eq @master
     end
 
     it "should return the progenitor of a grandchild" do
-      @slave_second.progenitor.should eq @master
+      expect(@slave_second.progenitor).to eq @master
     end
 
     it "should return a master as its own progenitor" do
-      @master.progenitor.should eq @master
+      expect(@master.progenitor).to eq @master
     end
 
     it "should return the progenitor if an imported venue has an exact duplicate" do
       @abstract_location = SourceParser::AbstractLocation.new
       @abstract_location.title = @slave_second.title
 
-      Venue.from_abstract_location(@abstract_location).should eq @master
+      expect(Venue.from_abstract_location(@abstract_location)).to eq @master
     end
   end
 
@@ -193,42 +193,42 @@ describe Venue do
     it "should squash a single duplicate" do
       Venue.squash(@master_venue, @submaster_venue)
 
-      @submaster_venue.duplicate_of.should eq @master_venue
-      @submaster_venue.duplicate?.should be_truthy
+      expect(@submaster_venue.duplicate_of).to eq @master_venue
+      expect(@submaster_venue.duplicate?).to be_truthy
     end
 
     it "should squash multiple duplicates" do
       Venue.squash(@master_venue, [@submaster_venue, @child_venue])
 
-      @submaster_venue.duplicate_of.should eq @master_venue
-      @child_venue.duplicate_of.should eq @master_venue
+      expect(@submaster_venue.duplicate_of).to eq @master_venue
+      expect(@child_venue.duplicate_of).to eq @master_venue
     end
 
     it "should squash duplicates recursively" do
       Venue.squash(@master_venue, @submaster_venue)
 
-      @submaster_venue.duplicate_of.should eq @master_venue
+      expect(@submaster_venue.duplicate_of).to eq @master_venue
       @child_venue.reload # Needed because child was queried through DB, not object graph
-      @child_venue.duplicate_of.should eq @master_venue
+      expect(@child_venue.duplicate_of).to eq @master_venue
     end
 
     it "should transfer events of duplicates" do
-      @venues.map{|venue| venue.events.count}.should eq [0, 1, 1]
+      expect(@venues.map{|venue| venue.events.count}).to eq [0, 1, 1]
 
       Venue.squash(@master_venue, @submaster_venue)
 
-      @venues.map{|venue| venue.events.count}.should eq [2, 0, 0]
+      expect(@venues.map{|venue| venue.events.count}).to eq [2, 0, 0]
 
       events = @venues.map(&:events).flatten
-      events.should be_present
+      expect(events).to be_present
       for event in events
-        event.venue.should eq @master_venue
+        expect(event.venue).to eq @master_venue
       end
     end
   end
 end
 
-describe "Venue geocoding" do
+describe "Venue geocoding", :type => :model do
   before do
     @venue = Venue.new(:title => "title", :address => "test")
     @geo_failure = double("geo", :success => false)
@@ -240,19 +240,19 @@ describe "Venue geocoding" do
   end
 
   it "should be valid even if not yet geocoded" do
-    @venue.valid?.should be_truthy
+    expect(@venue.valid?).to be_truthy
   end
 
   it "should report its location properly if it has one" do
-    lambda {
+    expect {
       @venue.latitude = 45.0
       @venue.longitude = -122.0
-    }.should change { @venue.location }.from(nil).to([BigDecimal("45.0"), BigDecimal("-122.0")])
+    }.to change { @venue.location }.from(nil).to([BigDecimal("45.0"), BigDecimal("-122.0")])
   end
 
   it "should geocode automatically on save" do
     Venue.with_geocoding do
-      GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
+      expect(GeoKit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
       @venue.save
     end
   end
@@ -260,7 +260,7 @@ describe "Venue geocoding" do
   it "shouldn't geocode automatically unless there's an address" do
     Venue.with_geocoding do
       @venue.address = ""
-      GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
+      expect(GeoKit::Geocoders::MultiGeocoder).not_to receive(:geocode)
       @venue.save
     end
   end
@@ -268,35 +268,35 @@ describe "Venue geocoding" do
   it "shouldn't geocode automatically if already geocoded" do
     Venue.with_geocoding do
       @venue.latitude = @venue.longitude = 0.0
-      GeoKit::Geocoders::MultiGeocoder.should_not_receive(:geocode)
+      expect(GeoKit::Geocoders::MultiGeocoder).not_to receive(:geocode)
       @venue.save
     end
   end
 
   it "shouldn't fail if the geocoder returns failure" do
     Venue.with_geocoding do
-      GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_failure)
+      expect(GeoKit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_failure)
       @venue.save
     end
   end
 
   it "should fill in empty addressing fields" do
     Venue.with_geocoding do
-      GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
+      expect(GeoKit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
       @venue.save
-      @venue.street_address.should eq @geo_success.street_address
-      @venue.locality.should eq @geo_success.city
-      @venue.region.should eq @geo_success.state
-      @venue.postal_code.should eq @geo_success.zip
+      expect(@venue.street_address).to eq @geo_success.street_address
+      expect(@venue.locality).to eq @geo_success.city
+      expect(@venue.region).to eq @geo_success.state
+      expect(@venue.postal_code).to eq @geo_success.zip
     end
   end
 
   it "should leave non-empty addressing fields alone" do
     Venue.with_geocoding do
       @venue.locality = "Cleveland"
-      GeoKit::Geocoders::MultiGeocoder.should_receive(:geocode).once.and_return(@geo_success)
+      expect(GeoKit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
       @venue.save
-      @venue.locality.should eq "Cleveland"
+      expect(@venue.locality).to eq "Cleveland"
     end
   end
 
@@ -305,19 +305,19 @@ describe "Venue geocoding" do
 
     it "should strip location when geocoding is forced" do
       @venue.force_geocoding = "1"
-      @venue.latitude.should be_nil
-      @venue.longitude.should be_nil
+      expect(@venue.latitude).to be_nil
+      expect(@venue.longitude).to be_nil
     end
 
     it "should not strip location when geocoding is forced" do
       @venue.force_geocoding = "0"
-      @venue.latitude.should_not be_nil
-      @venue.longitude.should_not be_nil
+      expect(@venue.latitude).not_to be_nil
+      expect(@venue.longitude).not_to be_nil
     end
   end
 end
 
-describe "Venue geocode addressing" do
+describe "Venue geocode addressing", :type => :model do
   before do
     @venue = Venue.new(:title => "title")
   end
@@ -331,27 +331,27 @@ describe "Venue geocode addressing" do
       :country => "country",
       :address => "address"
     }
-    @venue.geocode_address.should eq "street_address, locality region postal_code country"
+    expect(@venue.geocode_address).to eq "street_address, locality region postal_code country"
   end
 
   it "should fall back to 'address' field if street address fields are blank" do
     @venue.attributes = {:street_address => "", :address => "address"}
-    @venue.geocode_address.should eq "address"
+    expect(@venue.geocode_address).to eq "address"
   end
 
   describe "when versioning" do
     it "should have versions" do
-      Venue.new.versions.should eq []
+      expect(Venue.new.versions).to eq []
     end
 
     it "should create a new version after updating" do
       venue = FactoryGirl.create :venue
-      venue.versions.count.should eq 1
+      expect(venue.versions.count).to eq 1
 
       venue.title += " (change)"
 
       venue.save!
-      venue.versions.count.should eq 2
+      expect(venue.versions.count).to eq 2
     end
 
     it "should store old content in past versions" do
@@ -361,7 +361,7 @@ describe "Venue geocode addressing" do
       venue.title += " (change)"
 
       venue.save!
-      venue.versions.last.reify.title.should eq original_title
+      expect(venue.versions.last.reify.title).to eq original_title
     end
   end
 end

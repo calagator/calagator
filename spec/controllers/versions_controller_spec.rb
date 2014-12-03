@@ -1,23 +1,23 @@
 require 'spec_helper'
 
-describe VersionsController do
+describe VersionsController, :type => :controller do
   describe "without versions" do
     it "should raise RecordNotFound if not given an id" do
-      lambda do
+      expect do
         get :edit, :id => ''
-      end.should raise_error ActiveRecord::RecordNotFound
+      end.to raise_error ActiveRecord::RecordNotFound
     end
 
     it "should raise RecordNotFound if given invalid id" do
-      lambda do
+      expect do
         get :edit, :id => '-1'
-      end.should raise_error ActiveRecord::RecordNotFound
+      end.to raise_error ActiveRecord::RecordNotFound
     end
 
     it "should raise RecordNotFound if given id that doesn't exist" do
-      lambda do
+      expect do
         get :edit, :id => '1234'
-      end.should raise_error ActiveRecord::RecordNotFound
+      end.to raise_error ActiveRecord::RecordNotFound
     end
   end
 
@@ -48,29 +48,29 @@ describe VersionsController do
     end
 
     it "should render the initial content for a 'create'" do
-      title_for(:create).should eq @create_title
+      expect(title_for(:create)).to eq @create_title
     end
 
     it "should render the updated content for an 'update'" do
-      title_for(:update).should eq @update_title
+      expect(title_for(:update)).to eq @update_title
     end
 
     it "should render the final content for a 'destroy'" do
-      title_for(:destroy).should eq @final_title
+      expect(title_for(:destroy)).to eq @final_title
     end
 
     it "should render html" do
       version_id = @event.versions.first.id
       get :edit, id: version_id
-      response.should be_success
-      response.should render_template "events/edit"
+      expect(response).to be_success
+      expect(response).to render_template "events/edit"
     end
 
     it "should render html via xhr" do
       version_id = @event.versions.first.id
       xhr :get, :edit, id: version_id
-      response.should be_success
-      response.should render_template "events/_form"
+      expect(response).to be_success
+      expect(response).to render_template "events/_form"
     end
   end
 end

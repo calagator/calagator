@@ -1,76 +1,76 @@
 require 'spec_helper'
 
-describe Venue do
+describe Venue, :type => :model do
   shared_examples_for "#search" do
     it "returns everything when searching by empty string" do
       venue1 = FactoryGirl.create(:venue)
       venue2 = FactoryGirl.create(:venue)
-      Venue.search("").should =~ [venue1, venue2]
+      expect(Venue.search("")).to match_array([venue1, venue2])
     end
 
     it "searches venue titles by substring" do
       venue1 = FactoryGirl.create(:venue, title: "wtfbbq")
       venue2 = FactoryGirl.create(:venue, title: "zomg!")
-      Venue.search("zomg").should == [venue2]
+      expect(Venue.search("zomg")).to eq([venue2])
     end
 
     it "searches venue descriptions by substring" do
       venue1 = FactoryGirl.create(:venue, description: "wtfbbq")
       venue2 = FactoryGirl.create(:venue, description: "zomg!")
-      Venue.search("zomg").should == [venue2]
+      expect(Venue.search("zomg")).to eq([venue2])
     end
 
     it "searches venue tags by exact match" do
       venue1 = FactoryGirl.create(:venue, tag_list: ["wtf", "bbq", "zomg"])
       venue2 = FactoryGirl.create(:venue, tag_list: ["wtf", "bbq", "omg"])
-      Venue.search("omg").should == [venue2]
+      expect(Venue.search("omg")).to eq([venue2])
     end
 
     it "searches case-insensitively" do
       venue1 = FactoryGirl.create(:venue, title: "WTFBBQ")
       venue2 = FactoryGirl.create(:venue, title: "ZOMG!")
-      Venue.search("zomg").should == [venue2]
+      expect(Venue.search("zomg")).to eq([venue2])
     end
 
     it "sorts by title" do
       venue2 = FactoryGirl.create(:venue, title: "zomg")
       venue1 = FactoryGirl.create(:venue, title: "omg")
-      Venue.search("", order: "name").should == [venue1, venue2]
+      expect(Venue.search("", order: "name")).to eq([venue1, venue2])
     end
 
     it "can limit to venues with wifi" do
       venue1 = FactoryGirl.create(:venue, wifi: false)
       venue2 = FactoryGirl.create(:venue, wifi: true)
-      Venue.search("", wifi: true).should == [venue2]
+      expect(Venue.search("", wifi: true)).to eq([venue2])
     end
 
     it "excludes closed venues" do
       venue1 = FactoryGirl.create(:venue, closed: true)
       venue2 = FactoryGirl.create(:venue, closed: false)
-      Venue.search("").should == [venue2]
+      expect(Venue.search("")).to eq([venue2])
     end
 
     it "can include closed venues" do
       venue1 = FactoryGirl.create(:venue, closed: true)
       venue2 = FactoryGirl.create(:venue, closed: false)
-      Venue.search("", include_closed: true).should =~ [venue1, venue2]
+      expect(Venue.search("", include_closed: true)).to match_array([venue1, venue2])
     end
 
     it "can limit number of venues" do
       2.times { FactoryGirl.create(:venue) }
-      Venue.search("", limit: 1).count.should == 1
+      expect(Venue.search("", limit: 1).count).to eq(1)
     end
 
     it "does not search multiple terms" do
       venue2 = FactoryGirl.create(:venue, title: "zomg")
       venue1 = FactoryGirl.create(:venue, title: "omg")
-      Venue.search("zomg omg").should == []
+      expect(Venue.search("zomg omg")).to eq([])
     end
 
     it "ANDs terms together to narrow search results" do
       venue2 = FactoryGirl.create(:venue, title: "zomg omg")
       venue1 = FactoryGirl.create(:venue, title: "zomg cats")
-      Venue.search("zomg omg").should == [venue2]
+      expect(Venue.search("zomg omg")).to eq([venue2])
     end
 
   end
@@ -86,7 +86,7 @@ describe Venue do
     it_should_behave_like "#search"
 
     it "is using the sql search engine" do
-      Venue::SearchEngine.kind.should == :sql
+      expect(Venue::SearchEngine.kind).to eq(:sql)
     end
   end
 
@@ -114,7 +114,7 @@ describe Venue do
     it_should_behave_like "#search"
 
     it "is using the sunspot search engine" do
-      Venue::SearchEngine.kind.should == :sunspot
+      expect(Venue::SearchEngine.kind).to eq(:sunspot)
     end
   end
 end

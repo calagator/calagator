@@ -14,14 +14,14 @@ feature 'search for events' do
     find_field('Search Events').native.send_keys "Ruby\n"
 
     within('#current') do
-      page.should have_content 'Viewing 1 current event'
-      page.should have_content 'Ruby Future'
+      expect(page).to have_content 'Viewing 1 current event'
+      expect(page).to have_content 'Ruby Future'
     end
 
     within('#past') do
-      page.should have_content 'Viewing 2 past events'
-      page.should have_content 'Ruby Part 2 Past'
-      page.should have_content 'Ruby Part 1 Past'
+      expect(page).to have_content 'Viewing 2 past events'
+      expect(page).to have_content 'Ruby Part 2 Past'
+      expect(page).to have_content 'Ruby Part 1 Past'
     end
   end
 end

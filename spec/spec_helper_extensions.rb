@@ -164,7 +164,7 @@ def stub_source_parser_http_response!(opts={})
   code = (opts[:code] || "200").to_s
   body = opts[:body]
   http_response = double("Net::HTTPResponse", :code => code, :body => body)
-  SourceParser::Base.should_receive(:http_response_for).and_return(http_response)
+  expect(SourceParser::Base).to receive(:http_response_for).and_return(http_response)
 end
 
 SAMPLES_PATH = File.expand_path(File.dirname(__FILE__) + "/samples") unless defined?(SAMPLES_PATH)

@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe EventsHelper do
+describe EventsHelper, :type => :helper do
   describe "#icon_exists_for?" do
     it "should return true if there is a PNG file in tag_icons with the name of the argument" do
-      helper.icon_exists_for?("pizza").should eq true
+      expect(helper.icon_exists_for?("pizza")).to eq true
     end
 
     it "should return false if there is not a PNG file in tag_icons with the name of the argument" do
-      helper.icon_exists_for?("no_image").should eq false
+      expect(helper.icon_exists_for?("no_image")).to eq false
     end
   end
 
@@ -23,18 +23,18 @@ describe EventsHelper do
     include_context "tag icons"
 
     it "should generate an array of image tags for event tags" do
-      helper.get_tag_icons(@event)[0].should include "Ruby"
-      helper.get_tag_icons(@event)[0].should include "ruby.png"
-      helper.get_tag_icons(@event)[1].should include "Pizza"
-      helper.get_tag_icons(@event)[1].should include "pizza.png"
+      expect(helper.get_tag_icons(@event)[0]).to include "Ruby"
+      expect(helper.get_tag_icons(@event)[0]).to include "ruby.png"
+      expect(helper.get_tag_icons(@event)[1]).to include "Pizza"
+      expect(helper.get_tag_icons(@event)[1]).to include "pizza.png"
     end
 
     it "should return nil values for tags that do not correspond to images" do
-      helper.get_tag_icons(@event2).should eq [nil, nil]
+      expect(helper.get_tag_icons(@event2)).to eq [nil, nil]
     end
 
     it "should return a blank array if event has no tags" do
-      helper.get_tag_icons(@untagged_event).should eq []
+      expect(helper.get_tag_icons(@untagged_event)).to eq []
     end
   end
 
@@ -42,61 +42,61 @@ describe EventsHelper do
     include_context "tag icons"
 
     it "should render image tags inline and whitespace separated" do
-      helper.display_tag_icons(@event).should include "Ruby"
-      helper.display_tag_icons(@event).should include "ruby.png"
-      helper.display_tag_icons(@event).should include "Pizza"
-      helper.display_tag_icons(@event).should include "pizza.png"
+      expect(helper.display_tag_icons(@event)).to include "Ruby"
+      expect(helper.display_tag_icons(@event)).to include "ruby.png"
+      expect(helper.display_tag_icons(@event)).to include "Pizza"
+      expect(helper.display_tag_icons(@event)).to include "pizza.png"
     end
 
     it "should render nothing if no image tags" do
-      helper.display_tag_icons(@event2).should eq " "
+      expect(helper.display_tag_icons(@event2)).to eq " "
     end
 
     it "should render nothing if event has no tags" do
-      helper.display_tag_icons(@untagged_event).should eq ""
+      expect(helper.display_tag_icons(@untagged_event)).to eq ""
     end
   end
 
   describe "#events_sort_link" do
     it "renders a sorting link with the field for the supplied key" do
       params.merge! action: "index", controller: "events"
-      helper.events_sort_link("score").should == %(<a href="/events?order=score">Relevance</a>)
+      expect(helper.events_sort_link("score")).to eq(%(<a href="/events?order=score">Relevance</a>))
     end
 
     it "removes any existing order if no key is entered" do
       params.merge! action: "index", controller: "events", order: "score"
-      helper.events_sort_link(nil).should == %(<a href="/events">Default</a>)
+      expect(helper.events_sort_link(nil)).to eq(%(<a href="/events">Default</a>))
     end
   end
 
   describe "#events_sort_label" do
     it "should return nil without arguments" do
-      helper.events_sort_label(nil).should be_nil
+      expect(helper.events_sort_label(nil)).to be_nil
     end
 
     it "should return string for a string key" do
-      helper.events_sort_label("score").should == " by <strong>Relevance.</strong>"
+      expect(helper.events_sort_label("score")).to eq(" by <strong>Relevance.</strong>")
     end
 
     it "should return string for a symbol key" do
-      helper.events_sort_label(:score).should == " by <strong>Relevance.</strong>"
+      expect(helper.events_sort_label(:score)).to eq(" by <strong>Relevance.</strong>")
     end
 
     it "should use the label Date when using a tag" do
       assign :tag, ActsAsTaggableOn::Tag.new
-      helper.events_sort_label(nil).should == " by <strong>Date.</strong>"
+      expect(helper.events_sort_label(nil)).to eq(" by <strong>Date.</strong>")
     end
   end
 
   describe "#today_tomorrow_or_weekday" do
     it "should display day of the week" do
       event = Event.new start_time: "2010-01-01"
-      helper.today_tomorrow_or_weekday(event).should == "Friday"
+      expect(helper.today_tomorrow_or_weekday(event)).to eq("Friday")
     end
 
     it "should display tomorrow as 'Tomorrow'" do
       event = Event.new start_time: "2010-01-01", end_time: 1.day.from_now
-      helper.today_tomorrow_or_weekday(event).should == "Started Friday"
+      expect(helper.today_tomorrow_or_weekday(event)).to eq("Started Friday")
     end
   end
 
@@ -115,19 +115,19 @@ describe EventsHelper do
 
     shared_examples_for "exported event" do
       it "should have title" do
-        @export.should match /\&text=#{escape(@event.title)}/
+        expect(@export).to match /\&text=#{escape(@event.title)}/
       end
 
       it "should have time range" do
-        @export.should match /\&dates=#{helper.format_google_timespan(@event)}/
+        expect(@export).to match /\&dates=#{helper.format_google_timespan(@event)}/
       end
 
       it "should have venue title" do
-        @export.should match /\&location=#{escape(@event.venue.title)}/
+        expect(@export).to match /\&location=#{escape(@event.venue.title)}/
       end
 
       it "should have venue address" do
-        @export.should match /\&location=.+?#{escape(@event.venue.geocode_address)}/
+        expect(@export).to match /\&location=.+?#{escape(@event.venue.geocode_address)}/
       end
     end
 
@@ -138,7 +138,7 @@ describe EventsHelper do
       it_should_behave_like "exported event"
 
       it "should have a complete event description" do
-        @export.should match /\&details=.*#{escape(event_description)}/
+        expect(@export).to match /\&details=.*#{escape(event_description)}/
       end
     end
 
@@ -149,11 +149,11 @@ describe EventsHelper do
       it_should_behave_like "exported event"
 
       it "should have a truncated event description" do
-        @export.should match /\&details=.*#{escape(event_description[0..100])}/
+        expect(@export).to match /\&details=.*#{escape(event_description[0..100])}/
       end
 
       it "should have a truncated URL" do
-        @export.size.should be < event_description.size
+        expect(@export.size).to be < event_description.size
       end
     end
   end
@@ -164,19 +164,19 @@ describe EventsHelper do
     end
 
     it "should fail if given unknown options" do
-      lambda { method(:omg => :kittens) }.should raise_error ArgumentError
+      expect { method(:omg => :kittens) }.to raise_error ArgumentError
     end
 
     it "should generate a default link" do
-      method.should eq "http://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents.ics"
+      expect(method).to eq "http://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents.ics"
     end
 
     it "should generate a search link" do
-      method(:query => "my query").should eq "http://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Fquery%3Dmy%2Bquery"
+      expect(method(:query => "my query")).to eq "http://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Fquery%3Dmy%2Bquery"
     end
 
     it "should generate a tag link" do
-      method(:tag => "mytag").should eq "http://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Ftag%3Dmytag"
+      expect(method(:tag => "mytag")).to eq "http://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Ftag%3Dmytag"
     end
   end
 
@@ -186,19 +186,19 @@ describe EventsHelper do
     end
 
     it "should fail if given unknown options" do
-      lambda { method(:omg => :kittens) }.should raise_error ArgumentError
+      expect { method(:omg => :kittens) }.to raise_error ArgumentError
     end
 
     it "should generate a default link" do
-      method.should eq "webcal://test.host/events.ics"
+      expect(method).to eq "webcal://test.host/events.ics"
     end
 
     it "should generate a search link" do
-      method(:query => "my query").should eq "webcal://test.host/events/search.ics?query=my+query"
+      expect(method(:query => "my query")).to eq "webcal://test.host/events/search.ics?query=my+query"
     end
 
     it "should generate a tag link" do
-      method(:tag => "mytag").should eq "webcal://test.host/events/search.ics?tag=mytag"
+      expect(method(:tag => "mytag")).to eq "webcal://test.host/events/search.ics?tag=mytag"
     end
   end
 
@@ -208,19 +208,19 @@ describe EventsHelper do
     end
 
     it "should fail if given unknown options" do
-      lambda { method(:omg => :kittens) }.should raise_error ArgumentError
+      expect { method(:omg => :kittens) }.to raise_error ArgumentError
     end
 
     it "should generate a default link" do
-      method.should eq "http://test.host/events.ics"
+      expect(method).to eq "http://test.host/events.ics"
     end
 
     it "should generate a search link" do
-      method(:query => "my query").should eq "http://test.host/events/search.ics?query=my+query"
+      expect(method(:query => "my query")).to eq "http://test.host/events/search.ics?query=my+query"
     end
 
     it "should generate a tag link" do
-      method(:tag => "mytag").should eq "http://test.host/events/search.ics?tag=mytag"
+      expect(method(:tag => "mytag")).to eq "http://test.host/events/search.ics?tag=mytag"
     end
   end
 
@@ -230,19 +230,19 @@ describe EventsHelper do
     end
 
     it "should fail if given unknown options" do
-      lambda { method(:omg => :kittens) }.should raise_error ArgumentError
+      expect { method(:omg => :kittens) }.to raise_error ArgumentError
     end
 
     it "should generate a default link" do
-      method.should eq "http://test.host/events.atom"
+      expect(method).to eq "http://test.host/events.atom"
     end
 
     it "should generate a search link" do
-      method(:query => "my query").should eq "http://test.host/events/search.atom?query=my+query"
+      expect(method(:query => "my query")).to eq "http://test.host/events/search.atom?query=my+query"
     end
 
     it "should generate a tag link" do
-      method(:tag => "mytag").should eq "http://test.host/events/search.atom?tag=mytag"
+      expect(method(:tag => "mytag")).to eq "http://test.host/events/search.atom?tag=mytag"
     end
   end
 
@@ -253,7 +253,7 @@ describe EventsHelper do
         start_time: "2010-01-01 12:00:00",
         end_time: "2010-01-02 12:00:00")
       event.venue = FactoryGirl.create(:venue, title: "holocene")
-      tweet_text(event).should == "hip and/or hop - 12:00PM 01.01.2010 @ holocene"
+      expect(tweet_text(event)).to eq("hip and/or hop - 12:00PM 01.01.2010 @ holocene")
     end
   end
 
@@ -264,28 +264,28 @@ describe EventsHelper do
         end_time: '2013-05-13T15:30:00z',
       )
 
-      helper.format_google_timespan(event).should eq \
+      expect(helper.format_google_timespan(event)).to eq \
         "20130513T050000Z/20130513T153000Z"
     end
 
     it "should the end time to the start time" do
       event = Event.new(start_time: '2014-07-26T13:00:00-0700')
-      helper.format_google_timespan(event).should eq \
+      expect(helper.format_google_timespan(event)).to eq \
         "20140726T200000Z/20140726T200000Z"
     end
   end
 
   describe "sorting labels" do
     it "should display human-friendly label for a known value" do
-      helper.sorting_label_for('name').should eq 'Event Name'
+      expect(helper.sorting_label_for('name')).to eq 'Event Name'
     end
 
     it "should display a default label" do
-      helper.sorting_label_for(nil).should eq 'Relevance'
+      expect(helper.sorting_label_for(nil)).to eq 'Relevance'
     end
 
     it "should display a different default label when searching by tag" do
-      helper.sorting_label_for(nil, true).should eq 'Date'
+      expect(helper.sorting_label_for(nil, true)).to eq 'Date'
     end
   end
 end
