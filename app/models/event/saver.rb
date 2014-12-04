@@ -1,9 +1,8 @@
 class Event < ActiveRecord::Base
-  class Saver < Struct.new(:event, :params, :venue, :failure)
+  class Saver < Struct.new(:event, :params, :failure)
     def save
-      self.venue = event.associate_with_venue(venue_ref)
-
       event.attributes = params[:event]
+      event.venue      = find_or_initialize_venue
       event.start_time = [ params[:start_date], params[:start_time] ]
       event.end_time   = [ params[:end_date], params[:end_time] ]
       event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
@@ -12,24 +11,17 @@ class Event < ActiveRecord::Base
     end
 
     def has_new_venue?
-      return unless venue
-      venue.previous_changes["id"] == [nil, venue.id] && params[:venue_name].present?
+      return unless event.venue
+      event.venue.previous_changes["id"] == [nil, event.venue.id] && params[:venue_name].present?
     end
 
     private
 
-    # Venues may be referred to in the params hash either by id or by name. This
-    # method looks for whichever type of reference is present and returns that
-    # reference. If both a venue id and a venue name are present, then the venue
-    # id is returned.
-    #
-    # If a venue id is returned it is cast to an integer for compatibility with
-    # Event#associate_with_venue.
-    def venue_ref
-      if (params[:event] && params[:event][:venue_id].present?)
-        params[:event][:venue_id].to_i
+    def find_or_initialize_venue
+      if params[:event] && params[:event][:venue_id].present?
+        Venue.find(params[:event][:venue_id]).progenitor
       else
-        params[:venue_name]
+        Venue.find_or_initialize_by_title(params[:venue_name]).progenitor
       end
     end
 

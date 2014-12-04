@@ -133,13 +133,6 @@ class Event < ActiveRecord::Base
 
   #---[ Queries ]---------------------------------------------------------
 
-  # Associate this event with the +venue+. The +venue+ can be given as a Venue
-  # instance, an ID, or a title.
-  def associate_with_venue(venue_identifier)
-    new_venue = Venue.find_by_identifier(venue_identifier)
-    self.venue = new_venue && new_venue.progenitor
-  end
-
   # Return Hash of Events grouped by the +type+.
   def self.find_duplicates_by_type(type='na')
     case type.to_s.strip

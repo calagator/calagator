@@ -518,52 +518,6 @@ describe Event, :type => :model do
     end
   end
 
-  describe "when associating with venues" do
-    before do
-      @event = FactoryGirl.create(:event)
-      @venue = FactoryGirl.create(:venue)
-    end
-
-    it "should associate a venue if one wasn't set before" do
-      expect(@event.associate_with_venue(@venue)).to eq @venue
-    end
-
-    it "should change an existing venue to a different one" do
-      @event.venue = FactoryGirl.create(:venue, :duplicate_of => @venue)
-
-      expect(@event.associate_with_venue(@venue)).to eq @venue
-    end
-
-    it "should clear an existing venue if given a nil venue" do
-      @event.venue = @venue
-
-      expect(@event.associate_with_venue(nil)).to be_nil
-      expect(@event.venue).to be_nil
-    end
-
-    it "should associate venue by title" do
-      expect(Venue).to receive(:find_or_initialize_by_title).and_return(@venue)
-
-      expect(@event.associate_with_venue(@venue.title)).to eq @venue
-    end
-
-    it "should associate venue by id" do
-      expect(@event.associate_with_venue(@venue.id)).to eq @venue
-    end
-
-    it "should raise an exception if there's a loop in the duplicates chain" do
-      venue1 = FactoryGirl.create(:venue)
-      venue2 = FactoryGirl.create(:venue, :duplicate_of => venue1)
-      venue1.update_attribute(:duplicate_of, venue2)
-
-      expect { @event.associate_with_venue(venue1.id) }.to raise_error DuplicateCheckingError
-    end
-
-    it "should raise an exception if associated with an unknown type" do
-      expect { @event.associate_with_venue(double('SourceParser')) }.to raise_error TypeError
-    end
-  end
-
   describe "with finding duplicates" do
     before do
       @non_duplicate_event = FactoryGirl.create(:event)
