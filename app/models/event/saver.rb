@@ -1,7 +1,7 @@
 class Event < ActiveRecord::Base
   class Saver < Struct.new(:event, :params, :venue, :failure)
     def save
-      self.venue = event.associate_with_venue(venue_ref)
+      self.venue = associate_with_venue(venue_ref)
 
       event.attributes = params[:event]
       event.start_time = [ params[:start_date], params[:start_time] ]
@@ -25,6 +25,15 @@ class Event < ActiveRecord::Base
     #
     # If a venue id is returned it is cast to an integer for compatibility with
     # Event#associate_with_venue.
+
+    # Associate this event with the +venue+. The +venue+ can be given as a Venue
+    # instance, an ID, or a title.
+
+    def associate_with_venue(venue_identifier)
+      new_venue = Venue.find_by_identifier(venue_identifier)
+      event.venue = new_venue && new_venue.progenitor
+    end
+
     def venue_ref
       if (params[:event] && params[:event][:venue_id].present?)
         params[:event][:venue_id].to_i
