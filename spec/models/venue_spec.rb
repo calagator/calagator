@@ -106,35 +106,6 @@ describe Venue, :type => :model do
     end
   end
 
-  describe "when finding by an identifier" do
-
-    it "should return nil for nil" do
-      expect(Venue.find_by_identifier(nil)).to be_nil
-    end
-
-    it "should return the argument if it is a Venue" do
-      record = FactoryGirl.create(:venue)
-      expect(Venue.find_by_identifier(record)).to eq record
-    end
-
-    it "should return a new venue record for a string" do
-      new_venue = Venue.find_by_identifier("Moda Center")
-      expect(new_venue).to be_an_instance_of Venue
-      expect(new_venue.title).to eq "Moda Center"
-      expect(new_venue).to be_new_record
-    end
-
-    it "should return an existing venue for a string that matches an existing venue" do
-      record = FactoryGirl.create(:venue, :title => "Tilt")
-      expect(Venue.find_by_identifier("Tilt")).to eq record
-    end
-
-    it "should return a venue for an id that matches an existing venue" do
-      record = FactoryGirl.create(:venue, :id => 8002)
-      expect(Venue.find_by_identifier(8002)).to eq record
-    end
-  end
-
   describe "when checking for squashing" do
     before do
       @master = Venue.create!(:title => "Master")
