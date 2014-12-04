@@ -30,8 +30,17 @@ class Event < ActiveRecord::Base
     # instance, an ID, or a title.
 
     def associate_with_venue(venue_identifier)
-      new_venue = Venue.find_by_identifier(venue_identifier)
+      new_venue = find_by_identifier(venue_identifier)
       event.venue = new_venue && new_venue.progenitor
+    end
+
+    def find_by_identifier(venue_identifier)
+      case venue_identifier
+      when Venue, NilClass  then venue_identifier
+      when String           then Venue.find_or_initialize_by_title(venue_identifier)
+      when Fixnum           then Venue.find(venue_identifier)
+      else raise TypeError, "Unknown type: #{venue_identifier.class}"
+      end
     end
 
     def venue_ref

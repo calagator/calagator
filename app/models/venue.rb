@@ -129,14 +129,6 @@ class Venue < ActiveRecord::Base
     end
   end
 
-  def self.find_by_identifier(venue_identifier)
-    case venue_identifier
-    when Venue, NilClass  then venue_identifier
-    when String           then find_or_initialize_by_title(venue_identifier)
-    when Fixnum           then find(venue_identifier)
-    else raise TypeError, "Unknown type: #{venue_identifier.class}"
-    end
-  end
   #===[ Search ]==========================================================
 
   def self.search(query, opts={})
