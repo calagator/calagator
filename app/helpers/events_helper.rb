@@ -223,15 +223,20 @@ module EventsHelper
     File.exists? Rails.root.join("app", "assets", "images", "tag_icons", "#{tag_name}.png")
   end
 
-  def get_tag_icons(event)
-    event.tag_list.collect do |tag_name|
-      if icon_exists_for?(tag_name)
-        image_tag("/assets/tag_icons/#{tag_name}.png", title: tag_name)
-      end
+  def tag_icon(tag_name)
+    if icon_exists_for?(tag_name)
+      image_tag("/assets/tag_icons/#{tag_name}.png", title: tag_name)
+    end
+  end
+
+  def get_tag_icon_links(event)
+    event.tag_list.map do |tag_name|
+      icon = tag_icon(tag_name)
+      link_to(icon, tag_events_path(tag_name)) if icon
     end
   end
 
   def display_tag_icons(event)
-    render inline: get_tag_icons(event).join(' ')
+    get_tag_icon_links(event).join(' ').html_safe
   end
 end

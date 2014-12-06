@@ -19,22 +19,34 @@ describe EventsHelper, :type => :helper do
     end
   end
 
-  describe "#get_tag_icons" do
+  describe "#get_tag_icon_links" do
     include_context "tag icons"
 
-    it "should generate an array of image tags for event tags" do
-      expect(helper.get_tag_icons(@event)[0]).to include "Ruby"
-      expect(helper.get_tag_icons(@event)[0]).to include "ruby.png"
-      expect(helper.get_tag_icons(@event)[1]).to include "Pizza"
-      expect(helper.get_tag_icons(@event)[1]).to include "pizza.png"
+    it "should generate an array of image tags" do
+      helper.get_tag_icon_links(@event).each do |item|
+        expect(item).to include "<img "
+      end
+    end
+
+    it "should generate an array of link tags" do
+      helper.get_tag_icon_links(@event).each do |item|
+        expect(item).to include "<a "
+      end
+    end
+
+    it "should generate items for each tag that has a corresponding image" do
+      expect(helper.get_tag_icon_links(@event)[0]).to include "Ruby"
+      expect(helper.get_tag_icon_links(@event)[0]).to include "ruby.png"
+      expect(helper.get_tag_icon_links(@event)[1]).to include "Pizza"
+      expect(helper.get_tag_icon_links(@event)[1]).to include "pizza.png"
     end
 
     it "should return nil values for tags that do not correspond to images" do
-      expect(helper.get_tag_icons(@event2)).to eq [nil, nil]
+      expect(helper.get_tag_icon_links(@event2)).to eq [nil, nil]
     end
 
     it "should return a blank array if event has no tags" do
-      expect(helper.get_tag_icons(@untagged_event)).to eq []
+      expect(helper.get_tag_icon_links(@untagged_event)).to eq []
     end
   end
 
