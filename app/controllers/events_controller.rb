@@ -112,7 +112,7 @@ class EventsController < ApplicationController
   end
 
   def clone
-    @event = Event.find(params[:id]).to_clone
+    @event = Event::Cloner.clone(Event.find(params[:id]))
     @page_title = "Clone an existing Event"
 
     flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
