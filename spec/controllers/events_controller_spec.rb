@@ -28,8 +28,8 @@ describe EventsController, :type => :controller do
 
       describe "with events" do
         before do
-          FactoryGirl.create(:event_with_venue)
-          FactoryGirl.create(:event_with_venue)
+          FactoryGirl.create(:event, :with_venue)
+          FactoryGirl.create(:event, :with_venue)
 
           get :index, :format => "xml"
 
@@ -79,7 +79,7 @@ describe EventsController, :type => :controller do
 
       describe "with events" do
         before do
-          @event = FactoryGirl.create(:event_with_venue)
+          @event = FactoryGirl.create(:event, :with_venue)
           @venue = @event.venue
 
           post :index, :format => "json"
@@ -125,8 +125,8 @@ describe EventsController, :type => :controller do
 
       describe "with events" do
         before do
-          FactoryGirl.create(:event_with_venue)
-          FactoryGirl.create(:event_with_venue)
+          FactoryGirl.create(:event, :with_venue)
+          FactoryGirl.create(:event, :with_venue)
 
           post :index, :format => "atom"
 
@@ -459,7 +459,7 @@ describe EventsController, :type => :controller do
 
     describe "#update" do
       before(:each) do
-        @event = FactoryGirl.create(:event_with_venue, id: 42)
+        @event = FactoryGirl.create(:event, :with_venue, id: 42)
         @venue = @event.venue
         @params.merge!(id: 42)
       end
@@ -627,9 +627,9 @@ describe EventsController, :type => :controller do
     describe "when returning results" do
       render_views
 
-      let!(:current_event) { FactoryGirl.create(:event_with_venue, title: "MyQuery") }
-      let!(:current_event_2) { FactoryGirl.create(:event_with_venue, description: "WOW myquery!") }
-      let!(:past_event) { FactoryGirl.create(:event_with_venue, title: "old myquery") }
+      let!(:current_event) { FactoryGirl.create(:event, :with_venue, title: "MyQuery") }
+      let!(:current_event_2) { FactoryGirl.create(:event, :with_venue, description: "WOW myquery!") }
+      let!(:past_event) { FactoryGirl.create(:event, :with_venue, title: "old myquery") }
 
       describe "in HTML format" do
         before do

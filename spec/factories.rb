@@ -40,9 +40,8 @@ FactoryGirl.define do
     end_time { start_time + 3.hours }
     venue
 
-  end
-
-  factory :duplicate_event, :parent => :event do
-    association :duplicate_of, :factory => :event
+    trait :with_venue do
+      association :venue
+    end
   end
 end
