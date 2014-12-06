@@ -179,15 +179,6 @@ class Event < ActiveRecord::Base
     event
   end
 
-  # Returns an iCalendar string representing this Event.
-  #
-  # Options:
-  # * :url_helper - Lambda that accepts an Event instance and generates a URL
-  #   for it if it doesn't have a URL already. (See Event::to_ical for example)
-  def to_ical(opts={})
-    self.class.to_ical(self, opts)
-  end
-
   # Return an iCalendar string representing an Array of Event instances.
   #
   # Arguments:
