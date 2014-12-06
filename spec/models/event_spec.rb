@@ -100,7 +100,7 @@ describe Event, :type => :model do
     end
 
     it "should parse an Event into an iCalendar" do
-      actual_ical = Event.to_ical(@basic_event)
+      actual_ical = Event::IcalRenderer.render(@basic_event)
 
       abstract_events = SourceParser.to_abstract_events(:content => actual_ical, :skip_old => false)
 
@@ -116,7 +116,7 @@ describe Event, :type => :model do
     it "should parse an Event into an iCalendar without a URL and generate it" do
       generated_url = "http://foo.bar/"
       @basic_event.url = nil
-      actual_ical = Event.to_ical(@basic_event, :url_helper => lambda{|event| generated_url})
+      actual_ical = Event::IcalRenderer.render(@basic_event, :url_helper => lambda{|event| generated_url})
 
       abstract_events = SourceParser.to_abstract_events(:content => actual_ical, :skip_old => false)
 
@@ -729,7 +729,7 @@ describe Event, :type => :model do
 
   describe "when converting to iCal" do
     def ical_roundtrip(events, opts = {})
-      parsed_events = RiCal.parse_string(Event.to_ical(events, opts)).first.events
+      parsed_events = RiCal.parse_string(Event::IcalRenderer.render(events, opts)).first.events
       if events.is_a?(Event)
         parsed_events.first
       else
@@ -821,7 +821,7 @@ describe Event, :type => :model do
 
     describe "sequence" do
       def event_to_ical(event)
-        return RiCal.parse_string(Event.to_ical([event])).first.events.first
+        return RiCal.parse_string(Event::IcalRenderer.render([event])).first.events.first
       end
 
       it "should set an initial sequence on a new event" do
@@ -847,7 +847,7 @@ describe Event, :type => :model do
 
     describe "- the headers" do
       before do
-        @data = Event.to_ical(FactoryGirl.build(:event))
+        @data = Event::IcalRenderer.render(FactoryGirl.build(:event))
       end
 
       it "should include the calendar name" do

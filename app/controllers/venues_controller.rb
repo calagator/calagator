@@ -132,7 +132,8 @@ class VenuesController < ApplicationController
   end
 
   def ical_export(venue)
-    events = venue.events.order("start_time ASC").non_duplicates
-    render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
+    events = venue.events.order(:start_time).non_duplicates
+    ical = Event::IcalRenderer.render(events, url_helper: -> (event) { event_url(event) })
+    render text: ical, mime_type: "text/calendar"
   end
 end
