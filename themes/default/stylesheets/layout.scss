@@ -40,7 +40,7 @@ body {
 }
 
 #app_menu ul {
-  font-size: 1.3em;
+  font-size: 1.1em;
   line-height: 1.3em;
   font-weight: bold;
   list-style: none;
@@ -135,8 +135,8 @@ body {
 
 .appropriateness_message {
   background: $box_background;
-  padding: 1em;
-  margin: 1em 0;
+  padding: 3%;
+  margin: 3%;
 }
 
 /* @end */
@@ -262,8 +262,7 @@ ul.event_list .list_date {
 
 .single_event .location.vcard {
   background: #e8fbfe;
-  width: 45em;
-  /* height: 16em;*/
+  width: 40em;
   padding: 1em;
   margin: 2em 0 2em -1em;
 }
@@ -273,7 +272,8 @@ ul.event_list .list_date {
 }
 
 .single_event .location #map {
-  width: 25em;
+  width: 50%;
+  padding: 1%;
   height: 16em;
   float: right;
 }

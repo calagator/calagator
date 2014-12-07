@@ -15,6 +15,8 @@
 fieldset .trap { display: none }
 
 form.formtastic {
+  margin: auto;
+  padding: 2%;
   width: 900px;
 }
 
@@ -36,22 +38,24 @@ form.formtastic {
 
 .formtastic .input .label {
   font-weight: bold;
-  text-align: right;
+  text-align: left;
   padding-right: 1em;
-  margin-left: -1em;
-  width: 15%;
+  float: none;
+  width: 90%;
 }
 
 .formtastic .input .inline-hints,
 .formtastic .errors,
 .formtastic .inline-errors {
-  margin-left: 15%;
-  width: 74%;
+  text-align: left;
+  margin: 0.5em 0 0 0;
+  // margin-left: 15%;
+  // width: 74%;
 }
 
 .formtastic .actions,
 .formtastic .boolean label {
-  padding-left: 15%;
+  // padding-left: 15%;
 }
 
 /* @group Autocomplete
@@ -90,7 +94,7 @@ ul.jq-ui-autocomplete li.active {
 }
 
 form.standard_form {
-  width: 100%;
+  width: 90%;
 }
 
 .standard_form input[type="text"],
