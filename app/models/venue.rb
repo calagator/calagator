@@ -54,7 +54,11 @@ class Venue < ActiveRecord::Base
     :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
     :allow_blank => true,
     :allow_nil => true
-  validates_inclusion_of :latitude, :longitude,
+  validates_inclusion_of :latitude,
+    :in => -90..90,
+    :allow_nil => true,
+    :message => "must be between -90 and 90"
+  validates_inclusion_of :longitude,
     :in => -180..180,
     :allow_nil => true,
     :message => "must be between -180 and 180"

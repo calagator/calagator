@@ -17,6 +17,30 @@ describe Venue, :type => :model do
     expect(venue).not_to be_valid
   end
 
+  describe 'latitude validation' do
+    specify do
+      venue = Venue.new(:latitude => -91)
+      expect(venue).to have(1).error_on(:latitude)
+    end
+
+    specify do
+      venue = Venue.new(:latitude => -89)
+      expect(venue).to have(0).errors_on(:latitude)
+    end
+  end
+
+  describe 'longitude validation' do
+    specify do
+      venue = Venue.new(:longitude => -181)
+      expect(venue).to have(1).error_on(:longitude)
+    end
+
+    specify do
+      venue = Venue.new(:longitude => -179)
+      expect(venue).to have(0).errors_on(:longitude)
+    end
+  end
+
   describe "when validating" do
     let(:attributes) { {:title => 'My Venue'} }
     let(:bad_data) { ' blargie ' }

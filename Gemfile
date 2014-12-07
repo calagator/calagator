@@ -85,6 +85,7 @@ group :development, :test do
   gem 'rspec-activemodel-mocks'
   gem 'rspec-its'
   gem 'rspec-rails', '~> 3'
+  gem 'rspec-collection_matchers'
   gem 'capybara', '2.4.3'
   gem 'factory_girl_rails'
   gem 'timecop', '~> 0.7'
