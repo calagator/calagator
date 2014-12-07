@@ -1,6 +1,18 @@
+# Return an iCalendar string representing an Array of Event instances.
+#
+# Arguments:
+# * :events - Event instance or array of them.
+#
+# Options:
+# * :url_helper - Lambda that accepts an Event instance and generates a URL
+#   for it if it doesn't have a URL already.
+#
+# Example:
+#   ics1 = Event::IcalRenderer.render(myevent)
+#   ics2 = Event::IcalRenderer.render(myevents, url_helper: -> (event) { event_url(event) })
 class Event < ActiveRecord::Base
   class IcalRenderer
-    def self.render(events, opts)
+    def self.render(events, opts={})
       output = render_icalendar(events, opts)
       output = add_name(output)
       output = normalize_line_endings(output)
