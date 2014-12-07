@@ -9,6 +9,10 @@ describe SettingsReader do
       expect(subject).to respond_to :foo
     end
 
+    it "renders ERB in the yaml file" do
+      expect(subject.erb).to eq('5')
+    end
+
     context 'when passed a defaults hash argument' do
       subject { described_class.read(filename, { bar: 4, foo: 5 }) }
 
