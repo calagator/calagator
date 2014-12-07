@@ -1,6 +1,8 @@
 class SettingsBag
   def initialize(data)
-    @data = data
+    @data = data.each_with_object({}) { |(key, value), obj|
+      obj[key.to_sym] = value
+    }
   end
 
   # method_missing

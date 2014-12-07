@@ -6,7 +6,8 @@ describe SettingsBag do
     foo: 1,
     bar: {
       baz: 2
-    }
+    },
+    "qux" => 3
   }}
 
   subject { described_class.new(hsh) }
@@ -17,6 +18,12 @@ describe SettingsBag do
       describe "#foo" do
         it "returns 1" do
           expect(subject.foo).to eq(1)
+        end
+      end
+
+      describe "accessing with a string key" do
+        it "returns 3" do
+          expect(subject.qux).to eq(3)
         end
       end
     end
