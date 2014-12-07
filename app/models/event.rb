@@ -218,34 +218,6 @@ class Event < ActiveRecord::Base
     end
   end
 
-  # Array of attributes that should be cloned by #to_clone.
-  CLONE_ATTRIBUTES = [:title, :description, :venue_id, :url, :tag_list, :venue_details]
-
-  # Return a new record with fields selectively copied from the original, and
-  # the start_time and end_time adjusted so that their date is set to today and
-  # their time-of-day is set to the original record's time-of-day.
-  def to_clone
-    clone = self.class.new
-    CLONE_ATTRIBUTES.each do |attribute|
-      clone.send("#{attribute}=", send(attribute))
-    end
-    if start_time
-      clone.start_time = clone_time_for_today(start_time)
-    end
-    if end_time
-      clone.end_time = clone_time_for_today(end_time)
-    end
-    clone
-  end
-
-  # Return a time that's today but has the time-of-day component from the
-  # +source+ time argument.
-  def clone_time_for_today(source)
-    today = Date.today
-    Time.local(today.year, today.mon, today.day, source.hour, source.min, source.sec, source.usec)
-  end
-  private :clone_time_for_today
-
   #---[ Date related ]----------------------------------------------------
 
   # Returns an array of the dates spanned by the event.
