@@ -45,7 +45,7 @@ class Venue < ActiveRecord::Base
 
   # Triggers
   strip_whitespace! :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone
-  before_save :geocode
+  before_save :geocode!
 
   # Validations
   validates_presence_of :title
@@ -89,7 +89,7 @@ class Venue < ActiveRecord::Base
     venue.tag_list = abstract_location.tags.join(',')
 
     # We must add geocoding information so this venue can be compared to existing ones.
-    venue.geocode
+    venue.geocode!
 
     # if the new venue has no exact duplicate, use the new venue
     # otherwise, find the ultimate master and return it
@@ -200,7 +200,7 @@ class Venue < ActiveRecord::Base
 
   # Try to geocode, but don't complain if we can't.
   # TODO Consider renaming this to #add_geocoding! to imply that this method makes destructive changes the object, rather than just returning values. Compare its name to the method called #geocode_address, which just returns values.
-  def geocode
+  def geocode!
     Geocoder.geocode(self)
   end
 end
