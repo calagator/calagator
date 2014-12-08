@@ -177,9 +177,8 @@ class Venue < ActiveRecord::Base
 
   attr_accessor :force_geocoding
 
-  # Try to geocode, but don't complain if we can't.
-  # TODO Consider renaming this to #add_geocoding! to imply that this method makes destructive changes the object, rather than just returning values. Compare its name to the method called #geocode_address, which just returns values.
   def geocode!
     Geocoder.geocode(self)
+    true # Try to geocode, but don't complain if we can't.
   end
 end

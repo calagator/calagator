@@ -24,8 +24,6 @@ class Venue < ActiveRecord::Base
       end
 
       log
-
-      true
     end
 
     private
