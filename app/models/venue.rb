@@ -210,22 +210,6 @@ class Venue < ActiveRecord::Base
   # Try to geocode, but don't complain if we can't.
   # TODO Consider renaming this to #add_geocoding! to imply that this method makes destructive changes the object, rather than just returning values. Compare its name to the method called #geocode_address, which just returns values.
   def geocode
-    if self.class.perform_geocoding? && location.blank? && geocode_address.present? && duplicate_of.blank?
-      geo = GeoKit::Geocoders::MultiGeocoder.geocode(geocode_address)
-      if geo.success
-        self.latitude       = geo.lat
-        self.longitude      = geo.lng
-        self.street_address = geo.street_address if self.street_address.blank?
-        self.locality       = geo.city           if self.locality.blank?
-        self.region         = geo.state          if self.region.blank?
-        self.postal_code    = geo.zip            if self.postal_code.blank?
-        self.country        = geo.country_code   if self.country.blank?
-      end
-
-      msg = 'Venue#add_geocoding for ' + (self.new_record? ? 'new record' : "record #{self.id}") + ' ' + (geo.success ? 'was successful' : 'failed') + ', response was: ' + geo.inspect
-      Rails.logger.info(msg)
-    end
-
-    return true
+    Geocoder.geocode(self)
   end
 end
