@@ -169,14 +169,12 @@ class Venue < ActiveRecord::Base
 
   # Run the block with geocoding enabled, then reset the geocoding back to the
   # previous state. This is typically used in tests.
-  def self.with_geocoding(&block)
-    original = self.perform_geocoding?
-    begin
-      self.perform_geocoding = true
-      block.call
-    ensure
-      self.perform_geocoding = original
-    end
+  def self.with_geocoding
+    original = perform_geocoding?
+    self.perform_geocoding = true
+    yield
+  ensure
+    self.perform_geocoding = original
   end
 
   # Get an address we can use for geocoding
