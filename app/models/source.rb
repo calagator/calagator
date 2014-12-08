@@ -113,53 +113,8 @@ class Source < ActiveRecord::Base
 
     self.imported_at = Time.now
     opts[:url] ||= self.url
-    SourceParser.to_abstract_events(opts).uniq.map do |abstract_event|
-      event = Event.new
-
-      event.source       = self
-      event.title        = abstract_event.title
-      event.description  = abstract_event.description
-      event.start_time   = abstract_event.start_time.blank? ? nil : Time.parse(abstract_event.start_time.to_s)
-      event.end_time     = abstract_event.end_time.blank? ? nil : Time.parse(abstract_event.end_time.to_s)
-      event.url          = abstract_event.url
-      event.tag_list     = abstract_event.tags.join(',')
-
-      if abstract_location  = abstract_event.location
-        venue = Venue.new
-
-        venue.source = self
-        abstract_location.each_pair do |key, value|
-          next if key == :tags
-          venue[key] = value unless value.blank?
-        end
-        venue.tag_list = abstract_location.tags.join(',')
-
-        # We must add geocoding information so this venue can be compared to existing ones.
-        venue.geocode!
-
-        # if the new venue has no exact duplicate, use the new venue
-        # otherwise, find the ultimate master and return it
-        duplicates = venue.find_exact_duplicates
-
-        if duplicates.present?
-          venue = duplicates.first.progenitor
-        else
-          venue_machine_tag_name = abstract_location.tags.find { |t|
-            # Match 2 in the MACHINE_TAG_PATTERN is the predicate
-            ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? t.match(ActsAsTaggableOn::Tag::MACHINE_TAG_PATTERN)[2]
-          }
-          matched_venue = Venue.tagged_with(venue_machine_tag_name).first
-
-          venue = matched_venue.progenitor if matched_venue.present?
-        end
-
-        event.venue        = venue
-      end
-
-      duplicates = event.find_exact_duplicates
-      event = duplicates.first.progenitor if duplicates
-      event
-    end
+    opts[:source] = self
+    SourceParser.to_events(opts)
   end
 
   # Return the name of the source, which can be its title or URL.

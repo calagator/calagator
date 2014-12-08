@@ -99,34 +99,34 @@ describe Event, :type => :model do
       expect(Event.from_abstract_event(abstract_event)).to eq event
     end
 
-    it "should parse an Event into an iCalendar" do
+    it "should parse an iCalendar into an Event" do
       actual_ical = Event::IcalRenderer.render(@basic_event)
 
-      abstract_events = SourceParser.to_abstract_events(:content => actual_ical, :skip_old => false)
+      events = SourceParser.to_events(content: actual_ical, skip_old: false)
 
-      expect(abstract_events.size).to eq 1
-      abstract_event = abstract_events.first
-      expect(abstract_event.title).to eq @basic_event.title
-      expect(abstract_event.url).to eq @basic_event.url
-      expect(abstract_event.description).to be_nil
+      expect(events.size).to eq 1
+      event = events.first
+      expect(event.title).to eq @basic_event.title
+      expect(event.url).to eq @basic_event.url
+      expect(event.description).to be_blank
 
-      expect(abstract_event.location.title).to match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
+      expect(event.venue.title).to match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
     end
 
-    it "should parse an Event into an iCalendar without a URL and generate it" do
+    it "should parse an iCalendar into an Event without a URL and generate it" do
       generated_url = "http://foo.bar/"
       @basic_event.url = nil
       actual_ical = Event::IcalRenderer.render(@basic_event, :url_helper => lambda{|event| generated_url})
 
-      abstract_events = SourceParser.to_abstract_events(:content => actual_ical, :skip_old => false)
+      events = SourceParser.to_events(:content => actual_ical, :skip_old => false)
 
-      expect(abstract_events.size).to eq 1
-      abstract_event = abstract_events.first
-      expect(abstract_event.title).to eq @basic_event.title
-      expect(abstract_event.url).to eq @basic_event.url
-      expect(abstract_event.description).to match /Imported from: #{generated_url}/
+      expect(events.size).to eq 1
+      event = events.first
+      expect(event.title).to eq @basic_event.title
+      expect(event.url).to eq @basic_event.url
+      expect(event.description).to match /Imported from: #{generated_url}/
 
-      expect(abstract_event.location.title).to match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
+      expect(event.venue.title).to match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
     end
   end
 

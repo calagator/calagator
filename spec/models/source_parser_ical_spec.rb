@@ -23,16 +23,16 @@ describe SourceParser::Ical, "in general", :type => :model do
   end
 end
 
-describe SourceParser::Ical, "when parsing events and their locations", :type => :model do
+describe SourceParser::Ical, "when parsing events and their venues", :type => :model do
 
   before(:each) do
     expect(SourceParser::Base).to receive(:read_url).and_return(read_sample('ical_upcoming_many.ics'))
-    @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
+    @events = SourceParser.to_events(:url => "intercepted", :skip_old => false)
   end
 
-   it "locations should be" do
+   it "venues should be" do
     @events.each do |event|
-      expect(event.location).not_to be_nil
+      expect(event.venue).not_to be_nil
     end
   end
 
@@ -41,7 +41,7 @@ end
 describe SourceParser::Ical, "when parsing multiple items in an Eventful feed", :type => :model do
   before(:each) do
     expect(SourceParser::Base).to receive(:read_url).and_return(read_sample('ical_eventful_many.ics'))
-    @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
+    @events = SourceParser.to_events(:url => "intercepted", :skip_old => false)
   end
 
   it "should find multiple events" do
@@ -50,7 +50,7 @@ describe SourceParser::Ical, "when parsing multiple items in an Eventful feed", 
 
   it "should find venues for events" do
     @events.each do |event|
-      expect(event.location.title).not_to be_nil
+      expect(event.venue.title).not_to be_nil
     end
   end
 
@@ -64,7 +64,7 @@ describe SourceParser::Ical, "when parsing multiple items in an Eventful feed", 
     # Make sure each of the above events has the expected street address
     event_titles_and_street_addresses.each do |event_title, street_address|
       expect(@events.find { |event|
-        event.title == event_title && event.location.street_address == street_address
+        event.title == event_title && event.venue.street_address == street_address
         }).not_to be_nil
       end
   end

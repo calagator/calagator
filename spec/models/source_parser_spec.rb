@@ -56,13 +56,15 @@ describe SourceParser, "when parsing events", :type => :model do
   end
 
   it "should use first successful parser's results" do
-    events = [double(SourceParser::AbstractEvent)]
+    location = SourceParser::AbstractLocation.new
+    events = [SourceParser::AbstractEvent.new("title", "description", 1.day.ago, Time.now, "http://url.com", location)]
+
     expect(SourceParser::Ical).to receive(:to_abstract_events).and_return(false)
     expect(SourceParser::Hcal).to receive(:to_abstract_events).and_return(events)
     expect(SourceParser::FakeParser).not_to receive(:to_abstract_events)
     expect(SourceParser::Base).to receive(:content_for).and_return("fake content")
 
-    expect(SourceParser.to_abstract_events(:fake => :argument)).to eq events
+    expect(SourceParser.to_events(:fake => :argument)).to have(1).event
   end
 end
 
