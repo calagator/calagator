@@ -162,16 +162,9 @@ class Venue < ActiveRecord::Base
 
   #===[ Geocoding helpers ]===============================================
 
-  @@_is_geocoding = true
-
-  # Should geocoding be performed?
-  def self.perform_geocoding?
-    return @@_is_geocoding
-  end
-
-  # Set whether to perform geocoding to the boolean +value+.
-  def self.perform_geocoding=(value)
-    return @@_is_geocoding = value
+  cattr_accessor(:perform_geocoding) { true }
+  class << self
+    alias_method :perform_geocoding?, :perform_geocoding
   end
 
   # Run the block with geocoding enabled, then reset the geocoding back to the
