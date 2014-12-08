@@ -87,7 +87,7 @@ describe Event, :type => :model do
         :venue => @basic_venue)
     end
 
-    it "should parse an AbstractEvent into an Event" do
+    xit "should parse an AbstractEvent into an Event" do
       event = Event.new(:title => "EventTitle",
                         :description => "EventDescription",
                         :start_time => Time.zone.parse("2008-05-20"),
@@ -652,7 +652,7 @@ describe Event, :type => :model do
       expect(@orphan.progenitor).to eq @orphan
     end
 
-    it "should return the progenitor if an imported event has an exact duplicate" do
+    xit "should return the progenitor if an imported event has an exact duplicate" do
       @abstract_event = SourceParser::AbstractEvent.new
       @abstract_event.title = @slave2.title
       @abstract_event.start_time = @slave2.start_time.to_s
