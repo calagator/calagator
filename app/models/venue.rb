@@ -148,15 +148,13 @@ class Venue < ActiveRecord::Base
 
   # Does this venue have any address information?
   def has_full_address?
-    return [street_address, locality, region, postal_code, country].any?(&:present?)
+    [street_address, locality, region, postal_code, country].any?(&:present?)
   end
 
   # Display a single line address.
   def full_address
     if has_full_address?
       "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
-    else
-      nil
     end
   end
 
