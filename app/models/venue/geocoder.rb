@@ -5,21 +5,22 @@ class Venue < ActiveRecord::Base
     end
 
     def geocode
-      if should_geocode?
-        self.geo = GeoKit::Geocoders::MultiGeocoder.geocode(venue.geocode_address)
-        if geo.success
-          venue.latitude       = geo.lat
-          venue.longitude      = geo.lng
-          venue.street_address = geo.street_address if venue.street_address.blank?
-          venue.locality       = geo.city           if venue.locality.blank?
-          venue.region         = geo.state          if venue.region.blank?
-          venue.postal_code    = geo.zip            if venue.postal_code.blank?
-          venue.country        = geo.country_code   if venue.country.blank?
-        end
-        log
+      return true unless should_geocode?
+
+      self.geo = GeoKit::Geocoders::MultiGeocoder.geocode(venue.geocode_address)
+      if geo.success
+        venue.latitude       = geo.lat
+        venue.longitude      = geo.lng
+        venue.street_address = geo.street_address if venue.street_address.blank?
+        venue.locality       = geo.city           if venue.locality.blank?
+        venue.region         = geo.state          if venue.region.blank?
+        venue.postal_code    = geo.zip            if venue.postal_code.blank?
+        venue.country        = geo.country_code   if venue.country.blank?
       end
 
-      return true
+      log
+
+      true
     end
 
     private
