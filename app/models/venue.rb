@@ -45,7 +45,6 @@ class Venue < ActiveRecord::Base
 
   # Triggers
   strip_whitespace! :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone
-  before_validation :normalize_url!
   before_save :geocode
 
   # Validations
@@ -139,6 +138,12 @@ class Venue < ActiveRecord::Base
     SearchEngine.search(query, opts)
   end
 
+  #===[ Overrides ]=======================================================
+
+  def url=(value)
+    super UrlPrefixer.prefix(value)
+  end
+
   #===[ Address helpers ]=================================================
 
   # Does this venue have any address information?
@@ -223,13 +228,4 @@ class Venue < ActiveRecord::Base
 
     return true
   end
-
-  #===[ Triggers ]========================================================
-
-  def normalize_url!
-    unless self.url.blank? || self.url.match(/^[\d\D]+:\/\//)
-      self.url = 'http://' + self.url
-    end
-  end
-
 end

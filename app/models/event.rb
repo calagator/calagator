@@ -33,9 +33,6 @@ class Event < ActiveRecord::Base
   belongs_to :venue, :counter_cache => true
   belongs_to :source
 
-  # Triggers
-  before_validation :normalize_url!
-
   # Validations
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time
@@ -104,6 +101,10 @@ class Event < ActiveRecord::Base
   def description
     # TODO Generalize this code so we can reuse it on other attributes.
     read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
+  end
+
+  def url=(value)
+    super UrlPrefixer.prefix(value)
   end
 
   # Set the start_time to the given +value+, which could be a Time, Date,
@@ -185,12 +186,6 @@ class Event < ActiveRecord::Base
 
   def venue_title
     venue && venue.title
-  end
-
-  def normalize_url!
-    unless url.blank? || url.match(/^[\d\D]+:\/\//)
-      self.url = 'http://' + url
-    end
   end
 
   #---[ Date related ]----------------------------------------------------
