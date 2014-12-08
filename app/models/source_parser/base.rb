@@ -155,7 +155,7 @@ class SourceParser
     #     end
     #   end
     def self.to_abstract_events_wrapper(opts, driver, source, target)
-      if matcher = opts[:url].match(source)
+      if matcher = opts[:url].try(:match, source)
         driver.to_abstract_events(opts.merge(
           :content => self.read_url(target.call(matcher)
         )))

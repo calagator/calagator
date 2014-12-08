@@ -10,33 +10,21 @@ class SourceParser
   # * :url - URL string to read as parser input.
   # * :content - String to read as parser input.
   def self.to_abstract_events(opts)
-    matched_parser = self.parsers.find{|parser|
-      parser.url_pattern.present? && opts[:url].try(:match, parser.url_pattern)
-    }
+    opts[:content] = content_for(opts)
 
-    # Cache the content
-    content = self.content_for(opts)
-
-    # Return events from the first parser that suceeds, starting with the parser
-    # that matches the given URL if one is found.
-    self.parsers.uniq.unshift(matched_parser).compact.uniq.each do |parser|
-      begin
-        events = parser.to_abstract_events(opts.merge(:content => content))
-        return events if not events.blank?
-      rescue ::SourceParser::NotFound => e
-        raise e
-      rescue ::SourceParser::HttpAuthenticationRequiredError => e
-        raise e
-      rescue NotImplementedError
-        # Ignore
-      rescue Exception => e
-        # Ignore
-        # TODO Eliminate this catch-all rescue and make each parser handle its own exceptions.
-      end
+    # start with the parser that matches the given URL
+    matched_parsers = parsers.sort_by do |parser|
+      match = parser.url_pattern.present? && opts[:url].try(:match, parser.url_pattern)
+      match ? 0 : 1
     end
 
-    # Return empty set if no matches
-    return []
+    # Return events from the first parser that suceeds
+    events = matched_parsers.each do |parser|
+      events = parser.to_abstract_events(opts)
+      return events if events.present?
+    end
+
+    []
   end
 
   # Returns an Array of parser classes for the various formats

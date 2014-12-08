@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 class SourceParser::FakeParser < SourceParser::Base
+  def self.to_abstract_events(*)
+    false
+  end
 end
 
 describe SourceParser, "when reading content", :type => :model do
@@ -32,11 +35,11 @@ end
 
 describe SourceParser, "when subclassing", :type => :model do
   it "should demand that to_hcals is implemented" do
-    expect{ SourceParser::FakeParser.to_hcals }.to raise_error(NotImplementedError)
+    expect{ SourceParser::Base.to_hcals }.to raise_error(NotImplementedError)
   end
 
   it "should demand that to_abstract_events is implemented" do
-    expect{ SourceParser::FakeParser.to_abstract_events }.to raise_error NotImplementedError
+    expect{ SourceParser::Base.to_abstract_events }.to raise_error NotImplementedError
   end
 end
 
@@ -54,7 +57,7 @@ describe SourceParser, "when parsing events", :type => :model do
 
   it "should use first successful parser's results" do
     events = [double(SourceParser::AbstractEvent)]
-    expect(SourceParser::Ical).to receive(:to_abstract_events).and_raise(NotImplementedError)
+    expect(SourceParser::Ical).to receive(:to_abstract_events).and_return(false)
     expect(SourceParser::Hcal).to receive(:to_abstract_events).and_return(events)
     expect(SourceParser::FakeParser).not_to receive(:to_abstract_events)
     expect(SourceParser::Base).to receive(:content_for).and_return("fake content")
