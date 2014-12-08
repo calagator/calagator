@@ -167,16 +167,6 @@ class Venue < ActiveRecord::Base
     alias_method :perform_geocoding?, :perform_geocoding
   end
 
-  # Run the block with geocoding enabled, then reset the geocoding back to the
-  # previous state. This is typically used in tests.
-  def self.with_geocoding
-    original = perform_geocoding?
-    self.perform_geocoding = true
-    yield
-  ensure
-    self.perform_geocoding = original
-  end
-
   # Get an address we can use for geocoding
   def geocode_address
     full_address or address
