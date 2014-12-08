@@ -45,7 +45,7 @@ class Venue < ActiveRecord::Base
 
   # Triggers
   strip_whitespace! :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone
-  before_save :geocode
+  before_save :geocode!
 
   # Validations
   validates_presence_of :title
@@ -89,7 +89,7 @@ class Venue < ActiveRecord::Base
     venue.tag_list = abstract_location.tags.join(',')
 
     # We must add geocoding information so this venue can be compared to existing ones.
-    venue.geocode
+    venue.geocode!
 
     # if the new venue has no exact duplicate, use the new venue
     # otherwise, find the ultimate master and return it
@@ -148,43 +148,17 @@ class Venue < ActiveRecord::Base
 
   # Does this venue have any address information?
   def has_full_address?
-    return [street_address, locality, region, postal_code, country].any?(&:present?)
+    [street_address, locality, region, postal_code, country].any?(&:present?)
   end
 
   # Display a single line address.
   def full_address
     if has_full_address?
       "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
-    else
-      nil
     end
   end
 
   #===[ Geocoding helpers ]===============================================
-
-  @@_is_geocoding = true
-
-  # Should geocoding be performed?
-  def self.perform_geocoding?
-    return @@_is_geocoding
-  end
-
-  # Set whether to perform geocoding to the boolean +value+.
-  def self.perform_geocoding=(value)
-    return @@_is_geocoding = value
-  end
-
-  # Run the block with geocoding enabled, then reset the geocoding back to the
-  # previous state. This is typically used in tests.
-  def self.with_geocoding(&block)
-    original = self.perform_geocoding?
-    begin
-      self.perform_geocoding = true
-      block.call
-    ensure
-      self.perform_geocoding = original
-    end
-  end
 
   # Get an address we can use for geocoding
   def geocode_address
@@ -194,38 +168,15 @@ class Venue < ActiveRecord::Base
   # Return this venue's latitude/longitude location,
   # or nil if it doesn't have one.
   def location
-    [latitude, longitude] unless latitude.blank? or longitude.blank?
-  end
-
-  # Should we default to forcing geocoding when the user edits this venue?
-  def force_geocoding
-    location.nil? # Yes, if it has no location.
-  end
-
-  # Maybe trigger geocoding when we save
-  def force_geocoding=(value)
-    self.latitude = self.longitude = nil if value == "1"
-  end
-
-  # Try to geocode, but don't complain if we can't.
-  # TODO Consider renaming this to #add_geocoding! to imply that this method makes destructive changes the object, rather than just returning values. Compare its name to the method called #geocode_address, which just returns values.
-  def geocode
-    if self.class.perform_geocoding? && location.blank? && geocode_address.present? && duplicate_of.blank?
-      geo = GeoKit::Geocoders::MultiGeocoder.geocode(geocode_address)
-      if geo.success
-        self.latitude       = geo.lat
-        self.longitude      = geo.lng
-        self.street_address = geo.street_address if self.street_address.blank?
-        self.locality       = geo.city           if self.locality.blank?
-        self.region         = geo.state          if self.region.blank?
-        self.postal_code    = geo.zip            if self.postal_code.blank?
-        self.country        = geo.country_code   if self.country.blank?
-      end
-
-      msg = 'Venue#add_geocoding for ' + (self.new_record? ? 'new record' : "record #{self.id}") + ' ' + (geo.success ? 'was successful' : 'failed') + ', response was: ' + geo.inspect
-      Rails.logger.info(msg)
+    if [latitude, longitude].all?(&:present?)
+      [latitude, longitude]
     end
+  end
 
-    return true
+  attr_accessor :force_geocoding
+
+  def geocode!
+    Geocoder.geocode(self)
+    true # Try to geocode, but don't complain if we can't.
   end
 end

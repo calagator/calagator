@@ -1,4 +1,4 @@
-Venue.perform_geocoding = false
+Venue::Geocoder.perform_geocoding = false
 
 class BeValidXhtml
   # require 'action_controller/test_process'
