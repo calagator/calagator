@@ -294,22 +294,6 @@ describe "Venue geocoding", :type => :model do
       expect(@venue.locality).to eq "Cleveland"
     end
   end
-
-  describe "forcing geocoding" do
-    before { @venue.latitude = @venue.longitude = double }
-
-    it "should strip location when geocoding is forced" do
-      @venue.force_geocoding = "1"
-      expect(@venue.latitude).to be_nil
-      expect(@venue.longitude).to be_nil
-    end
-
-    it "should not strip location when geocoding is forced" do
-      @venue.force_geocoding = "0"
-      expect(@venue.latitude).not_to be_nil
-      expect(@venue.longitude).not_to be_nil
-    end
-  end
 end
 
 describe "Venue geocode addressing", :type => :model do

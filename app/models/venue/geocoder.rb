@@ -28,7 +28,7 @@ class Venue < ActiveRecord::Base
     def should_geocode?
       [
         Venue.perform_geocoding?,
-        venue.location.blank?,
+        (venue.location.blank? || venue.force_geocoding == "1"),
         venue.geocode_address.present?,
         venue.duplicate_of.blank?
       ].all?

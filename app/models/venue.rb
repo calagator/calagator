@@ -185,18 +185,12 @@ class Venue < ActiveRecord::Base
   # Return this venue's latitude/longitude location,
   # or nil if it doesn't have one.
   def location
-    [latitude, longitude] unless latitude.blank? or longitude.blank?
+    if [latitude, longitude].all?(&:present?)
+      [latitude, longitude]
+    end
   end
 
-  # Should we default to forcing geocoding when the user edits this venue?
-  def force_geocoding
-    location.nil? # Yes, if it has no location.
-  end
-
-  # Maybe trigger geocoding when we save
-  def force_geocoding=(value)
-    self.latitude = self.longitude = nil if value == "1"
-  end
+  attr_accessor :force_geocoding
 
   # Try to geocode, but don't complain if we can't.
   # TODO Consider renaming this to #add_geocoding! to imply that this method makes destructive changes the object, rather than just returning values. Compare its name to the method called #geocode_address, which just returns values.
