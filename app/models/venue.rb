@@ -162,11 +162,6 @@ class Venue < ActiveRecord::Base
 
   #===[ Geocoding helpers ]===============================================
 
-  cattr_accessor(:perform_geocoding) { true }
-  class << self
-    alias_method :perform_geocoding?, :perform_geocoding
-  end
-
   # Get an address we can use for geocoding
   def geocode_address
     full_address or address

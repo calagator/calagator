@@ -1,5 +1,10 @@
 class Venue < ActiveRecord::Base
   class Geocoder < Struct.new(:venue, :geo)
+    cattr_accessor(:perform_geocoding) { true }
+    class << self
+      alias_method :perform_geocoding?, :perform_geocoding
+    end
+
     def self.geocode(venue)
       new(venue).geocode
     end
@@ -27,7 +32,7 @@ class Venue < ActiveRecord::Base
 
     def should_geocode?
       [
-        Venue.perform_geocoding?,
+        self.class.perform_geocoding?,
         (venue.location.blank? || venue.force_geocoding == "1"),
         venue.geocode_address.present?,
         venue.duplicate_of.blank?
