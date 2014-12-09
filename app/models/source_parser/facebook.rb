@@ -20,7 +20,7 @@ class SourceParser # :nodoc:
       }
 
     def self.to_events(opts={})
-      self.to_abstract_events_api_helper(
+      self.to_events_api_helper(
         :url => opts[:url],
         :api => lambda { |event_id|
           "http://graph.facebook.com/#{event_id}"

@@ -113,7 +113,7 @@ class SourceParser
       end
     end
 
-    # Wrapper for getting abstract events from a JSON API.
+    # Wrapper for getting Events from a JSON API.
     #
     # @example See SourceParser::Facebook for an example of this in use.
     #
@@ -126,9 +126,9 @@ class SourceParser
     # @yield a block for processing the downloaded JSON data.
     # @yieldparam [Hash] data the JSON data downloaded from the API.
     # @yieldparam [String] event_id the event's identifier.
-    # @yieldreturn [Array<AbstractEvent>] events.
-    # @return [Array<AbstractEvent>] events.
-    def self.to_abstract_events_api_helper(opts, &block)
+    # @yieldreturn [Array<Event>] events.
+    # @return [Array<Event>] events.
+    def self.to_events_api_helper(opts, &block)
       return false unless opts[:url]
       raise ArgumentError, "No block specified" unless block
       raise ArgumentError, "No API specified" unless opts[:api]
@@ -147,7 +147,7 @@ class SourceParser
       opts[:error] ||= 'error'
       raise SourceParser::NotFound, error if error = data[opts[:error]]
 
-      # Process the JSON data into AbstractEvents.
+      # Process the JSON data into Events.
       yield(data, event_id)
     end
 
@@ -155,7 +155,7 @@ class SourceParser
     # fetch another URL and parse it with the iCalendar driver.
     #
     # Arguments:
-    # * opts: Hash with +to_abstract_events+ options.
+    # * opts: Hash with +to_events+ options.
     # * driver: Driver that should parse the results. Should be a subclass of SourceParser::Base.
     # * source: Regular expression for extracting the event id from the URL.
     # * target: Lambda for generating the URL that the +driver+ should parse. It's called with a Regexp matcher for the +source+ and emits a string URL that the +driver+ should parse.
@@ -165,9 +165,9 @@ class SourceParser
     #   class SourceParser
     #     class Plancast < Base
     #       label :Plancast
-    #       def self.to_abstract_events(opts={})
+    #       def self.to_events(opts={})
     #         # Invoke the wrapper
-    #         self.to_abstract_events_wrapper(
+    #         self.to_events_wrapper(
     #           # Pass along the opts
     #           opts,
     #           # Parse using the Ical driver
@@ -182,9 +182,9 @@ class SourceParser
     #       end
     #     end
     #   end
-    def self.to_abstract_events_wrapper(opts, driver, source, target)
+    def self.to_events_wrapper(opts, driver, source, target)
       if matcher = opts[:url].try(:match, source)
-        driver.to_abstract_events(opts.merge(
+        driver.to_events(opts.merge(
           :content => self.read_url(target.call(matcher)
         )))
       end

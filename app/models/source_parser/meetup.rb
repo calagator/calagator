@@ -5,7 +5,7 @@ class SourceParser # :nodoc:
 
     def self.to_events(opts={})
       if SECRETS.meetup_api_key.present?
-        self.to_abstract_events_api_helper(
+        self.to_events_api_helper(
           :url => opts[:url],
           :error => 'problem',
           :api => lambda { |event_id|
@@ -33,7 +33,7 @@ class SourceParser # :nodoc:
           [event_or_duplicate(event)]
         end
       else
-        self.to_abstract_events_wrapper(
+        self.to_events_wrapper(
           opts,
           SourceParser::Ical,
           %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?},

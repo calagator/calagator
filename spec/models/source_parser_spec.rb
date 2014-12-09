@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 class SourceParser::FakeParser < SourceParser::Base
-  def self.to_abstract_events(*)
+  def self.to_events(*)
     false
   end
 end
@@ -38,8 +38,8 @@ describe SourceParser, "when subclassing", :type => :model do
     expect{ SourceParser::Base.to_hcals }.to raise_error(NotImplementedError)
   end
 
-  it "should demand that to_abstract_events is implemented" do
-    expect{ SourceParser::Base.to_abstract_events }.to raise_error NotImplementedError
+  it "should demand that to_events is implemented" do
+    expect{ SourceParser::Base.to_events }.to raise_error NotImplementedError
   end
 end
 
