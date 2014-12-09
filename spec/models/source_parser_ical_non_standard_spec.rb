@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SourceParser::Ical, "when parsing VVENUE", :type => :model do
    before(:each) do
-     @location = SourceParser::Ical.to_abstract_location(<<-HERE)
+     @venue = SourceParser::Ical.to_venue(<<-HERE)
 BEGIN:VVENUE
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
   html
@@ -24,19 +24,19 @@ END:VVENUE
   end
 
   it "should have a street_address" do
-    expect(@location.street_address).not_to be_nil
+    expect(@venue.street_address).not_to be_nil
   end
 
   it "should have the adress as is" do
-    @location.street_address == '700 Southwest Fifth Avenue Suite #1035'
+    @venue.street_address == '700 Southwest Fifth Avenue Suite #1035'
   end
 
   it "should have a locality" do
-    expect(@location.locality).not_to be_nil
+    expect(@venue.locality).not_to be_nil
   end
 
   it "should have the locality as is" do
-    @location.locality == 'Portland'
+    @venue.locality == 'Portland'
   end
 end
 
