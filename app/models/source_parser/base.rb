@@ -81,50 +81,8 @@ class SourceParser
     # Options:
     # * :url -- URL of iCalendar data to import
     # * :content -- String of iCalendar data to import
-    def self.to_abstract_events(opts={})
-      raise NotImplementedError, "Do not use #{self.class}.to_abstract_events method directly"
-    end
-
     def self.to_events(opts={})
-      source = opts.delete(:source)
-
-      events = to_abstract_events(opts)
-      return events unless events.present?
-
-      events.uniq.map do |abstract_event|
-        event = Event.new
-
-        event.source       = source
-        event.title        = abstract_event.title
-        event.description  = abstract_event.description
-        event.start_time   = abstract_event.start_time.blank? ? nil : Time.parse(abstract_event.start_time.to_s)
-        event.end_time     = abstract_event.end_time.blank? ? nil : Time.parse(abstract_event.end_time.to_s)
-        event.url          = abstract_event.url
-        event.tag_list     = abstract_event.tags.join(',')
-
-        if abstract_location = abstract_event.location
-          venue = Venue.new
-
-          venue.source = source
-          abstract_location.each_pair do |key, value|
-            next if key == :tags
-            venue[key] = value unless value.blank?
-          end
-          venue.tag_list = abstract_location.tags.join(',')
-
-          # We must add geocoding information so this venue can be compared to existing ones.
-          venue.geocode!
-
-          # if the new venue has no exact duplicate, use the new venue
-          # otherwise, find the ultimate master and return it
-          venue = venue_or_duplicate(venue)
-
-          event.venue = venue
-        end
-
-        event = event_or_duplicate(event)
-        event
-      end
+      raise NotImplementedError, "Do not use #{self.class}.to_events method directly"
     end
 
     def self.event_or_duplicate(event)
