@@ -117,26 +117,41 @@ class SourceParser
 
           # if the new venue has no exact duplicate, use the new venue
           # otherwise, find the ultimate master and return it
-          duplicates = venue.find_exact_duplicates
-
-          if duplicates.present?
-            venue = duplicates.first.progenitor
-          else
-            venue_machine_tag_name = abstract_location.tags.find { |t|
-              # Match 2 in the MACHINE_TAG_PATTERN is the predicate
-              ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? t.match(ActsAsTaggableOn::Tag::MACHINE_TAG_PATTERN)[2]
-            }
-            matched_venue = Venue.tagged_with(venue_machine_tag_name).first
-
-            venue = matched_venue.progenitor if matched_venue.present?
-          end
+          venue = venue_or_duplicate(venue)
 
           event.venue = venue
         end
 
-        duplicates = event.find_exact_duplicates
-        event = duplicates.first.progenitor if duplicates
+        event = event_or_duplicate(event)
         event
+      end
+    end
+
+    def self.event_or_duplicate(event)
+      duplicates = event.find_exact_duplicates
+      if duplicates.present?
+        duplicates.first.progenitor
+      else
+        event
+      end
+    end
+
+    def self.venue_or_duplicate(venue)
+      duplicates = venue.find_exact_duplicates
+      if duplicates.present?
+        duplicates.first.progenitor
+      else
+        venue_machine_tag_name = venue.tag_list.find { |t|
+          # Match 2 in the MACHINE_TAG_PATTERN is the predicate
+          ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? t.match(ActsAsTaggableOn::Tag::MACHINE_TAG_PATTERN)[2]
+        }
+        matched_venue = Venue.tagged_with(venue_machine_tag_name).first
+
+        if matched_venue.present?
+          matched_venue.progenitor
+        else
+          venue
+        end
       end
     end
 
