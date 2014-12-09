@@ -87,18 +87,6 @@ describe Event, :type => :model do
         :venue => @basic_venue)
     end
 
-    xit "should parse an AbstractEvent into an Event" do
-      event = Event.new(:title => "EventTitle",
-                        :description => "EventDescription",
-                        :start_time => Time.zone.parse("2008-05-20"),
-                        :end_time => Time.zone.parse("2008-05-22"))
-      expect(Event).to receive(:new).and_return(event)
-
-      abstract_event = SourceParser::AbstractEvent.new("EventTitle", "EventDescription", Time.zone.parse("2008-05-20"), Time.zone.parse("2008-05-22"))
-
-      expect(Event.from_abstract_event(abstract_event)).to eq event
-    end
-
     it "should parse an iCalendar into an Event" do
       actual_ical = Event::IcalRenderer.render(@basic_event)
 
@@ -651,15 +639,6 @@ describe Event, :type => :model do
     it "should return a marked duplicate as progenitor if it is orphaned"  do
       expect(@orphan.progenitor).to eq @orphan
     end
-
-    xit "should return the progenitor if an imported event has an exact duplicate" do
-      @abstract_event = SourceParser::AbstractEvent.new
-      @abstract_event.title = @slave2.title
-      @abstract_event.start_time = @slave2.start_time.to_s
-
-      expect(Event.from_abstract_event(@abstract_event)).to eq @master
-    end
-
   end
 
   describe "when versioning" do
