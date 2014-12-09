@@ -37,7 +37,7 @@ class SourceParser # :nodoc:
           opts,
           SourceParser::Ical,
           %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?},
-          lambda { |matcher| "http://www.meetup.com/#{matcher[1]}/events/#{matcher[2]}/ical/omgkittens.ics" }
+          lambda { |matcher| "http://www.meetup.com/#{matcher[1]}/events/#{matcher[2]}/ical" }
         )
       end
     end
