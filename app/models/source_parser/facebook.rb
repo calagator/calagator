@@ -19,7 +19,7 @@ class SourceParser # :nodoc:
         ([^/]+)                             # Facebook event identifier to capture
       }
 
-    def self.to_abstract_events(opts={})
+    def self.to_events(opts={})
       self.to_abstract_events_api_helper(
         :url => opts[:url],
         :api => lambda { |event_id|
@@ -28,7 +28,8 @@ class SourceParser # :nodoc:
       ) do |data, event_id|
         raise ::SourceParser::HttpAuthenticationRequiredError if data['parsed_response'] === false
 
-        event = AbstractEvent.new
+        event = Event.new
+        event.source      = opts[:source]
         event.title       = data['name']
         event.description = data['description']
 
@@ -36,28 +37,30 @@ class SourceParser # :nodoc:
         event.start_time  = Time.zone.parse(data['start_time'])
         event.end_time    = Time.zone.parse(data['end_time'])
         event.url         = opts[:url]
-        event.tags        = ["facebook:event=#{data['id']}"]
+        event.tag_list    = "facebook:event=#{data['id']}"
 
         # The 'venue' block in facebook's data doesn't contain the venue name, so we merge…
         data = (data['venue'] || {}).merge('name' => data['location'])
-        event.location    = to_abstract_location(data)
+        event.venue       = to_venue(data, opts)
 
-        [event]
+        [event_or_duplicate(event)]
       end
     end
 
-    def self.to_abstract_location(value, opts={})
-      if value.present?
-        location = AbstractLocation.new
-        location.title   = value['name']
-        location.street_address = value['street']
-        location.locality = value['city']
-        location.region = value['state']
-        location.country = value['country']
-        location.latitude = value['latitude']
-        location.longitude = value['longitude']
-        location
-      end
+    def self.to_venue(value, opts={})
+      return if value.blank?
+      venue = Venue.new({
+        source: opts[:source],
+        title: value['name'],
+        street_address: value['street'],
+        locality: value['city'],
+        region: value['state'],
+        country: value['country'],
+        latitude: value['latitude'],
+        longitude: value['longitude'],
+      })
+      venue.geocode!
+      venue_or_duplicate(venue)
     end
   end
 end
