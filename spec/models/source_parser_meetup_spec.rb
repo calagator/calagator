@@ -9,7 +9,7 @@ describe SourceParser::Meetup, :type => :model do
     before(:each) do
       content = read_sample('meetup.json')
       expect(HTTParty).to receive(:get).and_return(MultiJson.decode(content))
-      @events = SourceParser::Meetup.to_abstract_events(:url => 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/')
+      @events = SourceParser::Meetup.to_events(:url => 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/')
       @event = @events.first
     end
 
@@ -23,14 +23,14 @@ describe SourceParser::Meetup, :type => :model do
     end
 
     it "should tag Meetup events with automagic machine tags" do
-      expect(@event.tags).to eq ["meetup:event=ldhnqyplbnb", "meetup:group=eLearningNetwork"]
+      expect(@event.tag_list).to eq ["meetup:event=ldhnqyplbnb", "meetup:group=eLearningNetwork"]
     end
 
     it "should populate a venue when structured data is provided" do
-      expect(@event.location).to be_a SourceParser::AbstractLocation
-      expect(@event.location.title).to eq "Green Dragon Bistro and Brewpub"
-      expect(@event.location.street_address).to eq "928 SE 9th Ave"
-      expect(@event.location.tags).to eq ["meetup:venue=774133"]
+      expect(@event.venue).to be_a Venue
+      expect(@event.venue.title).to eq "Green Dragon Bistro and Brewpub"
+      expect(@event.venue.street_address).to eq "928 SE 9th Ave"
+      expect(@event.venue.tag_list).to eq ["meetup:venue=774133"]
     end
   end
 end

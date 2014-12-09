@@ -165,9 +165,9 @@ describe SourceParser::Ical, "when importing events with non-local times", :type
   it "should store time with TZID=GMT in UTC" do
     events = events_from_ical_at('ical_gmt.ics')
     expect(events.size).to eq 1
-    abstract_event = events.first
-    expect(abstract_event.start_time).to eq Time.parse('Fri May 07 08:00:00 +0000 2020')
-    expect(abstract_event.end_time).to eq Time.parse('Fri May 07 09:00:00 +0000 2020')
+    event = events.first
+    expect(event.start_time).to eq Time.parse('Fri May 07 08:00:00 +0000 2020')
+    expect(event.end_time).to eq Time.parse('Fri May 07 09:00:00 +0000 2020')
   end
 end
 

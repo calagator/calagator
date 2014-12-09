@@ -5,7 +5,7 @@ describe SourceParser::Plancast, :type => :model do
   before(:each) do
     content = read_sample('plancast.json')
     expect(HTTParty).to receive(:get).and_return(MultiJson.decode(content))
-    @events = SourceParser::Plancast.to_abstract_events(:url => 'http://plancast.com/p/3cos/indiewebcamp')
+    @events = SourceParser::Plancast.to_events(:url => 'http://plancast.com/p/3cos/indiewebcamp')
     @event = @events.first
   end
 
@@ -19,13 +19,13 @@ describe SourceParser::Plancast, :type => :model do
   end
 
   it "should tag Plancast events with automagic machine tags" do
-    expect(@event.tags).to eq ["plancast:plan=3cos"]
+    expect(@event.tag_list).to eq ["plancast:plan=3cos"]
   end
 
   it "should populate a venue when structured data is provided" do
-    expect(@event.location.title).to eq "Urban Airship"
-    expect(@event.location.address).to eq "334 Northwest 11th Avenue, Portland, Oregon, United States"
-    expect(@event.location.tags).to eq ["plancast:place=1520153"]
+    expect(@event.venue.title).to eq "Urban Airship"
+    expect(@event.venue.address).to eq "334 Northwest 11th Avenue, Portland, Oregon, United States"
+    expect(@event.venue.tag_list).to eq ["plancast:place=1520153"]
   end
 
 end

@@ -46,20 +46,20 @@ describe SourceParser::Hcal, "with hCalendar events", :type => :model do
   end
 end
 
-describe SourceParser::Hcal, "with hCalendar to AbstractLocation parsing", :type => :model do
-  it "should extract an AbstractLocation from an hCalendar text" do
+describe SourceParser::Hcal, "with hCalendar to Venue parsing", :type => :model do
+  it "should extract an Venue from an hCalendar text" do
     hcal_upcoming = read_sample('hcal_upcoming_v1.html')
 
     allow(SourceParser::Hcal).to receive(:read_url).and_return(hcal_upcoming)
-    abstract_events = SourceParser::Hcal.to_abstract_events(:url => "http://foo.bar/")
-    abstract_event = abstract_events.first
-    abstract_location = abstract_event.location
+    events = SourceParser::Hcal.to_events(:url => "http://foo.bar/")
+    event = events.first
+    venue = event.venue
 
-    expect(abstract_location).to be_a_kind_of(SourceParser::AbstractLocation)
-    expect(abstract_location.locality).to eq "portland"
-    expect(abstract_location.street_address).to eq "317 SW Alder St Ste 500"
-    expect(abstract_location.latitude).to be_within(0.1).of(45.5191)
-    expect(abstract_location.longitude).to be_within(0.1).of(-122.675)
-    expect(abstract_location.postal_code).to eq "97204"
+    expect(venue).to be_a_kind_of(Venue)
+    expect(venue.locality).to eq "portland"
+    expect(venue.street_address).to eq "317 SW Alder St Ste 500"
+    expect(venue.latitude).to be_within(0.1).of(45.5191)
+    expect(venue.longitude).to be_within(0.1).of(-122.675)
+    expect(venue.postal_code).to eq "97204"
   end
 end

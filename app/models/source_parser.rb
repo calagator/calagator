@@ -4,7 +4,7 @@ require 'source_parser/not_found'
 #
 # A hierarchy of classes that provide a way to parse different source formats and return hCalendar events.
 class SourceParser
-  # Return an Array of AbstractEvent instances.
+  # Return an Array of unsaved Event instances.
   #
   # Options: (these vary between specific parsers)
   # * :url - URL string to read as parser input.
