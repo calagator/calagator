@@ -120,30 +120,30 @@ class SourceParser # :nodoc:
     # * :fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
     def self.to_venue(value, opts={})
       value = "" if value.nil?
-      a = Venue.new
+      venue = Venue.new
 
       # VVENUE entries are considered just Vcards,
       # treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
         vcard_hash = self.hash_from_vcard_string(vcard_content)
 
-        a.title          = vcard_hash['NAME']
-        a.street_address = vcard_hash['ADDRESS']
-        a.locality       = vcard_hash['CITY']
-        a.region         = vcard_hash['REGION']
-        a.postal_code    = vcard_hash['POSTALCODE']
-        a.country        = vcard_hash['COUNTRY']
+        venue.title          = vcard_hash['NAME']
+        venue.street_address = vcard_hash['ADDRESS']
+        venue.locality       = vcard_hash['CITY']
+        venue.region         = vcard_hash['REGION']
+        venue.postal_code    = vcard_hash['POSTALCODE']
+        venue.country        = vcard_hash['COUNTRY']
 
-        a.latitude, a.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
+        venue.latitude, venue.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
 
       elsif opts[:fallback].present?
-        a.title = opts[:fallback]
+        venue.title = opts[:fallback]
       else
         return nil
       end
 
-      a.geocode!
-      venue_or_duplicate(a)
+      venue.geocode!
+      venue_or_duplicate(venue)
     end
 
     # Return hash parsed from the contents of first VCARD found in the iCalendar data.
