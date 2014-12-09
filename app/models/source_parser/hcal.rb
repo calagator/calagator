@@ -18,26 +18,27 @@ class SourceParser
       something.is_a?(hCalendar) ? [something] : something
     end
 
-    ABSTRACT_EVENT_TO_HCALENDAR_FIELD_MAP = {
+    EVENT_TO_HCALENDAR_FIELD_MAP = {
       :title => :summary,
       :description => true,
       :start_time => :dtstart,
       :end_time => :dtend,
       :url => true,
-      :location => true
+      :venue => :location,
     }
 
-    # Returns a set of AbstractEvent objects.
+    # Returns a set of Event objects.
     #
     # Options:
     # * :url => URL String to read events from.
-    def self.to_abstract_events(opts = {})
+    def self.to_events(opts = {})
       hcals = to_hcals(opts)
       
       hcals.map do |hcal|
-        AbstractEvent.new.tap do |event|
-          ABSTRACT_EVENT_TO_HCALENDAR_FIELD_MAP.each do |abstract_field, mofo_field|
-            mofo_field = abstract_field if mofo_field == true
+        event = Event.new.tap do |event|
+          event.source = opts[:source]
+          EVENT_TO_HCALENDAR_FIELD_MAP.each do |field, mofo_field|
+            mofo_field = field if mofo_field == true
             next unless hcal.respond_to?(mofo_field)
             raw_field = hcal.send(mofo_field)
             next unless raw_field
@@ -48,38 +49,42 @@ class SourceParser
               #when :dtend
               #  HTMLEntitiesCoder.decode(raw_field)
               when :location
-                to_abstract_location(:value => raw_field)
+                to_venue(opts.merge(:value => raw_field))
               else
                 raw_field
               end
-            event.send("#{abstract_field}=", decoded_field)
+            event.send("#{field}=", decoded_field)
           end
         end
+        event_or_duplicate(event)
+      end.uniq do |event|
+        [event.attributes, event.venue.try(:attributes)]
       end
     end
 
-    ABSTRACT_LOCATION_TO_HCARD_FIELD_MAP = {
+    VENUE_TO_HCARD_FIELD_MAP = {
       :title => :fn,
       :telephone => :tel,
       :email => true,
       :description => :note,
     }
 
-    # Return an AbstractLocation.
+    # Return a Venue.
     #
     # Options:
     # * :value -- hCard or string location
-    def self.to_abstract_location(opts)
-      AbstractLocation.new.tap do |a|
+    def self.to_venue(opts)
+      venue = Venue.new.tap do |a|
+        a.source = opts[:source]
         raw = opts[:value]
 
         case raw
         when String
           a.title = raw
         when HCard
-          ABSTRACT_LOCATION_TO_HCARD_FIELD_MAP.each do |abstract_field, mofo_field|
-            mofo_field = abstract_field if mofo_field == true
-            a[abstract_field] = raw.send(mofo_field).try(:strip_html) if raw.respond_to?(mofo_field)
+          VENUE_TO_HCARD_FIELD_MAP.each do |field, mofo_field|
+            mofo_field = field if mofo_field == true
+            a[field] = raw.send(mofo_field).try(:strip_html) if raw.respond_to?(mofo_field)
           end
 
           if raw.respond_to?(:geo)
@@ -105,7 +110,9 @@ class SourceParser
         else
           raise ArgumentError, "Unknown location type in hCalendar: #{raw.class}"
         end
+        a.geocode!
       end
+      venue_or_duplicate(venue)
     end
 
   end
