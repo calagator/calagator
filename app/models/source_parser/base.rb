@@ -189,5 +189,16 @@ class SourceParser
         )))
       end
     end
+
+    def self.<=> other
+      # use site-specific parsers first, then generics alphabetically
+      if url_pattern && !other.url_pattern
+        -1
+      elsif !url_pattern && other.url_pattern
+        1
+      else
+        label <=> other.label
+      end
+    end
   end
 end

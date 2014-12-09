@@ -1,11 +1,5 @@
 require 'spec_helper'
 
-class SourceParser::FakeParser < SourceParser::Base
-  def self.to_events(*)
-    false
-  end
-end
-
 describe SourceParser, "when reading content", :type => :model do
   it "should read from a normal URL" do
     stub_source_parser_http_response!(:body => 42)
@@ -44,23 +38,22 @@ describe SourceParser, "when subclassing", :type => :model do
 end
 
 describe SourceParser, "when parsing events", :type => :model do
-  it "should have expected parsers plus FakeParser" do
+  it "should have site-specific parsers first, then generics" do
     expect(SourceParser.parsers).to eq [
-      SourceParser::Plancast,
-      SourceParser::Meetup,
       SourceParser::Facebook,
-      SourceParser::Ical,
+      SourceParser::Meetup,
+      SourceParser::Plancast,
       SourceParser::Hcal,
-      SourceParser::FakeParser,
+      SourceParser::Ical,
     ]
   end
 
   it "should use first successful parser's results" do
     events = [double]
 
-    expect(SourceParser::Ical).to receive(:to_events).and_return(false)
-    expect(SourceParser::Hcal).to receive(:to_events).and_return(events)
-    expect(SourceParser::FakeParser).not_to receive(:to_events)
+    expect(SourceParser::Facebook).to receive(:to_events).and_return(false)
+    expect(SourceParser::Meetup).to receive(:to_events).and_return(events)
+    expect(SourceParser::Plancast).not_to receive(:to_events)
     expect(SourceParser::Base).to receive(:content_for).and_return("fake content")
 
     expect(SourceParser.to_events(:fake => :argument)).to have(1).event

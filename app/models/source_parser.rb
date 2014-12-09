@@ -1,4 +1,9 @@
 require 'source_parser/not_found'
+require 'source_parser/plancast'
+require 'source_parser/meetup'
+require 'source_parser/facebook'
+require 'source_parser/ical'
+require 'source_parser/hcal'
 
 # == SourceParser
 #
@@ -29,7 +34,7 @@ class SourceParser
 
   # Returns an Array of parser classes for the various formats
   def self.parsers
-    ::SourceParser::Base.parsers.to_a
+    ::SourceParser::Base.parsers.to_a.sort
   end
 
   # Returns an Array of sorted string labels for the parsers.
@@ -48,9 +53,3 @@ class SourceParser
   end
 end
 
-# Load format-specific drivers in the following order:
-SourceParser::Plancast
-SourceParser::Meetup
-SourceParser::Facebook
-SourceParser::Ical
-SourceParser::Hcal
