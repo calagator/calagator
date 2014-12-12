@@ -4,8 +4,12 @@ class Source::Parser # :nodoc:
     url_pattern %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
 
     def self.to_events(opts={})
+      new(opts).to_events
+    end
+
+    def to_events
       if SECRETS.meetup_api_key.present?
-        self.to_events_api_helper(
+        self.class.to_events_api_helper(
           :url => opts[:url],
           :error => 'problem',
           :api => lambda { |event_id|
@@ -30,10 +34,10 @@ class Source::Parser # :nodoc:
           event.venue       = to_venue(data['venue'])
           event.tag_list    = "meetup:event=#{event_id}, meetup:group=#{data['group']['urlname']}"
 
-          [event_or_duplicate(event)]
+          [self.class.event_or_duplicate(event)]
         end
       else
-        self.to_events_wrapper(
+        self.class.to_events_wrapper(
           opts,
           Source::Parser::Ical,
           %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?},
@@ -42,7 +46,7 @@ class Source::Parser # :nodoc:
       end
     end
 
-    def self.to_venue(value, opts={})
+    def to_venue(value)
       return if value.blank?
       venue = Venue.new({
         source: opts[:source],
@@ -56,7 +60,7 @@ class Source::Parser # :nodoc:
         tag_list: "meetup:venue=#{value['id']}",
       })
       venue.geocode!
-      venue_or_duplicate(venue)
+      self.class.venue_or_duplicate(venue)
     end
   end
 end
