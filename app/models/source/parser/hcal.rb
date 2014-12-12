@@ -32,7 +32,11 @@ class Source::Parser
     # Options:
     # * :url => URL String to read events from.
     def self.to_events(opts = {})
-      hcals = to_hcals(opts)
+      new(opts).to_events
+    end
+
+    def to_events
+      hcals = self.class.to_hcals(opts)
       
       hcals.map do |hcal|
         event = Event.new.tap do |event|
@@ -56,7 +60,7 @@ class Source::Parser
             event.send("#{field}=", decoded_field)
           end
         end
-        event_or_duplicate(event)
+        self.class.event_or_duplicate(event)
       end.uniq do |event|
         [event.attributes, event.venue.try(:attributes)]
       end
@@ -73,7 +77,7 @@ class Source::Parser
     #
     # Options:
     # * :value -- hCard or string location
-    def self.to_venue(opts)
+    def to_venue(opts)
       venue = Venue.new.tap do |venue|
         venue.source = opts[:source]
         raw = opts[:value]
@@ -112,8 +116,7 @@ class Source::Parser
         end
         venue.geocode!
       end
-      venue_or_duplicate(venue)
+      self.class.venue_or_duplicate(venue)
     end
-
   end
 end
