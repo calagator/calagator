@@ -4,7 +4,11 @@ class Source::Parser # :nodoc:
     url_pattern %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
 
     def self.to_events(opts={})
-      self.to_events_api_helper(
+      new(opts).to_events
+    end
+
+    def to_events
+      self.class.to_events_api_helper(
         :url => opts[:url],
         :api => lambda { |event_id|
           [
@@ -30,13 +34,13 @@ class Source::Parser # :nodoc:
         event.url         = (data['external_url'] || data['plan_url'])
         event.tag_list    = "plancast:plan=#{event_id}"
 
-        event.venue       = to_venue(data['place'], opts.merge(:fallback => data['where']))
+        event.venue       = to_venue(data['place'], data['where'])
 
-        [event_or_duplicate(event)]
+        [self.class.event_or_duplicate(event)]
       end
     end
 
-    def self.to_venue(value, opts={})
+    def to_venue(value, fallback=nil)
       value = "" if value.nil?
       if value.present?
         venue = Venue.new({
@@ -46,10 +50,10 @@ class Source::Parser # :nodoc:
           tag_list: "plancast:place=#{value['id']}",
         })
         venue.geocode!
-        venue_or_duplicate(venue)
-      elsif opts[:fallback].present?
-        venue = Venue.new(title: opts[:fallback])
-        venue_or_duplicate(venue)
+        self.class.venue_or_duplicate(venue)
+      elsif fallback.present?
+        venue = Venue.new(title: fallback)
+        self.class.venue_or_duplicate(venue)
       end
     end
   end
