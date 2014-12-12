@@ -57,11 +57,6 @@ class Source::Parser
     end
 
     # Stub which makes sure that subclasses of Base implement the #parse method.
-    def self.to_hcals(opts={})
-      raise NotImplementedError, "Do not use #{self.class}.to_hcals method directly"
-    end
-
-    # Stub which makes sure that subclasses of Base implement the #parse method.
     #
     # Options:
     # * :url -- URL of iCalendar data to import

@@ -12,10 +12,6 @@ describe Source::Parser, "when reading content", :type => :model do
 end
 
 describe Source::Parser, "when subclassing", :type => :model do
-  it "should demand that to_hcals is implemented" do
-    expect{ Source::Parser::Base.to_hcals }.to raise_error(NotImplementedError)
-  end
-
   it "should demand that to_events is implemented" do
     expect{ Source::Parser::Base.to_events }.to raise_error NotImplementedError
   end

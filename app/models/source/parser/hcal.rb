@@ -7,17 +7,6 @@ class Source::Parser
   class Hcal < Source::Parser::Base
     label :hCalendar
 
-    # Returns a set of hCalendar events.
-    #
-    # Options:
-    # * :url => URL String to read events from.
-    # * :content => String of data to read events from 
-    def self.to_hcals(opts={})
-      content = read_url(opts[:url])
-      something = hCalendar.find(:text => content)
-      something.is_a?(hCalendar) ? [something] : something
-    end
-
     EVENT_TO_HCALENDAR_FIELD_MAP = {
       :title => :summary,
       :description => true,
@@ -36,7 +25,7 @@ class Source::Parser
     end
 
     def to_events
-      hcals = self.class.to_hcals(opts)
+      hcals = to_hcals
       
       hcals.map do |hcal|
         event = Event.new.tap do |event|
@@ -117,6 +106,14 @@ class Source::Parser
         venue.geocode!
       end
       venue_or_duplicate(venue)
+    end
+
+    private
+
+    def to_hcals
+      content = self.class.read_url(opts[:url])
+      something = hCalendar.find(:text => content)
+      something.is_a?(hCalendar) ? [something] : something
     end
   end
 end
