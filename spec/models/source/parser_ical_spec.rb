@@ -174,7 +174,7 @@ end
 
 describe Source::Parser::Ical, "munge_gmt_dates", :type => :model do
   it "should return unexpected-format strings unmodified" do
-    munged = Source::Parser::Ical.munge_gmt_dates('justin bieber on a train')
+    munged = Source::Parser::Ical.new.send(:munge_gmt_dates, 'justin bieber on a train')
     expect(munged).to eq 'justin bieber on a train'
   end
 
@@ -188,7 +188,7 @@ END:VEVENT
 END:VCALENDAR
     }
 
-    expect(Source::Parser::Ical.munge_gmt_dates(icard)).to eq icard
+    expect(Source::Parser::Ical.new.send(:munge_gmt_dates, icard)).to eq icard
   end
 
   it "should replace TZID=GMT with a TZID-less UTC time" do
@@ -210,7 +210,7 @@ END:VEVENT
 END:VCALENDAR
     }
 
-    expect(Source::Parser::Ical.munge_gmt_dates(icard)).to eq munged
+    expect(Source::Parser::Ical.new.send(:munge_gmt_dates, icard)).to eq munged
   end
 end
 

@@ -3,10 +3,6 @@ class Source::Parser # :nodoc:
     self.label = :Meetup
     self.url_pattern = %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
 
-    def self.to_events(opts={})
-      new(opts).to_events
-    end
-
     def to_events
       if SECRETS.meetup_api_key.present?
         return unless data = to_events_api_helper(opts[:url], "problem") do |event_id|
@@ -40,6 +36,8 @@ class Source::Parser # :nodoc:
       end
     end
 
+    private
+
     def to_venue(value)
       return if value.blank?
       venue = Venue.new({
@@ -56,8 +54,6 @@ class Source::Parser # :nodoc:
       venue.geocode!
       venue_or_duplicate(venue)
     end
-
-    private
 
     def to_events_wrapper(driver, source, target)
       if matcher = opts[:url].try(:match, source)

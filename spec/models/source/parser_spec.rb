@@ -28,7 +28,7 @@ describe Source::Parser, "when parsing events", :type => :model do
     ]
   end
 
-  it "should use first successful parser's results" do
+  fit "should use first successful parser's results" do
     events = [double]
 
     body = {
@@ -36,7 +36,7 @@ describe Source::Parser, "when parsing events", :type => :model do
       start_time: "2010-01-01 12:00:00 UTC",
       end_time: "2010-01-01 13:00:00 UTC"
     }.to_json
-    stub_request(:get, "http://graph.facebook.com/omg").to_return(body: body)
+    stub_request(:get, "http://graph.facebook.com/omg").to_return(body: body, headers: { content_type: "application/json" })
 
     expect(Source::Parser.to_events(url: "http://www.facebook.com/events/omg")).to have(1).event
   end

@@ -17,28 +17,6 @@ class Source::Parser # :nodoc:
       super(url.gsub(/^webcal:/, 'http:'))
     end
 
-    # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-    def self.dates_for_tz(component, event)
-      if component.dtstart_property.tzid.nil?
-        event.start_time  = Time.parse(component.dtstart_property.value)
-        if component.dtend_property.nil?
-          if component.duration
-            event.end_time = component.duration_property.add_to_date_time_value(event.start_time)
-          else
-            event.end_time = event.start_time
-          end
-        else
-          event.end_time = Time.parse(component.dtend_property.value)
-        end
-      else
-        event.start_time  = component.dtstart
-        event.end_time    = component.dtend
-      end
-    rescue RiCal::InvalidTimezoneIdentifier
-      event.start_time = Time.parse(component.dtstart_property.to_s)
-      event.end_time = Time.parse(component.dtend_property.to_s)
-    end
-
     CALENDAR_CONTENT_RE    = /^BEGIN:VCALENDAR.*?^END:VCALENDAR/m
     EVENT_CONTENT_RE       = /^BEGIN:VEVENT.*?^END:VEVENT/m
     EVENT_DTSTART_RE       = /^DTSTART.*?:([^\r\n$]+)/m
@@ -47,16 +25,6 @@ class Source::Parser # :nodoc:
     VENUE_CONTENT_BEGIN_RE = /^BEGIN:VVENUE$/m
     VENUE_CONTENT_END_RE   = /^END:VVENUE$/m
 
-    # Return an Array of Event instances extracted from an iCalendar input.
-    #
-    # Options:
-    # * :url -- URL of iCalendar data to import
-    # * :content -- String of iCalendar data to import
-    # * :skip_old -- Should old events be skipped? Default is true.
-    def self.to_events(opts={})
-      new(opts).to_events
-    end
-
     def to_events
       # Skip old events by default
 
@@ -64,7 +32,7 @@ class Source::Parser # :nodoc:
       cutoff = Time.now.yesterday
 
       content = self.class.read_url(opts[:url]).gsub(/\r\n/, "\n")
-      content = self.class.munge_gmt_dates(content)
+      content = munge_gmt_dates(content)
 
       return [].tap do |events|
         begin
@@ -85,7 +53,7 @@ class Source::Parser # :nodoc:
             event.description = component.description
             event.url         = component.url
 
-            Source::Parser::Ical.dates_for_tz(component, event)
+            dates_for_tz(component, event)
 
             content_venues = content_calendar.to_s.scan(VENUE_CONTENT_RE)
 
@@ -111,7 +79,31 @@ class Source::Parser # :nodoc:
       end
     end
 
-    def self.munge_gmt_dates(content)
+    private
+
+    # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
+    def dates_for_tz(component, event)
+      if component.dtstart_property.tzid.nil?
+        event.start_time  = Time.parse(component.dtstart_property.value)
+        if component.dtend_property.nil?
+          if component.duration
+            event.end_time = component.duration_property.add_to_date_time_value(event.start_time)
+          else
+            event.end_time = event.start_time
+          end
+        else
+          event.end_time = Time.parse(component.dtend_property.value)
+        end
+      else
+        event.start_time  = component.dtstart
+        event.end_time    = component.dtend
+      end
+    rescue RiCal::InvalidTimezoneIdentifier
+      event.start_time = Time.parse(component.dtstart_property.to_s)
+      event.end_time = Time.parse(component.dtend_property.to_s)
+    end
+
+    def munge_gmt_dates(content)
       content.gsub(/;TZID=GMT:(.*)/, ':\1Z')
     end
 
@@ -129,7 +121,7 @@ class Source::Parser # :nodoc:
       # VVENUE entries are considered just Vcards,
       # treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
-        vcard_hash = self.class.hash_from_vcard_string(vcard_content)
+        vcard_hash = hash_from_vcard_string(vcard_content)
 
         venue.title          = vcard_hash['NAME']
         venue.street_address = vcard_hash['ADDRESS']
@@ -156,7 +148,7 @@ class Source::Parser # :nodoc:
     #
     # Arguments:
     # * data - String of iCalendar data containing a VCARD.
-    def self.hash_from_vcard_string(data)
+    def hash_from_vcard_string(data)
       # Only use first vcard of a VVENUE
       vcard = RiCal.parse_string(data).first
 
@@ -170,7 +162,7 @@ class Source::Parser # :nodoc:
     #
     # Arguments:
     # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
-    def self.hash_from_vcard_lines(vcard_lines)
+    def hash_from_vcard_lines(vcard_lines)
       {}.tap do |vcard_hash|
         # Turn a String-like object into an Enumerable.
         lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines

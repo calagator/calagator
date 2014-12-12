@@ -19,10 +19,6 @@ class Source::Parser # :nodoc:
         ([^/]+)                             # Facebook event identifier to capture
       }
 
-    def self.to_events(opts={})
-      new(opts).to_events
-    end
-
     def to_events
       return unless data = to_events_api_helper(opts[:url]) do |event_id|
         "http://graph.facebook.com/#{event_id}"
@@ -47,6 +43,8 @@ class Source::Parser # :nodoc:
 
       [event_or_duplicate(event)]
     end
+
+    private
 
     def to_venue(value)
       return if value.blank?

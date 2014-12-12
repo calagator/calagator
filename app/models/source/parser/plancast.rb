@@ -3,10 +3,6 @@ class Source::Parser # :nodoc:
     self.label = :Plancast
     self.url_pattern = %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
 
-    def self.to_events(opts={})
-      new(opts).to_events
-    end
-
     def to_events
       return unless data = to_events_api_helper(opts[:url]) do |event_id|
         [
@@ -35,6 +31,8 @@ class Source::Parser # :nodoc:
 
       [event_or_duplicate(event)]
     end
+
+    private
 
     def to_venue(value, fallback=nil)
       value = "" if value.nil?

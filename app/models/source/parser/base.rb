@@ -38,13 +38,12 @@ class Source::Parser
       end
     end
 
-    # Stub which makes sure that subclasses of Base implement the #parse method.
-    #
-    # Options:
-    # * :url -- URL of iCalendar data to import
-    # * :content -- String of iCalendar data to import
     def self.to_events(opts={})
-      raise NotImplementedError, "Do not use #{self.class}.to_events method directly"
+      new(opts).to_events
+    end
+
+    def to_events
+      raise NotImplementedError
     end
 
     def self.<=>(other)

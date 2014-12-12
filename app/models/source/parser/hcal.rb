@@ -16,14 +16,6 @@ class Source::Parser
       :venue => :location,
     }
 
-    # Returns a set of Event objects.
-    #
-    # Options:
-    # * :url => URL String to read events from.
-    def self.to_events(opts = {})
-      new(opts).to_events
-    end
-
     def to_events
       hcals = to_hcals
       
@@ -54,6 +46,8 @@ class Source::Parser
         [event.attributes, event.venue.try(:attributes)]
       end
     end
+
+    private
 
     VENUE_TO_HCARD_FIELD_MAP = {
       :title => :fn,
@@ -107,8 +101,6 @@ class Source::Parser
       end
       venue_or_duplicate(venue)
     end
-
-    private
 
     def to_hcals
       content = self.class.read_url(opts[:url])
