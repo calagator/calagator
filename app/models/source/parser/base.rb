@@ -133,45 +133,6 @@ class Source::Parser
       yield(data, event_id)
     end
 
-    # Wrapper for invoking a driver from another, e.g. if given a Plancast URL,
-    # fetch another URL and parse it with the iCalendar driver.
-    #
-    # Arguments:
-    # * opts: Hash with +to_events+ options.
-    # * driver: Driver that should parse the results. Should be a subclass of Source::Parser::Base.
-    # * source: Regular expression for extracting the event id from the URL.
-    # * target: Lambda for generating the URL that the +driver+ should parse. It's called with a Regexp matcher for the +source+ and emits a string URL that the +driver+ should parse.
-    #
-    # Example:
-    #
-    #   class Source::Parser
-    #     class Plancast < Base
-    #       label :Plancast
-    #       def self.to_events(opts={})
-    #         # Invoke the wrapper
-    #         self.to_events_wrapper(
-    #           # Pass along the opts
-    #           opts,
-    #           # Parse using the Ical driver
-    #           Source::Parser::Ical,
-    #           # Regexp describing how to extract an event identifier from the
-    #           # URL. So if given "http://plancast.com/p/5ivg", the event
-    #           # identifier will be "5ivg".
-    #           %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?},
-    #           # Lambda that generates a string URL based on the match above
-    #           lambda { |matcher| "http://plancast.com/p/#{matcher[1]}?feed=ical" }
-    #         )
-    #       end
-    #     end
-    #   end
-    def self.to_events_wrapper(opts, driver, source, target)
-      if matcher = opts[:url].try(:match, source)
-        driver.to_events(opts.merge(
-          :content => self.read_url(target.call(matcher)
-        )))
-      end
-    end
-
     def self.<=>(other)
       # use site-specific parsers first, then generics alphabetically
       if self.url_pattern && !other.url_pattern

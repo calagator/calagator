@@ -37,8 +37,7 @@ class Source::Parser # :nodoc:
           [event_or_duplicate(event)]
         end
       else
-        self.class.to_events_wrapper(
-          opts,
+        to_events_wrapper(
           Source::Parser::Ical,
           %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?},
           lambda { |matcher| "http://www.meetup.com/#{matcher[1]}/events/#{matcher[2]}/ical" }
@@ -61,6 +60,16 @@ class Source::Parser # :nodoc:
       })
       venue.geocode!
       venue_or_duplicate(venue)
+    end
+
+    private
+
+    def to_events_wrapper(driver, source, target)
+      if matcher = opts[:url].try(:match, source)
+        driver.to_events(opts.merge(
+          :content => self.class.read_url(target.call(matcher)
+        )))
+      end
     end
   end
 end
