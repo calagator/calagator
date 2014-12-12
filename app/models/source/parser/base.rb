@@ -88,42 +88,22 @@ class Source::Parser
       end
     end
 
-    # Wrapper for getting Events from a JSON API.
-    #
-    # @example See Source::Parser::Facebook for an example of this in use.
-    #
-    # @option opts [String] :url the user-provided URL for the event page.
-    # @option opts [String] :error the name of the JSON field that indicates an error, defaults to +error+.
-    # @option opts [Proc] :api a lambda that gets the +event_id+ and
-    #   returns the arguments to send to +HTTParty.get+ for downloading
-    #   data. This is usually a URL string and an optional hash of query
-    #   parameters.
-    # @yield a block for processing the downloaded JSON data.
-    # @yieldparam [Hash] data the JSON data downloaded from the API.
-    # @yieldparam [String] event_id the event's identifier.
-    # @yieldreturn [Array<Event>] events.
-    # @return [Array<Event>] events.
-    def to_events_api_helper(opts, &block)
-      return false unless opts[:url]
-      raise ArgumentError, "No block specified" unless block
-      raise ArgumentError, "No API specified" unless opts[:api]
-
+    def to_events_api_helper(url, error_key="error", &block)
       # Extract +event_id+ from :url using +url_pattern+.
-      event_id = opts[:url][self.class.url_pattern, 1]
+      event_id = url[self.class.url_pattern, 1]
       return false unless event_id # Give up unless we find the identifier.
 
       # Get URL and arguments for using the API.
-      api_args = opts[:api].call(event_id)
+      api_args = block.call(event_id)
 
       # Get data from the API.
       data = HTTParty.get(*api_args)
 
       # Stop if API tells us there's an error.
-      opts[:error] ||= 'error'
-      raise Source::Parser::NotFound, error if error = data[opts[:error]]
+      raise Source::Parser::NotFound, error if error = data[error_key]
 
-      # Process the JSON data into Events.
-      yield(data, event_id)
+      data['event_id'] = event_id
+      data
     end
   end
 end

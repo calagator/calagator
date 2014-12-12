@@ -24,31 +24,28 @@ class Source::Parser # :nodoc:
     end
 
     def to_events
-      to_events_api_helper(
-        :url => opts[:url],
-        :api => lambda { |event_id|
-          "http://graph.facebook.com/#{event_id}"
-        }
-      ) do |data, event_id|
-        raise ::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
-
-        event = Event.new
-        event.source      = opts[:source]
-        event.title       = data['name']
-        event.description = data['description']
-
-        # Facebook is sending floating times, treat them as local
-        event.start_time  = Time.zone.parse(data['start_time'])
-        event.end_time    = Time.zone.parse(data['end_time'])
-        event.url         = opts[:url]
-        event.tag_list    = "facebook:event=#{data['id']}"
-
-        # The 'venue' block in facebook's data doesn't contain the venue name, so we merge…
-        data = (data['venue'] || {}).merge('name' => data['location'])
-        event.venue       = to_venue(data)
-
-        [event_or_duplicate(event)]
+      return unless data = to_events_api_helper(opts[:url]) do |event_id|
+        "http://graph.facebook.com/#{event_id}"
       end
+
+      raise ::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
+
+      event = Event.new
+      event.source      = opts[:source]
+      event.title       = data['name']
+      event.description = data['description']
+
+      # Facebook is sending floating times, treat them as local
+      event.start_time  = Time.zone.parse(data['start_time'])
+      event.end_time    = Time.zone.parse(data['end_time'])
+      event.url         = opts[:url]
+      event.tag_list    = "facebook:event=#{data['id']}"
+
+      # The 'venue' block in facebook's data doesn't contain the venue name, so we merge…
+      data = (data['venue'] || {}).merge('name' => data['location'])
+      event.venue       = to_venue(data)
+
+      [event_or_duplicate(event)]
     end
 
     def to_venue(value)

@@ -8,36 +8,32 @@ class Source::Parser # :nodoc:
     end
 
     def to_events
-      to_events_api_helper(
-        :url => opts[:url],
-        :api => lambda { |event_id|
-          [
-            'http://api.plancast.com/02/plans/show.json',
-            {
-              :query => {
-                :plan_id => event_id,
-                :extensions => 'place'
-              }
+      return unless data = to_events_api_helper(opts[:url]) do |event_id|
+        [
+          'http://api.plancast.com/02/plans/show.json',
+          {
+            :query => {
+              :plan_id => event_id,
+              :extensions => 'place'
             }
-          ]
-        }
-      ) do |data, event_id|
-        event = Event.new
-        event.source      = opts[:source]
-        event.title       = data['what']
-        event.description = data['description']
-
-        # Plancast is sending floating times as Unix timestamps, which is hard to parse
-        event.start_time  = ActiveSupport::TimeWithZone.new(nil, Time.zone, Time.at(data['start'].to_i).utc)
-        event.end_time    = ActiveSupport::TimeWithZone.new(nil, Time.zone, Time.at(data['stop'].to_i).utc)
-
-        event.url         = (data['external_url'] || data['plan_url'])
-        event.tag_list    = "plancast:plan=#{event_id}"
-
-        event.venue       = to_venue(data['place'], data['where'])
-
-        [event_or_duplicate(event)]
+          }
+        ]
       end
+      event = Event.new
+      event.source      = opts[:source]
+      event.title       = data['what']
+      event.description = data['description']
+
+      # Plancast is sending floating times as Unix timestamps, which is hard to parse
+      event.start_time  = ActiveSupport::TimeWithZone.new(nil, Time.zone, Time.at(data['start'].to_i).utc)
+      event.end_time    = ActiveSupport::TimeWithZone.new(nil, Time.zone, Time.at(data['stop'].to_i).utc)
+
+      event.url         = (data['external_url'] || data['plan_url'])
+      event.tag_list    = "plancast:plan=#{data['event_id']}"
+
+      event.venue       = to_venue(data['place'], data['where'])
+
+      [event_or_duplicate(event)]
     end
 
     def to_venue(value, fallback=nil)
