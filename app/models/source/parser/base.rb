@@ -70,7 +70,9 @@ class Source::Parser
       raise NotImplementedError, "Do not use #{self.class}.to_events method directly"
     end
 
-    def self.event_or_duplicate(event)
+    private
+
+    def event_or_duplicate(event)
       duplicates = event.find_exact_duplicates
       if duplicates.present?
         duplicates.first.progenitor
@@ -79,7 +81,7 @@ class Source::Parser
       end
     end
 
-    def self.venue_or_duplicate(venue)
+    def venue_or_duplicate(venue)
       duplicates = venue.find_exact_duplicates
       if duplicates.present?
         duplicates.first.progenitor

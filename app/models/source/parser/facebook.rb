@@ -47,7 +47,7 @@ class Source::Parser # :nodoc:
         data = (data['venue'] || {}).merge('name' => data['location'])
         event.venue       = to_venue(data)
 
-        [self.class.event_or_duplicate(event)]
+        [event_or_duplicate(event)]
       end
     end
 
@@ -64,7 +64,7 @@ class Source::Parser # :nodoc:
         longitude: value['longitude'],
       })
       venue.geocode!
-      self.class.venue_or_duplicate(venue)
+      venue_or_duplicate(venue)
     end
   end
 end

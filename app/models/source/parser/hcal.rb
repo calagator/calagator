@@ -60,7 +60,7 @@ class Source::Parser
             event.send("#{field}=", decoded_field)
           end
         end
-        self.class.event_or_duplicate(event)
+        event_or_duplicate(event)
       end.uniq do |event|
         [event.attributes, event.venue.try(:attributes)]
       end
@@ -116,7 +116,7 @@ class Source::Parser
         end
         venue.geocode!
       end
-      self.class.venue_or_duplicate(venue)
+      venue_or_duplicate(venue)
     end
   end
 end

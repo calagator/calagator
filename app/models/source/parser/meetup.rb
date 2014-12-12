@@ -34,7 +34,7 @@ class Source::Parser # :nodoc:
           event.venue       = to_venue(data['venue'])
           event.tag_list    = "meetup:event=#{event_id}, meetup:group=#{data['group']['urlname']}"
 
-          [self.class.event_or_duplicate(event)]
+          [event_or_duplicate(event)]
         end
       else
         self.class.to_events_wrapper(
@@ -60,7 +60,7 @@ class Source::Parser # :nodoc:
         tag_list: "meetup:venue=#{value['id']}",
       })
       venue.geocode!
-      self.class.venue_or_duplicate(venue)
+      venue_or_duplicate(venue)
     end
   end
 end

@@ -102,7 +102,7 @@ class Source::Parser # :nodoc:
             end
 
             event.venue = to_venue(content_venue, opts.merge(:fallback => component.location))
-            events << self.class.event_or_duplicate(event)
+            events << event_or_duplicate(event)
           end
         end
         events.uniq do |event|
@@ -147,7 +147,7 @@ class Source::Parser # :nodoc:
       end
 
       venue.geocode!
-      self.class.venue_or_duplicate(venue)
+      venue_or_duplicate(venue)
     end
 
     # Return hash parsed from the contents of first VCARD found in the iCalendar data.

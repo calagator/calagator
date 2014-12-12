@@ -36,7 +36,7 @@ class Source::Parser # :nodoc:
 
         event.venue       = to_venue(data['place'], data['where'])
 
-        [self.class.event_or_duplicate(event)]
+        [event_or_duplicate(event)]
       end
     end
 
@@ -50,10 +50,10 @@ class Source::Parser # :nodoc:
           tag_list: "plancast:place=#{value['id']}",
         })
         venue.geocode!
-        self.class.venue_or_duplicate(venue)
+        venue_or_duplicate(venue)
       elsif fallback.present?
         venue = Venue.new(title: fallback)
-        self.class.venue_or_duplicate(venue)
+        venue_or_duplicate(venue)
       end
     end
   end
