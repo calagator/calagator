@@ -279,7 +279,6 @@ END:VCALENDAR))
   # for following specs a 'valid' event does not start after it ends"
   it "should be able to import all valid events" do
     events = @source.create_events!(:skip_old => false)
-    expect(events.size).to eq 5
     expect(events.map(&:title)).to eq [
       "Past start and no end",
       "Current start and no end",
@@ -291,7 +290,6 @@ END:VCALENDAR))
 
   it "should be able to skip invalid and old events" do
     events = @source.create_events!(:skip_old => true)
-    expect(events.size).to eq 3
     expect(events.map(&:title)).to eq [
       "Current start and no end",
       "Past start and current end",

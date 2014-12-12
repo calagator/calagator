@@ -52,13 +52,13 @@ describe SourcesController, :type => :controller do
     end
 
     it "should assign newly-created events to the source" do
-      expect(@event).to receive(:save!)
       post :import, :source => {:url => @source.url}
+      expect(@event).to be_persisted
     end
 
     it "should assign newly created venues to the source" do
-      expect(@venue).to receive(:save!)
       post :import, :source => {:url => @source.url}
+      expect(@venue).to be_persisted
     end
 
 
