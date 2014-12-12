@@ -9,7 +9,7 @@ class Source::Parser # :nodoc:
 
     def to_events
       if SECRETS.meetup_api_key.present?
-        self.class.to_events_api_helper(
+        to_events_api_helper(
           :url => opts[:url],
           :error => 'problem',
           :api => lambda { |event_id|

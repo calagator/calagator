@@ -115,13 +115,13 @@ class Source::Parser
     # @yieldparam [String] event_id the event's identifier.
     # @yieldreturn [Array<Event>] events.
     # @return [Array<Event>] events.
-    def self.to_events_api_helper(opts, &block)
+    def to_events_api_helper(opts, &block)
       return false unless opts[:url]
       raise ArgumentError, "No block specified" unless block
       raise ArgumentError, "No API specified" unless opts[:api]
 
       # Extract +event_id+ from :url using +url_pattern+.
-      event_id = opts[:url][self.url_pattern, 1]
+      event_id = opts[:url][self.class.url_pattern, 1]
       return false unless event_id # Give up unless we find the identifier.
 
       # Get URL and arguments for using the API.
