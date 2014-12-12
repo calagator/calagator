@@ -1,10 +1,10 @@
-class SourceParser # :nodoc:
-  # == SourceParser::Ical
+class Source::Parser # :nodoc:
+  # == Source::Parser::Ical
   #
   # Reads iCalendar events.
   #
   # Example:
-  #   events = SourceParser::Ical.to_events('http://appendix.23ae.com/calendars/AlternateHolidays.ics')
+  #   events = Source::Parser::Ical.to_events('http://appendix.23ae.com/calendars/AlternateHolidays.ics')
   #
   # Sample sources:
   #   webcal://appendix.23ae.com/calendars/AlternateHolidays.ics
@@ -81,7 +81,7 @@ class SourceParser # :nodoc:
             event.description = component.description
             event.url         = component.url
 
-            SourceParser::Ical.dates_for_tz(component, event)
+            Source::Parser::Ical.dates_for_tz(component, event)
 
             content_venues = content_calendar.to_s.scan(VENUE_CONTENT_RE)
 
@@ -93,7 +93,7 @@ class SourceParser # :nodoc:
               venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
             rescue Exception => e
               # Ignore
-              Rails.logger.info("SourceParser::Ical.to_events : Failed to parse content_venue for event -- #{e}")
+              Rails.logger.info("Source::Parser::Ical.to_events : Failed to parse content_venue for event -- #{e}")
               nil
             end
 

@@ -92,7 +92,7 @@ describe Event, :type => :model do
       actual_ical = Event::IcalRenderer.render(@basic_event)
       stub_request(:get, url).to_return(body: actual_ical)
 
-      events = SourceParser.to_events(url: url, skip_old: false)
+      events = Source::Parser.to_events(url: url, skip_old: false)
 
       expect(events.size).to eq 1
       event = events.first
@@ -110,7 +110,7 @@ describe Event, :type => :model do
       url = "http://foo.bar/"
       stub_request(:get, url).to_return(body: actual_ical)
 
-      events = SourceParser.to_events(url: url, skip_old: false)
+      events = Source::Parser.to_events(url: url, skip_old: false)
 
       expect(events.size).to eq 1
       event = events.first

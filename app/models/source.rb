@@ -82,7 +82,7 @@ class Source < ActiveRecord::Base
     self.imported_at = Time.now
     opts[:url] ||= self.url
     opts[:source] = self
-    SourceParser.to_events(opts)
+    Source::Parser.to_events(opts)
   end
 
   # Return the name of the source, which can be its title or URL.

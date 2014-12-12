@@ -89,7 +89,7 @@ describe SourcesController, :type => :controller do
       end
 
       it "should fail when host requires authentication" do
-        assert_import_raises(SourceParser::HttpAuthenticationRequiredError.new("omfg"))
+        assert_import_raises(Source::Parser::HttpAuthenticationRequiredError.new("omfg"))
         expect(flash[:failure]).to match /requires authentication/
       end
     end

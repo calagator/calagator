@@ -2,8 +2,8 @@ require "net/http"
 require "net/https"
 require "open-uri"
 
-class SourceParser
-  # == SourceParser::Base
+class Source::Parser
+  # == Source::Parser::Base
   #
   # The base class for all format-specific parsers. Do not use this class
   # directly, use a subclass of Base to do the parsing instead.
@@ -46,7 +46,7 @@ class SourceParser
           request = Net::HTTP::Get.new(path_and_query)
           request.basic_auth(uri.user, uri.password)
           response = http.request(request)
-          raise SourceParser::HttpAuthenticationRequiredError.new if response.code == "401"
+          raise Source::Parser::HttpAuthenticationRequiredError.new if response.code == "401"
           response.body
         else
           uri.read
@@ -100,7 +100,7 @@ class SourceParser
 
     # Wrapper for getting Events from a JSON API.
     #
-    # @example See SourceParser::Facebook for an example of this in use.
+    # @example See Source::Parser::Facebook for an example of this in use.
     #
     # @option opts [String] :url the user-provided URL for the event page.
     # @option opts [String] :error the name of the JSON field that indicates an error, defaults to +error+.
@@ -130,7 +130,7 @@ class SourceParser
 
       # Stop if API tells us there's an error.
       opts[:error] ||= 'error'
-      raise SourceParser::NotFound, error if error = data[opts[:error]]
+      raise Source::Parser::NotFound, error if error = data[opts[:error]]
 
       # Process the JSON data into Events.
       yield(data, event_id)
@@ -141,13 +141,13 @@ class SourceParser
     #
     # Arguments:
     # * opts: Hash with +to_events+ options.
-    # * driver: Driver that should parse the results. Should be a subclass of SourceParser::Base.
+    # * driver: Driver that should parse the results. Should be a subclass of Source::Parser::Base.
     # * source: Regular expression for extracting the event id from the URL.
     # * target: Lambda for generating the URL that the +driver+ should parse. It's called with a Regexp matcher for the +source+ and emits a string URL that the +driver+ should parse.
     #
     # Example:
     #
-    #   class SourceParser
+    #   class Source::Parser
     #     class Plancast < Base
     #       label :Plancast
     #       def self.to_events(opts={})
@@ -156,7 +156,7 @@ class SourceParser
     #           # Pass along the opts
     #           opts,
     #           # Parse using the Ical driver
-    #           SourceParser::Ical,
+    #           Source::Parser::Ical,
     #           # Regexp describing how to extract an event identifier from the
     #           # URL. So if given "http://plancast.com/p/5ivg", the event
     #           # identifier will be "5ivg".

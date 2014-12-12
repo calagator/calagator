@@ -1,4 +1,4 @@
-class SourceParser # :nodoc:
+class Source::Parser # :nodoc:
   class Facebook < Base
     label :Facebook
     # NOTE: This pattern's goal is to get the Facebook event identifier in the first capture group, so the "(?:foo)" non-capturing group syntax is used to match but not capture those groups -- search the web for "ruby class rexep non-capturing" for details.
@@ -26,7 +26,7 @@ class SourceParser # :nodoc:
           "http://graph.facebook.com/#{event_id}"
         }
       ) do |data, event_id|
-        raise ::SourceParser::HttpAuthenticationRequiredError if data['parsed_response'] === false
+        raise ::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
 
         event = Event.new
         event.source      = opts[:source]

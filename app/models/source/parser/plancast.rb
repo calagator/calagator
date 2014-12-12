@@ -1,4 +1,4 @@
-class SourceParser # :nodoc:
+class Source::Parser # :nodoc:
   class Plancast < Base
     label :Plancast
     url_pattern %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}

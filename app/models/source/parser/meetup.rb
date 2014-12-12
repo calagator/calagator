@@ -1,4 +1,4 @@
-class SourceParser # :nodoc:
+class Source::Parser # :nodoc:
   class Meetup < Base
     label :Meetup
     url_pattern %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
@@ -35,7 +35,7 @@ class SourceParser # :nodoc:
       else
         self.to_events_wrapper(
           opts,
-          SourceParser::Ical,
+          Source::Parser::Ical,
           %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?},
           lambda { |matcher| "http://www.meetup.com/#{matcher[1]}/events/#{matcher[2]}/ical" }
         )

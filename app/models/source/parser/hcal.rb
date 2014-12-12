@@ -1,10 +1,10 @@
-class SourceParser
+class Source::Parser
   HTMLEntitiesCoder = HTMLEntities.new
 
-  # == SourceParser::Hcal
+  # == Source::Parser::Hcal
   #
   # Reads hCalendar events.
-  class Hcal < SourceParser::Base
+  class Hcal < Source::Parser::Base
     label :hCalendar
 
     # Returns a set of hCalendar events.

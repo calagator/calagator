@@ -1,14 +1,14 @@
-require 'source_parser/not_found'
-require 'source_parser/plancast'
-require 'source_parser/meetup'
-require 'source_parser/facebook'
-require 'source_parser/ical'
-require 'source_parser/hcal'
+require 'source/parser/not_found'
+require 'source/parser/plancast'
+require 'source/parser/meetup'
+require 'source/parser/facebook'
+require 'source/parser/ical'
+require 'source/parser/hcal'
 
-# == SourceParser
+# == Source::Parser
 #
 # A hierarchy of classes that provide a way to parse different source formats and return hCalendar events.
-class SourceParser
+class Source::Parser
   # Return an Array of unsaved Event instances.
   #
   # Options: (these vary between specific parsers)
@@ -31,7 +31,7 @@ class SourceParser
 
   # Returns an Array of parser classes for the various formats
   def self.parsers
-    ::SourceParser::Base.parsers
+    ::Source::Parser::Base.parsers
   end
 
   # Returns an Array of sorted string labels for the parsers.
@@ -41,7 +41,7 @@ class SourceParser
 
   # Return content for a URL
   def self.read_url(*args)
-    ::SourceParser::Base.read_url(*args)
+    ::Source::Parser::Base.read_url(*args)
   end
 end
 

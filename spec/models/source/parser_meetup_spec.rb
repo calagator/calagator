@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SourceParser::Meetup, :type => :model do
+describe Source::Parser::Meetup, :type => :model do
   describe "with a meetup.com API key in secrets.yml" do
     before do
       SECRETS.meetup_api_key = "foo"
@@ -11,7 +11,7 @@ describe SourceParser::Meetup, :type => :model do
       api_url = "https://api.meetup.com/2/event/ldhnqyplbnb?key=foo&sign=true"
 
       stub_request(:get, api_url).to_return(body: read_sample('meetup.json'), headers: { content_type: "application/json" })
-      @events = SourceParser::Meetup.to_events(url: meetup_url)
+      @events = Source::Parser::Meetup.to_events(url: meetup_url)
       @event = @events.first
     end
 
@@ -44,7 +44,7 @@ describe SourceParser::Meetup, :type => :model do
     before(:each) do
       url = "http://www.meetup.com/pdxpython/events/ldhnqyplbnb/ical"
       stub_request(:get, url).to_return(body: read_sample('meetup.ics'))
-      @events = SourceParser::Meetup.to_events(url: url)
+      @events = Source::Parser::Meetup.to_events(url: url)
       @event = @events.first
     end
 

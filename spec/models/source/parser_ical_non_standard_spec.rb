@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe SourceParser::Ical, "when parsing VVENUE", :type => :model do
+describe Source::Parser::Ical, "when parsing VVENUE", :type => :model do
    before(:each) do
-     @venue = SourceParser::Ical.to_venue(%(
+     @venue = Source::Parser::Ical.to_venue(%(
 BEGIN:VVENUE
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
   html
@@ -39,10 +39,10 @@ END:VVENUE))
   end
 end
 
-describe SourceParser::Ical, "when parsing VCARD lines", :type => :model do
+describe Source::Parser::Ical, "when parsing VCARD lines", :type => :model do
    before(:each) do
      # Note that each line here represents a single, complete property definition -- this method doesn't do any magical unwrapping of text.
-     @vcard_hash = SourceParser::Ical.hash_from_vcard_lines(%(
+     @vcard_hash = Source::Parser::Ical.hash_from_vcard_lines(%(
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
 UID:V0-001-001423875-1@eventful.com
 NAME:Apple Store Pioneer Place
