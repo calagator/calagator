@@ -65,6 +65,17 @@ class Source::Parser
       raise NotImplementedError, "Do not use #{self.class}.to_events method directly"
     end
 
+    def self.<=>(other)
+      # use site-specific parsers first, then generics alphabetically
+      if self.url_pattern && !other.url_pattern
+        -1
+      elsif !self.url_pattern && other.url_pattern
+        1
+      else
+        self.label <=> other.label
+      end
+    end
+
     private
 
     def event_or_duplicate(event)
@@ -131,17 +142,6 @@ class Source::Parser
 
       # Process the JSON data into Events.
       yield(data, event_id)
-    end
-
-    def self.<=>(other)
-      # use site-specific parsers first, then generics alphabetically
-      if self.url_pattern && !other.url_pattern
-        -1
-      elsif !self.url_pattern && other.url_pattern
-        1
-      else
-        self.label <=> other.label
-      end
     end
   end
 end
