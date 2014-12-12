@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Source::Parser::Ical, "when parsing VVENUE", :type => :model do
    before(:each) do
-     @venue = Source::Parser::Ical.to_venue(%(
+     @venue = Source::Parser::Ical.new.to_venue(%(
 BEGIN:VVENUE
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
   html

@@ -54,13 +54,17 @@ class Source::Parser # :nodoc:
     # * :content -- String of iCalendar data to import
     # * :skip_old -- Should old events be skipped? Default is true.
     def self.to_events(opts={})
+      new(opts).to_events
+    end
+
+    def to_events
       # Skip old events by default
 
       opts[:skip_old] = true unless opts[:skip_old] == false
       cutoff = Time.now.yesterday
 
-      content = read_url(opts[:url]).gsub(/\r\n/, "\n")
-      content = munge_gmt_dates(content)
+      content = self.class.read_url(opts[:url]).gsub(/\r\n/, "\n")
+      content = self.class.munge_gmt_dates(content)
 
       return [].tap do |events|
         begin
@@ -98,7 +102,7 @@ class Source::Parser # :nodoc:
             end
 
             event.venue = to_venue(content_venue, opts.merge(:fallback => component.location))
-            events << event_or_duplicate(event)
+            events << self.class.event_or_duplicate(event)
           end
         end
         events.uniq do |event|
@@ -118,14 +122,14 @@ class Source::Parser # :nodoc:
     #
     # Options:
     # * :fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
-    def self.to_venue(value, opts={})
+    def to_venue(value, opts={})
       value = "" if value.nil?
       venue = Venue.new
 
       # VVENUE entries are considered just Vcards,
       # treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
-        vcard_hash = self.hash_from_vcard_string(vcard_content)
+        vcard_hash = self.class.hash_from_vcard_string(vcard_content)
 
         venue.title          = vcard_hash['NAME']
         venue.street_address = vcard_hash['ADDRESS']
@@ -143,7 +147,7 @@ class Source::Parser # :nodoc:
       end
 
       venue.geocode!
-      venue_or_duplicate(venue)
+      self.class.venue_or_duplicate(venue)
     end
 
     # Return hash parsed from the contents of first VCARD found in the iCalendar data.
