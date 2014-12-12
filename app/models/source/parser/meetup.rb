@@ -1,7 +1,7 @@
 class Source::Parser # :nodoc:
   class Meetup < Base
-    label :Meetup
-    url_pattern %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
+    self.label = :Meetup
+    self.url_pattern = %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
 
     def self.to_events(opts={})
       new(opts).to_events

@@ -1,7 +1,7 @@
 class Source::Parser # :nodoc:
   class Plancast < Base
-    label :Plancast
-    url_pattern %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
+    self.label = :Plancast
+    self.url_pattern = %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
 
     def self.to_events(opts={})
       new(opts).to_events

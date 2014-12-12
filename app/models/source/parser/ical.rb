@@ -10,7 +10,7 @@ class Source::Parser # :nodoc:
   #   webcal://appendix.23ae.com/calendars/AlternateHolidays.ics
   #   http://appendix.23ae.com/calendars/AlternateHolidays.ics
   class Ical < Base
-    label :iCalendar
+    self.label = :iCalendar
 
     # Override Base::read_url to handle "webcal" scheme addresses.
     def self.read_url(url)

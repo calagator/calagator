@@ -14,25 +14,7 @@ class Source::Parser
       parsers << subclass
     end
 
-    class_attribute :_label, :_url_pattern
-
-    # Gets or sets the human-readable label for this parser.
-    def self.label(value=nil)
-      self._label = value if value
-      self._label
-    end
-
-    # Gets or sets the applicable URL pattern for this parser.
-    #
-    # This pattern must have the event identifier as the first capture group.
-    #
-    # Example:
-    #   # The pattern below gets the event id as the first capture group:
-    #   url_pattern %r{^https?://facebook\.com/events/([^/]+)}
-    def self.url_pattern(value=nil)
-      self._url_pattern = value if value
-      self._url_pattern
-    end
+    class_attribute :label, :url_pattern
 
     # Returns content read from a URL. Easier to stub.
     def self.read_url(url)

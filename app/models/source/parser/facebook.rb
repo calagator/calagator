@@ -1,9 +1,9 @@
 class Source::Parser # :nodoc:
   class Facebook < Base
-    label :Facebook
+    self.label = :Facebook
+
     # NOTE: This pattern's goal is to get the Facebook event identifier in the first capture group, so the "(?:foo)" non-capturing group syntax is used to match but not capture those groups -- search the web for "ruby class rexep non-capturing" for details.
-    #
-    url_pattern %r{(?x)                     # Ignore regexp whitespace and comments
+    self.url_pattern = %r{(?x)              # Ignore regexp whitespace and comments
       ^
         (?:https?://)?                      # Optional http URI prefix
         (?:

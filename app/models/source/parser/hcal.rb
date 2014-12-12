@@ -5,7 +5,7 @@ class Source::Parser
   #
   # Reads hCalendar events.
   class Hcal < Source::Parser::Base
-    label :hCalendar
+    self.label = :hCalendar
 
     EVENT_TO_HCALENDAR_FIELD_MAP = {
       :title => :summary,
