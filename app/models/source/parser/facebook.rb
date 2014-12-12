@@ -20,7 +20,11 @@ class Source::Parser # :nodoc:
       }
 
     def self.to_events(opts={})
-      self.to_events_api_helper(
+      new(opts).to_events
+    end
+
+    def to_events
+      self.class.to_events_api_helper(
         :url => opts[:url],
         :api => lambda { |event_id|
           "http://graph.facebook.com/#{event_id}"
@@ -41,13 +45,13 @@ class Source::Parser # :nodoc:
 
         # The 'venue' block in facebook's data doesn't contain the venue name, so we merge…
         data = (data['venue'] || {}).merge('name' => data['location'])
-        event.venue       = to_venue(data, opts)
+        event.venue       = to_venue(data)
 
-        [event_or_duplicate(event)]
+        [self.class.event_or_duplicate(event)]
       end
     end
 
-    def self.to_venue(value, opts={})
+    def to_venue(value)
       return if value.blank?
       venue = Venue.new({
         source: opts[:source],
@@ -60,7 +64,7 @@ class Source::Parser # :nodoc:
         longitude: value['longitude'],
       })
       venue.geocode!
-      venue_or_duplicate(venue)
+      self.class.venue_or_duplicate(venue)
     end
   end
 end
