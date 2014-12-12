@@ -8,7 +8,7 @@ class SourceParser
   # The base class for all format-specific parsers. Do not use this class
   # directly, use a subclass of Base to do the parsing instead.
   class Base
-    cattr_accessor(:parsers) { Set.new }
+    cattr_accessor(:parsers) { SortedSet.new }
 
     def self.inherited(subclass)
       parsers << subclass

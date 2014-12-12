@@ -39,7 +39,7 @@ end
 
 describe SourceParser, "when parsing events", :type => :model do
   it "should have site-specific parsers first, then generics" do
-    expect(SourceParser.parsers).to eq [
+    expect(SourceParser.parsers.to_a).to eq [
       SourceParser::Facebook,
       SourceParser::Meetup,
       SourceParser::Plancast,
