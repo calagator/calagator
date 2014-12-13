@@ -1,10 +1,8 @@
-class Source::Parser
-  HTMLEntitiesCoder = HTMLEntities.new
-
-  # == Source::Parser::Hcal
-  #
-  # Reads hCalendar events.
-  class Hcal < Source::Parser::Base
+# == Source::Parser::Hcal
+#
+# Reads hCalendar events.
+class Source::Parser::Hcal < Source::Parser
+    HTMLEntitiesCoder = HTMLEntities.new
     self.label = :hCalendar
 
     EVENT_TO_HCALENDAR_FIELD_MAP = {
@@ -107,5 +105,4 @@ class Source::Parser
       something = hCalendar.find(:text => content)
       something.is_a?(hCalendar) ? [something] : something
     end
-  end
 end

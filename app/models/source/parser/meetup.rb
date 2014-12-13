@@ -1,5 +1,4 @@
-class Source::Parser # :nodoc:
-  class Meetup < Base
+class Source::Parser::Meetup < Source::Parser
     self.label = :Meetup
     self.url_pattern = %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
 
@@ -57,10 +56,9 @@ class Source::Parser # :nodoc:
 
     def to_events_wrapper(driver, source, target)
       if matcher = opts[:url].try(:match, source)
-        driver.to_events(opts.merge(
-          :content => self.class.read_url(target.call(matcher)
-        )))
+        url = target.call(matcher)
+        opts[:content] = self.class.read_url(url)
+        driver.new(opts).to_events
       end
     end
-  end
 end

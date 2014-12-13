@@ -1,5 +1,4 @@
-class Source::Parser # :nodoc:
-  class Facebook < Base
+class Source::Parser::Facebook < Source::Parser
     self.label = :Facebook
 
     # NOTE: This pattern's goal is to get the Facebook event identifier in the first capture group, so the "(?:foo)" non-capturing group syntax is used to match but not capture those groups -- search the web for "ruby class rexep non-capturing" for details.
@@ -61,6 +60,5 @@ class Source::Parser # :nodoc:
       venue.geocode!
       venue_or_duplicate(venue)
     end
-  end
 end
 

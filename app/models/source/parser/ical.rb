@@ -1,15 +1,14 @@
-class Source::Parser # :nodoc:
-  # == Source::Parser::Ical
-  #
-  # Reads iCalendar events.
-  #
-  # Example:
-  #   events = Source::Parser::Ical.to_events('http://appendix.23ae.com/calendars/AlternateHolidays.ics')
-  #
-  # Sample sources:
-  #   webcal://appendix.23ae.com/calendars/AlternateHolidays.ics
-  #   http://appendix.23ae.com/calendars/AlternateHolidays.ics
-  class Ical < Base
+# == Source::Parser::Ical
+#
+# Reads iCalendar events.
+#
+# Example:
+#   events = Source::Parser::Ical.to_events('http://appendix.23ae.com/calendars/AlternateHolidays.ics')
+#
+# Sample sources:
+#   webcal://appendix.23ae.com/calendars/AlternateHolidays.ics
+#   http://appendix.23ae.com/calendars/AlternateHolidays.ics
+class Source::Parser::Ical < Source::Parser
     self.label = :iCalendar
 
     # Override Base::read_url to handle "webcal" scheme addresses.
@@ -188,7 +187,4 @@ class Source::Parser # :nodoc:
         end
       end
     end
-  end
 end
-
-

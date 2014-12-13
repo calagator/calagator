@@ -12,8 +12,8 @@ describe Source::Parser, "when reading content", :type => :model do
 end
 
 describe Source::Parser, "when subclassing", :type => :model do
-  it "should demand that to_events is implemented" do
-    expect{ Source::Parser::Base.to_events }.to raise_error NotImplementedError
+  it "should demand that #to_events is implemented" do
+    expect{ Source::Parser.new.to_events }.to raise_error NotImplementedError
   end
 end
 
@@ -28,7 +28,7 @@ describe Source::Parser, "when parsing events", :type => :model do
     ]
   end
 
-  fit "should use first successful parser's results" do
+  it "should use first successful parser's results" do
     events = [double]
 
     body = {
@@ -196,9 +196,9 @@ describe Source::Parser, "checking duplicates when importing", :type => :model d
 
       it "should only invoke the #{parser_name} parser when given #{url}" do
         parser = parser_name.constantize
-        expect(parser).to receive(:to_events).and_return([Event.new])
+        expect_any_instance_of(parser).to receive(:to_events).and_return([Event.new])
         Source::Parser.parsers.reject{|p| p == parser }.each do |other_parser|
-          expect(other_parser).not_to receive :to_events
+          expect_any_instance_of(other_parser).not_to receive :to_events
         end
 
         stub_request(:get, url)

@@ -1,5 +1,4 @@
-class Source::Parser # :nodoc:
-  class Plancast < Base
+class Source::Parser::Plancast < Source::Parser
     self.label = :Plancast
     self.url_pattern = %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
 
@@ -50,5 +49,4 @@ class Source::Parser # :nodoc:
         venue_or_duplicate(venue)
       end
     end
-  end
 end
