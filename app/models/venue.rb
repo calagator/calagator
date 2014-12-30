@@ -75,41 +75,6 @@ class Venue < ActiveRecord::Base
   scope :in_business,      -> { where(closed: false) }
   scope :out_of_business,  -> { where(closed: true) }
 
-  #===[ Instantiators ]===================================================
-
-  # Returns a new Venue for the +abstract_location+ retrieved from +source+.
-  def self.from_abstract_location(abstract_location, source=nil)
-    venue = Venue.new
-
-    venue.source = source if source
-    abstract_location.each_pair do |key, value|
-      next if key == :tags
-      venue[key] = value unless value.blank?
-    end
-    venue.tag_list = abstract_location.tags.join(',')
-
-    # We must add geocoding information so this venue can be compared to existing ones.
-    venue.geocode!
-
-    # if the new venue has no exact duplicate, use the new venue
-    # otherwise, find the ultimate master and return it
-    duplicates = venue.find_exact_duplicates
-
-    if duplicates.present?
-      venue = duplicates.first.progenitor
-    else
-      venue_machine_tag_name = abstract_location.tags.find { |t|
-        # Match 2 in the MACHINE_TAG_PATTERN is the predicate
-        ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? t.match(ActsAsTaggableOn::Tag::MACHINE_TAG_PATTERN)[2]
-      }
-      matched_venue = Venue.tagged_with(venue_machine_tag_name).first
-
-      venue = matched_venue.progenitor if matched_venue.present?
-    end
-
-    return venue
-  end
-
   #===[ Finders ]=========================================================
 
   # Return Hash of Venues grouped by the +type+, e.g., a 'title'. Each Venue

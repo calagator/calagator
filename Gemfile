@@ -66,6 +66,10 @@ gem 'sunspot_rails', '2.1.1'
 gem 'sunspot_solr',  '2.1.1'
 gem 'lucene_query', '0.1'
 
+platforms :mri_19 do
+  gem 'backports', '3.6.4', require: "backports/2.0.0/enumerable/lazy"
+end
+
 platform :jruby do
   gem 'activerecord-jdbc-adapter'
   gem 'jruby-openssl'

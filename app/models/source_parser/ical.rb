@@ -4,7 +4,7 @@ class SourceParser # :nodoc:
   # Reads iCalendar events.
   #
   # Example:
-  #   abstract_events = SourceParser::Ical.to_abstract_events('http://appendix.23ae.com/calendars/AlternateHolidays.ics')
+  #   events = SourceParser::Ical.to_events('http://appendix.23ae.com/calendars/AlternateHolidays.ics')
   #
   # Sample sources:
   #   webcal://appendix.23ae.com/calendars/AlternateHolidays.ics
@@ -47,13 +47,13 @@ class SourceParser # :nodoc:
     VENUE_CONTENT_BEGIN_RE = /^BEGIN:VVENUE$/m
     VENUE_CONTENT_END_RE   = /^END:VVENUE$/m
 
-    # Return an Array of AbstractEvent instances extracted from an iCalendar input.
+    # Return an Array of Event instances extracted from an iCalendar input.
     #
     # Options:
     # * :url -- URL of iCalendar data to import
     # * :content -- String of iCalendar data to import
     # * :skip_old -- Should old events be skipped? Default is true.
-    def self.to_abstract_events(opts={})
+    def self.to_events(opts={})
       # Skip old events by default
 
       opts[:skip_old] = true unless opts[:skip_old] == false
@@ -75,7 +75,8 @@ class SourceParser # :nodoc:
         content_calendars.each do |content_calendar|
           content_calendar.events.each_with_index do |component, index|
             next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
-            event             = AbstractEvent.new
+            event             = Event.new
+            event.source      = opts[:source]
             event.title       = component.summary
             event.description = component.description
             event.url         = component.url
@@ -92,13 +93,16 @@ class SourceParser # :nodoc:
               venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
             rescue Exception => e
               # Ignore
-              Rails.logger.info("SourceParser::Ical.to_abstract_events : Failed to parse content_venue for event -- #{e}")
+              Rails.logger.info("SourceParser::Ical.to_events : Failed to parse content_venue for event -- #{e}")
               nil
             end
 
-            event.location = to_abstract_location(content_venue, :fallback => component.location)
-            events << event
+            event.venue = to_venue(content_venue, opts.merge(:fallback => component.location))
+            events << event_or_duplicate(event)
           end
+        end
+        events.uniq do |event|
+          [event.attributes, event.venue.try(:attributes)]
         end
       end
     end
@@ -107,38 +111,39 @@ class SourceParser # :nodoc:
       content.gsub(/;TZID=GMT:(.*)/, ':\1Z')
     end
 
-    # Return an AbstractLocation extracted from an iCalendar input.
+    # Return an Venue extracted from an iCalendar input.
     #
     # Arguments:
     # * value - String with iCalendar data to parse which contains a VVENUE item.
     #
     # Options:
     # * :fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
-    def self.to_abstract_location(value, opts={})
+    def self.to_venue(value, opts={})
       value = "" if value.nil?
-      a = AbstractLocation.new
+      venue = Venue.new
 
       # VVENUE entries are considered just Vcards,
       # treating them as such.
       if vcard_content = value.scan(VENUE_CONTENT_RE).first
         vcard_hash = self.hash_from_vcard_string(vcard_content)
 
-        a.title          = vcard_hash['NAME']
-        a.street_address = vcard_hash['ADDRESS']
-        a.locality       = vcard_hash['CITY']
-        a.region         = vcard_hash['REGION']
-        a.postal_code    = vcard_hash['POSTALCODE']
-        a.country        = vcard_hash['COUNTRY']
+        venue.title          = vcard_hash['NAME']
+        venue.street_address = vcard_hash['ADDRESS']
+        venue.locality       = vcard_hash['CITY']
+        venue.region         = vcard_hash['REGION']
+        venue.postal_code    = vcard_hash['POSTALCODE']
+        venue.country        = vcard_hash['COUNTRY']
 
-        a.latitude, a.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
+        venue.latitude, venue.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
 
-        return a
+      elsif opts[:fallback].present?
+        venue.title = opts[:fallback]
+      else
+        return nil
       end
 
-      if opts[:fallback].present?
-        a.title = opts[:fallback]
-        a
-      end
+      venue.geocode!
+      venue_or_duplicate(venue)
     end
 
     # Return hash parsed from the contents of first VCARD found in the iCalendar data.

@@ -109,15 +109,12 @@ class Source < ActiveRecord::Base
   # * :url -- URL of data to import. Defaults to record's #url attribute.
   # * :skip_old -- Should old events be skipped? Default is true.
   def to_events(opts={})
+    raise ActiveRecord::RecordInvalid, self unless valid?
+
     self.imported_at = Time.now
-    if valid?
-      opts[:url] ||= self.url
-      SourceParser.to_abstract_events(opts).uniq.map do |abstract_event|
-        Event.from_abstract_event(abstract_event, self)
-      end
-    else
-      raise ActiveRecord::RecordInvalid, self
-    end
+    opts[:url] ||= self.url
+    opts[:source] = self
+    SourceParser.to_events(opts)
   end
 
   # Return the name of the source, which can be its title or URL.

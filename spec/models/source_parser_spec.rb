@@ -1,8 +1,5 @@
 require 'spec_helper'
 
-class SourceParser::FakeParser < SourceParser::Base
-end
-
 describe SourceParser, "when reading content", :type => :model do
   it "should read from a normal URL" do
     stub_source_parser_http_response!(:body => 42)
@@ -32,34 +29,37 @@ end
 
 describe SourceParser, "when subclassing", :type => :model do
   it "should demand that to_hcals is implemented" do
-    expect{ SourceParser::FakeParser.to_hcals }.to raise_error(NotImplementedError)
+    expect{ SourceParser::Base.to_hcals }.to raise_error(NotImplementedError)
   end
 
-  it "should demand that to_abstract_events is implemented" do
-    expect{ SourceParser::FakeParser.to_abstract_events }.to raise_error NotImplementedError
+  it "should demand that to_events is implemented" do
+    expect{ SourceParser::Base.to_events }.to raise_error NotImplementedError
   end
 end
 
 describe SourceParser, "when parsing events", :type => :model do
-  it "should have expected parsers plus FakeParser" do
-    expect(SourceParser.parsers).to eq [
-      SourceParser::Plancast,
-      SourceParser::Meetup,
+  it "should have site-specific parsers first, then generics" do
+    expect(SourceParser.parsers.to_a).to eq [
       SourceParser::Facebook,
-      SourceParser::Ical,
+      SourceParser::Meetup,
+      SourceParser::Plancast,
       SourceParser::Hcal,
-      SourceParser::FakeParser,
+      SourceParser::Ical,
     ]
   end
 
   it "should use first successful parser's results" do
-    events = [double(SourceParser::AbstractEvent)]
-    expect(SourceParser::Ical).to receive(:to_abstract_events).and_raise(NotImplementedError)
-    expect(SourceParser::Hcal).to receive(:to_abstract_events).and_return(events)
-    expect(SourceParser::FakeParser).not_to receive(:to_abstract_events)
+    events = [double]
+
+    expect(SourceParser::Facebook).to receive(:to_events).and_return(false)
+    expect(SourceParser::Meetup).to receive(:to_events).and_return(events)
     expect(SourceParser::Base).to receive(:content_for).and_return("fake content")
 
-    expect(SourceParser.to_abstract_events(:fake => :argument)).to eq events
+    expect(SourceParser::Plancast).not_to receive(:to_events)
+    expect(SourceParser::Hcal).not_to receive(:to_events)
+    expect(SourceParser::Ical).not_to receive(:to_events)
+
+    expect(SourceParser.to_events(:fake => :argument)).to have(1).event
   end
 end
 
@@ -80,12 +80,12 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
         <abbr class="location" title="Arc de Triomphe"></abbr>
       </div>})
       allow(SourceParser::Base).to receive(:read_url).and_return(@cal_content)
-      @abstract_events = @cal_source.to_events
+      @events = @cal_source.to_events
       @created_events = @cal_source.create_events!(:skip_old => false)
     end
 
     it "should only parse one event" do
-      expect(@abstract_events.size).to eq 1
+      expect(@events.size).to eq 1
     end
 
     it "should create only one event" do
@@ -217,9 +217,9 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
 
       it "should only invoke the #{parser_name} parser when given #{url}" do
         parser = parser_name.constantize
-        expect(parser).to receive(:to_abstract_events).and_return([Event.new])
+        expect(parser).to receive(:to_events).and_return([Event.new])
         SourceParser.parsers.reject{|p| p == parser }.each do |other_parser|
-          expect(other_parser).not_to receive :to_abstract_events
+          expect(other_parser).not_to receive :to_events
         end
 
         allow(SourceParser::Base).to receive(:read_url).and_return("this content doesn't matter")

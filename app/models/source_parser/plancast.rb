@@ -3,8 +3,8 @@ class SourceParser # :nodoc:
     label :Plancast
     url_pattern %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
 
-    def self.to_abstract_events(opts={})
-      self.to_abstract_events_api_helper(
+    def self.to_events(opts={})
+      self.to_events_api_helper(
         :url => opts[:url],
         :api => lambda { |event_id|
           [
@@ -18,7 +18,8 @@ class SourceParser # :nodoc:
           ]
         }
       ) do |data, event_id|
-        event = AbstractEvent.new
+        event = Event.new
+        event.source      = opts[:source]
         event.title       = data['what']
         event.description = data['description']
 
@@ -27,24 +28,28 @@ class SourceParser # :nodoc:
         event.end_time    = ActiveSupport::TimeWithZone.new(nil, Time.zone, Time.at(data['stop'].to_i).utc)
 
         event.url         = (data['external_url'] || data['plan_url'])
-        event.tags        = ["plancast:plan=#{event_id}"]
+        event.tag_list    = "plancast:plan=#{event_id}"
 
-        event.location    = to_abstract_location(data['place'], :fallback => data['where'])
+        event.venue       = to_venue(data['place'], opts.merge(:fallback => data['where']))
 
-        [event]
+        [event_or_duplicate(event)]
       end
     end
 
-    def self.to_abstract_location(value, opts={})
+    def self.to_venue(value, opts={})
       value = "" if value.nil?
       if value.present?
-        location = AbstractLocation.new
-        location.title   = value['name']
-        location.address = value['address']
-        location.tags = ["plancast:place=#{value['id']}"]
-        location
+        venue = Venue.new({
+          source: opts[:source],
+          title: value['name'],
+          address: value['address'],
+          tag_list: "plancast:place=#{value['id']}",
+        })
+        venue.geocode!
+        venue_or_duplicate(venue)
       elsif opts[:fallback].present?
-        AbstractLocation.new(:title => opts[:fallback])
+        venue = Venue.new(title: opts[:fallback])
+        venue_or_duplicate(venue)
       end
     end
   end

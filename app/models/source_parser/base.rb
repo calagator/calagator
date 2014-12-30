@@ -2,16 +2,16 @@ require "net/http"
 require "net/https"
 require "open-uri"
 
-$SourceParserImplementations = []
-
 class SourceParser
   # == SourceParser::Base
   #
   # The base class for all format-specific parsers. Do not use this class
   # directly, use a subclass of Base to do the parsing instead.
   class Base
+    cattr_accessor(:parsers) { SortedSet.new }
+
     def self.inherited(subclass)
-      $SourceParserImplementations << subclass unless $SourceParserImplementations.include?(subclass)
+      parsers << subclass
     end
 
     class_attribute :_label, :_url_pattern
@@ -81,11 +81,39 @@ class SourceParser
     # Options:
     # * :url -- URL of iCalendar data to import
     # * :content -- String of iCalendar data to import
-    def self.to_abstract_events(opts={})
-      raise NotImplementedError, "Do not use #{self.class}.to_abstract_events method directly"
+    def self.to_events(opts={})
+      raise NotImplementedError, "Do not use #{self.class}.to_events method directly"
     end
 
-    # Wrapper for getting abstract events from a JSON API.
+    def self.event_or_duplicate(event)
+      duplicates = event.find_exact_duplicates
+      if duplicates.present?
+        duplicates.first.progenitor
+      else
+        event
+      end
+    end
+
+    def self.venue_or_duplicate(venue)
+      duplicates = venue.find_exact_duplicates
+      if duplicates.present?
+        duplicates.first.progenitor
+      else
+        venue_machine_tag_name = venue.tag_list.find { |t|
+          # Match 2 in the MACHINE_TAG_PATTERN is the predicate
+          ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? t.match(ActsAsTaggableOn::Tag::MACHINE_TAG_PATTERN)[2]
+        }
+        matched_venue = Venue.tagged_with(venue_machine_tag_name).first
+
+        if matched_venue.present?
+          matched_venue.progenitor
+        else
+          venue
+        end
+      end
+    end
+
+    # Wrapper for getting Events from a JSON API.
     #
     # @example See SourceParser::Facebook for an example of this in use.
     #
@@ -98,9 +126,9 @@ class SourceParser
     # @yield a block for processing the downloaded JSON data.
     # @yieldparam [Hash] data the JSON data downloaded from the API.
     # @yieldparam [String] event_id the event's identifier.
-    # @yieldreturn [Array<AbstractEvent>] events.
-    # @return [Array<AbstractEvent>] events.
-    def self.to_abstract_events_api_helper(opts, &block)
+    # @yieldreturn [Array<Event>] events.
+    # @return [Array<Event>] events.
+    def self.to_events_api_helper(opts, &block)
       return false unless opts[:url]
       raise ArgumentError, "No block specified" unless block
       raise ArgumentError, "No API specified" unless opts[:api]
@@ -119,7 +147,7 @@ class SourceParser
       opts[:error] ||= 'error'
       raise SourceParser::NotFound, error if error = data[opts[:error]]
 
-      # Process the JSON data into AbstractEvents.
+      # Process the JSON data into Events.
       yield(data, event_id)
     end
 
@@ -127,7 +155,7 @@ class SourceParser
     # fetch another URL and parse it with the iCalendar driver.
     #
     # Arguments:
-    # * opts: Hash with +to_abstract_events+ options.
+    # * opts: Hash with +to_events+ options.
     # * driver: Driver that should parse the results. Should be a subclass of SourceParser::Base.
     # * source: Regular expression for extracting the event id from the URL.
     # * target: Lambda for generating the URL that the +driver+ should parse. It's called with a Regexp matcher for the +source+ and emits a string URL that the +driver+ should parse.
@@ -137,9 +165,9 @@ class SourceParser
     #   class SourceParser
     #     class Plancast < Base
     #       label :Plancast
-    #       def self.to_abstract_events(opts={})
+    #       def self.to_events(opts={})
     #         # Invoke the wrapper
-    #         self.to_abstract_events_wrapper(
+    #         self.to_events_wrapper(
     #           # Pass along the opts
     #           opts,
     #           # Parse using the Ical driver
@@ -154,11 +182,22 @@ class SourceParser
     #       end
     #     end
     #   end
-    def self.to_abstract_events_wrapper(opts, driver, source, target)
-      if matcher = opts[:url].match(source)
-        driver.to_abstract_events(opts.merge(
+    def self.to_events_wrapper(opts, driver, source, target)
+      if matcher = opts[:url].try(:match, source)
+        driver.to_events(opts.merge(
           :content => self.read_url(target.call(matcher)
         )))
+      end
+    end
+
+    def self.<=>(other)
+      # use site-specific parsers first, then generics alphabetically
+      if self.url_pattern && !other.url_pattern
+        -1
+      elsif !self.url_pattern && other.url_pattern
+        1
+      else
+        self.label <=> other.label
       end
     end
   end
