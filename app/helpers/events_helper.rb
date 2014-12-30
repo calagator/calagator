@@ -218,25 +218,4 @@ module EventsHelper
     'date'  => 'Date',
   }
   private_constant :SORTING_LABELS
-
-  def icon_exists_for?(tag_name)
-    File.exists? Rails.root.join("app", "assets", "images", "tag_icons", "#{tag_name}.png")
-  end
-
-  def tag_icon(tag_name)
-    if icon_exists_for?(tag_name)
-      image_tag("/assets/tag_icons/#{tag_name}.png", title: tag_name)
-    end
-  end
-
-  def get_tag_icon_links(event)
-    event.tag_list.map do |tag_name|
-      icon = tag_icon(tag_name)
-      link_to(icon, tag_events_path(tag_name)) if icon
-    end
-  end
-
-  def display_tag_icons(event)
-    get_tag_icon_links(event).join(' ').html_safe
-  end
 end

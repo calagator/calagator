@@ -19,16 +19,6 @@ describe ApplicationHelper, :type => :helper do
     end
   end
 
-  describe "#tag_links_for" do
-    it "renders tag links for the supplied model" do
-      event = FactoryGirl.create(:event, tag_list: %w(b a))
-      expect(tag_links_for(event)).to eq(
-        %(<a href="/events/tag/a" class="p-category">a</a>, ) +
-        %(<a href="/events/tag/b" class="p-category">b</a>)
-      )
-    end
-  end
-
   describe "#format_description" do
     it "should autolink" do
       expect(helper.format_description("foo http://mysite.com/~user bar")).to eq \
