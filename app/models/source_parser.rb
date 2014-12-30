@@ -24,10 +24,9 @@ class SourceParser
     end
 
     # Return events from the first parser that suceeds
-    events = matched_parsers.each do |parser|
-      events = parser.to_events(opts)
-      break events if events.present?
-    end
+    events = matched_parsers.lazy.collect { |parser|
+      parser.to_events(opts)
+    }.detect(&:present?)
 
     events || []
   end

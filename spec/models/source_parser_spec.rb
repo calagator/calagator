@@ -53,8 +53,11 @@ describe SourceParser, "when parsing events", :type => :model do
 
     expect(SourceParser::Facebook).to receive(:to_events).and_return(false)
     expect(SourceParser::Meetup).to receive(:to_events).and_return(events)
-    expect(SourceParser::Plancast).not_to receive(:to_events)
     expect(SourceParser::Base).to receive(:content_for).and_return("fake content")
+
+    expect(SourceParser::Plancast).not_to receive(:to_events)
+    expect(SourceParser::Hcal).not_to receive(:to_events)
+    expect(SourceParser::Ical).not_to receive(:to_events)
 
     expect(SourceParser.to_events(:fake => :argument)).to have(1).event
   end
