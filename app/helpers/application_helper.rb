@@ -105,20 +105,6 @@ module ApplicationHelper
     return escape_once(string)
   end
 
-  def tag_links_for(model)
-    model.tags.sort_by(&:name).map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
-  end
-
-  def tag_link(type, tag, link_class=nil)
-    internal_url = "/#{type.to_s.pluralize}/tag/#{tag.name}"
-
-    link_classes = [link_class, "p-category"]
-    link_classes << "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" if tag.machine_tag[:url]
-
-    link_to escape_once(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
-  end
-  private :tag_link
-
   def subnav_class_for(controller_name, action_name)
     return [
       "#{controller.controller_name}_#{controller.action_name}_subnav",
