@@ -3,31 +3,31 @@ require 'spec_helper'
 def events_from_ical_at(filename)
   url = "http://foo.bar/"
   source = Source.new(:title => "Calendar event feed", :url => url)
-  expect(SourceParser::Base).to receive(:read_url).and_return(read_sample(filename))
+  stub_request(:get, url).to_return(body: read_sample(filename))
   return source.to_events(:skip_old => false)
 end
 
 describe SourceParser::Ical, "in general", :type => :model do
   it "should read http URLs as-is" do
-    http_url = "http://foo.bar/"
-    stub_source_parser_http_response!(:body => 42)
-
-    expect(SourceParser::Ical.read_url(http_url)).to eq 42
+    url = "http://foo.bar/"
+    stub_request(:get, url).to_return(body: "42")
+    expect(SourceParser::Ical.read_url(url)).to eq "42"
   end
 
   it "should read webcal URLs as http" do
     webcal_url = "webcal://foo.bar/"
     http_url   = "http://foo.bar/"
-    stub_source_parser_http_response!(:body => 42)
-    expect(SourceParser::Ical.read_url(webcal_url)).to eq 42
+    stub_request(:get, http_url).to_return(body: "42")
+    expect(SourceParser::Ical.read_url(webcal_url)).to eq "42"
   end
 end
 
 describe SourceParser::Ical, "when parsing events and their venues", :type => :model do
 
   before(:each) do
-    expect(SourceParser::Base).to receive(:read_url).and_return(read_sample('ical_upcoming_many.ics'))
-    @events = SourceParser.to_events(:url => "intercepted", :skip_old => false)
+    url = "http://foo.bar/"
+    stub_request(:get, url).to_return(body: read_sample('ical_upcoming_many.ics'))
+    @events = SourceParser.to_events(url: url, skip_old: false)
   end
 
    it "venues should be" do
@@ -40,8 +40,9 @@ end
 
 describe SourceParser::Ical, "when parsing multiple items in an Eventful feed", :type => :model do
   before(:each) do
-    expect(SourceParser::Base).to receive(:read_url).and_return(read_sample('ical_eventful_many.ics'))
-    @events = SourceParser.to_events(:url => "intercepted", :skip_old => false)
+    url = "http://foo.bar/"
+    stub_request(:get, url).to_return(body: read_sample('ical_eventful_many.ics'))
+    @events = SourceParser.to_events(url: url, skip_old: false)
   end
 
   it "should find multiple events" do
@@ -147,7 +148,7 @@ describe SourceParser::Ical, "when importing events with non-local times", :type
 
   it "should store time ending in Z as UTC" do
     url = "http://foo.bar/"
-    allow(SourceParser::Base).to receive(:read_url).and_return(read_sample('ical_z.ics'))
+    stub_request(:get, url).to_return(body: read_sample('ical_z.ics'))
     @source = Source.new(:title => "Non-local time", :url => url)
     events = @source.create_events!(:skip_old => false)
     event = events.first
@@ -215,7 +216,8 @@ end
 
 describe SourceParser::Ical, "when skipping old events", :type => :model do
   before(:each) do
-    allow(SourceParser::Base).to receive(:read_url).and_return(<<-HERE)
+    url = "http://foo.bar/"
+    stub_request(:get, url).to_return(body: <<-ICAL)
 BEGIN:VCALENDAR
 X-WR-CALNAME;VALUE=TEXT:NERV
 VERSION:2.0
@@ -271,8 +273,8 @@ DTEND:#{(Time.now-1.year).strftime("%Y%m%d")}
 DTSTAMP:040425
 END:VEVENT
 END:VCALENDAR
-      HERE
-    @source = Source.new(:title => "Title", :url => "http://my.url/")
+      ICAL
+    @source = Source.new(title: "Title", url: url)
   end
 
   # for following specs a 'valid' event does not start after it ends"
@@ -297,5 +299,4 @@ END:VCALENDAR
       "Current start and current end"
     ]
   end
-
 end
