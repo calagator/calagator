@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe SourceParser::Hcal, "with hCalendar events", :type => :model do
   it "should parse hcal" do
-    hcal_content = read_sample('hcal_single.xml')
-    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-    expect(SourceParser::Base).to receive(:read_url).and_return(hcal_content)
+    url = "http://mysample.hcal/"
+    stub_request(:get, url).to_return(body: read_sample('hcal_single.xml'))
+    hcal_source = Source.new(title: "Calendar event feed", url: url)
 
     events = hcal_source.to_events
 
@@ -22,19 +22,19 @@ describe SourceParser::Hcal, "with hCalendar events", :type => :model do
   end
 
   it "should strip html from the venue title" do
-    hcal_content = read_sample('hcal_upcoming_v1.html')
-    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-    allow(SourceParser::Base).to receive(:read_url).and_return(hcal_content)
+    url = "http://mysample.hcal/"
+    stub_request(:get, url).to_return(body: read_sample('hcal_upcoming_v1.html'))
+    hcal_source = Source.new(title: "Calendar event feed", url: url)
+
     events = hcal_source.to_events
 
     expect(events.first.venue.title).to eq 'Jive Software Office'
   end
 
   it "should parse a page with multiple events" do
-    hcal_content = read_sample('hcal_multiple.xml')
-
-    hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-    expect(SourceParser::Base).to receive(:read_url).and_return(hcal_content)
+    url = "http://mysample.hcal/"
+    stub_request(:get, url).to_return(body: read_sample('hcal_multiple.xml'))
+    hcal_source = Source.new(title: "Calendar event feed", url: url)
 
     events = hcal_source.to_events
     expect(events.size).to eq 2
@@ -48,10 +48,10 @@ end
 
 describe SourceParser::Hcal, "with hCalendar to Venue parsing", :type => :model do
   it "should extract an Venue from an hCalendar text" do
-    hcal_upcoming = read_sample('hcal_upcoming_v1.html')
+    url = "http://mysample.hcal/"
+    stub_request(:get, url).to_return(body: read_sample('hcal_upcoming_v1.html'))
 
-    allow(SourceParser::Hcal).to receive(:read_url).and_return(hcal_upcoming)
-    events = SourceParser::Hcal.to_events(:url => "http://foo.bar/")
+    events = SourceParser::Hcal.to_events(url: url)
     event = events.first
     venue = event.venue
 
