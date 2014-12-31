@@ -41,11 +41,6 @@ class SourceParser
     self.parsers.map(&:label).map(&:to_s).sort_by(&:downcase)
   end
 
-  # Return content for the arguments
-  def self.content_for(*args)
-    ::SourceParser::Base.content_for(*args).to_s.strip
-  end
-
   # Return content for a URL
   def self.read_url(*args)
     ::SourceParser::Base.read_url(*args)

@@ -34,11 +34,6 @@ class SourceParser
       self._url_pattern
     end
 
-    # Returns content from either the :content option or by reading a :url.
-    def self.content_for(opts)
-      content = self.read_url(opts[:url])
-    end
-
     # Returns content read from a URL. Easier to stub.
     def self.read_url(url)
       uri = URI.parse(url)
@@ -50,7 +45,7 @@ class SourceParser
           path_and_query += "?#{uri.query}" if uri.query
           request = Net::HTTP::Get.new(path_and_query)
           request.basic_auth(uri.user, uri.password)
-          response = SourceParser::Base::http_response_for(http, request)
+          response = http.request(request)
           raise SourceParser::HttpAuthenticationRequiredError.new if response.code == "401"
           response.body
         else
@@ -59,11 +54,6 @@ class SourceParser
       else
         open(url) { |h| h.read }
       end
-    end
-
-    # Return the HTTPResponse for the +http+ connection and the +request+.
-    def self.http_response_for(http, request)
-      return http.request(request)
     end
 
     # Stub which makes sure that subclasses of Base implement the #parse method.
