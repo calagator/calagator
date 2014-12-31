@@ -4,9 +4,12 @@ describe SourceParser::Plancast, :type => :model do
 
   context do
     before(:each) do
-      content = read_sample('plancast.json')
-      expect(HTTParty).to receive(:get).and_return(MultiJson.decode(content))
-      @events = SourceParser::Plancast.to_events(:url => 'http://plancast.com/p/3cos/indiewebcamp')
+      plancast_url = 'http://plancast.com/p/3cos/indiewebcamp'
+      api_url = 'http://api.plancast.com/02/plans/show.json?extensions=place&plan_id=3cos'
+      stub_request(:get, plancast_url)
+      stub_request(:get, api_url).to_return(body: read_sample('plancast.json'), headers: { content_type: "application/json" })
+
+      @events = SourceParser::Plancast.to_events(url: plancast_url)
       @event = @events.first
     end
 
@@ -32,9 +35,11 @@ describe SourceParser::Plancast, :type => :model do
 
   context "with missing venue" do
     before(:each) do
-      content = read_sample('plancast_with_missing_venue.json')
-      expect(HTTParty).to receive(:get).and_return(MultiJson.decode(content))
-      @events = SourceParser::Plancast.to_events(:url => 'http://plancast.com/p/3cos/indiewebcamp')
+      plancast_url = 'http://plancast.com/p/3cos/indiewebcamp'
+      api_url = 'http://api.plancast.com/02/plans/show.json?extensions=place&plan_id=3cos'
+      stub_request(:get, plancast_url)
+      stub_request(:get, api_url).to_return(body: read_sample('plancast_with_missing_venue.json'), headers: { content_type: "application/json" })
+      @events = SourceParser::Plancast.to_events(url: plancast_url)
       @event = @events.first
     end
 
