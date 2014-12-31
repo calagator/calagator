@@ -10,7 +10,6 @@ describe SourceParser::Meetup, :type => :model do
       meetup_url = "http://www.meetup.com/pdxpython/events/ldhnqyplbnb/"
       api_url = "https://api.meetup.com/2/event/ldhnqyplbnb?key=foo&sign=true"
 
-      stub_request(:get, meetup_url)
       stub_request(:get, api_url).to_return(body: read_sample('meetup.json'), headers: { content_type: "application/json" })
       @events = SourceParser::Meetup.to_events(url: meetup_url)
       @event = @events.first

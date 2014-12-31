@@ -6,7 +6,6 @@ describe SourceParser::Facebook, :type => :model do
     before(:each) do
       url = 'http://facebook.com/event.php?eid=247619485255249'
       graph_url = "http://graph.facebook.com/247619485255249"
-      stub_request(:get, url)
       stub_request(:get, graph_url).to_return(body: read_sample('facebook.json'), headers: { content_type: "application/json" })
       @events = SourceParser::Facebook.to_events(url: url)
       @event = @events.first

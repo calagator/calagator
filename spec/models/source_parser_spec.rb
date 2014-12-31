@@ -35,7 +35,6 @@ describe SourceParser, "when parsing events", :type => :model do
   it "should use first successful parser's results" do
     events = [double]
 
-    stub_request(:get, "http://www.facebook.com/events/omg")
     stub_request(:get, "http://graph.facebook.com/omg").to_return(body: <<-JSON)
       { "name": "event",
         "start_time": "2010-01-01 12:00:00 UTC",
@@ -185,7 +184,6 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
 
     plancast_url = 'http://plancast.com/p/3cos/indiewebcamp'
     api_url = 'http://api.plancast.com/02/plans/show.json?extensions=place&plan_id=3cos'
-    stub_request(:get, plancast_url)
     stub_request(:get, api_url).to_return(body: read_sample('plancast.json'), headers: { content_type: "application/json" })
 
     source = Source.new(title: "Event with duplicate machine-tagged venue", url: plancast_url)

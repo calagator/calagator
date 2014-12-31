@@ -6,7 +6,6 @@ describe SourceParser::Plancast, :type => :model do
     before(:each) do
       plancast_url = 'http://plancast.com/p/3cos/indiewebcamp'
       api_url = 'http://api.plancast.com/02/plans/show.json?extensions=place&plan_id=3cos'
-      stub_request(:get, plancast_url)
       stub_request(:get, api_url).to_return(body: read_sample('plancast.json'), headers: { content_type: "application/json" })
 
       @events = SourceParser::Plancast.to_events(url: plancast_url)
@@ -37,7 +36,6 @@ describe SourceParser::Plancast, :type => :model do
     before(:each) do
       plancast_url = 'http://plancast.com/p/3cos/indiewebcamp'
       api_url = 'http://api.plancast.com/02/plans/show.json?extensions=place&plan_id=3cos'
-      stub_request(:get, plancast_url)
       stub_request(:get, api_url).to_return(body: read_sample('plancast_with_missing_venue.json'), headers: { content_type: "application/json" })
       @events = SourceParser::Plancast.to_events(url: plancast_url)
       @event = @events.first

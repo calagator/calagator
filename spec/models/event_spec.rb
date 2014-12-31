@@ -88,9 +88,11 @@ describe Event, :type => :model do
     end
 
     it "should parse an iCalendar into an Event" do
+      url = "http://foo.bar/"
       actual_ical = Event::IcalRenderer.render(@basic_event)
+      stub_request(:get, url).to_return(body: actual_ical)
 
-      events = SourceParser.to_events(content: actual_ical, skip_old: false)
+      events = SourceParser.to_events(url: url, skip_old: false)
 
       expect(events.size).to eq 1
       event = events.first
@@ -105,8 +107,10 @@ describe Event, :type => :model do
       generated_url = "http://foo.bar/"
       @basic_event.url = nil
       actual_ical = Event::IcalRenderer.render(@basic_event, :url_helper => lambda{|event| generated_url})
+      url = "http://foo.bar/"
+      stub_request(:get, url).to_return(body: actual_ical)
 
-      events = SourceParser.to_events(:content => actual_ical, :skip_old => false)
+      events = SourceParser.to_events(url: url, skip_old: false)
 
       expect(events.size).to eq 1
       event = events.first
