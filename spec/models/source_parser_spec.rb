@@ -9,12 +9,6 @@ describe SourceParser, "when reading content", :type => :model do
   it "should read from a wacky URL" do
     expect { SourceParser.read_url("not://a.real/~url") }.to raise_error(Errno::ENOENT)
   end
-
-  it "should unescape ATOM feeds" do
-    content = "&lt;atom&gt;"
-    allow(content).to receive(:content_type).and_return("application/atom+xml")
-    expect(SourceParser.content_for(content: content)).to eq "<atom>"
-  end
 end
 
 describe SourceParser, "when subclassing", :type => :model do
