@@ -165,12 +165,6 @@ def stub_source_parser_http_response!(opts={})
   expect(SourceParser::Base).to receive(:http_response_for).and_return(http_response)
 end
 
-SAMPLES_PATH = File.expand_path(File.dirname(__FILE__) + "/samples") unless defined?(SAMPLES_PATH)
-
-def read_sample(path_fragment)
-  File.read(File.join(SAMPLES_PATH, path_fragment))
-end
-
 # Returns the time right now.
 def now
   return Time.zone.now
