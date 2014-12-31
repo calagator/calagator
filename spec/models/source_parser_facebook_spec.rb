@@ -4,10 +4,11 @@ describe SourceParser::Facebook, :type => :model do
 
   describe "when importing an event" do
     before(:each) do
-      content = read_sample('facebook.json')
-      parsed_content = MultiJson.decode(content)
-      expect(HTTParty).to receive(:get).and_return(parsed_content)
-      @events = SourceParser::Facebook.to_events(:url => 'http://facebook.com/event.php?eid=247619485255249')
+      url = 'http://facebook.com/event.php?eid=247619485255249'
+      graph_url = "http://graph.facebook.com/247619485255249"
+      stub_request(:get, url)
+      stub_request(:get, graph_url).to_return(body: read_sample('facebook.json'), headers: { content_type: "application/json" })
+      @events = SourceParser::Facebook.to_events(url: url)
       @event = @events.first
     end
 
