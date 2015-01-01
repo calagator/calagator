@@ -35,7 +35,8 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 RSpec.configure do |config|
   config.include FactoryGirl::Syntax::Methods
   config.use_transactional_fixtures = false
-  config.before(:all) do |example|
+
+  config.before(:suite) do |example|
     DatabaseCleaner.clean_with(:truncation)
   end
   config.before(:each) do |example|
