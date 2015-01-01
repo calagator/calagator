@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe SourceParser::Ical, "when parsing VVENUE", :type => :model do
    before(:each) do
-     @venue = SourceParser::Ical.to_venue(<<-HERE)
+     @venue = SourceParser::Ical.to_venue(%(
 BEGIN:VVENUE
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
   html
@@ -19,8 +19,7 @@ POSTALCODE:97204
 GEO:45.518798;-122.677583
 URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
 CATEGORIES:apple applecom appleinc technology
-END:VVENUE
-    HERE
+END:VVENUE))
   end
 
   it "should have a street_address" do
@@ -43,7 +42,7 @@ end
 describe SourceParser::Ical, "when parsing VCARD lines", :type => :model do
    before(:each) do
      # Note that each line here represents a single, complete property definition -- this method doesn't do any magical unwrapping of text.
-     @vcard_hash = SourceParser::Ical.hash_from_vcard_lines(<<-HERE)
+     @vcard_hash = SourceParser::Ical.hash_from_vcard_lines(%(
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
 UID:V0-001-001423875-1@eventful.com
 NAME:Apple Store Pioneer Place
@@ -55,8 +54,7 @@ COUNTRY;;;ABBREV=USA:United States
 POSTALCODE:97204
 GEO:45.518798;-122.677583
 URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
-CATEGORIES:apple applecom appleinc technology
-    HERE
+CATEGORIES:apple applecom appleinc technology))
   end
 
   it "should find a property set by its key" do

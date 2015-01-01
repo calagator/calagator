@@ -2,28 +2,12 @@ require 'spec_helper'
 
 describe SourceParser, "when reading content", :type => :model do
   it "should read from a normal URL" do
-    stub_source_parser_http_response!(:body => 42)
-    expect(SourceParser.read_url("http://a.real/~url")).to eq 42
+    stub_request(:get, "http://a.real/~url").to_return(body: "42")
+    expect(SourceParser.read_url("http://a.real/~url")).to eq "42"
   end
 
   it "should read from a wacky URL" do
-    uri = URI.parse('fake')
-    # please retain space betwen "?" and ")" on following line; it avoids a SciTE issue
-    allow(uri).to receive(:respond_to? ).and_return(false)
-    allow(URI).to receive(:parse).and_return(uri)
-
-    error_type = RUBY_PLATFORM.match(/mswin/) ? Errno::EINVAL : Errno::ENOENT
-    expect { SourceParser.read_url("not://a.real/~url") }.to raise_error(error_type)
-  end
-
-  it "should unescape ATOM feeds" do
-    content = "ATOM"
-    allow(content).to receive(:content_type).and_return("application/atom+xml")
-
-    expect(SourceParser::Base).to receive(:read_url).and_return(content)
-    expect(CGI).to receive(:unescapeHTML).and_return("42")
-
-    expect(SourceParser.content_for(:fake => :argument)).to eq "42"
+    expect { SourceParser.read_url("not://a.real/~url") }.to raise_error(Errno::ENOENT)
   end
 end
 
@@ -51,15 +35,14 @@ describe SourceParser, "when parsing events", :type => :model do
   it "should use first successful parser's results" do
     events = [double]
 
-    expect(SourceParser::Facebook).to receive(:to_events).and_return(false)
-    expect(SourceParser::Meetup).to receive(:to_events).and_return(events)
-    expect(SourceParser::Base).to receive(:content_for).and_return("fake content")
+    body = {
+      name: "event",
+      start_time: "2010-01-01 12:00:00 UTC",
+      end_time: "2010-01-01 13:00:00 UTC"
+    }.to_json
+    stub_request(:get, "http://graph.facebook.com/omg").to_return(body: body)
 
-    expect(SourceParser::Plancast).not_to receive(:to_events)
-    expect(SourceParser::Hcal).not_to receive(:to_events)
-    expect(SourceParser::Ical).not_to receive(:to_events)
-
-    expect(SourceParser.to_events(:fake => :argument)).to have(1).event
+    expect(SourceParser.to_events(url: "http://www.facebook.com/events/omg")).to have(1).event
   end
 end
 
@@ -67,7 +50,8 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
   describe "with two identical events" do
     before :each do
       @venue_size_before_import = Venue.count
-      @cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+      url = "http://mysample.hcal/"
+      @cal_source = Source.new(title: "Calendar event feed", url: url)
       @cal_content = (%{
       <div class="vevent">
         <abbr class="dtstart" title="20080714"></abbr>
@@ -79,7 +63,7 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
         <abbr class="summary" title="Bastille Day"></abbr>
         <abbr class="location" title="Arc de Triomphe"></abbr>
       </div>})
-      allow(SourceParser::Base).to receive(:read_url).and_return(@cal_content)
+      stub_request(:get, url).to_return(body: @cal_content)
       @events = @cal_source.to_events
       @created_events = @cal_source.create_events!(:skip_old => false)
     end
@@ -99,9 +83,9 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
 
   describe "with an event" do
     it "should retrieve an existing event if it's an exact duplicate" do
-      hcal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
-      hcal_content = read_sample('hcal_event_duplicates_fixture.xml')
-      allow(SourceParser::Base).to receive(:read_url).and_return(hcal_content)
+      url = "http://mysample.hcal/"
+      hcal_source = Source.new(title: "Calendar event feed", url: url)
+      stub_request(:get, url).to_return(body: read_sample('hcal_event_duplicates_fixture.xml'))
 
       event = hcal_source.to_events.first
       event.save!
@@ -112,15 +96,16 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
 
     it "an event with a orphaned exact duplicate should should remove duplicate marking" do
       orphan = Event.create!(:title => "orphan", :start_time => Time.parse("July 14 2008"), :duplicate_of_id => 7142008 )
-      cal_content = <<-HERE
+      cal_content = %(
         <div class="vevent">
         <abbr class="summary" title="orphan"></abbr>
         <abbr class="dtstart" title="20080714"></abbr>
         </div>
-      HERE
-      allow(SourceParser::Base).to receive(:read_url).and_return(cal_content)
+      )
+      url = "http://mysample.hcal/"
+      stub_request(:get, url).to_return(body: cal_content)
 
-      cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+      cal_source = Source.new(title: "Calendar event feed", url: url)
       imported_event = cal_source.create_events!(:skip_old => false).first
       expect(imported_event).not_to be_marked_as_duplicate
     end
@@ -134,7 +119,7 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
 
   describe "two identical events with different venues" do
     before(:each) do
-      cal_content = <<-HERE
+      cal_content = %(
         <div class="vevent">
           <abbr class="dtstart" title="20080714"></abbr>
           <abbr class="summary" title="Bastille Day"></abbr>
@@ -145,10 +130,11 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
           <abbr class="summary" title="Bastille Day"></abbr>
           <abbr class="location" title="Bastille"></abbr>
         </div>
-      HERE
-      allow(SourceParser::Base).to receive(:read_url).and_return(cal_content)
+      )
+      url = "http://mysample.hcal/"
+      stub_request(:get, url).to_return(body: cal_content)
 
-      cal_source = Source.new(:title => "Calendar event feed", :url => "http://mysample.hcal/")
+      cal_source = Source.new(title: "Calendar event feed", url: url)
       @parsed_events  = cal_source.to_events
       @created_events = cal_source.create_events!(:skip_old => false)
     end
@@ -177,19 +163,18 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
       :title => "Squashed Duplicate Venue",
       :duplicate_of_id => master_venue.id)
 
-    cal_content = <<-HERE
+    cal_content = %(
       <div class="vevent">
         <abbr class="dtstart" title="20090117"></abbr>
         <abbr class="summary" title="Event with cloned venue"></abbr>
         <abbr class="location" title="Squashed Duplicate Venue"></abbr>
       </div>
-    HERE
+    )
 
-    allow(SourceParser::Base).to receive(:read_url).and_return(cal_content)
+    url = "http://mysample.hcal/"
+    stub_request(:get, url).to_return(body: cal_content)
 
-    source = Source.new(
-      :title => "Event with squashed venue",
-      :url   => "http://IcalEventWithSquashedVenue.com/")
+    source = Source.new(title: "Event with squashed venue", url: url)
 
     event = source.to_events(:skip_old => false).first
     expect(event.venue.title).to eq "Master"
@@ -198,13 +183,11 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
   it "should use an existing venue when importing an event with a matching machine tag that describes a venue" do
     venue = Venue.create!(:title => "Custom Urban Airship", :tag_list => "plancast:place=1520153")
 
-    content = read_sample('plancast.json')
-    allow(SourceParser::Base).to receive(:read_url).and_return("this content doesn't matter")
-    expect(HTTParty).to receive(:get).and_return(MultiJson.decode(content))
+    plancast_url = 'http://plancast.com/p/3cos/indiewebcamp'
+    api_url = 'http://api.plancast.com/02/plans/show.json?extensions=place&plan_id=3cos'
+    stub_request(:get, api_url).to_return(body: read_sample('plancast.json'), headers: { content_type: "application/json" })
 
-    source = Source.new(
-      :title => "Event with duplicate machine-tagged venue",
-      :url   => "http://plancast.com/p/3cos/indiewebcamp")
+    source = Source.new(title: "Event with duplicate machine-tagged venue", url: plancast_url)
 
     event = source.to_events(:skip_old => false).first
 
@@ -222,7 +205,7 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
           expect(other_parser).not_to receive :to_events
         end
 
-        allow(SourceParser::Base).to receive(:read_url).and_return("this content doesn't matter")
+        stub_request(:get, url)
         Source.new(:title => parser_name, :url => url).to_events
       end
     end

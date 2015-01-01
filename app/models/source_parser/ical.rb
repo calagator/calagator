@@ -59,7 +59,7 @@ class SourceParser # :nodoc:
       opts[:skip_old] = true unless opts[:skip_old] == false
       cutoff = Time.now.yesterday
 
-      content = content_for(opts).gsub(/\r\n/, "\n")
+      content = read_url(opts[:url]).gsub(/\r\n/, "\n")
       content = munge_gmt_dates(content)
 
       return [].tap do |events|

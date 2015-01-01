@@ -7,9 +7,11 @@ describe SourceParser::Meetup, :type => :model do
     end
 
     before(:each) do
-      content = read_sample('meetup.json')
-      expect(HTTParty).to receive(:get).and_return(MultiJson.decode(content))
-      @events = SourceParser::Meetup.to_events(:url => 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/')
+      meetup_url = "http://www.meetup.com/pdxpython/events/ldhnqyplbnb/"
+      api_url = "https://api.meetup.com/2/event/ldhnqyplbnb?key=foo&sign=true"
+
+      stub_request(:get, api_url).to_return(body: read_sample('meetup.json'), headers: { content_type: "application/json" })
+      @events = SourceParser::Meetup.to_events(url: meetup_url)
       @event = @events.first
     end
 
@@ -40,10 +42,9 @@ describe SourceParser::Meetup, :type => :model do
     end
 
     before(:each) do
-      expect(SourceParser::Base).to receive(:read_url)
-        .with("http://www.meetup.com/pdxpython/events/ldhnqyplbnb/ical")
-        .and_return(read_sample('meetup.ics'))
-      @events = SourceParser::Meetup.to_events(:url => 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/')
+      url = "http://www.meetup.com/pdxpython/events/ldhnqyplbnb/ical"
+      stub_request(:get, url).to_return(body: read_sample('meetup.ics'))
+      @events = SourceParser::Meetup.to_events(url: url)
       @event = @events.first
     end
 
