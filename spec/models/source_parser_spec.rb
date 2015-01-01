@@ -35,11 +35,12 @@ describe SourceParser, "when parsing events", :type => :model do
   it "should use first successful parser's results" do
     events = [double]
 
-    stub_request(:get, "http://graph.facebook.com/omg").to_return(body: <<-JSON)
-      { "name": "event",
-        "start_time": "2010-01-01 12:00:00 UTC",
-        "end_time": "2010-01-01 13:00:00 UTC" }
-    JSON
+    body = {
+      name: "event",
+      start_time: "2010-01-01 12:00:00 UTC",
+      end_time: "2010-01-01 13:00:00 UTC"
+    }.to_json
+    stub_request(:get, "http://graph.facebook.com/omg").to_return(body: body)
 
     expect(SourceParser.to_events(url: "http://www.facebook.com/events/omg")).to have(1).event
   end
@@ -95,12 +96,12 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
 
     it "an event with a orphaned exact duplicate should should remove duplicate marking" do
       orphan = Event.create!(:title => "orphan", :start_time => Time.parse("July 14 2008"), :duplicate_of_id => 7142008 )
-      cal_content = <<-HERE
+      cal_content = %(
         <div class="vevent">
         <abbr class="summary" title="orphan"></abbr>
         <abbr class="dtstart" title="20080714"></abbr>
         </div>
-      HERE
+      )
       url = "http://mysample.hcal/"
       stub_request(:get, url).to_return(body: cal_content)
 
@@ -118,7 +119,7 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
 
   describe "two identical events with different venues" do
     before(:each) do
-      cal_content = <<-HERE
+      cal_content = %(
         <div class="vevent">
           <abbr class="dtstart" title="20080714"></abbr>
           <abbr class="summary" title="Bastille Day"></abbr>
@@ -129,7 +130,7 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
           <abbr class="summary" title="Bastille Day"></abbr>
           <abbr class="location" title="Bastille"></abbr>
         </div>
-      HERE
+      )
       url = "http://mysample.hcal/"
       stub_request(:get, url).to_return(body: cal_content)
 
@@ -162,13 +163,13 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
       :title => "Squashed Duplicate Venue",
       :duplicate_of_id => master_venue.id)
 
-    cal_content = <<-HERE
+    cal_content = %(
       <div class="vevent">
         <abbr class="dtstart" title="20090117"></abbr>
         <abbr class="summary" title="Event with cloned venue"></abbr>
         <abbr class="location" title="Squashed Duplicate Venue"></abbr>
       </div>
-    HERE
+    )
 
     url = "http://mysample.hcal/"
     stub_request(:get, url).to_return(body: cal_content)

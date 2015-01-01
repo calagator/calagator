@@ -217,8 +217,8 @@ end
 describe SourceParser::Ical, "when skipping old events", :type => :model do
   before(:each) do
     url = "http://foo.bar/"
-    stub_request(:get, url).to_return(body: <<-ICAL)
-BEGIN:VCALENDAR
+    stub_request(:get, url).to_return(body:
+%(BEGIN:VCALENDAR
 X-WR-CALNAME;VALUE=TEXT:NERV
 VERSION:2.0
 CALSCALE:GREGORIAN
@@ -272,8 +272,7 @@ DTSTART:#{Time.now.strftime("%Y%m%d")}
 DTEND:#{(Time.now-1.year).strftime("%Y%m%d")}
 DTSTAMP:040425
 END:VEVENT
-END:VCALENDAR
-      ICAL
+END:VCALENDAR))
     @source = Source.new(title: "Title", url: url)
   end
 
