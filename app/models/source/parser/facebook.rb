@@ -25,37 +25,37 @@ class Source::Parser::Facebook < Source::Parser
 
       raise ::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
 
-      event = Event.new
-      event.source      = opts[:source]
-      event.title       = data['name']
-      event.description = data['description']
+      event = Event.new({
+        source:      opts[:source],
+        title:       data['name'],
+        description: data['description'],
+        url:         opts[:url],
+        tag_list:    "facebook:event=#{data['id']}",
+        venue:       to_venue(data),
 
-      # Facebook is sending floating times, treat them as local
-      event.start_time  = Time.zone.parse(data['start_time'])
-      event.end_time    = Time.zone.parse(data['end_time'])
-      event.url         = opts[:url]
-      event.tag_list    = "facebook:event=#{data['id']}"
-
-      # The 'venue' block in facebook's data doesn't contain the venue name, so we merge…
-      data = (data['venue'] || {}).merge('name' => data['location'])
-      event.venue       = to_venue(data)
+        # Facebook is sending floating times, treat them as local
+        start_time:  Time.zone.parse(data['start_time']),
+        end_time:    Time.zone.parse(data['end_time']),
+      })
 
       [event_or_duplicate(event)]
     end
 
     private
 
-    def to_venue(value)
-      return if value.blank?
+    def to_venue(data)
+      fields = (data['venue'] || {})
+      return if fields.blank?
+
       venue = Venue.new({
-        source: opts[:source],
-        title: value['name'],
-        street_address: value['street'],
-        locality: value['city'],
-        region: value['state'],
-        country: value['country'],
-        latitude: value['latitude'],
-        longitude: value['longitude'],
+        source:         opts[:source],
+        title:          data['location'],
+        street_address: fields['street'],
+        locality:       fields['city'],
+        region:         fields['state'],
+        country:        fields['country'],
+        latitude:       fields['latitude'],
+        longitude:      fields['longitude'],
       })
       venue.geocode!
       venue_or_duplicate(venue)
