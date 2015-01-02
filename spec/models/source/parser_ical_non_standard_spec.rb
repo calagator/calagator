@@ -54,7 +54,7 @@ COUNTRY;;;ABBREV=USA:United States
 POSTALCODE:97204
 GEO:45.518798;-122.677583
 URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
-CATEGORIES:apple applecom appleinc technology))
+CATEGORIES:apple applecom appleinc technology).split("\n"))
   end
 
   it "should find a property set by its key" do

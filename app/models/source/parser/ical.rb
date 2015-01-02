@@ -11,91 +11,95 @@
 class Source::Parser::Ical < Source::Parser
     self.label = :iCalendar
 
+    VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
+
     # Override Base::read_url to handle "webcal" scheme addresses.
     def self.read_url(url)
       super(url.gsub(/^webcal:/, 'http:'))
     end
 
-    CALENDAR_CONTENT_RE    = /^BEGIN:VCALENDAR.*?^END:VCALENDAR/m
-    EVENT_CONTENT_RE       = /^BEGIN:VEVENT.*?^END:VEVENT/m
-    EVENT_DTSTART_RE       = /^DTSTART.*?:([^\r\n$]+)/m
-    EVENT_DTEND_RE         = /^DTEND.*?:([^\r\n$]+)/m
-    VENUE_CONTENT_RE       = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
-    VENUE_CONTENT_BEGIN_RE = /^BEGIN:VVENUE$/m
-    VENUE_CONTENT_END_RE   = /^END:VVENUE$/m
-
     def to_events
-      # Skip old events by default
+      return false unless calendars = content_calendars
 
-      opts[:skip_old] = true unless opts[:skip_old] == false
-      cutoff = Time.now.yesterday
-
-      content = self.class.read_url(opts[:url]).gsub(/\r\n/, "\n")
-      content = munge_gmt_dates(content)
-
-      return [].tap do |events|
-        begin
-          content_calendars = RiCal.parse_string(content)
-        rescue Exception => e
-          if e.message =~ /Invalid icalendar file/
-            return false # Invalid data, give up.
-          else
-            raise e # Unknown error, we should care.
-          end
+      events = calendars.flat_map do |calendar|
+        calendar.events.map do |component|
+          next if skip_old? and old?(component)
+          component_to_event(component, calendar)
         end
-        content_calendars.each do |content_calendar|
-          content_calendar.events.each_with_index do |component, index|
-            next if opts[:skip_old] && (component.dtend || component.dtstart).to_time < cutoff
-            event             = Event.new
-            event.source      = opts[:source]
-            event.title       = component.summary
-            event.description = component.description
-            event.url         = component.url
+      end
 
-            dates_for_tz(component, event)
-
-            content_venues = content_calendar.to_s.scan(VENUE_CONTENT_RE)
-
-            content_venue = \
-            begin
-              # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
-              venue_uid = component.location_property.params["VVENUE"]
-              # finding in the content_venues array an item matching the uid
-              venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
-            rescue Exception => e
-              # Ignore
-              Rails.logger.info("Source::Parser::Ical.to_events : Failed to parse content_venue for event -- #{e}")
-              nil
-            end
-
-            event.venue = to_venue(content_venue, opts.merge(:fallback => component.location))
-            events << event_or_duplicate(event)
-          end
-        end
-        events.uniq do |event|
-          [event.attributes, event.venue.try(:attributes)]
-        end
+      events.compact.uniq do |event|
+        [event.attributes, event.venue.try(:attributes)]
       end
     end
 
     private
 
+    def skip_old?
+      # Skip old events by default
+      true unless opts[:skip_old] == false
+    end
+
+    def old?(component)
+      cutoff = Time.now.yesterday
+      (component.dtend || component.dtstart).to_time < cutoff
+    end
+
+    def content_calendars
+      content = self.class.read_url(opts[:url]).gsub(/\r\n/, "\n")
+      content = munge_gmt_dates(content)
+      RiCal.parse_string(content)
+    rescue Exception => e
+      if e.message =~ /Invalid icalendar file/
+        false # Invalid data, give up.
+      else
+        raise e # Unknown error, we should care.
+      end
+    end
+
+    def component_to_event(component, calendar)
+      event = Event.new({
+        source:      opts[:source],
+        title:       component.summary,
+        description: component.description,
+        url:         component.url,
+      })
+
+      dates_for_tz(component, event)
+
+      event.venue = to_venue(content_venue(component, calendar), opts.merge(fallback: component.location))
+      event_or_duplicate(event)
+    end
+
+    def content_venue(component, calendar)
+      content_venues = calendar.to_s.scan(VENUE_CONTENT_RE)
+
+      # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
+      venue_uid = component.location_property.params["VVENUE"]
+      # finding in the content_venues array an item matching the uid
+      venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
+    rescue Exception => e
+      # Ignore
+      Rails.logger.info("Source::Parser::Ical.to_events : Failed to parse content_venue for event -- #{e}")
+      nil
+    end
+
     # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
     def dates_for_tz(component, event)
-      if component.dtstart_property.tzid.nil?
+      if component.dtstart_property.tzid
+        event.start_time  = component.dtstart
+        event.end_time    = component.dtend
+      else
         event.start_time  = Time.parse(component.dtstart_property.value)
-        if component.dtend_property.nil?
+        if component.dtend_property
+          event.end_time = Time.parse(component.dtend_property.value)
+        else
           if component.duration
             event.end_time = component.duration_property.add_to_date_time_value(event.start_time)
           else
             event.end_time = event.start_time
           end
-        else
-          event.end_time = Time.parse(component.dtend_property.value)
         end
-      else
-        event.start_time  = component.dtstart
-        event.end_time    = component.dtend
       end
     rescue RiCal::InvalidTimezoneIdentifier
       event.start_time = Time.parse(component.dtstart_property.to_s)
@@ -114,21 +118,19 @@ class Source::Parser::Ical < Source::Parser
     # Options:
     # * :fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
     def to_venue(value, opts={})
-      value = "" if value.nil?
       venue = Venue.new
 
       # VVENUE entries are considered just Vcards,
       # treating them as such.
-      if vcard_content = value.scan(VENUE_CONTENT_RE).first
-        vcard_hash = hash_from_vcard_string(vcard_content)
-
-        venue.title          = vcard_hash['NAME']
-        venue.street_address = vcard_hash['ADDRESS']
-        venue.locality       = vcard_hash['CITY']
-        venue.region         = vcard_hash['REGION']
-        venue.postal_code    = vcard_hash['POSTALCODE']
-        venue.country        = vcard_hash['COUNTRY']
-
+      if vcard_hash = vcard_hash_from_value(value)
+        venue.attributes = {
+          title:          vcard_hash['NAME'],
+          street_address: vcard_hash['ADDRESS'],
+          locality:       vcard_hash['CITY'],
+          region:         vcard_hash['REGION'],
+          postal_code:    vcard_hash['POSTALCODE'],
+          country:        vcard_hash['COUNTRY'],
+        }
         venue.latitude, venue.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
 
       elsif opts[:fallback].present?
@@ -141,18 +143,18 @@ class Source::Parser::Ical < Source::Parser
       venue_or_duplicate(venue)
     end
 
-    # Return hash parsed from the contents of first VCARD found in the iCalendar data.
-    #
-    # Properties with meta-qualifiers are treated specially. When a property with a meta-qualifier is parsed (e.g. "FOO;BAR"), it will also set a value for the key (e.g. "FOO") if one isn't specified. This makes it possible to retrieve a value for a key like "DTSTART" when only a key with a qualifier like "DTSTART;TZID=..." is specified in the data.
-    #
-    # Arguments:
-    # * data - String of iCalendar data containing a VCARD.
-    def hash_from_vcard_string(data)
+    def vcard_hash_from_value(value)
+      value ||= ""
+      return unless data = value.scan(VENUE_CONTENT_RE).first
+
       # Only use first vcard of a VVENUE
       vcard = RiCal.parse_string(data).first
 
       # Extract all properties, including non-standard ones, into an array of "KEY;meta-qualifier:value" strings
       vcard_lines = vcard.export_properties_to(StringIO.new(''))
+
+      # Turn a String-like object into an Enumerable.
+      vcard_lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
 
       hash_from_vcard_lines(vcard_lines)
     end
@@ -162,29 +164,22 @@ class Source::Parser::Ical < Source::Parser
     # Arguments:
     # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
     def hash_from_vcard_lines(vcard_lines)
-      {}.tap do |vcard_hash|
-        # Turn a String-like object into an Enumerable.
-        lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
-        lines.each do |vcard_line|
-          if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
-            key = matcher[1]
-            qualifier = matcher[2]
-            value = matcher[3]
+      vcard_lines.reduce({}) do |vcard_hash, vcard_line|
+        if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
+          _, key, qualifier, value = *matcher
 
-            if qualifier
-              # Add entry for a key and its meta-qualifier
-              vcard_hash["#{key}#{qualifier}"] = value
+          if qualifier
+            # Add entry for a key and its meta-qualifier
+            vcard_hash["#{key}#{qualifier}"] = value
 
-              # Add fallback entry for a key from the matching meta-qualifier, e.g. create key "foo" from contents of key with meta-qualifier "foo;bar".
-              unless vcard_hash.has_key?(key)
-                vcard_hash[key] = value
-              end
-            else
-              # Add entry for a key without a meta-qualifier.
-              vcard_hash[key] = value
-            end
+            # Add fallback entry for a key from the matching meta-qualifier, e.g. create key "foo" from contents of key with meta-qualifier "foo;bar".
+            vcard_hash[key] ||= value
+          else
+            # Add entry for a key without a meta-qualifier.
+            vcard_hash[key] = value
           end
         end
+        vcard_hash
       end
     end
 end
