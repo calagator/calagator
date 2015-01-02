@@ -3,39 +3,45 @@ class Source::Parser::Meetup < Source::Parser
     self.url_pattern = %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
 
     def to_events
-      if SECRETS.meetup_api_key.present?
-        return unless data = to_events_api_helper(opts[:url], "problem") do |event_id|
-          [
-            "https://api.meetup.com/2/event/#{event_id}",
-            {
-              :query => {
-                :key => SECRETS.meetup_api_key,
-                :sign => 'true'
-              }
-            }
-          ]
-        end
-        event = Event.new
-        event.source      = opts[:source]
-        event.title       = data['name']
-        event.description = data['description']
+      return fallback unless SECRETS.meetup_api_key.present?
+      return unless data = get_data
+      event = Event.new({
+        source:      opts[:source],
+        title:       data['name'],
+        description: data['description'],
+        url:         data['event_url'],
+        venue:       to_venue(data['venue']),
+        tag_list:    "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}",
         # Meetup sends us milliseconds since the epoch in UTC
-        event.start_time  = Time.at(data['time']/1000).utc
-        event.url         = data['event_url']
-        event.venue       = to_venue(data['venue'])
-        event.tag_list    = "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}"
+        start_time:  Time.at(data['time']/1000).utc,
+      })
 
-        [event_or_duplicate(event)]
-      else
-        to_events_wrapper(
-          Source::Parser::Ical,
-          %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?},
-          lambda { |matcher| "http://www.meetup.com/#{matcher[1]}/events/#{matcher[2]}/ical" }
-        )
-      end
+      [event_or_duplicate(event)]
     end
 
     private
+
+    def fallback
+      to_events_wrapper(
+        Source::Parser::Ical,
+        %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?},
+        lambda { |matcher| "http://www.meetup.com/#{matcher[1]}/events/#{matcher[2]}/ical" }
+      )
+    end
+
+    def get_data
+      to_events_api_helper(opts[:url], "problem") do |event_id|
+        [
+          "https://api.meetup.com/2/event/#{event_id}",
+          {
+            :query => {
+              :key => SECRETS.meetup_api_key,
+              :sign => 'true'
+            }
+          }
+        ]
+      end
+    end
 
     def to_venue(value)
       return if value.blank?
