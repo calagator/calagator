@@ -3,7 +3,29 @@ class Source::Parser::Plancast < Source::Parser
     self.url_pattern = %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
 
     def to_events
-      return unless data = to_events_api_helper(opts[:url]) do |event_id|
+      return unless data = get_data
+      event = Event.new({
+        source:      opts[:source],
+        title:       data['what'],
+        description: data['description'],
+
+        # Plancast is sending floating times as Unix timestamps, which is hard to parse
+        start_time:  ActiveSupport::TimeWithZone.new(nil, Time.zone, Time.at(data['start'].to_i).utc),
+        end_time:    ActiveSupport::TimeWithZone.new(nil, Time.zone, Time.at(data['stop'].to_i).utc),
+
+        url:         (data['external_url'] || data['plan_url']),
+        tag_list:    "plancast:plan=#{data['event_id']}",
+
+        venue:       to_venue(data['place'], data['where']),
+      })
+
+      [event_or_duplicate(event)]
+    end
+
+    private
+
+    def get_data
+      to_events_api_helper(opts[:url]) do |event_id|
         [
           'http://api.plancast.com/02/plans/show.json',
           {
@@ -14,24 +36,7 @@ class Source::Parser::Plancast < Source::Parser
           }
         ]
       end
-      event = Event.new
-      event.source      = opts[:source]
-      event.title       = data['what']
-      event.description = data['description']
-
-      # Plancast is sending floating times as Unix timestamps, which is hard to parse
-      event.start_time  = ActiveSupport::TimeWithZone.new(nil, Time.zone, Time.at(data['start'].to_i).utc)
-      event.end_time    = ActiveSupport::TimeWithZone.new(nil, Time.zone, Time.at(data['stop'].to_i).utc)
-
-      event.url         = (data['external_url'] || data['plan_url'])
-      event.tag_list    = "plancast:plan=#{data['event_id']}"
-
-      event.venue       = to_venue(data['place'], data['where'])
-
-      [event_or_duplicate(event)]
     end
-
-    private
 
     def to_venue(value, fallback=nil)
       value = "" if value.nil?
