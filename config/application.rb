@@ -101,10 +101,6 @@ module Calagator
     #---[ Secrets and settings ]--------------------------------------------
 
     config.before_initialize do
-      # Read secrets
-      require 'secrets_reader'
-      ::SECRETS = SecretsReader.read
-
       # Read theme
       require 'theme_reader'
       ::THEME_NAME = ThemeReader.read
@@ -127,13 +123,13 @@ module Calagator
 
 
       # Set cookie session
-      config.session_store :cookie_store, :key => SECRETS.session_name || "calagator"
-      config.secret_token = SECRETS.session_secret
+      config.session_store :cookie_store, :key => ENV['session_name'] || "calagator"
+      config.secret_token = ENV['session_secret']
 
 
       # Activate search engine
       require 'search_engine'
-      SearchEngine.kind = Rails.env.test? ? "sql" : SECRETS.search_engine
+      SearchEngine.kind = Rails.env.test? ? "sql" : ENV['search_engine']
     end
 
     # Set timezone for OS

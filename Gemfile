@@ -61,6 +61,7 @@ gem 'rdoc', '3.12.2', :require => false
 gem 'geokit', '1.6.5'
 gem 'htmlentities', '4.3.1'
 gem 'paper_trail', '2.7.2'
+gem 'figaro', '1.0.0'
 gem 'ri_cal', '0.8.8'
 gem 'rubyzip', '0.9.9', :require =>  'zip/zip'
 gem 'will_paginate', '3.0.5'
@@ -167,9 +168,8 @@ group :assets do
 end
 
 # Some dependencies are activated through server settings.
-require "#{basedir}/lib/secrets_reader"
-secrets = SecretsReader.read(:silent => true)
-case secrets.search_engine
+
+case ENV['search_engine']
 when 'sunspot'
   sunspot_version = '2.1.0'
   gem 'sunspot_rails', sunspot_version

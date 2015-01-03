@@ -1,10 +1,10 @@
 module MappingHelper
   def map_provider
-    (SECRETS.mapping && SECRETS.mapping["provider"]) || 'stamen'
+    (ENV['mapping'] && ENV['mapping']["provider"]) || 'stamen'
   end
 
   def map_tiles
-    (SECRETS.mapping && SECRETS.mapping["tiles"]) || 'terrain'
+    (ENV['mapping'] && ENV['mapping']["tiles"]) || 'terrain'
   end
 
   def mapping_js_includes
@@ -15,7 +15,7 @@ module MappingHelper
       when "mapbox"
         scripts << "https://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.standalone.js"
       when "google"
-        scripts << "https://maps.googleapis.com/maps/api/js?key=#{SECRETS.mapping["google_maps_api_key"]}&sensor=false"
+        scripts << "https://maps.googleapis.com/maps/api/js?key=#{ENV['mapping']["google_maps_api_key"]}&sensor=false"
         scripts << "leaflet_google_layer"
     end
 

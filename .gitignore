@@ -17,7 +17,7 @@ config/database~custom.yml
 config/geocoder_api_keys.yml
 config/mongrel_cluster.yml
 config/newrelic.yml
-config/secrets.yml
+config/application.yml
 config/sunspot.yml
 config/theme.txt
 config/thin.yml

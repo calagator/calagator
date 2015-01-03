@@ -932,13 +932,6 @@ describe Event do
         ical = event_to_ical(event)
         ical.sequence.should eq 2
       end
-
-      # it "should offset the squence based the global SECRETS.icalendar_sequence_offset" do
-        # SECRETS.should_receive(:icalendar_sequence_offset).and_return(41)
-        # event = Factory.build(:event)
-        # ical = event_to_ical(event)
-        # ical.sequence.should eq 42
-      # end
     end
 
     describe "- the headers" do
