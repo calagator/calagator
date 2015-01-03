@@ -4,6 +4,7 @@ rvm:
   - 1.9.3
   - 2.0.0
   - 2.1.0
+  - 2.2.0
   - rbx-2
   ## JRuby is not compatible, see Gemfile for details.
   # - jruby-19mode
@@ -29,4 +30,5 @@ before_script:
 script:
   - bundle exec rake spec --trace
 cache: bundler
+
 
