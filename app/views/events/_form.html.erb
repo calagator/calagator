@@ -14,7 +14,7 @@
   <script>
     var completed_title = '';
     $(document).ready(function(){
-      
+
       // Initialize autocompletion for venues
       $("input.autocomplete").attr('autocomplete', 'off').autocomplete({
         source: "/venues/autocomplete.json",
@@ -37,32 +37,28 @@
                 .data( "item.autocomplete", item )
                 .appendTo(ul);
       };
-      
+
       // Initialize date and time pickers
       $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
-      $('.time_picker').timePicker({
-        show24Hours:false,
-        separator:':',
-        step: 30});
+      $('.time_picker').timepicker({ 'timeFormat': 'g:i A' });
 
-      // Update "time_end" to have the same offset from "time_start" if the "time_start" changes, and displays a highlight to alert the user.
-      var oldTime = $.timePicker("#time_start").getTime();
+      // Update "time_end" to maintain the same offset from "time_start" if "time_start" changes, and display a highlight to alert the user.
+      var oldTime = $("#time_start").timepicker('getTime');
       $("#time_start").change(function() {
         if ($("#time_end").val()) { // Only update when second input has a value.
-          // Calculate duration.
-          var duration = ($.timePicker("#time_end").getTime() - oldTime);
-          var time = $.timePicker("#time_start").getTime();
+          var duration = ($("#time_end").timepicker('getTime') - oldTime);
+          var newTime = $("#time_start").timepicker('getTime');
           // Calculate and update the time in the second input.
-          $.timePicker("#time_end").setTime(new Date(new Date(time.getTime() + duration)));
+          $("#time_end").timepicker('setTime', new Date(newTime.getTime() + duration));
           $('#time_end').effect('highlight', {}, 3000);
-          oldTime = time;
+          oldTime = newTime;
         }
       });
 
-      // Update "date_end" so that it is the same as "date_start" if "date_start" is changed to after "date_end", and displays a highlight to alert the user..
+      // Update "date_end" so that it is the same as "date_start" if "date_start" is changed to after "date_end", and displays a highlight to alert the user.
       $("#date_start").change(function() {
         // Only update when end value is defined.
-        if ($("#date_end").val()) { 
+        if ($("#date_end").val()) {
           // Only update when end value is before start value.
           var startDate = $.datepicker.parseDate('yy-mm-dd', $('#date_start').val());
           var endDate = $.datepicker.parseDate('yy-mm-dd', $('#date_end').val());
