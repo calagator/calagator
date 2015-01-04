@@ -17,6 +17,7 @@ Changes
 List of Calagator stable releases and changes, with the latest at the top:
 
   * [master]
+    * [!] Changed config/secrets.yml to config/application.yml so that we can use figaro to read configuration from environment variables instead of YAML files.
     * Switched from outdated v2 Google Maps to a more flexible leaflet-based mapping system.
       * [!] New mapping settings have been added to secrets.yml
         If you wish to keep using Google as your map provider, you'll need to set your provider and add an API key to secrets.yml.
@@ -76,7 +77,7 @@ List of Calagator stable releases and changes, with the latest at the top:
   * v0.20120709
     * [!] This release drops support for 'acts_as_solr' search backend.  Please migrate to the 'sunspot' backend instead.
     * [DEPENDENCY] Upgraded most external dependencies.
-    * [MIGRATION] Remove obsolete tables and columns that may have been left behind. 
+    * [MIGRATION] Remove obsolete tables and columns that may have been left behind.
     * Improved compatibility with Ruby 1.9.x.
     * Improved tag cloud implementation and styling.
     * Improved ATOM output.
