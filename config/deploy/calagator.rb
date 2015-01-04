@@ -1,5 +1,5 @@
 set :stage, :calagator
-set :linked_files, %w{config/database.yml config/secrets.yml config/sunspot.yml Gemfile.local config/newrelic.yml config/initializers/errbit.rb}
+set :linked_files, %w{config/database.yml config/application.yml config/sunspot.yml Gemfile.local config/newrelic.yml config/initializers/errbit.rb}
 
 # Extended Server Syntax
 # ======================

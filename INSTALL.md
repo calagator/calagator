@@ -58,10 +58,10 @@ Customization
 If you want to customize your Calagator, do NOT just start modifying files in `app`, `public` and `themes/default`. Please read the instructions in `themes/README.txt` for how to use the theming system.
 
 
-Security and secrets.yml
+Security and application.yml
 ------------------------
 
-This application runs with insecure settings by default to make it easy to get started. These default settings include publicly-known cryptography keys that can allow attackers to gain admin privileges to your application. You should create a `config/secrets.yml` file with your secret settings if you intend to run this application on a server that can be accessed by untrusted users, read the [config/secrets.yml.sample](config/secrets.yml.sample) file for details.
+This application runs with insecure settings by default to make it easy to get started. These default settings include publicly-known cryptography keys that can allow attackers to gain admin privileges to your application. You should create a `config/application.yml` file with your secret settings if you intend to run this application on a server that can be accessed by untrusted users, read the [config/application.yml.sample](config/application.yml.sample) file for details.
 
 Spam Blacklist
 --------------
@@ -73,20 +73,20 @@ API Keys
 
 The application uses a number of API keys to communicate with external services.
 
-* Yahoo! Upcoming: To import events from Upcoming, the application can use a public key, but for production use, you should really get and use your own API key. See the `config/secrets.yml.sample` file's `upcoming_api_key` section for details.
+* Yahoo! Upcoming: To import events from Upcoming, the application can use a public key, but for production use, you should really get and use your own API key. See the `config/application.yml.sample` file's `upcoming_api_key` section for details.
 
-* Google Maps: To use Google's geocoder, and to use Google to display maps, you must get an API key.  See `config/secrets.yml.sample` for details.
+* Google Maps: To use Google's geocoder, and to use Google to display maps, you must get an API key.  See `config/application.yml.sample` for details.
 
 Mapping
 -------
 
-Calagator can use a number of map tile providers when displaying maps. This can be configured in `config/secrets.yml`.
+Calagator can use a number of map tile providers when displaying maps. This can be configured in `config/application.yml`.
 
 
 Search engine
 -------------
 
-You can specify the search engine to use in your `config/secrets.yml` file:
+You can specify the search engine to use in your `config/application.yml` file:
 
 ### sql
 

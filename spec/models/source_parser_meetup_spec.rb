@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SourceParser::Meetup do
-  describe "with a meetup.com API key in secrets.yml" do
+  describe "with a meetup.com API key in application.yml" do
     before do
       ENV['meetup_api_key'] = "foo"
     end

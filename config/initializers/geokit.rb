@@ -42,7 +42,7 @@ old_keys_path = Rails.root.join('config','geocoder_api_keys.yml')
 if google_key
   GeoKit::Geocoders::google = google_key
 elsif File.exist? old_keys_path
-  raise "Loading keys from config/geocoder_api_keys.yml is deprecated. Please use config/secrets.yml instead."
+  raise "Loading keys from config/geocoder_api_keys.yml is deprecated. Please use config/application.yml instead."
 else
   puts "Warning: No Google Maps API key was set. Geocoding will not function."
 end

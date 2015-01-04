@@ -67,7 +67,7 @@ module SearchEngine
     begin
       return "SearchEngine::#{self.kind.to_s.classify}".constantize
     rescue NameError
-      raise ArgumentError, "Invalid search engine specified in 'config/secrets.yml': #{self.kind}"
+      raise ArgumentError, "Invalid search engine specified in 'config/application.yml': #{self.kind}"
     end
   end
 

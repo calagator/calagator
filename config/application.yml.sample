@@ -1,10 +1,10 @@
 #===[ Secrets ]=========================================================
 #
-# This file is meant for storing secret information that is never
-# published or committed to a revision control system.
+# This file is meant for storing secret information and application settings
+# that are never published or committed to a revision control system.
 #
-# Do not modify this "config/secrets.yml.sample" file directly -- you
-# should copy it to "config/secrets.yml" and customize it there.
+# Do not modify this "config/application.yml.sample" file directly -- you
+# should copy it to "config/application.yml" and customize it there.
 #
 #---[ Values ]----------------------------------------------------------
 

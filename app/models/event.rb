@@ -412,7 +412,7 @@ EOF
 
           # Set the iCalendar SEQUENCE, which should be increased each time an
           # event is updated. If an admin needs to forcefully increment the
-          # SEQUENCE for all events, they can edit the "config/secrets.yml"
+          # SEQUENCE for all events, they can edit the "config/application.yml"
           # file and set the "icalendar_sequence_offset" value to something
           # greater than 0.
           entry.sequence((ENV['icalendar_sequence_offset'] || 0) + item.versions.count)

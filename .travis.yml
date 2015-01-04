@@ -25,7 +25,7 @@ before_script:
   - mysql -e 'create database calagator_test;'
   - psql -c 'create database calagator_test;' -U postgres
   - bundle exec rake db:migrate
-  - cp "config/secrets.yml.sample" "config/secrets.yml"
+  - cp "config/application.yml.sample" "config/application.yml"
 script:
   - bundle exec rake spec --trace
 cache: bundler
