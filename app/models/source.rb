@@ -60,6 +60,7 @@ class Source < ActiveRecord::Base
     events = to_events(opts).select(&:valid?)
     events.reject!(&:old?) if opts[:skip_old]
     events.each(&:save!)
+    events
   end
 
   # Normalize the URL.
