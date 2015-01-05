@@ -44,3 +44,26 @@ feature 'Venue Editing' do
     expect(page).to have_content 'This venue is no longer open for business.' if new_venue.closed
   end
 end
+
+feature 'Venue Deletion' do
+  background do
+    create :venue, title: 'Test Venue'
+  end
+
+  scenario 'A user deletes a venue' do
+    visit '/'
+    click_on 'Venues'
+
+    within '#newest' do
+      click_on 'Test Venue'
+    end
+
+    click_on 'delete'
+
+    expect(page).to have_content %("Test Venue" has been deleted)
+
+    click_on "List all venues"
+
+    expect(page).to have_content "Sorry, there are no venues"
+  end
+end
