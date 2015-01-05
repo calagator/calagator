@@ -1,12 +1,14 @@
 require 'rails_helper'
 
 feature 'Venue Editing' do
-  let(:venue) { create(:venue) }
-  let(:new_venue) { build(:venue) }
+  let!(:venue) { create(:venue) }
+  let!(:event) { create(:event, venue: venue) }
+  let!(:new_venue) { build(:venue) }
 
   scenario 'A user edits an existing venue' do
 
-    visit "/venues/#{venue.id}"
+    visit "/"
+    click_on venue.title
     click_on 'edit'
 
     venue_name = find_field('Venue Name').value

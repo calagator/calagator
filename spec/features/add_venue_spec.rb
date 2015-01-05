@@ -5,7 +5,8 @@ feature 'Venue Creation' do
 
   scenario 'User adds a new venue' do
 
-    visit '/venues'
+    visit '/'
+    click_on 'Venues'
     click_on 'Add a venue'
 
 
