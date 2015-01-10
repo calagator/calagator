@@ -1,6 +1,3 @@
-# -*- encoding: utf-8 -*-
-# stub: mofo 0.2.8 ruby lib
-
 Gem::Specification.new do |s|
   s.name = "mofo"
   s.version = "0.2.8"

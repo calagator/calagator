@@ -55,10 +55,6 @@ gem 'sunspot_rails', '2.1.1'
 gem 'sunspot_solr',  '2.1.1'
 gem 'lucene_query', '0.1'
 
-platforms :mri_19 do
-  gem 'backports', '3.6.4', require: "backports/2.0.0/enumerable/lazy"
-end
-
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
 #   bundle install --without development:test
@@ -87,7 +83,7 @@ group :development, :test do
     gem 'capistrano-bundler', '1.0.0'
 
     # Guard and plugins
-    platforms :ruby_19, :ruby_20 do
+    platforms :mri do
       gem 'guard', '~> 1.3.0'
       gem 'guard-rspec', '~> 1.2.1'
     end
@@ -106,16 +102,8 @@ group :development, :test do
   #
   #   touch .dev && bundle
   if File.exist?(".dev")
-    platforms :mri_19 do
-      gem 'debugger'
-      gem 'debugger-ruby_core_source'
-    end
-
-    platforms :mri_20, :mri_21 do
+    platforms :mri do
       gem 'byebug'
-    end
-
-    platforms :mri_19, :mri_20, :mri_21 do
       gem 'simplecov'
     end
   end
