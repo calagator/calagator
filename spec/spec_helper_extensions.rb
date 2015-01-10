@@ -165,12 +165,3 @@ def stub_source_parser_http_response!(opts={})
   expect(SourceParser::Base).to receive(:http_response_for).and_return(http_response)
 end
 
-# Returns the time right now.
-def now
-  return Time.zone.now
-end
-
-# Returns the time for today at midnight.
-def today
-  return now.midnight
-end
