@@ -23,7 +23,7 @@ FactoryGirl.define do
   factory :event do
     sequence(:title) { |n| "Event #{n}" }
     sequence(:description) { |n| "Description of Event #{n}." }
-    start_time { Time.now + 1.hour }
+    start_time { today + 1.hour }
     end_time { start_time + 1.hour }
 
     after(:create) { Sunspot.commit if Event::SearchEngine.kind == :sunspot }
