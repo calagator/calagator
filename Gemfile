@@ -11,14 +11,6 @@
 
 source 'https://rubygems.org'
 
-unless defined?($BUNDLER_INTERPRETER_CHECKED)
-  if defined?(JRUBY_VERSION)
-    puts "WARNING: JRuby cannot run Calagator. Its version of Nokogiri is incompatible with 'loofah', 'mofo' and other things. Although basic things like running the console and starting the server work, you'll run into problems as soon as you try to add/edit records or import hCalendar events."
-    $JRUBY_WARNED = true
-  end
-  $BUNDLER_INTERPRETER_CHECKED = true
-end
-
 # Database driver
 require "./lib/database_yml_reader"
 adapter = DatabaseYmlReader.read.adapter
@@ -27,9 +19,6 @@ when 'pg', 'postgresql'
   gem 'pg'
 when 'mysql2'
   gem 'mysql2', '~> 0.3.11'
-when 'jdbcsqlite3'
-  gem 'jdbc-sqlite3'
-  gem 'activerecord-jdbcsqlite3-adapter'
 else
   gem adapter
 end
@@ -68,16 +57,6 @@ gem 'lucene_query', '0.1'
 
 platforms :mri_19 do
   gem 'backports', '3.6.4', require: "backports/2.0.0/enumerable/lazy"
-end
-
-platform :jruby do
-  gem 'activerecord-jdbc-adapter'
-  gem 'jruby-openssl'
-  gem 'jruby-rack'
-  gem 'warbler'
-
-  gem 'activerecord-jdbcsqlite3-adapter'
-  gem 'jdbc-sqlite3'
 end
 
 # Some dependencies are only needed for test and development environments. On
@@ -138,10 +117,6 @@ group :development, :test do
 
     platforms :mri_19, :mri_20, :mri_21 do
       gem 'simplecov'
-    end
-
-    platform :jruby do
-      gem 'ruby-debug'
     end
   end
 end
