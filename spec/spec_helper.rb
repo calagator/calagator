@@ -1,15 +1,13 @@
 require 'factory_girl'
 
-unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
-  require 'simplecov'
-  require 'coveralls'
+require 'simplecov'
+require 'coveralls'
 
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-    SimpleCov::Formatter::HTMLFormatter,
-    Coveralls::SimpleCov::Formatter,
-  ]
-  SimpleCov.start('rails')
-end
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter,
+]
+SimpleCov.start('rails')
 
 require "rails_helper"
 
