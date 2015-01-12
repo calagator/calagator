@@ -43,6 +43,8 @@ if google_key
   GeoKit::Geocoders::google = google_key
 elsif File.exist? old_keys_path
   raise "Loading keys from config/geocoder_api_keys.yml is deprecated. Please use config/secrets.yml instead."
+elsif SECRETS.mapping.present?
+  raise "SECRETS.mapping is no longer used. Please refer to config/secrets.yml.sample."
 else
   puts "Warning: No Google Maps API key was set. Geocoding will not function."
 end
