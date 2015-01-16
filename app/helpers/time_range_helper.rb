@@ -29,6 +29,8 @@ class TimeRange
     @context_date = context
   end
 
+  attr_reader :start_time, :end_time, :format, :context_date
+
   def to_s
     figure_out_the_general_format
     remove_stuff_implied_by_context
@@ -41,15 +43,15 @@ class TimeRange
     # Assume one date only, equal start/end
     @start_format_list = [nil, :wday, :month, :day, :year, :at, :hour, :min, :suffix, nil]
     
-    @start_details = time_details(@start_time)
-    if @end_time.nil? or @start_time == @end_time
+    @start_details = time_details(start_time)
+    if end_time.nil? or start_time == end_time
       # One date only, or equal dates.
       @end_format_list = @conjunction = nil
     else
-      @end_details = time_details(@end_time)
-      if @start_time.to_date == @end_time.to_date
+      @end_details = time_details(end_time)
+      if start_time.to_date == end_time.to_date
         @start_format_list[@start_format_list.index(:at)] = :from
-        @conjunction = @format == :text ? "-" : "&ndash;"
+        @conjunction = format == :text ? "-" : "&ndash;"
         if @start_details[:suffix] == @end_details[:suffix]
           # same day & am/pm
           # Tuesday, April 1, 2008 from 9-11am
@@ -70,14 +72,14 @@ class TimeRange
   end
     
   def remove_stuff_implied_by_context
-    if @context_date
+    if context_date
       # Do it to both start & end lists
-      [[@start_time, @start_format_list], [@end_time, @end_format_list]].each do |t, list|
+      [[start_time, @start_format_list], [end_time, @end_format_list]].each do |t, list|
         if t and list
-          list.delete(:year) if @context_date.year == t.year # same year
+          list.delete(:year) if context_date.year == t.year # same year
           [:wday, :month, :day, :at, :from].each do |k|
             list.delete(k)
-          end if @context_date == t.to_date
+          end if context_date == t.to_date
         end
       end
     end
@@ -85,14 +87,14 @@ class TimeRange
 
   def combine_the_pieces
     results = []
-    results << %Q|<time class="dtstart dt-start" title="#{@start_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{@start_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if @format == :hcal
+    results << %Q|<time class="dtstart dt-start" title="#{start_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{start_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
     results << format_details_by_list(@start_details, @start_format_list)
-    results << %Q|</time>| if @format == :hcal
+    results << %Q|</time>| if format == :hcal
     if @end_format_list
       results << @conjunction
-      results << %Q|<time class="dtend dt-end" title="#{@end_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{@end_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if @format == :hcal
+      results << %Q|<time class="dtend dt-end" title="#{end_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{end_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
       results << format_details_by_list(@end_details, @end_format_list)
-      results << %Q|</time>| if @format == :hcal
+      results << %Q|</time>| if format == :hcal
     end
     results.join('').html_safe
   end
