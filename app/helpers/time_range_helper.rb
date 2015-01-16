@@ -29,8 +29,8 @@ module TimeRangeHelper
     private
 
     def start_text
-      parts = TimeParts.new(start_time, context_date, from_prefix: same_day?, no_meridian: same_meridian?)
-      parts.to_s(format, "start")
+      part = TimePart.new(start_time, context_date, from_prefix: same_day?, no_meridian: same_meridian?)
+      part.to_s(format, "start")
     end
 
     def conjunction
@@ -44,8 +44,8 @@ module TimeRangeHelper
 
     def end_text
       return unless range?
-      parts = TimeParts.new(end_time, context_date, time_only: same_day?)
-      parts.to_s(format, "end")
+      part = TimePart.new(end_time, context_date, time_only: same_day?)
+      part.to_s(format, "end")
     end
 
     def range?
@@ -61,7 +61,7 @@ module TimeRangeHelper
     end
   end
 
-  class TimeParts
+  class TimePart
     def initialize(time, context, time_only: false, no_meridian: false, from_prefix: false)
       @time = time
       @context = context
@@ -75,7 +75,7 @@ module TimeRangeHelper
     attr_reader :time, :context, :parts
 
     def to_s(format, which)
-      TimePartsRenderer.new(self, format, which).to_s
+      TimePartRenderer.new(self, format, which).to_s
     end
 
     private
@@ -125,7 +125,7 @@ module TimeRangeHelper
     end
   end
 
-  class TimePartsRenderer < Struct.new(:parts, :format, :which)
+  class TimePartRenderer < Struct.new(:part, :format, :which)
     PREFIXES = {
       :hour => " ",
       [nil, :hour] => "",
@@ -150,7 +150,7 @@ module TimeRangeHelper
     private
 
     def text
-      parts.parts.reduce("") do |string, (key, value)|
+      part.parts.reduce("") do |string, (key, value)|
         prefix = (PREFIXES[[@last_key, key]] || PREFIXES[key])
         suffix = SUFFIXES[key]
         @last_key = key
@@ -160,7 +160,7 @@ module TimeRangeHelper
 
     def wrap_in_hcal(string, which)
       css_class = "dt#{which} dt-#{which}"
-      formatted_time = parts.time.strftime('%Y-%m-%dT%H:%M:%S')
+      formatted_time = part.time.strftime('%Y-%m-%dT%H:%M:%S')
       %(<time class="#{css_class}" title="#{formatted_time}" datetime="#{formatted_time}">#{string}</time>)
     end
   end
