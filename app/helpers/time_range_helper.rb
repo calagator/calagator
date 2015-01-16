@@ -29,7 +29,8 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   private
 
   def start_text
-    start_parts.to_s(format, "start")
+    parts = TimeParts.new(start_time, context_date, from_prefix: same_day?, no_meridian: same_meridian?)
+    parts.to_s(format, "start")
   end
 
   def conjunction
@@ -43,15 +44,8 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
   def end_text
     return unless range?
-    end_parts.to_s(format, "end")
-  end
-
-  def start_parts
-    TimeParts.new(start_time, context_date, from_prefix: same_day?, no_meridian: same_meridian?)
-  end
-
-  def end_parts
-    TimeParts.new(end_time, context_date, time_only: same_day?)
+    parts = TimeParts.new(end_time, context_date, time_only: same_day?)
+    parts.to_s(format, "end")
   end
 
   def range?
@@ -122,13 +116,13 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
       string
     end
 
+    private
+
     def wrap_in_hcal(string, which)
       css_class = "dt#{which} dt-#{which}"
       formatted_time = time.strftime('%Y-%m-%dT%H:%M:%S')
       %(<time class="#{css_class}" title="#{formatted_time}" datetime="#{formatted_time}">#{string}</time>)
     end
-
-    private
 
     def get_parts
       parts = {
