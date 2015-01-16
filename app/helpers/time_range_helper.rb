@@ -1,7 +1,14 @@
 module TimeRangeHelper
-  def normalize_time(start_time, end_time=nil, opts=nil)
-    TimeRange.new(start_time, end_time, opts).to_s.html_safe
-    # datetime_format(time,time.min == 0 ? '%I%p' : '%I:%M%p').downcase
+  # Initialize with a single DateTime, a pair of DateTimes,
+  # or an object that responds_to start_time and end_time, and two options
+  # By default (unless :format => :text) include <abbr> tags for hCalendar,
+  # if a :context date is provided, omit unnecessary date parts.
+  def normalize_time(start_time, end_time=nil, format: :hcal, context: nil)
+    if end_time.nil? and start_time.respond_to?(:start_time)
+      end_time = start_time.end_time
+      start_time = start_time.start_time
+    end
+    TimeRange.new(start_time, end_time, format: format, context: context).to_s.html_safe
   end  
 end
 
@@ -15,29 +22,11 @@ class TimeRange
   # "Thursday-Friday, April 3-5, 2008"
   # (context: during 2008) "Thursday April 5, 2009 at 3:30pm through Friday, April 5 at 8:45pm, 2009"
   # (same, context: during 2009) "Thursday April 5 at 3:30pm through Friday, April 5 at 8:45pm"
-
-  def initialize(start_time, end_time=nil, opts=nil)
-    # Initialize with a single DateTime, a pair of DateTimes,
-    # or an object that responds_to start_time and end_time, and
-    # several options
-    #
-    # By default (unless :format => :text) include <abbr> tags for hCalendar,
-    # if a :context date is provided, omit unnecessary date parts.
-    if end_time.is_a? Hash
-      opts = end_time
-      end_time = nil
-    else
-      opts ||= {}
-    end
-    if end_time.nil? and start_time.respond_to?(:start_time)
-      @start_time = start_time.start_time
-      @end_time = start_time.end_time
-    else
-      @start_time = start_time
-      @end_time = end_time
-    end
-    @format = opts[:format] || :hcal
-    @context_date = opts[:context]
+  def initialize(start_time, end_time=nil, format: nil, context: nil)
+    @start_time = start_time
+    @end_time = end_time
+    @format = format
+    @context_date = context
   end
 
   def to_s
@@ -98,7 +87,7 @@ class TimeRange
     results.join('').html_safe
   end
 
-protected
+  private
 
   PREFIXES = {
     :hour => " ",
