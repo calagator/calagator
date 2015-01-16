@@ -30,40 +30,49 @@ class TimeRange
   end
 
   def to_s
+    figure_out_the_general_format
+    remove_stuff_implied_by_context
+    combine_the_pieces
+  end
+
+  private
+
+  def figure_out_the_general_format
     # Assume one date only, equal start/end
-    start_format_list = [nil, :wday, :month, :day, :year, :at, :hour, :min, :suffix, nil]
+    @start_format_list = [nil, :wday, :month, :day, :year, :at, :hour, :min, :suffix, nil]
     
-    start_details = time_details(@start_time)
+    @start_details = time_details(@start_time)
     if @end_time.nil? or @start_time == @end_time
       # One date only, or equal dates.
-      end_format_list = conjunction = nil
+      @end_format_list = @conjunction = nil
     else
-      end_details = time_details(@end_time)
+      @end_details = time_details(@end_time)
       if @start_time.to_date == @end_time.to_date
-        start_format_list[start_format_list.index(:at)] = :from
-        conjunction = @format == :text ? "-" : "&ndash;"
-        if start_details[:suffix] == end_details[:suffix]
+        @start_format_list[@start_format_list.index(:at)] = :from
+        @conjunction = @format == :text ? "-" : "&ndash;"
+        if @start_details[:suffix] == @end_details[:suffix]
           # same day & am/pm
           # Tuesday, April 1, 2008 from 9-11am
-          start_format_list.delete(:suffix)
-          end_format_list = [nil, :hour, :min, :suffix, nil]
+          @start_format_list.delete(:suffix)
+          @end_format_list = [nil, :hour, :min, :suffix, nil]
         else
           # same day, different am/pm
           # Tuesday, April 1, 2008 from 9am-1:30pm
-          end_format_list = [nil, :hour, :min, :suffix, nil]
+          @end_format_list = [nil, :hour, :min, :suffix, nil]
         end
       else
         # different days: 
         # Tuesday, April 1, 2008 at 9am through Wednesday, April 1, 2009 at 1:30pm
-        end_format_list = start_format_list.clone
-        conjunction = " through "
+        @end_format_list = @start_format_list.clone
+        @conjunction = " through "
       end
     end
+  end
     
-    # Remove stuff implied by our context
+  def remove_stuff_implied_by_context
     if @context_date
       # Do it to both start & end lists
-      [[@start_time, start_format_list], [@end_time, end_format_list]].each do |t, list|
+      [[@start_time, @start_format_list], [@end_time, @end_format_list]].each do |t, list|
         if t and list
           list.delete(:year) if @context_date.year == t.year # same year
           [:wday, :month, :day, :at, :from].each do |k|
@@ -72,22 +81,21 @@ class TimeRange
         end
       end
     end
+  end
 
-    # Combine the pieces
+  def combine_the_pieces
     results = []
     results << %Q|<time class="dtstart dt-start" title="#{@start_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{@start_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if @format == :hcal
-    results << format_details_by_list(start_details, start_format_list)
+    results << format_details_by_list(@start_details, @start_format_list)
     results << %Q|</time>| if @format == :hcal
-    if end_format_list
-      results << conjunction
+    if @end_format_list
+      results << @conjunction
       results << %Q|<time class="dtend dt-end" title="#{@end_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{@end_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if @format == :hcal
-      results << format_details_by_list(end_details, end_format_list)
+      results << format_details_by_list(@end_details, @end_format_list)
       results << %Q|</time>| if @format == :hcal
     end
     results.join('').html_safe
   end
-
-  private
 
   PREFIXES = {
     :hour => " ",
