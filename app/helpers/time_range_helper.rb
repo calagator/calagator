@@ -10,62 +10,56 @@ module TimeRangeHelper
     end
     TimeRange.new(start_time, end_time, format, context).to_s.html_safe
   end  
-end
 
-class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
-  # A representation of a time or range of time that can format itself 
-  # in a meaningful way. Examples:
-  # "Thursday, April 3, 2008"
-  # "Thursday, April 3, 2008 at 4pm"
-  # "Thursday, April 3, 2008 from 4:30-6pm"
-  # (context: in the list for today) "11:30am-2pm"
-  # "Thursday-Friday, April 3-5, 2008"
-  # (context: during 2008) "Thursday April 5, 2009 at 3:30pm through Friday, April 5 at 8:45pm, 2009"
-  # (same, context: during 2009) "Thursday April 5 at 3:30pm through Friday, April 5 at 8:45pm"
-  def to_s
-    [start_text, conjunction, end_text].compact.join
-  end
+  class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
+    # A representation of a time or range of time that can format itself 
+    # in a meaningful way. Examples:
+    # "Thursday, April 3, 2008"
+    # "Thursday, April 3, 2008 at 4pm"
+    # "Thursday, April 3, 2008 from 4:30-6pm"
+    # (context: in the list for today) "11:30am-2pm"
+    # "Thursday-Friday, April 3-5, 2008"
+    # (context: during 2008) "Thursday April 5, 2009 at 3:30pm through Friday, April 5 at 8:45pm, 2009"
+    # (same, context: during 2009) "Thursday April 5 at 3:30pm through Friday, April 5 at 8:45pm"
+    def to_s
+      [start_text, conjunction, end_text].compact.join
+    end
 
-  private
+    private
 
-  def start_text
-    parts = TimeParts.new(start_time, context_date, from_prefix: same_day?, no_meridian: same_meridian?)
-    parts.to_s(format, "start")
-  end
+    def start_text
+      parts = TimeParts.new(start_time, context_date, from_prefix: same_day?, no_meridian: same_meridian?)
+      parts.to_s(format, "start")
+    end
 
-  def conjunction
-    return unless range?
-    if same_day?
-      format == :text ? "-" : "&ndash;"
-    else
-      " through "
+    def conjunction
+      return unless range?
+      if same_day?
+        format == :text ? "-" : "&ndash;"
+      else
+        " through "
+      end
+    end
+
+    def end_text
+      return unless range?
+      parts = TimeParts.new(end_time, context_date, time_only: same_day?)
+      parts.to_s(format, "end")
+    end
+
+    def range?
+      end_time.present? && start_time != end_time
+    end
+
+    def same_day?
+      range? && start_time.to_date == end_time.to_date
+    end
+
+    def same_meridian?
+      same_day? && start_time.strftime("%p") == end_time.strftime("%p")
     end
   end
 
-  def end_text
-    return unless range?
-    parts = TimeParts.new(end_time, context_date, time_only: same_day?)
-    parts.to_s(format, "end")
-  end
-
-  def range?
-    end_time.present? && start_time != end_time
-  end
-
-  def same_day?
-    range? && start_time.to_date == end_time.to_date
-  end
-
-  def same_meridian?
-    same_day? && start_time.strftime("%p") == end_time.strftime("%p")
-  end
-
-  # Get the parts for formatting this time, as a hash of 
-  # strings: keys (roughly) match the equivalent methods on DateTime, but only
-  # relevant keys will be filled in.
-  # - if it's exactly noon or midnight, :hour will be eg "noon"
-  #   (with no other time fields)
-  #
   class TimeParts
     def initialize(time, context, time_only: false, no_meridian: false, from_prefix: false)
       @time = time
@@ -80,7 +74,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
     attr_reader :time, :context, :parts
 
     def to_s(format, which)
-      Renderer.new(self, format, which).to_s
+      TimePartsRenderer.new(self, format, which).to_s
     end
 
     private
@@ -128,45 +122,45 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
     def set_at_to_from
       parts[:at] = "from" if parts.has_key?(:at)
     end
+  end
 
-    class Renderer < Struct.new(:parts, :format, :which)
-      PREFIXES = {
-        :hour => " ",
-        [nil, :hour] => "",
-        :year => ", ",
-        :end_hour => " ",
-        :end_year => ", ",
-        :at => " ",
-      }
-      SUFFIXES = {
-        :month => " ",
-        :wday => ", ",
-      }
+  class TimePartsRenderer < Struct.new(:parts, :format, :which)
+    PREFIXES = {
+      :hour => " ",
+      [nil, :hour] => "",
+      :year => ", ",
+      :end_hour => " ",
+      :end_year => ", ",
+      :at => " ",
+    }
+    SUFFIXES = {
+      :month => " ",
+      :wday => ", ",
+    }
 
-      def to_s
-        if format == :hcal
-          wrap_in_hcal(text, which)
-        else
-          text
-        end
+    def to_s
+      if format == :hcal
+        wrap_in_hcal(text, which)
+      else
+        text
       end
+    end
 
-      private
+    private
 
-      def text
-        parts.parts.reduce("") do |string, (key, value)|
-          prefix = (PREFIXES[[@last_key, key]] || PREFIXES[key])
-          suffix = SUFFIXES[key]
-          @last_key = key
-          "#{string}#{prefix}#{value}#{suffix}"
-        end
+    def text
+      parts.parts.reduce("") do |string, (key, value)|
+        prefix = (PREFIXES[[@last_key, key]] || PREFIXES[key])
+        suffix = SUFFIXES[key]
+        @last_key = key
+        "#{string}#{prefix}#{value}#{suffix}"
       end
+    end
 
-      def wrap_in_hcal(string, which)
-        css_class = "dt#{which} dt-#{which}"
-        formatted_time = parts.time.strftime('%Y-%m-%dT%H:%M:%S')
-        %(<time class="#{css_class}" title="#{formatted_time}" datetime="#{formatted_time}">#{string}</time>)
-      end
+    def wrap_in_hcal(string, which)
+      css_class = "dt#{which} dt-#{which}"
+      formatted_time = parts.time.strftime('%Y-%m-%dT%H:%M:%S')
+      %(<time class="#{css_class}" title="#{formatted_time}" datetime="#{formatted_time}">#{string}</time>)
     end
   end
 end
