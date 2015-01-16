@@ -46,9 +46,8 @@ class TimeRange
     @start_details = time_details(start_time)
     if range?
       @end_details = time_details(end_time)
-      if start_time.to_date == end_time.to_date
+      if same_day?
         @start_format_list[@start_format_list.index(:at)] = :from
-        @conjunction = format == :text ? "-" : "&ndash;"
         if @start_details[:suffix] == @end_details[:suffix]
           # same day & am/pm
           # Tuesday, April 1, 2008 from 9-11am
@@ -63,13 +62,29 @@ class TimeRange
         # different days: 
         # Tuesday, April 1, 2008 at 9am through Wednesday, April 1, 2009 at 1:30pm
         @end_format_list = @start_format_list.clone
-        @conjunction = " through "
       end
+    end
+  end
+
+  def conjunction
+    return unless range?
+    if same_day?
+      text_format? ? "-" : "&ndash;"
+    else
+      " through "
     end
   end
 
   def range?
     end_time.present? && start_time != end_time
+  end
+
+  def same_day?
+    start_time.to_date == end_time.to_date
+  end
+
+  def text_format?
+    format == :text
   end
 
   def remove_stuff_implied_by_context
@@ -90,7 +105,7 @@ class TimeRange
     results = []
     results += component(start_time, @start_details, @start_format_list, css_class: "dtstart dt-start")
     if range?
-      results << @conjunction
+      results << conjunction
       results += component(end_time, @end_details, @end_format_list, css_class: "dtend dt-end")
     end
     results.join
