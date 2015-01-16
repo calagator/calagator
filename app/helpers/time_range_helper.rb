@@ -66,15 +66,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   end
 
   def end_parts
-    @end_parts ||= begin
-      if range?
-        parts = TimeParts.new(end_time, context_date)
-        parts = parts.keep_if { |key| [:hour, :min, :suffix].include?(key) } if same_day?
-        parts
-      else
-        {}
-      end
-    end
+    TimeParts.new(end_time, context_date, time_only: same_day?)
   end
 
   def range?
@@ -129,16 +121,17 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   #   (with no other time fields)
   #
   class TimeParts
-    def initialize(time, context)
+    def initialize(time, context, time_only: false)
       @time = time
       @context = context
       @parts = get_parts
       remove_parts_implied_by_context
+      remove_day_parts if time_only
     end
 
     attr_reader :time, :context
 
-    delegate :[], :[]=, :each, :keep_if, :delete, to: :@parts
+    delegate :[], :[]=, :each, :delete, to: :@parts
 
     def replace(key, value)
       @parts[key] = value if @parts.has_key?(key)
@@ -176,6 +169,10 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
       [:wday, :month, :day, :at, :from].each do |key|
         @parts.delete(key)
       end if time.to_date == context
+    end
+
+    def remove_day_parts
+      @parts.keep_if { |key| [:hour, :min, :suffix].include?(key) }
     end
   end
 end
