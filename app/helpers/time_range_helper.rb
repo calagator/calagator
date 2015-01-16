@@ -32,7 +32,6 @@ class TimeRange
   attr_reader :start_time, :end_time, :format, :context_date
 
   def to_s
-    remove_stuff_implied_by_context
     combine_the_pieces
   end
 
@@ -45,6 +44,7 @@ class TimeRange
         details[:at] = "from"
         details.delete(:suffix) if same_meridiem?
       end
+      remove_stuff_implied_by_context start_time, details
       details
     end
   end
@@ -54,6 +54,7 @@ class TimeRange
       if range?
         details = time_details(end_time)
         details = details.keep_if { |key| [:hour, :min, :suffix].include?(key) } if same_day?
+        remove_stuff_implied_by_context end_time, details
         details
       else
         {}
@@ -77,17 +78,12 @@ class TimeRange
     format == :text
   end
 
-  def remove_stuff_implied_by_context
-    if context_date
-      # Do it to both start & end lists
-      [[start_time, start_details], [end_time, end_details]].compact.each do |time, t|
-        next unless time
-        t.delete(:year) if context_date.year == time.year # same year
-        [:wday, :month, :day, :at, :from].each do |k|
-          t.delete(k)
-        end if context_date == time.to_date
-      end
-    end
+  def remove_stuff_implied_by_context time, details
+    return unless time && context_date
+    details.delete(:year) if context_date.year == time.year
+    [:wday, :month, :day, :at, :from].each do |key|
+      details.delete(key)
+    end if time.to_date == context_date
   end
 
   def combine_the_pieces
@@ -117,7 +113,7 @@ class TimeRange
     results << %Q|<time class="#{css_class}" title="#{time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
     results << format_details_by_list(details)
     results << %Q|</time>| if format == :hcal
-    results
+    results.join
   end
 
   PREFIXES = {
@@ -150,7 +146,7 @@ class TimeRange
       results << SUFFIXES[key]
       last_key = key
     end
-    results
+    results.join
   end
 
   def time_details(t)
