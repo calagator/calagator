@@ -32,7 +32,7 @@ class TimeRange
   attr_reader :start_time, :end_time, :format, :context_date
 
   def to_s
-    combine_the_pieces
+    [start_text, conjunction, end_text].compact.join
   end
 
   private
@@ -84,10 +84,6 @@ class TimeRange
     [:wday, :month, :day, :at, :from].each do |key|
       details.delete(key)
     end if time.to_date == context_date
-  end
-
-  def combine_the_pieces
-    [start_text, conjunction, end_text].compact.join
   end
 
   def start_text
