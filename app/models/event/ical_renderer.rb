@@ -75,7 +75,7 @@ class Event < ActiveRecord::Base
 
     def description_range
       return unless multiday?
-      time_range = TimeRange.new(event.start_time, event.end_time, format: :text)
+      time_range = TimeRangeHelper.normalize_time(event, format: :text)
       "This event runs from #{time_range}.\n\nDescription:\n"
     end
 
