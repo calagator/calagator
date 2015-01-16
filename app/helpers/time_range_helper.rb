@@ -39,30 +39,24 @@ class TimeRange
   private
 
   def start_details
-    @start_details ||= time_details(start_time)
+    @start_details ||= begin
+      details = time_details(start_time)
+      if range? && same_day?
+        details[:at] = "from"
+        details.delete(:suffix) if same_meridiem?
+      end
+      details
+    end
   end
 
   def end_details
-    @end_details ||= range? ? time_details(end_time) : {}
-  end
-
-  def start_format_list
-    return @start_format_list if defined?(@start_format_list)
-    list = [nil, :wday, :month, :day, :year, :at, :hour, :min, :suffix, nil]
-    if range? && same_day?
-      list[list.index(:at)] = :from
-      list.delete(:suffix) if same_meridiem?
-    end
-    @start_format_list = list
-  end
-
-  def end_format_list
-    return @end_format_list if defined?(@end_format_list)
-    @end_format_list = if range?
-      if same_day?
-        [nil, :hour, :min, :suffix, nil]
+    @end_details ||= begin
+      if range?
+        details = time_details(end_time)
+        details = details.keep_if { |key| [:hour, :min, :suffix].include?(key) } if same_day?
+        details
       else
-        [nil, :wday, :month, :day, :year, :at, :hour, :min, :suffix, nil]
+        {}
       end
     end
   end
@@ -76,7 +70,7 @@ class TimeRange
   end
 
   def same_meridiem?
-    start_details[:suffix] == end_details[:suffix]
+    start_time.strftime("%p") == end_time.strftime("%p")
   end
 
   def text_format?
@@ -86,13 +80,12 @@ class TimeRange
   def remove_stuff_implied_by_context
     if context_date
       # Do it to both start & end lists
-      [[start_time, start_format_list], [end_time, end_format_list]].each do |t, list|
-        if t and list
-          list.delete(:year) if context_date.year == t.year # same year
-          [:wday, :month, :day, :at, :from].each do |k|
-            list.delete(k)
-          end if context_date == t.to_date
-        end
+      [[start_time, start_details], [end_time, end_details]].compact.each do |time, t|
+        next unless time
+        t.delete(:year) if context_date.year == time.year # same year
+        [:wday, :month, :day, :at, :from].each do |k|
+          t.delete(k)
+        end if context_date == time.to_date
       end
     end
   end
@@ -102,7 +95,7 @@ class TimeRange
   end
 
   def start_text
-    component(start_time, start_details, start_format_list, css_class: "dtstart dt-start")
+    component(start_time, start_details, css_class: "dtstart dt-start")
   end
 
   def conjunction
@@ -116,13 +109,13 @@ class TimeRange
 
   def end_text
     return unless range?
-    component(end_time, end_details, end_format_list, css_class: "dtend dt-end")
+    component(end_time, end_details, css_class: "dtend dt-end")
   end
 
-  def component(time, details, list, css_class: nil)
+  def component(time, details, css_class: nil)
     results = []
     results << %Q|<time class="#{css_class}" title="#{time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
-    results << format_details_by_list(details, list)
+    results << format_details_by_list(details)
     results << %Q|</time>| if format == :hcal
     results
   end
@@ -133,17 +126,14 @@ class TimeRange
     :year => ", ",
     :end_hour => " ",
     :end_year => ", ",
+    :at => " ",
   }
   SUFFIXES = {
     :month => " ",
     :wday => ", ",
   }
-  STRINGS = {
-    :from => " from",
-    :at => " at",
-  }
 
-  def format_details_by_list(details, format_list)
+  def format_details_by_list(details)
     # Given a hash of date details, and a format_list of the keys
     # that should be emitted, produce a list of the pieces.
     #
@@ -153,10 +143,12 @@ class TimeRange
     # preceded :hour and we have a PREFIXES[[nil, :hour]], in
     # which case we'll emit that instead.
     results = []
-    format_list.each_cons(3) do |before, part, after|
-      results << (PREFIXES[[before, part]] || PREFIXES[part])
-      results << (details[part] || STRINGS[part])
-      results << (SUFFIXES[[part, after]] || SUFFIXES[part])
+    last_key = nil
+    details.each do |key, value|
+      results << (PREFIXES[[last_key, key]] || PREFIXES[key])
+      results << value
+      results << SUFFIXES[key]
+      last_key = key
     end
     results
   end
@@ -167,11 +159,13 @@ class TimeRange
     # relevant keys will be filled in.
     # - if it's exactly noon or midnight, :hour will be eg "noon"
     #   (with no other time fields)
+    #
     details = {
       :wday => Date::DAYNAMES[t.wday],
       :month => Date::MONTHNAMES[t.month],
       :day => t.day.to_s,
-      :year => t.year.to_s }
+      :year => t.year.to_s,
+      :at => "at" }
     if t.min == 0
       return details.merge(:hour => "midnight") if t.hour == 0
       return details.merge(:hour => "noon") if t.hour == 12
