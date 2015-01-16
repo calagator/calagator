@@ -44,63 +44,32 @@ class Source < ActiveRecord::Base
   # without setting the reimport flag. If someone really wants to turn off
   # reimporting, they should edit the source.
   def self.find_or_create_from(attrs={})
-    if attrs && attrs[:url]
-      source = Source.find_or_create_by_url(attrs[:url])
-      attrs.each_pair do |key, value|
-        if key.to_sym == :reimport
-          source.reimport = true if ! source.reimport && value
-        else
-          source.send("#{key}=", value) if source.send(key) != value
-        end
-      end
-      source.save if source.changed?
-      return source
-    else
-      return Source.new(attrs)
-    end
+    return new(attrs) unless attrs[:url]
+
+    source = find_or_create_by_url(attrs[:url])
+    source.reimport = true if attrs.delete(:reimport)
+    source.attributes = attrs
+    source.save if source.changed?
+    source
   end
 
   # Create events for this source. Returns the events created. URL must be set
   # for this source for this to work.
   def create_events!(opts={})
-    cutoff = Time.now.yesterday # All events before this date will be skipped
-    events = []
-    self.to_events(opts).each do |event|
-      if opts[:skip_old]
-        next if event.title.blank? && event.description.blank? && event.url.blank?
-        next if event.old?
-      end
-
-      # Skip invalid events that start after they end
-      next if event.end_time && event.end_time < event.start_time
-
-      # convert to local time, because time zone is simply discarded when event is saved
-      event.start_time.localtime
-      event.end_time.localtime if event.end_time
-
-      # clear duplicate_of_id field in case to_events picked up orphaned duplicate
-      # TODO clear the duplicate_of_id at the point where the object is created, not down here
-      event.duplicate_of_id = nil if event.duplicate_of_id
-      event.save!
-      if event.venue
-        event.venue.duplicate_of_id = nil if event.venue.duplicate_of_id
-        event.venue.save! if event.venue
-      end
-      events << event
-    end
-    self.save!
-    return events
+    save!
+    events = to_events(opts).select(&:valid?)
+    events.reject!(&:old?) if opts[:skip_old]
+    events.each(&:save!)
+    events
   end
 
   # Normalize the URL.
   def url=(value)
-    begin
-      url = URI.parse(value.strip)
-      url.scheme = 'http' unless ['http','https','ftp'].include?(url.scheme) || url.scheme.nil?
-      write_attribute(:url, url.scheme.nil? ? 'http://'+value.strip : url.to_s)
-    rescue URI::InvalidURIError
-      false
-    end
+    url = URI.parse(value.strip)
+    url.scheme = 'http' unless ['http','https','ftp'].include?(url.scheme) || url.scheme.nil?
+    write_attribute(:url, url.scheme.nil? ? 'http://'+value.strip : url.to_s)
+  rescue URI::InvalidURIError
+    false
   end
 
   # Returns an Array of Event objects that were read from this source.
@@ -114,25 +83,21 @@ class Source < ActiveRecord::Base
     self.imported_at = Time.now
     opts[:url] ||= self.url
     opts[:source] = self
-    SourceParser.to_events(opts)
+    Source::Parser.to_events(opts)
   end
 
   # Return the name of the source, which can be its title or URL.
   def name
-    [title,url].detect{|t| !t.blank?}
+    [title, url].detect(&:present?)
   end
 
-private
+  private
 
   # Ensure that the URL for this source is valid.
   def assert_url
-    begin
-      URI.parse(url)
-      return true
-    rescue URI::InvalidURIError => e
-      errors.add("url", "has invalid format")
-      return false
-    end
+    URI.parse(url)
+  rescue URI::InvalidURIError
+    errors.add :url, "has invalid format"
+    false
   end
-
 end

@@ -1,34 +1,30 @@
 require 'spec_helper'
 
-describe SourceParser, "when reading content", :type => :model do
+describe Source::Parser, "when reading content", :type => :model do
   it "should read from a normal URL" do
     stub_request(:get, "http://a.real/~url").to_return(body: "42")
-    expect(SourceParser.read_url("http://a.real/~url")).to eq "42"
+    expect(Source::Parser.read_url("http://a.real/~url")).to eq "42"
   end
 
   it "should read from a wacky URL" do
-    expect { SourceParser.read_url("not://a.real/~url") }.to raise_error(Errno::ENOENT)
+    expect { Source::Parser.read_url("not://a.real/~url") }.to raise_error(Errno::ENOENT)
   end
 end
 
-describe SourceParser, "when subclassing", :type => :model do
-  it "should demand that to_hcals is implemented" do
-    expect{ SourceParser::Base.to_hcals }.to raise_error(NotImplementedError)
-  end
-
-  it "should demand that to_events is implemented" do
-    expect{ SourceParser::Base.to_events }.to raise_error NotImplementedError
+describe Source::Parser, "when subclassing", :type => :model do
+  it "should demand that #to_events is implemented" do
+    expect{ Source::Parser.new.to_events }.to raise_error NotImplementedError
   end
 end
 
-describe SourceParser, "when parsing events", :type => :model do
+describe Source::Parser, "when parsing events", :type => :model do
   it "should have site-specific parsers first, then generics" do
-    expect(SourceParser.parsers.to_a).to eq [
-      SourceParser::Facebook,
-      SourceParser::Meetup,
-      SourceParser::Plancast,
-      SourceParser::Hcal,
-      SourceParser::Ical,
+    expect(Source::Parser.parsers.to_a).to eq [
+      Source::Parser::Facebook,
+      Source::Parser::Meetup,
+      Source::Parser::Plancast,
+      Source::Parser::Hcal,
+      Source::Parser::Ical,
     ]
   end
 
@@ -40,13 +36,13 @@ describe SourceParser, "when parsing events", :type => :model do
       start_time: "2010-01-01 12:00:00 UTC",
       end_time: "2010-01-01 13:00:00 UTC"
     }.to_json
-    stub_request(:get, "http://graph.facebook.com/omg").to_return(body: body)
+    stub_request(:get, "http://graph.facebook.com/omg").to_return(body: body, headers: { content_type: "application/json" })
 
-    expect(SourceParser.to_events(url: "http://www.facebook.com/events/omg")).to have(1).event
+    expect(Source::Parser.to_events(url: "http://www.facebook.com/events/omg")).to have(1).event
   end
 end
 
-describe SourceParser, "checking duplicates when importing", :type => :model do
+describe Source::Parser, "checking duplicates when importing", :type => :model do
   describe "with two identical events" do
     before :each do
       @venue_size_before_import = Venue.count
@@ -113,7 +109,7 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
 
   describe "should create two events when importing two non-identical events" do
     # This behavior is tested under
-    #  describe SourceParser::Hcal, "with hCalendar events" do
+    #  describe Source::Parser::Hcal, "with hCalendar events" do
     #  'it "should parse a page with multiple events" '
   end
 
@@ -195,14 +191,14 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
   end
 
   describe "choosing parsers by matching URLs" do
-    { "SourceParser::Plancast" => "http://plancast.com/p/3cos/indiewebcamp",
-      "SourceParser::Meetup"   => "http://www.meetup.com/pdxweb/events/23287271/" }.each do |parser_name, url|
+    { "Source::Parser::Plancast" => "http://plancast.com/p/3cos/indiewebcamp",
+      "Source::Parser::Meetup"   => "http://www.meetup.com/pdxweb/events/23287271/" }.each do |parser_name, url|
 
       it "should only invoke the #{parser_name} parser when given #{url}" do
         parser = parser_name.constantize
-        expect(parser).to receive(:to_events).and_return([Event.new])
-        SourceParser.parsers.reject{|p| p == parser }.each do |other_parser|
-          expect(other_parser).not_to receive :to_events
+        expect_any_instance_of(parser).to receive(:to_events).and_return([Event.new])
+        Source::Parser.parsers.reject{|p| p == parser }.each do |other_parser|
+          expect_any_instance_of(other_parser).not_to receive :to_events
         end
 
         stub_request(:get, url)
@@ -212,22 +208,22 @@ describe SourceParser, "checking duplicates when importing", :type => :model do
   end
 end
 
-describe SourceParser, "labels", :type => :model do
+describe Source::Parser, "labels", :type => :model do
   it "should have labels" do
-    expect(SourceParser.labels).not_to be_blank
+    expect(Source::Parser.labels).not_to be_blank
   end
 
   it "should have labels for each parser" do
-    expect(SourceParser.labels.size).to eq SourceParser.parsers.size
+    expect(Source::Parser.labels.size).to eq Source::Parser.parsers.size
   end
 
   it "should use the label of the parser, as a string" do
-    label = SourceParser.parsers.first.label.to_s
-    expect(SourceParser.labels).to include label
+    label = Source::Parser.parsers.first.label.to_s
+    expect(Source::Parser.labels).to include label
   end
 
   it "should have sorted labels" do
-    labels = SourceParser.labels
+    labels = Source::Parser.labels
     sorted = labels.sort_by(&:downcase)
 
     expect(labels).to eq sorted

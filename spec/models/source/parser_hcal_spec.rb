@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe SourceParser::Hcal, "with hCalendar events", :type => :model do
+describe Source::Parser::Hcal, "with hCalendar events", :type => :model do
   it "should parse hcal" do
     url = "http://mysample.hcal/"
     stub_request(:get, url).to_return(body: read_sample('hcal_single.xml'))
@@ -46,12 +46,12 @@ describe SourceParser::Hcal, "with hCalendar events", :type => :model do
   end
 end
 
-describe SourceParser::Hcal, "with hCalendar to Venue parsing", :type => :model do
+describe Source::Parser::Hcal, "with hCalendar to Venue parsing", :type => :model do
   it "should extract an Venue from an hCalendar text" do
     url = "http://mysample.hcal/"
     stub_request(:get, url).to_return(body: read_sample('hcal_upcoming_v1.html'))
 
-    events = SourceParser::Hcal.to_events(url: url)
+    events = Source::Parser::Hcal.to_events(url: url)
     event = events.first
     venue = event.venue
 

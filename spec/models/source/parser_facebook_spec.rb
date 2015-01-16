@@ -1,13 +1,13 @@
 require 'spec_helper'
 
-describe SourceParser::Facebook, :type => :model do
+describe Source::Parser::Facebook, :type => :model do
 
   describe "when importing an event" do
     before(:each) do
       url = 'http://facebook.com/event.php?eid=247619485255249'
       graph_url = "http://graph.facebook.com/247619485255249"
       stub_request(:get, graph_url).to_return(body: read_sample('facebook.json'), headers: { content_type: "application/json" })
-      @events = SourceParser::Facebook.to_events(url: url)
+      @events = Source::Parser::Facebook.to_events(url: url)
       @event = @events.first
     end
 
@@ -42,7 +42,7 @@ describe SourceParser::Facebook, :type => :model do
 
   describe "when parsing Facebook URLs" do
     def should_parse(url)
-      expect(url.match(SourceParser::Facebook.url_pattern)[1]).to eq "247619485255249"
+      expect(url.match(Source::Parser::Facebook.url_pattern)[1]).to eq "247619485255249"
     end
 
     it "should parse a GET-style URL" do
