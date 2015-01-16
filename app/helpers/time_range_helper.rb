@@ -56,12 +56,11 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
   def start_parts
     @start_parts ||= begin
-      parts = TimeParts.new(start_time)
+      parts = TimeParts.new(start_time, context_date)
       if range? && same_day?
-        parts[:at] = "from"
+        parts.replace(:at, "from")
         parts.delete(:suffix) if same_meridian?
       end
-      remove_parts_implied_by_context start_time, parts
       parts
     end
   end
@@ -69,9 +68,8 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   def end_parts
     @end_parts ||= begin
       if range?
-        parts = TimeParts.new(end_time)
+        parts = TimeParts.new(end_time, context_date)
         parts = parts.keep_if { |key| [:hour, :min, :suffix].include?(key) } if same_day?
-        remove_parts_implied_by_context end_time, parts
         parts
       else
         {}
@@ -89,14 +87,6 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
   def same_meridian?
     start_time.strftime("%p") == end_time.strftime("%p")
-  end
-
-  def remove_parts_implied_by_context time, parts
-    return unless time && context_date
-    parts.delete(:year) if context_date.year == time.year
-    [:wday, :month, :day, :at, :from].each do |key|
-      parts.delete(key)
-    end if time.to_date == context_date
   end
 
   PREFIXES = {
@@ -139,14 +129,20 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   #   (with no other time fields)
   #
   class TimeParts
-    def initialize(time)
+    def initialize(time, context)
       @time = time
+      @context = context
       @parts = get_parts
+      remove_parts_implied_by_context
     end
 
-    attr_reader :time
+    attr_reader :time, :context
 
     delegate :[], :[]=, :each, :keep_if, :delete, to: :@parts
+
+    def replace(key, value)
+      @parts[key] = value if @parts.has_key?(key)
+    end
 
     private
 
@@ -172,6 +168,14 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
       parts.merge(:hour => h.to_s,
                     :min => m,
                     :suffix => suffix)
+    end
+
+    def remove_parts_implied_by_context
+      return unless time && context
+      @parts.delete(:year) if context.year == time.year
+      [:wday, :month, :day, :at, :from].each do |key|
+        @parts.delete(key)
+      end if time.to_date == context
     end
   end
 end
