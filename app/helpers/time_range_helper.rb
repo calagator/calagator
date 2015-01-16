@@ -55,14 +55,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   end
 
   def start_parts
-    @start_parts ||= begin
-      parts = TimeParts.new(start_time, context_date)
-      if range? && same_day?
-        parts.replace(:at, "from")
-        parts.delete(:suffix) if same_meridian?
-      end
-      parts
-    end
+    TimeParts.new(start_time, context_date, from_prefix: same_day?, no_meridian: same_meridian?)
   end
 
   def end_parts
@@ -74,11 +67,11 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   end
 
   def same_day?
-    start_time.to_date == end_time.to_date
+    range? && start_time.to_date == end_time.to_date
   end
 
   def same_meridian?
-    start_time.strftime("%p") == end_time.strftime("%p")
+    same_day? && start_time.strftime("%p") == end_time.strftime("%p")
   end
 
   PREFIXES = {
@@ -121,21 +114,19 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   #   (with no other time fields)
   #
   class TimeParts
-    def initialize(time, context, time_only: false)
+    def initialize(time, context, time_only: false, no_meridian: false, from_prefix: false)
       @time = time
       @context = context
       @parts = get_parts
       remove_parts_implied_by_context
       remove_day_parts if time_only
+      remove_suffix if no_meridian
+      set_at_to_from if from_prefix
     end
 
     attr_reader :time, :context
 
-    delegate :[], :[]=, :each, :delete, to: :@parts
-
-    def replace(key, value)
-      @parts[key] = value if @parts.has_key?(key)
-    end
+    delegate :[], :[]=, :each, to: :@parts
 
     private
 
@@ -173,6 +164,14 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
     def remove_day_parts
       @parts.keep_if { |key| [:hour, :min, :suffix].include?(key) }
+    end
+
+    def remove_suffix
+      @parts.delete(:suffix)
+    end
+
+    def set_at_to_from
+      @parts[:at] = "from" if @parts.has_key?(:at)
     end
   end
 end
