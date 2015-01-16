@@ -28,25 +28,51 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
   private
 
-  def start_details
-    @start_details ||= begin
-      details = time_details(start_time)
-      if range? && same_day?
-        details[:at] = "from"
-        details.delete(:suffix) if same_meridiem?
-      end
-      remove_stuff_implied_by_context start_time, details
-      details
+  def start_text
+    text(start_time, start_parts, css_class: "dtstart dt-start")
+  end
+
+  def conjunction
+    return unless range?
+    if same_day?
+      format == :text ? "-" : "&ndash;"
+    else
+      " through "
     end
   end
 
-  def end_details
-    @end_details ||= begin
+  def end_text
+    return unless range?
+    text(end_time, end_parts, css_class: "dtend dt-end")
+  end
+
+  def text(time, parts, css_class: nil)
+    results = []
+    results << %Q|<time class="#{css_class}" title="#{time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
+    results << format_parts_by_list(parts)
+    results << %Q|</time>| if format == :hcal
+    results.join
+  end
+
+  def start_parts
+    @start_parts ||= begin
+      parts = time_parts(start_time)
+      if range? && same_day?
+        parts[:at] = "from"
+        parts.delete(:suffix) if same_meridian?
+      end
+      remove_parts_implied_by_context start_time, parts
+      parts
+    end
+  end
+
+  def end_parts
+    @end_parts ||= begin
       if range?
-        details = time_details(end_time)
-        details = details.keep_if { |key| [:hour, :min, :suffix].include?(key) } if same_day?
-        remove_stuff_implied_by_context end_time, details
-        details
+        parts = time_parts(end_time)
+        parts = parts.keep_if { |key| [:hour, :min, :suffix].include?(key) } if same_day?
+        remove_parts_implied_by_context end_time, parts
+        parts
       else
         {}
       end
@@ -61,46 +87,16 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
     start_time.to_date == end_time.to_date
   end
 
-  def same_meridiem?
+  def same_meridian?
     start_time.strftime("%p") == end_time.strftime("%p")
   end
 
-  def text_format?
-    format == :text
-  end
-
-  def remove_stuff_implied_by_context time, details
+  def remove_parts_implied_by_context time, parts
     return unless time && context_date
-    details.delete(:year) if context_date.year == time.year
+    parts.delete(:year) if context_date.year == time.year
     [:wday, :month, :day, :at, :from].each do |key|
-      details.delete(key)
+      parts.delete(key)
     end if time.to_date == context_date
-  end
-
-  def start_text
-    component(start_time, start_details, css_class: "dtstart dt-start")
-  end
-
-  def conjunction
-    return unless range?
-    if same_day?
-      text_format? ? "-" : "&ndash;"
-    else
-      " through "
-    end
-  end
-
-  def end_text
-    return unless range?
-    component(end_time, end_details, css_class: "dtend dt-end")
-  end
-
-  def component(time, details, css_class: nil)
-    results = []
-    results << %Q|<time class="#{css_class}" title="#{time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
-    results << format_details_by_list(details)
-    results << %Q|</time>| if format == :hcal
-    results.join
   end
 
   PREFIXES = {
@@ -116,8 +112,8 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
     :wday => ", ",
   }
 
-  def format_details_by_list(details)
-    # Given a hash of date details, and a format_list of the keys
+  def format_parts_by_list(parts)
+    # Given a hash of date parts, and a format_list of the keys
     # that should be emitted, produce a list of the pieces.
     #
     # Include any extra pieces implied by juxtaposition: eg,
@@ -127,7 +123,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
     # which case we'll emit that instead.
     results = []
     last_key = nil
-    details.each do |key, value|
+    parts.each do |key, value|
       results << (PREFIXES[[last_key, key]] || PREFIXES[key])
       results << value
       results << SUFFIXES[key]
@@ -136,22 +132,22 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
     results.join
   end
 
-  def time_details(t)
+  def time_parts(t)
     # Get the parts for formatting this time, as a hash of 
     # strings: keys (roughly) match the equivalent methods on DateTime, but only
     # relevant keys will be filled in.
     # - if it's exactly noon or midnight, :hour will be eg "noon"
     #   (with no other time fields)
     #
-    details = {
+    parts = {
       :wday => Date::DAYNAMES[t.wday],
       :month => Date::MONTHNAMES[t.month],
       :day => t.day.to_s,
       :year => t.year.to_s,
       :at => "at" }
     if t.min == 0
-      return details.merge(:hour => "midnight") if t.hour == 0
-      return details.merge(:hour => "noon") if t.hour == 12
+      return parts.merge(:hour => "midnight") if t.hour == 0
+      return parts.merge(:hour => "noon") if t.hour == 12
     end
     if t.hour >= 12
       suffix = "pm"
@@ -161,7 +157,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
       h = t.hour == 0 ? 12 : t.hour
     end
     m = ":%02d" % t.min if t.min != 0
-    details.merge(:hour => h.to_s,
+    parts.merge(:hour => h.to_s,
                   :min => m,
                   :suffix => suffix)
   end
