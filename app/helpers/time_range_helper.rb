@@ -77,14 +77,10 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
       set_at_to_from if from_prefix
     end
 
-    attr_reader :time, :context
+    attr_reader :time, :context, :parts
 
     def to_s(format, which)
       Renderer.new(self, format, which).to_s
-    end
-
-    def each(&block)
-      @parts.each(&block)
     end
 
     private
@@ -115,22 +111,22 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
     def remove_parts_implied_by_context
       return unless time && context
-      @parts.delete(:year) if context.year == time.year
+      parts.delete(:year) if context.year == time.year
       [:wday, :month, :day, :at, :from].each do |key|
-        @parts.delete(key)
+        parts.delete(key)
       end if time.to_date == context
     end
 
     def remove_day_parts
-      @parts.keep_if { |key| [:hour, :min, :suffix].include?(key) }
+      parts.keep_if { |key| [:hour, :min, :suffix].include?(key) }
     end
 
     def remove_suffix
-      @parts.delete(:suffix)
+      parts.delete(:suffix)
     end
 
     def set_at_to_from
-      @parts[:at] = "from" if @parts.has_key?(:at)
+      parts[:at] = "from" if parts.has_key?(:at)
     end
 
     class Renderer < Struct.new(:parts, :format, :which)
@@ -158,15 +154,12 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
       private
 
       def text
-        results = []
-        last_key = nil
-        parts.each do |key, value|
-          results << (PREFIXES[[last_key, key]] || PREFIXES[key])
-          results << value
-          results << SUFFIXES[key]
-          last_key = key
+        parts.parts.reduce("") do |string, (key, value)|
+          prefix = (PREFIXES[[@last_key, key]] || PREFIXES[key])
+          suffix = SUFFIXES[key]
+          @last_key = key
+          "#{string}#{prefix}#{value}#{suffix}"
         end
-        results.join
       end
 
       def wrap_in_hcal(string, which)
