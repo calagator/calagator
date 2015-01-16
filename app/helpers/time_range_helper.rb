@@ -8,11 +8,11 @@ module TimeRangeHelper
       end_time = start_time.end_time
       start_time = start_time.start_time
     end
-    TimeRange.new(start_time, end_time, format: format, context: context).to_s.html_safe
+    TimeRange.new(start_time, end_time, format, context).to_s.html_safe
   end  
 end
 
-class TimeRange
+class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   # A representation of a time or range of time that can format itself 
   # in a meaningful way. Examples:
   # "Thursday, April 3, 2008"
@@ -22,15 +22,6 @@ class TimeRange
   # "Thursday-Friday, April 3-5, 2008"
   # (context: during 2008) "Thursday April 5, 2009 at 3:30pm through Friday, April 5 at 8:45pm, 2009"
   # (same, context: during 2009) "Thursday April 5 at 3:30pm through Friday, April 5 at 8:45pm"
-  def initialize(start_time, end_time=nil, format: nil, context: nil)
-    @start_time = start_time
-    @end_time = end_time
-    @format = format
-    @context_date = context
-  end
-
-  attr_reader :start_time, :end_time, :format, :context_date
-
   def to_s
     [start_text, conjunction, end_text].compact.join
   end
