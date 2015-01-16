@@ -79,50 +79,15 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
     attr_reader :time, :context
 
-    PREFIXES = {
-      :hour => " ",
-      [nil, :hour] => "",
-      :year => ", ",
-      :end_hour => " ",
-      :end_year => ", ",
-      :at => " ",
-    }
-    SUFFIXES = {
-      :month => " ",
-      :wday => ", ",
-    }
+    def to_s(format, which)
+      Renderer.new(self, format, which).to_s
+    end
 
-    def to_s(format = :text, which = "start")
-      # Given a hash of date parts, and a format_list of the keys
-      # that should be emitted, produce a list of the pieces.
-      #
-      # Include any extra pieces implied by juxtaposition: eg,
-      # if PREFIXES[:hour] is " ", include a " " piece just
-      # before the hour, unless nil immediately
-      # preceded :hour and we have a PREFIXES[[nil, :hour]], in
-      # which case we'll emit that instead.
-      results = []
-      last_key = nil
-      @parts.each do |key, value|
-        results << (PREFIXES[[last_key, key]] || PREFIXES[key])
-        results << value
-        results << SUFFIXES[key]
-        last_key = key
-      end
-      string = results.join
-
-      string = wrap_in_hcal(string, which) if format == :hcal
-
-      string
+    def each(&block)
+      @parts.each(&block)
     end
 
     private
-
-    def wrap_in_hcal(string, which)
-      css_class = "dt#{which} dt-#{which}"
-      formatted_time = time.strftime('%Y-%m-%dT%H:%M:%S')
-      %(<time class="#{css_class}" title="#{formatted_time}" datetime="#{formatted_time}">#{string}</time>)
-    end
 
     def get_parts
       parts = {
@@ -166,6 +131,49 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
     def set_at_to_from
       @parts[:at] = "from" if @parts.has_key?(:at)
+    end
+
+    class Renderer < Struct.new(:parts, :format, :which)
+      PREFIXES = {
+        :hour => " ",
+        [nil, :hour] => "",
+        :year => ", ",
+        :end_hour => " ",
+        :end_year => ", ",
+        :at => " ",
+      }
+      SUFFIXES = {
+        :month => " ",
+        :wday => ", ",
+      }
+
+      def to_s
+        if format == :hcal
+          wrap_in_hcal(text, which)
+        else
+          text
+        end
+      end
+
+      private
+
+      def text
+        results = []
+        last_key = nil
+        parts.each do |key, value|
+          results << (PREFIXES[[last_key, key]] || PREFIXES[key])
+          results << value
+          results << SUFFIXES[key]
+          last_key = key
+        end
+        results.join
+      end
+
+      def wrap_in_hcal(string, which)
+        css_class = "dt#{which} dt-#{which}"
+        formatted_time = parts.time.strftime('%Y-%m-%dT%H:%M:%S')
+        %(<time class="#{css_class}" title="#{formatted_time}" datetime="#{formatted_time}">#{string}</time>)
+      end
     end
   end
 end
