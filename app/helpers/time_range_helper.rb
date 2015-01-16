@@ -66,15 +66,6 @@ class TimeRange
     end
   end
 
-  def conjunction
-    return unless range?
-    if same_day?
-      text_format? ? "-" : "&ndash;"
-    else
-      " through "
-    end
-  end
-
   def range?
     end_time.present? && start_time != end_time
   end
@@ -102,13 +93,25 @@ class TimeRange
   end
 
   def combine_the_pieces
-    results = []
-    results += component(start_time, @start_details, @start_format_list, css_class: "dtstart dt-start")
-    if range?
-      results << conjunction
-      results += component(end_time, @end_details, @end_format_list, css_class: "dtend dt-end")
+    [start_text, conjunction, end_text].compact.join
+  end
+
+  def start_text
+    component(start_time, @start_details, @start_format_list, css_class: "dtstart dt-start")
+  end
+
+  def conjunction
+    return unless range?
+    if same_day?
+      text_format? ? "-" : "&ndash;"
+    else
+      " through "
     end
-    results.join
+  end
+
+  def end_text
+    return unless range?
+    component(end_time, @end_details, @end_format_list, css_class: "dtend dt-end")
   end
 
   def component(time, details, list, css_class: nil)
