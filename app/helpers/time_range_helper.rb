@@ -32,16 +32,18 @@ class TimeRange
   attr_reader :start_time, :end_time, :format, :context_date
 
   def to_s
-    figure_out_the_general_format
     remove_stuff_implied_by_context
     combine_the_pieces
   end
 
   private
 
-  def figure_out_the_general_format
-    @start_details = time_details(start_time)
-    @end_details = time_details(end_time) if range?
+  def start_details
+    @start_details ||= time_details(start_time)
+  end
+
+  def end_details
+    @end_details ||= range? ? time_details(end_time) : {}
   end
 
   def start_format_list
@@ -74,7 +76,7 @@ class TimeRange
   end
 
   def same_meridiem?
-    time_details(start_time)[:suffix] == time_details(end_time)[:suffix]
+    start_details[:suffix] == end_details[:suffix]
   end
 
   def text_format?
@@ -100,7 +102,7 @@ class TimeRange
   end
 
   def start_text
-    component(start_time, @start_details, start_format_list, css_class: "dtstart dt-start")
+    component(start_time, start_details, start_format_list, css_class: "dtstart dt-start")
   end
 
   def conjunction
@@ -114,7 +116,7 @@ class TimeRange
 
   def end_text
     return unless range?
-    component(end_time, @end_details, end_format_list, css_class: "dtend dt-end")
+    component(end_time, end_details, end_format_list, css_class: "dtend dt-end")
   end
 
   def component(time, details, list, css_class: nil)
