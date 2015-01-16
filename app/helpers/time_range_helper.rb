@@ -49,7 +49,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   def text(time, parts, css_class: nil)
     results = []
     results << %Q|<time class="#{css_class}" title="#{time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
-    results << format_parts_by_list(parts)
+    results << parts.to_s
     results << %Q|</time>| if format == :hcal
     results.join
   end
@@ -74,39 +74,6 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
     same_day? && start_time.strftime("%p") == end_time.strftime("%p")
   end
 
-  PREFIXES = {
-    :hour => " ",
-    [nil, :hour] => "",
-    :year => ", ",
-    :end_hour => " ",
-    :end_year => ", ",
-    :at => " ",
-  }
-  SUFFIXES = {
-    :month => " ",
-    :wday => ", ",
-  }
-
-  def format_parts_by_list(parts)
-    # Given a hash of date parts, and a format_list of the keys
-    # that should be emitted, produce a list of the pieces.
-    #
-    # Include any extra pieces implied by juxtaposition: eg,
-    # if PREFIXES[:hour] is " ", include a " " piece just 
-    # before the hour, unless nil immediately 
-    # preceded :hour and we have a PREFIXES[[nil, :hour]], in
-    # which case we'll emit that instead.
-    results = []
-    last_key = nil
-    parts.each do |key, value|
-      results << (PREFIXES[[last_key, key]] || PREFIXES[key])
-      results << value
-      results << SUFFIXES[key]
-      last_key = key
-    end
-    results.join
-  end
-
   # Get the parts for formatting this time, as a hash of 
   # strings: keys (roughly) match the equivalent methods on DateTime, but only
   # relevant keys will be filled in.
@@ -126,7 +93,38 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
     attr_reader :time, :context
 
-    delegate :[], :[]=, :each, to: :@parts
+    PREFIXES = {
+      :hour => " ",
+      [nil, :hour] => "",
+      :year => ", ",
+      :end_hour => " ",
+      :end_year => ", ",
+      :at => " ",
+    }
+    SUFFIXES = {
+      :month => " ",
+      :wday => ", ",
+    }
+
+    def to_s
+      # Given a hash of date parts, and a format_list of the keys
+      # that should be emitted, produce a list of the pieces.
+      #
+      # Include any extra pieces implied by juxtaposition: eg,
+      # if PREFIXES[:hour] is " ", include a " " piece just
+      # before the hour, unless nil immediately
+      # preceded :hour and we have a PREFIXES[[nil, :hour]], in
+      # which case we'll emit that instead.
+      results = []
+      last_key = nil
+      @parts.each do |key, value|
+        results << (PREFIXES[[last_key, key]] || PREFIXES[key])
+        results << value
+        results << SUFFIXES[key]
+        last_key = key
+      end
+      results.join
+    end
 
     private
 
