@@ -134,23 +134,17 @@ class TimeRange
     results
   end
 
-  def date_details(d)
-    # Get the parts for formatting a date, as a hash of 
-    # strings: keys (roughly) match the equivalent methods on Date, but only
-    # relevant keys will be filled in.
-    { :wday => Date::DAYNAMES[d.wday],
-      :month => Date::MONTHNAMES[d.month],
-      :day => d.day.to_s,
-      :year => d.year.to_s }
-  end
-
   def time_details(t)
     # Get the parts for formatting this time, as a hash of 
     # strings: keys (roughly) match the equivalent methods on DateTime, but only
     # relevant keys will be filled in.
     # - if it's exactly noon or midnight, :hour will be eg "noon"
     #   (with no other time fields)
-    details = date_details(t)
+    details = {
+      :wday => Date::DAYNAMES[t.wday],
+      :month => Date::MONTHNAMES[t.month],
+      :day => t.day.to_s,
+      :year => t.year.to_s }
     if t.min == 0
       return details.merge(:hour => "midnight") if t.hour == 0
       return details.merge(:hour => "noon") if t.hour == 12
