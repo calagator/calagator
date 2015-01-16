@@ -56,7 +56,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
   def start_parts
     @start_parts ||= begin
-      parts = time_parts(start_time)
+      parts = TimeParts.new(start_time)
       if range? && same_day?
         parts[:at] = "from"
         parts.delete(:suffix) if same_meridian?
@@ -69,7 +69,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   def end_parts
     @end_parts ||= begin
       if range?
-        parts = time_parts(end_time)
+        parts = TimeParts.new(end_time)
         parts = parts.keep_if { |key| [:hour, :min, :suffix].include?(key) } if same_day?
         remove_parts_implied_by_context end_time, parts
         parts
@@ -132,33 +132,46 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
     results.join
   end
 
-  def time_parts(t)
-    # Get the parts for formatting this time, as a hash of 
-    # strings: keys (roughly) match the equivalent methods on DateTime, but only
-    # relevant keys will be filled in.
-    # - if it's exactly noon or midnight, :hour will be eg "noon"
-    #   (with no other time fields)
-    #
-    parts = {
-      :wday => Date::DAYNAMES[t.wday],
-      :month => Date::MONTHNAMES[t.month],
-      :day => t.day.to_s,
-      :year => t.year.to_s,
-      :at => "at" }
-    if t.min == 0
-      return parts.merge(:hour => "midnight") if t.hour == 0
-      return parts.merge(:hour => "noon") if t.hour == 12
+  # Get the parts for formatting this time, as a hash of 
+  # strings: keys (roughly) match the equivalent methods on DateTime, but only
+  # relevant keys will be filled in.
+  # - if it's exactly noon or midnight, :hour will be eg "noon"
+  #   (with no other time fields)
+  #
+  class TimeParts
+    def initialize(time)
+      @time = time
+      @parts = get_parts
     end
-    if t.hour >= 12
-      suffix = "pm"
-      h = t.hour - (t.hour > 12 ? 12 : 0)
-    else
-      suffix = "am"
-      h = t.hour == 0 ? 12 : t.hour
+
+    attr_reader :time
+
+    delegate :[], :[]=, :each, :keep_if, :delete, to: :@parts
+
+    private
+
+    def get_parts
+      parts = {
+        :wday => Date::DAYNAMES[time.wday],
+        :month => Date::MONTHNAMES[time.month],
+        :day => time.day.to_s,
+        :year => time.year.to_s,
+        :at => "at" }
+      if time.min == 0
+        return parts.merge(:hour => "midnight") if time.hour == 0
+        return parts.merge(:hour => "noon") if time.hour == 12
+      end
+      if time.hour >= 12
+        suffix = "pm"
+        h = time.hour - (time.hour > 12 ? 12 : 0)
+      else
+        suffix = "am"
+        h = time.hour == 0 ? 12 : time.hour
+      end
+      m = ":%02d" % time.min if time.min != 0
+      parts.merge(:hour => h.to_s,
+                    :min => m,
+                    :suffix => suffix)
     end
-    m = ":%02d" % t.min if t.min != 0
-    parts.merge(:hour => h.to_s,
-                  :min => m,
-                  :suffix => suffix)
   end
 end
