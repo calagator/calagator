@@ -40,21 +40,18 @@ class TimeRange
   private
 
   def figure_out_the_general_format
-    # Assume one date only, equal start/end
-    @start_format_list = [nil, :wday, :month, :day, :year, :at, :hour, :min, :suffix, nil]
-    
     @start_details = time_details(start_time)
-    if range?
-      @end_details = time_details(end_time)
-      if same_day?
-        @start_format_list[@start_format_list.index(:at)] = :from
-        if @start_details[:suffix] == @end_details[:suffix]
-          # same day & am/pm
-          # Tuesday, April 1, 2008 from 9-11am
-          @start_format_list.delete(:suffix)
-        end
-      end
+    @end_details = time_details(end_time) if range?
+  end
+
+  def start_format_list
+    return @start_format_list if defined?(@start_format_list)
+    list = [nil, :wday, :month, :day, :year, :at, :hour, :min, :suffix, nil]
+    if range? && same_day?
+      list[list.index(:at)] = :from
+      list.delete(:suffix) if same_meridiem?
     end
+    @start_format_list = list
   end
 
   def end_format_list
@@ -76,6 +73,10 @@ class TimeRange
     start_time.to_date == end_time.to_date
   end
 
+  def same_meridiem?
+    time_details(start_time)[:suffix] == time_details(end_time)[:suffix]
+  end
+
   def text_format?
     format == :text
   end
@@ -83,7 +84,7 @@ class TimeRange
   def remove_stuff_implied_by_context
     if context_date
       # Do it to both start & end lists
-      [[start_time, @start_format_list], [end_time, end_format_list]].each do |t, list|
+      [[start_time, start_format_list], [end_time, end_format_list]].each do |t, list|
         if t and list
           list.delete(:year) if context_date.year == t.year # same year
           [:wday, :month, :day, :at, :from].each do |k|
@@ -99,7 +100,7 @@ class TimeRange
   end
 
   def start_text
-    component(start_time, @start_details, @start_format_list, css_class: "dtstart dt-start")
+    component(start_time, @start_details, start_format_list, css_class: "dtstart dt-start")
   end
 
   def conjunction
