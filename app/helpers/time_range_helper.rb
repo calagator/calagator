@@ -52,16 +52,18 @@ class TimeRange
           # same day & am/pm
           # Tuesday, April 1, 2008 from 9-11am
           @start_format_list.delete(:suffix)
-          @end_format_list = [nil, :hour, :min, :suffix, nil]
-        else
-          # same day, different am/pm
-          # Tuesday, April 1, 2008 from 9am-1:30pm
-          @end_format_list = [nil, :hour, :min, :suffix, nil]
         end
+      end
+    end
+  end
+
+  def end_format_list
+    return @end_format_list if defined?(@end_format_list)
+    @end_format_list = if range?
+      if same_day?
+        [nil, :hour, :min, :suffix, nil]
       else
-        # different days: 
-        # Tuesday, April 1, 2008 at 9am through Wednesday, April 1, 2009 at 1:30pm
-        @end_format_list = @start_format_list.clone
+        [nil, :wday, :month, :day, :year, :at, :hour, :min, :suffix, nil]
       end
     end
   end
@@ -81,7 +83,7 @@ class TimeRange
   def remove_stuff_implied_by_context
     if context_date
       # Do it to both start & end lists
-      [[start_time, @start_format_list], [end_time, @end_format_list]].each do |t, list|
+      [[start_time, @start_format_list], [end_time, end_format_list]].each do |t, list|
         if t and list
           list.delete(:year) if context_date.year == t.year # same year
           [:wday, :month, :day, :at, :from].each do |k|
@@ -111,7 +113,7 @@ class TimeRange
 
   def end_text
     return unless range?
-    component(end_time, @end_details, @end_format_list, css_class: "dtend dt-end")
+    component(end_time, @end_details, end_format_list, css_class: "dtend dt-end")
   end
 
   def component(time, details, list, css_class: nil)
