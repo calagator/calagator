@@ -29,7 +29,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
   private
 
   def start_text
-    text(start_time, start_parts, css_class: "dtstart dt-start")
+    start_parts.to_s(format, "start")
   end
 
   def conjunction
@@ -43,15 +43,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
 
   def end_text
     return unless range?
-    text(end_time, end_parts, css_class: "dtend dt-end")
-  end
-
-  def text(time, parts, css_class: nil)
-    results = []
-    results << %Q|<time class="#{css_class}" title="#{time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
-    results << parts.to_s
-    results << %Q|</time>| if format == :hcal
-    results.join
+    end_parts.to_s(format, "end")
   end
 
   def start_parts
@@ -106,7 +98,7 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
       :wday => ", ",
     }
 
-    def to_s
+    def to_s(format = :text, which = "start")
       # Given a hash of date parts, and a format_list of the keys
       # that should be emitted, produce a list of the pieces.
       #
@@ -123,7 +115,17 @@ class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
         results << SUFFIXES[key]
         last_key = key
       end
-      results.join
+      string = results.join
+
+      string = wrap_in_hcal(string, which) if format == :hcal
+
+      string
+    end
+
+    def wrap_in_hcal(string, which)
+      css_class = "dt#{which} dt-#{which}"
+      formatted_time = time.strftime('%Y-%m-%dT%H:%M:%S')
+      %(<time class="#{css_class}" title="#{formatted_time}" datetime="#{formatted_time}">#{string}</time>)
     end
 
     private
