@@ -88,16 +88,20 @@ class TimeRange
 
   def combine_the_pieces
     results = []
-    results << %Q|<time class="dtstart dt-start" title="#{start_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{start_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
-    results << format_details_by_list(@start_details, @start_format_list)
-    results << %Q|</time>| if format == :hcal
+    results += component(start_time, @start_details, @start_format_list, css_class: "dtstart dt-start")
     if range?
       results << @conjunction
-      results << %Q|<time class="dtend dt-end" title="#{end_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{end_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
-      results << format_details_by_list(@end_details, @end_format_list)
-      results << %Q|</time>| if format == :hcal
+      results += component(end_time, @end_details, @end_format_list, css_class: "dtend dt-end")
     end
-    results.join('').html_safe
+    results.join
+  end
+
+  def component(time, details, list, css_class: nil)
+    results = []
+    results << %Q|<time class="#{css_class}" title="#{time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
+    results << format_details_by_list(details, list)
+    results << %Q|</time>| if format == :hcal
+    results
   end
 
   PREFIXES = {
