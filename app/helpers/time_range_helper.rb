@@ -44,10 +44,7 @@ class TimeRange
     @start_format_list = [nil, :wday, :month, :day, :year, :at, :hour, :min, :suffix, nil]
     
     @start_details = time_details(start_time)
-    if end_time.nil? or start_time == end_time
-      # One date only, or equal dates.
-      @end_format_list = @conjunction = nil
-    else
+    if range?
       @end_details = time_details(end_time)
       if start_time.to_date == end_time.to_date
         @start_format_list[@start_format_list.index(:at)] = :from
@@ -70,7 +67,11 @@ class TimeRange
       end
     end
   end
-    
+
+  def range?
+    end_time.present? && start_time != end_time
+  end
+
   def remove_stuff_implied_by_context
     if context_date
       # Do it to both start & end lists
@@ -90,7 +91,7 @@ class TimeRange
     results << %Q|<time class="dtstart dt-start" title="#{start_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{start_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
     results << format_details_by_list(@start_details, @start_format_list)
     results << %Q|</time>| if format == :hcal
-    if @end_format_list
+    if range?
       results << @conjunction
       results << %Q|<time class="dtend dt-end" title="#{end_time.strftime('%Y-%m-%dT%H:%M:%S')}" datetime="#{end_time.strftime('%Y-%m-%dT%H:%M:%S')}">| if format == :hcal
       results << format_details_by_list(@end_details, @end_format_list)
