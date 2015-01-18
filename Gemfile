@@ -59,21 +59,12 @@ gem 'lucene_query', '0.1'
 # production servers, you can skip their installation by running:
 #   bundle install --without development:test
 group :development, :test do
-  gem 'better_errors', '1.1.0'
-  gem 'binding_of_caller', '0.7.2'
   gem 'rspec-activemodel-mocks'
   gem 'rspec-its'
   gem 'rspec-rails', '~> 3'
   gem 'rspec-collection_matchers'
-  gem 'webmock', '~> 1.20'
-  gem 'capybara', '2.4.3'
-  gem 'factory_girl_rails'
-  gem 'timecop', '~> 0.7'
   gem 'spring', '1.1.3'
   gem 'spring-commands-rspec', '1.0.2'
-  gem 'database_cleaner'
-  gem 'coveralls', '0.7.0', require: false
-  gem 'poltergeist', '1.5.1'
 
   # Do not install these interactive libraries onto the continuous integration server.
   unless ENV['CI'] || ENV['TRAVIS']
@@ -107,6 +98,21 @@ group :development, :test do
       gem 'simplecov'
     end
   end
+end
+
+group :development do
+  gem 'better_errors', '1.1.0'
+  gem 'binding_of_caller', '0.7.2'
+end
+
+group :test do
+  gem 'capybara', '2.4.3'
+  gem 'coveralls', '0.7.0', require: false
+  gem 'database_cleaner'
+  gem 'factory_girl_rails'
+  gem 'poltergeist', '1.5.1'
+  gem 'timecop', '~> 0.7'
+  gem 'webmock', '~> 1.20'
 end
 
 # Gems used only for assets and not required
