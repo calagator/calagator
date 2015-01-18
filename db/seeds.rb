@@ -10,5 +10,7 @@
 
 require 'faker'
 
-FactoryGirl.create_list(:seed_venue, 50)
-FactoryGirl.create_list(:seed_event, 50)
+FactoryGirl.create_list(:seed_venue, 25, :with_events)
+FactoryGirl.create_list(:seed_venue, 25)
+FactoryGirl.create_list(:seed_event, 25, :with_venue)
+FactoryGirl.create_list(:seed_event, 25)
