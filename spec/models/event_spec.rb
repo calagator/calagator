@@ -87,46 +87,38 @@ describe Event, :type => :model do
         :venue => @basic_venue)
     end
 
-    it "should parse an AbstractEvent into an Event" do
-      event = Event.new(:title => "EventTitle",
-                        :description => "EventDescription",
-                        :start_time => Time.zone.parse("2008-05-20"),
-                        :end_time => Time.zone.parse("2008-05-22"))
-      expect(Event).to receive(:new).and_return(event)
+    it "should parse an iCalendar into an Event" do
+      url = "http://foo.bar/"
+      actual_ical = Event::IcalRenderer.render(@basic_event)
+      stub_request(:get, url).to_return(body: actual_ical)
 
-      abstract_event = SourceParser::AbstractEvent.new("EventTitle", "EventDescription", Time.zone.parse("2008-05-20"), Time.zone.parse("2008-05-22"))
+      events = Source::Parser.to_events(url: url, skip_old: false)
 
-      expect(Event.from_abstract_event(abstract_event)).to eq event
+      expect(events.size).to eq 1
+      event = events.first
+      expect(event.title).to eq @basic_event.title
+      expect(event.url).to eq @basic_event.url
+      expect(event.description).to be_blank
+
+      expect(event.venue.title).to match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
     end
 
-    it "should parse an Event into an iCalendar" do
-      actual_ical = Event.to_ical(@basic_event)
-
-      abstract_events = SourceParser.to_abstract_events(:content => actual_ical, :skip_old => false)
-
-      expect(abstract_events.size).to eq 1
-      abstract_event = abstract_events.first
-      expect(abstract_event.title).to eq @basic_event.title
-      expect(abstract_event.url).to eq @basic_event.url
-      expect(abstract_event.description).to be_nil
-
-      expect(abstract_event.location.title).to match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
-    end
-
-    it "should parse an Event into an iCalendar without a URL and generate it" do
+    it "should parse an iCalendar into an Event without a URL and generate it" do
       generated_url = "http://foo.bar/"
       @basic_event.url = nil
-      actual_ical = Event.to_ical(@basic_event, :url_helper => lambda{|event| generated_url})
+      actual_ical = Event::IcalRenderer.render(@basic_event, :url_helper => lambda{|event| generated_url})
+      url = "http://foo.bar/"
+      stub_request(:get, url).to_return(body: actual_ical)
 
-      abstract_events = SourceParser.to_abstract_events(:content => actual_ical, :skip_old => false)
+      events = Source::Parser.to_events(url: url, skip_old: false)
 
-      expect(abstract_events.size).to eq 1
-      abstract_event = abstract_events.first
-      expect(abstract_event.title).to eq @basic_event.title
-      expect(abstract_event.url).to eq @basic_event.url
-      expect(abstract_event.description).to match /Imported from: #{generated_url}/
+      expect(events.size).to eq 1
+      event = events.first
+      expect(event.title).to eq @basic_event.title
+      expect(event.url).to eq @basic_event.url
+      expect(event.description).to match /Imported from: #{generated_url}/
 
-      expect(abstract_event.location.title).to match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
+      expect(event.venue.title).to match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
     end
   end
 
@@ -651,15 +643,6 @@ describe Event, :type => :model do
     it "should return a marked duplicate as progenitor if it is orphaned"  do
       expect(@orphan.progenitor).to eq @orphan
     end
-
-    it "should return the progenitor if an imported event has an exact duplicate" do
-      @abstract_event = SourceParser::AbstractEvent.new
-      @abstract_event.title = @slave2.title
-      @abstract_event.start_time = @slave2.start_time.to_s
-
-      expect(Event.from_abstract_event(@abstract_event)).to eq @master
-    end
-
   end
 
   describe "when versioning" do
@@ -698,38 +681,9 @@ describe Event, :type => :model do
     end
   end
 
-  describe "when cloning" do
-    let :original do
-      FactoryGirl.build(:event,
-        :id => 42,
-        :start_time => Time.parse("2008-01-19 10:00 PST"),
-        :end_time => Time.parse("2008-01-19 17:00 PST"),
-        :tag_list => "foo, bar, baz",
-        :venue_details => "Details")
-    end
-
-    subject do
-      original.to_clone
-    end
-
-    its(:new_record?) { should be_truthy }
-
-    its(:id) { should be_nil }
-
-    its(:start_time) { should eq today + original.start_time.hour.hours }
-
-    its(:end_time)   { should eq today + original.end_time.hour.hours }
-
-    its(:tag_list) { should eq original.tag_list }
-
-    %w[title description url venue_id venue_details].each do |field|
-      its(field) { should eq original[field] }
-    end
-  end
-
   describe "when converting to iCal" do
     def ical_roundtrip(events, opts = {})
-      parsed_events = RiCal.parse_string(Event.to_ical(events, opts)).first.events
+      parsed_events = RiCal.parse_string(Event::IcalRenderer.render(events, opts)).first.events
       if events.is_a?(Event)
         parsed_events.first
       else
@@ -821,7 +775,7 @@ describe Event, :type => :model do
 
     describe "sequence" do
       def event_to_ical(event)
-        return RiCal.parse_string(Event.to_ical([event])).first.events.first
+        return RiCal.parse_string(Event::IcalRenderer.render([event])).first.events.first
       end
 
       it "should set an initial sequence on a new event" do
@@ -847,7 +801,7 @@ describe Event, :type => :model do
 
     describe "- the headers" do
       before do
-        @data = Event.to_ical(FactoryGirl.build(:event))
+        @data = Event::IcalRenderer.render(FactoryGirl.build(:event))
       end
 
       it "should include the calendar name" do

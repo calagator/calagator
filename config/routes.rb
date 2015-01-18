@@ -12,7 +12,7 @@ Calagator::Application.routes.draw do
       post :squash_many_duplicates
       get :search
       get :duplicates
-      match 'tag/:tag', {:via => :get, :to => :search }
+      match 'tag/:tag', via: :get, to: :search, as: :tag
     end
 
     member do
@@ -32,7 +32,7 @@ Calagator::Application.routes.draw do
       get :map
       get :duplicates
       get :autocomplete
-      match 'tag/:tag', {:via => :get, :to => :index }
+      match 'tag/:tag', via: :get, to: :search, as: :tag
     end
   end
 

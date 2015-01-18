@@ -1,5 +1,3 @@
-# encoding: utf-8
-
 # --------------------------------------------------------------------------------------------------
 # Please note: If you're subclassing Formtastic::FormBuilder, Formtastic uses
 # class_attribute for these configuration attributes instead of the deprecated

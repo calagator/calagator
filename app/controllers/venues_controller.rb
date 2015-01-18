@@ -49,7 +49,7 @@ class VenuesController < ApplicationController
       format.html
       format.xml  { render xml: @venue }
       format.json { render json: @venue, callback: params[:callback] }
-      format.ics  { ical_export(@venue) }
+      format.ics  { render ics: @venue.events.order("start_time ASC").non_duplicates }
     end
 
   rescue ActiveRecord::RecordNotFound => e
@@ -129,10 +129,5 @@ class VenuesController < ApplicationController
 
   def from_event
     Event.find_by_id(params[:from_event])
-  end
-
-  def ical_export(venue)
-    events = venue.events.order("start_time ASC").non_duplicates
-    render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
   end
 end

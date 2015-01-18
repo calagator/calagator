@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe SourceParser::Ical, "when parsing VVENUE", :type => :model do
+describe Source::Parser::Ical, "when parsing VVENUE", :type => :model do
    before(:each) do
-     @location = SourceParser::Ical.to_abstract_location(<<-HERE)
+     @venue = Source::Parser::Ical.new.send(:to_venue, %(
 BEGIN:VVENUE
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
   html
@@ -19,31 +19,30 @@ POSTALCODE:97204
 GEO:45.518798;-122.677583
 URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
 CATEGORIES:apple applecom appleinc technology
-END:VVENUE
-    HERE
+END:VVENUE))
   end
 
   it "should have a street_address" do
-    expect(@location.street_address).not_to be_nil
+    expect(@venue.street_address).not_to be_nil
   end
 
   it "should have the adress as is" do
-    @location.street_address == '700 Southwest Fifth Avenue Suite #1035'
+    @venue.street_address == '700 Southwest Fifth Avenue Suite #1035'
   end
 
   it "should have a locality" do
-    expect(@location.locality).not_to be_nil
+    expect(@venue.locality).not_to be_nil
   end
 
   it "should have the locality as is" do
-    @location.locality == 'Portland'
+    @venue.locality == 'Portland'
   end
 end
 
-describe SourceParser::Ical, "when parsing VCARD lines", :type => :model do
+describe Source::Parser::Ical, "when parsing VCARD lines", :type => :model do
    before(:each) do
      # Note that each line here represents a single, complete property definition -- this method doesn't do any magical unwrapping of text.
-     @vcard_hash = SourceParser::Ical.hash_from_vcard_lines(<<-HERE)
+     @vcard_hash = Source::Parser::Ical.new.send(:hash_from_vcard_lines, %(
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
 UID:V0-001-001423875-1@eventful.com
 NAME:Apple Store Pioneer Place
@@ -55,8 +54,7 @@ COUNTRY;;;ABBREV=USA:United States
 POSTALCODE:97204
 GEO:45.518798;-122.677583
 URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
-CATEGORIES:apple applecom appleinc technology
-    HERE
+CATEGORIES:apple applecom appleinc technology).split("\n"))
   end
 
   it "should find a property set by its key" do

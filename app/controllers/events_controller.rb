@@ -112,7 +112,7 @@ class EventsController < ApplicationController
   end
 
   def clone
-    @event = Event.find(params[:id]).to_clone
+    @event = Event::Cloner.clone(Event.find(params[:id]))
     @page_title = "Clone an existing Event"
 
     flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
@@ -121,13 +121,12 @@ class EventsController < ApplicationController
 
   private
 
-
   def render_event(event)
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml  => event.to_xml(:include => :venue) }
       format.json { render :json => event.to_json(:include => :venue), :callback => params[:callback] }
-      format.ics { ical_export([event]) }
+      format.ics  { render :ics  => [event] }
     end
   end
 
@@ -136,17 +135,11 @@ class EventsController < ApplicationController
     respond_to do |format|
       format.html # *.html.erb
       format.kml  # *.kml.erb
-      format.ics  { ical_export(events) }
+      format.ics  { render :ics => events || Event.future.non_duplicates }
       format.atom { render :template => 'events/index' }
       format.xml  { render :xml  => events.to_xml(:include => :venue) }
       format.json { render :json => events.to_json(:include => :venue), :callback => params[:callback] }
     end
-  end
-
-  # Export +events+ to an iCalendar file.
-  def ical_export(events=nil)
-    events = events || Event.future.non_duplicates
-    render(:text => Event.to_ical(events, :url_helper => lambda{|event| event_url(event)}), :mime_type => 'text/calendar')
   end
 
   # Return the default start date.

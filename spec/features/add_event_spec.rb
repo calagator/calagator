@@ -1,4 +1,3 @@
-#coding: UTF-8
 require 'rails_helper'
 
 feature 'Event Creation' do

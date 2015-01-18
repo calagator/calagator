@@ -1,28 +1,21 @@
+sudo: false
 language: ruby
 rvm:
-  - 1.9.3
   - 2.0.0
   - 2.1.0
   - rbx-2
-  ## JRuby is not compatible, see Gemfile for details.
-  # - jruby-19mode
-  # - jruby-head
 env:
   matrix:
     - DB=mysql
     - DB=postgresql
     - DB=sqlite
-  global:
-    - BUNDLE_JOBS=4
 matrix:
+  fast_finish: true
   allow_failures:
     - rvm: rbx-2
 
 before_install:
-  # Only use 1 job until Travis fixes the rbx --jobs issue.
-  - if [ "$TRAVIS_RUBY_VERSION" == "rbx-2" ] ; then export BUNDLE_JOBS=1 ; fi
   - ruby ci/copy_database_config.rb
-install: bundle install --retry=3
 
 before_script:
   - mysql -e 'create database calagator_test;'

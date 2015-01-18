@@ -17,7 +17,7 @@ Changes
 List of Calagator stable releases and changes, with the latest at the top:
 
   * [master]
-    * [!] Dropped support for Ruby 1.8.7. Use Ruby 1.9.3+.
+    * [!] Dropped support for Ruby 1.8.7, and 1.9.3. Use Ruby 2.0+.
     * Switched from outdated v2 Google Maps to a more flexible leaflet-based mapping system.
       * [!] New mapping settings have been added to secrets.yml
         If you wish to keep using Google as your map provider, you'll need to set your provider and add an API key to secrets.yml.

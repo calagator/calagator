@@ -33,9 +33,6 @@ class Event < ActiveRecord::Base
   belongs_to :venue, :counter_cache => true
   belongs_to :source
 
-  # Triggers
-  before_validation :normalize_url!
-
   # Validations
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time
@@ -106,6 +103,10 @@ class Event < ActiveRecord::Base
     read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
   end
 
+  def url=(value)
+    super UrlPrefixer.prefix(value)
+  end
+
   # Set the start_time to the given +value+, which could be a Time, Date,
   # DateTime, String, Array of Strings, or nil.
   def start_time=(value)
@@ -161,49 +162,6 @@ class Event < ActiveRecord::Base
 
   #---[ Transformations ]-------------------------------------------------
 
-  # Returns an Event created from an AbstractEvent.
-  def self.from_abstract_event(abstract_event, source=nil)
-    event = Event.new
-
-    event.source       = source
-    event.title        = abstract_event.title
-    event.description  = abstract_event.description
-    event.start_time   = abstract_event.start_time.blank? ? nil : Time.parse(abstract_event.start_time.to_s)
-    event.end_time     = abstract_event.end_time.blank? ? nil : Time.parse(abstract_event.end_time.to_s)
-    event.url          = abstract_event.url
-    event.venue        = Venue.from_abstract_location(abstract_event.location, source) if abstract_event.location
-    event.tag_list     = abstract_event.tags.join(',')
-
-    duplicates = event.find_exact_duplicates
-    event = duplicates.first.progenitor if duplicates
-    event
-  end
-
-  # Returns an iCalendar string representing this Event.
-  #
-  # Options:
-  # * :url_helper - Lambda that accepts an Event instance and generates a URL
-  #   for it if it doesn't have a URL already. (See Event::to_ical for example)
-  def to_ical(opts={})
-    self.class.to_ical(self, opts)
-  end
-
-  # Return an iCalendar string representing an Array of Event instances.
-  #
-  # Arguments:
-  # * :events - Event instance or array of them.
-  #
-  # Options:
-  # * :url_helper - Lambda that accepts an Event instance and generates a URL
-  #   for it if it doesn't have a URL already.
-  #
-  # Example:
-  #   ics1 = Event.to_ical(myevent)
-  #   ics2 = Event.to_ical(myevents, :url_helper => lambda{|event| event_url(event)})
-  def self.to_ical(events, opts={})
-    Event::IcalRenderer.render(events, opts)
-  end
-
   def location
     venue && venue.location
   end
@@ -211,40 +169,6 @@ class Event < ActiveRecord::Base
   def venue_title
     venue && venue.title
   end
-
-  def normalize_url!
-    unless url.blank? || url.match(/^[\d\D]+:\/\//)
-      self.url = 'http://' + url
-    end
-  end
-
-  # Array of attributes that should be cloned by #to_clone.
-  CLONE_ATTRIBUTES = [:title, :description, :venue_id, :url, :tag_list, :venue_details]
-
-  # Return a new record with fields selectively copied from the original, and
-  # the start_time and end_time adjusted so that their date is set to today and
-  # their time-of-day is set to the original record's time-of-day.
-  def to_clone
-    clone = self.class.new
-    CLONE_ATTRIBUTES.each do |attribute|
-      clone.send("#{attribute}=", send(attribute))
-    end
-    if start_time
-      clone.start_time = clone_time_for_today(start_time)
-    end
-    if end_time
-      clone.end_time = clone_time_for_today(end_time)
-    end
-    clone
-  end
-
-  # Return a time that's today but has the time-of-day component from the
-  # +source+ time argument.
-  def clone_time_for_today(source)
-    today = Date.today
-    Time.local(today.year, today.mon, today.day, source.hour, source.min, source.sec, source.usec)
-  end
-  private :clone_time_for_today
 
   #---[ Date related ]----------------------------------------------------
 

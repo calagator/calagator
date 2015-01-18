@@ -17,6 +17,30 @@ describe Venue, :type => :model do
     expect(venue).not_to be_valid
   end
 
+  describe 'latitude validation' do
+    specify do
+      venue = Venue.new(:latitude => -91)
+      expect(venue).to have(1).error_on(:latitude)
+    end
+
+    specify do
+      venue = Venue.new(:latitude => -89)
+      expect(venue).to have(0).errors_on(:latitude)
+    end
+  end
+
+  describe 'longitude validation' do
+    specify do
+      venue = Venue.new(:longitude => -181)
+      expect(venue).to have(1).error_on(:longitude)
+    end
+
+    specify do
+      venue = Venue.new(:longitude => -179)
+      expect(venue).to have(0).errors_on(:longitude)
+    end
+  end
+
   describe "when validating" do
     let(:attributes) { {:title => 'My Venue'} }
     let(:bad_data) { ' blargie ' }
@@ -140,13 +164,6 @@ describe Venue, :type => :model do
     it "should return a master as its own progenitor" do
       expect(@master.progenitor).to eq @master
     end
-
-    it "should return the progenitor if an imported venue has an exact duplicate" do
-      @abstract_location = SourceParser::AbstractLocation.new
-      @abstract_location.title = @slave_second.title
-
-      expect(Venue.from_abstract_location(@abstract_location)).to eq @master
-    end
   end
 
   describe "when squashing duplicates" do
@@ -221,38 +238,38 @@ describe "Venue geocoding", :type => :model do
     }.to change { @venue.location }.from(nil).to([BigDecimal("45.0"), BigDecimal("-122.0")])
   end
 
-  it "should geocode automatically on save" do
-    Venue.with_geocoding do
+  describe "with geocoding" do
+    # Enable geocoding for just these tests
+    around do |example|
+      original = Venue::Geocoder.perform_geocoding?
+      Venue::Geocoder.perform_geocoding = true
+      example.run
+      Venue::Geocoder.perform_geocoding = original
+    end
+
+    it "should geocode automatically on save" do
       expect(GeoKit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
       @venue.save
     end
-  end
 
-  it "shouldn't geocode automatically unless there's an address" do
-    Venue.with_geocoding do
+    it "shouldn't geocode automatically unless there's an address" do
       @venue.address = ""
       expect(GeoKit::Geocoders::MultiGeocoder).not_to receive(:geocode)
       @venue.save
     end
-  end
 
-  it "shouldn't geocode automatically if already geocoded" do
-    Venue.with_geocoding do
+    it "shouldn't geocode automatically if already geocoded" do
       @venue.latitude = @venue.longitude = 0.0
       expect(GeoKit::Geocoders::MultiGeocoder).not_to receive(:geocode)
       @venue.save
     end
-  end
 
-  it "shouldn't fail if the geocoder returns failure" do
-    Venue.with_geocoding do
+    it "shouldn't fail if the geocoder returns failure" do
       expect(GeoKit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_failure)
       @venue.save
     end
-  end
 
-  it "should fill in empty addressing fields" do
-    Venue.with_geocoding do
+    it "should fill in empty addressing fields" do
       expect(GeoKit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
       @venue.save
       expect(@venue.street_address).to eq @geo_success.street_address
@@ -260,30 +277,12 @@ describe "Venue geocoding", :type => :model do
       expect(@venue.region).to eq @geo_success.state
       expect(@venue.postal_code).to eq @geo_success.zip
     end
-  end
 
-  it "should leave non-empty addressing fields alone" do
-    Venue.with_geocoding do
+    it "should leave non-empty addressing fields alone" do
       @venue.locality = "Cleveland"
       expect(GeoKit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
       @venue.save
       expect(@venue.locality).to eq "Cleveland"
-    end
-  end
-
-  describe "forcing geocoding" do
-    before { @venue.latitude = @venue.longitude = double }
-
-    it "should strip location when geocoding is forced" do
-      @venue.force_geocoding = "1"
-      expect(@venue.latitude).to be_nil
-      expect(@venue.longitude).to be_nil
-    end
-
-    it "should not strip location when geocoding is forced" do
-      @venue.force_geocoding = "0"
-      expect(@venue.latitude).not_to be_nil
-      expect(@venue.longitude).not_to be_nil
     end
   end
 end

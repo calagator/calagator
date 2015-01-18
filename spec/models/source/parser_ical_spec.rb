@@ -3,45 +3,46 @@ require 'spec_helper'
 def events_from_ical_at(filename)
   url = "http://foo.bar/"
   source = Source.new(:title => "Calendar event feed", :url => url)
-  expect(SourceParser::Base).to receive(:read_url).and_return(read_sample(filename))
+  stub_request(:get, url).to_return(body: read_sample(filename))
   return source.to_events(:skip_old => false)
 end
 
-describe SourceParser::Ical, "in general", :type => :model do
+describe Source::Parser::Ical, "in general", :type => :model do
   it "should read http URLs as-is" do
-    http_url = "http://foo.bar/"
-    stub_source_parser_http_response!(:body => 42)
-
-    expect(SourceParser::Ical.read_url(http_url)).to eq 42
+    url = "http://foo.bar/"
+    stub_request(:get, url).to_return(body: "42")
+    expect(Source::Parser::Ical.read_url(url)).to eq "42"
   end
 
   it "should read webcal URLs as http" do
     webcal_url = "webcal://foo.bar/"
     http_url   = "http://foo.bar/"
-    stub_source_parser_http_response!(:body => 42)
-    expect(SourceParser::Ical.read_url(webcal_url)).to eq 42
+    stub_request(:get, http_url).to_return(body: "42")
+    expect(Source::Parser::Ical.read_url(webcal_url)).to eq "42"
   end
 end
 
-describe SourceParser::Ical, "when parsing events and their locations", :type => :model do
+describe Source::Parser::Ical, "when parsing events and their venues", :type => :model do
 
   before(:each) do
-    expect(SourceParser::Base).to receive(:read_url).and_return(read_sample('ical_upcoming_many.ics'))
-    @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
+    url = "http://foo.bar/"
+    stub_request(:get, url).to_return(body: read_sample('ical_upcoming_many.ics'))
+    @events = Source::Parser.to_events(url: url, skip_old: false)
   end
 
-   it "locations should be" do
+   it "venues should be" do
     @events.each do |event|
-      expect(event.location).not_to be_nil
+      expect(event.venue).not_to be_nil
     end
   end
 
 end
 
-describe SourceParser::Ical, "when parsing multiple items in an Eventful feed", :type => :model do
+describe Source::Parser::Ical, "when parsing multiple items in an Eventful feed", :type => :model do
   before(:each) do
-    expect(SourceParser::Base).to receive(:read_url).and_return(read_sample('ical_eventful_many.ics'))
-    @events = SourceParser.to_abstract_events(:url => "intercepted", :skip_old => false)
+    url = "http://foo.bar/"
+    stub_request(:get, url).to_return(body: read_sample('ical_eventful_many.ics'))
+    @events = Source::Parser.to_events(url: url, skip_old: false)
   end
 
   it "should find multiple events" do
@@ -50,7 +51,7 @@ describe SourceParser::Ical, "when parsing multiple items in an Eventful feed", 
 
   it "should find venues for events" do
     @events.each do |event|
-      expect(event.location.title).not_to be_nil
+      expect(event.venue.title).not_to be_nil
     end
   end
 
@@ -64,13 +65,13 @@ describe SourceParser::Ical, "when parsing multiple items in an Eventful feed", 
     # Make sure each of the above events has the expected street address
     event_titles_and_street_addresses.each do |event_title, street_address|
       expect(@events.find { |event|
-        event.title == event_title && event.location.street_address == street_address
+        event.title == event_title && event.venue.street_address == street_address
         }).not_to be_nil
       end
   end
 end
 
-describe SourceParser::Ical, "with iCalendar events", :type => :model do
+describe Source::Parser::Ical, "with iCalendar events", :type => :model do
 
   it "should parse Apple iCalendar v3 format" do
     events = events_from_ical_at('ical_apple_v3.ics')
@@ -143,11 +144,11 @@ describe SourceParser::Ical, "with iCalendar events", :type => :model do
 
 end
 
-describe SourceParser::Ical, "when importing events with non-local times", :type => :model do
+describe Source::Parser::Ical, "when importing events with non-local times", :type => :model do
 
   it "should store time ending in Z as UTC" do
     url = "http://foo.bar/"
-    allow(SourceParser::Base).to receive(:read_url).and_return(read_sample('ical_z.ics'))
+    stub_request(:get, url).to_return(body: read_sample('ical_z.ics'))
     @source = Source.new(:title => "Non-local time", :url => url)
     events = @source.create_events!(:skip_old => false)
     event = events.first
@@ -165,15 +166,15 @@ describe SourceParser::Ical, "when importing events with non-local times", :type
   it "should store time with TZID=GMT in UTC" do
     events = events_from_ical_at('ical_gmt.ics')
     expect(events.size).to eq 1
-    abstract_event = events.first
-    expect(abstract_event.start_time).to eq Time.parse('Fri May 07 08:00:00 +0000 2020')
-    expect(abstract_event.end_time).to eq Time.parse('Fri May 07 09:00:00 +0000 2020')
+    event = events.first
+    expect(event.start_time).to eq Time.parse('Fri May 07 08:00:00 +0000 2020')
+    expect(event.end_time).to eq Time.parse('Fri May 07 09:00:00 +0000 2020')
   end
 end
 
-describe SourceParser::Ical, "munge_gmt_dates", :type => :model do
+describe Source::Parser::Ical, "munge_gmt_dates", :type => :model do
   it "should return unexpected-format strings unmodified" do
-    munged = SourceParser::Ical.munge_gmt_dates('justin bieber on a train')
+    munged = Source::Parser::Ical.new.send(:munge_gmt_dates, 'justin bieber on a train')
     expect(munged).to eq 'justin bieber on a train'
   end
 
@@ -187,7 +188,7 @@ END:VEVENT
 END:VCALENDAR
     }
 
-    expect(SourceParser::Ical.munge_gmt_dates(icard)).to eq icard
+    expect(Source::Parser::Ical.new.send(:munge_gmt_dates, icard)).to eq icard
   end
 
   it "should replace TZID=GMT with a TZID-less UTC time" do
@@ -209,14 +210,15 @@ END:VEVENT
 END:VCALENDAR
     }
 
-    expect(SourceParser::Ical.munge_gmt_dates(icard)).to eq munged
+    expect(Source::Parser::Ical.new.send(:munge_gmt_dates, icard)).to eq munged
   end
 end
 
-describe SourceParser::Ical, "when skipping old events", :type => :model do
+describe Source::Parser::Ical, "when skipping old events", :type => :model do
   before(:each) do
-    allow(SourceParser::Base).to receive(:read_url).and_return(<<-HERE)
-BEGIN:VCALENDAR
+    url = "http://foo.bar/"
+    stub_request(:get, url).to_return(body:
+%(BEGIN:VCALENDAR
 X-WR-CALNAME;VALUE=TEXT:NERV
 VERSION:2.0
 CALSCALE:GREGORIAN
@@ -270,15 +272,13 @@ DTSTART:#{Time.now.strftime("%Y%m%d")}
 DTEND:#{(Time.now-1.year).strftime("%Y%m%d")}
 DTSTAMP:040425
 END:VEVENT
-END:VCALENDAR
-      HERE
-    @source = Source.new(:title => "Title", :url => "http://my.url/")
+END:VCALENDAR))
+    @source = Source.new(title: "Title", url: url)
   end
 
   # for following specs a 'valid' event does not start after it ends"
   it "should be able to import all valid events" do
     events = @source.create_events!(:skip_old => false)
-    expect(events.size).to eq 5
     expect(events.map(&:title)).to eq [
       "Past start and no end",
       "Current start and no end",
@@ -290,12 +290,10 @@ END:VCALENDAR
 
   it "should be able to skip invalid and old events" do
     events = @source.create_events!(:skip_old => true)
-    expect(events.size).to eq 3
     expect(events.map(&:title)).to eq [
       "Current start and no end",
       "Past start and current end",
       "Current start and current end"
     ]
   end
-
 end

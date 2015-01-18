@@ -10,9 +10,9 @@ class Source < ActiveRecord::Base
 
       self.events.present?
 
-    rescue SourceParser::NotFound
+    rescue Source::Parser::NotFound
       add_error "No events found at remote site. Is the event identifier in the URL correct?"
-    rescue SourceParser::HttpAuthenticationRequiredError
+    rescue Source::Parser::HttpAuthenticationRequiredError
       add_error "Couldn't import events, remote site requires authentication."
     rescue OpenURI::HTTPError
       add_error "Couldn't download events, remote site may be experiencing connectivity problems."
