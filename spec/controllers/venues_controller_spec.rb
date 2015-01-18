@@ -260,7 +260,7 @@ describe VenuesController, :type => :controller do
 
     describe "when deleting a venue with events" do
       before do
-        @event = FactoryGirl.create(:event_with_venue)
+        @event = FactoryGirl.create(:event, :with_venue)
         @venue = @event.venue
       end
 

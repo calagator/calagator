@@ -38,7 +38,7 @@ Development
 To run Calagator in `development` mode, which automatically reloads code as you change it:
 
   * Follow the **[Setup](#setup)** instructions above.
-  * Initialize your database by running `bundle exec rake db:migrate db:test:prepare`
+  * Initialize your database by running `bundle exec rake db:migrate db:test:prepare db:seed`
   * Start the *Ruby on Rails* web application by running `rails server` (UNIX) or `ruby script/rails /server` (Windows).
   * Open a web browser to <http://localhost:3000/> to use the development server
   * Read the [Rails Guides](http://guides.rubyonrails.org/) to learn how to develop a Ruby on Rails application.
