@@ -10,10 +10,10 @@ module TimeRangeHelper
       start_time = start_time.start_time
     end
     TimeRange.new(start_time, end_time, format, context).to_s.html_safe
-  end  
+  end
 
   class TimeRange < Struct.new(:start_time, :end_time, :format, :context_date)
-    # A representation of a time or range of time that can format itself 
+    # A representation of a time or range of time that can format itself
     # in a meaningful way. Examples:
     # "Thursday, April 3, 2008"
     # "Thursday, April 3, 2008 at 4pm"
@@ -82,26 +82,21 @@ module TimeRangeHelper
 
     def get_parts
       parts = {
-        :wday => Date::DAYNAMES[time.wday],
-        :month => Date::MONTHNAMES[time.month],
-        :day => time.day.to_s,
-        :year => time.year.to_s,
-        :at => "at" }
+        wday: time.strftime("%A"),
+        month: time.strftime("%B"),
+        day: time.day,
+        year: time.year,
+        at: "at",
+        hour: time.strftime("%l").strip,
+        min: time.strftime(":%M"),
+        suffix: time.strftime("%P"),
+      }
       if time.min == 0
-        return parts.merge(:hour => "midnight") if time.hour == 0
-        return parts.merge(:hour => "noon") if time.hour == 12
+        parts.delete(:min)
+        return parts.merge(hour: "midnight", suffix: nil) if time.hour == 0
+        return parts.merge(hour: "noon", suffix: nil) if time.hour == 12
       end
-      if time.hour >= 12
-        suffix = "pm"
-        h = time.hour - (time.hour > 12 ? 12 : 0)
-      else
-        suffix = "am"
-        h = time.hour == 0 ? 12 : time.hour
-      end
-      m = ":%02d" % time.min if time.min != 0
-      parts.merge(:hour => h.to_s,
-                    :min => m,
-                    :suffix => suffix)
+      parts
     end
 
     def remove_parts_implied_by_context
