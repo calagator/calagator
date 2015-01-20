@@ -63,7 +63,7 @@ describe EventsHelper, :type => :helper do
       end
 
       it "should have time range" do
-        expect(@export).to match /\&dates=#{helper.format_google_timespan(@event)}/
+        expect(@export).to match /\&dates=#{escape(helper.format_google_timespan(@event))}/
       end
 
       it "should have venue title" do

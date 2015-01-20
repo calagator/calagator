@@ -67,33 +67,39 @@ module EventsHelper
   end
 
   # Return a Google Calendar export URL.
+
   def google_event_export_link(event)
-    result = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&text=" << cgi_escape(event.title)
-
-    result << "&dates=" << format_google_timespan(event)
-
-    if event.venue
-      result << "&location=" << cgi_escape(event.venue.title)
-      if event.venue.geocode_address.present?
-        result << cgi_escape(", " + event.venue.geocode_address)
-      end
+    location = event.venue.try(:title)
+    if address = event.venue.try(:geocode_address)
+      location += ", #{address}" if address.present?
     end
 
-    if event.url.present?
-      result << "&sprop=website:" << cgi_escape(event.url.sub(/^http.?:\/\//, ''))
+    sprop = if event.url.present?
+      "website:#{event.url.sub(/^http.?:\/\//, '')}"
     end
 
-    if event.description.present?
-      details = "Imported from: #{event_url(event)} \n\n#{event.description}"
-      details_suffix = "...[truncated]"
-      overflow = 1024 - result.length
-      if overflow > 0
-        details = "#{details[0..(overflow - details.size - details_suffix.size - 1)]}#{details_suffix}"
-      end
-      result << "&details=" << cgi_escape(details)
-    end
+    details = "Imported from: #{event_url(event)} \n\n#{event.description}"
 
-    return result
+    url = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&"
+    params = {
+      text: event.title,
+      dates: format_google_timespan(event),
+      location: location,
+      sprop: sprop,
+      details: details,
+    }
+
+    query = params.collect do |key, value|
+      value.to_query(key)
+    end.compact.join("&")
+
+    url += query
+
+    omission = "...[truncated]"
+    length = 1024 - omission.length
+    url = truncate(url, length: length, omission: omission)
+
+    url
   end
 
   #---[ Feed links ]------------------------------------------------------
