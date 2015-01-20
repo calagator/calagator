@@ -69,37 +69,43 @@ module EventsHelper
   # Return a Google Calendar export URL.
 
   def google_event_export_link(event)
-    location = event.venue.try(:title)
-    if address = event.venue.try(:geocode_address)
-      location += ", #{address}" if address.present?
+    GoogleEventExportLink.new(event, self).render
+  end
+
+  class GoogleEventExportLink < Struct.new(:event, :context)
+    def render
+      location = event.venue.try(:title)
+      if address = event.venue.try(:geocode_address)
+        location += ", #{address}" if address.present?
+      end
+
+      sprop = if event.url.present?
+        "website:#{event.url.sub(/^http.?:\/\//, '')}"
+      end
+
+      details = "Imported from: #{context.event_url(event)} \n\n#{event.description}"
+
+      url = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&"
+      params = {
+        text: event.title,
+        dates: context.format_google_timespan(event),
+        location: location,
+        sprop: sprop,
+        details: details,
+      }
+
+      query = params.collect do |key, value|
+        value.to_query(key)
+      end.compact.join("&")
+
+      url += query
+
+      omission = "...[truncated]"
+      length = 1024 - omission.length
+      url = context.truncate(url, length: length, omission: omission)
+
+      url
     end
-
-    sprop = if event.url.present?
-      "website:#{event.url.sub(/^http.?:\/\//, '')}"
-    end
-
-    details = "Imported from: #{event_url(event)} \n\n#{event.description}"
-
-    url = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&"
-    params = {
-      text: event.title,
-      dates: format_google_timespan(event),
-      location: location,
-      sprop: sprop,
-      details: details,
-    }
-
-    query = params.collect do |key, value|
-      value.to_query(key)
-    end.compact.join("&")
-
-    url += query
-
-    omission = "...[truncated]"
-    length = 1024 - omission.length
-    url = truncate(url, length: length, omission: omission)
-
-    url
   end
 
   #---[ Feed links ]------------------------------------------------------
