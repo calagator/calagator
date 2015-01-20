@@ -8,8 +8,6 @@ class VenuesController < ApplicationController
     @search = Venue::Search.new(params)
     @venues = @search.venues
 
-    @page_title = "Venues"
-
     respond_to do |format|
       format.html # index.html.erb
       format.kml  # index.kml.erb
@@ -43,8 +41,6 @@ class VenuesController < ApplicationController
 
     return redirect_to @venue.duplicate_of if @venue.duplicate?
 
-    @page_title = @venue.title
-
     respond_to do |format|
       format.html
       format.xml  { render xml: @venue }
@@ -61,15 +57,12 @@ class VenuesController < ApplicationController
   # GET /venues/new.xml
   def new
     @venue = Venue.new
-    @page_title = "Add a Venue"
-
     render layout: params[:layout] != "false"
   end
 
   # GET /venues/1/edit
   def edit
     @venue = Venue.find(params[:id])
-    @page_title = "Editing '#{@venue.title}'"
   end
 
   # POST /venues

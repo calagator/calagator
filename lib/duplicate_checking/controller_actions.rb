@@ -2,7 +2,6 @@ module DuplicateChecking
   module ControllerActions
     # GET /#{model_class}/duplicates
     def duplicates
-      @page_title = "Duplicate #{model_class} Squasher"
       @type = params[:type]
       @grouped_venues = @grouped_events = model_class.find_duplicates_by_type(@type)
     rescue ArgumentError => e
