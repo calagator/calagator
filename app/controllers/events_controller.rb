@@ -15,8 +15,6 @@ class EventsController < ApplicationController
 
     @perform_caching = params[:order].blank? && params[:date].blank?
 
-    @page_title = "Events"
-
     render_events @events
   end
 
@@ -25,8 +23,6 @@ class EventsController < ApplicationController
   def show
     @event = Event.find(params[:id])
     return redirect_to(@event.progenitor) if @event.duplicate?
-
-    @page_title = @event.title
 
     render_event @event
   rescue ActiveRecord::RecordNotFound => e
@@ -37,13 +33,11 @@ class EventsController < ApplicationController
   # GET /events/new.xml
   def new
     @event = Event.new(params[:event])
-    @page_title = "Add an Event"
   end
 
   # GET /events/1/edit
   def edit
     @event = Event.find(params[:id])
-    @page_title = "Editing '#{@event.title}'"
   end
 
   # POST /events
@@ -106,15 +100,11 @@ class EventsController < ApplicationController
     # setting @events so that we can reuse the index atom builder
     @events = @search.events
 
-    @page_title = @search.tag ? "Events tagged with '#{@search.tag}'" : "Search Results for '#{@search.query}'"
-
     render_events(@events)
   end
 
   def clone
     @event = Event::Cloner.clone(Event.find(params[:id]))
-    @page_title = "Clone an existing Event"
-
     flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
     render "new"
   end

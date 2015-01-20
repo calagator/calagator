@@ -1,3 +1,5 @@
+<%= content_for :title, "Events" %>
+
 <% tabindex_on '#search_field' %>
 
 <% cache_if(@perform_caching, CacheObserver.daily_key_for("events_index", request)) do %>
