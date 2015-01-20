@@ -55,47 +55,6 @@ module EventsHelper
     end
   end
 
-  #---[ Google Calendar export ]--------------------------------------------
-
-  # Time format used for Google Calendar exports
-  GOOGLE_TIME_FORMAT = "%Y%m%dT%H%M%SZ"
-
-  # Return a time span using Google Calendar's export format.
-  def format_google_timespan(event)
-    end_time = event.end_time || event.start_time
-    "#{event.start_time.utc.strftime(GOOGLE_TIME_FORMAT)}/#{end_time.utc.strftime(GOOGLE_TIME_FORMAT)}"
-  end
-
-  # Return a Google Calendar export URL.
-  def google_event_export_link(event)
-    result = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&text=" << cgi_escape(event.title)
-
-    result << "&dates=" << format_google_timespan(event)
-
-    if event.venue
-      result << "&location=" << cgi_escape(event.venue.title)
-      if event.venue.geocode_address.present?
-        result << cgi_escape(", " + event.venue.geocode_address)
-      end
-    end
-
-    if event.url.present?
-      result << "&sprop=website:" << cgi_escape(event.url.sub(/^http.?:\/\//, ''))
-    end
-
-    if event.description.present?
-      details = "Imported from: #{event_url(event)} \n\n#{event.description}"
-      details_suffix = "...[truncated]"
-      overflow = 1024 - result.length
-      if overflow > 0
-        details = "#{details[0..(overflow - details.size - details_suffix.size - 1)]}#{details_suffix}"
-      end
-      result << "&details=" << cgi_escape(details)
-    end
-
-    return result
-  end
-
   #---[ Feed links ]------------------------------------------------------
 
   # Returns a URL for an events feed.
