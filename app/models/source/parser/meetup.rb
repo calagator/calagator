@@ -34,10 +34,8 @@ class Source::Parser::Meetup < Source::Parser
       [
         "https://api.meetup.com/2/event/#{event_id}",
         {
-          :query => {
-            :key => SECRETS.meetup_api_key,
-            :sign => 'true'
-          }
+          key: SECRETS.meetup_api_key,
+          sign: 'true'
         }
       ]
     end

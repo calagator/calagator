@@ -44,26 +44,10 @@ class Source::Parser < Struct.new(:opts)
     parsers.map { |p| p.label.to_s }.sort_by(&:downcase)
   end
 
-  # Returns content read from a URL. Easier to stub.
   def self.read_url(url)
-    uri = URI.parse(url)
-    if uri.respond_to?(:read)
-      if ['http', 'https'].include?(uri.scheme)
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = (uri.scheme == 'https')
-        path_and_query = uri.path.blank? ? "/" : uri.path
-        path_and_query += "?#{uri.query}" if uri.query
-        request = Net::HTTP::Get.new(path_and_query)
-        request.basic_auth(uri.user, uri.password)
-        response = http.request(request)
-        raise Source::Parser::HttpAuthenticationRequiredError.new if response.code == "401"
-        response.body
-      else
-        uri.read
-      end
-    else
-      open(url) { |h| h.read }
-    end
+    RestClient.get(url).to_str
+  rescue RestClient::Unauthorized
+    raise Source::Parser::HttpAuthenticationRequiredError.new
   end
 
   def to_events

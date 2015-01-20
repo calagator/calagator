@@ -38,6 +38,7 @@ gem 'ri_cal', '0.8.8'
 gem 'rubyzip'
 gem 'will_paginate', '3.0.5', require: ['will_paginate', 'will_paginate/array']
 gem 'httparty', '0.11.0'
+gem 'rest-client', '1.6.7'
 gem 'loofah', '1.2.1'
 gem 'loofah-activerecord', '1.1.0'
 gem 'bluecloth', '2.2.0'
