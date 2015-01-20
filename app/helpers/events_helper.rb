@@ -74,37 +74,61 @@ module EventsHelper
 
   class GoogleEventExportLink < Struct.new(:event, :context)
     def render
-      location = event.venue.try(:title)
-      if address = event.venue.try(:geocode_address)
-        location += ", #{address}" if address.present?
-      end
+      truncate(url + query)
+    end
 
-      sprop = if event.url.present?
-        "website:#{event.url.sub(/^http.?:\/\//, '')}"
-      end
+    private
 
-      details = "Imported from: #{context.event_url(event)} \n\n#{event.description}"
+    def url
+      "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&"
+    end
 
-      url = "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&"
-      params = {
-        text: event.title,
-        dates: context.format_google_timespan(event),
+    def query
+      params.collect do |key, value|
+        value.to_query(key)
+      end.compact.join("&")
+    end
+
+    def params
+      {
+        text: text,
+        dates: dates,
         location: location,
         sprop: sprop,
         details: details,
       }
+    end
 
-      query = params.collect do |key, value|
-        value.to_query(key)
-      end.compact.join("&")
+    def text
+      event.title
+    end
 
-      url += query
+    def dates
+      context.format_google_timespan(event)
+    end
 
+    def location
+      location = event.venue.try(:title)
+      if address = event.venue.try(:geocode_address)
+        location += ", #{address}" if address.present?
+      end
+      location
+    end
+
+    def sprop
+      if event.url.present?
+        "website:#{event.url.sub(/^http.?:\/\//, '')}"
+      end
+    end
+
+    def details
+      "Imported from: #{context.event_url(event)} \n\n#{event.description}"
+    end
+
+    def truncate string
       omission = "...[truncated]"
       length = 1024 - omission.length
-      url = context.truncate(url, length: length, omission: omission)
-
-      url
+      context.truncate(string, length: length, omission: omission)
     end
   end
 
