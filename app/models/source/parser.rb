@@ -100,11 +100,12 @@ class Source::Parser < Struct.new(:opts)
     event_id = url[self.class.url_pattern, 1]
     return false unless event_id # Give up unless we find the identifier.
 
-    # Get URL and arguments for using the API.
-    api_args = block.call(event_id)
+    # Get URL and params for using the API.
+    url, params = *block.call(event_id)
 
     # Get data from the API.
-    data = HTTParty.get(*api_args)
+    data = RestClient.get(url, params: params, accept: "json").to_str
+    data = JSON.parse(data)
 
     # Stop if API tells us there's an error.
     raise Source::Parser::NotFound, error if error = data[error_key]
