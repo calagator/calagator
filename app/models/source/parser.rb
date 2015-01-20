@@ -14,19 +14,22 @@ class Source::Parser < Struct.new(:opts)
   # * :url - URL string to read as parser input.
   # * :content - String to read as parser input.
   def self.to_events(opts)
-    # start with the parser that matches the given URL
-    matched_parsers = parsers.sort_by do |parser|
-      match = parser.url_pattern.present? && opts[:url].try(:match, parser.url_pattern)
-      match ? 0 : 1
-    end
-
     # Return events from the first parser that suceeds
-    events = matched_parsers.lazy.collect { |parser|
+    events = matched_parsers(opts[:url]).lazy.collect { |parser|
       parser.new(opts).to_events
     }.detect(&:present?)
 
     events || []
   end
+
+  def self.matched_parsers(url)
+    # start with the parser that matches the given URL
+    parsers.sort_by do |parser|
+      match = parser.url_pattern.present? && url.try(:match, parser.url_pattern)
+      match ? 0 : 1
+    end
+  end
+  private_class_method :matched_parsers
 
   cattr_accessor(:parsers) { SortedSet.new }
 
@@ -38,29 +41,13 @@ class Source::Parser < Struct.new(:opts)
 
   # Returns an Array of sorted string labels for the parsers.
   def self.labels
-    self.parsers.map(&:label).map(&:to_s).sort_by(&:downcase)
+    parsers.map { |p| p.label.to_s }.sort_by(&:downcase)
   end
 
-  # Returns content read from a URL. Easier to stub.
   def self.read_url(url)
-    uri = URI.parse(url)
-    if uri.respond_to?(:read)
-      if ['http', 'https'].include?(uri.scheme)
-        http = Net::HTTP.new(uri.host, uri.port)
-        http.use_ssl = (uri.scheme == 'https')
-        path_and_query = uri.path.blank? ? "/" : uri.path
-        path_and_query += "?#{uri.query}" if uri.query
-        request = Net::HTTP::Get.new(path_and_query)
-        request.basic_auth(uri.user, uri.password)
-        response = http.request(request)
-        raise Source::Parser::HttpAuthenticationRequiredError.new if response.code == "401"
-        response.body
-      else
-        uri.read
-      end
-    else
-      open(url) { |h| h.read }
-    end
+    RestClient.get(url).to_str
+  rescue RestClient::Unauthorized
+    raise Source::Parser::HttpAuthenticationRequiredError.new
   end
 
   def to_events
@@ -113,11 +100,12 @@ class Source::Parser < Struct.new(:opts)
     event_id = url[self.class.url_pattern, 1]
     return false unless event_id # Give up unless we find the identifier.
 
-    # Get URL and arguments for using the API.
-    api_args = block.call(event_id)
+    # Get URL and params for using the API.
+    url, params = *block.call(event_id)
 
     # Get data from the API.
-    data = HTTParty.get(*api_args)
+    data = RestClient.get(url, params: params, accept: "json").to_str
+    data = JSON.parse(data)
 
     # Stop if API tells us there's an error.
     raise Source::Parser::NotFound, error if error = data[error_key]

@@ -29,10 +29,8 @@ class Source::Parser::Plancast < Source::Parser
       [
         'http://api.plancast.com/02/plans/show.json',
         {
-          :query => {
-            :plan_id => event_id,
-            :extensions => 'place'
-          }
+          plan_id: event_id,
+          extensions: 'place'
         }
       ]
     end
