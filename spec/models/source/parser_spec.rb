@@ -5,10 +5,6 @@ describe Source::Parser, "when reading content", :type => :model do
     stub_request(:get, "http://a.real/~url").to_return(body: "42")
     expect(Source::Parser.read_url("http://a.real/~url")).to eq "42"
   end
-
-  it "should read from a wacky URL" do
-    expect { Source::Parser.read_url("not://a.real/~url") }.to raise_error(Errno::ENOENT)
-  end
 end
 
 describe Source::Parser, "when subclassing", :type => :model do
