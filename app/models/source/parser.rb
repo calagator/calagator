@@ -14,19 +14,22 @@ class Source::Parser < Struct.new(:opts)
   # * :url - URL string to read as parser input.
   # * :content - String to read as parser input.
   def self.to_events(opts)
-    # start with the parser that matches the given URL
-    matched_parsers = parsers.sort_by do |parser|
-      match = parser.url_pattern.present? && opts[:url].try(:match, parser.url_pattern)
-      match ? 0 : 1
-    end
-
     # Return events from the first parser that suceeds
-    events = matched_parsers.lazy.collect { |parser|
+    events = matched_parsers(opts[:url]).lazy.collect { |parser|
       parser.new(opts).to_events
     }.detect(&:present?)
 
     events || []
   end
+
+  def self.matched_parsers(url)
+    # start with the parser that matches the given URL
+    parsers.sort_by do |parser|
+      match = parser.url_pattern.present? && url.try(:match, parser.url_pattern)
+      match ? 0 : 1
+    end
+  end
+  private_class_method :matched_parsers
 
   cattr_accessor(:parsers) { SortedSet.new }
 
