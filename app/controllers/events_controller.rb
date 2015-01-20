@@ -156,25 +156,12 @@ class EventsController < ApplicationController
   # is a value like :start, which refers to the `params[:date][+kind+]` value.
   # If there's an error, set an error message to flash.
   def date_or_default_for(kind)
-    if params[:date].present?
-      if params[:date].respond_to?(:has_key?)
-        if params[:date].has_key?(kind)
-          if params[:date][kind].present?
-            begin
-              return Date.parse(params[:date][kind])
-            rescue ArgumentError => e
-              append_flash :failure, "Can't filter by an invalid #{kind} date."
-            end
-          else
-            append_flash :failure, "Can't filter by an empty #{kind} date."
-          end
-        else
-          append_flash :failure, "Can't filter by a missing #{kind} date."
-        end
-      else
-        append_flash :failure, "Can't filter by a malformed #{kind} date."
-      end
-    end
-    return self.send("default_#{kind}_date")
+    default = send("default_#{kind}_date")
+    return default unless params[:date].present?
+
+    Date.parse(params[:date][kind])
+  rescue ArgumentError, TypeError
+    append_flash :failure, "Can't filter by an invalid #{kind} date."
+    default
   end
 end
