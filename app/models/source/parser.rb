@@ -41,7 +41,7 @@ class Source::Parser < Struct.new(:opts)
 
   # Returns an Array of sorted string labels for the parsers.
   def self.labels
-    self.parsers.map(&:label).map(&:to_s).sort_by(&:downcase)
+    parsers.map { |p| p.label.to_s }.sort_by(&:downcase)
   end
 
   # Returns content read from a URL. Easier to stub.
