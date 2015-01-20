@@ -84,19 +84,13 @@ module EventsHelper
     end
 
     def query
-      params.collect do |key, value|
-        value.to_query(key)
+      fields.collect do |field|
+        send(field).to_query(field)
       end.compact.join("&")
     end
 
-    def params
-      {
-        text: text,
-        dates: dates,
-        location: location,
-        sprop: sprop,
-        details: details,
-      }
+    def fields
+      [:text, :dates, :location, :sprop, :details]
     end
 
     def text
