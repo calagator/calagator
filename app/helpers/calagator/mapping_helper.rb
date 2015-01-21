@@ -53,11 +53,10 @@ module MappingHelper
           markerColor: '#{marker_color}'
         })
 
-        var markers = [
-          #{markers.map do |m|
-            "L.marker([#{m.latitude}, #{m.longitude}], {title: '#{context.j m.title}', icon: venueIcon}).bindPopup('#{context.j m.popup}')"
-          end.join(",\n") }
-        ];
+        var rawMarkers = #{markers.to_json};
+        var markers = rawMarkers.map(function(m) {
+          return L.marker([m.latitude, m.longitude], { title: m.title, icon: venueIcon}).bindPopup(m.popup);
+        });
         var markerGroup = L.featureGroup(markers);
         markerGroup.addTo(map);
 
@@ -93,15 +92,13 @@ module MappingHelper
 
     def markers
       Array(locatable_items).map { |locatable_item|
-        location = locatable_item.location
-
-        if location
-          latitude = location[0]
-          longitude = location[1]
-          title = locatable_item.title
-          popup = context.link_to(locatable_item.title, locatable_item)
-
-          Marker.new(latitude, longitude, title, popup)
+        if location = locatable_item.location
+          {
+            latitude: location[0],
+            longitude: location[1],
+            title: locatable_item.title,
+            popup: context.link_to(locatable_item.title, locatable_item)
+          }
         end
       }.compact
     end
@@ -128,9 +125,6 @@ module MappingHelper
     def map_tiles
       Calagator.mapping_tiles || 'terrain'
     end
-  end
-
-  class Marker < Struct.new(:latitude, :longitude, :title, :popup)
   end
 
   alias_method :google_map, :map
