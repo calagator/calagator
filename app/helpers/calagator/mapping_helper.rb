@@ -26,45 +26,43 @@ module MappingHelper
   end
 
   def map(items, options = {})
+    options.symbolize_keys!
     Map.new(items, self, options).render
   end
 
   class Map < Struct.new(:items, :context, :options)
     def render
-      options.symbolize_keys!
+      return if locatable_items.empty?
+      script = <<-JS
+        var layer = new #{layer_constructor}("#{map_tiles}");
+        var map = new L.Map("#{div_id}", {
+            center: new L.LatLng(#{center}),
+            zoom: #{zoom},
+            attributionControl: false
+        });
+        L.control.attribution ({
+          position: 'bottomright',
+          prefix: false
+        }).addTo(map);
 
-      if locatable_items.present?
-        script = <<-JS
-          var layer = new #{layer_constructor}("#{map_tiles}");
-          var map = new L.Map("#{div_id}", {
-              center: new L.LatLng(#{center}),
-              zoom: #{zoom},
-              attributionControl: false
-          });
-          L.control.attribution ({
-            position: 'bottomright',
-            prefix: false
-          }).addTo(map);
+        map.addLayer(layer);
 
-          map.addLayer(layer);
+        var venueIcon = L.AwesomeMarkers.icon({
+          icon: 'star',
+          prefix: 'fa',
+          markerColor: '#{marker_color}'
+        })
 
-          var venueIcon = L.AwesomeMarkers.icon({
-            icon: 'star',
-            prefix: 'fa',
-            markerColor: '#{marker_color}'
-          })
+        var markers = [#{markers}];
+        var markerGroup = L.featureGroup(markers);
+        markerGroup.addTo(map);
 
-          var markers = [#{markers}];
-          var markerGroup = L.featureGroup(markers);
-          markerGroup.addTo(map);
+        if(#{should_fit_bounds}) {
+          map.fitBounds(markerGroup.getBounds());
+        }
+      JS
 
-          if(#{should_fit_bounds}) {
-            map.fitBounds(markerGroup.getBounds());
-          }
-        JS
-
-        map_div + context.javascript_tag(script)
-      end
+      map_div + context.javascript_tag(script)
     end
 
     private
