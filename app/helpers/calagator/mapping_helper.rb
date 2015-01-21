@@ -73,16 +73,15 @@ module MappingHelper
     end
 
     def markers
-      Array(locatable_items).map { |locatable_item|
-        if location = locatable_item.location
-          {
-            latitude: location[0],
-            longitude: location[1],
-            title: locatable_item.title,
-            popup: context.link_to(locatable_item.title, locatable_item)
-          }
-        end
-      }.compact
+      Array(locatable_items).map do |locatable_item|
+        next unless location = locatable_item.location
+        {
+          latitude: location[0],
+          longitude: location[1],
+          title: locatable_item.title,
+          popup: context.link_to(locatable_item.title, locatable_item)
+        }
+      end.compact
     end
 
     def marker_color
