@@ -107,8 +107,6 @@ module MappingHelper
       Calagator.mapping_tiles || 'terrain'
     end
   end
-
-  alias_method :google_map, :map
 end
 
 end
