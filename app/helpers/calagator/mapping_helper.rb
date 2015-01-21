@@ -34,35 +34,37 @@ module MappingHelper
     def render
       return if locatable_items.empty?
       script = <<-JS
-        var layer = new #{layer_constructor}("#{map_tiles}");
-        var map = new L.Map("#{div_id}", {
-            center: new L.LatLng(#{center}),
-            zoom: #{zoom},
-            attributionControl: false
-        });
-        L.control.attribution ({
-          position: 'bottomright',
-          prefix: false
-        }).addTo(map);
+        var map = function(layer_constructor, map_tiles, div_id, center, zoom, marker_color, rawMarkers, should_fit_bounds) {
+          var layer = new layer_constructor(map_tiles);
+          var map = new L.Map(div_id, {
+              center: new L.LatLng(center[0], center[1]),
+              zoom: zoom,
+              attributionControl: false
+          });
+          L.control.attribution ({
+            position: 'bottomright',
+            prefix: false
+          }).addTo(map);
 
-        map.addLayer(layer);
+          map.addLayer(layer);
 
-        var venueIcon = L.AwesomeMarkers.icon({
-          icon: 'star',
-          prefix: 'fa',
-          markerColor: '#{marker_color}'
-        })
+          var venueIcon = L.AwesomeMarkers.icon({
+            icon: 'star',
+            prefix: 'fa',
+            markerColor: marker_color
+          })
 
-        var rawMarkers = #{markers.to_json};
-        var markers = rawMarkers.map(function(m) {
-          return L.marker([m.latitude, m.longitude], { title: m.title, icon: venueIcon}).bindPopup(m.popup);
-        });
-        var markerGroup = L.featureGroup(markers);
-        markerGroup.addTo(map);
+          var markers = rawMarkers.map(function(m) {
+            return L.marker([m.latitude, m.longitude], { title: m.title, icon: venueIcon}).bindPopup(m.popup);
+          });
+          var markerGroup = L.featureGroup(markers);
+          markerGroup.addTo(map);
 
-        if(#{should_fit_bounds}) {
-          map.fitBounds(markerGroup.getBounds());
-        }
+          if(should_fit_bounds) {
+            map.fitBounds(markerGroup.getBounds());
+          }
+        };
+        map(#{layer_constructor}, "#{map_tiles}", "#{div_id}", #{center}, #{zoom}, "#{marker_color}", #{markers.to_json}, #{should_fit_bounds});
       JS
 
       map_div + context.javascript_tag(script)
@@ -83,7 +85,7 @@ module MappingHelper
     end
 
     def center
-      (options[:center] || locatable_items.first.location).join(", ")
+      (options[:center] || locatable_items.first.location).map(&:to_f)
     end
 
     def should_fit_bounds
