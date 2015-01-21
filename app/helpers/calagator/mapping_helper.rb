@@ -5,10 +5,6 @@ module MappingHelper
     Calagator.mapping_provider || 'stamen'
   end
 
-  def map_tiles
-    Calagator.mapping_tiles || 'terrain'
-  end
-
   def leaflet_js
     Rails.env.production? ? ["http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"] : ["leaflet"]
   end
@@ -42,13 +38,13 @@ module MappingHelper
         div_id = options[:id] || 'map'
         map_div = context.content_tag(:div, "", :id => div_id)
 
-        markers = context.map_markers(locatable_items)
+        markers = map_markers(locatable_items)
         zoom = options[:zoom] || 14
         center = (options[:center] || locatable_items.first.location).join(", ")
         should_fit_bounds = locatable_items.count > 1 && options[:center].blank?
 
         script = <<-JS
-          var layer = new #{context.layer_constructor}("#{context.map_tiles}");
+          var layer = new #{layer_constructor}("#{map_tiles}");
           var map = new L.Map("#{div_id}", {
               center: new L.LatLng(#{center}),
               zoom: #{zoom},
@@ -76,35 +72,41 @@ module MappingHelper
         map_div + context.javascript_tag(script)
       end
     end
+
+    private
+
+    def map_markers(locatable_items)
+      Array(locatable_items).map { |locatable_item|
+        location = locatable_item.location
+
+        if location
+          latitude = location[0]
+          longitude = location[1]
+          title = locatable_item.title
+          popup = context.link_to(locatable_item.title, locatable_item)
+
+          "L.marker([#{latitude}, #{longitude}], {title: '#{context.j title}', icon: venueIcon}).bindPopup('#{context.j popup}')"
+        end
+      }.compact
+    end
+
+    def layer_constructor
+      constructor_map = {
+        "stamen"  => "L.StamenTileLayer",
+        "mapbox"  => "L.mapbox.tileLayer",
+        "esri"    => "L.esri.basemapLayer",
+        "google"  => "L.Google",
+        "leaflet" => "L.tileLayer",
+      }
+      constructor_map[context.map_provider]
+    end
+
+    def map_tiles
+      Calagator.mapping_tiles || 'terrain'
+    end
   end
 
   alias_method :google_map, :map
-
-  def layer_constructor
-    constructor_map = {
-      "stamen"  => "L.StamenTileLayer",
-      "mapbox"  => "L.mapbox.tileLayer",
-      "esri"    => "L.esri.basemapLayer",
-      "google"  => "L.Google",
-      "leaflet" => "L.tileLayer",
-    }
-    constructor_map[map_provider]
-  end
-
-  def map_markers(locatable_items)
-    Array(locatable_items).map { |locatable_item|
-      location = locatable_item.location
-
-      if location
-        latitude = location[0]
-        longitude = location[1]
-        title = locatable_item.title
-        popup = link_to(locatable_item.title, locatable_item)
-
-        "L.marker([#{latitude}, #{longitude}], {title: '#{j title}', icon: venueIcon}).bindPopup('#{j popup}')"
-      end
-    }.compact
-  end
 end
 
 end
