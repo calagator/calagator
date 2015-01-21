@@ -1,7 +1,8 @@
 //= require leaflet.awesome-markers
 
 var map = function(layer_constructor, map_tiles, div_id, center, zoom, marker_color, rawMarkers, should_fit_bounds) {
-  var layer = new layer_constructor(map_tiles);
+  klass = eval(layer_constructor)
+  var layer = new klass(map_tiles);
   var map = new L.Map(div_id, {
       center: new L.LatLng(center[0], center[1]),
       zoom: zoom,

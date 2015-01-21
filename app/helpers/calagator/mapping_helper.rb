@@ -33,14 +33,24 @@ module MappingHelper
   class Map < Struct.new(:items, :context, :options)
     def render
       return if locatable_items.empty?
-      script = <<-JS
-        map(#{layer_constructor}, "#{map_tiles}", "#{div_id}", #{center}, #{zoom}, "#{marker_color}", #{markers.to_json}, #{should_fit_bounds});
-      JS
-
-      map_div + context.javascript_tag(script)
+      args = js_args.to_json[1...-1] # "splat" arguments by removing wrapping square brackets
+      map_div + context.javascript_tag("map(#{args});")
     end
 
     private
+
+    def js_args
+      [
+        layer_constructor,
+        map_tiles,
+        div_id,
+        center,
+        zoom,
+        marker_color,
+        markers,
+        should_fit_bounds
+      ]
+    end
 
     def map_div
       context.content_tag(:div, "", id: div_id)
