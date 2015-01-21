@@ -30,45 +30,51 @@ module MappingHelper
   end
 
   def map(locatable_items, options = {})
-    options.symbolize_keys!
-    locatable_items = Array(locatable_items).select{|i| i.location.present? }
+    Map.new(locatable_items, self, options).render
+  end
 
-    if locatable_items.present?
-      div_id = options[:id] || 'map'
-      map_div = content_tag(:div, "", :id => div_id)
+  class Map < Struct.new(:items, :context, :options)
+    def render
+      options.symbolize_keys!
+      locatable_items = Array(items).select{|i| i.location.present? }
 
-      markers = map_markers(locatable_items)
-      zoom = options[:zoom] || 14
-      center = (options[:center] || locatable_items.first.location).join(", ")
-      should_fit_bounds = locatable_items.count > 1 && options[:center].blank?
+      if locatable_items.present?
+        div_id = options[:id] || 'map'
+        map_div = context.content_tag(:div, "", :id => div_id)
 
-      script = <<-JS
-        var layer = new #{layer_constructor}("#{map_tiles}");
-        var map = new L.Map("#{div_id}", {
-            center: new L.LatLng(#{center}),
-            zoom: #{zoom},
-            attributionControl: false
-        });
-        L.control.attribution ({
-          position: 'bottomright',
-          prefix: false
-        }).addTo(map);
+        markers = context.map_markers(locatable_items)
+        zoom = options[:zoom] || 14
+        center = (options[:center] || locatable_items.first.location).join(", ")
+        should_fit_bounds = locatable_items.count > 1 && options[:center].blank?
 
-        map.addLayer(layer);
+        script = <<-JS
+          var layer = new #{context.layer_constructor}("#{context.map_tiles}");
+          var map = new L.Map("#{div_id}", {
+              center: new L.LatLng(#{center}),
+              zoom: #{zoom},
+              attributionControl: false
+          });
+          L.control.attribution ({
+            position: 'bottomright',
+            prefix: false
+          }).addTo(map);
 
-        var venueIcon = L.AwesomeMarkers.icon({
-          icon: 'star',
-          prefix: 'fa',
-          markerColor: '#{Calagator.mapping_marker_color}'
-        })
+          map.addLayer(layer);
 
-        var markers = [#{markers.join(", ")}];
-        var markerGroup = L.featureGroup(markers);
-        markerGroup.addTo(map);
-      JS
-      script << "map.fitBounds(markerGroup.getBounds());" if should_fit_bounds
+          var venueIcon = L.AwesomeMarkers.icon({
+            icon: 'star',
+            prefix: 'fa',
+            markerColor: '#{Calagator.mapping_marker_color}'
+          })
 
-      map_div + javascript_tag(script)
+          var markers = [#{markers.join(", ")}];
+          var markerGroup = L.featureGroup(markers);
+          markerGroup.addTo(map);
+        JS
+        script << "map.fitBounds(markerGroup.getBounds());" if should_fit_bounds
+
+        map_div + context.javascript_tag(script)
+      end
     end
   end
 
