@@ -25,24 +25,15 @@ module MappingHelper
     leaflet_js + map_provider_dependencies
   end
 
-  def map(locatable_items, options = {})
-    Map.new(locatable_items, self, options).render
+  def map(items, options = {})
+    Map.new(items, self, options).render
   end
 
   class Map < Struct.new(:items, :context, :options)
     def render
       options.symbolize_keys!
-      locatable_items = Array(items).select{|i| i.location.present? }
 
       if locatable_items.present?
-        div_id = options[:id] || 'map'
-        map_div = context.content_tag(:div, "", :id => div_id)
-
-        markers = map_markers(locatable_items)
-        zoom = options[:zoom] || 14
-        center = (options[:center] || locatable_items.first.location).join(", ")
-        should_fit_bounds = locatable_items.count > 1 && options[:center].blank?
-
         script = <<-JS
           var layer = new #{layer_constructor}("#{map_tiles}");
           var map = new L.Map("#{div_id}", {
@@ -75,7 +66,27 @@ module MappingHelper
 
     private
 
-    def map_markers(locatable_items)
+    def map_div
+      context.content_tag(:div, "", id: div_id)
+    end
+
+    def div_id
+      options[:id] || 'map'
+    end
+
+    def zoom
+      options[:zoom] || 14
+    end
+
+    def center
+      (options[:center] || locatable_items.first.location).join(", ")
+    end
+
+    def should_fit_bounds
+      locatable_items.count > 1 && options[:center].blank?
+    end
+
+    def markers
       Array(locatable_items).map { |locatable_item|
         location = locatable_item.location
 
@@ -88,6 +99,10 @@ module MappingHelper
           "L.marker([#{latitude}, #{longitude}], {title: '#{context.j title}', icon: venueIcon}).bindPopup('#{context.j popup}')"
         end
       }.compact
+    end
+
+    def locatable_items
+      @locatable_items ||= Array(items).select {|i| i.location.present? }
     end
 
     def layer_constructor
