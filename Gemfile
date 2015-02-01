@@ -65,6 +65,8 @@ group :development, :test do
   gem 'rspec-collection_matchers'
   gem 'spring', '1.1.3'
   gem 'spring-commands-rspec', '1.0.2'
+  gem 'factory_girl_rails'
+  gem 'faker', '1.4.3'
 
   # Do not install these interactive libraries onto the continuous integration server.
   unless ENV['CI'] || ENV['TRAVIS']
@@ -109,11 +111,9 @@ group :test do
   gem 'capybara', '2.4.3'
   gem 'coveralls', '0.7.0', require: false
   gem 'database_cleaner'
-  gem 'factory_girl_rails'
   gem 'poltergeist', '1.5.1'
   gem 'timecop', '~> 0.7'
   gem 'webmock', '~> 1.20'
-  gem 'faker', '1.4.3'
 end
 
 # Gems used only for assets and not required
