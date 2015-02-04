@@ -1,3 +1,5 @@
+require "faker"
+
 FactoryGirl.define do
   factory :venue do
     sequence(:title) { |n| "Venue #{n}" }

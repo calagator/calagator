@@ -62,13 +62,43 @@ GEM
       multi_json (~> 1.0)
     acts-as-taggable-on (2.4.1)
       rails (>= 3, < 5)
+    addressable (2.3.6)
     arel (3.0.3)
     bluecloth (2.2.0)
     builder (3.0.4)
+    byebug (3.0.0)
+      columnize (~> 0.3)
+      debugger-linecache (~> 1.2)
+    capybara (2.4.3)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
+    cliver (0.3.2)
     columnize (0.3.6)
+    coveralls (0.7.0)
+      multi_json (~> 1.3)
+      rest-client
+      simplecov (>= 0.7)
+      term-ansicolor
+      thor
+    crack (0.4.2)
+      safe_yaml (~> 1.0.0)
+    database_cleaner (1.4.0)
+    debugger-linecache (1.2.0)
+    diff-lcs (1.2.5)
+    docile (1.1.5)
     erubis (2.7.0)
     exception_notification (2.6.1)
       actionmailer (>= 3.0.4)
+    factory_girl (4.5.0)
+      activesupport (>= 3.0.0)
+    factory_girl_rails (4.5.0)
+      factory_girl (~> 4.5.0)
+      railties (>= 3.0.0)
+    faker (1.4.3)
+      i18n (~> 0.5)
     font-awesome-rails (3.2.1.3)
       railties (>= 3.2, < 5.0)
     formtastic (2.2.1)
@@ -104,6 +134,11 @@ GEM
       rails (~> 3.0)
       rake
       will_paginate (~> 3.0.pre2)
+    poltergeist (1.5.1)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      multi_json (~> 1.0)
+      websocket-driver (>= 0.2.0)
     polyglot (0.3.5)
     pr_geohash (1.0.0)
     progress_bar (1.0.0)
@@ -142,7 +177,39 @@ GEM
     ri_cal (0.8.8)
     rsolr (1.0.10)
       builder (>= 2.1.2)
+    rspec-activemodel-mocks (1.0.1)
+      activemodel (>= 3.0)
+      activesupport (>= 3.0)
+      rspec-mocks (>= 2.99, < 4.0)
+    rspec-collection_matchers (1.1.2)
+      rspec-expectations (>= 2.99.0.beta1)
+    rspec-core (3.2.0)
+      rspec-support (~> 3.2.0)
+    rspec-expectations (3.2.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.2.0)
+    rspec-its (1.1.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
+    rspec-mocks (3.2.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.2.0)
+    rspec-rails (3.2.0)
+      actionpack (>= 3.0, <= 4.2)
+      activesupport (>= 3.0, <= 4.2)
+      railties (>= 3.0, <= 4.2)
+      rspec-core (~> 3.2.0)
+      rspec-expectations (~> 3.2.0)
+      rspec-mocks (~> 3.2.0)
+      rspec-support (~> 3.2.0)
+    rspec-support (3.2.0)
     rubyzip (1.1.7)
+    safe_yaml (1.0.4)
+    simplecov (0.9.1)
+      docile (~> 1.1.0)
+      multi_json (~> 1.0)
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
     sprockets (2.2.3)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -157,19 +224,45 @@ GEM
       rails (>= 3)
       sunspot (= 2.1.1)
     sunspot_solr (2.1.1)
+    term-ansicolor (1.3.0)
+      tins (~> 1.0)
     thor (0.19.1)
     tilt (1.4.1)
+    timecop (0.7.1)
+    tins (1.3.3)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
     tzinfo (0.3.43)
     utf8-cleaner (0.0.9)
+    webmock (1.20.4)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+    websocket-driver (0.5.1)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.1)
     will_paginate (3.0.5)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  byebug
   calagator!
+  capybara
+  coveralls
+  database_cleaner
+  factory_girl_rails
+  faker
   jquery-rails
+  poltergeist
+  rspec-activemodel-mocks
+  rspec-collection_matchers
+  rspec-its
+  rspec-rails
+  simplecov
   sqlite3
+  timecop
+  webmock
