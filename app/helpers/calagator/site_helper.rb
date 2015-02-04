@@ -1,0 +1,2 @@
+module Calagator::SiteHelper
+end

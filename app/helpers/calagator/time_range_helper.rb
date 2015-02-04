@@ -1,4 +1,4 @@
-module TimeRangeHelper
+module Calagator::TimeRangeHelper
   extend self
   # Initialize with a single DateTime, a pair of DateTimes,
   # or an object that responds_to start_time and end_time, and two options

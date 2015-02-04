@@ -1,4 +1,4 @@
-module MappingHelper
+module Calagator::MappingHelper
   def map_provider
     (SECRETS.mapping && SECRETS.mapping["provider"]) || 'stamen'
   end
