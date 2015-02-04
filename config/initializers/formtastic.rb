@@ -71,11 +71,11 @@ Formtastic::FormBuilder.all_fields_required_by_default = false
 # Formtastic::Helpers::FormHelper.builder = MyCustomBuilder
 
 
-# Hack to disable Formtastic's HTML5 'required' attributes until Chrome properly supports the novalidate option.
-module NoHtmlRequired
-  def input_html_options_with_no_html_5_required_attribute
-    input_html_options_without_no_html_5_required_attribute.merge(:required => nil)
-  end
-end
-Formtastic::Inputs::Base::Html.send(:include, NoHtmlRequired)
-Formtastic::Inputs::Base::Html.send(:alias_method_chain, :input_html_options, :no_html_5_required_attribute)
+# # Hack to disable Formtastic's HTML5 'required' attributes until Chrome properly supports the novalidate option.
+# module NoHtmlRequired
+#   def input_html_options_with_no_html_5_required_attribute
+#     input_html_options_without_no_html_5_required_attribute.merge(:required => nil)
+#   end
+# end
+# Formtastic::Inputs::Base::Html.send(:include, NoHtmlRequired)
+# Formtastic::Inputs::Base::Html.send(:alias_method_chain, :input_html_options, :no_html_5_required_attribute)
