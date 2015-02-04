@@ -1,5 +1,3 @@
-require 'factory_girl'
-
 unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
   require 'simplecov'
   require 'coveralls'
@@ -12,6 +10,17 @@ unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using 
 end
 
 require "rails_helper"
+require "rspec-activemodel-mocks"
+require "rspec/its"
+require "rspec-rails"
+require "rspec/collection_matchers"
+require "factory_girl_rails"
+require "capybara"
+require "database_cleaner"
+require "capybara/poltergeist"
+require "timecop"
+require "webmock"
+require "byebug"
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
