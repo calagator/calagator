@@ -1,4 +1,4 @@
-module TagsHelper
+module Calagator::TagsHelper
   def tag_links_for(model)
     model.tags.sort_by(&:name).map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
   end

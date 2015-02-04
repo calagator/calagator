@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe EventsHelper, :type => :helper do
+describe Calagator::EventsHelper, :type => :helper do
   describe "#events_sort_link" do
     it "renders a sorting link with the field for the supplied key" do
       params.merge! action: "index", controller: "events"

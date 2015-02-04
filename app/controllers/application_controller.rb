@@ -2,6 +2,17 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class ApplicationController < ActionController::Base
+  helper Calagator::EventsHelper
+  helper Calagator::ApplicationHelper
+  helper Calagator::EventsHelper
+  helper Calagator::GoogleEventExportHelper
+  helper Calagator::MappingHelper
+  helper Calagator::SiteHelper
+  helper Calagator::SourcesHelper
+  helper Calagator::TagsHelper
+  helper Calagator::TimeRangeHelper
+  helper Calagator::VenuesHelper
+
   helper :all # include all helpers, all the time
 
   # See ActionController::RequestForgeryProtection for details

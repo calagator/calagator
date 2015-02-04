@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe TimeRangeHelper do
+describe Calagator::TimeRangeHelper do
   let(:start_time) { DateTime.new(2008, 4, 1, 9, 00) }
 
   # Test all permutations of
