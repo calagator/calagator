@@ -4,9 +4,100 @@ require 'rails/all'
 
 Bundler.require(*Rails.groups)
 require "calagator"
+require "formtastic"
+require "rails_autolink"
+require "nokogiri"
+require "columnize"
+require "geokit"
+require "htmlentities"
+require "paper_trail"
+require "ri_cal"
+# require "rubyzip"
+require "will_paginate"
+require "rest-client"
+require "loofah"
+require "loofah-activerecord"
+require "bluecloth"
+require "formtastic"
+require "acts-as-taggable-on"
+require "jquery-rails"
+require "progress_bar"
+require "exception_notification"
+require "font-awesome-rails"
+require "paper_trail_manager"
+require "utf8-cleaner"
+# require "mofo"
+require "sunspot_rails"
+require "sunspot_solr"
+require "lucene_query"
 
 module Dummy
   class Application < Rails::Application
+    config.autoload_paths += %W(
+      #{config.root}/app/mixins
+      #{config.root}/app/observers
+      #{config.root}/lib
+    )
+
+    #---[ Rails ]-----------------------------------------------------------
+
+    # Activate observers that should always be running
+    # config.active_record.observers = :cacher, :garbage_collector
+    config.active_record.observers = :cache_observer
+
+    # Deliver email using sendmail by default
+    config.action_mailer.delivery_method = :sendmail
+    config.action_mailer.sendmail_settings = { :arguments => '-i' }
+
+    # Configure sensitive parameters which will be filtered from the log file.
+    config.filter_parameters += [:password]
+
+    config.i18n.enforce_available_locales = true
+
+    #---[ Caching ]---------------------------------------------------------
+
+    require 'fileutils'
+    cache_path = Rails.root.join('tmp','cache',Rails.env)
+    config.cache_store = :file_store, cache_path
+    FileUtils.mkdir_p(cache_path)
+
+    #---[ Asset Pipeline ]--------------------------------------------------
+    # Enable the asset pipeline
+    config.assets.enabled = true
+
+    # Version of your assets, change this if you want to expire all your assets
+    config.assets.version = '1.0'
+
+    config.assets.precompile += [
+      "leaflet.js",
+      "leaflet_google_layer.js",
+      "errors.css"
+    ]
+
+    #---[ Secrets and settings ]--------------------------------------------
+
+    config.before_initialize do
+      # Read secrets
+      require 'secrets_reader'
+      ::SECRETS = SecretsReader.read
+
+      # Read theme
+      require 'theme_reader'
+      ::THEME_NAME = ThemeReader.read
+
+      # Read theme settings
+      require 'settings_reader'
+      ::SETTINGS = SettingsReader.read(Rails.root.join('themes',THEME_NAME,'settings.yml'))
+
+      # Set timezone for Rails
+      config.time_zone = SETTINGS.timezone || 'Pacific Time (US & Canada)'
+    end
+
+    # Set timezone for OS
+    config.after_initialize do
+      ENV['TZ'] = Time.zone.tzinfo.identifier
+    end
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
