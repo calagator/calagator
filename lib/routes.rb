@@ -1,4 +1,6 @@
-Calagator::Application.routes.draw do
+def Calagator.draw_routes(app)
+  app.routes.draw do
+
   match 'omfg' => 'site#omfg'
   match 'hello' => 'site#hello'
 
@@ -53,4 +55,7 @@ Calagator::Application.routes.draw do
   match '/index' => 'site#index'
   match '/index.:format' => 'site#index'
 
+  mount app.assets => app.config.assets.prefix if app.assets
+
+  end
 end
