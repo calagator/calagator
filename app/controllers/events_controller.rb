@@ -1,3 +1,5 @@
+require "duplicate_checking/controller_actions"
+
 class EventsController < ApplicationController
   # Provides #duplicates and #squash_many_duplicates
   include DuplicateChecking::ControllerActions

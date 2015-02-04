@@ -27,6 +27,7 @@
 #  access_notes    :text
 #  events_count    :integer
 #
+require "url_prefixer"
 
 class Venue < ActiveRecord::Base
   include StripWhitespace

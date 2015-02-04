@@ -19,6 +19,10 @@
 #  venue_details   :text
 #
 
+require "blacklist_validator"
+require "duplicate_checking"
+require "url_prefixer"
+
 # == Event
 #
 # A model representing a calendar event.

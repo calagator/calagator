@@ -1,4 +1,4 @@
-Calagator::Engine.routes.draw do
+Calagator::Application.routes.draw do
   match 'omfg' => 'site#omfg'
   match 'hello' => 'site#hello'
 
