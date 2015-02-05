@@ -2,11 +2,11 @@ module Calagator
 
 module TagsHelper
   def tag_links_for(model)
-    model.tags.sort_by(&:name).map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
+    model.tags.sort_by(&:name).map{|tag| tag_link(model.class.model_name.human.downcase, tag)}.join(', ').html_safe
   end
 
   def tag_link(type, tag, link_class=nil)
-    internal_url = "/#{type.to_s.pluralize}/tag/#{tag.name}"
+    internal_url = "/#{type.pluralize}/tag/#{tag.name}"
 
     link_classes = [link_class, "p-category"]
     link_classes << "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" if tag.machine_tag[:url]
