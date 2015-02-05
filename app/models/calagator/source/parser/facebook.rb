@@ -1,3 +1,5 @@
+module Calagator
+
 class Source::Parser::Facebook < Source::Parser
   self.label = :Facebook
 
@@ -25,7 +27,7 @@ class Source::Parser::Facebook < Source::Parser
 
     raise ::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
 
-    event = Calagator::Event.new({
+    event = Event.new({
       source:      opts[:source],
       title:       data['name'],
       description: data['description'],
@@ -47,7 +49,7 @@ class Source::Parser::Facebook < Source::Parser
     fields = (data['venue'] || {})
     return if fields.blank?
 
-    venue = Calagator::Venue.new({
+    venue = Venue.new({
       source:         opts[:source],
       title:          data['location'],
       street_address: fields['street'],
@@ -62,3 +64,4 @@ class Source::Parser::Facebook < Source::Parser
   end
 end
 
+end

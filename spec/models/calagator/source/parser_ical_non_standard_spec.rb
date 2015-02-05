@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-describe Source::Parser::Ical, "when parsing VVENUE", :type => :model do
+module Calagator
+
+describe Calagator::Source::Parser::Ical, "when parsing VVENUE", :type => :model do
    before(:each) do
      @venue = Source::Parser::Ical.new.send(:to_venue, %(
 BEGIN:VVENUE
@@ -84,4 +86,6 @@ CATEGORIES:apple applecom appleinc technology).split("\n"))
   it "should find a property set by its key and meta-qualifier with odd characters by its key when one wasn't specified" do
     @vcard_hash['REGION'] == 'Oregon'
   end
+end
+
 end

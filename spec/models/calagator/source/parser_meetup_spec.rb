@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Source::Parser::Meetup, :type => :model do
   describe "with a meetup.com API key in secrets.yml" do
     before do
@@ -62,4 +64,6 @@ describe Source::Parser::Meetup, :type => :model do
       expect(@event.venue.title).to eq "Green Dragon Bistro and Brewpub"
     end
   end
+end
+
 end

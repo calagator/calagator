@@ -15,7 +15,11 @@
 # == Source
 #
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
+module Calagator
+
 class Source < ActiveRecord::Base
+  self.table_name = "sources"
+
   validate :assert_url
 
   has_many :events,  :dependent => :destroy
@@ -99,4 +103,6 @@ class Source < ActiveRecord::Base
     errors.add :url, "has invalid format"
     false
   end
+end
+
 end

@@ -1,4 +1,4 @@
-class Source::Parser
+class Calagator::Source::Parser
   # == Source::Parser::NotFound
   #
   # Exception thrown to indicate that the source isn't found and no other parsers should be tried.

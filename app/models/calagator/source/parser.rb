@@ -7,6 +7,8 @@ require "open-uri"
 # A hierarchy of classes that provide a way to parse different source formats and return hCalendar events.
 # The base class for all format-specific parsers. Do not use instances of this class
 # directly, use a subclass of Parser to do the parsing instead.
+module Calagator
+
 class Source::Parser < Struct.new(:opts)
   # Return an Array of unsaved Event instances.
   #
@@ -85,7 +87,7 @@ class Source::Parser < Struct.new(:opts)
         # Match 2 in the MACHINE_TAG_PATTERN is the predicate
         ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? t.match(ActsAsTaggableOn::Tag::MACHINE_TAG_PATTERN)[2]
       }
-      matched_venue = Calagator::Venue.tagged_with(venue_machine_tag_name).first
+      matched_venue = Venue.tagged_with(venue_machine_tag_name).first
 
       if matched_venue.present?
         matched_venue.progenitor
@@ -115,10 +117,12 @@ class Source::Parser < Struct.new(:opts)
   end
 end
 
-require 'source/parser/not_found'
-require 'source/parser/plancast'
-require 'source/parser/meetup'
-require 'source/parser/facebook'
-require 'source/parser/ical'
-require 'source/parser/hcal'
+end
+
+require 'calagator/source/parser/not_found'
+require 'calagator/source/parser/plancast'
+require 'calagator/source/parser/meetup'
+require 'calagator/source/parser/facebook'
+require 'calagator/source/parser/ical'
+require 'calagator/source/parser/hcal'
 

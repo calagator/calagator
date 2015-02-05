@@ -1,10 +1,12 @@
+module Calagator
+
 class Source::Parser::Plancast < Source::Parser
   self.label = :Plancast
   self.url_pattern = %r{^http://(?:www\.)?plancast\.com/p/([^/]+)/?}
 
   def to_events
     return unless data = get_data
-    event = Calagator::Event.new({
+    event = Event.new({
       source:      opts[:source],
       title:       data['what'],
       description: data['description'],
@@ -39,7 +41,7 @@ class Source::Parser::Plancast < Source::Parser
   def to_venue(value, fallback=nil)
     value = "" if value.nil?
     if value.present?
-      venue = Calagator::Venue.new({
+      venue = Venue.new({
         source: opts[:source],
         title: value['name'],
         address: value['address'],
@@ -48,8 +50,10 @@ class Source::Parser::Plancast < Source::Parser
       venue.geocode!
       venue_or_duplicate(venue)
     elsif fallback.present?
-      venue = Calagator::Venue.new(title: fallback)
+      venue = Venue.new(title: fallback)
       venue_or_duplicate(venue)
     end
   end
+end
+
 end

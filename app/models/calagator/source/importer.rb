@@ -1,3 +1,5 @@
+module Calagator
+
 class Source < ActiveRecord::Base
   class Importer < Struct.new(:source, :events)
     def initialize params
@@ -41,3 +43,4 @@ class Source < ActiveRecord::Base
   end
 end
 
+end

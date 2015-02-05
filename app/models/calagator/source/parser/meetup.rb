@@ -1,3 +1,5 @@
+module Calagator
+
 class Source::Parser::Meetup < Source::Parser
   self.label = :Meetup
   self.url_pattern = %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
@@ -5,7 +7,7 @@ class Source::Parser::Meetup < Source::Parser
   def to_events
     return fallback unless SECRETS.meetup_api_key.present?
     return unless data = get_data
-    event = Calagator::Event.new({
+    event = Event.new({
       source:      opts[:source],
       title:       data['name'],
       description: data['description'],
@@ -43,7 +45,7 @@ class Source::Parser::Meetup < Source::Parser
 
   def to_venue(value)
     return if value.blank?
-    venue = Calagator::Venue.new({
+    venue = Venue.new({
       source: opts[:source],
       title: value['name'],
       street_address: [value['address_1'], value['address_2'], value['address_3']].compact.join(", "),
@@ -65,4 +67,6 @@ class Source::Parser::Meetup < Source::Parser
       driver.new(opts).to_events
     end
   end
+end
+
 end

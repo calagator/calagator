@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Source::Parser::Facebook, :type => :model do
 
   describe "when importing an event" do
@@ -68,3 +70,4 @@ describe Source::Parser::Facebook, :type => :model do
 
 end
 
+end

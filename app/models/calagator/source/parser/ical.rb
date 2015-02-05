@@ -8,6 +8,8 @@
 # Sample sources:
 #   webcal://appendix.23ae.com/calendars/AlternateHolidays.ics
 #   http://appendix.23ae.com/calendars/AlternateHolidays.ics
+module Calagator
+
 class Source::Parser::Ical < Source::Parser
   self.label = :iCalendar
 
@@ -58,7 +60,7 @@ class Source::Parser::Ical < Source::Parser
   end
 
   def component_to_event(component, calendar)
-    event = Calagator::Event.new({
+    event = Event.new({
       source:      opts[:source],
       title:       component.summary,
       description: component.description,
@@ -118,7 +120,7 @@ class Source::Parser::Ical < Source::Parser
   # Options:
   # * :fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
   def to_venue(value, opts={})
-    venue = Calagator::Venue.new
+    venue = Venue.new
 
     # VVENUE entries are considered just Vcards,
     # treating them as such.
@@ -182,4 +184,6 @@ class Source::Parser::Ical < Source::Parser
       vcard_hash
     end
   end
+end
+
 end
