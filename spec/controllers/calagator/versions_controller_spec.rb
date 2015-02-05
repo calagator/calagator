@@ -1,6 +1,10 @@
 require 'spec_helper'
 
+module Calagator
+
 describe VersionsController, :type => :controller do
+  routes { Calagator::Engine.routes }
+
   describe "without versions" do
     it "should raise RecordNotFound if not given an id" do
       expect do
@@ -73,4 +77,6 @@ describe VersionsController, :type => :controller do
       expect(response).to render_template "events/_form"
     end
   end
+end
+
 end
