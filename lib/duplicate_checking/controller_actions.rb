@@ -28,7 +28,7 @@ module DuplicateChecking
 
     def model_class
       # Derive model class from controller name
-      controller_name.singularize.titleize.constantize
+      "Calagator::#{controller_name.singularize.titleize}".constantize
     end
   end
 end
