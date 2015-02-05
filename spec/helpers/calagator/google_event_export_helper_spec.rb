@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-describe Calagator::GoogleEventExportHelper, :type => :helper do
+module Calagator
+
+describe GoogleEventExportHelper, :type => :helper do
   describe "google_event_export_link" do
     def escape(string)
       return Regexp.escape(CGI.escape(string))
@@ -58,4 +60,6 @@ describe Calagator::GoogleEventExportHelper, :type => :helper do
       end
     end
   end
+end
+
 end

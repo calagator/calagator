@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-describe Calagator::EventsHelper, :type => :helper do
+module Calagator
+
+describe EventsHelper, :type => :helper do
   describe "#events_sort_link" do
     it "renders a sorting link with the field for the supplied key" do
       params.merge! action: "index", controller: "events"
@@ -156,4 +158,6 @@ describe Calagator::EventsHelper, :type => :helper do
       expect(helper.sorting_label_for(nil, true)).to eq 'Date'
     end
   end
+end
+
 end

@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-describe Calagator::ApplicationHelper, :type => :helper do
+module Calagator
+
+describe ApplicationHelper, :type => :helper do
   describe "when escaping HTML while preserving entities (cleanse)" do
     it "should preserve plain text" do
       expect(cleanse("Allison to Lillia")).to eq "Allison to Lillia"
@@ -42,23 +44,23 @@ describe Calagator::ApplicationHelper, :type => :helper do
 
   describe "the source code version date" do
     it "returns the timestamp from git" do
-      expect(Calagator::ApplicationHelper).to receive(:system).with(/git/).and_return(true)
-      expect(Calagator::ApplicationHelper).to receive(:`).with(/git/).and_return("Tue Jul 29 01:22:49 2014 -0700")
-      expect(Calagator::ApplicationHelper.source_code_version_raw).to match(/Git timestamp: Tue Jul 29 01:22:49 2014 -0700/)
+      expect(ApplicationHelper).to receive(:system).with(/git/).and_return(true)
+      expect(ApplicationHelper).to receive(:`).with(/git/).and_return("Tue Jul 29 01:22:49 2014 -0700")
+      expect(ApplicationHelper.source_code_version_raw).to match(/Git timestamp: Tue Jul 29 01:22:49 2014 -0700/)
     end
 
     describe "when the git command can't be found" do
       it "returns empty string" do
-        expect(Calagator::ApplicationHelper).to receive(:system).with(/git/).and_return(true)
-        expect(Calagator::ApplicationHelper).to receive(:`).with(/git/).and_raise(Errno::ENOENT)
-        expect(Calagator::ApplicationHelper.source_code_version_raw).to eq("")
+        expect(ApplicationHelper).to receive(:system).with(/git/).and_return(true)
+        expect(ApplicationHelper).to receive(:`).with(/git/).and_raise(Errno::ENOENT)
+        expect(ApplicationHelper.source_code_version_raw).to eq("")
       end
     end
 
     describe "when the git command returns a non-zero exit status" do
       it "returns empty string" do
-        expect(Calagator::ApplicationHelper).to receive(:system).with(/git/).and_return(false)
-        expect(Calagator::ApplicationHelper.source_code_version_raw).to eq("")
+        expect(ApplicationHelper).to receive(:system).with(/git/).and_return(false)
+        expect(ApplicationHelper.source_code_version_raw).to eq("")
       end
     end
   end
@@ -75,4 +77,6 @@ describe Calagator::ApplicationHelper, :type => :helper do
       )
     end
   end
+end
+
 end
