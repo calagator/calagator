@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Event::Search, :type => :model do
   describe "by keyword" do
     it "should be able to only return events that include a specific keyword" do
@@ -98,3 +100,4 @@ describe Event::Search, :type => :model do
   end
 end
 
+end

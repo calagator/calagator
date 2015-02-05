@@ -10,6 +10,8 @@
 # Example:
 #   ics1 = Event::IcalRenderer.render(myevent)
 #   ics2 = Event::IcalRenderer.render(myevents, url_helper: -> (event) { event_url(event) })
+module Calagator
+
 class Event < ActiveRecord::Base
   class IcalRenderer
     def self.render(events, opts={})
@@ -75,7 +77,7 @@ class Event < ActiveRecord::Base
 
     def description_range
       return unless multiday?
-      time_range = Calagator::TimeRangeHelper.normalize_time(event, format: :text)
+      time_range = TimeRangeHelper.normalize_time(event, format: :text)
       "This event runs from #{time_range}.\n\nDescription:\n"
     end
 
@@ -148,4 +150,6 @@ class Event < ActiveRecord::Base
       event.dates.size > 1 && event.duration.seconds > 20.hours
     end
   end
+end
+
 end

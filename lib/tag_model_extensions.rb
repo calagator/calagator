@@ -85,7 +85,7 @@ module TagModelExtensions
           if namespace =~ /\A(upcoming|gowalla|shizzow)\Z/
             domain = "http://localhost:3000" if Rails.env.development? || Rails.env.test?
             domain = "http://calagator.org" if Rails.env.production?
-            archive_date = Event.tagged_with(self).first.start_time.strftime("%Y%m%d") if Event.tagged_with(self).first
+            archive_date = Calagator::Event.tagged_with(self).first.start_time.strftime("%Y%m%d") if Calagator::Event.tagged_with(self).first
             archive_date = Venue.tagged_with(self).first.created_at.strftime("%Y%m%d") if Venue.tagged_with(self).first
             result[:url] = "#{domain}/defunct?url=https://web.archive.org/web/#{archive_date}/#{result[:url]}"
           end

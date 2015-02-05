@@ -26,7 +26,11 @@ require "url_prefixer"
 # == Event
 #
 # A model representing a calendar event.
+
+module Calagator
 class Event < ActiveRecord::Base
+  self.table_name = "events"
+
   has_paper_trail
   acts_as_taggable
 
@@ -230,4 +234,6 @@ protected
   def verify_lock_status
     return !locked
   end
+end
+
 end

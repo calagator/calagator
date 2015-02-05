@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Event::Cloner do
   describe "when cloning" do
     let :original do
@@ -29,4 +31,6 @@ describe Event::Cloner do
       its(field) { should eq original[field] }
     end
   end
+end
+
 end

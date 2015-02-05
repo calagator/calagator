@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Event, :type => :model do
   shared_examples_for "#search" do
     it "returns everything when searching by empty string" do
@@ -130,3 +132,4 @@ describe Event, :type => :model do
   end
 end
 
+end

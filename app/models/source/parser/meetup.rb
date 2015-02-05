@@ -5,7 +5,7 @@ class Source::Parser::Meetup < Source::Parser
   def to_events
     return fallback unless SECRETS.meetup_api_key.present?
     return unless data = get_data
-    event = Event.new({
+    event = Calagator::Event.new({
       source:      opts[:source],
       title:       data['name'],
       description: data['description'],

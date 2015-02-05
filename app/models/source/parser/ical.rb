@@ -58,7 +58,7 @@ class Source::Parser::Ical < Source::Parser
   end
 
   def component_to_event(component, calendar)
-    event = Event.new({
+    event = Calagator::Event.new({
       source:      opts[:source],
       title:       component.summary,
       description: component.description,

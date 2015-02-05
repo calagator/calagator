@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Event::Overview, :type => :model do
   describe "#times_to_events" do
     before do
@@ -74,3 +76,4 @@ describe Event::Overview, :type => :model do
   end
 end
 
+end

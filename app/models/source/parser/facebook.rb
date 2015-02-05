@@ -25,7 +25,7 @@ class Source::Parser::Facebook < Source::Parser
 
     raise ::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
 
-    event = Event.new({
+    event = Calagator::Event.new({
       source:      opts[:source],
       title:       data['name'],
       description: data['description'],
