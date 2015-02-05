@@ -1,6 +1,8 @@
 # Methods added to this helper will be available to all templates in the application.
-module Calagator::ApplicationHelper
-  include Calagator::TimeRangeHelper
+module Calagator
+
+module ApplicationHelper
+  include TimeRangeHelper
 
   # Returns HTML string of an event or venue description for display in a view.
   def format_description(string)
@@ -121,4 +123,6 @@ module Calagator::ApplicationHelper
   def cgi_escape(data)
     return CGI::escape(data.to_str)
   end
+end
+
 end

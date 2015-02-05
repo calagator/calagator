@@ -7,11 +7,9 @@ class ApplicationController < ActionController::Base
   helper Calagator::EventsHelper
   helper Calagator::GoogleEventExportHelper
   helper Calagator::MappingHelper
-  helper Calagator::SiteHelper
   helper Calagator::SourcesHelper
   helper Calagator::TagsHelper
   helper Calagator::TimeRangeHelper
-  helper Calagator::VenuesHelper
 
   helper :all # include all helpers, all the time
 

@@ -1,4 +1,6 @@
-module Calagator::TimeRangeHelper
+module Calagator
+
+module TimeRangeHelper
   extend self
   # Initialize with a single DateTime, a pair of DateTimes,
   # or an object that responds_to start_time and end_time, and two options
@@ -159,4 +161,6 @@ module Calagator::TimeRangeHelper
       %(<time class="#{css_class}" title="#{formatted_time}" datetime="#{formatted_time}">#{string}</time>)
     end
   end
+end
+
 end

@@ -1,4 +1,6 @@
-module Calagator::GoogleEventExportHelper
+module Calagator
+
+module GoogleEventExportHelper
   # Return a Google Calendar export URL.
 
   def google_event_export_link(event)
@@ -60,4 +62,6 @@ module Calagator::GoogleEventExportHelper
       context.truncate(string, length: length, omission: omission)
     end
   end
+end
+
 end

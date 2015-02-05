@@ -1,5 +1,7 @@
-module Calagator::EventsHelper
-  include Calagator::TimeRangeHelper # provides normalize_time
+module Calagator
+
+module EventsHelper
+  include TimeRangeHelper # provides normalize_time
 
   def today_tomorrow_or_weekday(record)
     if record.ongoing?
@@ -177,4 +179,6 @@ module Calagator::EventsHelper
     'date'  => 'Date',
   }
   private_constant :SORTING_LABELS
+end
+
 end

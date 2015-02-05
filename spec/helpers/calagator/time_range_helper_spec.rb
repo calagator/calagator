@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-describe Calagator::TimeRangeHelper do
+module Calagator
+
+describe TimeRangeHelper do
   let(:start_time) { DateTime.new(2008, 4, 1, 9, 00) }
 
   # Test all permutations of
@@ -52,4 +54,6 @@ describe Calagator::TimeRangeHelper do
       expect(actual).to eq "Tuesday, April 1, 2008 from 1:30-3:30pm"
     end
   end
+end
+
 end

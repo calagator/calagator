@@ -1,6 +1,8 @@
 require 'spec_helper'
 
-describe Calagator::TagsHelper, type: :helper do
+module Calagator
+
+describe TagsHelper, type: :helper do
   describe "#tag_links_for" do
     it "renders tag links for the supplied model" do
       event = FactoryGirl.create(:event, tag_list: %w(b a))
@@ -78,4 +80,6 @@ describe Calagator::TagsHelper, type: :helper do
       expect(helper.display_tag_icons(@untagged_event)).to eq ""
     end
   end
+end
+
 end
