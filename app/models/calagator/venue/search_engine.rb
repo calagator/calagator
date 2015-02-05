@@ -1,3 +1,5 @@
+module Calagator
+
 class Venue < ActiveRecord::Base
   class SearchEngine
     cattr_accessor(:kind) { :sql }
@@ -17,4 +19,6 @@ class Venue < ActiveRecord::Base
       kind == :sunspot ? ApacheSunspot : Sql
     end
   end
+end
+
 end

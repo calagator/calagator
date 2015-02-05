@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Venue, :type => :model do
   shared_examples_for "#search" do
     it "returns everything when searching by empty string" do
@@ -117,4 +119,6 @@ describe Venue, :type => :model do
       expect(Venue::SearchEngine.kind).to eq(:sunspot)
     end
   end
+end
+
 end

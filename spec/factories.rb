@@ -1,7 +1,7 @@
 require "faker"
 
 FactoryGirl.define do
-  factory :venue do
+  factory :venue, class: Calagator::Venue do
     sequence(:title) { |n| "Venue #{n}" }
     sequence(:description) { |n| "Description of Venue #{n}." }
     sequence(:address) { |n| "Address #{n}" }
@@ -18,7 +18,7 @@ FactoryGirl.define do
     closed false
     wifi true
     access_notes "Access permitted."
-    after(:create) { Sunspot.commit if Venue::SearchEngine.kind == :sunspot }
+    after(:create) { Sunspot.commit if Calagator::Venue::SearchEngine.kind == :sunspot }
   end
 
   factory :event, class: Calagator::Event do

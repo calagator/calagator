@@ -1,3 +1,5 @@
+module Calagator
+
 class Venue < ActiveRecord::Base
   class Geocoder < Struct.new(:venue, :geo)
     cattr_accessor(:perform_geocoding) { true }
@@ -44,4 +46,6 @@ class Venue < ActiveRecord::Base
       Rails.logger.info message
     end
   end
+end
+
 end

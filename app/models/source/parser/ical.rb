@@ -118,7 +118,7 @@ class Source::Parser::Ical < Source::Parser
   # Options:
   # * :fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
   def to_venue(value, opts={})
-    venue = Venue.new
+    venue = Calagator::Venue.new
 
     # VVENUE entries are considered just Vcards,
     # treating them as such.

@@ -1,3 +1,5 @@
+module Calagator
+
 class Venue < ActiveRecord::Base
   class Search < Struct.new(:tag, :query, :wifi, :all, :closed, :include_closed)
     def initialize attributes = {}
@@ -58,3 +60,4 @@ class Venue < ActiveRecord::Base
   end
 end
 
+end

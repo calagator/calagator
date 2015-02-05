@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Venue::Search, :type => :model do
   describe "#venues" do
     before do
@@ -85,4 +87,6 @@ describe Venue::Search, :type => :model do
       expect(subject.results?).to be_truthy
     end
   end
+end
+
 end

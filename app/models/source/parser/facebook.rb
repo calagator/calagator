@@ -47,7 +47,7 @@ class Source::Parser::Facebook < Source::Parser
     fields = (data['venue'] || {})
     return if fields.blank?
 
-    venue = Venue.new({
+    venue = Calagator::Venue.new({
       source:         opts[:source],
       title:          data['location'],
       street_address: fields['street'],
