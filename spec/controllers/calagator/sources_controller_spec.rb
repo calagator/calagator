@@ -1,6 +1,10 @@
 require 'spec_helper'
 
+module Calagator
+
 describe SourcesController, :type => :controller do
+  routes { Calagator::Engine.routes }
+
   describe "using import logic" do
     before(:each) do
       @venue = mock_model(Venue,
@@ -414,4 +418,6 @@ describe SourcesController, :type => :controller do
       expect(response).to redirect_to(sources_url)
     end
   end
+end
+
 end

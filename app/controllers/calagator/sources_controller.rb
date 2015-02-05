@@ -1,3 +1,5 @@
+module Calagator
+
 class SourcesController < ApplicationController
   # POST /import
   # POST /import.xml
@@ -87,4 +89,6 @@ class SourcesController < ApplicationController
       format.xml  { head :ok }
     end
   end
+end
+
 end
