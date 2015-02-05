@@ -41,10 +41,10 @@ module Calagator::ApplicationHelper
     ""
   end
 
-  ApplicationController::SOURCE_CODE_VERSION = self.source_code_version_raw
+  Calagator::ApplicationController::SOURCE_CODE_VERSION = self.source_code_version_raw
 
   def source_code_version
-    ApplicationController::SOURCE_CODE_VERSION
+    Calagator::ApplicationController::SOURCE_CODE_VERSION
   end
 
   # returns html markup with source (if any), imported/created time, and - if modified - modified time

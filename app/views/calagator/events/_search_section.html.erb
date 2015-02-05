@@ -10,6 +10,6 @@ Locals:
   <%= events_sort_label(search.order) %></h2>
 
 	<div class='list_items'>
-	  <%= render partial: 'events/table', locals: { events: events, scores: search.query.present? && Event::SearchEngine.score? } %>
+	  <%= render partial: 'table', locals: { events: events, scores: search.query.present? && Calagator::Event::SearchEngine.score? } %>
 	</div>
 </div>

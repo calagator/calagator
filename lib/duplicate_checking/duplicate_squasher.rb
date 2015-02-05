@@ -5,9 +5,10 @@ module DuplicateChecking
     end
 
     def valid?
-      self.failure = "A master #{model_name} must be selected." if master.blank?
-      self.failure = "At least one duplicate #{model_name} must be selected." if duplicates.empty?
-      self.failure = "The master #{model_name} could not be squashed into itself." if duplicates.include?(master)
+      name = model_name.split("::").last
+      self.failure = "A master #{name} must be selected." if master.blank?
+      self.failure = "At least one duplicate #{name} must be selected." if duplicates.empty?
+      self.failure = "The master #{name} could not be squashed into itself." if duplicates.include?(master)
       failure.blank?
     end
 
@@ -16,7 +17,8 @@ module DuplicateChecking
         duplicates.each do |duplicate|
           SingleSquasher.new(master, duplicate, model_name).squash
         end
-        self.success = "Squashed duplicate #{model_name.pluralize} #{duplicates.map(&:title)} into master #{master.id}."
+        name = model_name.split("::").last
+        self.success = "Squashed duplicate #{name.pluralize} #{duplicates.map(&:title)} into master #{master.id}."
       end
       self
     end

@@ -1,5 +1,7 @@
 require "duplicate_checking/controller_actions"
 
+module Calagator
+
 class EventsController < ApplicationController
   # Provides #duplicates and #squash_many_duplicates
   include DuplicateChecking::ControllerActions
@@ -116,7 +118,7 @@ class EventsController < ApplicationController
   def render_event(event)
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml  => event.to_xml(:include => :venue) }
+      format.xml  { render :xml  => event.to_xml(root: "events", :include => :venue) }
       format.json { render :json => event.to_json(:include => :venue), :callback => params[:callback] }
       format.ics  { render :ics  => [event] }
     end
@@ -128,8 +130,8 @@ class EventsController < ApplicationController
       format.html # *.html.erb
       format.kml  # *.kml.erb
       format.ics  { render :ics => events || Event.future.non_duplicates }
-      format.atom { render :template => 'events/index' }
-      format.xml  { render :xml  => events.to_xml(:include => :venue) }
+      format.atom { render :template => 'calagator/events/index' }
+      format.xml  { render :xml  => events.to_xml(root: "events", :include => :venue) }
       format.json { render :json => events.to_json(:include => :venue), :callback => params[:callback] }
     end
   end
@@ -156,4 +158,6 @@ class EventsController < ApplicationController
     append_flash :failure, "Can't filter by an invalid #{kind} date."
     default
   end
+end
+
 end

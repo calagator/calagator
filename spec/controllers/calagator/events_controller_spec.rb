@@ -1,7 +1,11 @@
 require 'spec_helper'
 require './spec/controllers/squash_many_duplicates_examples'
 
+module Calagator
+
 describe EventsController, :type => :controller do
+  routes { Calagator::Engine.routes }
+
   describe "#index" do
     render_views
 
@@ -761,4 +765,6 @@ describe EventsController, :type => :controller do
       expect(response).to redirect_to(events_url)
     end
   end
+end
+
 end
