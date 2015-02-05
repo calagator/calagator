@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Event, :type => :model do
   describe "in general"  do
     it "should be valid" do
@@ -817,4 +819,6 @@ describe Event, :type => :model do
       end
     end
   end
+end
+
 end

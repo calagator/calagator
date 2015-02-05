@@ -15,7 +15,7 @@ class Source::Parser::Hcal < Source::Parser
 
   def to_events
     hcals.map do |hcal|
-      event = Event.new
+      event = Calagator::Event.new
       event.source = opts[:source]
       EVENT_TO_HCALENDAR_FIELD_MAP.each do |field, mofo_field|
         next unless hcal.respond_to?(mofo_field)

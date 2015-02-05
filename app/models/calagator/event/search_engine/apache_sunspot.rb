@@ -1,3 +1,5 @@
+module Calagator
+
 class Event < ActiveRecord::Base
   class SearchEngine
     class ApacheSunspot < Struct.new(:query, :opts)
@@ -94,4 +96,6 @@ class Event < ActiveRecord::Base
       end
     end
   end
+end
+
 end

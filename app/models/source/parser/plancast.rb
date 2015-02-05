@@ -4,7 +4,7 @@ class Source::Parser::Plancast < Source::Parser
 
   def to_events
     return unless data = get_data
-    event = Event.new({
+    event = Calagator::Event.new({
       source:      opts[:source],
       title:       data['what'],
       description: data['description'],

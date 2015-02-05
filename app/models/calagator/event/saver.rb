@@ -1,3 +1,5 @@
+module Calagator
+
 class Event < ActiveRecord::Base
   class Saver < Struct.new(:event, :params, :failure)
     def save
@@ -53,3 +55,4 @@ class Event < ActiveRecord::Base
   end
 end
 
+end

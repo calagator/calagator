@@ -21,12 +21,12 @@ FactoryGirl.define do
     after(:create) { Sunspot.commit if Venue::SearchEngine.kind == :sunspot }
   end
 
-  factory :event do
+  factory :event, class: Calagator::Event do
     sequence(:title) { |n| "Event #{n}" }
     sequence(:description) { |n| "Description of Event #{n}." }
     start_time { today + 1.hour }
     end_time { start_time + 1.hour }
-    after(:create) { Sunspot.commit if Event::SearchEngine.kind == :sunspot }
+    after(:create) { Sunspot.commit if Calagator::Event::SearchEngine.kind == :sunspot }
 
     trait :with_venue do
       association :venue

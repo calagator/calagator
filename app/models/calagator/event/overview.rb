@@ -1,3 +1,5 @@
+module Calagator
+
 class Event < ActiveRecord::Base
   class Overview
     def today
@@ -40,3 +42,4 @@ class Event < ActiveRecord::Base
   end
 end
 
+end

@@ -1,3 +1,5 @@
+module Calagator
+
 class Event < ActiveRecord::Base
   class Search < Struct.new(:query, :tag, :order, :current)
     def initialize attributes = {}
@@ -65,4 +67,6 @@ class Event < ActiveRecord::Base
       end
     end
   end
+end
+
 end

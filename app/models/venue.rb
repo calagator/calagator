@@ -39,7 +39,7 @@ class Venue < ActiveRecord::Base
   include DecodeHtmlEntitiesHack
 
   # Associations
-  has_many :events, dependent: :nullify
+  has_many :events, class_name: "Calagator::Event", dependent: :nullify
   def future_events; events.future_with_venue; end
   def past_events; events.past_with_venue; end
   belongs_to :source
