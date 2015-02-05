@@ -1,0 +1,15 @@
+<%#
+USAGE: Display message describing appropriate content for this site
+
+This message is shown on the "Add event" and "Import event(s)" pages. The appropriateness text is stored in a theme-specific partial and will only be displayed if found.
+
+The theme-specific partial is retrieved from `themes/YOUR_THEME/views/site/_appropriateness`. You can find the `default` theme's appropriateness message partial at `themes/default/views/site/_appropriateness.html.erb` if you'd like to see an example.
+%>
+<div class="appropriateness_message">
+  <%- begin -%>
+    <%= render :partial => 'site/appropriateness' %>
+  <%- rescue ActionView::MissingTemplate => e -%>
+    <%#- No theme-specific appropriatenes partial was found. -%>
+    Please only add or import events that are of interest to our community. The more information you provide about the event, the easier it will be for people to find and choose to attend it.
+  <%- end -%>
+</div>
