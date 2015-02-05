@@ -1,3 +1,5 @@
+module Calagator
+
 class VenuesController < ApplicationController
   # Provides #duplicates and #squash_many_duplicates
   include DuplicateChecking::ControllerActions
@@ -123,4 +125,6 @@ class VenuesController < ApplicationController
   def from_event
     Event.find_by_id(params[:from_event])
   end
+end
+
 end

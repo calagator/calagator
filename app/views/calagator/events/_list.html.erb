@@ -13,7 +13,7 @@ skipped = 0
       <% for event in events do %>
           <% new_day = previous_start_time.nil? || (previous_start_time.to_date != event.start_time.to_date) %>
       <li>
-        <%= render :partial => 'list_item', :locals => { :event => event, :new_day => new_day, :opts => opts, :show_year => show_year } %>
+        <%= render :partial => 'calagator/events/list_item', :locals => { :event => event, :new_day => new_day, :opts => opts, :show_year => show_year } %>
       </li>
       <% previous_start_time = event.start_time %>
     <% end %>

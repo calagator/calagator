@@ -1,7 +1,11 @@
 require 'spec_helper'
 require './spec/controllers/squash_many_duplicates_examples'
 
+module Calagator
+
 describe VenuesController, :type => :controller do
+  routes { Calagator::Engine.routes }
+
   render_views
 
   it "should redirect duplicate venues to their master" do
@@ -303,4 +307,6 @@ describe VenuesController, :type => :controller do
       end
     end
   end
+end
+
 end
