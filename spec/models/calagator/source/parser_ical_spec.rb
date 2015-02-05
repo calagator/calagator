@@ -2,10 +2,12 @@ require 'spec_helper'
 
 def events_from_ical_at(filename)
   url = "http://foo.bar/"
-  source = Source.new(:title => "Calendar event feed", :url => url)
+  source = Calagator::Source.new(:title => "Calendar event feed", :url => url)
   stub_request(:get, url).to_return(body: read_sample(filename))
   return source.to_events(:skip_old => false)
 end
+
+module Calagator
 
 describe Source::Parser::Ical, "in general", :type => :model do
   it "should read http URLs as-is" do
@@ -296,4 +298,6 @@ END:VCALENDAR))
       "Current start and current end"
     ]
   end
+end
+
 end

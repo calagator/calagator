@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Source::Parser, "when reading content", :type => :model do
   it "should read from a normal URL" do
     stub_request(:get, "http://a.real/~url").to_return(body: "42")
@@ -187,8 +189,8 @@ describe Source::Parser, "checking duplicates when importing", :type => :model d
   end
 
   describe "choosing parsers by matching URLs" do
-    { "Source::Parser::Plancast" => "http://plancast.com/p/3cos/indiewebcamp",
-      "Source::Parser::Meetup"   => "http://www.meetup.com/pdxweb/events/23287271/" }.each do |parser_name, url|
+    { "Calagator::Source::Parser::Plancast" => "http://plancast.com/p/3cos/indiewebcamp",
+      "Calagator::Source::Parser::Meetup"   => "http://www.meetup.com/pdxweb/events/23287271/" }.each do |parser_name, url|
 
       it "should only invoke the #{parser_name} parser when given #{url}" do
         parser = parser_name.constantize
@@ -224,4 +226,6 @@ describe Source::Parser, "labels", :type => :model do
 
     expect(labels).to eq sorted
   end
+end
+
 end

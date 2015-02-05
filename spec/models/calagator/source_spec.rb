@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Source, "in general", :type => :model do
   before(:each) do
     @event = mock_model(Event,
@@ -128,4 +130,6 @@ describe Source, "find_or_create_from", :type => :model do
     result = Source.find_or_create_from(:url => @url, :reimport => true)
     expect(result.reimport).to be_truthy
   end
+end
+
 end

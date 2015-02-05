@@ -1,6 +1,8 @@
 # == Source::Parser::Hcal
 #
 # Reads hCalendar events.
+module Calagator
+
 class Source::Parser::Hcal < Source::Parser
   self.label = :hCalendar
 
@@ -15,7 +17,7 @@ class Source::Parser::Hcal < Source::Parser
 
   def to_events
     hcals.map do |hcal|
-      event = Calagator::Event.new
+      event = Event.new
       event.source = opts[:source]
       EVENT_TO_HCALENDAR_FIELD_MAP.each do |field, mofo_field|
         next unless hcal.respond_to?(mofo_field)
@@ -54,7 +56,7 @@ class Source::Parser::Hcal < Source::Parser
   # Options:
   # * :value -- hCard or string location
   def to_venue(opts)
-    venue = Calagator::Venue.new
+    venue = Venue.new
     venue.source = opts[:source]
     case raw = opts[:value]
     when String
@@ -96,4 +98,6 @@ class Source::Parser::Hcal < Source::Parser
     something = hCalendar.find(:text => content)
     something.is_a?(hCalendar) ? [something] : something
   end
+end
+
 end

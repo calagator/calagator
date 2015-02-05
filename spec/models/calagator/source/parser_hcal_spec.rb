@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Source::Parser::Hcal, "with hCalendar events", :type => :model do
   it "should parse hcal" do
     url = "http://mysample.hcal/"
@@ -62,4 +64,6 @@ describe Source::Parser::Hcal, "with hCalendar to Venue parsing", :type => :mode
     expect(venue.longitude).to be_within(0.1).of(-122.675)
     expect(venue.postal_code).to eq "97204"
   end
+end
+
 end

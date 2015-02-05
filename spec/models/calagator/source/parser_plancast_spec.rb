@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Source::Parser::Plancast, :type => :model do
 
   context do
@@ -46,4 +48,6 @@ describe Source::Parser::Plancast, :type => :model do
       expect(@event.venue.address).to be_blank
     end
   end
+end
+
 end
