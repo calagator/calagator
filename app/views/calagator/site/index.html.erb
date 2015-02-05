@@ -23,15 +23,15 @@
   <h3><%= link_to("View All &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) if @overview.more %></h3>
   <div class='coming_events' id='today'>
     <h3>Today</h3>
-      <%= render 'events/list', :events => @overview.today, :dates => false %>
+      <%= render 'calagator/events/list', :events => @overview.today, :dates => false %>
   </div>
   <div class='coming_events' id='tomorrow'>
     <h3>Tomorrow</h3>
-    <%= render 'events/list', :events => @overview.tomorrow, :dates => false %>
+    <%= render 'calagator/events/list', :events => @overview.tomorrow, :dates => false %>
   </div>
   <div id='next_two_weeks'>
     <h3>Next two weeks</h3>
-    <%= render 'events/list', :events => @overview.later %>
+    <%= render 'calagator/events/list', :events => @overview.later %>
   </div>
   <div>
     <h3><%= link_to("View future events &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) if @overview.more %></h3>
