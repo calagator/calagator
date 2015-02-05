@@ -85,7 +85,7 @@ class Source::Parser < Struct.new(:opts)
         # Match 2 in the MACHINE_TAG_PATTERN is the predicate
         ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? t.match(ActsAsTaggableOn::Tag::MACHINE_TAG_PATTERN)[2]
       }
-      matched_venue = Venue.tagged_with(venue_machine_tag_name).first
+      matched_venue = Calagator::Venue.tagged_with(venue_machine_tag_name).first
 
       if matched_venue.present?
         matched_venue.progenitor

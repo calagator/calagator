@@ -43,7 +43,7 @@ class Source::Parser::Meetup < Source::Parser
 
   def to_venue(value)
     return if value.blank?
-    venue = Venue.new({
+    venue = Calagator::Venue.new({
       source: opts[:source],
       title: value['name'],
       street_address: [value['address_1'], value['address_2'], value['address_3']].compact.join(", "),

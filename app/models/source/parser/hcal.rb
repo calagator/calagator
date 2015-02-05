@@ -54,7 +54,7 @@ class Source::Parser::Hcal < Source::Parser
   # Options:
   # * :value -- hCard or string location
   def to_venue(opts)
-    venue = Venue.new
+    venue = Calagator::Venue.new
     venue.source = opts[:source]
     case raw = opts[:value]
     when String

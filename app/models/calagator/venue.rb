@@ -29,7 +29,11 @@
 #
 require "url_prefixer"
 
+module Calagator
+
 class Venue < ActiveRecord::Base
+  self.table_name = "venues"
+
   include StripWhitespace
 
   has_paper_trail
@@ -39,7 +43,7 @@ class Venue < ActiveRecord::Base
   include DecodeHtmlEntitiesHack
 
   # Associations
-  has_many :events, class_name: "Calagator::Event", dependent: :nullify
+  has_many :events, dependent: :nullify
   def future_events; events.future_with_venue; end
   def past_events; events.past_with_venue; end
   belongs_to :source
@@ -145,4 +149,6 @@ class Venue < ActiveRecord::Base
     Geocoder.geocode(self)
     true # Try to geocode, but don't complain if we can't.
   end
+end
+
 end

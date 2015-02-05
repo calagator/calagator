@@ -1,1 +1,1 @@
-Venue::Geocoder.perform_geocoding = false
+Calagator::Venue::Geocoder.perform_geocoding = false

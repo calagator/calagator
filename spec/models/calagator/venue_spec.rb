@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe Venue, :type => :model do
 
   it "should be valid" do
@@ -334,4 +336,6 @@ describe "Venue geocode addressing", :type => :model do
       expect(venue.versions.last.reify.title).to eq original_title
     end
   end
+end
+
 end

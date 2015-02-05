@@ -39,7 +39,7 @@ class Source::Parser::Plancast < Source::Parser
   def to_venue(value, fallback=nil)
     value = "" if value.nil?
     if value.present?
-      venue = Venue.new({
+      venue = Calagator::Venue.new({
         source: opts[:source],
         title: value['name'],
         address: value['address'],
@@ -48,7 +48,7 @@ class Source::Parser::Plancast < Source::Parser
       venue.geocode!
       venue_or_duplicate(venue)
     elsif fallback.present?
-      venue = Venue.new(title: fallback)
+      venue = Calagator::Venue.new(title: fallback)
       venue_or_duplicate(venue)
     end
   end

@@ -1,3 +1,5 @@
+module Calagator
+
 class Venue < ActiveRecord::Base
   class SearchEngine
     class Sql < Struct.new(:query, :opts)
@@ -17,7 +19,7 @@ class Venue < ActiveRecord::Base
         column_names = Venue.column_names.map { |name| "venues.#{name}" }
         @scope = Venue.scoped
           .group(column_names)
-          .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type = 'Venue'")
+          .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type LIKE '%Venue'")
           .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
         self
       end
@@ -61,4 +63,6 @@ class Venue < ActiveRecord::Base
       end
     end
   end
+end
+
 end

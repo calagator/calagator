@@ -123,7 +123,7 @@ RSpec.configure do |config|
   # this block runs before the individual test's override.
   config.around do |example|
     Calagator::Event::SearchEngine.use(:sql)
-    Venue::SearchEngine.use(:sql)
+    Calagator::Venue::SearchEngine.use(:sql)
     example.run
   end
 
