@@ -3,33 +3,6 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 Bundler.require(*Rails.groups)
-require "calagator"
-require "formtastic"
-require "rails_autolink"
-require "nokogiri"
-require "columnize"
-require "geokit"
-require "htmlentities"
-require "paper_trail"
-require "ri_cal"
-require "will_paginate"
-require "will_paginate/array"
-require "rest-client"
-require "loofah"
-require "loofah-activerecord"
-require "bluecloth"
-require "formtastic"
-require "acts-as-taggable-on"
-require "jquery-rails"
-require "progress_bar"
-require "exception_notification"
-require "font-awesome-rails"
-require "paper_trail_manager"
-require "utf8-cleaner"
-# require "mofo"
-require "sunspot_rails"
-require "sunspot_solr"
-require "lucene_query"
 
 module Dummy
   class Application < Rails::Application
