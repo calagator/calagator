@@ -1,3 +1,5 @@
+module Calagator
+
 module DuplicateChecking
   module ControllerActions
     # GET /#{model_class}/duplicates
@@ -31,4 +33,6 @@ module DuplicateChecking
       "Calagator::#{controller_name.singularize.titleize}".constantize
     end
   end
+end
+
 end

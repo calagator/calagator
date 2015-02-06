@@ -1,3 +1,5 @@
+module Calagator
+
 module DuplicateChecking
   class DuplicateSquasher < Struct.new(:master, :duplicates, :model_name, :failure, :success)
     def duplicates
@@ -67,4 +69,6 @@ module DuplicateChecking
       end
     end
   end
+end
+
 end
