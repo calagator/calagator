@@ -37,11 +37,9 @@ Gem::Specification.new do |s|
   s.add_dependency "acts-as-taggable-on", "2.4.1"
   s.add_dependency "jquery-rails", "1.0.19"
   s.add_dependency "progress_bar", "1.0.0"
-  s.add_dependency "exception_notification", "2.6.1"
   s.add_dependency "font-awesome-rails", "3.2.1.3"
   s.add_dependency "paper_trail_manager", ">= 0.2.0"
   s.add_dependency "utf8-cleaner", "~> 0.0.6"
-  s.add_dependency "rack-robustness", "~> 1.1.0"
   # s.add_dependency "mofo", path: "vendor/gems/mofo-0.2.8" # vendored fork with hpricot dependency replaced with nokogiri
   s.add_dependency "sunspot_rails", "2.1.1"
   s.add_dependency "sunspot_solr",  "2.1.1"
