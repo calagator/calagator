@@ -1,6 +1,11 @@
 # == Source::Parser::Hcal
 #
 # Reads hCalendar events.
+
+vendored_mofo_dir = File.expand_path("../../../../../vendor/gems/mofo-0.2.8/lib", File.dirname(__FILE__))
+$: << vendored_mofo_dir
+require "mofo"
+
 module Calagator
 
 class Source::Parser::Hcal < Source::Parser
