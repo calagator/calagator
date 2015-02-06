@@ -43,7 +43,7 @@ module Dummy
 
     # Activate observers that should always be running
     # config.active_record.observers = :cacher, :garbage_collector
-    config.active_record.observers = :cache_observer
+    config.active_record.observers = "Calagator::CacheObserver"
 
     # Deliver email using sendmail by default
     config.action_mailer.delivery_method = :sendmail

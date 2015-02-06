@@ -1,8 +1,10 @@
 # = CacheObserver
 #
 # Expires caches.
+module Calagator
+
 class CacheObserver < ActiveRecord::Observer
-  observe Calagator::Event, Calagator::Venue
+  observe Event, Venue
 
   #---[ Unique methods ]--------------------------------------------------
 
@@ -30,4 +32,6 @@ class CacheObserver < ActiveRecord::Observer
     Rails.logger.info "CacheObserver#after_destroy: invoked"
     self.class.expire_all
   end
+end
+
 end
