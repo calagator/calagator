@@ -74,9 +74,9 @@
 
     <% # Pick a subnav %>
 
-    <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
-    <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
-    <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+    <%= render(:partial => 'calagator/events/subnav') if link_class[:events] == 'active' %>
+    <%= render(:partial => 'calagator/venues/subnav') if link_class[:venues] == 'active' %>
+    <%= render(:partial => 'calagator/sources/subnav') if link_class[:import] == 'active' %>
 
     <div id="content">
       <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
