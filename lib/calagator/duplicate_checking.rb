@@ -29,6 +29,11 @@
 #   # Find duplicate of a record
 #   foo3.find_exact_duplicates # => [foo1, foo2]
 #   bar.find_exact_duplicates  # => nil
+require "calagator/duplicate_checking/duplicate_finder"
+require "calagator/duplicate_checking/duplicate_squasher"
+
+module Calagator
+
 module DuplicateChecking
   DUPLICATE_MARK_COLUMN = :duplicate_of_id
   DEFAULT_SQUASH_METHOD = :mark
@@ -123,4 +128,6 @@ module DuplicateChecking
 end
 
 class DuplicateCheckingError < Exception
+end
+
 end

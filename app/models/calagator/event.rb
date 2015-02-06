@@ -20,7 +20,7 @@
 #
 
 require "blacklist_validator"
-require "duplicate_checking"
+require "calagator/duplicate_checking"
 require "url_prefixer"
 
 # == Event

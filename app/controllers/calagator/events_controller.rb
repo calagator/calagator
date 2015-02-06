@@ -1,4 +1,4 @@
-require "duplicate_checking/controller_actions"
+require "calagator/duplicate_checking/controller_actions"
 
 module Calagator
 

@@ -1,3 +1,5 @@
+module Calagator
+
 module DuplicateChecking
   class DuplicateFinder < Struct.new(:model, :fields, :options)
     def find
@@ -76,4 +78,6 @@ module DuplicateChecking
       end
     end
   end
+end
+
 end
