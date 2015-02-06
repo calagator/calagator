@@ -27,7 +27,9 @@
 #  access_notes    :text
 #  events_count    :integer
 #
-require "url_prefixer"
+require "calagator/decode_html_entities_hack"
+require "calagator/strip_whitespace"
+require "calagator/url_prefixer"
 
 module Calagator
 

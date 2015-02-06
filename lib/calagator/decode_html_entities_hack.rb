@@ -13,6 +13,8 @@
 # Warning: this effectively renders loofah's "escape" scrubbing mode useless by
 # undoing everything it does. Don't use that mode.
 #
+module Calagator
+
 module DecodeHtmlEntitiesHack
   def self.included(base)
     base.set_callback(:validate, :before, :decode_html_entities)
@@ -26,4 +28,6 @@ module DecodeHtmlEntitiesHack
       end
     end
   end
+end
+
 end

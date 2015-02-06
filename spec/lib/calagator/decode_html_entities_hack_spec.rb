@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 # Non-database model derived from: http://railscasts.com/episodes/219-active-model
+module Calagator
+
 class ModelWithoutDecodeHack
   include ActiveModel::Callbacks
   include ActiveModel::Validations
@@ -46,5 +48,7 @@ describe DecodeHtmlEntitiesHack, :type => :model do
     expect(record).to be_valid
     expect(record.kitten).to eq decoded_string
   end
+
+end
 
 end

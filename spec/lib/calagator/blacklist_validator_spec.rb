@@ -1,5 +1,7 @@
 require "active_model"
-require "blacklist_validator"
+require "calagator/blacklist_validator"
+
+module Calagator
 
 describe BlacklistValidator do
   let(:klass) do
@@ -56,4 +58,6 @@ describe BlacklistValidator do
       expect(subject).not_to be_valid
     end
   end
+end
+
 end
