@@ -15,6 +15,8 @@
 # == Source
 #
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
+require "calagator/decode_html_entities_hack"
+
 module Calagator
 
 class Source < ActiveRecord::Base

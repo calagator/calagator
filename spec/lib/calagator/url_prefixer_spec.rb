@@ -1,5 +1,7 @@
 require "spec_helper"
-require "url_prefixer"
+require "calagator/url_prefixer"
+
+module Calagator
 
 describe UrlPrefixer do
   it "adds an http prefix to urls missing it" do
@@ -26,4 +28,6 @@ describe UrlPrefixer do
     url = UrlPrefixer.prefix(" google.com ")
     url.should == "http://google.com "
   end
+end
+
 end
