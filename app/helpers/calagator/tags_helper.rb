@@ -18,12 +18,12 @@ module TagsHelper
   private :tag_link
 
   def icon_exists_for?(tag_name)
-    File.exists? Rails.root.join("app", "assets", "images", "tag_icons", "#{tag_name}.png")
+    !!Rails.application.assets["tag_icons/#{tag_name}.png"]
   end
 
   def tag_icon(tag_name)
     if icon_exists_for?(tag_name)
-      image_tag("/assets/tag_icons/#{tag_name}.png", title: tag_name)
+      image_tag(asset_path("tag_icons/#{tag_name}.png"), title: tag_name)
     end
   end
 
