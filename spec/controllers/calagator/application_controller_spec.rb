@@ -1,5 +1,7 @@
 require 'spec_helper'
 
+module Calagator
+
 describe ApplicationController, :type => :controller do
   describe "#append_flash" do
     before :each do
@@ -40,4 +42,6 @@ describe ApplicationController, :type => :controller do
       expect(controller.send(:escape_once, escaped)).to eq escaped
     end
   end
+end
+
 end

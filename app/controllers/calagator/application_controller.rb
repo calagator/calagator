@@ -57,22 +57,23 @@ protected
   def set_theme
     prepend_view_path "themes/#{THEME_NAME}/views"
   end
-end
 
-# Make it possible to use helpers in controllers
-# http://www.johnyerhot.com/2008/01/10/rails-using-helpers-in-you-controller/
-class Helper
-  include Singleton
-  include ActionView::Helpers::UrlHelper # Provide: #link_to
-  include ActionView::Helpers::TagHelper # Provide: #escape_once (which #link_to needs)
-end
-def help
-  Helper.instance
-end
+  # Make it possible to use helpers in controllers
+  # http://www.johnyerhot.com/2008/01/10/rails-using-helpers-in-you-controller/
+  class Helper
+    include Singleton
+    include ActionView::Helpers::UrlHelper # Provide: #link_to
+    include ActionView::Helpers::TagHelper # Provide: #escape_once (which #link_to needs)
+  end
 
-# Return string with contents HTML escaped once.
-def escape_once(*args)
-  help.escape_once(*args)
+  def help
+    Helper.instance
+  end
+
+  # Return string with contents HTML escaped once.
+  def escape_once(*args)
+    help.escape_once(*args)
+  end
 end
 
 end
