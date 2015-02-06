@@ -33,12 +33,6 @@ require "lucene_query"
 
 module Dummy
   class Application < Rails::Application
-    config.autoload_paths += %W(
-      #{config.root}/app/mixins
-      #{config.root}/app/observers
-      #{config.root}/lib
-    )
-
     #---[ Rails ]-----------------------------------------------------------
 
     # Activate observers that should always be running
