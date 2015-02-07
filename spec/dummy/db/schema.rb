@@ -11,20 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120831234448) do
+ActiveRecord::Schema.define(:version => 20150206085809) do
 
   create_table "events", :force => true do |t|
     t.string   "title"
     t.text     "description"
     t.datetime "start_time"
-    t.string   "url"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.integer  "venue_id"
+    t.string   "url"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
     t.integer  "source_id"
     t.integer  "duplicate_of_id"
     t.datetime "end_time"
-    t.integer  "version"
     t.string   "rrule"
     t.text     "venue_details"
   end
@@ -33,8 +32,8 @@ ActiveRecord::Schema.define(:version => 20120831234448) do
     t.string   "title"
     t.string   "url"
     t.datetime "imported_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
     t.boolean  "reimport"
   end
 
@@ -57,20 +56,13 @@ ActiveRecord::Schema.define(:version => 20120831234448) do
 
   add_index "tags", ["name"], :name => "index_tags_on_name", :unique => true
 
-  create_table "updates", :force => true do |t|
-    t.integer  "source_id"
-    t.text     "status"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "venues", :force => true do |t|
     t.string   "title"
     t.text     "description"
     t.string   "address"
     t.string   "url"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                       :null => false
+    t.datetime "updated_at",                                                       :null => false
     t.string   "street_address"
     t.string   "locality"
     t.string   "region"
