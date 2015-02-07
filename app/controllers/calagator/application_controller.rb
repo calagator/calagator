@@ -22,8 +22,6 @@ class ApplicationController < ActionController::Base
   # Setup theme
   layout "application"
 
-  before_filter :set_theme
-
 protected
 
   def self.require_admin(options = {})
@@ -62,10 +60,6 @@ protected
     else
       flash[kind] = "#{message}"
     end
-  end
-
-  def set_theme
-    prepend_view_path "themes/#{THEME_NAME}/views"
   end
 
   # Make it possible to use helpers in controllers
