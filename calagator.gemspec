@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", "~> 3.2.19"
   s.add_dependency "sass-rails", "~> 3.2.3"
-  s.add_dependency "sass", "~> 3.2.14"
+  s.add_dependency "sass", ">= 3.2.14"
   s.add_dependency "formtastic", "2.2.1"
   s.add_dependency "rails_autolink", "1.1.3"
   s.add_dependency "nokogiri", "1.5.11"
@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
   s.add_dependency "bluecloth", "2.2.0"
   s.add_dependency "formtastic", "2.2.1"
   s.add_dependency "acts-as-taggable-on", "2.4.1"
-  s.add_dependency "jquery-rails", "1.0.19"
+  s.add_dependency "jquery-rails", ">= 1.0.19"
   s.add_dependency "progress_bar", "1.0.0"
   s.add_dependency "font-awesome-rails", "3.2.1.3"
   s.add_dependency "paper_trail_manager", ">= 0.2.0"
