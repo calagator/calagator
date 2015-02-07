@@ -22,7 +22,7 @@ before_script:
   - psql -c 'create database calagator_test;' -U postgres
   - bundle exec rake db:migrate
   - cp "config/secrets.yml.sample" "config/secrets.yml"
-  - bundle exec rake sunspot:solr:start
+  - bundle exec rake sunspot:solr:start_with_waiting
 script:
   - bundle exec rake spec --trace
 cache: bundler
