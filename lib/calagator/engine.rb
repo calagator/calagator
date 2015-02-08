@@ -11,11 +11,12 @@ module Calagator
 
   # settings with defaults
   class << self
-    mattr_accessor :title, :tagline, :url, :timezone, :precompile_assets, :venues_map_zoom, :venues_map_center
+    mattr_accessor :title, :tagline, :url, :timezone, :precompile_assets, :venues_map_options
     self.title = 'Calagator'
     self.tagline = 'A Tech Calendar'
     self.url = 'http://calagator.org/'
     self.timezone = 'Pacific Time (US & Canada)'
+    self.venues_map_options = {}
   end
 
   # map the attrs from initializer
