@@ -132,6 +132,14 @@ class Event < ActiveRecord::Base
   end
   private :time_for
 
+  def lock_editing!
+    update_attribute(:locked, true)
+  end
+
+  def unlock_editing!
+    update_attribute(:locked, false)
+  end
+
   #---[ Queries ]---------------------------------------------------------
 
   # Return Hash of Events grouped by the +type+.

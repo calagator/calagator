@@ -7,6 +7,11 @@ Calagator::Application.routes.draw do
   match 'opensearch.:format' => 'site#opensearch'
   match 'defunct' => 'site#defunct'
 
+  match 'admin' => 'admin#index'
+  get "admin/index"
+  get "admin/events"
+  match "lock_event" => "admin#lock_event", :only => :post
+
   resources :events do
     collection do
       post :squash_many_duplicates
