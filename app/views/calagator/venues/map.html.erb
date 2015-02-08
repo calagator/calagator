@@ -1,4 +1,4 @@
 <h1>Big Map of Venues</h1>
 <div id='venues_map'>
-  <%= map @venues, SETTINGS.venues_map_options || SETTINGS.venues_google_map_options %>
+  <%= map @venues, zoom: Calagator.venues_map_zoom, center: Calagator.venues_map_center %>
 </div>

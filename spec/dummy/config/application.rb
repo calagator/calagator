@@ -41,25 +41,6 @@ module Dummy
       "errors.css"
     ]
 
-    #---[ Secrets and settings ]--------------------------------------------
-
-    config.before_initialize do
-      # Read secrets
-      require 'secrets_reader'
-      ::SECRETS = SecretsReader.read
-
-      # Read theme
-      require 'theme_reader'
-      ::THEME_NAME = ThemeReader.read
-
-      # Read theme settings
-      require 'settings_reader'
-      ::SETTINGS = SettingsReader.read(Rails.root.join('themes',THEME_NAME,'settings.yml'))
-
-      # Set timezone for Rails
-      config.time_zone = SETTINGS.timezone || 'Pacific Time (US & Canada)'
-    end
-
     # Set timezone for OS
     config.after_initialize do
       ENV['TZ'] = Time.zone.tzinfo.identifier

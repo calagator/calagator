@@ -33,7 +33,7 @@ class Event < ActiveRecord::Base
     end
 
     def self.add_name(output)
-      output.sub(/(CALSCALE:\w+)/i, "\\1\nX-WR-CALNAME:#{SETTINGS.name}\nMETHOD:PUBLISH")
+      output.sub(/(CALSCALE:\w+)/i, "\\1\nX-WR-CALNAME:#{Calagator.title}\nMETHOD:PUBLISH")
     end
 
     def self.normalize_line_endings(output)
