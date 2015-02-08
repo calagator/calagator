@@ -7,12 +7,12 @@
     <%= yield :open_graph_tags %>
     <title>
       <%= "#{yield(:title)} » " if content_for?(:title) -%>
-      <%= SETTINGS.name -%>: <%= SETTINGS.tagline -%>
+      <%= Calagator.title -%>: <%= Calagator.tagline -%>
     </title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <link rel='search' type='application/opensearchdescription+xml' href='<%= "#{root_path}opensearch.xml" %>'  title='<%= SETTINGS.name %>' />
+    <link rel='search' type='application/opensearchdescription+xml' href='<%= "#{root_path}opensearch.xml" %>'  title='<%= Calagator.title %>' />
 
     <!-- Stylesheets, static -->
     <%= stylesheet_link_tag 'application', 'theme', :media => :all %>
@@ -45,7 +45,7 @@
 
   <div id="outer">
     <div id="global_header">
-      <%= link_to SETTINGS.name, root_path, id: "project_title" %>
+      <%= link_to Calagator.title, root_path, id: "project_title" %>
 
       <div id="top_menu">
          <div id='app_menu'>
@@ -85,7 +85,7 @@
     </div>
 
     <div id="top_footer">
-      <%= URI.parse(SETTINGS.url).host %>
+      <%= URI.parse(Calagator.url).host %>
       <%= source_code_version %>
       &nbsp;
       &nbsp;
