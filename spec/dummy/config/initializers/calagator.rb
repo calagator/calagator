@@ -1,22 +1,22 @@
 Calagator.setup do |config|
 
   # Site's name
-  name = 'Calagator'
+  config.title = 'Calagator'
 
   # Site's tagline
-  tagline = "Portland's Tech Calendar"
+  config.tagline = "Portland's Tech Calendar"
 
   # Site's URL with trailing slash
-  url = 'http://calagator.org/'
+  config.url = 'http://calagator.org/'
 
   # Default timezone, run "rake -D time" for information on how to display known timezones
-  timezone = 'Pacific Time (US & Canada)'
+  config.timezone = 'Pacific Time (US & Canada)'
 
   # Precompile additional theme assets (theme.js, theme.css, and images already included)
-  precompile_assets = %w( mobile.css print.css )
+  config.precompile_assets = %w( mobile.css print.css )
 
   # Map to display on /venues page:
-  venues_map_options = {
+  config.venues_map_options = {
     # Zoom magnification level:
     zoom: 12,
     # Center of the map, in latitude and longitude.
