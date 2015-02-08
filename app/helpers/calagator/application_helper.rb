@@ -53,7 +53,7 @@ module ApplicationHelper
   def datestamp(item)
     stamp = "This item was "
     if item.source.nil?
-      stamp << "added directly to #{SETTINGS.name}"
+      stamp << "added directly to #{Calagator.title}"
     else
       stamp << "imported from " << link_to(truncate(item.source.name, :length => 40), helper.url_for(item.source))
     end

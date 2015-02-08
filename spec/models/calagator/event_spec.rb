@@ -807,7 +807,7 @@ describe Event, :type => :model do
       end
 
       it "should include the calendar name" do
-        expect(@data).to match /\sX-WR-CALNAME:#{SETTINGS.name}\s/
+        expect(@data).to match /\sX-WR-CALNAME:#{Calagator.title}\s/
       end
 
       it "should include the method" do

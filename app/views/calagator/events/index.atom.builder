@@ -5,7 +5,7 @@ cache_if(@perform_caching, Calagator::CacheObserver.daily_key_for("events_atom",
     else
       "Events"
     end
-    feed.title("#{SETTINGS.name}: #{page_title}")
+    feed.title("#{Calagator.title}: #{page_title}")
 
     unless @events.size == 0
       feed.updated(@events.present? ? @events.sort_by(&:updated_at).last.updated_at : Time.now)
