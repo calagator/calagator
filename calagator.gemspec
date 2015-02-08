@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   s.summary     = "TODO: Summary of Calagator."
   s.description = "TODO: Description of Calagator."
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.test_files = Dir["test/**/*"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENSE.txt", "Rakefile", "README.md"]
+  s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", "~> 3.2.19"
   s.add_dependency "sass-rails", "~> 3.2.3"
