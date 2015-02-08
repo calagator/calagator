@@ -12,14 +12,15 @@ module Calagator
   # settings with defaults
   class << self
     mattr_accessor :title, :tagline, :url, :venues_map_options
-    self.title = 'Calagator'
-    self.tagline = 'A Tech Calendar'
-    self.url = 'http://calagator.org/'
-    self.venues_map_options = {}
-  end
 
-  # map the attrs from initializer
-  def self.setup(&block)
-    yield self
+    title = 'Calagator'
+    tagline = 'A Tech Calendar'
+    url = 'http://calagator.org/'
+    venues_map_options = {}
+
+    # map the attrs from initializer
+    def setup(&block)
+      yield self
+    end
   end
 end
