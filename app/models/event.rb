@@ -43,6 +43,9 @@ class Event < ActiveRecord::Base
 
   validates :title, :description, :url, blacklist: true
 
+  before_update :verify_lock_status
+  before_destroy :verify_lock_status
+
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
@@ -219,5 +222,9 @@ protected
     if start_time && end_time && end_time < start_time
       errors.add(:end_time, "cannot be before start")
     end
+  end
+
+  def verify_lock_status
+    return false if locked
   end
 end
