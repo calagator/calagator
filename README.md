@@ -1,3 +1,12 @@
+WORK IN PROGRESS
+================
+
+**This repo is not ready for deployment!**
+
+This repository is part of an ongoing project to split the [calagator project](http://github.com/calagator/calagator/) into a Rails engine with a separate Rails shell on top. This repo will become the Rails shell for the [Calagator.org](http://calagator.org) deployment.
+
+---
+
 [![Build Status](https://travis-ci.org/calagator/calagator.svg?branch=master)](http://travis-ci.org/calagator/calagator)
 [![Code Climate](https://codeclimate.com/github/calagator/calagator.png)](https://codeclimate.com/github/calagator/calagator)
 [![Coverage Status](https://coveralls.io/repos/calagator/calagator/badge.png)](https://coveralls.io/r/calagator/calagator)
