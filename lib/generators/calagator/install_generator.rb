@@ -14,7 +14,7 @@ module Calagator
     private
 
     def add_route
-      inject_into_file 'config/routes.rb', "\tmount Calagator::Engine => '/'\n", after: "Application.routes.draw do\n"
+      inject_into_file 'config/routes.rb', "\s\smount Calagator::Engine => '/'\n", after: "Application.routes.draw do\n"
     end
 
     def add_secrets
