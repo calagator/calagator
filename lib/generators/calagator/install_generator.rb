@@ -9,6 +9,7 @@ module Calagator
       add_initializer
       rake 'calagator:install:migrations'
       rake 'db:migrate'
+      rake 'db:test:prepare'
     end
 
     private
