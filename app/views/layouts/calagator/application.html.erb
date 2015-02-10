@@ -1,14 +1,110 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <title>Calagator</title>
-  <%= stylesheet_link_tag    "calagator/application", :media => "all" %>
-  <%= javascript_include_tag "calagator/application" %>
-  <%= csrf_meta_tags %>
-</head>
-<body>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
-<%= yield %>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <%= yield :open_graph_tags %>
+    <title>
+      <%= "#{yield(:title)} » " if content_for?(:title) -%>
+      <%= Calagator.title -%>: <%= Calagator.tagline -%>
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <link rel='search' type='application/opensearchdescription+xml' href='<%= "#{root_path}opensearch.xml" %>'  title='<%= Calagator.title %>' />
 
-</body>
+    <!-- Stylesheets, static -->
+    <%= stylesheet_link_tag 'application', 'theme', :media => :all %>
+
+    <link rel="stylesheet" href="https://d591zijq8zntj.cloudfront.net/leaflet-0.6.4/leaflet.css" />
+    <!--[if lte IE 8]>
+        <link rel="stylesheet" href="https://d591zijq8zntj.cloudfront.net/leaflet-0.6.4/leaflet.ie.css" />
+    <![endif]-->
+
+    <!-- Stylesheets, inserted  -->
+    <%= yield :css_insert %>
+
+    <!-- JavaScripts, static -->
+    <%= javascript_include_tag *mapping_js_includes %>
+    <%= javascript_include_tag 'application', 'theme' %>
+
+    <!-- JavaScripts, inserted -->
+    <%= yield :javascript_insert %>
+
+    <!-- Auto-discovery, static -->
+    <%= auto_discovery_link_tag(:atom, events_url(:format => 'atom'), :title => 'Atom: All Events' )%>
+
+    <!-- Auto-discovery, inserted -->
+    <%= yield :discovery_insert %>
+
+    <%# FIXME extract icon into theme %>
+    <link rel="apple-touch-icon" href="<%= image_path("site-icon.png") %>" />
+  </head>
+  <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
+
+  <div id="outer">
+    <div id="global_header">
+      <%= link_to Calagator.title, root_path, id: "project_title" %>
+
+      <div id="top_menu">
+         <div id='app_menu'>
+          <ul>
+              <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+              <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+          </ul>
+        </div>
+        <div id='project_menu'>
+          <strong>Get Involved:</strong> <%= link_to "Blog", "http://calagator.wordpress.com/", {:class => 'first'} %> | <%= link_to "Forum", "http://groups.google.com/group/pdx-tech-calendar/" %> | <%= link_to "Code", "https://github.com/calagator/calagator" %>
+          <br />
+          <strong>Something not right?</strong> <%= link_to "File an issue", "https://github.com/calagator/calagator/issues" %>
+        </div>
+        <%= form_tag search_events_path, :method => :get do %>
+          <div id='search_form'>
+          <label for="search_field">Search Events</label>
+          <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+            <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+          <% else %>
+            <%= text_field_tag 'query', @query, :id => 'search_field' %>
+          <% end %>
+          </div>
+        <% end -%>
+      </div>
+    </div>
+
+    <% # Pick a subnav %>
+
+    <%= render(:partial => 'calagator/events/subnav') if link_class[:events] == 'active' %>
+    <%= render(:partial => 'calagator/venues/subnav') if link_class[:venues] == 'active' %>
+    <%= render(:partial => 'calagator/sources/subnav') if link_class[:import] == 'active' %>
+
+    <div id="content">
+      <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
+      <%= render_flash %>
+      <%= yield %>
+    </div>
+
+    <div id="top_footer">
+      <%= URI.parse(Calagator.url).host %>
+      <%= source_code_version %>
+      &nbsp;
+      &nbsp;
+      &nbsp;
+    </div>
+
+</div>
+
+    <% if Rails.env == 'production' %>
+      <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+        </script>
+        <script type="text/javascript">
+        var pageTracker = _gat._getTracker("UA-168427-7");
+        pageTracker._initData();
+        pageTracker._trackPageview();
+      </script>
+    <% end %>
+
+  </body>
 </html>

@@ -20,7 +20,6 @@ class ApplicationController < ActionController::Base
   protect_from_forgery # :secret => '8813a7fec0bb4fbffd283a3868998eed'
 
   # Setup theme
-  layout "application"
 
 protected
 
