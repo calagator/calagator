@@ -42,14 +42,14 @@ describe TimeRangeHelper do
 
   describe "with objects" do
     it "should format from objects that respond to just start_time" do
-      event = Event.new(:start_time => Time.parse('2008-04-01 13:30'))
+      event = Event.new(:start_time => Time.zone.parse('2008-04-01 13:30'))
       actual = helper.normalize_time(event, format: :text)
       expect(actual).to eq "Tuesday, April 1, 2008 at 1:30pm"
     end
 
     it "should format from objects that respond to both start_time and end_time" do
-      event = Event.new(:start_time => Time.parse('2008-04-01 13:30'),
-                        :end_time => Time.parse('2008-04-01 15:30'))
+      event = Event.new(:start_time => Time.zone.parse('2008-04-01 13:30'),
+                        :end_time => Time.zone.parse('2008-04-01 15:30'))
       actual = helper.normalize_time(event, format: :text)
       expect(actual).to eq "Tuesday, April 1, 2008 from 1:30-3:30pm"
     end

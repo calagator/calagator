@@ -40,15 +40,15 @@ describe Event, :type => :model do
 
   describe "when checking time status" do
     it "should be old if event ended before today" do
-      expect(FactoryGirl.build(:event, :start_time => today - 1.hour)).to be_old
+      expect(FactoryGirl.build(:event, start_time: 2.days.ago, end_time: 1.day.ago)).to be_old
     end
 
     it "should be current if event is happening today" do
-      expect(FactoryGirl.build(:event, :start_time => today + 1.hour)).to be_current
+      expect(FactoryGirl.build(:event, start_time: 1.hour.from_now)).to be_current
     end
 
     it "should be ongoing if it began before today but ends today or later" do
-      expect(FactoryGirl.build(:event, :start_time => today - 1.day, :end_time => today + 1.day)).to be_ongoing
+      expect(FactoryGirl.build(:event, start_time: 1.day.ago, end_time: 1.day.from_now)).to be_ongoing
     end
   end
 
@@ -264,7 +264,7 @@ describe Event, :type => :model do
 
     it "should set from Date" do
       event = Event.new(:start_time => Date.parse("2009-02-01"))
-      expect(event.start_time).to eq Time.zone.parse("2009-02-01")
+      expect(event.start_time).to eq Time.zone.parse("2009-02-01 00:00:00 PST -08:00")
     end
 
     it "should set from DateTime" do
@@ -302,7 +302,7 @@ describe Event, :type => :model do
 
     it "should set from Date" do
       event = Event.new(:end_time => Date.parse("2009-02-01"))
-      expect(event.end_time).to eq Time.zone.parse("2009-02-01")
+      expect(event.end_time).to eq Time.zone.parse("2009-02-01 00:00:00 PST -08:00")
     end
 
     it "should set from DateTime" do
@@ -502,9 +502,9 @@ describe Event, :type => :model do
   describe "when ordering" do
     describe "with .ordered_by_ui_field" do
       it "defaults to order by start time" do
-        event1 = FactoryGirl.create(:event, start_time: Date.parse("2003-01-01"))
-        event2 = FactoryGirl.create(:event, start_time: Date.parse("2002-01-01"))
-        event3 = FactoryGirl.create(:event, start_time: Date.parse("2001-01-01"))
+        event1 = FactoryGirl.create(:event, start_time: Time.zone.parse("2003-01-01"))
+        event2 = FactoryGirl.create(:event, start_time: Time.zone.parse("2002-01-01"))
+        event3 = FactoryGirl.create(:event, start_time: Time.zone.parse("2001-01-01"))
 
         events = Event.ordered_by_ui_field(nil)
         expect(events).to eq([event3, event2, event1])

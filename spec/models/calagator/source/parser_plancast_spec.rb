@@ -20,7 +20,7 @@ describe Source::Parser::Plancast, :type => :model do
 
     it "should set event details" do
       expect(@event.title).to eq "IndieWebCamp"
-      expect(@event.start_time).to eq Time.zone.parse("Sat, 25 Jun 2011 00:00:00 PDT -07:00")
+      expect(@event.start_time).to eq Time.zone.parse("Sat, 25 Jun 2011 00:00:00")
     end
 
     it "should tag Plancast events with automagic machine tags" do

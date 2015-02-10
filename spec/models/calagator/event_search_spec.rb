@@ -60,9 +60,9 @@ describe Event, :type => :model do
     end
 
     it "can limit to current and upcoming events" do
-      event1 = FactoryGirl.create(:event, start_time: 1.year.ago)
-      event2 = FactoryGirl.create(:event, start_time: Time.zone.today)
-      event3 = FactoryGirl.create(:event, start_time: 1.year.from_now)
+      event1 = FactoryGirl.create(:event, start_time: 1.year.ago, end_time: 1.year.ago + 1.hour)
+      event2 = FactoryGirl.create(:event, start_time: 1.hour.ago, end_time: 1.hour.from_now)
+      event3 = FactoryGirl.create(:event, start_time: 1.year.from_now, end_time: 1.year.from_now + 1.hour)
       expect(Event.search("", skip_old: true)).to eq([event3, event2])
     end
 

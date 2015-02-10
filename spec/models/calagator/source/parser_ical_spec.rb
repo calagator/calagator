@@ -82,8 +82,8 @@ describe Source::Parser::Ical, "with iCalendar events", :type => :model do
     event = events.first
     expect(event.title).to eq "Coffee with Jason"
     # NOTE Source data does not contain a timezone!?
-    expect(event.start_time).to eq Time.zone.parse('2010-04-08 00:00:00')
-    expect(event.end_time).to eq Time.zone.parse('2010-04-08 01:00:00')
+    expect(event.start_time).to eq Time.zone.parse('2010-04-08 00:00:00 PDT -07:00')
+    expect(event.end_time).to eq Time.zone.parse('2010-04-08 01:00:00 PDT -07:00')
     expect(event.venue).to be_nil
   end
 
@@ -103,8 +103,8 @@ describe Source::Parser::Ical, "with iCalendar events", :type => :model do
     expect(events.size).to eq 1
     event = events.first
     expect(event.title).to be_blank
-    expect(event.start_time).to eq Time.zone.parse('2010-04-08 00:00:00')
-    expect(event.end_time).to eq Time.zone.parse('2010-04-08 01:00:00')
+    expect(event.start_time).to eq Time.zone.parse('2010-04-08 00:00:00 PDT -07:00')
+    expect(event.end_time).to eq Time.zone.parse('2010-04-08 01:00:00 PDT -07:00')
     expect(event.venue).to be_nil
   end
 

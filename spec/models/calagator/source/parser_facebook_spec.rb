@@ -19,7 +19,7 @@ describe Source::Parser::Facebook, :type => :model do
 
     it "should set event details" do
       expect(@event.title).to eq "Open Source Bridge 2012"
-      time = Time.zone.parse("26 Jun 2012 09:00:00 PDT -07:00")
+      time = Time.zone.parse("26 Jun 2012 09:00:00")
       expect(@event.start_time).to eq time
     end
 

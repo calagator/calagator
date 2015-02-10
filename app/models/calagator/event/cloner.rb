@@ -31,7 +31,7 @@ class Event < ActiveRecord::Base
     # +source+ time argument.
     def clone_time_for_today(source)
       today = Date.today
-      Time.local(today.year, today.mon, today.day, source.hour, source.min, source.sec, source.usec)
+      Time.zone.local(today.year, today.mon, today.day, source.hour, source.min, source.sec, source.usec)
     end
   end
 end

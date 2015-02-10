@@ -56,7 +56,7 @@ describe Source::Parser::Meetup, :type => :model do
 
     it "should set event details" do
       expect(@event.title).to eq "eLearning Network Meetup"
-      expect(@event.start_time.to_s).to eq "3011-08-10 23:00:00 -0800"
+      expect(@event.start_time).to eq Time.zone.parse("3011-08-10 23:00:00 PST -08:00")
     end
 
     it "should populate a venue when structured data is provided" do
