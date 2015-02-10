@@ -29,7 +29,7 @@
 
           return false;
         }
-      }).data( "autocomplete" )._renderItem = function( ul, item ) {
+      }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
         var short_address = (item.street_address && item.street_address.length > 0)
                               ? item.street_address+", "+item.locality+" "+item.region
                               : item.address;
