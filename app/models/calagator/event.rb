@@ -36,6 +36,8 @@ module Calagator
 class Event < ActiveRecord::Base
   self.table_name = "events"
 
+  attr_protected
+
   has_paper_trail
   acts_as_taggable
 
