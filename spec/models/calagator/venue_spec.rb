@@ -15,6 +15,7 @@ describe Venue, :type => :model do
   end
 
   it "validates blacklisted words" do
+    BlacklistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
     venue = Venue.new(:title => "Foo bar cialis")
     expect(venue).not_to be_valid
   end

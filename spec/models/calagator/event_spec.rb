@@ -15,6 +15,7 @@ describe Event, :type => :model do
     end
 
     it "validates blacklisted words" do
+      BlacklistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
       event = Event.new(:title => "Foo bar cialis", :start_time => Time.zone.parse('2008.04.12'), :url => 'google.com')
       expect(event).not_to be_valid
     end
