@@ -10,6 +10,7 @@ module Calagator
       rake 'calagator:install:migrations'
       rake 'db:migrate'
       rake 'db:test:prepare'
+      run 'rm -f public/index.html'
     end
 
     private
