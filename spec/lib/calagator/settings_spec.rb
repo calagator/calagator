@@ -2,8 +2,8 @@ require 'spec_helper'
 
 module Calagator
   describe 'Calagator.title' do
-    it "should use initializer's value" do
-      expect(Calagator.title).to eq('Calagator Dummy')
+    it "should use default value" do
+      expect(Calagator.title).to eq('Calagator')
     end
 
     it "should be configurable" do
