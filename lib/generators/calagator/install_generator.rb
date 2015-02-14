@@ -7,6 +7,8 @@ module Calagator
       add_route
       add_secrets
       add_initializer
+      add_javascripts
+      add_stylesheets
       rake 'calagator:install:migrations'
       rake 'db:migrate'
       rake 'db:test:prepare'
@@ -27,5 +29,12 @@ module Calagator
       copy_file File.expand_path(File.join(__FILE__, '../templates/config/calagator.rb')), 'config/initializers/calagator.rb'
     end
 
+    def add_javascripts
+      append_file 'app/assets/javascripts/application.js', '//= require calagator'
+    end
+
+    def add_stylesheets
+      append_file 'app/assets/stylesheets/application.css', '//= require calagator'
+    end
   end
 end
