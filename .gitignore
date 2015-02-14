@@ -47,10 +47,6 @@ vagrant/cookbooks/vagrant/recipes/local.rb
 .ruby-version
 .bundle/
 pkg/
-spec/dummy/db/*.sqlite3
-spec/dummy/log/*
-spec/dummy/solr/*
-spec/dummy/tmp/
-spec/dummy/.sass-cache
+spec/dummy
 .sass-cache
 .DS_Store

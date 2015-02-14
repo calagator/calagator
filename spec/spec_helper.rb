@@ -1,3 +1,7 @@
+if !File.exist?("spec/dummy")
+  raise "Missing dummy app in spec/dummy! Run bin/calagator new spec/dummy to generate one."
+end
+
 unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
   require 'simplecov'
   require 'coveralls'

@@ -18,6 +18,7 @@ before_install:
   - ruby ci/copy_database_config.rb
 
 before_script:
+  - bin/calagator new spec/dummy
   - mysql -e 'create database calagator_test;'
   - psql -c 'create database calagator_test;' -U postgres
   - bundle exec rake db:migrate
