@@ -52,6 +52,7 @@ class BlacklistValidator < ActiveModel::EachValidator
   def patterns
     @patterns ||= options.fetch(:patterns) do
       [
+        Calagator.blacklist_patterns,
         get_blacklist_patterns_from(options.fetch(:blacklist, "blacklist.txt")),
         get_blacklist_patterns_from("blacklist-local.txt")
       ].flatten.compact
