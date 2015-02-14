@@ -16,6 +16,30 @@ describe Event, :type => :model do
       event = Event.new(:title => "Foo bar cialis", :start_time => Time.zone.parse('2008.04.12'), :url => 'google.com')
       expect(event).not_to be_valid
     end
+
+    it "can be locked" do
+      event = Event.create(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'))
+      event.lock_editing!
+      expect(event.locked).to eq(true)
+    end
+
+    it "can be unlocked" do
+      event = Event.create(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'), :locked => true)
+      event.unlock_editing!
+      expect(event.locked).to eq(false)
+    end
+
+    it "can't be updated if it's locked" do
+      event = Event.create(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'))
+      event.lock_editing!
+      expect(event.update_attributes(:title => "New title")).to eq(false)
+    end
+
+    it "can't be deleted if it's locked" do
+      event = Event.create(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'))
+      event.lock_editing!
+      expect(event.destroy).to eq(false)
+    end
   end
 
   describe "when checking time status" do
