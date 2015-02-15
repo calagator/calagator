@@ -43,7 +43,6 @@ class Event < ActiveRecord::Base
 
   validates :title, :description, :url, blacklist: true
 
-  before_update :verify_lock_status
   before_destroy :verify_lock_status
 
   # Duplicates
@@ -225,6 +224,6 @@ protected
   end
 
   def verify_lock_status
-    return false if locked
+    return !locked
   end
 end

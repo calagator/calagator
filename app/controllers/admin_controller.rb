@@ -10,9 +10,9 @@ class AdminController < ApplicationController
 
   def lock_event
     @event = Event.find(params[:event_id])
-    if @event.locked
+    if @event.locked?
       @event.unlock_editing!
-      flash[:success] = "Unlocked event #{@event.title} (#{@event.id})"      
+      flash[:success] = "Unlocked event #{@event.title} (#{@event.id})"
     else
       @event.lock_editing!
       flash[:success] = "Locked event #{@event.title} (#{@event.id})"
