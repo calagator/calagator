@@ -29,12 +29,6 @@ describe Event, :type => :model do
       expect(event.locked).to eq(false)
     end
 
-    it "can't be updated if it's locked" do
-      event = Event.create(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'))
-      event.lock_editing!
-      expect(event.update_attributes(:title => "New title")).to eq(false)
-    end
-
     it "can't be deleted if it's locked" do
       event = Event.create(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'))
       event.lock_editing!
