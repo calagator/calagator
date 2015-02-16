@@ -2,6 +2,7 @@ require 'rails_helper'
 
 feature 'Administrative suite is hidden behind an http basic auth wall' do
   scenario 'Users are not permitted in /admin' do
+    page.driver.basic_authorize 'nope', 'nada'
     visit '/admin'
     expect(page.status_code).to eq 401
   end
