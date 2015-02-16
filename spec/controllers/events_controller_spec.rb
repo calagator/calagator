@@ -538,6 +538,13 @@ describe EventsController, :type => :controller do
         put "update", @params.merge(:preview => "Preview")
         expect(response).to render_template :edit
       end
+
+      it "should not allow a user to update a locked event" do
+        @event.lock_editing!
+        put "update", @params
+        expect(response).to be_redirect
+        expect(flash[:failure]).to match /not permitted/i
+      end
     end
 
     describe "#clone" do
@@ -760,5 +767,15 @@ describe EventsController, :type => :controller do
       delete 'destroy', :id => 1234
       expect(response).to redirect_to(events_url)
     end
+
+    it "should not allow a user to destroy a locked event" do
+      event = FactoryGirl.create(:event)
+      event.lock_editing!
+
+      delete 'destroy', :id => event.id
+      expect(response).to be_redirect
+      expect(flash[:failure]).to match /not permitted/i
+    end
+
   end
 end

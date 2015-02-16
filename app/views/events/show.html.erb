@@ -59,6 +59,9 @@
   </ul>
 <hr />
   <div id='edit_link'>
+    <% if @event.locked %>
+    <p>This event is currently locked and cannot be edited. Please contact an admin for assistance.</p>
+    <% else %>
     <p>
       You can 
       <%= link_to "edit", edit_event_url(@event) %>,
@@ -67,6 +70,7 @@
       <%= link_to "delete", event_url(@event), :method => :delete, :confirm => "Are you sure?" %>
       this event.
     </p>
+    <% end %>
   </div>
 <hr />
   <div id='metadata'>

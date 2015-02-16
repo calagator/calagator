@@ -43,6 +43,8 @@ class Event < ActiveRecord::Base
 
   validates :title, :description, :url, blacklist: true
 
+  before_destroy :verify_lock_status
+
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
@@ -132,6 +134,14 @@ class Event < ActiveRecord::Base
   end
   private :time_for
 
+  def lock_editing!
+    update_attribute(:locked, true)
+  end
+
+  def unlock_editing!
+    update_attribute(:locked, false)
+  end
+
   #---[ Queries ]---------------------------------------------------------
 
   # Return Hash of Events grouped by the +type+.
@@ -211,5 +221,9 @@ protected
     if start_time && end_time && end_time < start_time
       errors.add(:end_time, "cannot be before start")
     end
+  end
+
+  def verify_lock_status
+    return !locked
   end
 end
