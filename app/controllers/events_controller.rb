@@ -1,6 +1,7 @@
 class EventsController < ApplicationController
   # Provides #duplicates and #squash_many_duplicates
   include DuplicateChecking::ControllerActions
+  before_filter :find_and_redirect_if_locked, :only => [:edit, :update, :destroy]
 
   # GET /events
   # GET /events.xml
@@ -37,7 +38,6 @@ class EventsController < ApplicationController
 
   # GET /events/1/edit
   def edit
-    @event = Event.find(params[:id])
   end
 
   # POST /events
@@ -50,7 +50,6 @@ class EventsController < ApplicationController
   # PUT /events/1
   # PUT /events/1.xml
   def update
-    @event = Event.find(params[:id])
     create_or_update
   end
 
@@ -81,7 +80,6 @@ class EventsController < ApplicationController
   # DELETE /events/1
   # DELETE /events/1.xml
   def destroy
-    @event = Event.find(params[:id])
     @event.destroy
 
     respond_to do |format|
@@ -153,5 +151,13 @@ class EventsController < ApplicationController
   rescue ArgumentError, TypeError
     append_flash :failure, "Can't filter by an invalid #{kind} date."
     default
+  end
+
+  def find_and_redirect_if_locked
+    @event = Event.find(params[:id])
+    if @event.locked?
+      flash[:failure] = "You are not permitted to modify this event."
+      redirect_to root_path
+    end
   end
 end
