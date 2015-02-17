@@ -8,6 +8,5 @@ Dir.chdir ARGV[1] do
   system %(echo "gem 'calagator', path: '#{calagator_path}'" >> Gemfile)
   system "bundle"
   system "bundle exec rake db:create"
-  system "bundle exec rake db:create RAILS_ENV=test"
   system "bundle exec rails g calagator:install"
 end
