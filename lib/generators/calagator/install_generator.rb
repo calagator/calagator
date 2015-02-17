@@ -3,7 +3,6 @@ module Calagator
     source_root File.expand_path('../templates', __FILE__)
 
     def install
-      run 'bundle install'
       add_route
       add_secrets
       add_initializer
