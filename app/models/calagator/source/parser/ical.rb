@@ -92,9 +92,9 @@ class Source::Parser::Ical < Source::Parser
       event.start_time  = component.dtstart
       event.end_time    = component.dtend
     else
-      event.start_time  = Time.parse(component.dtstart_property.value)
+      event.start_time  = Time.zone.parse(component.dtstart_property.value)
       if component.dtend_property
-        event.end_time = Time.parse(component.dtend_property.value)
+        event.end_time = Time.zone.parse(component.dtend_property.value)
       else
         if component.duration
           event.end_time = component.duration_property.add_to_date_time_value(event.start_time)
