@@ -21,9 +21,13 @@ describe GoogleEventExportHelper, :type => :helper do
         expect(@export).to match /\&text=#{escape(@event.title)}/
       end
 
-      it "should have time range" do
-        params = Rack::Utils.parse_query(@export)
-        params["dates"].should == "20100101T120000Z/20100101T130000Z"
+      it "should have time range in utc" do
+        dates = Rack::Utils.parse_query(@export)["dates"]
+        format = "%Y%m%dT%H%M%SZ"
+        dates.should == [
+          @event.start_time.utc.strftime(format),
+          @event.end_time.utc.strftime(format),
+        ].join("/")
       end
 
       it "should have venue title" do

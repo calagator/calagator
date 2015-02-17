@@ -785,11 +785,11 @@ describe Event, :type => :model do
     end
 
     it "should create multi-day entries for multi-day events" do
-      time = Time.now
+      time = Time.zone.now
       event = FactoryGirl.build(:event, :start_time => time, :end_time => time + 4.days)
       parsed_event = ical_roundtrip( event )
 
-      start_time = Date.today
+      start_time = Date.current
       expect(parsed_event.dtstart).to eq start_time
       expect(parsed_event.dtend).to eq(start_time + 5.days)
     end

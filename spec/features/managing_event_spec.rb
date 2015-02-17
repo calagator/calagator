@@ -3,7 +3,7 @@ require 'rails_helper'
 feature 'Event Editing' do
   background do
     Timecop.travel('2014-10-09')
-    create :event, title: 'Ruby Future', start_time: today
+    create :event, title: 'Ruby Future', start_time: Time.zone.now
   end
 
   after do
@@ -47,7 +47,7 @@ end
 feature 'Event Cloning' do
   background do
     Timecop.travel('2014-10-09')
-    create :event, title: 'Ruby Event Part One', start_time: today + 4.day
+    create :event, title: 'Ruby Event Part One', start_time: 4.days.from_now
   end
 
   after do
@@ -89,7 +89,7 @@ end
 
 feature 'Event Deletion' do
   background do
-    create :event, title: 'Ruby and You', start_time: today + 1.day
+    create :event, title: 'Ruby and You', start_time: 1.day.from_now
   end
 
   scenario 'A user deletes an event' do
