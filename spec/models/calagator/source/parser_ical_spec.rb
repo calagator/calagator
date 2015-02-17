@@ -103,8 +103,8 @@ describe Source::Parser::Ical, "with iCalendar events", :type => :model do
     expect(events.size).to eq 1
     event = events.first
     expect(event.title).to be_blank
-    expect(event.start_time).to eq Time.zone.parse('2010-04-08 00:00:00 PDT -07:00')
-    expect(event.end_time).to eq Time.zone.parse('2010-04-08 01:00:00 PDT -07:00')
+    expect(event.start_time).to eq Time.parse('2010-04-08 00:00:00')
+    expect(event.end_time).to eq Time.parse('2010-04-08 01:00:00')
     expect(event.venue).to be_nil
   end
 
@@ -117,20 +117,20 @@ describe Source::Parser::Ical, "with iCalendar events", :type => :model do
     event = events.first
     expect(event.title).to eq "XPDX (eXtreme Programming) at CubeSpace"
     expect(event.description).to be_blank
-    expect(event.start_time).to eq Time.parse("2007-10-24 18:30:00")
-    expect(event.end_time).to eq Time.parse("2007-10-24 19:30:00")
+    expect(event.start_time).to eq Time.parse("2007-10-24 18:30:00 PDT")
+    expect(event.end_time).to eq Time.parse("2007-10-24 19:30:00 PDT")
 
     event = events[17]
     expect(event.title).to eq "Code Sprint/Coding Dojo at CubeSpace"
     expect(event.description).to be_blank
-    expect(event.start_time).to eq Time.parse("2007-10-17 19:00:00")
-    expect(event.end_time).to eq Time.parse("2007-10-17 21:00:00")
+    expect(event.start_time).to eq Time.parse("2007-10-17 19:00:00 PDT")
+    expect(event.end_time).to eq Time.parse("2007-10-17 21:00:00 PDT")
 
     event = events.last
     expect(event.title).to eq "Adobe Developer User Group"
     expect(event.description).to eq "http://pdxria.com/"
-    expect(event.start_time).to eq Time.parse("2007-01-16 17:30:00")
-    expect(event.end_time).to eq Time.parse("2007-01-16 18:30:00")
+    expect(event.start_time).to eq Time.parse("2007-01-16 17:30:00 PST")
+    expect(event.end_time).to eq Time.parse("2007-01-16 18:30:00 PST")
   end
 
   it "should parse non-Vcard locations" do

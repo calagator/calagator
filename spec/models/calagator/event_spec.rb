@@ -265,7 +265,7 @@ describe Event, :type => :model do
 
     it "should set from Date" do
       event = Event.new(:start_time => Date.parse("2009-02-01"))
-      expect(event.start_time).to eq Time.zone.parse("2009-02-01 00:00:00 PST -08:00")
+      expect(event.start_time).to eq Time.parse("2009-02-01")
     end
 
     it "should set from DateTime" do
@@ -303,7 +303,7 @@ describe Event, :type => :model do
 
     it "should set from Date" do
       event = Event.new(:end_time => Date.parse("2009-02-01"))
-      expect(event.end_time).to eq Time.zone.parse("2009-02-01 00:00:00 PST -08:00")
+      expect(event.end_time).to eq Time.parse("2009-02-01")
     end
 
     it "should set from DateTime" do
