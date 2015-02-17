@@ -16,8 +16,8 @@ matrix:
 
 before_script:
   - bin/calagator new spec/dummy --database=$DB --postgres-username=postgres
-  - bundle exec rake db:migrate
   - bundle exec rake app:sunspot:solr:start_with_waiting
+
 script:
   - bundle exec rake spec --trace
 cache: bundler
