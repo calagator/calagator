@@ -1,7 +1,9 @@
 #!/bin/sh
 CALAGATOR_PATH=$(pwd)
-bundle exec rails new $2 --skip-bundle
+bundle exec rails $@ --skip-bundle
 cd $2
 echo "gem 'calagator', path: '$CALAGATOR_PATH'" >> Gemfile
 bundle
+bundle exec rake db:create
+bundle exec rake db:create RAILS_ENV=test
 bundle exec rails g calagator:install
