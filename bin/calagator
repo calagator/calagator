@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 calagator_path = Dir.pwd
 system "bundle exec rails #{ARGV.join(" ")} --skip-bundle"
+if ARGV.any? { |arg| arg =~ /--database=postgres/ } && ARGV.any? { |arg| arg =~ /--postgres-username=(\w+)/ }
+  system "sed -i 's/username: .\\+/username: #{$1}/' spec/dummy/config/database.yml"
+end
 Dir.chdir ARGV[1] do
   system %(echo "gem 'calagator', path: '#{calagator_path}'" >> Gemfile)
   system "bundle"
