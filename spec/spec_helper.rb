@@ -24,7 +24,6 @@ require "database_cleaner"
 require "capybara/poltergeist"
 require "timecop"
 require "webmock"
-require "byebug"
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }

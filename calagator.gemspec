@@ -61,6 +61,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "poltergeist", "~> 1.6.0"
   s.add_development_dependency "timecop", "~> 0.7.1"
   s.add_development_dependency "webmock", "~> 1.20.4"
-  s.add_development_dependency "byebug", "~> 3.0.0"
   s.add_development_dependency "simplecov", "~> 0.9.1"
 end
