@@ -15,9 +15,9 @@ matrix:
     - rvm: rbx-2
 
 before_script:
-  - bin/calagator new spec/dummy
   - mysql -e 'create database calagator_test;'
   - psql -c 'create database calagator_test;' -U postgres
+  - bin/calagator new spec/dummy
   - ruby ci/copy_database_config.rb
   - bundle exec rake db:migrate
   - bundle exec rake app:sunspot:solr:start_with_waiting
