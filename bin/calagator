@@ -1,9 +1,10 @@
-#!/bin/sh
-CALAGATOR_PATH=$(pwd)
-bundle exec rails $@ --skip-bundle
-cd $2
-echo "gem 'calagator', path: '$CALAGATOR_PATH'" >> Gemfile
-bundle
-bundle exec rake db:create
-bundle exec rake db:create RAILS_ENV=test
-bundle exec rails g calagator:install
+#!/usr/bin/env ruby
+calagator_path = Dir.pwd
+system "bundle exec rails #{ARGV.join(" ")} --skip-bundle"
+Dir.chdir ARGV[1] do
+  system %(echo "gem 'calagator', path: '#{calagator_path}'" >> Gemfile)
+  system "bundle"
+  system "bundle exec rake db:create"
+  system "bundle exec rake db:create RAILS_ENV=test"
+  system "bundle exec rails g calagator:install"
+end
