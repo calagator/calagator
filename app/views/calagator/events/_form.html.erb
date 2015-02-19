@@ -5,10 +5,6 @@
 # * event: An new or existing Event instance.
 %>
 
-<% content_for :css_insert do %>
-  <%= stylesheet_link_tag 'forms' %>
-<% end %>
-
 <% if params[:preview] && event.valid? -%>
 <div id="event_preview">
     <h2>Preview your event</h2>
