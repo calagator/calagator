@@ -55,7 +55,7 @@ module ApplicationHelper
     if item.source.nil?
       stamp << "added directly to #{Calagator.title}"
     else
-      stamp << "imported from " << link_to(truncate(item.source.name, :length => 40), helper.url_for(item.source))
+      stamp << "imported from " << link_to(truncate(item.source.name, :length => 40), url_for(item.source))
     end
     stamp << " <br />" << content_tag(:strong, normalize_time(item.created_at, :format => :html) )
     if item.updated_at > item.created_at

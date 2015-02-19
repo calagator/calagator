@@ -70,7 +70,7 @@ describe ApplicationHelper, :type => :helper do
       event = FactoryGirl.create(:event, created_at: "2010-01-01", updated_at: "2010-01-02")
       event.create_source! title: "google", url: "http://google.com"
       allow(event.source).to receive_messages id: 1
-      expect(datestamp(event)).to eq(
+      expect(helper.datestamp(event)).to eq(
         %(This item was imported from <a href="/sources/1">google</a> <br />) +
         %(<strong>Friday, January 1, 2010 at midnight</strong> ) +
         %(and last updated <br /><strong>Saturday, January 2, 2010 at midnight</strong>.)
