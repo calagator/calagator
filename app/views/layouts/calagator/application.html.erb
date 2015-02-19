@@ -15,7 +15,7 @@
     <link rel='search' type='application/opensearchdescription+xml' href='<%= "#{root_path}opensearch.xml" %>'  title='<%= Calagator.title %>' />
 
     <!-- Stylesheets, static -->
-    <%= stylesheet_link_tag 'application', 'theme', :media => :all %>
+    <%= stylesheet_link_tag 'application', :media => :all %>
 
     <link rel="stylesheet" href="https://d591zijq8zntj.cloudfront.net/leaflet-0.6.4/leaflet.css" />
     <!--[if lte IE 8]>
@@ -27,7 +27,7 @@
 
     <!-- JavaScripts, static -->
     <%= javascript_include_tag *mapping_js_includes %>
-    <%= javascript_include_tag 'application', 'theme' %>
+    <%= javascript_include_tag 'application' %>
 
     <!-- JavaScripts, inserted -->
     <%= yield :javascript_insert %>
