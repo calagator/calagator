@@ -9,10 +9,6 @@
   <%= stylesheet_link_tag 'forms' %>
 <% end %>
 
-<% content_for :javascript_insert do %>
-  <%= javascript_include_tag 'forms' %>
-<% end %>
-
 <% if params[:preview] && event.valid? -%>
 <div id="event_preview">
     <h2>Preview your event</h2>

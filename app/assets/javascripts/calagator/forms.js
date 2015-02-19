@@ -4,27 +4,29 @@
 
 $(document).ready(function(){
   // Initialize autocompletion for venues
-  $("input.autocomplete").attr('autocomplete', 'off').autocomplete({
-    source: "/venues/autocomplete.json",
-    minLength: 2,
-    search: function(event, ui) {
-      //$("#event_venue_loading").show();
-      $("#event_venue_id").val('');
-    },
-    select: function(event, ui) {
-      $('input.autocomplete').val( ui.item.title );
-      $("#event_venue_id").val( ui.item.id );
+  $("input.autocomplete").each(function() {
+    $(this).attr('autocomplete', 'off').autocomplete({
+      source: "/venues/autocomplete.json",
+      minLength: 2,
+      search: function(event, ui) {
+        //$("#event_venue_loading").show();
+        $("#event_venue_id").val('');
+      },
+      select: function(event, ui) {
+        $('input.autocomplete').val( ui.item.title );
+        $("#event_venue_id").val( ui.item.id );
 
-      return false;
-    }
-  }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-    var short_address = (item.street_address && item.street_address.length > 0)
-                          ? item.street_address+", "+item.locality+" "+item.region
-                          : item.address;
-    return $( "<li><a href='javascript:void(0);'><strong>"+item.title+"</strong><br />"+short_address+"</a></li>" )
-            .data( "item.autocomplete", item )
-            .appendTo(ul);
-  };
+        return false;
+      }
+    }).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+      var short_address = (item.street_address && item.street_address.length > 0)
+                            ? item.street_address+", "+item.locality+" "+item.region
+                            : item.address;
+      return $( "<li><a href='javascript:void(0);'><strong>"+item.title+"</strong><br />"+short_address+"</a></li>" )
+              .data( "item.autocomplete", item )
+              .appendTo(ul);
+    };
+  });
 
   // Initialize date and time pickers
   $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });

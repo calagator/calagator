@@ -1,5 +1,6 @@
 //= require jquery
 //= require jquery_ujs
+//= require calagator/forms
 //= require leaflet.awesome-markers
 
 $(document).ready(function(){
