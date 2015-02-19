@@ -148,7 +148,7 @@ class EventsController < ApplicationController
     return default unless params[:date].present?
 
     Date.parse(params[:date][kind])
-  rescue ArgumentError, TypeError
+  rescue NoMethodError, ArgumentError, TypeError
     append_flash :failure, "Can't filter by an invalid #{kind} date."
     default
   end
