@@ -65,6 +65,6 @@ Calagator::Application.configure do
 
   # Google analytics id
   # TODO: replace with organization's google analytics account id
-  config.google_analytics_tracking_id = 123456
+  config.google_analytics_tracking_id = 'UA-123456-7'
 end
 

@@ -29,6 +29,6 @@ Calagator::Application.configure do
   config.assets.debug = true
 
   # Google analytics id
-  config.google_analytics_tracking_id = 123456
+  config.google_analytics_tracking_id = 'UA-123456-7'
 end
 
