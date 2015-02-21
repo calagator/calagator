@@ -23,6 +23,9 @@ show_year ||= false
     <% if event.venue && !event.venue.title.blank? %>
       <br/><a class='location p-location h-card' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
     <% end -%>
+    <% if event.organization && !event.organization.title.blank? %>
+      <br/><a class='location p-location h-card' href='<%= url_for organization_url(event.organization) %>'><%= event.organization.title -%></a>
+    <% end -%>
     </div>
     <% if !event.description.blank? %>
       <div class='description e-description'>

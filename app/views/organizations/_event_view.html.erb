@@ -1,0 +1,15 @@
+<% unless organization.blank? %>
+<div class="clearfix location p-location h-card vcard"  itemprop="location" itemscope itemtype="http://schema.org/Place">
+
+    <a class="url u-url" href='<%= organization.new_record? ? "#" : organization_url(organization) %>'>
+      <span class='fn org p-name' itemprop="name"><%= organization.title -%></span>
+    </a>
+
+    <% unless organization.description.blank? -%>
+    <p class="p-description">
+      <%= format_description(organization.description) %>
+    </p>
+    <% end -%>
+
+</div>
+<% end -%>

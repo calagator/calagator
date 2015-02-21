@@ -17,6 +17,9 @@ html_classes << " contentbar" if has_contentbar
       <meta itemprop="endDate" content="<%= event.end_time.to_time.iso8601 %>">
     <% end %>
     <div class='date'><%= normalize_time(event) -%></div>
+
+    <%= render partial: 'organizations/event_view', locals: { organization: event.organization } %>
+
       <% unless event.venue.blank? %>
       <div class="clearfix location p-location h-card vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
           <%= map event %>
