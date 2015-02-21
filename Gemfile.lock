@@ -138,6 +138,7 @@ GEM
       rails (~> 3.0)
       rake
       will_paginate (~> 3.0.pre2)
+    pg (0.18.1)
     poltergeist (1.5.1)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -308,6 +309,7 @@ DEPENDENCIES
   nokogiri (= 1.5.11)
   paper_trail (= 2.7.2)
   paper_trail_manager (>= 0.2.0)
+  pg
   poltergeist (= 1.5.1)
   progress_bar (= 1.0.0)
   puma (= 2.6.0)

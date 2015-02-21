@@ -12,16 +12,8 @@
 source 'https://rubygems.org'
 
 # Database driver
-require "./lib/database_yml_reader"
-adapter = DatabaseYmlReader.read.adapter
-case adapter
-when 'pg', 'postgresql'
-  gem 'pg'
-when 'mysql2'
-  gem 'mysql2', '~> 0.3.11'
-else
-  gem adapter
-end
+gem 'pg'
+gem 'sqlite3'
 
 gem 'puma', '2.6.0'
 
