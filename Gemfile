@@ -92,7 +92,8 @@ group :development do
   gem 'better_errors', '1.1.0'
   gem 'binding_of_caller', '0.7.2'
 
-  gem 'pry-rails'
+  gem 'pry-rails', '~> 0.3.3'
+  gem 'quiet_assets', '~> 1.1.0'
 end
 
 group :test do
@@ -104,7 +105,7 @@ group :test do
   gem 'timecop', '~> 0.7'
   gem 'webmock', '~> 1.20'
 
-  gem 'pry-rails'
+  gem 'pry-rails', '~> 0.3.3'
 end
 
 # Gems used only for assets and not required
