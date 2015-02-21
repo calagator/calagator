@@ -29,6 +29,10 @@
     <h1 class="fn org"><%= @organization.title %></h1>
 
     <div class='info'>
+      <% if @organization.description.present? %>
+        <div class='description'><%= @organization.description %></div>
+      <% end %>
+
       <% if @organization.url.present? %>
         <div class='url'><%= link_to(truncate(url_for(@organization.url), :length => 60), url_for(@organization.url), :rel => "nofollow") %></div>
       <% end %>
