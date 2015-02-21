@@ -31,6 +31,7 @@ class Event < ActiveRecord::Base
 
   # Associations
   belongs_to :venue, :counter_cache => true
+  belongs_to :organization, :counter_cache => true
   belongs_to :source
 
   # Validations
@@ -77,6 +78,13 @@ class Event < ActiveRecord::Base
   }
   scope :past_with_venue, -> {
     past.order("start_time DESC").non_duplicates.includes(:venue)
+  }
+
+  scope :future_with_organization, -> {
+    future.order("start_time ASC").non_duplicates.includes(:organization)
+  }
+  scope :past_with_organization, -> {
+    past.order("start_time DESC").non_duplicates.includes(:organization)
   }
 
   # Expand the simple sort order names from the URL into more intelligent SQL order strings

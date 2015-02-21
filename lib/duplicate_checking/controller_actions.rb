@@ -3,9 +3,9 @@ module DuplicateChecking
     # GET /#{model_class}/duplicates
     def duplicates
       @type = params[:type]
-      @grouped_venues = @grouped_events = model_class.find_duplicates_by_type(@type)
+      @grouped_organizations = @grouped_venues = @grouped_events = model_class.find_duplicates_by_type(@type)
     rescue ArgumentError => e
-      @grouped_venues = @grouped_events = {}
+      @grouped_organizations = @grouped_venues = @grouped_events = {}
       flash[:failure] = e.to_s
     end
 
