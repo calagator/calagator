@@ -36,4 +36,7 @@ Calagator::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # Google analytics id
+  config.google_analytics_tracking_id = 'UA-123456-7'
 end

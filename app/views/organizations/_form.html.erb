@@ -1,0 +1,31 @@
+<%= semantic_form_for(organization, :html => {:id => 'organization_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
+  <%= f.inputs :name => "#{'Editing: ' unless organization.new_record?} <em>#{organization.title}</em>".html_safe do %>
+    <li class='input'>
+      <p class='inline-hints'>You can <%= organization.new_record? ? "enter" : "edit" %> the details of your organization below.  The more information we have about your organization, the easier it will be for people to find it.</p>
+    </li>
+    <%= f.input :title, :label => "Organization Name" %>
+    <% focus_on '#organization_title' %>
+
+    <%= f.input :url, :label => "Web Link" %>
+    <%= f.input :email %>
+    <%= f.input :telephone %>
+    <%= f.input :description,
+                :input_html => {:rows => 12},
+                :hint => "(Format text using #{link_to("Markdown", "http://www.simpleeditions.com/59001/markdown-an-introduction", :target => "_blank")} and HTML)".html_safe %>
+
+    <%= f.input :tag_list, :required => false,
+                :label => 'Tags',
+                :hint => "(Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>plancast:plan=ABCD</code> to associate this with a particular <a href='http://plancast.com/'>Plancast</a> event, or a tag like <code>epdx:group=1234</code> to associate the event with a particular <a href='http://epdx.org/'>ePDX</a> group)".html_safe %>
+
+    <li class='trap'>
+      <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
+      <%= text_field_tag 'trap_field', params[:trap_field] %>
+    </li>
+
+    <% if !params[:from_event].blank? %>
+      <%= hidden_field_tag(:from_event, params[:from_event]) %>
+    <% end %>
+  <% end %>
+
+  <%= f.actions :submit %>
+<% end %>
