@@ -118,8 +118,6 @@ GEM
     json (1.8.2)
     launchy (2.4.3)
       addressable (~> 2.3)
-    libnotify (0.9.1)
-      ffi (>= 1.0.11)
     libv8 (3.16.14.7)
     listen (2.8.5)
       celluloid (>= 0.15.2)
@@ -321,7 +319,6 @@ DEPENDENCIES
   htmlentities (= 4.3.1)
   jquery-rails (= 1.0.19)
   jquery-ui-rails
-  libnotify
   loofah (= 1.2.1)
   loofah-activerecord (= 1.1.0)
   lucene_query (= 0.1)
