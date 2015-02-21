@@ -15,6 +15,15 @@ class ApplicationController < ActionController::Base
 
 protected
 
+  helper_method :current_organization
+  def current_organization
+    @current_organization ||= begin
+      if id = session[:organization_id]
+        Organization.find_by_id(id)
+      end
+    end
+  end
+
   #---[ Helpers ]---------------------------------------------------------
 
   # Returns a data structure used for telling the CSS menu which part of the
