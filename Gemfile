@@ -12,16 +12,8 @@
 source 'https://rubygems.org'
 
 # Database driver
-require "./lib/database_yml_reader"
-adapter = DatabaseYmlReader.read.adapter
-case adapter
-when 'pg', 'postgresql'
-  gem 'pg'
-when 'mysql2'
-  gem 'mysql2', '~> 0.3.11'
-else
-  gem adapter
-end
+gem 'pg'
+gem 'sqlite3'
 
 gem 'puma', '2.6.0'
 
@@ -79,12 +71,6 @@ group :development, :test do
     platforms :mri do
       gem 'guard', '~> 1.3.0'
       gem 'guard-rspec', '~> 1.2.1'
-    end
-
-    # Guard notifier
-    case RUBY_PLATFORM
-    when /-*darwin.*/ then gem 'growl'
-    when /-*linux.*/ then gem 'libnotify'
     end
   end
 

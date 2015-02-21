@@ -51,7 +51,8 @@ module Calagator
     config.assets.precompile += [
       "leaflet.js",
       "leaflet_google_layer.js",
-      "errors.css"
+      "errors.css",
+      "analytics.js"
     ]
 
     #---[ Rack Middleware ]-------------------------------------------------

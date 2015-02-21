@@ -27,7 +27,7 @@
 
     <!-- JavaScripts, static -->
     <%= javascript_include_tag *mapping_js_includes %>
-    <%= javascript_include_tag 'application', 'theme' %>
+    <%= javascript_include_tag 'application', 'theme', 'analytics' %>
 
     <!-- JavaScripts, inserted -->
     <%= yield :javascript_insert %>
@@ -54,11 +54,11 @@
               <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
           </ul>
         </div>
-        <div id='project_menu'>
+        <!-- <div id='project_menu'>
           <strong>Get Involved:</strong> <%= link_to "Blog", "http://calagator.wordpress.com/", {:class => 'first'} %> | <%= link_to "Forum", "http://groups.google.com/group/pdx-tech-calendar/" %> | <%= link_to "Code", "https://github.com/calagator/calagator" %>
           <br />
           <strong>Something not right?</strong> <%= link_to "File an issue", "https://github.com/calagator/calagator/issues" %>
-        </div>
+        </div> -->
         <%= form_tag search_events_path, :method => :get do %>
           <div id='search_form'>
           <label for="search_field">Search Events</label>
@@ -86,7 +86,7 @@
 
     <div id="top_footer">
       <%= URI.parse(SETTINGS.url).host %>
-      <%= source_code_version %>
+      <!-- <%= source_code_version %> -->
       &nbsp;
       &nbsp;
       &nbsp;
