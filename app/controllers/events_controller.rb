@@ -3,6 +3,8 @@ class EventsController < ApplicationController
   include DuplicateChecking::ControllerActions
   before_filter :find_and_redirect_if_locked, :only => [:edit, :update, :destroy]
 
+  before_filter :load_organization, only: [:new, :create, :update]
+
   # GET /events
   # GET /events.xml
   def index
@@ -33,7 +35,7 @@ class EventsController < ApplicationController
   # GET /events/new
   # GET /events/new.xml
   def new
-    @event = Event.new(params[:event])
+    @event = @current_organization.events.new(params[:event])
   end
 
   # GET /events/1/edit
@@ -43,7 +45,7 @@ class EventsController < ApplicationController
   # POST /events
   # POST /events.xml
   def create
-    @event = Event.new
+    @event = @current_organization.events.new
     create_or_update
   end
 
@@ -109,6 +111,11 @@ class EventsController < ApplicationController
 
   private
 
+  def load_organization
+    Rails.logger.warn "** Need an actual org lookup here!!"
+    @current_organization = Organization.find_or_create_by_title!("Volunteer Odyssey")
+  end
+
   def render_event(event)
     respond_to do |format|
       format.html # show.html.erb
@@ -147,7 +154,7 @@ class EventsController < ApplicationController
     default = send("default_#{kind}_date")
     return default unless params[:date].present?
 
-    Date.parse(params[:date][kind])
+    Date.parse(params[:date][kind].to_s)
   rescue ArgumentError, TypeError
     append_flash :failure, "Can't filter by an invalid #{kind} date."
     default
