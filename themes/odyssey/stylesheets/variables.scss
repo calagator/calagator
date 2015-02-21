@@ -8,14 +8,17 @@ $lt_blue: #e8fbfe;
 $wifi_blue: #6098e6;
 $red: #CE421D;
 
-$box_background: $lt_blue;
+$vo_blue: #054974;
+$vo_gray: #B7B9BB;
+
+$box_background: lighten($vo_blue, 60%);
 $closed: $red;
-$default_text: $beige;
-$footer: $dk_green;
-$header: $green;
-$header_text: $dk_green;
-$subnav: saturate(lighten($header, 20%), 25%);
+$default_text: #888;
+$header: $white;
+$header_text: $vo_blue;
+$subnav: $vo_blue;
+$footer: $subnav;
 $wifi: $wifi_blue;
 
 $section_head_background: $beige;
-$text_highlight: $teal;
+$text_highlight: saturate(lighten($vo_blue, 20%), 20%);
