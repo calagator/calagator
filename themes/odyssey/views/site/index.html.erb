@@ -3,10 +3,6 @@
 <% cache(CacheObserver.daily_key_for("site_index", request)) do %>
 <a href="#" id="homepage_sidebar_toggle" class="expander_toggle">Hi there. Learn about this site and how to use it...</a>
 <div id="homepage_sidebar">
-  <!-- <div id="project_description">
-    <%= render :partial => "description" %>
-  </div> -->
-
   <% if @overview.tags.present? %>
     <div id="tagcloud">
       <h2>Popular tags</h2>
@@ -15,6 +11,24 @@
         <span class="spacer">&middot;</span>
       <% end %>
     </div>
+  <% end %>
+</div>
+
+<div id="articles">
+  <h2 id="month">
+    <%= link_to "<", date: Date.today.prev_month %>
+    <%= Date.today.strftime("%B %Y") %>
+    <%= link_to ">", date: Date.today.next_month %>
+  </h2>
+  <%= calendar Date.today do |date| %>
+    <%= date.day %>
+    <% if false %>
+      <ul>
+        <% @articles_by_date[date].each do |article| %>
+          <li><%= link_to article.name, article %></li>
+        <% end %>
+      </ul>
+    <% end %>
   <% end %>
 </div>
 

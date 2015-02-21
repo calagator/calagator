@@ -1,0 +1,17 @@
+<div id="articles">
+  <h2 id="month">
+    <%= link_to "<", date: @date.prev_month %>
+    <%= @date.strftime("%B %Y") %>
+    <%= link_to ">", date: @date.next_month %>
+  </h2>
+  <%= calendar @date do |date| %>
+    <%= date.day %>
+    <% if @articles_by_date[date] %>
+      <ul>
+        <% @articles_by_date[date].each do |article| %>
+          <li><%= link_to article.name, article %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+</div>
