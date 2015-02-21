@@ -10,6 +10,9 @@ class CreateOrganizations < ActiveRecord::Migration
       t.string         :telephone
       t.string         :email
 
+      t.integer        :duplicate_of_id
+
+      t.integer        :events_count
       t.timestamps
     end
   end

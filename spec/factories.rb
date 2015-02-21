@@ -19,6 +19,15 @@ FactoryGirl.define do
     after(:create) { Sunspot.commit if Venue::SearchEngine.kind == :sunspot }
   end
 
+  factory :organization do
+    sequence(:title) { |n| "Organization #{n}" }
+    sequence(:description) { |n| "Description of Organization #{n}." }
+    sequence(:email) { |n| "info@organization#{n}.com" }
+    sequence(:telephone) { |n| "(#{n}#{n}#{n}) #{n}#{n}#{n}-#{n}#{n}#{n}#{n}" }
+    sequence(:url) { |n| "http://#{n}.com" }
+    after(:create) { Sunspot.commit if Organization::SearchEngine.kind == :sunspot }
+  end
+
   factory :event do
     sequence(:title) { |n| "Event #{n}" }
     sequence(:description) { |n| "Description of Event #{n}." }
