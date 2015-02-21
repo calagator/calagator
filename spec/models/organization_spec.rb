@@ -17,6 +17,17 @@ describe Organization, :type => :model do
     expect(organization).not_to be_valid
   end
 
+  it "initializes a permalink" do
+    organization = Organization.new(title: 'Viagra')
+    expect(organization.permalink.length).to be(36)
+  end
+
+  it "validates the permalink format" do
+    organization = Organization.new(title: 'S.H.I.E.L.D.')
+    organization.permalink = 'foobar'
+    expect(organization).not_to be_valid
+  end
+
   describe "when validating" do
     let(:attributes) { {:title => 'My Organization'} }
     let(:bad_data) { ' blargie ' }
@@ -100,7 +111,7 @@ describe Organization, :type => :model do
     end
 
     it "should match similar records when searching by :all" do
-      attributes = @existing.attributes.reject{ |k,v| k == 'id'}
+      attributes = @existing.attributes.reject{ |k,v| %w{id permalink}.include?(k) }
       Organization.create!(attributes)
       expect(Organization.find_duplicates_by(:all)).to be_present
     end
