@@ -72,12 +72,6 @@ group :development, :test do
       gem 'guard', '~> 1.3.0'
       gem 'guard-rspec', '~> 1.2.1'
     end
-
-    # Guard notifier
-    case RUBY_PLATFORM
-    when /-*darwin.*/ then gem 'growl'
-    when /-*linux.*/ then gem 'libnotify'
-    end
   end
 
   # Optional libraries add debugging and code coverage functionality, but are not
