@@ -38,6 +38,10 @@ FactoryGirl.define do
     trait :with_venue do
       association :venue
     end
+
+    trait :with_organization do
+      association :organization
+    end
   end
 
   factory :duplicate_event, parent: :event do

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://earth.google.com/kml/2.2">
+  <Document>
+  <% for organization in @organizations -%>
+  <% next if organization.latitude.nil? -%>
+  <Placemark>
+    <name><%= escape_once(organization.title) %></name>
+    <description><%= cdata_section(organization.description) %></description>
+    <Point>
+      <coordinates><%= organization.longitude %>,<%= organization.latitude %></coordinates>
+    </Point>
+  </Placemark>
+  <% end -%>
+  </Document>
+</kml>

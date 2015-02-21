@@ -1,5 +1,5 @@
 class Organization < ActiveRecord::Base
-  class Search < Struct.new(:tag, :query, :wifi, :all, :closed, :include_closed)
+  class Search < Struct.new(:tag, :query, :all)
     def initialize attributes = {}
       members.each do |key|
         send "#{key}=", attributes[key]
@@ -8,18 +8,18 @@ class Organization < ActiveRecord::Base
 
     def organizations
       @organizations ||= if query
-        Organization.search(query, include_closed: include_closed, wifi: wifi)
+        Organization.search(query)
       else
-        base.business.wifi_status.search.scope
+        base.search.scope
       end
     end
 
     def most_active_organizations
-      base.business.wifi_status.scope.order('events_count DESC').limit(10)
+      base.scope.order('events_count DESC').limit(10)
     end
 
     def newest_organizations
-      base.business.wifi_status.scope.order('created_at DESC').limit(10)
+      base.scope.order('created_at DESC').limit(10)
     end
 
     def results?
@@ -30,20 +30,6 @@ class Organization < ActiveRecord::Base
 
     def base
       @scope = Organization.non_duplicates
-      self
-    end
-
-    def business
-      if closed
-        @scope = @scope.out_of_business
-      elsif !include_closed
-        @scope = @scope.in_business
-      end
-      self
-    end
-
-    def wifi_status
-      @scope = @scope.with_public_wifi if wifi
       self
     end
 

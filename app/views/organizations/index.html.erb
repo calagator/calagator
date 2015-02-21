@@ -1,0 +1,84 @@
+<%= content_for :title, "Organizations" %>
+
+<% tabindex_on '#search_field' %>
+
+<div id="organizations_index">
+<h1>Organizations</h1>
+<div id='organizations_search'>
+  <h2>Find a organization:</h2>
+  <%= form_tag organizations_path, :method => 'get' do %>
+    <div class='keywords'>
+      <%= label_tag :query, "Keywords" %>
+      <%= text_field_tag :query, @search.query %>
+    </div>
+
+    <div class='submit'>
+      <%= submit_tag "Search" %>
+    </div>
+  <% end %>
+</div>
+
+<% if @search.results? %>
+  <div id='organizations_search_results'>
+    <div class='list_description'>
+      <% if @search.tag %>
+        <h2>Showing <strong><%= @organizations.size %></strong> organizations tagged with <strong><%= @search.tag %></strong></h2>
+      <% else -%>
+        <h2>
+          <% if @organizations.size == 0 -%>
+            Sorry, there are no organizations
+          <% else -%>
+            Showing <%= "all " if @search.all %><strong><%= @organizations.size %></strong> <%= 'organization'.pluralize(@organizations.size) %>
+          <% end %>
+          <% if @search.query.present? %>
+            matching &#8220;<%= @search.query %>&#8221;
+          <% end %>
+        </h2>
+      <% end -%>
+    </div>
+
+    <ul>
+      <% @organizations.each do |organization| %>
+        <li>
+          <%= link_to(organization.title, organization_url(organization)) %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+<% else %>
+  <div id='organization_portal'>
+    <div id='most_active'>
+      <h3>Most Active</h3>
+      <ul>
+        <% @search.most_active_organizations.each do |organization| %>
+          <li>
+            <%= link_to(organization.title, organization_url(organization)) %>
+            <p class='detail'><%= organization.events_count %> events</p>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div id='newest'>
+      <h3>Newest</h3>
+      <ul>
+        <% @search.newest_organizations.each do |organization| %>
+          <li>
+            <%= link_to(organization.title, organization_url(organization)) %>
+            <p class='detail'>Added <%= time_ago_in_words(organization.created_at) %> ago</p>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    <div id="exports">
+      <ul>
+        <li><%= link_to 'List all organizations', organizations_path(:all => 1) %></li>
+      </ul>
+      <h3>Export organizations</h3>
+      <ul>
+        <li><%= link_to 'KML', '/organizations.kml' %></li>
+        <li><%= link_to 'JSON', '/organizations.json' %></li>
+      </ul>
+    </div>
+  </div>
+  <% end %>
+</div>

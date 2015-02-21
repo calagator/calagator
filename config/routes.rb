@@ -41,6 +41,15 @@ Calagator::Application.routes.draw do
     end
   end
 
+  resources :organizations do
+    collection do
+      post :squash_many_duplicates
+      get :duplicates
+      get :autocomplete
+      match 'tag/:tag', via: :get, to: :search, as: :tag
+    end
+  end
+
   resources :versions, :only => [:edit]
   resources :changes, :controller => 'paper_trail_manager/changes'
   match 'recent_changes' => redirect("/changes")

@@ -49,16 +49,6 @@ class Organization < ActiveRecord::Base
         @scope = @scope.limit(opts[:limit] || 50)
         self
       end
-
-      def with_wifi
-        @scope = @scope.with_public_wifi if opts[:wifi]
-        self
-      end
-
-      def in_business
-        @scope = @scope.in_business unless opts[:include_closed]
-        self
-      end
     end
   end
 end

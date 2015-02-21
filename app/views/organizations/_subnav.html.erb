@@ -1,0 +1,10 @@
+<div id="organizations_subnav" class="subnav">
+    <ul class="clearfix">
+      <li><%= link_to 'Browse organizations', organizations_url, 
+              :class => subnav_class_for("organizations", "index") %>
+      </li>
+      <li><%= link_to 'Add a organization', new_organization_url,
+              :class => subnav_class_for("organizations", "new") %>
+      </li>
+    </ul>
+</div>
