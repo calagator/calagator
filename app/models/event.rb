@@ -31,6 +31,7 @@ class Event < ActiveRecord::Base
 
   # Associations
   belongs_to :venue, :counter_cache => true
+  belongs_to :organization, :counter_cache => true
   belongs_to :source
 
   # Validations
