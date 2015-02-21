@@ -62,5 +62,9 @@ Calagator::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+
+  # Google analytics id
+  # TODO: replace with organization's google analytics account id
+  config.google_analytics_tracking_id = 123456
 end
 
