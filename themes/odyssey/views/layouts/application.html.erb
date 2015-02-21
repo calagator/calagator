@@ -52,6 +52,7 @@
           <ul>
               <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
               <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+              <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li>
           </ul>
         </div>
         <!-- <div id='project_menu'>
@@ -76,6 +77,7 @@
 
     <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
     <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
+    <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
     <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
 
     <div id="content">
