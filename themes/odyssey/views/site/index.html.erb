@@ -14,7 +14,7 @@
   <% end %>
 </div>
 
-<div id="articles">
+<!-- <div id="calendar">
   <h2 id="month">
     <%= link_to "<", date: Date.today.prev_month %>
     <%= Date.today.strftime("%B %Y") %>
@@ -24,13 +24,14 @@
     <%= date.day %>
     <% if false %>
       <ul>
-        <% @articles_by_date[date].each do |article| %>
-          <li><%= link_to article.name, article %></li>
+        <% @events_by_date[date].each do |event| %>
+          <li><%= link_to event.name, event %></li>
         <% end %>
       </ul>
     <% end %>
   <% end %>
-</div>
+</div> -->
+<%= render :partial => 'calendar/index', :layout => false %>
 
 <div id="whats_happening">
   <h1>What's happening?</h1>

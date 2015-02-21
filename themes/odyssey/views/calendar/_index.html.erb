@@ -1,0 +1,19 @@
+<div id="calendar">
+  <h2 id="month">
+    <%= link_to "<", date: @date.prev_month %>
+    <%= @date.strftime("%B %Y") %>
+    <%= link_to ">", date: @date.next_month %>
+  </h2>
+  <%= calendar @date do |date| %>
+    <span class="monthname"><%= date.strftime('%b') %></span>
+    <span class="daynumber"><%= date.day %></span>
+    <span class="yearnumber"><%= date.strftime('%Y') %></span>
+    <% if @events_by_date[date] %>
+      <ul>
+        <% @events_by_date[date].each do |event| %>
+          <li><%= link_to event.title, event %></li>
+        <% end %>
+      </ul>
+    <% end %>
+  <% end %>
+</div>

@@ -1,7 +1,7 @@
 // Place all the styles related to the articles controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-#articles .calendar {
+#calendar .calendar {
   border-collapse: collapse;
   width: 100%;
 
@@ -31,7 +31,7 @@
   .today { background-color: #D7F2FF; }
 }
 
-#articles #month {
+#calendar #month {
   margin: 0;
   padding-bottom: 10px;
   text-align: center;
@@ -43,7 +43,7 @@
   }
 }
 
-#articles ul {
+#calendar ul {
   font-size: 11px;
   padding-left: 20px;
 }
