@@ -20,7 +20,7 @@
 
 body {
   font-size: 75%;
-  color: $dk_green;
+  color: #666;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -57,9 +57,9 @@ p img.right { float: right; margin: 1.5em 0 1.5em 1.5em; }
 p img.inline{ float: none; margin: 1.5em 1.5em;}
 
 a:focus,
-a:hover     { color: #445544; text-decoration: underline; }
-a:link      { color: #66baa9; text-decoration: none;}
-a:visited   { color: #59a12d; text-decoration: none;}
+a:hover     { color: lighten($vo_blue, 60%); text-decoration: underline; }
+a:link      { color: lighten($vo_blue, 25%); text-decoration: none;}
+a:visited   { color: $vo_blue; text-decoration: none;}
 
 .dark a     { color: #fff; text-decoration: underline; }
 

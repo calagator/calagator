@@ -1,14 +1,14 @@
 # Site's name:
-name: 'Calagator'
+name: 'Volunteer Odyssey'
 
 # Site's tagline:
-tagline: "Portland's Tech Calendar"
+tagline: "Find volunteer opportunities in Memphis, TN."
 
 # Site's URL with trailing slash:
-url: 'http://calagator.org/'
+url: 'http://www.volunteeerodyssey.org/'
 
 # Default timezone, run "rake -D time" for information on how to display known timezones:
-timezone: 'Pacific Time (US & Canada)'
+timezone: 'Central Time (US & Canada)'
 
 # Precompile additional theme assets (theme.js, theme.css, and images already included):
 precompile_assets:
@@ -21,4 +21,4 @@ venues_map_options:
   zoom: 12
   # Center of the map, in latitude and longitude.
   # If no center is specified, the map will zoom to fit all markers.
-  center: [45.518493, -122.660737]
+  center: [35.1174, 89.9711]

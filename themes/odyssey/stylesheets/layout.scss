@@ -19,7 +19,7 @@ body {
 
 #top_footer {
   background: $footer;
-  color: $default_text;
+  color: $white;
   padding: .5em 30px .5em 40px;
   font-size: 70%;
   clear: both;
@@ -27,16 +27,25 @@ body {
 
 @import url(https://fonts.googleapis.com/css?family=Sanchez);
 
-#global_header #project_title {
-  font-family: Sanchez;
-  color: $header_text;
-  font-size: 29px;
-  line-height: 31px;
-  height: 31px;
-  left: 40px;
-  position: absolute;
-  top: 25px;
-  width: 135px;
+#global_header {
+  #project_logo {
+    position: absolute;
+    left: 320px;
+    top:  20px;
+    height: 65px;
+  }
+
+  #project_title {
+    font-family: Sanchez;
+    color: $header_text;
+    font-size: 29px;
+    line-height: 31px;
+    height: 31px;
+    left: 40px;
+    position: absolute;
+    top: 25px;
+    width: 300px;
+  }
 }
 
 #app_menu ul {
@@ -94,7 +103,7 @@ body {
 }
 
 .subnav a {
-  color: $header_text;
+  color: $white;
   padding-bottom: .42em;
 }
 
@@ -176,7 +185,7 @@ ul.event_list .list_date {
 
 .event_table .day_of_week,
 ul.event_list .day_of_week {
-  color: #59a12d;
+  color: saturate(lighten($vo_blue, 25%), 20%);
   font-weight: bold;
 }
 
@@ -258,7 +267,7 @@ ul.event_list .list_date {
 }
 
 .single_event .date {
-  color: #82c555;
+  color: saturate(lighten($vo_blue, 30%), 15%);
   font-size: 1.3em;
   font-weight: bold;
   margin-bottom: 1em;
