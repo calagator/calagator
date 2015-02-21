@@ -27,16 +27,25 @@ body {
 
 @import url(https://fonts.googleapis.com/css?family=Sanchez);
 
-#global_header #project_title {
-  font-family: Sanchez;
-  color: $header_text;
-  font-size: 29px;
-  line-height: 31px;
-  height: 31px;
-  left: 40px;
-  position: absolute;
-  top: 25px;
-  width: 300px;
+#global_header {
+  #project_logo {
+    position: absolute;
+    left: 320px;
+    top:  20px;
+    height: 65px;
+  }
+
+  #project_title {
+    font-family: Sanchez;
+    color: $header_text;
+    font-size: 29px;
+    line-height: 31px;
+    height: 31px;
+    left: 40px;
+    position: absolute;
+    top: 25px;
+    width: 300px;
+  }
 }
 
 #app_menu ul {
