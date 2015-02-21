@@ -15,6 +15,11 @@ class SiteController < ApplicationController
       format.html { }
       format.any  { redirect_to events_path(format: params[:format]) }
     end
+    @events = Event.all
+    @events_by_date = @events.group_by do |e|
+      e.start_time.to_date
+    end
+    @date = params[:date] ? Date.parse(params[:date]) : Date.today
   end
 
   # Displays the about page.
