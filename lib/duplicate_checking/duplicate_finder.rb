@@ -72,7 +72,7 @@ module DuplicateChecking
     def attributes
       # TODO make find_duplicates_by(:all) pay attention to ignore fields
       model.new.attribute_names.map(&:to_sym).reject do |attr|
-        [:id, :created_at, :updated_at, :duplicate_of_id, :version].include?(attr)
+        [:id, :created_at, :updated_at, :duplicate_of_id, :version, :permalink].include?(attr)
       end
     end
   end
