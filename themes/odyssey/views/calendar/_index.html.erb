@@ -17,9 +17,10 @@
             <% if event.organization.present? %>
               <%=link_to(event.organization_title, event.organization, :class => 'organization-name') %><br />
             <% end %>
-            <%= link_to event.title, event, :class => "event-title" %></li>
+            <%= link_to event.title, event, :class => "event-title" %>
             <div class='event-time'>
-              <span class='event-start-time'><%= event.start_time %></span> - <span class='event-end-time'><%= event.end_time %></span>
+              <span class='event-start-time'><%= event.start_time %></span> - <span class='event-end-time'><%= event.end_time %>
+            </span>
             </div>
           </li>
         <% end %>

@@ -17,6 +17,10 @@ body {
 }
 
 body.agenda-view {
+
+  .truncate {
+    display: block;
+  }
     .expander_toggle {
     display: none;
   }
@@ -85,7 +89,7 @@ body.agenda-view {
       display: none;
     }
 
-    ul > span {
+    ul > a {
       display: none;
     }
 
@@ -255,7 +259,7 @@ body.agenda-view {
       display: none;
     }
 
-    ul > span {
+    ul > a {
       display: none;
     }
 

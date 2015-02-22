@@ -1,4 +1,11 @@
 $(document).ready(function () {
+	if (window.matchMedia("(min-width: 768px)").matches) {
+		$('body').removeClass('agenda-view');
+	}
+
+	if (window.matchMedia("(max-width: 767px)").matches) {
+		$('body').addClass('agenda-view');
+	}
 
 	$(window).resize(function (e) {
 		if (window.matchMedia("(min-width: 768px)").matches) {
@@ -39,10 +46,21 @@ $(document).ready(function () {
 			});
 
 			if ($ul.children().length > 4) {
-				var $moreEvents = $("<span></span>");
+				var $moreEvents = $("<a></a>");
 				amountCounter = $ul.children().length - 4;
-				$moreEvents.html("And " + amountCounter + " more events");
+				$moreEvents.html("Click here for " + amountCounter + " more events");
 				$ul.append($moreEvents);
+
+				$moreEvents.click(function (e) { 
+					console.log("Working?");
+
+					$('body').addClass('agenda-view');
+
+					$('html, body').animate({
+        				scrollTop: $(element).closest('.has-event').offset().top
+    				}, 250);
+
+				});
 			}
 
 		}
