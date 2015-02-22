@@ -54,6 +54,7 @@ module Calagator
       "leaflet_google_layer.js",
       "errors.css",
       "analytics.js",
+      "analytics_events.js",
       "calendar.js"
     ]
 
