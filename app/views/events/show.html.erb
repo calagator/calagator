@@ -34,6 +34,32 @@
   </script>
 <% end %>
 
+<% content_for :javascript_insert do %>
+  <script type='text/javascript'>
+    $(function() {
+      $(document).ready(function(){
+        // Add google analytics event tracking to links and emails in description
+        //
+        // pulls meta data from page
+        var organization = $('.org.p-name[itemprop="name"]').text();
+        var category = 'category: Engagement - Event';
+        var $description = $('.description[itemprop="description"]');
+
+        // then add listeners to links
+        $description.select('a[href^="http"]').click(function(event) {
+          var action = 'link clicked';
+          ga('send', 'event', category, action, organization);
+        });
+
+        // then add listeners to emails and links
+        $description.select('a[href^="mailto"]').click(function(event) {
+          var action = 'email clicked';
+          ga('send', 'event', category, action, organization);
+        });
+      });
+    })
+  </script>
+<% end %>
 
 <a href="#" id="event_sidebar_toggle" class="expander_toggle">Export or edit this event...</a>
 
