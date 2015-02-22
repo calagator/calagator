@@ -45,7 +45,9 @@ class Source::Parser < Struct.new(:opts)
   end
 
   def self.read_url(url)
-    RestClient.get(url).to_str
+    RestClient.get(url).to_str.
+      encode("UTF-8", :invalid => :replace, :undef => :replace, :replace => "?")
+
   rescue RestClient::Unauthorized
     raise Source::Parser::HttpAuthenticationRequiredError.new
   end
