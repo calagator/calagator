@@ -1,4 +1,5 @@
 <% tabindex_on '#search_field' %>
+<%= stylesheet_link_tag 'bootstrap' %>
 
 <% cache(CacheObserver.daily_key_for("site_index", request)) do %>
 <a href="#" id="homepage_sidebar_toggle" class="expander_toggle">Hi there. Learn about this site and how to use it...</a>
@@ -13,43 +14,14 @@
     </div>
   <% end %>
 </div>
-
-<!-- <div id="calendar">
-  <h2 id="month">
-    <%= link_to "<", date: Date.today.prev_month %>
-    <%= Date.today.strftime("%B %Y") %>
-    <%= link_to ">", date: Date.today.next_month %>
-  </h2>
-  <%= calendar Date.today do |date| %>
-    <%= date.day %>
-    <% if false %>
-      <ul>
-        <% @events_by_date[date].each do |event| %>
-          <li><%= link_to event.name, event %></li>
-        <% end %>
-      </ul>
-    <% end %>
-  <% end %>
-</div> -->
-<%= render :partial => 'calendar/index', :layout => false %>
-
-<div id="whats_happening">
-  <h1>What's happening?</h1>
-  <h3><%= link_to("View All &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) if @overview.more %></h3>
-  <div class='coming_events' id='today'>
-    <h3>Today</h3>
-      <%= render 'events/list', :events => @overview.today, :dates => false %>
-  </div>
-  <div class='coming_events' id='tomorrow'>
-    <h3>Tomorrow</h3>
-    <%= render 'events/list', :events => @overview.tomorrow, :dates => false %>
-  </div>
-  <div id='next_two_weeks'>
-    <h3>Next two weeks</h3>
-    <%= render 'events/list', :events => @overview.later %>
-  </div>
-  <div>
-    <h3><%= link_to("View future events &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) if @overview.more %></h3>
-  </div>
+<div class='view-mode-buttons'>
+  <button class='btn btn-primary agenda-view js-agenda-view'>Agenda View</button>
+  <button class='btn btn-primary month-view js-month-view'>Month View</button>
 </div>
+
+<%= render :partial => 'calendar/index', :layout => false %>
+<% end %>
+<% content_for :javascript_insert do %>
+  <%= javascript_include_tag 'calendar' %>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.js"></script>
 <% end %>
