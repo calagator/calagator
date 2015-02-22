@@ -39,7 +39,6 @@ $(document).ready(function () {
 
 		if ($ul.children().length >= 4) { // 0-indexed?
 			$ul.children().each(function (index, element) {
-				console.log(element);
 				if ( index > 3) { // 0-indexed?
 					$(element).addClass('truncate');
 				}
@@ -52,7 +51,6 @@ $(document).ready(function () {
 				$ul.append($moreEvents);
 
 				$moreEvents.click(function (e) { 
-					console.log("Working?");
 
 					$('body').addClass('agenda-view');
 
@@ -72,7 +70,6 @@ $(document).ready(function () {
 	
 	// Properly format the time, but it doesn't seem to be working in mobile.
 	/* $('.event-start-time, .event-end-time').each(function (index, element) {
-		console.log("Working? from .event-start-time");
 		var $element = $(element);
 
 		$element.text( moment($element.text()).format("LT") );

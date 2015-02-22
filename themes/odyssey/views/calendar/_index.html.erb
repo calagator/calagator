@@ -1,10 +1,10 @@
-<% if @events.present? %>
-  <div id="calendar">
-    <h2 id="month">
-      <%= link_to "<", date: @date.prev_month %>
-      <%= @date.strftime("%B %Y") %>
-      <%= link_to ">", date: @date.next_month %>
-    </h2>
+<div id="calendar">
+  <h2 id="month">
+    <%= link_to "<", date: @date.prev_month %>
+    <%= @date.strftime("%B %Y") %>
+    <%= link_to ">", date: @date.next_month %>
+  </h2>
+  <% if events_this_month? %>
     <%= calendar @date do |date| %>
       <div class='date'>
         <span class="monthname"><%= date.strftime('%b') %></span>
@@ -21,14 +21,15 @@
               <%= link_to event.title, event, :class => "event-title" %>
               <div class='event-time'>
                 <span class='event-start-time'><%= event.start_time.strftime("%I:%m %p") %></span> - <span class='event-end-time'><%= event.end_time.strftime("%I:%m %p") %>
-                <!-- 8:00 am - 12:00 pm -->
               </span>
               </div>
             </li>
           <% end %>
-        </ul> 
+        </ul>
       <% end %>
     <% end %>
-  </div>
+  <% else %>
+    <div class='no-events'>No events this month.</div>
+  <% end %>
+</div>
 
-<% end %>
