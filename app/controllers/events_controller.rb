@@ -33,7 +33,7 @@ class EventsController < ApplicationController
   # GET /events/new
   # GET /events/new.xml
   def new
-    if current_organization
+    if current_admin || current_organization
       @event = current_organization.events.new(params[:event])
     else
       not_authorized
@@ -165,7 +165,11 @@ class EventsController < ApplicationController
 
   def find_authorized_event
     @event = Event.find(params[:id])
-    if @event.locked? || (@event.organization && @event.organization != current_organization)
+    authorized =
+      (current_admin || !@event.organization || @event.organization == current_organization) && !@event.locked?
+
+    binding.pry
+    unless authorized
       not_authorized
     end
   end
