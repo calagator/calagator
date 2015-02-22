@@ -53,7 +53,8 @@ module Calagator
       "leaflet.js",
       "leaflet_google_layer.js",
       "errors.css",
-      "analytics.js"
+      "analytics.js",
+      "calendar.js"
     ]
 
     #---[ Rack Middleware ]-------------------------------------------------
