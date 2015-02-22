@@ -1,0 +1,49 @@
+$(function() {
+  if (typeof ga != 'undefined' && ga) {
+
+    var delegate_helper_event = function (category, action, type, value) {
+      var deferred = $.Deferred();
+
+      ga('send', 'event', {
+        'eventCategory': category,
+        'eventAction': action,
+        'eventLabel': type,
+        'eventValue': value || null, //let value = nil
+        'hitCallback': function () {
+          deferred.resolve();
+        }
+      });
+      return deferred.promise();
+    };
+
+    var sendEvent = function (catagory, event, label, value) {
+      var analyticsWait = setTimeout(function(){},500);
+      $.when(
+          delegate_helper_event(catagory, event, label, value)
+      ).done(function () {
+            clearTimeout(analyticsWait);
+      });
+    };
+
+    $(document).ready(function(){
+      // Add google analytics event tracking to links and emails in description
+      //
+      // pulls meta data from page
+      var organization = $('.org.p-name[itemprop="name"]').text();
+      var category = 'category: Engagement - Event';
+      var $description = $('.description[itemprop="description"]');
+
+      // then add listeners to links
+      $description.find('a[href^="http"]').click(function() {
+        var action = 'link clicked';
+        sendEvent(category, action, organization);
+      });
+
+      // then add listeners to emails and links
+      $description.find('a[href^="mailto"]').click(function() {
+        var action = 'email clicked';
+        sendEvent(category, action, organization);
+      });
+    });
+  }
+});
