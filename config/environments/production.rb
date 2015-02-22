@@ -64,7 +64,6 @@ Calagator::Application.configure do
   config.active_support.deprecation = :notify
 
   # Google analytics id
-  # TODO: replace with organization's google analytics account id
-  config.google_analytics_tracking_id = 'UA-123456-7'
+  config.google_analytics_tracking_id = ENV.fetch('ODYSSEY_CALENDAR_GUID', '')
 end
 
