@@ -27,8 +27,5 @@ Calagator::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
-
-  # Google analytics id
-  config.google_analytics_tracking_id = ENV.fetch('ODYSSEY_CALENDAR_GUID', 'UA-123456-7')
 end
 

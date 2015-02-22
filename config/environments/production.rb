@@ -62,8 +62,5 @@ Calagator::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-
-  # Google analytics id
-  config.google_analytics_tracking_id = ENV.fetch('ODYSSEY_CALENDAR_GUID', '')
 end
 
