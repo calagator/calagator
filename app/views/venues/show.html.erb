@@ -9,14 +9,16 @@
 <div class="single_venue contentbar">
   <a href="#" id="venue_sidebar_toggle" class="expander_toggle">Export or edit this venue...</a>
   <div id="venue_sidebar" class='single_view_right sidebar'>
-    <div id='edit_link'>
-      <p>
-        You can <%= link_to "edit", edit_venue_url(@venue) %>
-        or <%= link_to "delete", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>
-        this venue.
-      </p>
-    </div>
-    <hr />
+    <% if current_organization %>
+      <div id='edit_link'>
+        <p>
+          You can <%= link_to "edit", edit_venue_url(@venue) %>
+          or <%= link_to "delete", venue_url(@venue), :method => :delete, :confirm => "Are you sure?" %>
+          this venue.
+        </p>
+      </div>
+      <hr />
+    <% end %>
     <p>Download an <%= link_to "iCalendar file", venue_url(@venue, :format => :ics) %> or
     <%= link_to "subscribe to a feed", venue_url(@venue, :format => :ics, :protocol => "webcal") %> of events at this venue.</p>
     <hr />

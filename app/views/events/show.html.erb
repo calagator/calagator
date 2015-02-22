@@ -58,21 +58,25 @@
     </li>
   </ul>
 <hr />
+<% if current_organization %>
   <div id='edit_link'>
     <% if @event.locked %>
-    <p>This event is currently locked and cannot be edited. Please contact an admin for assistance.</p>
+      <p>This event is currently locked and cannot be edited. Please contact an admin for assistance.</p>
+    <% elsif @event.organization == current_organization %>
+      <p>
+        You can
+        <%= link_to "edit", edit_event_url(@event) %>,
+        <%= link_to "clone", clone_event_url(@event) %>,
+        or
+        <%= link_to "delete", event_url(@event), :method => :delete, :confirm => "Are you sure?" %>
+        this event.
+      </p>
     <% else %>
-    <p>
-      You can 
-      <%= link_to "edit", edit_event_url(@event) %>,
-      <%= link_to "clone", clone_event_url(@event) %>,
-      or 
-      <%= link_to "delete", event_url(@event), :method => :delete, :confirm => "Are you sure?" %>
-      this event.
-    </p>
+      <p>This event is owned by another organization. You cannot edit it.</p>
     <% end %>
   </div>
 <hr />
+<% end %>
   <div id='metadata'>
       <%= datestamp(@event) %>
   </div>
