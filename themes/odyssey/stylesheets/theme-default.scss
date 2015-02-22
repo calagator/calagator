@@ -194,3 +194,25 @@
     display: none;
   }
 }
+
+@media (max-width: 768px) {
+  #app_menu {
+    ul {
+      left: 10px;
+      li {
+        font-size: 80%;
+        margin-right: 5px;
+      }
+    }
+  }
+  .subnav {
+    ul {
+      padding-left: 0px;
+      padding-right: 0px;
+      li {
+        font-size: 80%;
+        margin-right: 5px;
+      }
+    }
+  }
+}
