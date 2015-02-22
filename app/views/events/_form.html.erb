@@ -82,6 +82,11 @@
 
 <%= semantic_form_for(event, :html => {:id => 'event_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
   <%= f.inputs :name => "#{'Editing: ' unless event.new_record?} <em>#{event.title}</em>".html_safe do %>
+    <% if current_admin %>
+      <%= f.input :organization, as: :select, collection: Organization.all %>
+    <% else %>
+      <%= f.input :organization, input_html: { disabled: true } %>
+    <% end %>
     <%= f.input :title, :label => "Event Name" %>
     <% focus_on '#event_title' %>
     <li class="string input required stringish" id="event_venue_title_input">
