@@ -50,20 +50,31 @@ class OrganizationsController < ApplicationController
   # GET /organizations/new
   # GET /organizations/new.xml
   def new
-    @organization = Organization.new
-    render layout: params[:layout] != "false"
+    if current_admin
+      @organization = Organization.new
+      render layout: params[:layout] != "false"
+    else
+      not_authorized
+    end
   end
 
   # GET /organizations/1/edit
   def edit
     @organization = Organization.find(params[:id])
+    unless current_admin || @organization == current_organization
+      not_authorized
+    end
   end
 
   # POST /organizations
   # POST /organizations.xml
   def create
-    @organization = Organization.new
-    create_or_update
+    if current_admin
+      @organization = Organization.new
+      create_or_update
+    else
+      not_authorized
+    end
   end
 
   # PUT /organizations/1
@@ -118,6 +129,10 @@ class OrganizationsController < ApplicationController
   end
 
   private
+
+  def not_authorized
+    redirect_to organizations_path, flash: { failure: "You are not permitted to modify this organization." }
+  end
 
   def evil_robot?
     if params[:trap_field].present?
