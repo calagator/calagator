@@ -16,6 +16,14 @@ body {
   line-height: 1.4;
 }
 
+#content {
+  max-width: 1170px;
+  margin: 0 auto;
+}
+.view-mode-buttons {
+  margin-top: 10px;
+}
+
 body.agenda-view {
 
   .truncate {
