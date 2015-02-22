@@ -81,7 +81,11 @@ class OrganizationsController < ApplicationController
   # PUT /organizations/1.xml
   def update
     @organization = Organization.find(params[:id])
-    create_or_update
+    if current_admin || @organization == current_organization
+      create_or_update
+    else
+      not_authorized
+    end
   end
 
   def create_or_update
