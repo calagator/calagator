@@ -62,5 +62,6 @@ Calagator::Application.routes.draw do
   match '/index' => 'site#index'
   match '/index.:format' => 'site#index'
 
-  get '/organization_logins/:permalink' => 'organization_logins#create'
+  get '/organization_sessions/destroy'    => 'organization_logins#destroy'
+  get '/organization_sessions/:permalink' => 'organization_logins#create'
 end

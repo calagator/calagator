@@ -1,9 +1,7 @@
 class EventsController < ApplicationController
   # Provides #duplicates and #squash_many_duplicates
   include DuplicateChecking::ControllerActions
-  before_filter :find_and_redirect_if_locked, :only => [:edit, :update, :destroy]
-
-  before_filter :load_organization, only: [:new, :create, :update]
+  before_filter :find_authorized_event, :only => [:edit, :update, :destroy, :clone]
 
   # GET /events
   # GET /events.xml
@@ -35,7 +33,11 @@ class EventsController < ApplicationController
   # GET /events/new
   # GET /events/new.xml
   def new
-    @event = @current_organization.events.new(params[:event])
+    if current_organization
+      @event = current_organization.events.new(params[:event])
+    else
+      not_authorized
+    end
   end
 
   # GET /events/1/edit
@@ -45,8 +47,10 @@ class EventsController < ApplicationController
   # POST /events
   # POST /events.xml
   def create
-    @event = @current_organization.events.new
-    create_or_update
+    if current_organization
+      @event = current_organization.events.build(params[:event])
+      create_or_update
+    end
   end
 
   # PUT /events/1
@@ -104,16 +108,15 @@ class EventsController < ApplicationController
   end
 
   def clone
-    @event = Event::Cloner.clone(Event.find(params[:id]))
+    @event = Event::Cloner.clone(@event)
     flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
     render "new"
   end
 
   private
 
-  def load_organization
-    Rails.logger.warn "** Need an actual org lookup here!!"
-    @current_organization = Organization.find_or_create_by_title!("Volunteer Odyssey")
+  def not_authorized
+    redirect_to events_path, flash: { failure: "You are not permitted to modify this event." }
   end
 
   def render_event(event)
@@ -160,11 +163,10 @@ class EventsController < ApplicationController
     default
   end
 
-  def find_and_redirect_if_locked
+  def find_authorized_event
     @event = Event.find(params[:id])
-    if @event.locked?
-      flash[:failure] = "You are not permitted to modify this event."
-      redirect_to root_path
+    if @event.locked? || (@event.organization && @event.organization != current_organization)
+      not_authorized
     end
   end
 end
