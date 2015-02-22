@@ -36,8 +36,8 @@ body.agenda-view {
   }
 
   #month { // h2 
+    padding-top: 10px;
     text-align: center;
-    font-weight: bold;
   }
 
   #calendar .calendar {
@@ -176,6 +176,7 @@ body.agenda-view {
     padding-bottom: 10px;
     text-align: center;
     font-size: 22px;
+    padding-top: 10px;
     a {
       text-decoration: none;
       padding: 0 10px;
@@ -207,7 +208,6 @@ body.agenda-view {
 
   #month { // h2 
     text-align: center;
-    font-weight: bold;
   }
 
   #calendar .calendar {
