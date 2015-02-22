@@ -63,11 +63,16 @@ body {
 #app_menu li {
   float: left;
   margin-right: 1em;
-  padding-bottom: 10px
+  // padding-bottom: 10px
 }
 
 #app_menu li.active {
-  background: image-url("nav_marker.gif") no-repeat center bottom;
+  // background: image-url("nav_marker.gif") no-repeat center bottom;
+  // width: 0;
+  // height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 6px solid gray;
 }
 
 #project_menu {
@@ -104,11 +109,16 @@ body {
 
 .subnav a {
   color: $white;
-  padding-bottom: .42em;
+  // padding-bottom: .42em;
 }
 
 .subnav .active {
-  background: image-url("subnav_marker.gif") no-repeat center bottom;
+  // background: image-url("subnav_marker.gif") no-repeat center bottom;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-bottom: 6px solid white;
 }
 
 
