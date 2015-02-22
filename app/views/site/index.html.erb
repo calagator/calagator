@@ -1,6 +1,5 @@
 <% tabindex_on '#search_field' %>
 
-<% cache(CacheObserver.daily_key_for("site_index", request)) do %>
 <a href="#" id="homepage_sidebar_toggle" class="expander_toggle">Hi there. Learn about this site and how to use it...</a>
 <div id="homepage_sidebar">
   <div id="project_description">
@@ -37,4 +36,3 @@
     <h3><%= link_to("View future events &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) if @overview.more %></h3>
   </div>
 </div>
-<% end %>
