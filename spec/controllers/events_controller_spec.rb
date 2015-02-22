@@ -396,9 +396,7 @@ describe EventsController, :type => :controller do
       end
 
       it "should stop evil robots" do
-        binding.pry
         post "create", :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
-        binding.pry
         expect(response).to render_template :new
         expect(flash[:failure]).to match /evil robot/i
       end
