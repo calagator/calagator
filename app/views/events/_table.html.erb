@@ -47,6 +47,9 @@ rowspans = calculate_rowspans(events)
             <% if event.venue && !event.venue.title.blank? %>
               <a class='location p-location h-card' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
             <% end -%>
+            <% if event.organization && event.organization.title.present? %>
+              <br/><%= link_to event.organization.title, organization_path(event.organization), class: 'p-organization h-card' %>
+            <% end %>
             <% if !event.description.blank? %>
               <div class='description e-description'>
                 <%= format_description(event.description) -%>
