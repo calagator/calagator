@@ -106,6 +106,17 @@ class OrganizationsController < ApplicationController
     end
   end
 
+  def regenerate_permalink
+    if !currently_admin?
+      redirect_to events_path, flash: { failure: 'Only admins can regenerate permalinks.' }
+    end
+
+    @organization = Organization.find(params[:organization_id])
+
+    @organization.regenerate_permalink!
+    redirect_to organization_path(@organization)
+  end
+
   private
 
   def evil_robot?
