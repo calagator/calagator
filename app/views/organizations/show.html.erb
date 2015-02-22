@@ -27,6 +27,10 @@
 
   <div class="location vcard">
     <h1 class="fn org"><%= @organization.title %></h1>
+    <% if currently_admin? %>
+      <% login_url = organization_login_url(@organization.permalink) %>
+      <h4>Private login link: <%= link_to(login_url, login_url) %></h4>
+    <% end %>
 
     <div class='info'>
       <% if @organization.description.present? %>
