@@ -3,11 +3,13 @@
       <li><%= link_to 'Browse Events', root_url,
               :class => subnav_class_for("site", "index") %>
       </li>
-      <li><%= link_to 'Add an event', new_event_url,
-              :class => subnav_class_for("events", "new") %>
-      </li>
-      <li><%= link_to 'Import event(s)', new_source_url,
-              :class => subnav_class_for("sources", "new") %>
-      </li>
+      <% if current_organization %>
+        <li><%= link_to 'Add an event', new_event_url,
+                :class => subnav_class_for("events", "new") %>
+        </li>
+        <li><%= link_to 'Import event(s)', new_source_url,
+                :class => subnav_class_for("sources", "new") %>
+        </li>
+      <% end %>
     </ul>
 </div>

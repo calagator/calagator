@@ -1,10 +1,12 @@
 <div id="venues_subnav" class="subnav">
     <ul class="clearfix">
-      <li><%= link_to 'Browse venues', venues_url, 
+      <li><%= link_to 'Browse venues', venues_url,
               :class => subnav_class_for("venues", "index") %>
       </li>
-      <li><%= link_to 'Add a venue', new_venue_url,
-              :class => subnav_class_for("venues", "new") %>
-      </li>
+      <% if current_organization %>
+        <li><%= link_to 'Add a venue', new_venue_url,
+                :class => subnav_class_for("venues", "new") %>
+        </li>
+      <% end %>
     </ul>
 </div>
