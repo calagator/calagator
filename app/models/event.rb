@@ -34,6 +34,8 @@ class Event < ActiveRecord::Base
   belongs_to :organization, :counter_cache => true
   belongs_to :source
 
+  delegate :title, to: :organization, prefix: true, allow_nil: true
+
   # Validations
   validates_presence_of :title, :start_time
   validate :end_time_later_than_start_time

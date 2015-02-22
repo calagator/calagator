@@ -11,7 +11,7 @@
     <% if (events=events_for_date(date,@events)).any? %>
       <ul>
         <% events.each do |event| %>
-          <li><%=link_to event.organization.title, event %><br />
+          <li><%=link_to event.organization_title, event %><br />
             <%= link_to event.title, event %></li>
         <% end %>
       </ul>
