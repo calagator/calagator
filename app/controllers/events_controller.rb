@@ -168,7 +168,6 @@ class EventsController < ApplicationController
     authorized =
       (current_admin || !@event.organization || @event.organization == current_organization) && !@event.locked?
 
-    binding.pry
     unless authorized
       not_authorized
     end
