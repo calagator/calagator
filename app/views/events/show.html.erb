@@ -61,11 +61,11 @@
     </li>
   </ul>
 <hr />
-<% if current_organization %>
+<% if current_admin || current_organization %>
   <div id='edit_link'>
     <% if @event.locked %>
       <p>This event is currently locked and cannot be edited. Please contact an admin for assistance.</p>
-    <% elsif @event.organization == current_organization %>
+    <% elsif current_admin || @event.organization == current_organization %>
       <p>
         You can
         <%= link_to "edit", edit_event_url(@event) %>,
