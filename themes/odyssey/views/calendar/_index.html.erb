@@ -5,17 +5,23 @@
     <%= link_to ">", date: @date.next_month %>
   </h2>
   <%= calendar @date do |date| %>
-    <span class="monthname"><%= date.strftime('%b') %></span>
-    <span class="daynumber"><%= date.day %></span>
-    <span class="yearnumber"><%= date.strftime('%Y') %></span>
+    <div class='date'>
+      <span class="monthname"><%= date.strftime('%b') %></span>
+      <span class="daynumber"><%= date.day %></span>
+      <span class="yearnumber"><%= date.strftime('%Y') %></span>
+    </div>
     <% if (events=events_for_date(date,@events)).any? %>
       <ul>
         <% events.each do |event| %>
           <li>
             <% if event.organization.present? %>
-              <%=link_to(event.organization_title, event) %><br />
+              <%=link_to(event.organization_title, event.organization, :class => 'organization-name') %><br />
             <% end %>
-            <%= link_to event.title, event %></li>
+            <%= link_to event.title, event, :class => "event-title" %></li>
+            <div class='event-time'>
+              <span class='event-start-time'><%= event.start_time %></span> - <span class='event-end-time'><%= event.end_time %></span>
+            </div>
+          </li>
         <% end %>
       </ul>
     <% end %>
