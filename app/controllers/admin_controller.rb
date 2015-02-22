@@ -1,6 +1,5 @@
 class AdminController < ApplicationController
-  http_basic_authenticate_with :name => SECRETS.admin_username, :password => SECRETS.admin_password, :if => Proc.new { SECRETS.admin_username && SECRETS.admin_password }
-
+  before_filter :authenticate
   def index
   end
 
@@ -20,4 +19,17 @@ class AdminController < ApplicationController
     redirect_to :action => :events
   end
 
+  private
+
+  def authenticate
+    authed = authenticate_with_http_basic do |u, p|
+      u == SECRETS.admin_username && p == SECRETS.admin_password
+    end
+    if authed
+      session[:admin] = true
+      @current_admin  = true
+    else
+      request_http_basic_authentication
+    end
+  end
 end

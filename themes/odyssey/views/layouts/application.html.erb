@@ -59,6 +59,8 @@
           <% if current_organization %>
             Logged in as: <%= current_organization.title %>
             (<%= link_to 'logout', organization_logout_path %>)
+          <% elsif current_admin %>
+              Logged in as Admin.
           <% end %>
         </div>
         <%= form_tag search_events_path, :method => :get do %>

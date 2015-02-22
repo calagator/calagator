@@ -3,7 +3,7 @@
       <li><%= link_to 'Browse organizations', organizations_url, 
               :class => subnav_class_for("organizations", "index") %>
       </li>
-      <% if current_organization %>
+      <% if current_admin %>
         <li><%= link_to 'Add an organization', new_organization_url,
                 :class => subnav_class_for("organizations", "new") %>
         </li>

@@ -24,9 +24,9 @@ protected
     end
   end
 
-  helper_method :currently_admin?
-  def currently_admin?
-    true
+  helper_method :current_admin
+  def current_admin
+    @current_admin ||= !!session[:admin]
   end
 
   #---[ Helpers ]---------------------------------------------------------
