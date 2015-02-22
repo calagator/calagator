@@ -42,6 +42,8 @@ Calagator::Application.routes.draw do
   end
 
   resources :organizations do
+    put :regenerate_permalink
+
     collection do
       post :squash_many_duplicates
       get :duplicates

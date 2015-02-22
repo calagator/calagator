@@ -48,6 +48,12 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def regenerate_permalink!
+    self.permalink = ''
+    build_permalink
+    save!
+  end
+
   #===[ Finders ]=========================================================
 
   # Return Hash of Organizations grouped by the +type+, e.g., a 'title'. Each Organization
