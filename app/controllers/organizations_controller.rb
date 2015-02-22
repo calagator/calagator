@@ -122,7 +122,7 @@ class OrganizationsController < ApplicationController
   end
 
   def regenerate_permalink
-    if current_admin
+    if !currently_admin?
       redirect_to events_path, flash: { failure: 'Only admins can regenerate permalinks.' }
     end
 
