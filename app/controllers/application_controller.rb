@@ -29,6 +29,11 @@ protected
     @current_admin ||= !!session[:admin]
   end
 
+  helper_method :currently_admin?
+  def currently_admin?
+    !!current_admin
+  end
+
   #---[ Helpers ]---------------------------------------------------------
 
   # Returns a data structure used for telling the CSS menu which part of the
