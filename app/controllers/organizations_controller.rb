@@ -123,13 +123,14 @@ class OrganizationsController < ApplicationController
 
   def regenerate_permalink
     if !currently_admin?
+      Rails.logger.info "** Not admin, redirecting to events path"
       redirect_to events_path, flash: { failure: 'Only admins can regenerate permalinks.' }
+    else
+      Rails.logger.info "** Currently admin, attempting to regenerate permalink"
+      @organization = Organization.find(params[:organization_id])
+      @organization.regenerate_permalink!
+      redirect_to organization_path(@organization)
     end
-
-    @organization = Organization.find(params[:organization_id])
-
-    @organization.regenerate_permalink!
-    redirect_to organization_path(@organization)
   end
 
   private
