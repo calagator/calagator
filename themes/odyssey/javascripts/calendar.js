@@ -70,11 +70,12 @@ $(document).ready(function () {
 
 	$('#calendar ul').parent().addClass('has-event');
 
-	/* Properly format the time for each event */
+	/* 
+	// Properly format the time, but it doesn't seem to be working in mobile.
 	$('.event-start-time, .event-end-time').each(function (index, element) {
 		var $element = $(element);
 
 		$element.text( moment($element.text()).format("LT") );
-	});
+	}); */
 
 });
