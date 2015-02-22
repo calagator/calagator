@@ -317,6 +317,8 @@ describe EventsController, :type => :controller do
 
   describe "when creating and updating events" do
     before do
+      @organization = FactoryGirl.create(:organization)
+      session[:organization_id] = @organization.id
       @params = {
         "end_date"       => "2008-06-04",
         "start_date"     => "2008-06-03",
@@ -329,7 +331,7 @@ describe EventsController, :type => :controller do
         "start_time"     => ""
       }.with_indifferent_access
       @venue = FactoryGirl.build(:venue)
-      @event = FactoryGirl.build(:event, :venue => @venue)
+      @event = FactoryGirl.build(:event, :venue => @venue, organization: @organization)
     end
 
     describe "#new" do
@@ -394,7 +396,9 @@ describe EventsController, :type => :controller do
       end
 
       it "should stop evil robots" do
+        binding.pry
         post "create", :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+        binding.pry
         expect(response).to render_template :new
         expect(flash[:failure]).to match /evil robot/i
       end

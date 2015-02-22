@@ -83,7 +83,6 @@ module Calagator
       # Set timezone for Rails
       config.time_zone = SETTINGS.timezone || 'Pacific Time (US & Canada)'
     end
-
     # Set timezone for OS
     config.after_initialize do
       ENV['TZ'] = Time.zone.tzinfo.identifier
