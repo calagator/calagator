@@ -38,9 +38,15 @@ Vagrant::Config.run do |config|
   require "fileutils"
   require "rbconfig"
   unless RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
-    apt_cache = "tmp/vagrant_apt_cache"
-    FileUtils.mkdir_p("#{apt_cache}/archives/partial")
-    config.vm.share_folder "vagrant-apt-cache", "/var/cache/apt", apt_cache, :nfs => defined?(NFS) ? NFS : false
+    # NOTE: This is only enabled if using NFS because `apt-get` fails with
+    # "Couldn't make mmap" and "Unable to munmap" errors when using the default
+    # sharing mechanism.
+    if defined?(NFS) && NFS
+      require "fileutils"
+      apt_cache = "tmp/vagrant_apt_cache"
+      FileUtils.mkdir_p("#{apt_cache}/archives/partial")
+      config.vm.share_folder "vagrant-apt-cache", "/var/cache/apt", apt_cache, :nfs => true
+    end
   end
 
   # Use more memory so badly-designed programs like Bundler can work.
