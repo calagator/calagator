@@ -1,8 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Sanchez);
 
 body {
-  background: #BEF598;
-  color: #445545;
+  background: #CCCCCC;
+  color: #054974;
   text-align: center;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 18px;
@@ -21,41 +21,41 @@ h2 {
 }
 a {
   color: #fff;
-  background: #377B15;
+  background: #054974;
   text-decoration: none;
   display: inline-block;
   border-radius: .5em;
   padding: .5em;
   font-weight: bold;
 }
-#alligator {
+#gear {
   background: #fff;
   border-radius: 50%;
-  border: 1px solid #9CD579;
+  border: 1px solid #095580;
   position: relative;
   width: 340px;
   height: 340px;
   margin: 2em auto 1.5em;
 }
-#alligator:before {
+#gear:before {
    content: " ";
    position: absolute;
    top: 10px;
    left: 10px;
    right: 10px;
    bottom: 10px;
-   border: 2px solid #7FAB4C;
+   border: 2px solid #054974;
    border-radius: 50%;
 }
-#alligator img {
+#gear img {
   z-index: 10;
   position: absolute;
   top: 35px;
   left: 30px;
-  width: 300px;
+  height: 300px;
 }
 .guide {
-  border: 1px solid #9CD579;
+  border: 1px solid #999999;
   padding: 2em;
   background: #fff;
 }
@@ -97,7 +97,7 @@ a {
   }
 }
 
-#alligator img {
+#gear img {
   -webkit-transform-origin: 100px 300px;
   -ms-transform-origin: top center;
   transform-origin: top center;
