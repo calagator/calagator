@@ -8,9 +8,9 @@
     <span class="monthname"><%= date.strftime('%b') %></span>
     <span class="daynumber"><%= date.day %></span>
     <span class="yearnumber"><%= date.strftime('%Y') %></span>
-    <% if @events_by_date[date] %>
+    <% if (events=events_for_date(date,@events)).any? %>
       <ul>
-        <% @events_by_date[date].each do |event| %>
+        <% events.each do |event| %>
           <li><%=link_to event.organization.title, event %><br />
             <%= link_to event.title, event %></li>
         <% end %>
