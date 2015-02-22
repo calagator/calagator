@@ -1,5 +1,9 @@
 @import "variables";
 
+// lazily cloning venue css as org css
+@import "organizations";
+
+
 /* @group Global Layout
 ----------------------------------------*/
 
@@ -343,7 +347,6 @@ ul.event_list .list_date {
   margin: 2em 0 2em 0em;
   background-color: #DDD;
 }
-
 
 /* @group Venues
 ----------------------------------------*/

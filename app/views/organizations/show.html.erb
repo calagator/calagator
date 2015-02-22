@@ -30,7 +30,7 @@
     <% if currently_admin? %>
       <% login_url = organization_login_url(@organization.permalink) %>
       <h4>Private login link: <%= link_to(login_url, login_url) %></h4>
-      <button><%= link_to('New Permalink', organization_regenerate_permalink_url(@organization), method: :put) %></button>
+      <button class="regenerate"><%= link_to('Generate new permalink', organization_regenerate_permalink_url(@organization), method: :put) %></button>
     <% end %>
 
     <div class='info'>
