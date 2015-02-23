@@ -1,0 +1,1 @@
+Calagator::Application.config.action_controller.default_url_options = {host: SECRETS.default_url_host} if SECRETS.default_url_host
