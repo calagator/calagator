@@ -24,7 +24,7 @@ FactoryGirl.define do
   factory :event, class: Calagator::Event do
     sequence(:title) { |n| "Event #{n}" }
     sequence(:description) { |n| "Description of Event #{n}." }
-    start_time { Time.zone.now }
+    start_time { Time.zone.now.beginning_of_day }
     end_time { start_time + 1.hour }
     after(:create) { Sunspot.commit if Calagator::Event::SearchEngine.kind == :sunspot }
 
