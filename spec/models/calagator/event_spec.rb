@@ -356,6 +356,22 @@ describe Event, :type => :model do
     end
   end
 
+  describe ".search_tag" do
+    before do
+      @c = FactoryGirl.create(:event, title: "c", tag_list: ["tag", "wtf"], start_time: 3.minutes.ago)
+      @b = FactoryGirl.create(:event, title: "b", tag_list: ["omg", "wtf"], start_time: 2.minutes.ago)
+      @a = FactoryGirl.create(:event, title: "a", tag_list: ["tag", "omg"], start_time: 1.minutes.ago)
+    end
+
+    it "finds events with the given tag" do
+      Event.search_tag("tag").should == [@c,@a]
+    end
+
+    it "accepts an order option" do
+      Event.search_tag("tag", order: "name").should == [@a,@c]
+    end
+  end
+
   describe "when finding by dates" do
 
     before do
