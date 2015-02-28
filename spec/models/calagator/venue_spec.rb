@@ -131,6 +131,10 @@ describe Venue, :type => :model do
       Venue.create!(attributes)
       expect(Venue.find_duplicates_by(:all)).to be_present
     end
+
+    it "should match non duplicate venues when searching by default" do
+      expect(Venue.find_duplicates_by_type).to be_present
+    end
   end
 
   describe "when checking for squashing" do
