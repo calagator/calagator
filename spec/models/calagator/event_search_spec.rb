@@ -101,6 +101,10 @@ describe Event, :type => :model do
     it "is using the sql search engine" do
       expect(Event::SearchEngine.kind).to eq(:sql)
     end
+
+    it "does not provide a score" do
+      expect(Event::SearchEngine.score?).to be_falsey
+    end
   end
 
   describe "Sunspot" do
@@ -128,6 +132,10 @@ describe Event, :type => :model do
 
     it "is using the sunspot search engine" do
       expect(Event::SearchEngine.kind).to eq(:sunspot)
+    end
+
+    it "provides a score" do
+      expect(Event::SearchEngine.score?).to be_truthy
     end
   end
 end
