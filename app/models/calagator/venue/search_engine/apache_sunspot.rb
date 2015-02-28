@@ -37,13 +37,13 @@ class Venue < ActiveRecord::Base
         end
       end
 
-      def configured?
+      def self.configured?
         Venue.respond_to?(:solr_search)
       end
 
       def initialize(*args)
         super
-        configure unless configured?
+        self.class.configure unless self.class.configured?
       end
 
       def search

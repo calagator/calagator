@@ -47,6 +47,11 @@ class Event < ActiveRecord::Base
         Event.respond_to?(:solr_search)
       end
 
+      def initialize(*args)
+        super
+        self.class.configure unless self.class.configured?
+      end
+
       def all
         current_events + past_events
       end
