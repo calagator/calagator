@@ -7,6 +7,13 @@ describe Source::Parser, "when reading content", :type => :model do
     stub_request(:get, "http://a.real/~url").to_return(body: "42")
     expect(Source::Parser.read_url("http://a.real/~url")).to eq "42"
   end
+
+  it "should raise an error when unauthorized" do
+    stub_request(:get, "http://a.private/~url").to_return(status: [401, "Forbidden"])
+    expect {
+      Source::Parser.read_url("http://a.private/~url")
+    }.to raise_error Source::Parser::HttpAuthenticationRequiredError
+  end
 end
 
 describe Source::Parser, "when subclassing", :type => :model do
