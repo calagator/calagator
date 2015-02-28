@@ -143,6 +143,15 @@ describe EventsHelper, :type => :helper do
       event.venue = FactoryGirl.create(:venue, title: "holocene")
       expect(tweet_text(event)).to eq("hip and/or hop - 12:00PM 01.01.2010 @ holocene")
     end
+
+    it "crops it at 140 characters" do
+      event = FactoryGirl.create(:event,
+        title: "hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop",
+        start_time: "2010-01-01 12:00:00",
+        end_time: "2010-01-02 12:00:00")
+      event.venue = FactoryGirl.create(:venue, title: "holocene")
+      expect(tweet_text(event)).to eq("hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop, h... - 12:00PM 01.01.2010 @ holocene")
+    end
   end
 
   describe "sorting labels" do
