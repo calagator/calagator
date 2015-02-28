@@ -10,27 +10,19 @@ module MappingHelper
   end
 
   def leaflet_js
-    if Rails.env.production?
-      ["https://d591zijq8zntj.cloudfront.net/leaflet-0.6.4/leaflet.js"]
-    else
-      ["leaflet"]
-    end
+    Rails.env.production? ? ["https://d591zijq8zntj.cloudfront.net/leaflet-0.6.4/leaflet.js"] : ["leaflet"]
   end
 
   def map_provider_dependencies
-    case map_provider
-      when "stamen"
-        ["http://maps.stamen.com/js/tile.stamen.js?v1.2.3"]
-      when "mapbox"
-        ["https://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.standalone.js"]
-      when "esri"
-        ["http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"]
-      when "google"
-        [
-          "https://maps.googleapis.com/maps/api/js?key=#{SECRETS.mapping["google_maps_api_key"]}&sensor=false",
-          "leaflet_google_layer",
-        ]
-    end
+    {
+      "stamen" => ["http://maps.stamen.com/js/tile.stamen.js?v1.2.3"],
+      "mapbox" => ["https://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.standalone.js"],
+      "esri"   => ["http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"],
+      "google" => [
+        "https://maps.googleapis.com/maps/api/js?key=#{SECRETS.mapping && SECRETS.mapping["google_maps_api_key"]}&sensor=false",
+        "leaflet_google_layer",
+      ],
+    }[map_provider]
   end
 
   def mapping_js_includes
