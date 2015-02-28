@@ -77,6 +77,17 @@ describe SourcesController, :type => :controller do
         post :import, :source => {:url => "http://invalid.host"}
       end
 
+      it "should fail when host responds with no events" do
+        expect(@source).to receive(:create_events!).and_return([])
+        post :import, :source => {:url => "http://empty.host"}
+        expect(flash[:failure]).to match /Unable to find any upcoming events to import from this source/
+      end
+
+      it "should fail when host responds with a 404" do
+        assert_import_raises(Source::Parser::NotFound)
+        expect(flash[:failure]).to match /No events found at remote site/
+      end
+
       it "should fail when host responds with an error" do
         assert_import_raises(OpenURI::HTTPError.new("omfg", "bbq"))
         expect(flash[:failure]).to match /Couldn't download events/
@@ -95,6 +106,11 @@ describe SourcesController, :type => :controller do
       it "should fail when host requires authentication" do
         assert_import_raises(Source::Parser::HttpAuthenticationRequiredError.new("omfg"))
         expect(flash[:failure]).to match /requires authentication/
+      end
+
+      it "should fail when host throws something strange" do
+        assert_import_raises(TypeError)
+        expect(flash[:failure]).to match /Unknown error: TypeError/
       end
     end
   end
