@@ -59,6 +59,12 @@ describe Event, :type => :model do
       expect(Event.search("", order: "venue")).to eq([event1, event2])
     end
 
+    it "can sort by start date" do
+      event2 = FactoryGirl.create(:event, start_time: 1.year.ago)
+      event1 = FactoryGirl.create(:event, start_time: 1.year.from_now)
+      expect(Event.search("", order: "date")).to eq([event1, event2])
+    end
+
     it "can limit to current and upcoming events" do
       event1 = FactoryGirl.create(:event, start_time: 1.year.ago, end_time: 1.year.ago + 1.hour)
       event2 = FactoryGirl.create(:event, start_time: 1.hour.ago, end_time: 1.hour.from_now)
