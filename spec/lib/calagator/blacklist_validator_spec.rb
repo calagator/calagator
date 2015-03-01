@@ -43,9 +43,11 @@ describe BlacklistValidator do
   end
 
   describe "created with custom blacklist file" do
+    let(:blacklist_file_path) { Rails.root.join("config/blacklist.txt") }
+
     before do
-      expect_any_instance_of(BlacklistValidator).to receive(:get_blacklist_patterns_from).with("blacklist.txt").and_return([])
-      expect_any_instance_of(BlacklistValidator).to receive(:get_blacklist_patterns_from).with("blacklist-local.txt").and_return([/Kltpzyxm/i])
+      allow(File).to receive(:exists?).with(blacklist_file_path).and_return(true)
+      expect(File).to receive(:readlines).with(blacklist_file_path).and_return(["Kltpzyxm"])
     end
 
     it "should be valid when clean" do
