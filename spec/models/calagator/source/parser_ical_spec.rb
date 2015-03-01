@@ -143,6 +143,10 @@ describe Source::Parser::Ical, "with iCalendar events", :type => :model do
     expect(events.map(&:title)).to eq ["Coffee with Jason", "Coffee with Mike", "Coffee with Kim"]
   end
 
+  it "should not swallow errors" do
+    expect(RiCal).to receive(:parse_string).and_raise(TypeError)
+    expect { events_from_ical_at('ical_multiple_calendars.ics') }.to raise_error(TypeError)
+  end
 end
 
 describe Source::Parser::Ical, "when importing events with non-local times", :type => :model do
@@ -296,6 +300,22 @@ END:VCALENDAR))
       "Past start and current end",
       "Current start and current end"
     ]
+  end
+end
+
+describe Source::Parser::Ical, "when parsing an invalid ical", :type => :model do
+  before(:each) do
+    url = "http://foo.bar/"
+    stub_request(:get, url).to_return(body:
+%(BEGIN:VCALENDAR
+BEGIN:VEVENT
+OMGWTFBBQ
+END:VCALENDAR))
+    @source = Source.new(title: "Title", url: url)
+  end
+
+  it "should return no events" do
+    @source.create_events!.should == []
   end
 end
 
