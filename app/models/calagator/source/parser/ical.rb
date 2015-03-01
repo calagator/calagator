@@ -103,9 +103,6 @@ class Source::Parser::Ical < Source::Parser
         end
       end
     end
-  rescue RiCal::InvalidTimezoneIdentifier
-    event.start_time = Time.parse(component.dtstart_property.to_s)
-    event.end_time = Time.parse(component.dtend_property.to_s)
   end
 
   def munge_gmt_dates(content)
