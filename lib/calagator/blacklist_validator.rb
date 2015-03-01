@@ -54,7 +54,6 @@ class BlacklistValidator < ActiveModel::EachValidator
       [
         Calagator.blacklist_patterns,
         get_blacklist_patterns_from(options.fetch(:blacklist, "blacklist.txt")),
-        get_blacklist_patterns_from("blacklist-local.txt")
       ].flatten.compact
     end
   end
