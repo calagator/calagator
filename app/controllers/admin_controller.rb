@@ -1,5 +1,5 @@
 class AdminController < ApplicationController
-  http_basic_authenticate_with :name => SECRETS.admin_username, :password => SECRETS.admin_password, :if => Proc.new { SECRETS.admin_username && SECRETS.admin_password }
+  require_admin
 
   def index
   end

@@ -580,54 +580,61 @@ describe EventsController, :type => :controller do
     end
   end
 
-  describe "#duplicates" do
-    render_views
+  context "with admin auth for duplicates" do
+    before do
+      credentials = ActionController::HttpAuthentication::Basic.encode_credentials SECRETS.admin_username, SECRETS.admin_password
+      request.env['HTTP_AUTHORIZATION'] = credentials
+    end
 
-    it "should find current duplicates and not past duplicates" do
-      current_master = FactoryGirl.create(:event, :title => "Current")
-      current_duplicate = FactoryGirl.create(:event, :title => current_master.title)
+    describe "#duplicates" do
+      render_views
 
-      past_master = FactoryGirl.create(:event, :title => "Past", :start_time => now - 2.days)
-      past_duplicate = FactoryGirl.create(:event, :title => past_master.title, :start_time => now - 1.day)
+      it "should find current duplicates and not past duplicates" do
+        current_master = FactoryGirl.create(:event, :title => "Current")
+        current_duplicate = FactoryGirl.create(:event, :title => current_master.title)
 
-      get 'duplicates', :type => 'title'
+        past_master = FactoryGirl.create(:event, :title => "Past", :start_time => now - 2.days)
+        past_duplicate = FactoryGirl.create(:event, :title => past_master.title, :start_time => now - 1.day)
 
-      # Current duplicates
-      assigns[:grouped_events].select{|keys,values| keys.include?(current_master.title)}.tap do |events|
-        expect(events).not_to be_empty
-        expect(events.first.last.size).to eq 2
+        get 'duplicates', :type => 'title'
+
+        # Current duplicates
+        assigns[:grouped_events].select{|keys,values| keys.include?(current_master.title)}.tap do |events|
+          expect(events).not_to be_empty
+          expect(events.first.last.size).to eq 2
+        end
+
+        # Past duplicates
+        expect(assigns[:grouped_events].select{|keys,values| keys.include?(past_master.title)}).to be_empty
       end
 
-      # Past duplicates
-      expect(assigns[:grouped_events].select{|keys,values| keys.include?(past_master.title)}).to be_empty
+      it "should redirect duplicate events to their master" do
+        event_master = FactoryGirl.create(:event)
+        event_duplicate = FactoryGirl.create(:event)
+
+        get 'show', :id => event_duplicate.id
+        expect(response).not_to be_redirect
+        expect(assigns(:event).id).to eq event_duplicate.id
+
+        event_duplicate.duplicate_of = event_master
+        event_duplicate.save!
+
+        get 'show', :id => event_duplicate.id
+        expect(response).to be_redirect
+        expect(response).to redirect_to(event_url(event_master.id))
+      end
+
+      it "should display an error message if given invalid arguments" do
+        get 'duplicates', :type => 'omgwtfbbq'
+
+        expect(response).to be_success
+        expect(response.body).to have_selector('.failure', text: 'omgwtfbbq')
+      end
     end
 
-    it "should redirect duplicate events to their master" do
-      event_master = FactoryGirl.create(:event)
-      event_duplicate = FactoryGirl.create(:event)
-
-      get 'show', :id => event_duplicate.id
-      expect(response).not_to be_redirect
-      expect(assigns(:event).id).to eq event_duplicate.id
-
-      event_duplicate.duplicate_of = event_master
-      event_duplicate.save!
-
-      get 'show', :id => event_duplicate.id
-      expect(response).to be_redirect
-      expect(response).to redirect_to(event_url(event_master.id))
+    context do
+      include_examples "#squash_many_duplicates", :event
     end
-
-    it "should display an error message if given invalid arguments" do
-      get 'duplicates', :type => 'omgwtfbbq'
-
-      expect(response).to be_success
-      expect(response.body).to have_selector('.failure', text: 'omgwtfbbq')
-    end
-  end
-
-  context do
-    include_examples "#squash_many_duplicates", :event
   end
 
   describe "#search" do
