@@ -23,15 +23,22 @@ describe VenuesController, :type => :controller do
     expect(response).to redirect_to(venue_url(venue_master.id))
   end
 
-  it "should display an error message if given invalid arguments" do
-    get 'duplicates', :type => 'omgwtfbbq'
+  context "with admin auth for duplicates" do
+    before do
+      credentials = ActionController::HttpAuthentication::Basic.encode_credentials SECRETS.admin_username, SECRETS.admin_password
+      request.env['HTTP_AUTHORIZATION'] = credentials
+    end
 
-    expect(response).to be_success
-    expect(response.body).to have_selector('.failure', text: 'omgwtfbbq')
-  end
+    it "should display an error message if given invalid arguments" do
+      get 'duplicates', :type => 'omgwtfbbq'
 
-  context do
-    include_examples "#squash_many_duplicates", :venue
+      expect(response).to be_success
+      expect(response.body).to have_selector('.failure', text: 'omgwtfbbq')
+    end
+
+    context do
+      include_examples "#squash_many_duplicates", :venue
+    end
   end
 
   describe "when creating venues" do
