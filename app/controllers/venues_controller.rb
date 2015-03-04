@@ -1,6 +1,7 @@
 class VenuesController < ApplicationController
   # Provides #duplicates and #squash_many_duplicates
   include DuplicateChecking::ControllerActions
+  require_admin only: [:duplicates, :squash_many_duplicates]
 
   # GET /venues
   # GET /venues.xml

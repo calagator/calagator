@@ -1,6 +1,8 @@
 class EventsController < ApplicationController
   # Provides #duplicates and #squash_many_duplicates
   include DuplicateChecking::ControllerActions
+  require_admin only: [:duplicates, :squash_many_duplicates]
+
   before_filter :find_and_redirect_if_locked, :only => [:edit, :update, :destroy]
 
   # GET /events

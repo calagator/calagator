@@ -15,6 +15,16 @@ class ApplicationController < ActionController::Base
 
 protected
 
+  def self.require_admin(options = {})
+    http_basic_authenticate_with(
+      options.reverse_merge(
+        :name => SECRETS.admin_username,
+        :password => SECRETS.admin_password,
+        :if => Proc.new { SECRETS.admin_username && SECRETS.admin_password }
+      )
+    )
+  end
+
   #---[ Helpers ]---------------------------------------------------------
 
   # Returns a data structure used for telling the CSS menu which part of the
