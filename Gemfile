@@ -111,7 +111,7 @@ group :test do
   gem 'capybara', '2.4.3'
   gem 'coveralls', '0.7.0', require: false
   gem 'database_cleaner'
-  gem 'poltergeist', '1.5.1'
+  gem 'poltergeist', '1.6.0'
   gem 'timecop', '~> 0.7'
   gem 'webmock', '~> 1.20'
 end
