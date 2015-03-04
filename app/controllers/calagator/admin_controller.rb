@@ -1,3 +1,5 @@
+module Calagator
+
 class AdminController < ApplicationController
   require_admin
 
@@ -19,5 +21,7 @@ class AdminController < ApplicationController
     end
     redirect_to :action => :events
   end
+
+end
 
 end
