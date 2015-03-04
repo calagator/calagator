@@ -10,7 +10,7 @@
 #=======================================================================
 
 source 'https://rubygems.org'
-
+ruby '2.1.5'
 # Database driver
 require "./lib/database_yml_reader"
 adapter = DatabaseYmlReader.read.adapter
