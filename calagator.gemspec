@@ -7,17 +7,18 @@ require "calagator/version"
 Gem::Specification.new do |s|
   s.name        = "calagator"
   s.version     = Calagator::VERSION
-  s.authors     = ["TODO: Your name"]
-  s.email       = ["TODO: Your email"]
-  s.homepage    = "TODO"
-  s.summary     = "TODO: Summary of Calagator."
-  s.description = "TODO: Description of Calagator."
+  s.authors     = ["The Calagator Team"]
+  s.email       = ["calagator-development@googlegroups.com"]
+  s.homepage    = "https://github.com/calagator/calagator"
+  s.summary     = "A calendar for communities"
+  s.description = "Calagator is an open source community calendaring platform"
+  s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENSE.txt", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", "3.2.19"
-  s.add_dependency "sass-rails", "~> 3.2.3"
+  s.add_dependency 'sass-rails', '~> 3.2', '>= 3.2.3'
   s.add_dependency "sass", "~> 3.2"
   s.add_dependency "formtastic", "2.2.1"
   s.add_dependency "rails_autolink", "1.1.3"
@@ -33,7 +34,6 @@ Gem::Specification.new do |s|
   s.add_dependency "loofah", "1.2.1"
   s.add_dependency "loofah-activerecord", "1.1.0"
   s.add_dependency "bluecloth", "2.2.0"
-  s.add_dependency "formtastic", "2.2.1"
   s.add_dependency "acts-as-taggable-on", "2.4.1"
   s.add_dependency "jquery-rails", "~> 3.1"
   s.add_dependency "jquery-ui-rails", "~> 5.0"
