@@ -8,7 +8,6 @@ RUBY_VERSION=2.1
 # Fix locale so that Postgres creates databases in UTF-8
 locale-gen en_US.UTF-8
 dpkg-reconfigure locales
-. /etc/default/locale
 
 # Add source for up-to-date ruby
 # docs: https://www.brightbox.com/docs/ruby/ubuntu/
@@ -25,9 +24,7 @@ apt-get install -y ruby${RUBY_VERSION} ruby${RUBY_VERSION}-dev build-essential p
 apt-get install -y git-core screen tmux elinks 
 
 # Postgresql
-if ! command -v psql; then
-    apt-get install -y postgresql-$PGSQL_VERSION libpq-dev postgresql-client-common postgresql-contrib-$PGSQL_VERSION postgresql-$PGSQL_VERSION-postgis-$PGIS_VERSION
-fi
+apt-get install -y postgresql-$PGSQL_VERSION libpq-dev postgresql-client-common postgresql-contrib-$PGSQL_VERSION postgresql-$PGSQL_VERSION-postgis-$PGIS_VERSION
 
 # Create PostgreSQL user
 if ! su postgres -c "psql -c '\\du' | grep ${VAGRANT_USER}"; then
