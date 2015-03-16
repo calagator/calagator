@@ -19,7 +19,7 @@ apt-get update -y
 apt-get remove ruby1.9.1 libruby1.9.1
 
 # Required packages
-apt-get install -y ruby${RUBY_VERSION} ruby${RUBY_VERSION}-dev build-essential libcurl4-openssl-dev libsqlite3-dev libxml2 libxml2-dev libxslt1.1 libxslt1-dev
+apt-get install -y ruby${RUBY_VERSION} ruby${RUBY_VERSION}-dev build-essential phantomjs libcurl4-openssl-dev libsqlite3-dev libxml2 libxml2-dev libxslt1.1 libxslt1-dev
 
 # Useful tools
 apt-get install -y git-core screen tmux elinks 
