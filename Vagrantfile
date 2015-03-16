@@ -5,59 +5,42 @@ if File.exist?(overrides)
     eval File.read(overrides)
 end
 
-Vagrant::Config.run do |config|
-  # All Vagrant configuration is done here. The most common configuration
-  # options are documented and commented below. For a complete reference,
-  # please see the online documentation at vagrantup.com.
+Vagrant.configure(2) do |config|
+  # The most common configuration options are documented and commented below.
+  # For a complete reference, please see the online documentation at
+  # https://docs.vagrantup.com.
 
-  # The url from where the 'config.vm.box' box will be fetched if it
-  # doesn't already exist on the user's system.
-  config.vm.box_url = "http://files.vagrantup.com/lucid32.box"
+  config.vm.box = "ubuntu/trusty64"
 
-  # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "lucid32"
+  # Disable automatic box update checking. If you disable this, then
+  # boxes will only be checked for updates when the user runs
+  # `vagrant box outdated`. This is not recommended.
+  # config.vm.box_check_update = false
 
-  # Assign this VM to a host only network IP, allowing you to access it
-  # via the IP.
-  if (defined?(NFS) && NFS) || defined?(ADDRESS)
-    config.vm.network defined?(ADDRESS) ? ADDRESS : "33.33.31.13"
-  end
+  # Create a forwarded port mapping which allows access to a specific port
+  # within the machine from a port on the host machine.
+  config.vm.network "forwarded_port", guest: 80, host: defined?(HTTP_PORT) ? HTTP_PORT : 8080
+  config.vm.network "forwarded_port", guest: 3000, host: defined?(HTTP_PORT) ? HTTP_PORT : 8000
 
-  # Forward a port from the guest to the host, which allows for outside
-  # computers to access the VM, whereas host only networking does not.
-  config.vm.forward_port 80, defined?(HTTP_PORT) ? HTTP_PORT : 8080
-  config.vm.forward_port 3000, defined?(RAILS_PORT) ? RAILS_PORT : 8000
+  # Create a private network, which allows host-only access to the machine
+  # using a specific IP.
+  # config.vm.network "private_network", ip: "192.168.33.10"
+
+  # Create a public network, which generally matched to bridged network.
+  # Bridged networks make the machine appear as another physical device on
+  # your network.
+  # config.vm.network "public_network"
 
   # Share an additional folder to the guest VM. The first argument is
-  # an identifier, the second is the path on the guest to mount the
-  # folder, and the third is the path on the host to the actual folder.
-  config.vm.share_folder "vagrant", "/vagrant", ".", :nfs => defined?(NFS) ? NFS : false
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
 
-  # Share a folder with the guest VM for storing downloaded packages. This
-  # makes rebuilding VMs faster by only downloading packages if needed.
-  require "fileutils"
-  require "rbconfig"
-  unless RbConfig::CONFIG['host_os'] =~ /mswin|mingw/
-    # NOTE: This is only enabled if using NFS because `apt-get` fails with
-    # "Couldn't make mmap" and "Unable to munmap" errors when using the default
-    # sharing mechanism.
-    if defined?(NFS) && NFS
-      require "fileutils"
-      apt_cache = "tmp/vagrant_apt_cache"
-      FileUtils.mkdir_p("#{apt_cache}/archives/partial")
-      config.vm.share_folder "vagrant-apt-cache", "/var/cache/apt", apt_cache, :nfs => true
-    end
+  # Use more memory so Bundler works.
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
   end
 
-  # Use more memory so badly-designed programs like Bundler can work.
-  config.vm.customize do |vm|
-    vm.memory_size = defined?(MEMORY) ? MEMORY : 512
-  end
-
-  # Enable provisioning with chef solo, specifying a cookbooks path (relative
-  # to this Vagrantfile), and adding some recipes and/or roles.
-  config.vm.provision :chef_solo do |chef|
-    chef.cookbooks_path = "vagrant/cookbooks"
-    chef.add_recipe "vagrant"
-  end
+  config.vm.provision :shell, :path => "vagrant/provision.sh"
 end
