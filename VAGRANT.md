@@ -73,10 +73,6 @@ Below are the supported overrides:
 
         RAILS_PORT = 8000
 
-* Set the virtual machine's IP address to `33.33.31.13`, which is useful if you want to SSH into the virtual machine by IP, rather than using `vagrant ssh`. If you're not using overrides to set the address or enable NFS, the address will be randomly assigned by VirtualBox.
+* Set the amount of memory to dedicate to the virtual machine to 768 megabytes. The appropriate amount will depend on how much memory you have available versus how much processes within the virtual machine need. If running `bundler` or `gem` results in an "out of memory" error you may need to increase this.
 
-        ADDRESS = "33.33.31.13"
-
-* Set the amount of memory to dedicate to the virtual machine to 1024 megabytes. The appropriate amount will depend on how much memory you have available versus how much processes within the virtual machine need. In general, running `bundler` or `gem` in the virtual machine will require at least 1024 megabytes:
-
-        MEMORY = 1024
+        MEMORY = 768
