@@ -26,6 +26,9 @@ apt-get install -y git-core screen tmux elinks
 # Postgresql
 apt-get install -y postgresql-$PGSQL_VERSION libpq-dev postgresql-client-common postgresql-contrib-$PGSQL_VERSION postgresql-$PGSQL_VERSION-postgis-$PGIS_VERSION
 
+# Install Java for Solr
+apt-get install -y openjdk-7-jre-headless
+
 # Create PostgreSQL user
 if ! su postgres -c "psql -c '\\du' | grep ${VAGRANT_USER}"; then
     su postgres -c "createuser --superuser ${VAGRANT_USER}"
