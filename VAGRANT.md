@@ -6,7 +6,8 @@ Using Vagrant for development
 Setup
 -----
 
-Download the Vagrant installer for your OS from https://www.vagrantup.com/
+1. Install VirtualBox from https://www.virtualbox.org/.
+2. Download the Vagrant installer for your OS from https://www.vagrantup.com/.
 
 Usage
 -----
