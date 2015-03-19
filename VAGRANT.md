@@ -6,13 +6,8 @@ Using Vagrant for development
 Setup
 -----
 
-Setup Vagrant and its dependencies:
-
-1. Install Ruby: [http://www.ruby-lang.org/](http://www.ruby-lang.org/)
-3. Install VirtualBox: [http://www.virtualbox.org/](http://www.virtualbox.org/)
-4. Install Vagrant:
-
-        gem install vagrant
+1. Install VirtualBox from https://www.virtualbox.org/.
+2. Download the Vagrant installer for your OS from https://www.vagrantup.com/.
 
 Usage
 -----
@@ -78,24 +73,6 @@ Below are the supported overrides:
 
         RAILS_PORT = 8000
 
-* Share files from the local machine to the virtual machine using NFS, which is much faster than the default sharing mechanism. Unfortunately, there are a few gotchas. You must provision the virtual machine initially without NFS so the NFS client can be installed, then you can enable NFS and run `vagrant reload` so you can begin using it. You must be running a UNIX-like operating system as your local machine, have an NFS server installed, and have `root` access via `sudo` for Vagrant to automatically configure NFS sharing.
+* Set the amount of memory to dedicate to the virtual machine to 768 megabytes. The appropriate amount will depend on how much memory you have available versus how much processes within the virtual machine need. If running `bundler` or `gem` results in an "out of memory" error you may need to increase this.
 
-        NFS = true
-
-* Set the virtual machine's IP address to `33.33.31.13`, which is useful if you want to SSH into the virtual machine by IP, rather than using `vagrant ssh`. If you're not using overrides to set the address or enable NFS, the address will be randomly assigned by VirtualBox.
-
-        ADDRESS = "33.33.31.13"
-
-* Set the amount of memory to dedicate to the virtual machine to 512 megabytes. The appropriate amount will depend on how much memory you have available versus how much processes within the virtual machine need. In general, running `bundler` or `gem` in the virtual machine will require at least 512 megabytes:
-
-        MEMORY = 512
-
-### Provisioning
-
-You can customize your virtual machine by creating a `vagrant/cookbooks/vagrant/recipes/local.rb` file. This file is local to your computer and should not be added to revision control.
-
-This file can contain any valid Chef recipe code, and will be applied when a virtual machine is first created using `vagrant up` or any time you run `vagrant reload`. This custom code will be run after all the other operating system packages have been installed, but before Bundler is run -- see `vagrant/cookbooks/vagrant/recipes/default.rb` for additional context.
-
-For example, you could add the following to install the `emacs` package on your virtal machine:
-
-    package "emacs"
+        MEMORY = 768
