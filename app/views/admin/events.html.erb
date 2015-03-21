@@ -1,0 +1,28 @@
+<h2>Lock Events</h2>
+
+<p>Locking an event prevents editing or deleting it.</p>
+
+<table style="width: 60%; border: 1px solid black;">
+  <thead>
+    <tr style="background-color: #ccc;">
+      <th>Event name</th>
+      <th>Date</th>
+      <th>&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @events.each do |event| %>
+    <tr>
+      <td style="border: 1px solid gray"><%= link_to event.title, event_path(event) %></td>
+      <td style="border: 1px solid gray"><%= event.start_time %></td>
+      <td style="border: 1px solid gray">
+        <% if event.locked %>
+        <%= button_to "Unlock", lock_event_path(:event_id => event.id) %>
+        <% else %>
+        <%= button_to "Lock", lock_event_path(:event_id => event.id) %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

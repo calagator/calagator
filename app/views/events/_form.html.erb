@@ -6,25 +6,18 @@
 %>
 
 <% content_for :css_insert do %>
-  <%= stylesheet_link_tag \
-    "datepicker",
-    "timePicker"
-  %>
+  <%= stylesheet_link_tag 'forms' %>
 <% end %>
 
 <% content_for :javascript_insert do %>
-  <%= javascript_include_tag \
-    'jquery-ui.js',
-    'date-functions.js',
-    'jquery.timePicker.js'
-  %>
+  <%= javascript_include_tag 'forms' %>
   <script>
     var completed_title = '';
     $(document).ready(function(){
-      
+
       // Initialize autocompletion for venues
       $("input.autocomplete").attr('autocomplete', 'off').autocomplete({
-        source: "/venues.js",
+        source: "/venues/autocomplete.json",
         minLength: 2,
         search: function(event, ui) {
           //$("#event_venue_loading").show();
@@ -40,36 +33,32 @@
         var short_address = (item.street_address && item.street_address.length > 0)
                               ? item.street_address+", "+item.locality+" "+item.region
                               : item.address;
-        return $( "<li><a><strong>"+item.title+"</strong><br />"+short_address+"</a></li>" )
+        return $( "<li><a href='javascript:void(0);'><strong>"+item.title+"</strong><br />"+short_address+"</a></li>" )
                 .data( "item.autocomplete", item )
                 .appendTo(ul);
       };
-      
+
       // Initialize date and time pickers
       $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
-      $('.time_picker').timePicker({
-        show24Hours:false,
-        separator:':',
-        step: 30});
+      $('.time_picker').timepicker({ 'timeFormat': 'g:i A' });
 
-      // Update "time_end" to have the same offset from "time_start" if the "time_start" changes, and displays a highlight to alert the user.
-      var oldTime = $.timePicker("#time_start").getTime();
+      // Update "time_end" to maintain the same offset from "time_start" if "time_start" changes, and display a highlight to alert the user.
+      var oldTime = $("#time_start").timepicker('getTime');
       $("#time_start").change(function() {
         if ($("#time_end").val()) { // Only update when second input has a value.
-          // Calculate duration.
-          var duration = ($.timePicker("#time_end").getTime() - oldTime);
-          var time = $.timePicker("#time_start").getTime();
+          var duration = ($("#time_end").timepicker('getTime') - oldTime);
+          var newTime = $("#time_start").timepicker('getTime');
           // Calculate and update the time in the second input.
-          $.timePicker("#time_end").setTime(new Date(new Date(time.getTime() + duration)));
+          $("#time_end").timepicker('setTime', new Date(newTime.getTime() + duration));
           $('#time_end').effect('highlight', {}, 3000);
-          oldTime = time;
+          oldTime = newTime;
         }
       });
 
-      // Update "date_end" so that it is the same as "date_start" if "date_start" is changed to after "date_end", and displays a highlight to alert the user..
+      // Update "date_end" so that it is the same as "date_start" if "date_start" is changed to after "date_end", and displays a highlight to alert the user.
       $("#date_start").change(function() {
         // Only update when end value is defined.
-        if ($("#date_end").val()) { 
+        if ($("#date_end").val()) {
           // Only update when end value is before start value.
           var startDate = $.datepicker.parseDate('yy-mm-dd', $('#date_start').val());
           var endDate = $.datepicker.parseDate('yy-mm-dd', $('#date_end').val());
@@ -96,7 +85,7 @@
     <%= f.input :title, :label => "Event Name" %>
     <% focus_on '#event_title' %>
     <li class="string input required stringish" id="event_venue_title_input">
-      <%= f.label :venue_id, "Venue", :class => 'label' %>
+      <%= label_tag :venue_name, "Venue", :class => 'label' %>
       <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !event.venue.nil? ? event.venue.title : params[:venue_name] %>
       <%= hidden_field(:event, :venue_id, :value => (!event.venue.nil? ? event.venue.id : params[:event_venue_id])) %>
       <%= image_tag "spinner.gif", :id=> "event_venue_loading", :style => "display: none; margin-left: 0.5em;" %>
@@ -134,8 +123,8 @@
       <%= text_field_tag 'trap_field', params[:trap_field] %>
     </li>
   <% end %>
-  <%= f.buttons do %>
-    <%= f.commit_button :label => "Preview", :button_html => {:name => 'preview'} %>
-    <%= f.commit_button %>
+  <%= f.actions do %>
+    <%= f.action :submit, :label => "Preview", :button_html => {:name => 'preview'} %>
+    <%= f.action :submit %>
   <% end %>
 <% end %>

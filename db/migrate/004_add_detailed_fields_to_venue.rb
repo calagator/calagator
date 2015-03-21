@@ -14,8 +14,6 @@ class AddDetailedFieldsToVenue < ActiveRecord::Migration
   end
 
   def self.down
-    for field in %w(street_address locality region postal_code country latitude longitude email telephone)
-      remove_column :venues, field
-    end
+    remove_columns :venues, :street_address, :locality, :region, :postal_code, :country, :latitude, :longitude, :email, :telephone
   end
 end

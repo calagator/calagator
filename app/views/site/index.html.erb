@@ -7,32 +7,34 @@
     <%= render :partial => "description" %>
   </div>
 
-  <% tags =
-        @tagcloud_items_deferred.call.map{ |item|
-          tag_link(:event, item[:tag], "tagcloud_level_#{item[:level]}") 
-        }.join('<span class="spacer"> &middot; </span>').html_safe -%>
-  <% if tags.present? %>
+  <% if @overview.tags.present? %>
     <div id="tagcloud">
       <h2>Popular tags</h2>
-      <%= tags -%>
+      <% tag_cloud @overview.tags, %w(tagcloud_level_0 tagcloud_level_1 tagcloud_level_2 tagcloud_level_3 tagcloud_level_4) do |tag, css_class| %>
+        <%= link_to tag.name, search_events_path(tag: tag.name), class: css_class %>
+        <span class="spacer">&middot;</span>
+      <% end %>
     </div>
   <% end %>
 </div>
 
 <div id="whats_happening">
   <h1>What's happening?</h1>
-  <div id='coming_events'>
+  <h3><%= link_to("View All &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) if @overview.more %></h3>
+  <div class='coming_events' id='today'>
     <h3>Today</h3>
-      <%= render 'events/list', :events => @times_to_events[:today], :dates => false %>
+      <%= render 'events/list', :events => @overview.today, :dates => false %>
+  </div>
+  <div class='coming_events' id='tomorrow'>
     <h3>Tomorrow</h3>
-    <%= render 'events/list', :events => @times_to_events[:tomorrow], :dates => false %>
+    <%= render 'events/list', :events => @overview.tomorrow, :dates => false %>
   </div>
-  <div id='recently_added_events'>
+  <div id='next_two_weeks'>
     <h3>Next two weeks</h3>
-    <%= render 'events/list', :events => @times_to_events[:later] %>
+    <%= render 'events/list', :events => @overview.later %>
   </div>
-  <div id='recently_added_events'>
-    <h3><%= link_to("View future events &raquo;".html_safe, events_path(:anchor => "event-#{@times_to_events[:more].id}")) if @times_to_events[:more] %></h3>
+  <div>
+    <h3><%= link_to("View future events &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) if @overview.more %></h3>
   </div>
 </div>
 <% end %>

@@ -10,14 +10,15 @@ url: 'http://calagator.org/'
 # Default timezone, run "rake -D time" for information on how to display known timezones:
 timezone: 'Pacific Time (US & Canada)'
 
-# Google map to display on /venues page:
-venues_google_map_options:
+# Precompile additional theme assets (theme.js, theme.css, and images already included):
+precompile_assets:
+  - 'mobile.css'
+  - 'print.css'
+
+# Map to display on /venues page:
+venues_map_options:
   # Zoom magnification level:
   zoom: 12
-  # Center of the map, in latitude and longitude:
+  # Center of the map, in latitude and longitude.
+  # If no center is specified, the map will zoom to fit all markers.
   center: [45.518493, -122.660737]
-
-# Array of tag names to exclude from tag cloud:
-tagcloud_exclusions:
-  - ostartupskey
-  - tvg

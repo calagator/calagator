@@ -1,5 +1,6 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
+  include TimeRangeHelper
 
   # Returns HTML string of an event or venue description for display in a view.
   def format_description(string)
@@ -31,64 +32,19 @@ module ApplicationHelper
     time.strftime(format).gsub(/\*0*/,'').html_safe
   end
 
-  # Returns HTML for a Google map containing the +locatable_items+.
-  #
-  # Adapt the gmaps_on_rails plugin to talk to our locatable items.
-  # Return markup containing a Google map with markers for these items, or
-  # nil if no items have locations.
-  # - "locatable_items" can be one item or an array of them.
-  # - A locatable item is anything that responds_to? :location and
-  #   :title (yes, our Events and Venues both qualify).
-  # - A locatable item with a nil location will be ignored
-  #
-  # The plugin uses Google Maps automatic zooming to set the scale, but
-  # the little overview map obscures such a big chunk of the main map that
-  # it's likely to hide some of our markers, so it's off by default.
-  def google_map(locatable_items, options={})
-    return nil if defined?(GOOGLE_APPLICATION_ID) == nil
-    options[:controls] ||= [:zoom, :scale, :type] # the default, minus :overview
-    options[:zoom] ||= 14
-
-    # Make the map and our marker(s)
-    map = GoogleMap.new(options)
-    icon = GoogleMapSmallIcon.new('green')
-    [locatable_items].flatten.each do |locatable_item|
-      location = locatable_item.location
-      if location
-        map.markers << GoogleMapMarker.new(:map => map,
-          :lat => location[0], :lng => location[1],
-          :html => link_to(locatable_item.title, locatable_item),
-          :icon => icon)
-      end
-    end
-    (map.to_html + map.div(nil)).html_safe unless map.markers.empty?
-  end
-
-  # Retrun a string describing the source code version being used, or false/nil if it can't figure out how to find the version.
   def self.source_code_version_raw
-    begin
-      if File.directory?(Rails.root.join(".svn"))
-        s = `svn info 2>&1`
-        m = s.match(/^Revision: (\d+)/s)
-        return " - SVN revision: #{m[1]}"
-      elsif File.directory?(Rails.root.join(".git"))
-        s = `git log -1 --format=medium 2>&1`
-        m = s.match(/^Date: (.+?)$/s)
-        return " - Git timestamp: #{m[1]}"
-      elsif File.directory?(Rails.root.join(".hg"))
-        s = `hg id -nibt 2>&1`
-        return " - Mercurial revision: #{s}"
-      end
-    rescue Errno::ENOENT
-      # Platform (e.g., Windows) has the checkout directory but not the command-line command to manipulate it.
-      return ""
-    end
+    # Return a string describing the source code version being used
+    return "" unless system("git status 2>&1 >/dev/null")
+    " - Git timestamp: #{`git log -1 --format=format:"%ad" 2>&1`}"
+  rescue Errno::ENOENT
+    # Fail quietly if that didn't work; we don't want to get in the way.
+    ""
   end
 
   ApplicationController::SOURCE_CODE_VERSION = self.source_code_version_raw
 
   def source_code_version
-    return ApplicationController::SOURCE_CODE_VERSION
+    ApplicationController::SOURCE_CODE_VERSION
   end
 
   # returns html markup with source (if any), imported/created time, and - if modified - modified time
@@ -149,23 +105,6 @@ module ApplicationHelper
     return escape_once(string)
   end
 
-  def tag_links_for(model)
-    model.tags.map{|tag| tag_link(model.class.name.downcase.to_sym, tag)}.join(', ').html_safe
-  end
-
-  def tag_link(type, tag, link_class=nil)
-    internal_url = \
-      case type
-      when :event then search_events_path(:tag => tag.name)
-      when :venue then venues_path(:tag => tag.name)
-      end
-
-    link_classes = [link_class]
-    link_classes << "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" if tag.machine_tag[:url]
-
-    link_to escape_once(tag.name), (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
-  end
-
   def subnav_class_for(controller_name, action_name)
     return [
       "#{controller.controller_name}_#{controller.action_name}_subnav",
@@ -177,46 +116,6 @@ module ApplicationHelper
 
   # String name of the mobile preference cookie's name, e.g. "calagator_mobile".
   MOBILE_COOKIE_NAME = "#{SECRETS.session_name}_mobile"
-
-  # Returns mobile stylesheet's :media option, which can be overriden by params or cookies.
-  #
-  # If user provides a "mobile" param to certain values, rendering will be affected:
-  # * "1" forces mobile rendering and saves this preference as a cookie.
-  # * "0" forces non-mobile rendering and saves this preference as a cookie.
-  # * "-1" forces default rendering and clears any previous prefernece cookie.
-  #
-  # Example:
-  #    theme_stylesheet_link_tag 'mobile', :media => mobile_stylesheet_media("only screen and (max-device-width: 960px)") %>
-  def mobile_stylesheet_media(default)
-    # TODO Figure out if it's possible to use the same handling for Rails "cookies" and Rspec "request.cookies", which seem to have totaly different behavior and no relationship to each other, which makes testing rather awkward.
-    expiration = 1.year.from_now
-    cookie = {:expires => expiration}
-    cookie_name = MOBILE_COOKIE_NAME
-
-    case params[:mobile]
-    when "1", "true", 1, true
-      cookies[cookie_name] = cookie.merge(:value => "1")
-      request.cookies[cookie_name] = "1"
-      return :all
-    when "0", "false", 0, false
-      cookies[cookie_name] = cookie.merge(:value => "0")
-      request.cookies[cookie_name] = "0"
-      return false
-    when "-1"
-      request.cookies.delete(cookie_name)
-      cookies.delete(cookie_name)
-      return default
-    else
-      case cookies[cookie_name] || request.cookies[cookie_name]
-      when "1"
-        return :all
-      when "0"
-        return false
-      else
-        return default
-      end
-    end
-  end
 
   # CGI escape a string-like object. The issue is that CGI::escape fails if used on a RailsXss SafeBuffer: https://github.com/rails/rails_xss/issues/8
   def cgi_escape(data)

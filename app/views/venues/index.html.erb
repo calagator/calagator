@@ -1,4 +1,7 @@
+<%= content_for :title, "Venues" %>
+
 <% tabindex_on '#search_field' %>
+
 <div id="venues_index">
 <h1>Venues</h1>
 <div id='venues_search'>
@@ -6,10 +9,10 @@
   <%= form_tag venues_path, :method => 'get' do %>
     <div class='keywords'>
       <%= label_tag :query, "Keywords" %>
-      <%= text_field_tag :query, params[:query] %>
+      <%= text_field_tag :query, @search.query %>
     </div>
     <div class='wifi'>
-      <%= check_box_tag :wifi, '1', params[:wifi] %>
+      <%= check_box_tag :wifi, '1', @search.wifi %>
       <%= label_tag :wifi, "Public WiFi" %>
     </div>
 
@@ -19,28 +22,28 @@
   <% end %>
 </div>
 
-<% if @venues %>
+<% if @search.results? %>
   <div id='venues_search_results'>
-    <div id='list_description'>
-      <% if @tag %>
-        <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%= @tag %></strong></h2>
+    <div class='list_description'>
+      <% if @search.tag %>
+        <h2>Showing <strong><%= @venues.size %></strong> venues tagged with <strong><%= @search.tag %></strong></h2>
       <% else -%>
         <h2>
           <% if @venues.size == 0 -%>
             Sorry, there are no venues
           <% else -%>
-            Showing <%= "all " if params[:all] %><strong><%= @venues.size %></strong> <%= 'venue'.pluralize(@venues.size) %>
+            Showing <%= "all " if @search.all %><strong><%= @venues.size %></strong> <%= 'venue'.pluralize(@venues.size) %>
           <% end %>
-          <% if params[:query].present? %>
-            matching &#8220;<%= params[:query] %>&#8221;
+          <% if @search.query.present? %>
+            matching &#8220;<%= @search.query %>&#8221;
           <% end %>
-          <%= "with public WiFi" if params[:wifi] %>
+          <%= "with public WiFi" if @search.wifi %>
         </h2>
       <% end -%>
     </div>
 
     <ul>
-      <% for venue in @venues %>
+      <% @venues.each do |venue| %>
         <li>
           <%= link_to(venue.title, venue_url(venue)) %>
           <% if venue.has_full_address? %>
@@ -55,7 +58,7 @@
     <div id='most_active'>
       <h3>Most Active</h3>
       <ul>
-        <% for venue in @most_active_venues %>
+        <% @search.most_active_venues.each do |venue| %>
           <li>
             <%= link_to(venue.title, venue_url(venue)) %>
             <p class='detail'><%= venue.events_count %> events</p>
@@ -66,7 +69,7 @@
     <div id='newest'>
       <h3>Newest</h3>
       <ul>
-        <% for venue in @newest_venues %>
+        <% @search.newest_venues.each do |venue| %>
           <li>
             <%= link_to(venue.title, venue_url(venue)) %>
             <p class='detail'>Added <%= time_ago_in_words(venue.created_at) %> ago</p>

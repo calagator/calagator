@@ -5,9 +5,7 @@
     <%= f.input :url %>
     <%= f.input :reimport, :label => "Re-import?" %>
   <% end %>
-  <%= f.buttons do %>
-    <%= f.submit "Update" %>
-  <% end %>
+  <%= f.actions :submit %>
 <% end %>
 
 <%= link_to 'Show', @source %> |

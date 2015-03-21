@@ -1,15 +1,11 @@
 class SpecifyVenuesLatitudeAndLongitudePrecision < ActiveRecord::Migration
-  FIELDS = %w[latitude longitude].map(&:to_sym)
-
   def up
-    for field in FIELDS
-      change_column :venues, field, :decimal, :precision => 7, :scale => 4
-    end
+    change_column :venues, :latitude,  :decimal, :precision => 7, :scale => 4
+    change_column :venues, :longitude, :decimal, :precision => 7, :scale => 4
   end
 
   def down
-    for field in FIELDS
-      change_column :venues, field, :decimal
-    end
+    change_column :venues, :latitude,  :decimal
+    change_column :venues, :longitude, :decimal
   end
 end

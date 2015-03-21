@@ -29,6 +29,7 @@ db/schema.rb
 index/*
 log/*
 nbproject/*
+public/assets
 public/images/active_scaffold
 public/images/record_select
 public/javascripts/active_scaffold
@@ -39,15 +40,9 @@ public/stylesheets/all.css
 public/stylesheets/record_select
 public/themes/
 solr/data/*
+solr/pids/*
 tags
 tmp/*
-tmp/cache/*
-tmp/pids/*
-tmp/sessions/*
-tmp/sockets/*
 vagrant/cookbooks/vagrant/recipes/local.rb
-vendor/plugins/acts_as_solr/solr/logs/*
-vendor/plugins/acts_as_solr/solr/solr/data/*
-vendor/plugins/acts_as_solr/solr/tmp/*
 .ruby-gemset
 .ruby-version

@@ -3,7 +3,7 @@
 # Allow visits to all pages, except the edit forms
 User-Agent: *
 Disallow: /omfg
-Disallow: /recent_changes
+Disallow: /changes
 Disallow: /sources
 Disallow: /sources/import
 Disallow: /sources/new

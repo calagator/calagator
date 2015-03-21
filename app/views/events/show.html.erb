@@ -1,11 +1,20 @@
+<%= content_for :title, @event.title %>
+
 <% tabindex_on '#search_field' %>
 
 <% content_for :discovery_insert do %>
   <link rel="alternate" type="application/x-wiki" title="Edit this page" href="<%= edit_event_url(@event) %>" />
 <% end %>
 
+<% content_for :open_graph_tags do %>
+  <meta property="og:title" content="<%= @event.title %>" />
+  <meta property="og:description" content="<%= @event.description %>" />
+  <meta property="og:site_name" content="<%= SETTINGS.name %>" />
+  <meta property="og:url" content="<%= event_url(@event) %>">
+<% end %>
+
 <% content_for :javascript_insert do %>
-  <script src="/javascripts/mustache.js" type="text/javascript"></script>
+  <%= javascript_include_tag 'mustache' %>
   <script type='text/javascript'>
     $(function() {
       var plan = $('.external.plancast.plan:first');
@@ -25,6 +34,7 @@
   </script>
 <% end %>
 
+
 <a href="#" id="event_sidebar_toggle" class="expander_toggle">Export or edit this event...</a>
 
 <div id="event_sidebar" class='single_view_right sidebar'>
@@ -35,7 +45,6 @@
     <li>
       <%= link_to_function 'hCalendar markup', '$("#hcal_field").toggle()' %>
       <div id="hcal_field" style="display: none;">
-        <%# TODO: Do we actually want to keep providing this? %>
         <%= text_area_tag 'hCalendar',
           h(
             render :partial => 'hcal',
@@ -50,6 +59,9 @@
   </ul>
 <hr />
   <div id='edit_link'>
+    <% if @event.locked %>
+    <p>This event is currently locked and cannot be edited. Please contact an admin for assistance.</p>
+    <% else %>
     <p>
       You can 
       <%= link_to "edit", edit_event_url(@event) %>,
@@ -58,6 +70,7 @@
       <%= link_to "delete", event_url(@event), :method => :delete, :confirm => "Are you sure?" %>
       this event.
     </p>
+    <% end %>
   </div>
 <hr />
   <div id='metadata'>

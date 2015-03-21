@@ -1,4 +1,7 @@
-[![Build Status](https://secure.travis-ci.org/calagator/calagator.png)](http://travis-ci.org/calagator/calagator)
+[![Build Status](https://travis-ci.org/calagator/calagator.svg?branch=master)](http://travis-ci.org/calagator/calagator)
+[![Code Climate](https://codeclimate.com/github/calagator/calagator.png)](https://codeclimate.com/github/calagator/calagator)
+[![Coverage Status](https://coveralls.io/repos/calagator/calagator/badge.png)](https://coveralls.io/r/calagator/calagator)
+[![Dependency Status](https://gemnasium.com/calagator/calagator.svg)](https://gemnasium.com/calagator/calagator)
 
 
 Calagator
@@ -13,8 +16,9 @@ Calagator is an open source community calendaring platform:
   * [Calagator.org](http://calagator.org/) is the flagship website running this software.
   * [Source code](http://github.com/calagator/calagator/) is available.
   * [Mailing list](http://groups.google.com/group/pdx-tech-calendar/) for discussion about the software.
-  * [Wiki](http://code.google.com/p/calagator/) features many useful articles on using and developing.
-  * [Issue tracker](http://code.google.com/p/calagator/issues/list) lists outstanding issues and
+  * [Development mailing list](http://groups.google.com/group/calagator-development/) for discussion of patches, code discussion, and other development issues.
+  * [Wiki](https://github.com/calagator/calagator/wiki) features many useful articles on using and developing.
+  * [Issue tracker](https://github.com/calagator/calagator/issues?state=open) lists outstanding issues.
 
 
 Why
@@ -40,6 +44,9 @@ Contributing
 
 Bug fixes and features are welcomed. Please fork the source code and submit a pull request: <http://github.com/calagator/calagator/tree/master>
 
+When you make a pull request, make sure to add your name to the list of contributors in [CONTRIBUTORS.md](http://github.com/calagator/calagator/blob/master/CONTRIBUTORS.md).
+
+All Calagator contributors are expected to read and follow our [code of conduct](https://github.com/calagator/calagator/wiki/Code-of-Conduct).
 
 Contributors
 ------------
@@ -56,4 +63,4 @@ This program is provided under an MIT open source license, read the [LICENSE.txt
 Copyright
 ---------
 
-Copyright (c) 2007-2012 Calagator
+Copyright (c) 2007-2015 Calagator

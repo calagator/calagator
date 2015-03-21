@@ -5,12 +5,19 @@ Calagator::Application.routes.draw do
   match 'about' => 'site#about'
 
   match 'opensearch.:format' => 'site#opensearch'
+  match 'defunct' => 'site#defunct'
+
+  match 'admin' => 'admin#index'
+  get "admin/index"
+  get "admin/events"
+  match "lock_event" => "admin#lock_event", :only => :post
 
   resources :events do
     collection do
-      post :squash_multiple_duplicates
+      post :squash_many_duplicates
       get :search
       get :duplicates
+      match 'tag/:tag', via: :get, to: :search, as: :tag
     end
 
     member do
@@ -20,15 +27,17 @@ Calagator::Application.routes.draw do
 
   resources :sources do
     collection do
-      put :import
+      post :import
     end
   end
 
   resources :venues do
     collection do
-      post :squash_multiple_duplicates
+      post :squash_many_duplicates
       get :map
       get :duplicates
+      get :autocomplete
+      match 'tag/:tag', via: :get, to: :search, as: :tag
     end
   end
 
@@ -44,7 +53,4 @@ Calagator::Application.routes.draw do
   match '/index' => 'site#index'
   match '/index.:format' => 'site#index'
 
-  themes_for_rails
-
-  match '/:controller(/:action(/:id))'
 end

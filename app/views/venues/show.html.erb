@@ -1,3 +1,5 @@
+<%= content_for :title, @venue.title %>
+
 <% tabindex_on '#search_field' %>
 
 <% content_for :discovery_insert do %>
@@ -14,6 +16,9 @@
         this venue.
       </p>
     </div>
+    <hr />
+    <p>Download an <%= link_to "iCalendar file", venue_url(@venue, :format => :ics) %> or
+    <%= link_to "subscribe to a feed", venue_url(@venue, :format => :ics, :protocol => "webcal") %> of events at this venue.</p>
     <hr />
     <div class="metadata">
       <%= datestamp(@venue) %>
@@ -91,18 +96,18 @@
   <% end %>
 
   <div id="google_map">
-    <%= google_map @venue %>
+    <%= map @venue %>
   </div>
 
   <div id='events'>
     <div id='future_events'>
       <h2>Future events happening here</h2>
-      <%= render :partial => 'events/list', :locals => { :events => @future_events } %>
+      <%= render :partial => 'events/list', :locals => { :events => @venue.future_events } %>
     </div>
 
     <div id='past_events'>
       <h2>Past events that happened here</h2>
-      <%= render :partial => 'events/list', :locals => { :events => @past_events } %>
+      <%= render :partial => 'events/list', :locals => { :events => @venue.past_events } %>
     </div>
   </div>
 </div>

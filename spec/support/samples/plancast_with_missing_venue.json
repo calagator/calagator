@@ -1,0 +1,39 @@
+{
+    "attendance_url": "http:\/\/plancast.com\/p\/3cos",
+    "attendance_id": "74ry",
+    "attendance_created_at": "Fri Dec 31 23:12:54 +0000 2010",
+    "attendance_created_since": "5 months, 3 weeks",
+    "attendee": {
+        "id": 9544,
+        "name": "Tantek \u00c7elik",
+        "username": "t",
+        "pic_square": "http:\/\/a3.twimg.com\/profile_images\/574754189\/ca-sci-t_normal.jpg",
+        "pic_square_big": "http:\/\/a3.twimg.com\/profile_images\/574754189\/ca-sci-t_normal.jpg",
+        "pic": "http:\/\/a1.twimg.com\/profile_images\/574754189\/ca-sci-t.jpg"
+    },
+    "plan_url": "http:\/\/plancast.com\/p\/3cos",
+    "plan_id": "3cos",
+    "plan_created_at": "Fri Dec 31 23:12:54 +0000 2010",
+    "plan_created_since": "5 months, 3 weeks",
+    "creator": {
+        "id": 9544,
+        "name": "Tantek \u00c7elik",
+        "username": "t",
+        "pic_square": "http:\/\/a3.twimg.com\/profile_images\/574754189\/ca-sci-t_normal.jpg",
+        "pic_square_big": "http:\/\/a3.twimg.com\/profile_images\/574754189\/ca-sci-t_normal.jpg",
+        "pic": "http:\/\/a1.twimg.com\/profile_images\/574754189\/ca-sci-t.jpg"
+    },
+    "text": "I've made plans for IndieWebCamp http:\/\/plancast.com\/p\/3cos",
+    "what": "IndieWebCamp",
+    "when": "June 25-26, 2011",
+    "where": "The Center of the Earth",
+    "start": 1308960000,
+    "stop": 1309132800,
+    "external_url": "http:\/\/indiewebcamp.com",
+    "description": "RSVP on the IndieWebCamp wiki. http:\/\/indiewebcamp.com\/Guest_List\n\nRather than posting content on many third-party silos of data, we should all begin owning our own data that we're creating when we create it. Publish short status updates first on your own domain, and then syndicate to Twitter. Publish photos on your own domain, then syndicate to Flickr, etc, etc.\n\nThis is the basis of the \"Indie Web\" movement. We'll get together for a day and a half to talk about what has been done in the field, and what still needs to be done. There will be workshops and breakout sessions the second day.",
+    "is_attending": 0,
+    "attendees_count": 76,
+    "attendees": null,
+    "comments_count": 24,
+    "comments": null
+}

@@ -2,6 +2,10 @@ require 'geokit'
 
 # CALAGATOR: Differences from the defaults are tagged like this below.
 
+# remap Google V3 geocoder so we can reference it in provider list, see:
+# https://github.com/geokit/geokit/issues/86
+Geokit::Geocoders::Google3Geocoder = Geokit::Geocoders::GoogleGeocoder3
+
 # These defaults are used in GeoKit::Mappable.distance_to and in acts_as_mappable
 GeoKit::default_units = :miles
 GeoKit::default_formula = :sphere
@@ -30,17 +34,17 @@ GeoKit::Geocoders::yahoo = 'REPLACE_WITH_YOUR_YAHOO_KEY'
 # and http://www.google.com/apis/maps/documentation/#Geocoding_Examples
 #
 # CALAGATOR: was GeoKit::Geocoders::google = 'REPLACE_WITH_YOUR_GOOGLE_KEY',
-# but since each developer needs their own, we get it from an (optional)
-# separate file.
+# but since each developer needs their own, we get it from the secrets file.
 #
-# CALAGATOR: We also assign the key to GOOGLE_APPLICATION_ID to make
-# the gmaps_on_rails plugin happy.
-#
-keys_path = Rails.root.join('config','geocoder_api_keys.yml')
-if File.exist? keys_path
-  geocoder_api_keys = YAML.load_file(keys_path)
-  GeoKit::Geocoders::google = GOOGLE_APPLICATION_ID = \
-    geocoder_api_keys.fetch(Rails.env,{})['google']
+google_key = SECRETS.mapping && SECRETS.mapping["google_maps_api_key"]
+old_keys_path = Rails.root.join('config','geocoder_api_keys.yml')
+
+if google_key
+  GeoKit::Geocoders::google = google_key
+elsif File.exist? old_keys_path
+  raise "Loading keys from config/geocoder_api_keys.yml is deprecated. Please use config/secrets.yml instead."
+else
+  puts "Warning: No Google Maps API key was set. Geocoding will not function."
 end
 
 # This is your username and password for geocoder.us.
@@ -67,4 +71,4 @@ GeoKit::Geocoders::geocoder_ca = false
 #
 # CALAGATOR: was [:google, :us], but this is all we need since we're Google-only.
 #
-GeoKit::Geocoders::provider_order = [:google]
+GeoKit::Geocoders::provider_order = [:google3]

@@ -10,15 +10,13 @@ class SiteController < ApplicationController
   end
 
   def index
-    @times_to_events = Event.select_for_overview
-    @tagcloud_items_deferred = lambda { ActsAsTaggableOn::Tag.for_tagcloud }
-
+    @overview = Event::Overview.new
     respond_to do |format|
-      format.html { } # Default
-      format.any  { redirect_to(events_path(:format => params[:format])) }
+      format.html { }
+      format.any  { redirect_to events_path(format: params[:format]) }
     end
   end
-  
+
   # Displays the about page.
   def about; end
 
@@ -26,5 +24,8 @@ class SiteController < ApplicationController
     respond_to do |format|
       format.xml { render :content_type => 'application/opensearchdescription+xml' }
     end
+  end
+
+  def defunct
   end
 end

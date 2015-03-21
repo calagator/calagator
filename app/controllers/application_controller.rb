@@ -10,9 +10,20 @@ class ApplicationController < ActionController::Base
 
   # Setup theme
   layout "application"
-  theme THEME_NAME # DEPENDENCY: lib/theme_reader.rb
+
+  before_filter :set_theme
 
 protected
+
+  def self.require_admin(options = {})
+    http_basic_authenticate_with(
+      options.reverse_merge(
+        :name => SECRETS.admin_username,
+        :password => SECRETS.admin_password,
+        :if => Proc.new { SECRETS.admin_username && SECRETS.admin_password }
+      )
+    )
+  end
 
   #---[ Helpers ]---------------------------------------------------------
 
@@ -40,6 +51,10 @@ protected
     else
       flash[kind] = "#{message}"
     end
+  end
+
+  def set_theme
+    prepend_view_path "themes/#{THEME_NAME}/views"
   end
 end
 

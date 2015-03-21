@@ -13,8 +13,5 @@ class CreateVenues < ActiveRecord::Migration
 
   def self.down
     drop_table :venues
-
-    remove_column :events, :venue_id
-    add_column :events, :location
   end
 end

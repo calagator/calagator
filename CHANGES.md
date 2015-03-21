@@ -16,6 +16,44 @@ Changes
 
 List of Calagator stable releases and changes, with the latest at the top:
 
+  * [master]
+  * v0.20150320
+    * [!] Dropped support for Ruby 1.8.7, and 1.9.3. Use Ruby 2.0+.
+    * Switched from outdated v2 Google Maps to a more flexible leaflet-based mapping system.
+      * [!] New mapping settings have been added to secrets.yml
+        If you wish to keep using Google as your map provider, you'll need to set your provider and add an API key to secrets.yml.
+      * [!] The "venues_google_map_options" setting in settings.yml has been renamed to venues_map_settings.
+      * [!] Loading Google API keys from config/geocoder_api_keys.yml has been deprecated. Use config/secrets.yml instead.
+      * [THEME] References to the #google_map div in stylesheets should be changed to #map.
+      * [THEME] Theme authors need to require the mapping javascript files in the layout:
+        Add `<%= javascript_include_tag *mapping_js_includes %>` just before your application javascript_include_tag.
+    * Updated to Rails 3.2.21
+    * Rewrote deployment scripts using [Capistrano 3](http://capistranorb.com)
+    * Streamlined navigation, collapsing "Overview" and "Browse Events"
+    * Added the ability to lock individual events from editing to prevent vandalism
+    * Added a unified admin tool list (/admin) with optional password protection. Includes changelog, duplicate squashing, and event locking.
+    * Added prettier tag URLs (e.g. /events/tag/ruby, and /venues/tag/office)
+    * Added friendlier error pages with a confused alligator
+    * Added tag icons
+    * Added database seeds to ease development
+    * Fixed search loading and reindexing
+    * Squashed wiggly bugs
+    * Gloriously increased test coverage
+    * Copiously refactored, improved code style, and swept up unused code
+    * Updated vagrant configuration to Ubuntu 14.04 and Ruby 2.1
+  * v0.20131020
+    * We now use the Rails 3.2 asset pipeline to compile assets.
+      * [!][THEME] Theme maintainers need to make a few small changes when upgrading.
+        See https://github.com/calagator/calagator/wiki/Asset-Pipeline-Theme-Upgrade for details.
+    * Improved venue search, backed by by SQL or Sunspot.
+      * [!] If you're running a Calagator instance using Sunspot for search, you'll want to run `rake sunspot:reindex` to index your venues.
+    * Added Twitter and Facebook share buttons to event pages
+    * Added ability to export all events at a given venue to iCalendar
+    * Fixed Google geocoder: v2 was deprecated, using v3 now
+    * Assed microformats2 markup to event pages
+    * Removed reliance on the rails default /:controller/:action/:id route
+    * [DEPENDENCY] Upgraded formtastic and other dependencies
+    * Updated spam blacklist.
   * v0.20130717
     * [DEPENDENCY] Upgraded to rails 3.2.13.
     * Fixed #30: Relax markdown emphasis parsing to avoid adding emphasis to words_containing_underscores.

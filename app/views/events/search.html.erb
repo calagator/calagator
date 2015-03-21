@@ -1,21 +1,25 @@
+<%= content_for :title do %>
+  <%= @search.tag ? "Events tagged with: #{@search.tag}" : "Search Results for: #{@search.query}" %>
+<% end %>
+
 <% tabindex_on '#search_field' %>
 
 <% content_for :discovery_insert do %>
-  <%= auto_discovery_link_tag(:atom, atom_feed_link(:query => @query, :tag => @tag), :title => "Atom: Search Results for '#{@query}'" )%>
+  <%= auto_discovery_link_tag(:atom, atom_feed_link(query: @search.query, tag: @search.tag), title: "Atom: Search Results for '#{@search.query}'" )%>
 <% end -%>
-<%= render :partial => 'search_section', :locals => {:description => "current", :events => @grouped_events[:current]} %>
-<%= render :partial => 'search_section', :locals => {:description => "past", :events => @grouped_events[:past]} %>
+<%= render partial: 'search_section', locals: { search: @search, section: :current } %>
+<%= render partial: 'search_section', locals: { search: @search, section: :past } unless @search.current %>
 
 <div id='list_filters' class='sidebar'>
   <h3>Subscribe to</h3>
   <ul>
-    <li><%= link_to "iCalendar feed", icalendar_feed_link(:query => @query, :tag => @tag) %></li>
-    <li><%= link_to "Atom feed", atom_feed_link(:query => @query, :tag => @tag) %></li>
-    <li><%= link_to "Google Calendar", google_events_subscription_link(:query => @query, :tag => @tag) %></li>
+    <li><%= link_to "iCalendar feed", icalendar_feed_link(query: @search.query, tag: @search.tag) %></li>
+    <li><%= link_to "Atom feed", atom_feed_link(query: @search.query, tag: @search.tag) %></li>
+    <li><%= link_to "Google Calendar", google_events_subscription_link(query: @search.query, tag: @search.tag) %></li>
   </ul>
 
   <h3>Export to</h3>
   <ul>
-    <li><%= link_to "iCalendar file", icalendar_export_link(:query => @query, :tag => @tag) %></li>
+    <li><%= link_to "iCalendar file", icalendar_export_link(query: @search.query, tag: @search.tag) %></li>
   </ul>
 </div>
