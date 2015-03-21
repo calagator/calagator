@@ -1,4 +1,4 @@
-Calagator::Application.routes.draw do
+Calagator::Engine.routes.draw do
   match 'omfg' => 'site#omfg'
   match 'hello' => 'site#hello'
 
@@ -52,5 +52,4 @@ Calagator::Application.routes.draw do
   match '/' => 'site#index', :as => :root
   match '/index' => 'site#index'
   match '/index.:format' => 'site#index'
-
 end

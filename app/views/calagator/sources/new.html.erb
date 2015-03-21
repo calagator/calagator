@@ -1,0 +1,32 @@
+<%= render :partial => 'calagator/site/appropriateness_message' %>
+
+<%= semantic_form_for(@source, :html => {:id => 'source_form', :class => 'standard_form'}, :url => { :action => :import }) do |f| %>
+  <%= f.inputs :name => "Import a source" do %>
+    <li class='input'>
+      <p class='inline-hints'>
+        Import one or more events from a feed or web page in one of the following formats:
+        <%= Calagator::Source::Parser.labels.to_sentence %>
+      </p>
+    </li>
+    <%= f.input :url, :label => "URL" %>
+    <% focus_on '#source_url' %>
+
+    <%# FIXME Igal has disabled reimport UI because people are adding almost all new events with re-import, which means that they're almost all generating duplicates and I'm completely overwhelmed with having to use the horrible squashing UI to deal with them. %>
+    <% if false %>
+      <%= f.input :reimport, :label => "Re-import?", :hint => "(Regularly check this source and import new events automatically?)" %>
+    <% end %>
+  <% end %>
+
+  <%= f.actions do %>
+    <%= f.action :submit, :label => "Import" %>
+  <% end %>
+
+  <%= f.inputs do %>
+    <li class='input'>
+      <p class='inline-hints'>
+      <b>Bookmarklet</b>: Import pages faster by adding the following bookmark to your browser's bookmarks and click it when you're visiting a webpage that contains events that you'd like to import:
+      <%= link_to "Add to #{Calagator.title}", "javascript:d=document;q=(d.location.href);w=window;location.href='#{new_source_url}?url='+escape(q);" %>
+      </p>
+    </li>
+  <% end %>
+<% end %>

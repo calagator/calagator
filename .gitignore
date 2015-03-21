@@ -9,9 +9,8 @@
 .dtach
 .rvmrc
 .vagrant
-Gemfile.local
-Gemfile.lock
 Makefile
+Gemfile.lock
 Vagrantfile.local
 config/database~custom.yml
 config/geocoder_api_keys.yml
@@ -46,3 +45,8 @@ tmp/*
 vagrant/cookbooks/vagrant/recipes/local.rb
 .ruby-gemset
 .ruby-version
+.bundle/
+pkg/
+spec/dummy
+.sass-cache
+.DS_Store

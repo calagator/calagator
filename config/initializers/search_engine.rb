@@ -1,4 +1,4 @@
 kind = SECRETS.search_engine.try(:to_sym)
 
-Event::SearchEngine.use(kind)
-Venue::SearchEngine.use(kind)
+Calagator::Event::SearchEngine.use(kind)
+Calagator::Venue::SearchEngine.use(kind)

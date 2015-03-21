@@ -1,0 +1,7 @@
+<%= content_for :title, "Add an Event" %>
+
+<div id="new_event_form">
+  <%= render :partial => 'calagator/site/appropriateness_message' %>
+
+  <%= render :partial => 'form', :locals => {:event => @event} %>
+</div>

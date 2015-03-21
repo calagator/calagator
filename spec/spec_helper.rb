@@ -1,4 +1,6 @@
-require 'factory_girl'
+if !File.exist?("spec/dummy")
+  raise "Missing dummy app in spec/dummy! Run bin/calagator new spec/dummy to generate one."
+end
 
 unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
   require 'simplecov'
@@ -12,6 +14,16 @@ unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using 
 end
 
 require "rails_helper"
+require "rspec-activemodel-mocks"
+require "rspec/its"
+require "rspec-rails"
+require "rspec/collection_matchers"
+require "factory_girl_rails"
+require "capybara"
+require "database_cleaner"
+require "capybara/poltergeist"
+require "timecop"
+require "webmock"
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
@@ -48,6 +60,9 @@ RSpec.configure do |config|
   end
 
   require 'capybara/poltergeist'
+  Capybara.register_driver :poltergeist do |app|
+    Capybara::Poltergeist::Driver.new(app, timeout: 90)
+  end
   Capybara.javascript_driver = :poltergeist
 
   # config.include(Capybara::Webkit::RspecMatchers, :type => :feature)
@@ -113,8 +128,8 @@ RSpec.configure do |config|
   # override this use "around"; we'll use "around" here too to ensure that
   # this block runs before the individual test's override.
   config.around do |example|
-    Event::SearchEngine.use(:sql)
-    Venue::SearchEngine.use(:sql)
+    Calagator::Event::SearchEngine.use(:sql)
+    Calagator::Venue::SearchEngine.use(:sql)
     example.run
   end
 

@@ -1,0 +1,51 @@
+<%= content_for :title, "Events" %>
+
+<% tabindex_on '#search_field' %>
+
+<% cache_if(@perform_caching, Calagator::CacheObserver.daily_key_for("events_index", request)) do %>
+<div class='list_description'>
+  <h2>Viewing <strong><%= @events.size %></strong>
+  <%= params[:date] ? 'filtered' : 'future' %> events
+  <%= events_sort_label(params[:order]) %></h2>
+</div>
+
+<div id='list_filters' class='sidebar'>
+  
+  <h3 class='first'>Filter by date</h3>
+
+  <%= form_tag events_url, :method => 'get' do  -%>
+  <div id="date_filter">
+    <div id='start_calendar'>
+      <label for='date_start'>From</label>
+      <%= text_field_tag 'date[start]', @start_date.strftime('%Y-%m-%d'), :id => 'date_start', :class => 'date_picker' %>
+    </div>
+    <div id='end_calendar'>
+      <label for='date_end'>To</label>
+      <%= text_field_tag 'date[end]', @end_date.strftime('%Y-%m-%d'), :id => 'date_end', :class => 'date_picker' %>
+    </div>
+    <div>
+      <label for="commit">&nbsp;</label>
+      <%= submit_tag 'Filter' %>
+      <span class="clear_filter"><%= link_to 'Reset', events_url %></span>
+    </div>
+  </div>
+  <% end %>
+  
+  <h3>Subscribe to</h3>
+  <ul>
+    <li><%= link_to "iCalendar feed", icalendar_feed_link %></li>
+    <li><%= link_to "Atom feed", atom_feed_link %></li>
+    <li><%= link_to "Google Calendar", google_events_subscription_link %></li>
+  </ul>
+
+  <h3>Export to</h3>
+  <ul>
+    <li><%= link_to "iCalendar file", icalendar_export_link %></li>
+  </ul>
+  
+</div>
+
+<div class='list_items'>
+  <%= render :partial => 'table', :locals => { :events => @events } %>
+</div>
+<% end %>

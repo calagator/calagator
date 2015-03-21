@@ -1,0 +1,63 @@
+<%
+# USAGE: Display a form for creating or editing an event.
+#
+# VARIABLES:
+# * event: An new or existing Event instance.
+%>
+
+<% if params[:preview] && event.valid? -%>
+<div id="event_preview">
+    <h2>Preview your event</h2>
+
+    <%= render :partial => "item", :locals => { :event => event, :has_contentbar => false } %>
+</div>
+<% end -%>
+
+<%= semantic_form_for(event, :html => {:id => 'event_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
+  <%= f.inputs :name => "#{'Editing: ' unless event.new_record?} <em>#{event.title}</em>".html_safe do %>
+    <%= f.input :title, :label => "Event Name" %>
+    <% focus_on '#event_title' %>
+    <li class="string input required stringish" id="event_venue_title_input">
+      <%= label_tag :venue_name, "Venue", :class => 'label' %>
+      <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !event.venue.nil? ? event.venue.title : params[:venue_name] %>
+      <%= hidden_field(:event, :venue_id, :value => (!event.venue.nil? ? event.venue.id : params[:event_venue_id])) %>
+      <%= image_tag "spinner.gif", :id=> "event_venue_loading", :style => "display: none; margin-left: 0.5em;" %>
+      <p class='inline-hints'>
+        Type the name of a venue to search. If it doesn't exist, we'll create it for you.
+      </p>
+    <li>
+    <li id="event_times" class='input'>
+      <%= f.label :when, "When", :class => 'label' %>
+      <%
+        present = Time.now
+        # Provide initial default values for the start_time and end_time rounded to the upcoming hour.
+        event.start_time ||= present + (60.minutes - present.min.minutes) - present.sec
+        event.end_time   ||= present + (60.minutes - present.min.minutes) - present.sec + 1.hour
+      %>
+        <%= text_field_tag 'start_date', event.start_time.to_date, :id => 'date_start', :class => 'date_picker' %>
+        <%= text_field_tag 'start_time', event.start_time.strftime('%I:%M %p'), :id => 'time_start', :class => 'time_picker' %>
+        <span class="to">to</span>
+        <%= text_field_tag 'end_time', event.end_time.strftime('%I:%M %p'), :id => 'time_end', :class => 'time_picker' %>
+        <%= text_field_tag 'end_date', event.end_time.to_date, :id => 'date_end', :class => 'date_picker' %>
+        <%= f.semantic_errors :start_date, :start_time, :end_date, :end_time %>
+    </li>
+    <%= f.input :url, :label => 'Website' %>
+    <%= f.input :description,
+                :input_html => {:rows => 12},
+                :hint => "(Format text using #{link_to("Markdown", "http://www.simpleeditions.com/59001/markdown-an-introduction", :target => "_blank")} and HTML)".html_safe %>
+    <%= f.input :venue_details, :required => false,
+                :input_html => {:rows => 4},
+                :hint => "(Event-specific details like the room number, or who to call to be let into the building.)" %>
+    <%= f.input :tag_list, :required => false,
+                :label => 'Tags',
+                :hint => "(Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>plancast:plan=ABCD</code> to associate this with a particular <a href='http://plancast.com/'>Plancast</a> event, or a tag like <code>epdx:group=1234</code> to associate the event with a particular <a href='http://epdx.org/'>ePDX</a> group)".html_safe %>
+    <li class='trap'>
+      <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
+      <%= text_field_tag 'trap_field', params[:trap_field] %>
+    </li>
+  <% end %>
+  <%= f.actions do %>
+    <%= f.action :submit, :label => "Preview", :button_html => {:name => 'preview'} %>
+    <%= f.action :submit %>
+  <% end %>
+<% end %>
