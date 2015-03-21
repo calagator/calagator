@@ -14,6 +14,8 @@ Gem::Specification.new do |s|
   s.description = "Calagator is an open source community calendaring platform"
   s.license     = "MIT"
 
+  s.required_ruby_version = ['>= 2.0.0', '< 2.2.0']
+
   s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENSE.txt", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
 
