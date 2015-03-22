@@ -17,6 +17,7 @@ Changes
 List of Calagator stable releases and changes, with the latest at the top:
 
   * [master]
+  * [!] Adopted a flat configuration format for easier Heroku deployment. See config/secrets.yml.sample.
   * v0.20150320
     * [!] Dropped support for Ruby 1.8.7, and 1.9.3. Use Ruby 2.0+.
     * Switched from outdated v2 Google Maps to a more flexible leaflet-based mapping system.
@@ -92,7 +93,7 @@ List of Calagator stable releases and changes, with the latest at the top:
   * v0.20120709
     * [!] This release drops support for 'acts_as_solr' search backend.  Please migrate to the 'sunspot' backend instead.
     * [DEPENDENCY] Upgraded most external dependencies.
-    * [MIGRATION] Remove obsolete tables and columns that may have been left behind. 
+    * [MIGRATION] Remove obsolete tables and columns that may have been left behind.
     * Improved compatibility with Ruby 1.9.x.
     * Improved tag cloud implementation and styling.
     * Improved ATOM output.
