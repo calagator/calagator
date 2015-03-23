@@ -1,8 +1,14 @@
 /*
- *= require ./reset
- *= require ./utils
- *= require ./forms
+ * First come the SCSS @imports below:
+ *= require_self
+ *
+ * Then come the external dependencies:
+ *
  *= require formtastic
  *= require font-awesome
  *= require leaflet.awesome-markers
  */
+
+@import 'reset';
+@import 'utils';
+@import 'forms';
