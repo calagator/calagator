@@ -1,6 +1,7 @@
 #!/usr/bin/env rake
 if !File.exist?("spec/dummy")
-  raise "Missing dummy app in spec/dummy! Run bin/calagator new spec/dummy to generate one."
+  puts "Missing dummy app in spec/dummy! Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one."
+  exit 1
 end
 
 require 'bundler/setup'
