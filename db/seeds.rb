@@ -65,6 +65,7 @@ FactoryGirl.define do
   end
 end
 
+puts "Seeding database with sample data..."
 FactoryGirl.create_list(:seed_venue, 25, :with_events)
 FactoryGirl.create_list(:seed_venue, 25)
 FactoryGirl.create_list(:seed_event, 25, :with_venue)
