@@ -10,6 +10,7 @@ module Calagator
       add_initializer
       add_javascripts
       add_stylesheets
+      add_seeds
       run 'rm -f public/index.html'
       unless options[:dummy]
         rake 'calagator:install:migrations'
@@ -38,6 +39,10 @@ module Calagator
 
     def add_stylesheets
       append_file 'app/assets/stylesheets/application.css', '//= require calagator'
+    end
+
+    def add_seeds
+      append_file 'db/seeds.rb', 'Calagator::Engine.load_seed'
     end
   end
 end
