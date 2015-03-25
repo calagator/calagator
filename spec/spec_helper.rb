@@ -14,6 +14,7 @@ unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using 
 end
 
 require "rails_helper"
+require "sass"
 require "rspec-activemodel-mocks"
 require "rspec/its"
 require "rspec-rails"
