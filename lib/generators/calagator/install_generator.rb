@@ -2,16 +2,20 @@ module Calagator
   class InstallGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
 
+    class_option :dummy, type: :boolean, default: false
+
     def install
       add_route
       add_secrets
       add_initializer
       add_javascripts
       add_stylesheets
-      rake 'calagator:install:migrations'
-      rake 'db:migrate'
-      rake 'db:test:prepare'
       run 'rm -f public/index.html'
+      unless options[:dummy]
+        rake 'calagator:install:migrations'
+        rake 'db:migrate'
+        rake 'db:test:prepare'
+      end
     end
 
     private
@@ -25,7 +29,7 @@ module Calagator
     end
 
     def add_initializer
-      copy_file File.expand_path(File.join(__FILE__, '../templates/config/calagator.rb')), 'config/initializers/calagator.rb'
+      initializer 'calagator.rb', File.read(File.expand_path('../templates/config/calagator.rb', __FILE__))
     end
 
     def add_javascripts
