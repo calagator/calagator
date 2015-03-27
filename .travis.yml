@@ -15,7 +15,8 @@ matrix:
     - rvm: rbx-2
 
 before_script:
-  - bin/calagator new spec/dummy --database=$DB --postgres-username=postgres
+  - bundle exec bin/calagator new spec/dummy --dummy --database=$DB --postgres-username=postgres
+  - bundle exec rake app:db:migrate app:db:seed
   - bundle exec rake app:sunspot:solr:start_with_waiting
 
 script:
