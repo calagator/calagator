@@ -19,8 +19,8 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["LICENSE.txt", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"]
 
-  s.add_dependency "rails", "3.2.21"
-  s.add_dependency 'sass-rails', '~> 3.2', '>= 3.2.3'
+  s.add_dependency "rails", ">= 3.2", "< 4.1"
+  s.add_dependency "sass-rails"
   s.add_dependency "sass", "~> 3.2"
   s.add_dependency "formtastic", "2.2.1"
   s.add_dependency "rails_autolink", "1.1.6"
@@ -63,4 +63,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "timecop", "~> 0.7.1"
   s.add_development_dependency "webmock", "~> 1.20.4"
   s.add_development_dependency "simplecov", "~> 0.9.1"
+  s.add_development_dependency "appraisal", "~> 1.0.3"
 end

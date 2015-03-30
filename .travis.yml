@@ -14,6 +14,10 @@ matrix:
   allow_failures:
     - rvm: rbx-2
 
+gemfile:
+  - gemfiles/rails_3_2.gemfile
+  - gemfiles/rails_4_0.gemfile
+
 before_script:
   - bundle exec bin/calagator new spec/dummy --dummy --database=$DB --postgres-username=postgres
   - bundle exec rake app:db:migrate app:db:seed
