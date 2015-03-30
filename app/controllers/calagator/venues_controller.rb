@@ -42,7 +42,7 @@ class VenuesController < ApplicationController
   # GET /venues/1
   # GET /venues/1.xml
   def show
-    @venue = Venue.find(params[:id], include: :source)
+    @venue = Venue.find(params[:id])
 
     return redirect_to @venue.duplicate_of if @venue.duplicate?
 
