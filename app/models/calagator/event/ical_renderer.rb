@@ -10,6 +10,8 @@
 # Example:
 #   ics1 = Event::IcalRenderer.render(myevent)
 #   ics2 = Event::IcalRenderer.render(myevents, url_helper: -> (event) { event_url(event) })
+require "loofah/helpers"
+
 module Calagator
 
 class Event < ActiveRecord::Base
