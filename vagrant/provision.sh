@@ -61,7 +61,9 @@ gem install bundler rake
 su ${VAGRANT_USER} -l -c 'bundle check || bundle --local || bundle'
 
 # Setup database
-su ${VAGRANT_USER} -l -c 'bundle exec rake db:create:all db:migrate db:test:prepare'
+# TODO: what should the out of box experience be here?
+# Should we pregenerate the dummy app?
+su ${VAGRANT_USER} -l -c 'bundle exec rake db:create:all db:migrate'
 
 # Cleanup for box image build
 # apt-get clean
