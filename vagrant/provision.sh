@@ -27,8 +27,11 @@ apt-get install -y ruby${RUBY_VERSION} ruby${RUBY_VERSION}-dev build-essential p
 # Useful tools
 apt-get install -y git-core screen tmux elinks 
 
-# Postgresql
+# Postgresql. Do we really want a full postgres running?
 apt-get install -y postgresql-$PGSQL_VERSION libpq-dev postgresql-client-common postgresql-contrib-$PGSQL_VERSION postgresql-$PGSQL_VERSION-postgis-$PGIS_VERSION
+
+# Req to build mysql2 gem
+apt-get install libmysqlclient-dev
 
 # Install Java for Solr
 apt-get install -y openjdk-7-jre-headless
