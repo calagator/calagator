@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'Venue Editing' do
   let!(:venue) { create(:venue) }
-  let!(:event) { create(:event, venue: venue) }
+  let!(:event) { create(:event, venue: venue, start_time: Time.now.end_of_day - 1.hour) }
   let!(:new_venue) { build(:venue) }
 
   scenario 'A user edits an existing venue' do

@@ -1,6 +1,26 @@
 Calagator
 =========
 
+Requirements
+-----
+
+Rails 3.2
+Ruby 1.9.3 - 2.1.x
+
+Gem Install
+-----
+
+add the gem to your `Gemfile`
+
+```
+gem 'calagator'
+``` 
+
+Run the installer
+
+```
+rails generate calagator:install
+```
 
 Setup
 -----

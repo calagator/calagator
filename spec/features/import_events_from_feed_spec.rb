@@ -31,13 +31,13 @@ feature 'import events from a feed' do
       Thursday Apr 8
 
       Coffee with Jason
-      midnight–1am
+      7–8am
 
       Coffee with Mike
-      midnight–1am
+      7–8am
 
       Coffee with Kim
-      midnight–1am
+      7–8am
     )
   end
 end

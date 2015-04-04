@@ -47,7 +47,9 @@ class SecretsReader
       $INSECURE_SECRETS = true
       error = true
     else
-      raise Errno::ENOENT, "Couldn't find '#{normal_file}'"
+      object = OpenStruct.new
+      message << "Couldn't find '#{normal_file}'"
+      error = true
     end
 
     unless silent

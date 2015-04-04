@@ -17,6 +17,8 @@ Changes
 List of Calagator stable releases and changes, with the latest at the top:
 
   * [master]
+  * [!] Adopted a flat configuration format for easier Heroku deployment. See config/secrets.yml.sample.
+  * v0.20150320
     * [!] Dropped support for Ruby 1.8.7, and 1.9.3. Use Ruby 2.0+.
     * Switched from outdated v2 Google Maps to a more flexible leaflet-based mapping system.
       * [!] New mapping settings have been added to secrets.yml
@@ -26,6 +28,20 @@ List of Calagator stable releases and changes, with the latest at the top:
       * [THEME] References to the #google_map div in stylesheets should be changed to #map.
       * [THEME] Theme authors need to require the mapping javascript files in the layout:
         Add `<%= javascript_include_tag *mapping_js_includes %>` just before your application javascript_include_tag.
+    * Updated to Rails 3.2.21
+    * Rewrote deployment scripts using [Capistrano 3](http://capistranorb.com)
+    * Streamlined navigation, collapsing "Overview" and "Browse Events"
+    * Added the ability to lock individual events from editing to prevent vandalism
+    * Added a unified admin tool list (/admin) with optional password protection. Includes changelog, duplicate squashing, and event locking.
+    * Added prettier tag URLs (e.g. /events/tag/ruby, and /venues/tag/office)
+    * Added friendlier error pages with a confused alligator
+    * Added tag icons
+    * Added database seeds to ease development
+    * Fixed search loading and reindexing
+    * Squashed wiggly bugs
+    * Gloriously increased test coverage
+    * Copiously refactored, improved code style, and swept up unused code
+    * Updated vagrant configuration to Ubuntu 14.04 and Ruby 2.1
   * v0.20131020
     * We now use the Rails 3.2 asset pipeline to compile assets.
       * [!][THEME] Theme maintainers need to make a few small changes when upgrading.
@@ -77,7 +93,7 @@ List of Calagator stable releases and changes, with the latest at the top:
   * v0.20120709
     * [!] This release drops support for 'acts_as_solr' search backend.  Please migrate to the 'sunspot' backend instead.
     * [DEPENDENCY] Upgraded most external dependencies.
-    * [MIGRATION] Remove obsolete tables and columns that may have been left behind. 
+    * [MIGRATION] Remove obsolete tables and columns that may have been left behind.
     * Improved compatibility with Ruby 1.9.x.
     * Improved tag cloud implementation and styling.
     * Improved ATOM output.

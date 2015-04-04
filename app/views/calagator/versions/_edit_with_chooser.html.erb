@@ -1,0 +1,16 @@
+<%
+# USAGE: Renders an edit form for an ActiveRecord model.
+#
+# VARIABLES:
+# * record: The record to render this form for.
+
+name = record.class.name.underscore.split("/").last
+target = "edit_#{name}_form"
+template = "calagator/#{name.pluralize}/form"
+%>
+
+<%= render :partial => 'calagator/versions/chooser', :locals => {:record => record, :target => target} %>
+
+<div id='<%= target %>'>
+  <%= render template, name.to_sym => record %>
+</div>

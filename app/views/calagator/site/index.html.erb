@@ -1,0 +1,41 @@
+<% tabindex_on '#search_field' %>
+
+<% cache(Calagator::CacheObserver.daily_key_for("site_index", request)) do %>
+<a href="#" id="homepage_sidebar_toggle" class="expander_toggle">Hi there. Learn about this site and how to use it...</a>
+<div id="homepage_sidebar">
+  <div id="project_description">
+    <%= render :partial => "description" %>
+    <%= render :partial => "sidebar_menu" %>
+  </div>
+
+  <% if @overview.tags.present? %>
+    <div id="tagcloud">
+      <h2>Popular tags</h2>
+      <% tag_cloud @overview.tags, %w(tagcloud_level_0 tagcloud_level_1 tagcloud_level_2 tagcloud_level_3 tagcloud_level_4) do |tag, css_class| %>
+        <%= link_to tag.name, search_events_path(tag: tag.name), class: css_class %>
+        <span class="spacer">&middot;</span>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<div id="whats_happening">
+  <h1>What's happening?</h1>
+  <h3><%= link_to("View All &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) if @overview.more %></h3>
+  <div class='coming_events' id='today'>
+    <h3>Today</h3>
+      <%= render 'calagator/events/list', :events => @overview.today, :dates => false %>
+  </div>
+  <div class='coming_events' id='tomorrow'>
+    <h3>Tomorrow</h3>
+    <%= render 'calagator/events/list', :events => @overview.tomorrow, :dates => false %>
+  </div>
+  <div id='next_two_weeks'>
+    <h3>Next two weeks</h3>
+    <%= render 'calagator/events/list', :events => @overview.later %>
+  </div>
+  <div>
+    <h3><%= link_to("View future events &raquo;".html_safe, events_path(:anchor => "event-#{@overview.more.id}")) if @overview.more %></h3>
+  </div>
+</div>
+<% end %>

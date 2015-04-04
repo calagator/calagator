@@ -1,0 +1,15 @@
+<%#
+Locals:
+* search: Event::Search object
+* section: Symbol of section of grouped events to display, e.g. :current
+%>
+<% events = search.grouped_events[section] %>
+<div class='list_description' id="<%= section %>" >
+  <h2>Viewing <strong> <%= pluralize events.size, "#{section} event" %></strong>
+  matching <strong>&ldquo;<%= search.query || search.tag %>&rdquo;</strong>
+  <%= events_sort_label(search.order) %></h2>
+
+	<div class='list_items'>
+	  <%= render partial: 'table', locals: { events: events, scores: search.query.present? && Calagator::Event::SearchEngine.score? } %>
+	</div>
+</div>

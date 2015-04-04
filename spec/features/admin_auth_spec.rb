@@ -15,7 +15,7 @@ feature 'Administrative suite is hidden behind an http basic auth wall' do
     scenario "Authenticated users are permitted in #{path}" do
       page.driver.basic_authorize SECRETS.admin_username, SECRETS.admin_password
       visit path
-      expect(page.status_code).to eq 200
+	  expect([200, 304]).to include page.status_code
     end
   end
 end

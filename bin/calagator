@@ -1,0 +1,23 @@
+#!/usr/bin/env ruby
+
+TEMPLATE = File.expand_path("../../rails_template.rb", __FILE__)
+
+case ARGV.shift
+when 'new'
+  system "rails new #{ARGV.join(' ')} -m #{TEMPLATE} --skip-bundle"
+else
+  puts DATA.read
+end
+
+__END__
+
+calagator: generates new Rails apps with the Calagator template
+
+Usage:
+  calagator new APP_PATH [options]
+
+Options:
+  --dummy   # Generates an app suitable for use in spec/dummy for Calagator
+            # development and testing
+
+  All other options will be passed along to `rails new`; see `rails new --help`
