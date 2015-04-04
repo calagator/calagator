@@ -42,5 +42,8 @@ Vagrant.configure(2) do |config|
     vb.memory = defined?(MEMORY) ? MEMORY : 1024
   end
 
+  # avoid tty errors in ubuntu
+  # https://github.com/mitchellh/vagrant/issues/1673
+  config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
   config.vm.provision :shell, :path => "vagrant/provision.sh"
 end
