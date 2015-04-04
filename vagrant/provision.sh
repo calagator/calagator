@@ -60,10 +60,11 @@ gem install bundler rake
 # Bundle install
 su ${VAGRANT_USER} -l -c 'bundle check || bundle --local || bundle'
 
-# Setup database
-# TODO: what should the out of box experience be here?
-# Should we pregenerate the dummy app?
-su ${VAGRANT_USER} -l -c 'bundle exec rake db:create:all db:migrate'
+# Create dummy app
+if [ ! -e "${APPDIR}/spec/dummy/" ] ; then
+  su ${VAGRANT_USER} -l -c 'bin/calagator new spec/dummy --dummy'
+  su ${VAGRANT_USER} -l -c 'rake app:db:migrate app:db:setup'
+fi
 
 # Cleanup for box image build
 # apt-get clean
