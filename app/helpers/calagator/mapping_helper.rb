@@ -20,9 +20,9 @@ module MappingHelper
       "esri"   => ["http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"],
       "google" => [
         "https://maps.googleapis.com/maps/api/js?key=#{SECRETS.mapping_google_maps_api_key}&sensor=false",
-        "leaflet_google_layer",
-      ],
-    }[map_provider]
+        "leaflet_google_layer"
+      ]
+    }[map_provider] || []
   end
 
   def mapping_js_includes
