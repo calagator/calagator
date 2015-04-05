@@ -15,7 +15,6 @@ matrix:
     - rvm: rbx-2
 
 gemfile:
-  - gemfiles/rails_3_2.gemfile
   - gemfiles/rails_4_0.gemfile
 
 before_script:
