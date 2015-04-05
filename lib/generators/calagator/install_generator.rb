@@ -26,7 +26,8 @@ module Calagator
     end
 
     def add_secrets
-      copy_file File.expand_path(File.join(__FILE__, '../templates/config/secrets.yml.sample')), 'config/secrets.yml'
+      run 'touch config/secrets.yml'
+      append_file 'config/secrets.yml', File.read(File.expand_path('../templates/config/secrets.yml.sample', __FILE__))
     end
 
     def add_initializer
