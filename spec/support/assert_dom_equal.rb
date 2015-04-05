@@ -6,11 +6,11 @@ module DomEquivalence
       assert_dom_equal source, target
     end
 
-    failure_message_for_should do |source|
+    failure_message do |source|
       "Expected #{source} to have equivalent DOM to #{target}"
     end
 
-    failure_message_for_should_not do |source|
+    failure_message_when_negated do |source|
       "Expected #{source} not to have equivalent DOM to #{target}"
     end
 
