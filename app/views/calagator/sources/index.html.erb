@@ -10,7 +10,7 @@
   <tr class="<%= cycle 'odd', 'even' %>">
     <td>
       <%= link_to 'Show', source %> | 
-      <%= link_to 'Destroy', source, :confirm => 'Are you sure?', :method => :delete %>
+      <%= link_to 'Destroy', source, method: :delete, data: {confirm: 'Are you sure?' } %>
     </td>
     <td><%= source_url_link source %></td>
   </tr>

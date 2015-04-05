@@ -13,4 +13,4 @@
 </p>
 
 <%= link_to 'Back', sources_path %> |
-<%= link_to 'Destroy', @source, :confirm => 'Are you sure?', :method => :delete %>
+<%= link_to 'Destroy', @source, method: :delete, data: { confirm: 'Are you sure?' } %>
