@@ -39,30 +39,6 @@ class Source < ActiveRecord::Base
   xss_foliate
   include DecodeHtmlEntitiesHack
 
-  # Return a newly-created or existing Source record matching the given
-  # attributes. The +attrs+ hash is the same format as used when calling
-  # Source::new.
-  #
-  # This method is intended to supplement the import process by providing a
-  # single Source record for each unique URL, thus when multiple people import
-  # the same URL, there will only be one Source record.
-  #
-  # The :reimport flag is given special handling: If the original Source record
-  # has this set to true, it will never be set back to false by this method.
-  # The intent behind this is that if one person wants this Source reimported,
-  # the reimporting shouldn't be disabled by someone else manually importing it
-  # without setting the reimport flag. If someone really wants to turn off
-  # reimporting, they should edit the source.
-  def self.find_or_create_from(attrs={})
-    return new(attrs) unless attrs[:url]
-
-    source = find_or_create_by_url(attrs[:url])
-    source.reimport = true if attrs.delete(:reimport)
-    source.attributes = attrs
-    source.save if source.changed?
-    source
-  end
-
   # Create events for this source. Returns the events created. URL must be set
   # for this source for this to work.
   def create_events!(opts={})

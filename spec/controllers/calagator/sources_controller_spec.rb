@@ -27,7 +27,7 @@ describe SourcesController, :type => :controller do
       allow(@source).to receive(:to_events).and_return([@event])
 
       allow(Source).to receive(:new).and_return(@source)
-      allow(Source).to receive(:find_or_create_by_url).and_return(@source)
+      allow(Source).to receive(:find_or_create_by).with(url: "http://my.url/").and_return(@source)
     end
 
     it "should provide a way to create new sources" do
@@ -69,7 +69,7 @@ describe SourcesController, :type => :controller do
     describe "is given problematic sources" do
       before do
         @source = stub_model(Source)
-        expect(Source).to receive(:find_or_create_from).and_return(@source)
+        expect(Source).to receive(:find_or_create_by).with(url: "http://invalid.host").and_return(@source)
       end
 
       def assert_import_raises(exception)
@@ -79,7 +79,7 @@ describe SourcesController, :type => :controller do
 
       it "should fail when host responds with no events" do
         expect(@source).to receive(:create_events!).and_return([])
-        post :import, :source => {:url => "http://empty.host"}
+        post :import, :source => {:url => "http://invalid.host"}
         expect(flash[:failure]).to match /Unable to find any upcoming events to import from this source/
       end
 
