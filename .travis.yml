@@ -16,6 +16,7 @@ matrix:
 
 gemfile:
   - gemfiles/rails_4_0.gemfile
+  - gemfiles/rails_4_1.gemfile
 
 before_script:
   - bundle exec bin/calagator new spec/dummy --dummy --database=$DB --postgres-username=postgres
