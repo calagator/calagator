@@ -17,7 +17,7 @@ class Venue < ActiveRecord::Base
 
       def base
         column_names = Venue.column_names.map { |name| "venues.#{name}" }
-        @scope = Venue.scoped
+        @scope = Venue.all
           .group(column_names)
           .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type LIKE '%Venue'")
           .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")

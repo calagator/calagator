@@ -50,11 +50,12 @@ class Event < ActiveRecord::Base
       def base
         column_names = Event.column_names.map { |name| "events.#{name}"}
         column_names << "venues.id"
-        @scope = Event.scoped
+        @scope = Event.all
           .group(column_names)
           .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type LIKE '%Event'")
           .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
           .includes(:venue)
+          .references(:venues, :tags)
         self
       end
 

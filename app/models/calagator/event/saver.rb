@@ -23,7 +23,7 @@ class Event < ActiveRecord::Base
       if params[:event] && params[:event][:venue_id].present?
         Venue.find(params[:event][:venue_id]).progenitor
       else
-        Venue.find_or_initialize_by_title(params[:venue_name]).progenitor
+        Venue.find_or_initialize_by(title: params[:venue_name]).progenitor
       end
     end
 

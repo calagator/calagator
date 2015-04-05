@@ -100,7 +100,7 @@ class Event < ActiveRecord::Base
       when 'name'
         order('lower(events.title), start_time')
       when 'venue'
-        includes(:venue).order('lower(venues.title), start_time')
+        includes(:venue).order('lower(venues.title), start_time').references(:venues)
       else # when 'date', nil
         order('start_time')
     end
