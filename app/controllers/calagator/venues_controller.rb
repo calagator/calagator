@@ -85,7 +85,7 @@ class VenuesController < ApplicationController
   end
 
   def create_or_update
-    @venue.attributes = params[:venue]
+    @venue.attributes = params[:venue] || {}
     respond_to do |format|
       if !evil_robot? && @venue.save
         format.html { redirect_to from_event || @venue, flash: { success: "Venue was successfully saved." } }

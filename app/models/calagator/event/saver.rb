@@ -3,7 +3,7 @@ module Calagator
 class Event < ActiveRecord::Base
   class Saver < Struct.new(:event, :params, :failure)
     def save
-      event.attributes = params[:event]
+      event.attributes = params[:event] || {}
       event.venue      = find_or_initialize_venue
       event.start_time = [ params[:start_date], params[:start_time] ]
       event.end_time   = [ params[:end_date], params[:end_time] ]
