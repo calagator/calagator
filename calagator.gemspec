@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
   s.add_dependency "loofah"
   s.add_dependency "loofah-activerecord", "1.2.0"
   s.add_dependency "bluecloth", "2.2.0"
-  s.add_dependency "acts-as-taggable-on", "~> 3.0.0"
+  s.add_dependency "acts-as-taggable-on", "~> 3.5"
   s.add_dependency "jquery-rails", "~> 3.1"
   s.add_dependency "jquery-ui-rails", "~> 5.0"
   s.add_dependency "progress_bar", "1.0.0"

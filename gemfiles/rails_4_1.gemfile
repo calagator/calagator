@@ -3,10 +3,10 @@
 source "https://rubygems.org"
 
 gem "jquery-rails"
-gem "byebug", "~> 3.0.0", :platform => "mri"
-gem "rails", "4.1.9"
 gem "protected_attributes"
 gem "rails-observers"
 gem "turbolinks"
+gem "byebug", "~> 3.0.0", :platform => "mri"
+gem "rails", "4.1.9"
 
 gemspec :path => "../"
