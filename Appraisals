@@ -12,3 +12,10 @@ appraise "rails-4-1" do
   gem "turbolinks"
 end
 
+appraise "rails-4-2" do
+  gem "rails", "4.2.1"
+  gem "protected_attributes"
+  gem "rails-observers"
+  gem "turbolinks"
+end
+
