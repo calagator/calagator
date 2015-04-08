@@ -116,9 +116,6 @@ module ApplicationHelper
     ].compact.join(" ")
   end
 
-  # String name of the mobile preference cookie's name, e.g. "calagator_mobile".
-  MOBILE_COOKIE_NAME = "#{SECRETS.session_name}_mobile"
-
   # CGI escape a string-like object. The issue is that CGI::escape fails if used on a RailsXss SafeBuffer: https://github.com/rails/rails_xss/issues/8
   def cgi_escape(data)
     return CGI::escape(data.to_str)
