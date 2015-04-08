@@ -1,24 +1,32 @@
 sudo: false
 language: ruby
+
 rvm:
   - 2.0.0
   - 2.1.0
   - 2.2.0
   - rbx-2
-env:
-  matrix:
-    - DB=mysql
-    - DB=postgresql
-    - DB=sqlite3
-matrix:
-  fast_finish: true
-  allow_failures:
-    - rvm: rbx-2
 
 gemfile:
   - gemfiles/rails_4_0.gemfile
   - gemfiles/rails_4_1.gemfile
   - gemfiles/rails_4_2.gemfile
+
+env:
+  matrix:
+    - DB=mysql
+    - DB=postgresql
+    - DB=sqlite3
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - rvm: rbx-2
+  exclude:
+    - rvm: rbx-2
+      gemfile: gemfiles/rails_4_0.gemfile
+    - rvm: rbx-2
+      gemfile: gemfiles/rails_4_1.gemfile
 
 before_script:
   - bundle exec bin/calagator new spec/dummy --dummy --database=$DB --postgres-username=postgres
