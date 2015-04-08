@@ -586,7 +586,7 @@ describe EventsController, :type => :controller do
 
   context "with admin auth for duplicates" do
     before do
-      credentials = ActionController::HttpAuthentication::Basic.encode_credentials SECRETS.admin_username, SECRETS.admin_password
+      credentials = ActionController::HttpAuthentication::Basic.encode_credentials Calagator.admin_username, Calagator.admin_password
       request.env['HTTP_AUTHORIZATION'] = credentials
     end
 

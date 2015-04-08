@@ -46,36 +46,7 @@ calagator new ~/path/to/new/calagator/app
 Additional Setup
 -----
 
-Calagator can be configured via initializer file:
-
-```ruby
-# config/initializers/calagator.rb
-Calagator.setup do |config|
-  # Site's name
-  config.title = 'Calagator'
-
-  # Site's tagline
-  config.tagline = 'A Tech Calendar'
-
-  # Site's URL with trailing slash
-  config.url = 'http://my-calagator.org/'
-
-  # Map to display on /venues page:
-  config.venues_map_options = {
-    # Zoom magnification level:
-    zoom: 12,
-    # Center of the map, in latitude and longitude.
-    # If no center is specified, the map will zoom to fit all markers.
-    center: [45.518493, -122.660737]
-  }
-
-  # Patterns for detecting spam events and venues
-  config.blacklist_patterns = [
-    /\b(online|overseas).+(drugstore|pharmacy)\b/,
-    /\bcialis\b/,
-  ]
-end
-```
+Calagator's settings be configured via a generated initializer file at `config/initializers/calagator.rb`. Please see that file for more details.
 
 *Optional:*
   * Start the search service if needed. See the **[Search engine](#search_engine)** section for details.
@@ -92,20 +63,20 @@ API Keys
 
 The application uses a number of API keys to communicate with external services.
 
-* Google Maps: To use Google's geocoder, and to use Google to display maps, you must get an API key.  See the `config/secrets.yml` file for details.
-* Meetup.com: To import events from Meetup.com, you need an API key. See the `config/secrets.yml` file for details.
+* Google Maps: To use Google's geocoder, and to use Google to display maps, you must get an API key.  See the `config/initializers/calagator.rb` file for details.
+* Meetup.com: To import events from Meetup.com, you need an API key. See the `config/initializers/calagator.rb` file for details.
 
 
 Mapping
 -------
 
-Calagator can use a number of map tile providers when displaying maps. This can be configured in `config/secrets.yml`.
+Calagator can use a number of map tile providers when displaying maps. This can be configured in `config/initializers/calagator.rb`.
 
 
 Search engine
 -------------
 
-You can specify the search engine to use in your `config/secrets.yml` file:
+You can specify the search engine to use in your `config/initializers/calagator.rb` file:
 
 ### SQL
 

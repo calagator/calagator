@@ -34,17 +34,15 @@ GeoKit::Geocoders::yahoo = 'REPLACE_WITH_YOUR_YAHOO_KEY'
 # and http://www.google.com/apis/maps/documentation/#Geocoding_Examples
 #
 # CALAGATOR: was GeoKit::Geocoders::google = 'REPLACE_WITH_YOUR_GOOGLE_KEY',
-# but since each developer needs their own, we get it from the secrets file.
+# but since each developer needs their own, we get it from the config/initializers/calagator.rb file.
 #
-google_key = SECRETS.mapping_google_maps_api_key
+google_key = Calagator.mapping_google_maps_api_key
 old_keys_path = Rails.root.join('config','geocoder_api_keys.yml')
 
 if google_key
   GeoKit::Geocoders::google = google_key
 elsif File.exist? old_keys_path
-  raise "Loading keys from config/geocoder_api_keys.yml is deprecated. Please use config/secrets.yml instead."
-elsif SECRETS.mapping.present?
-  raise "SECRETS.mapping is no longer used. Please refer to config/secrets.yml.sample."
+  raise "Loading keys from config/geocoder_api_keys.yml is deprecated. Please use config/initializers/calagator.rb instead."
 else
   puts "Warning: No Google Maps API key was set. Geocoding will not function."
 end

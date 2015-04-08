@@ -2,11 +2,11 @@ module Calagator
 
 module MappingHelper
   def map_provider
-    SECRETS.mapping_provider || 'stamen'
+    Calagator.mapping_provider || 'stamen'
   end
 
   def map_tiles
-    SECRETS.mapping_tiles || 'terrain'
+    Calagator.mapping_tiles || 'terrain'
   end
 
   def leaflet_js
@@ -19,7 +19,7 @@ module MappingHelper
       "mapbox" => ["https://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.standalone.js"],
       "esri"   => ["http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"],
       "google" => [
-        "https://maps.googleapis.com/maps/api/js?key=#{SECRETS.mapping_google_maps_api_key}&sensor=false",
+        "https://maps.googleapis.com/maps/api/js?key=#{Calagator.mapping_google_maps_api_key}&sensor=false",
         "leaflet_google_layer",
       ],
     }[map_provider]
@@ -58,7 +58,7 @@ module MappingHelper
 
         var venueIcon = L.AwesomeMarkers.icon({
           icon: 'star',
-          color: '#{SECRETS.mapping_marker_color}'
+          color: '#{Calagator.mapping_marker_color}'
         })
 
         var markers = [#{markers.join(", ")}];

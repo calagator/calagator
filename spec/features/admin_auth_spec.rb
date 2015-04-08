@@ -13,7 +13,7 @@ feature 'Administrative suite is hidden behind an http basic auth wall' do
     end
 
     scenario "Authenticated users are permitted in #{path}" do
-      page.driver.basic_authorize SECRETS.admin_username, SECRETS.admin_password
+      page.driver.basic_authorize Calagator.admin_username, Calagator.admin_password
       visit path
 	  expect([200, 304]).to include page.status_code
     end

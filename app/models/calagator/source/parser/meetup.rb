@@ -5,7 +5,7 @@ class Source::Parser::Meetup < Source::Parser
   self.url_pattern = %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
 
   def to_events
-    return fallback unless SECRETS.meetup_api_key.present?
+    return fallback unless Calagator.meetup_api_key.present?
     return unless data = get_data
     event = Event.new({
       source:      opts[:source],
@@ -36,7 +36,7 @@ class Source::Parser::Meetup < Source::Parser
       [
         "https://api.meetup.com/2/event/#{event_id}",
         {
-          key: SECRETS.meetup_api_key,
+          key: Calagator.meetup_api_key,
           sign: 'true'
         }
       ]

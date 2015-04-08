@@ -828,8 +828,8 @@ describe Event, :type => :model do
         expect(ical.sequence).to eq 2
       end
 
-      # it "should offset the squence based the global SECRETS.icalendar_sequence_offset" do
-        # SECRETS.should_receive(:icalendar_sequence_offset).and_return(41)
+      # it "should offset the squence based the global Calagator.icalendar_sequence_offset" do
+        # Calagator.should_receive(:icalendar_sequence_offset).and_return(41)
         # event = FactoryGirl.build(:event)
         # ical = event_to_ical(event)
         # ical.sequence.should eq 42
