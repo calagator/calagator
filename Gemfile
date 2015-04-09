@@ -12,7 +12,7 @@ gem "rails", "4.2.1"
 gem "turbolinks"
 
 # can't declare platform specific development dependencies in the gemspec.
-gem "byebug", "~> 3.0.0", platform: "mri"
+gem "byebug", platform: "mri"
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or
