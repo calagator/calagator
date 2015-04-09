@@ -8,7 +8,7 @@ PATH
       formtastic (~> 3.1)
       geokit (= 1.6.5)
       htmlentities (= 4.3.3)
-      jquery-rails (~> 3.1)
+      jquery-rails
       jquery-ui-rails (~> 5.0)
       loofah
       loofah-activerecord (= 1.2.0)
