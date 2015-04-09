@@ -29,7 +29,6 @@ Gem::Specification.new do |s|
   s.add_dependency "geokit", "1.6.5"
   s.add_dependency "htmlentities", "4.3.3"
   s.add_dependency "ri_cal", "0.8.8"
-  s.add_dependency "rubyzip", "1.1.7"
   s.add_dependency "will_paginate", "3.0.7"
   s.add_dependency "rest-client", "1.7.3"
   s.add_dependency "loofah"
