@@ -156,8 +156,6 @@ GEM
     progress_bar (1.0.0)
       highline (~> 1.6.1)
       options (~> 2.3.0)
-    protected_attributes (1.0.9)
-      activemodel (>= 4.0.1, < 5.0)
     rack (1.5.2)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -283,7 +281,6 @@ DEPENDENCIES
   mysql2 (= 0.3.18)
   pg (= 0.18.1)
   poltergeist (~> 1.6.0)
-  protected_attributes
   rails (= 4.1.9)
   rails-observers
   rspec-activemodel-mocks (~> 1.0.1)

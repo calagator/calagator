@@ -4,7 +4,7 @@ class SourcesController < ApplicationController
   # POST /import
   # POST /import.xml
   def import
-    @importer = Source::Importer.new(params[:source])
+    @importer = Source::Importer.new(params.permit![:source])
     respond_to do |format|
       if @importer.import
         format.html { redirect_to events_path, flash: { success: render_to_string(layout: false) } }
@@ -67,7 +67,7 @@ class SourcesController < ApplicationController
 
   def create_or_update
     respond_to do |format|
-      if @source.update_attributes(params[:source])
+      if @source.update_attributes(params.permit![:source])
         format.html { redirect_to @source, notice: 'Source was successfully saved.' }
         format.xml  { render xml: @source, status: :created, location: @source }
       else

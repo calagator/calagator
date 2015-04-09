@@ -25,8 +25,6 @@ module Calagator
 class Source < ActiveRecord::Base
   self.table_name = "sources"
 
-  attr_protected
-
   validate :assert_url
 
   has_many :events,  :dependent => :destroy

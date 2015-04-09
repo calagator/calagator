@@ -10,7 +10,7 @@ class VenuesController < ApplicationController
   # GET /venues
   # GET /venues.xml
   def index
-    @search = Venue::Search.new(params)
+    @search = Venue::Search.new(params.permit!)
     @venues = @search.venues
 
     respond_to do |format|
@@ -85,7 +85,7 @@ class VenuesController < ApplicationController
   end
 
   def create_or_update
-    @venue.attributes = params[:venue] || {}
+    @venue.attributes = params.permit![:venue] || {}
     respond_to do |format|
       if !evil_robot? && @venue.save
         format.html { redirect_to from_event || @venue, flash: { success: "Venue was successfully saved." } }
