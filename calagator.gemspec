@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails-observers"
   s.add_dependency "sass-rails"
   s.add_dependency "sass", "~> 3.2"
-  s.add_dependency "formtastic", "2.2.1"
+  s.add_dependency "formtastic", "~> 3.1"
   s.add_dependency "rails_autolink", "1.1.6"
   s.add_dependency "nokogiri"
   s.add_dependency "geokit", "1.6.5"
