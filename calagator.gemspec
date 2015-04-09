@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency "htmlentities", "4.3.3"
   s.add_dependency "ri_cal", "0.8.8"
   s.add_dependency "will_paginate", "3.0.7"
-  s.add_dependency "rest-client", "1.7.3"
+  s.add_dependency "rest-client", "~> 1.8.0"
   s.add_dependency "loofah"
   s.add_dependency "loofah-activerecord", "1.2.0"
   s.add_dependency "bluecloth", "2.2.0"
