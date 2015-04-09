@@ -39,7 +39,6 @@ Gem::Specification.new do |s|
   s.add_dependency "acts-as-taggable-on", "~> 3.5"
   s.add_dependency "jquery-rails", "~> 3.1"
   s.add_dependency "jquery-ui-rails", "~> 5.0"
-  s.add_dependency "progress_bar", "1.0.0"
   s.add_dependency "font-awesome-rails", "3.2.1.3"
   s.add_dependency "paper_trail_manager", "0.3.0"
   s.add_dependency "utf8-cleaner", "~> 0.0.6"
