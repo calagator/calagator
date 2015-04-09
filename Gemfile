@@ -8,7 +8,6 @@ gemspec
 # jquery-rails is used by the dummy application
 gem "jquery-rails"
 gem "rails", "4.2.1"
-gem "rails-observers"
 gem "turbolinks"
 
 # Declare any dependencies that are still in development here instead of in

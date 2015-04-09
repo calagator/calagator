@@ -2,6 +2,7 @@ require "calagator/engine"
 
 require "formtastic"
 require "rails_autolink"
+require "rails-observers"
 require "nokogiri"
 require "columnize"
 require "geokit"

@@ -18,6 +18,7 @@ PATH
       paper_trail_manager (= 0.3.0)
       progress_bar (= 1.0.0)
       rails (>= 3.2, < 5.0)
+      rails-observers
       rails_autolink (= 1.1.6)
       rest-client (= 1.7.3)
       ri_cal (= 0.8.8)
@@ -302,7 +303,6 @@ DEPENDENCIES
   pg (= 0.18.1)
   poltergeist (~> 1.6.0)
   rails (= 4.2.1)
-  rails-observers
   rspec-activemodel-mocks (~> 1.0.1)
   rspec-collection_matchers (~> 1.1.2)
   rspec-its (~> 1.1.0)
