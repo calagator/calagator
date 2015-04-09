@@ -298,7 +298,6 @@ DEPENDENCIES
   database_cleaner (~> 1.4.0)
   factory_girl_rails (~> 4.5.0)
   faker (~> 1.4.3)
-  jquery-rails
   mysql2 (= 0.3.18)
   pg (= 0.18.1)
   poltergeist (~> 1.6.0)
