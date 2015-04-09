@@ -36,8 +36,6 @@ module Calagator
 class Event < ActiveRecord::Base
   self.table_name = "events"
 
-  attr_protected
-
   has_paper_trail
   acts_as_taggable
 
@@ -100,7 +98,7 @@ class Event < ActiveRecord::Base
       when 'name'
         order('lower(events.title), start_time')
       when 'venue'
-        includes(:venue).order('lower(venues.title), start_time')
+        includes(:venue).order('lower(venues.title), start_time').references(:venues)
       else # when 'date', nil
         order('start_time')
     end
@@ -144,6 +142,7 @@ class Event < ActiveRecord::Base
 
   def time_for(value)
     value = value.join(' ') if value.kind_of?(Array)
+    value = value.to_s if value.kind_of?(Date)
     value = Time.zone.parse(value) if value.kind_of?(String) # this will throw ArgumentError if invalid
     value
   end

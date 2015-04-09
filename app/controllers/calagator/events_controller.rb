@@ -39,7 +39,7 @@ class EventsController < ApplicationController
   # GET /events/new
   # GET /events/new.xml
   def new
-    @event = Event.new(params[:event])
+    @event = Event.new(params.permit![:event])
   end
 
   # GET /events/1/edit
@@ -60,7 +60,7 @@ class EventsController < ApplicationController
   end
 
   def create_or_update
-    saver = Event::Saver.new(@event, params)
+    saver = Event::Saver.new(@event, params.permit!)
     respond_to do |format|
       if saver.save
         format.html {

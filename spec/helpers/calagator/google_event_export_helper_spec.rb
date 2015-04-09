@@ -4,6 +4,8 @@ module Calagator
 
 describe GoogleEventExportHelper, :type => :helper do
   describe "google_event_export_link" do
+    let(:params) { Rack::Utils.parse_query(@export) }
+
     def escape(string)
       return Regexp.escape(CGI.escape(string))
     end
@@ -18,24 +20,19 @@ describe GoogleEventExportHelper, :type => :helper do
 
     shared_examples_for "exported event" do
       it "should have title" do
-        expect(@export).to match /\&text=#{escape(@event.title)}/
+        params["text"].should == @event.title
       end
 
       it "should have time range in utc" do
-        dates = Rack::Utils.parse_query(@export)["dates"]
         format = "%Y%m%dT%H%M%SZ"
-        dates.should == [
+        params["dates"].should == [
           @event.start_time.utc.strftime(format),
           @event.end_time.utc.strftime(format),
         ].join("/")
       end
 
-      it "should have venue title" do
-        expect(@export).to match /\&location=#{escape(@event.venue.title)}/
-      end
-
-      it "should have venue address" do
-        expect(@export).to match /\&location=.+?#{escape(@event.venue.geocode_address)}/
+      it "should have venue title and address" do
+        params["location"].should == "#{@event.venue.title}, #{@event.venue.geocode_address}"
       end
     end
 
@@ -46,7 +43,7 @@ describe GoogleEventExportHelper, :type => :helper do
       it_should_behave_like "exported event"
 
       it "should have a complete event description" do
-        expect(@export).to match /\&details=.*#{escape(event_description)}/
+        params["details"].should include event_description
       end
     end
 
@@ -57,7 +54,7 @@ describe GoogleEventExportHelper, :type => :helper do
       it_should_behave_like "exported event"
 
       it "should have a truncated event description" do
-        expect(@export).to match /\&details=.*#{escape(event_description[0..100])}/
+        params["details"].should include event_description[0..100]
       end
 
       it "should have a truncated URL" do

@@ -39,8 +39,6 @@ module Calagator
 class Venue < ActiveRecord::Base
   self.table_name = "venues"
 
-  attr_protected
-
   include StripWhitespace
 
   has_paper_trail

@@ -6,10 +6,9 @@ describe TagsHelper, type: :helper do
   describe "#tag_links_for" do
     it "renders tag links for the supplied model" do
       event = FactoryGirl.create(:event, tag_list: %w(b a))
-      expect(tag_links_for(event)).to eq(
+      expect(tag_links_for(event)).to match_dom_of \
         %(<a href="/events/tag/a" class="p-category">a</a>, ) +
         %(<a href="/events/tag/b" class="p-category">b</a>)
-      )
     end
   end
 

@@ -5,6 +5,7 @@
  * Then come the external dependencies:
  *
  *= require jquery.timepicker
+ *= require jquery-ui/theme
  *= require formtastic
  *= require font-awesome
  *= require leaflet.awesome-markers
@@ -17,5 +18,4 @@
 @import 'forms';
 @import 'layout';
 @import 'mobile';
-@import 'jquery-ui-theme';
 @import 'changes';

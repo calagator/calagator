@@ -3,7 +3,7 @@ module Calagator
 class Event < ActiveRecord::Base
   class Saver < Struct.new(:event, :params, :failure)
     def save
-      event.attributes = params[:event]
+      event.attributes = params[:event] || {}
       event.venue      = find_or_initialize_venue
       event.start_time = [ params[:start_date], params[:start_time] ]
       event.end_time   = [ params[:end_date], params[:end_time] ]
@@ -23,7 +23,7 @@ class Event < ActiveRecord::Base
       if params[:event] && params[:event][:venue_id].present?
         Venue.find(params[:event][:venue_id]).progenitor
       else
-        Venue.find_or_initialize_by_title(params[:venue_name]).progenitor
+        Venue.find_or_initialize_by(title: params[:venue_name]).progenitor
       end
     end
 

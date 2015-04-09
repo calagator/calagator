@@ -22,11 +22,12 @@ module Calagator
     private
 
     def add_route
-      inject_into_file 'config/routes.rb', "\s\smount Calagator::Engine => '/'\n", after: "Application.routes.draw do\n"
+      inject_into_file 'config/routes.rb', "\s\smount Calagator::Engine => '/'\n", after: "routes.draw do\n"
     end
 
     def add_secrets
-      copy_file File.expand_path(File.join(__FILE__, '../templates/config/secrets.yml.sample')), 'config/secrets.yml'
+      run 'touch config/secrets.yml'
+      append_file 'config/secrets.yml', File.read(File.expand_path('../templates/config/secrets.yml.sample', __FILE__))
     end
 
     def add_initializer

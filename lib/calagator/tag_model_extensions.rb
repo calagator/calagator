@@ -4,7 +4,7 @@ module Calagator
 module TagModelExtensions
   def self.included(base)
     base.class_eval do
-      scope :machine_tags, where("name LIKE '%:%=%'")
+      scope :machine_tags, -> { where("name LIKE '%:%=%'") }
     end
   end
 

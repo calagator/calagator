@@ -11,7 +11,7 @@ module DuplicateChecking
       scope = scope.where(query)
       scope.distinct
 
-      records = scope.all
+      records = scope.to_a
       records = group_by_fields(records) if grouped
       records
     end

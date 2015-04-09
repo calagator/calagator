@@ -103,33 +103,4 @@ describe Source, "when parsing URLs", :type => :model do
   end
 end
 
-describe Source, "find_or_create_from", :type => :model do
-  before do
-    @url = "http://foo.bar"
-  end
-
-  it "should return new, unsaved record if given no arguments" do
-    source = Source.find_or_create_from()
-
-    expect(source).to be_a_new_record
-  end
-
-  it "should return an existing or newly-created record" do
-    record = Source.new(:url => @url)
-    expect(Source).to receive(:find_or_create_by_url).and_return(record)
-
-    result = Source.find_or_create_from(:url => @url)
-    expect(record).to eq result
-  end
-
-  it "should set re-import flag if given" do
-    record = Source.new(:url => @url)
-    expect(record).to receive(:save)
-    expect(Source).to receive(:find_or_create_by_url).and_return(record)
-
-    result = Source.find_or_create_from(:url => @url, :reimport => true)
-    expect(result.reimport).to be_truthy
-  end
-end
-
 end

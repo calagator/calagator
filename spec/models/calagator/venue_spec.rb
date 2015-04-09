@@ -214,11 +214,8 @@ describe Venue, :type => :model do
 
       expect(@venues.map{|venue| venue.events.count}).to eq [2, 0, 0]
 
-      events = @venues.map(&:events).flatten
-      expect(events).to be_present
-      for event in events
-        expect(event.venue).to eq @master_venue
-      end
+      events = @venues.flat_map(&:events).each(&:reload)
+      expect(events.map(&:venue)).to all(eq @master_venue)
     end
   end
 end

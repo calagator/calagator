@@ -132,9 +132,9 @@ describe VenuesController, :type => :controller do
       end
 
       it "should accept a JSONP callback" do
-        get :index, :format => "json", :callback => "some_function"
+        xhr :get, :index, :format => "json", :callback => "some_function"
 
-        expect(response.body.split("\n").join).to match /^\s*some_function\(.*\);?\s*$/
+        expect(response.body.split("\n").join).to match /some_function\(.*\)$/
       end
     end
 
@@ -164,9 +164,9 @@ describe VenuesController, :type => :controller do
         end
 
         it "should accept a JSONP callback" do
-          get :show, :id => @venue.to_param, :format => "json", :callback => "some_function"
+          xhr :get, :show, :id => @venue.to_param, :format => "json", :callback => "some_function"
 
-          expect(response.body.split("\n").join).to match /^\s*some_function\(.*\);?\s*$/
+          expect(response.body.split("\n").join).to match /some_function\(.*\)$/
         end
       end
     end

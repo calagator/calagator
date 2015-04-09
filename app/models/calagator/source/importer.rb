@@ -3,7 +3,7 @@ module Calagator
 class Source < ActiveRecord::Base
   class Importer < Struct.new(:source, :events)
     def initialize params
-      self.source = Source.find_or_create_from(params)
+      self.source = Source.find_or_create_by(params)
     end
 
     def import

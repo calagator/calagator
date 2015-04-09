@@ -265,7 +265,7 @@ describe Event, :type => :model do
 
     it "should set from Date" do
       event = Event.new(:start_time => Date.parse("2009-02-01"))
-      expect(event.start_time).to eq Time.parse("2009-02-01")
+      expect(event.start_time).to eq Time.zone.parse("2009-02-01")
     end
 
     it "should set from DateTime" do
@@ -303,7 +303,7 @@ describe Event, :type => :model do
 
     it "should set from Date" do
       event = Event.new(:end_time => Date.parse("2009-02-01"))
-      expect(event.end_time).to eq Time.parse("2009-02-01")
+      expect(event.end_time).to eq Time.zone.parse("2009-02-01")
     end
 
     it "should set from DateTime" do
@@ -600,12 +600,12 @@ describe Event, :type => :model do
     end
 
     it "should find complete duplicates by all" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes)
+      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(id: nil))
       expect(post.size).to eq(pre.size + 2)
     end
 
     it "should not find incomplete duplicates by all" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(:title => "SpaceCube", :start_time => @event.start_time ))
+      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(title: "SpaceCube", start_time: @event.start_time, id: nil))
       expect(post.size).to eq pre.size
     end
 
@@ -628,7 +628,7 @@ describe Event, :type => :model do
     it "should consolidate associations, and merge tags" do
       @event.tag_list = %w[first second] # master event contains one duplicate tag, and one unique tag
 
-      clone = Event.create!(@event.attributes)
+      clone = Event.create!(@event.attributes.merge(id: nil))
       clone.tag_list.replace %w[second third] # duplicate event also contains one duplicate tag, and one unique tag
       clone.save!
       clone.reload

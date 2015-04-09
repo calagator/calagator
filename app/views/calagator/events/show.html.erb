@@ -43,7 +43,7 @@
     <li><%= link_to "Google Calendar", google_event_export_link(@event), :id => "google_calendar_export", :target => "_blank" %></li>
     <li><%= link_to 'iCalendar file', "#{event_url(@event)}.ics" %></li>
     <li>
-      <%= link_to_function 'hCalendar markup', '$("#hcal_field").toggle()' %>
+      <a href="#" onclick="$('#hcal_field').toggle(); return false">hCalendar markup</a>
       <div id="hcal_field" style="display: none;">
         <%= text_area_tag 'hCalendar',
           h(
@@ -67,7 +67,7 @@
       <%= link_to "edit", edit_event_url(@event) %>,
       <%= link_to "clone", clone_event_url(@event) %>,
       or 
-      <%= link_to "delete", event_url(@event), :method => :delete, :confirm => "Are you sure?" %>
+      <%= link_to "delete", event_url(@event), method: :delete, data: { confirm: "Are you sure?" } %>
       this event.
     </p>
     <% end %>

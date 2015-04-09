@@ -62,7 +62,7 @@ describe EventsController, :type => :controller do
       it "should accept a JSONP callback" do
         post :index, :format => "json", :callback => "some_function"
 
-        expect(response.body.split("\n").join).to match /^\s*some_function\(.*\);?\s*$/
+        expect(response.body.split("\n").join).to match /some_function\(.*\)\Z/
       end
 
       describe "without events" do
@@ -717,7 +717,7 @@ describe EventsController, :type => :controller do
         it "should accept a JSONP callback" do
           post :search, :query => "myquery", :format => "json", :callback => "some_function"
 
-          expect(response.body).to match /^\s*some_function\(.*\);?\s*$/
+          expect(response.body).to match /some_function\(.*\)$/
         end
 
         it "should include venue details" do
