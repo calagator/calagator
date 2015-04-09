@@ -4,7 +4,6 @@ PATH
     calagator (0.0.1)
       acts-as-taggable-on (~> 3.5)
       bluecloth (= 2.2.0)
-      columnize (= 0.3.6)
       font-awesome-rails (= 3.2.1.3)
       formtastic (= 2.2.1)
       geokit (= 1.6.5)

@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
   s.add_dependency "formtastic", "2.2.1"
   s.add_dependency "rails_autolink", "1.1.6"
   s.add_dependency "nokogiri"
-  s.add_dependency "columnize", "0.3.6"
   s.add_dependency "geokit", "1.6.5"
   s.add_dependency "htmlentities", "4.3.3"
   s.add_dependency "ri_cal", "0.8.8"
