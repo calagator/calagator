@@ -1,7 +1,8 @@
 class Event < ActiveRecord::Base
   class Saver < Struct.new(:event, :params, :failure)
     def save
-      unless params[:update_all]
+      update_all = params[:update_all] == 'true'
+      unless update_all
         params[:event].delete(:rrule)
       end
       event.attributes = params[:event]
@@ -11,7 +12,7 @@ class Event < ActiveRecord::Base
       event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
 
       if attempt_save?
-        params[:update_all] ? event.update_recurrences : true
+        update_all ? event.update_recurrences : true
       end
     end
 
