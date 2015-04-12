@@ -114,6 +114,24 @@ module EventsHelper
     return _events_feed_linker(filter, :format => "atom")
   end
 
+  def action_links(event)
+    links = [
+      link_to("edit", edit_event_url(@event)),
+      link_to("clone", clone_event_url(@event)),
+      link_to("delete", event_url(@event), {
+        :method => :delete,
+        :confirm => "Are you sure you want to delete this event?"
+      })
+    ]
+    if event.has_recurrences?
+      links << link_to("delete reccurrences of", event_url(@event, delete_all: true), {
+        method: :delete,
+        confirm: "Are you sure you want to delete this and all future recurrences of this event?"
+      })
+    end
+    links.to_sentence
+  end
+
   #--[ Sharing buttons ]-----------------------------------------
 
   # Tweet button text

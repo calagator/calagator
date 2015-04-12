@@ -11,6 +11,7 @@
 
 <% content_for :javascript_insert do %>
   <%= javascript_include_tag 'forms' %>
+  <%= javascript_include_tag 'recurrence' %>
   <script>
     var completed_title = '';
     $(document).ready(function(){
@@ -29,7 +30,7 @@
 
           return false;
         }
-      }).data( "autocomplete" )._renderItem = function( ul, item ) {
+      }).data("ui-autocomplete" )._renderItem = function( ul, item ) {
         var short_address = (item.street_address && item.street_address.length > 0)
                               ? item.street_address+", "+item.locality+" "+item.region
                               : item.address;
@@ -82,6 +83,18 @@
 
 <%= semantic_form_for(event, :html => {:id => 'event_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
   <%= f.inputs :name => "#{'Editing: ' unless event.new_record?} <em>#{event.title}</em>".html_safe do %>
+    <% if event.has_recurrences? %>
+      <li class='radio input' id='event_update_all'>
+        <%= label_tag :recurrence, "Recurrence", class: 'label' %>
+        <%= radio_button_tag :update_all, false, checked: true %>
+        <%= label_tag :update_all_false, "Update only this event" %>
+        <br/>
+        <%= radio_button_tag :update_all, true %>
+        <%= label_tag :update_all_true, "Update this event and all future occurrences" %>
+      </li>
+    <% else %>
+      <%= hidden_field_tag :update_all, true %>
+    <% end %>
     <% if current_admin %>
       <%= f.input :organization, as: :select, collection: Organization.all %>
     <% else %>
@@ -112,6 +125,10 @@
         <%= text_field_tag 'end_time', event.end_time.strftime('%I:%M %p'), :id => 'time_end', :class => 'time_picker' %>
         <%= text_field_tag 'end_date', event.end_time.to_date, :id => 'date_end', :class => 'date_picker' %>
         <%= f.semantic_errors :start_date, :start_time, :end_date, :end_time %>
+    </li>
+    <li id='event_rrule_input' class='input optional'>
+      <%= label_tag :rrule, "Schedule", class: 'label' %>
+      <%= f.select_recurring :rrule, nil, allow_blank: true  %>
     </li>
     <%= f.input :url, :label => 'Website' %>
     <%= f.input :description,

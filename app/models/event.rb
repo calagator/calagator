@@ -33,6 +33,8 @@ class Event < ActiveRecord::Base
   belongs_to :venue, :counter_cache => true
   belongs_to :organization, :counter_cache => true
   belongs_to :source
+  belongs_to :parent, foreign_key: :parent_id, class_name: 'Event', inverse_of: :children
+  has_many   :children, foreign_key: :parent_id, class_name: 'Event', inverse_of: :parent
 
   delegate :title, to: :organization, prefix: true, allow_nil: true
 
@@ -45,6 +47,8 @@ class Event < ActiveRecord::Base
     :allow_nil => true
 
   validates :title, :description, :url, blacklist: true
+
+  validate :valid_rrule
 
   before_destroy :verify_lock_status
 
@@ -101,6 +105,50 @@ class Event < ActiveRecord::Base
     end
   }
 
+  def schedule
+    IceCube::Schedule.new(start_time, end_time: end_time) do |s|
+      s.add_exception_time(start_time)
+      s.add_recurrence_rule(rule.until(1.year.from_now)) if rule
+    end
+  end
+
+
+  def rule
+    RecurringSelect.dirty_hash_to_rule(rrule) if rrule.present?
+  end
+
+  # Existing occurrences of this event, excluding self
+  def occurrences
+    parent_id = self.parent_id || self.id
+    self.class.where(parent_id: parent_id).where('id <> ?', id)
+  end
+
+  # Future recurrences of this event
+  def recurrences
+    occurrences.on_or_after_date([start_time, Time.now].compact.max)
+  end
+
+  # Update timing of recurrences, creating and destroying events as required
+  def update_recurrences
+    schedule.all_occurrences.interleave(recurrences)
+                            .each do |occurrence, event|
+      if occurrence
+        event ||= self.class.new
+        attrs = attributes.except(:id, :source_id, :duplicate_of_id).merge({
+          start_time: occurrence.start_time,
+          end_time:   occurrence.end_time,
+          parent_id:  parent_id || id
+        })
+        event.update_attributes(attrs)
+      else
+        event.destroy
+      end
+    end
+  end
+
+  def has_recurrences?
+    recurrences.present?
+  end
   #---[ Overrides ]-------------------------------------------------------
 
   # Return the title but strip out any whitespace.
@@ -235,5 +283,16 @@ protected
 
   def verify_lock_status
     return !locked
+  end
+
+  def valid_rrule
+    if rrule.present?
+      begin
+        valid = RecurringSelect.is_valid_rule?(JSON.parse(rrule))
+      rescue
+        valid = false
+      end
+      errors.add(:rrule, "Must be a valid reccurrence rule.") unless valid
+    end
   end
 end

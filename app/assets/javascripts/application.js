@@ -1,7 +1,6 @@
 //= require jquery
 //= require jquery_ujs
 //= require leaflet.awesome-markers
-//  require jquery-ui/datepicker
 
 $(document).ready(function(){
   // Shows hidden section when a link is clicked, and hides the link.
