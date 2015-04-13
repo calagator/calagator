@@ -17,6 +17,9 @@ html_classes << " contentbar" if has_contentbar
       <meta itemprop="endDate" content="<%= event.end_time.to_time.iso8601 %>">
     <% end %>
     <div class='date'><%= normalize_time(event) -%></div>
+    <% if event.rule && event.has_recurrences? %>
+      <div class='recurrence'><%= event.rule.to_s %></div>
+    <% end %>
 
     <%= render partial: 'organizations/event_view', locals: { organization: event.organization } %>
 

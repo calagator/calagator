@@ -55,7 +55,8 @@ module Calagator
       "errors.css",
       "analytics.js",
       "analytics_events.js",
-      "calendar.js"
+      "calendar.js",
+      "recurrence.js"
     ]
 
     #---[ Rack Middleware ]-------------------------------------------------

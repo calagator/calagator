@@ -66,14 +66,7 @@
     <% if @event.locked %>
       <p>This event is currently locked and cannot be edited. Please contact an admin for assistance.</p>
     <% elsif current_admin || @event.organization == current_organization %>
-      <p>
-        You can
-        <%= link_to "edit", edit_event_url(@event) %>,
-        <%= link_to "clone", clone_event_url(@event) %>,
-        or
-        <%= link_to "delete", event_url(@event), :method => :delete, :confirm => "Are you sure?" %>
-        this event.
-      </p>
+      <p>You can <%= action_links(@event).html_safe %> this event.</p>
     <% else %>
       <p>This event is owned by another organization. You cannot edit it.</p>
     <% end %>

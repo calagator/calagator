@@ -90,6 +90,10 @@ class EventsController < ApplicationController
   # DELETE /events/1
   # DELETE /events/1.xml
   def destroy
+    if params[:delete_all]
+      @event.recurrences.delete_all
+    end
+
     @event.destroy
 
     respond_to do |format|
@@ -171,7 +175,6 @@ class EventsController < ApplicationController
     @event = Event.find(params[:id])
     authorized =
       (current_admin || !@event.organization || @event.organization == current_organization) && !@event.locked?
-
     unless authorized
       not_authorized
     end

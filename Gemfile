@@ -35,7 +35,7 @@ gem 'loofah-activerecord', '1.1.0'
 gem 'bluecloth', '2.2.0'
 gem 'formtastic', '2.2.1'
 gem 'acts-as-taggable-on', '2.4.1'
-gem 'jquery-rails', '1.0.19'
+gem 'jquery-rails', '~> 3.0.0'
 gem 'progress_bar', '1.0.0'
 gem 'exception_notification', '2.6.1'
 gem 'font-awesome-rails', '3.2.1.3'
@@ -46,6 +46,7 @@ gem 'mofo', path: 'vendor/gems/mofo-0.2.8' # vendored fork with hpricot dependen
 gem 'sunspot_rails', '2.1.1'
 gem 'sunspot_solr',  '2.1.1'
 gem 'lucene_query', '0.1'
+gem 'recurring_select', '~> 1.2.1'
 
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
@@ -114,7 +115,7 @@ group :assets do
   gem 'sass-rails',   '~> 3.2.3'
   gem 'sass', '~> 3.2.14'
   # gem 'coffee-rails', '~> 3.2.1'
-  #gem 'jquery-ui-rails'
+  gem 'jquery-ui-rails'
 
   # See https://github.com/sstephenson/execjs#readme for more supported runtimes
   gem 'therubyracer', :platforms => :ruby
