@@ -18,7 +18,7 @@ html_classes << " contentbar" if has_contentbar
     <% end %>
     <div class='date'><%= normalize_time(event) -%></div>
     <% if event.rule && event.has_recurrences? %>
-      <div class='recurrence'><%= event.rule.to_s %></div>
+      <div class='recurrence'>Repeats: <%= event.rule.to_s %></div>
     <% end %>
 
     <%= render partial: 'organizations/event_view', locals: { organization: event.organization } %>

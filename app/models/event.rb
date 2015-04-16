@@ -112,6 +112,12 @@ class Event < ActiveRecord::Base
     end
   end
 
+  # Don't write "null" or otherwise invalid JSON.
+  def rrule=(value)
+    if (JSON.parse(value) rescue nil)
+      super(value)
+    end
+  end
 
   def rule
     RecurringSelect.dirty_hash_to_rule(rrule) if rrule.present?

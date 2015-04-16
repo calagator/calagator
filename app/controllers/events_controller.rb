@@ -49,7 +49,7 @@ class EventsController < ApplicationController
   # POST /events.xml
   def create
     if current_admin || current_organization
-      attrs = { organization: current_organization}.merge(params[:event] || {})
+      attrs = { organization: current_organization }.merge(params[:event] || {})
       @event = Event.new(attrs)
       create_or_update
     else
