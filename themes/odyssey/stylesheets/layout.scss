@@ -270,23 +270,11 @@ ul.event_list .list_date {
 /* @group Single Event
 ----------------------------------------*/
 
-.single_event h1 {
-  padding-top: 0.5em;
-  margin: 0;
-  line-height: 1.2em;
-}
-
-.single_event h3 {
-  padding-top: 1.0em;
-  margin-bottom: 0.5em;
-  line-height: 0.5em;
-}
-
 .single_event .date {
   color: saturate(lighten($vo_blue, 30%), 15%);
   font-size: 1.3em;
   font-weight: bold;
-  margin-bottom: 1em;
+  margin-bottom: 8px;
 }
 
 .single_event .location.vcard {
@@ -322,6 +310,24 @@ ul.event_list .list_date {
 
 .single_event .description {
   width: 40em;
+}
+
+.single_event {
+  #recurrence {
+    color: saturate(lighten($vo_blue, 10%), 15%);
+  }
+  .property {
+    h3 {
+      margin-bottom: 6px;
+    }
+    margin: 18px 0px;
+    .property-detail {
+      width: 100%;
+      margin: 0px;
+      padding: 12px;
+      background: rgba(38,169,224,0.1);
+    }
+  }
 }
 
 .share .fb-share {
@@ -499,9 +505,6 @@ ul.event_list .list_date {
 .single_venue .location.vcard .address {
   margin-bottom: 1em;
   width: 300px;
-}
-
-.single_venue .location .info {
 }
 
 .single_venue .description,

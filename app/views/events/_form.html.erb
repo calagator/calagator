@@ -130,13 +130,25 @@
       <%= label_tag :rrule, "Schedule", class: 'label' %>
       <%= f.select_recurring :rrule, nil, allow_blank: true  %>
     </li>
-    <%= f.input :url, :label => 'Website' %>
+    <%= f.input :url, as: :url, label: 'Website' %>
+    <%= f.input :minimum_age,
+                as: :select,
+                include_blank: false,
+                collection: (1..65).to_a.unshift(['- all ages -', nil]) %>
+    <%= f.input :signup_instructions,
+                as: :text,
+                hint: "If volunteers need to signup, describe how (email, phone, web, etc.).",
+                input_html: { rows: 2 } %>
+    <%= f.input :contact_information,
+                as: :text,
+                hint: "How and with whom can volunteers get in touch with?",
+                input_html: { rows: 2 } %>
     <%= f.input :description,
                 :input_html => {:rows => 12},
-                :hint => "(Format text using #{link_to("Markdown", "http://www.simpleeditions.com/59001/markdown-an-introduction", :target => "_blank")} and HTML)".html_safe %>
+                :hint => "Describe the event. Things like what volunteers will do, what to bring, and who benefits from the work are good things to put here. You may format text using #{link_to("Markdown", "http://www.simpleeditions.com/59001/markdown-an-introduction", :target => "_blank")} and HTML".html_safe %>
     <%= f.input :tag_list, :required => false,
                 :label => 'Tags',
-                :hint => "(Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>plancast:plan=ABCD</code> to associate this with a particular <a href='http://plancast.com/'>Plancast</a> event, or a tag like <code>epdx:group=1234</code> to associate the event with a particular <a href='http://epdx.org/'>ePDX</a> group)".html_safe %>
+                :hint => "Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>plancast:plan=ABCD</code> to associate this with a particular <a href='http://plancast.com/'>Plancast</a> event.".html_safe %>
     <li class='trap'>
       <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
       <%= text_field_tag 'trap_field', params[:trap_field] %>
