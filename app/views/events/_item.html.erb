@@ -17,74 +17,109 @@ html_classes << " contentbar" if has_contentbar
       <meta itemprop="endDate" content="<%= event.end_time.to_time.iso8601 %>">
     <% end %>
     <div class='date'><%= normalize_time(event) -%></div>
+
     <% if event.rule && event.has_recurrences? %>
-      <div class='recurrence'>Repeats: <%= event.rule.to_s %></div>
+      <div id='recurrence'><h4><%= event.rule.to_s %></h4></div>
     <% end %>
 
-    <%= render partial: 'organizations/event_view', locals: { organization: event.organization } %>
+    <% if event.organization %>
+      <div id='organizer' class='property'>
+        <h4>Organized by <%= link_to event.organization.title, event.organization %>.</h4>
+      </div>
+    <% end %>
 
-      <% unless event.venue.blank? %>
-      <div class="clearfix location p-location h-card vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
-          <%= map event %>
-          <a class="url u-url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
-            <span class='fn org p-name' itemprop="name"><%= event.venue.title -%></span>
-          </a>
-          <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
-          <div class="adr p-adr h-adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-          <% if !event.venue.street_address.blank? -%>
-          <div class="street-address p-street-address" itemprop="streetAddress"><%= event.venue.street_address -%></div>
-          <% end %>
-          <% if !event.venue.locality.blank? -%>
-            <span class="locality p-locality" itemprop="addressLocality"><%= event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
-            <% end -%>
-            <% if !event.venue.region.blank? -%>
-            <span class="region p-region" itemprop="addressRegion"><%= event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
-            <% end -%>
-            <% if !event.venue.postal_code.blank? -%>
-            <span class="postal-code p-postal-code"  itemprop="postalCode"><%= event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
-            <% end -%>
-            <% if !event.venue.country.blank? -%>
-            <span class='country-name p-country-name'><%= event.venue.country -%></span>
-            <% end -%>
-            <% if event.venue && event.venue.has_full_address? -%>
-            (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
-            <% end -%>
-
-            <% if event.venue.wifi? -%>
-              <div class='wifi_callout'>Public WiFi</div>
-            <% end -%>
-
-            <% if event.venue.access_notes.present? -%>
-              <div class="access_notes">
-                <h3>Access Notes</h3>
-                <%= format_description event.venue.access_notes %>
-              </div>
-            <% end -%>
-
+    <% unless event.venue.blank? %>
+      <div id='location' class='property'>
+        <h3>Location</h3>
+          <div class="property-detail clearfix location p-location h-card vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
+            <%= map event %>
+            <a class="url u-url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
+              <span class='fn org p-name' itemprop="name"><%= event.venue.title -%></span>
+            </a>
+            <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
+            <div class="adr p-adr h-adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+              <% if !event.venue.street_address.blank? -%>
+                <div class="street-address p-street-address" itemprop="streetAddress"><%= event.venue.street_address -%></div>
+              <% end %>
+              <% if !event.venue.locality.blank? -%>
+                <span class="locality p-locality" itemprop="addressLocality"><%= event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
+              <% end -%>
+              <% if !event.venue.region.blank? -%>
+                <span class="region p-region" itemprop="addressRegion"><%= event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
+              <% end -%>
+              <% if !event.venue.postal_code.blank? -%>
+                <span class="postal-code p-postal-code"  itemprop="postalCode"><%= event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
+              <% end -%>
+              <% if !event.venue.country.blank? -%>
+                <span class='country-name p-country-name'><%= event.venue.country -%></span>
+              <% end -%>
+              <% if event.venue && event.venue.has_full_address? -%>
+                (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
+              <% end -%>
+              <% if event.venue.wifi? -%>
+                <div class='wifi_callout'>Public WiFi</div>
+              <% end -%>
+              <% if event.venue.access_notes.present? -%>
+                <div class="access_notes">
+                  <h3>Access Notes</h3>
+                  <%= format_description event.venue.access_notes %>
+                </div>
+              <% end -%>
             <% unless event.venue_details.blank? -%>
-            <p class="p-description">
-              <%= format_description(event.venue_details) %>
-            </p>
+              <p class="p-description">
+                <%= format_description(event.venue_details) %>
+              </p>
             <% end -%>
-
+          </div>
+        <% end -%>
       </div>
-      <% end -%>
-  </div>
-
-    <% unless event.url.blank? -%>
-      <h3>Website</h3>
-      <div class="website">
-        <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url u-url", :rel => "nofollow", 
-        :itemprop => "url" %>
-      </div>
-    <% end -%>
+    </div>
 
     <% unless event.description.blank? -%>
-    <h3>Description</h3>
-    <div class="description e-description" itemprop="description">
-      <%= format_description(event.description) %>
-    </div>
+      <div id='description' class='property'>
+        <h3>Description</h3>
+        <div class="description property-detail e-description" itemprop="description">
+          <%= format_description(event.description) %>
+        </div>
+      </div>
     <% end -%>
+
+    <% unless event.url.blank? -%>
+      <div id='website' class='property'>
+        <h3>
+          Website:
+          <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url u-url", :rel => "nofollow", :itemprop => "url" %>
+        </h3>
+      </div>
+    <% end -%>
+
+    <div id='minimum-age' class='property'><h3>
+      <% if event.minimum_age.blank? %>
+        All Ages Event
+      <% else %>
+        Minimum Volunteer Age: <%= event.minimum_age %>
+      <% end %>
+    </h3></div>
+
+    <% if event.contact_information.present? %>
+      <div id='contact-information' class='property'>
+        <h3>Contact Information</h3>
+        <div class='contact-information property-detail'>
+          <%= event.contact_information %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if event.signup_instructions.present? %>
+      <div id='signup-instructions' class='property'>
+        <h3>Signup Instructions</h3>
+        <div class='signup-instructions property-detail'>
+          <%= event.contact_information %>
+        </div>
+      </div>
+    <% end %>
+
+
     <div class="attendees">
       <script id="attendees-template" type="text/mustache">
         <h3>Attendees</h3>
@@ -101,7 +136,6 @@ html_classes << " contentbar" if has_contentbar
       </script>
     </div>
     <% if event.persisted? %>
-      <h3>Share</h3>
       <div class="share">
         <a class="fb-share" href="#"
           onclick="

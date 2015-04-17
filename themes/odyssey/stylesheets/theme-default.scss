@@ -1,7 +1,6 @@
 @import "variables";
 @charset "UTF-8";
 
-
 @media (max-width: 960px) {
   .expander_toggle,
   .expander_toggle:link,
@@ -9,12 +8,15 @@
     display: block;
     margin: 1em 0;
     color:  $text_highlight;
-    font-style: italic; }
-    a.expander_toggle {
-      padding: 0.25em;
-      padding-left: 0; }
-    a.expander_toggle::before {
-      content: "» "; }
+    font-style: italic;
+  }
+  a.expander_toggle {
+    padding: 0.25em;
+    padding-left: 0;
+  }
+  a.expander_toggle::before {
+    content: "» ";
+  }
 
   #global_header {
     background: none repeat scroll 0 0 $header;
@@ -28,15 +30,15 @@
 
   #project_menu,
   .sidebar {
-	display: none;
+    display: none;
   }
 
   #content {
-	margin: 5px 0 0 10px;
+    margin: 5px 0 0 10px;
   }
 
   #list_filters {
-	display: none;
+    display: none;
   }
 
   .list_items {
@@ -45,8 +47,8 @@
   }
 
   #global_header a {
-	 font-size: 100%;
-   font-size: 16px;
+    font-size: 100%;
+    font-size: 16px;
   }
 
   #global_header #project_title {
@@ -56,27 +58,19 @@
 
   .subnav {
     line-height: inherit;
-	padding-left: 10px;
-    height: inherit; }
-    .subnav li {
-      padding: 0.25em 0; }
-    .subnav a {
+    padding-left: 10px;
+    height: inherit;
+    li {
+      padding: 0.25em 0;
+    }
+    a {
       margin: 0.5em 0;
-      padding: 0.15em 0.5em; }
-  //   .subnav .active {
-  //     -moz-border-radius: 4px;
-  //     border-radius: 4px;
-  //     color: white;
-  //     background: $green;
-	// padding: 0.25em;
-	// -moz-border-radius: 4px;
-	// border-radius: 4px;
-	// right: 10px;
-  //   top: 10px;
-  // }
+      padding: 0.15em 0.5em;
+    }
+  }
 
   #search_form label {
-	display: none;
+    display: none;
   }
 
   #search_form input {
@@ -87,7 +81,7 @@
   }
 
   #search_field {
-	width: 150px;
+    width: 150px;
   }
 
   .sidebar {
@@ -96,10 +90,10 @@
   }
 
   .sidebar.single_view_right {
-	position: inherit;
-	width: inherit;
-	margin-top: 0px;
-	width: 90%;
+    position: inherit;
+    width: inherit;
+    margin-top: 0px;
+    width: 90%;
   }
 
   .standard_form input[type="text"],
@@ -120,11 +114,14 @@
 
   .contentbar {
     margin: 0;
-    padding: 0; }
-    .contentbar > .vevent h1,
-    .contentbar .location h1 {
-      margin-top: 0;
-      padding-top: 0; }
+    padding: 0;
+  }
+
+  .contentbar > .vevent h1,
+  .contentbar .location h1 {
+    margin-top: 0;
+    padding-top: 0;
+  }
 
   .copy_block,
   .single_event .description,
@@ -133,8 +130,7 @@
   .single_venue .tags,
   .single_venue #events,
   .single_venue .description,
-  .single_venue .location.vcard
-  {
+  .single_venue .location.vcard {
     float: none;
     width: inherit;
     padding: inherit;
@@ -156,43 +152,51 @@
     background: inherit;
   }
 
-  .site_index {}
-    .site_index #homepage_sidebar,
-    .site_index #tagcloud {
-      display: none; }
-    .site_index #homepage_sidebar {
+  .site_index {
+    #homepage_sidebar, #tagcloud {
+      display: none;
+    }
+    #homepage_sidebar {
       float: none;
-      margin: 1em; }
-      .site_index #homepage_sidebar #project_description {
+      margin: 1em;
+      #project_description {
         width: inherit;
-        margin: 0; }
-    .site_index #whats_happening {
-      margin: 0 10px 0 0 ; }
-      .site_index #whats_happening > h1 {
-        display: none; }
-    .site_index .coming_events h3 {
-      /* background: $section_head_background; */
+        margin: 0;
+      }
+    }
+    #whats_happening {
+      margin: 0 10px 0 0 ;
+      > h1 {
+        display: none;
+      }
+    }
+    .coming_events h3 {
       color: inherit;
       padding: 0.25em;
       padding-right: 0;
       text-align: left;
-      margin-right: -1em; }
+      margin-right: -1em;
+    }
 
-  .events_change {}
-    .events_change #event_times input[type="text"] {
-      width: 70px; }
-    .events_change #event_times .to {
+  }
+  .events_change #event_times {
+    input[type="text"] {
+      width: 70px;
+    }
+    .to {
       clear: both;
       text-align: right;
       font-weight: bold;
-      width: 7em; }
-    .events_change #time_start,
-    .events_change #date_end {
-      margin: 0; }
-
-  .events_show #google_map,
-  .venues_show #google_map {
-    display: none;
+      width: 7em;
+    }
+    #time_start, #date_end {
+      margin: 0;
+    }
+  }
+  .events_show, .venues_show {
+    #google_map {
+      display: none;
+    }
   }
 }
 
