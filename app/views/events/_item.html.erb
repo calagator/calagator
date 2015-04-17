@@ -101,24 +101,23 @@ html_classes << " contentbar" if has_contentbar
       <% end %>
     </h3></div>
 
-    <% if event.contact_information.present? %>
-      <div id='contact-information' class='property'>
-        <h3>Contact Information</h3>
-        <div class='contact-information property-detail'>
-          <%= event.contact_information %>
-        </div>
-      </div>
-    <% end %>
-
     <% if event.signup_instructions.present? %>
       <div id='signup-instructions' class='property'>
         <h3>Signup Instructions</h3>
         <div class='signup-instructions property-detail'>
-          <%= event.contact_information %>
+          <%= auto_link event.signup_instructions, html: { rel: :nofollow } %>
         </div>
       </div>
     <% end %>
 
+    <% if event.contact_information.present? %>
+      <div id='contact-information' class='property'>
+        <h3>Contact Information</h3>
+        <div class='contact-information property-detail'>
+          <%= auto_link event.contact_information, html: { rel: :nofollow } %>
+        </div>
+      </div>
+    <% end %>
 
     <div class="attendees">
       <script id="attendees-template" type="text/mustache">
