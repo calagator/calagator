@@ -7,7 +7,7 @@
 
 ############################################################## */
 
-html, body, div, span, object, iframe,
+/* html, body, div, span, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, code,
 del, dfn, em, img, q, dl, dt, dd, ol, ul, li,
@@ -21,10 +21,62 @@ table, caption, tbody, tfoot, thead, tr, th, td {
   font-size: 100%;
   font-family: inherit;
   vertical-align: baseline;
+} */
+
+/* body {
+  line-height: 1.5;
+} */
+
+/* Remove annoying border on linked images. */
+/* a img { border: none; } */
+
+html {
+    font-family: sans-serif; /* 1 */
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+body {
+    margin: 0;
+    font-size: 16px;
+}
+h1,
+h2,
+h3,
+h4,
+p,
+blockquote,
+figure,
+ol,
+ul {
+    margin: 0;
+    padding: 0;
+}
+li {
+    display: block;
+}
+h1,
+h2,
+h3,
+h4 {
+    font-size: inherit;
+}
+a {
+    text-decoration: none;
+    color: inherit;
+    -webkit-transition: .3s;
+    -moz-transition: .3s;
+    transition: .3s;
+}
+img {
+    max-width: 100%;
+    height: auto;
+    border: 0;
 }
 
-body {
-  line-height: 1.5;
+svg:not(:root) {
+  overflow: hidden;
 }
 
 /* Tables still need 'cellspacing="0"' in the markup. */
@@ -36,5 +88,3 @@ table, td, th { vertical-align: middle; }
 blockquote:before, blockquote:after, q:before, q:after { content: ""; }
 blockquote, q { quotes: "" ""; }
 
-/* Remove annoying border on linked images. */
-a img { border: none; }
