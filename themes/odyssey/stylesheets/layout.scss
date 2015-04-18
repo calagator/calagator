@@ -29,27 +29,101 @@ body {
   clear: both;
 }
 
-@import url(https://fonts.googleapis.com/css?family=Sanchez);
+.header {
 
-#global_header {
-  #project_logo {
-    position: absolute;
-    left: 320px;
-    top:  20px;
-    height: 65px;
+  margin-top: 20px;
+
+  .logo {
+    float: left;
+    width: 35%;
   }
 
-  #project_title {
-    font-family: Sanchez;
-    color: $header_text;
-    font-size: 29px;
-    line-height: 31px;
-    height: 31px;
-    left: 40px;
-    position: absolute;
-    top: 25px;
-    width: 300px;
+  .search-form {
+    float: right;
   }
+
+  .search-form input {
+    padding-left: 6px;
+  }
+
+  ul.app-menu {
+    float: left;
+    clear: left;
+    display: block;
+    margin-top: 5px;
+    margin-left: 5px;
+  }
+
+  ul.app-menu > li {
+    float: left;
+    margin-right: 15px;
+  }
+
+  .project-menu {
+    float: right;
+    clear: right;
+  }
+  
+}
+
+@media screen and (max-width: 768px) {
+
+  .header {
+    margin-top: 10px;
+  }
+
+  .header .logo {
+    float: none;
+    width: 15%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+  }
+
+  .header .search-form {
+    // layout
+    float: none;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    // styles 
+    background-color: #08304A; // darker version of $vo-blue?
+  }
+
+  .header .search-form input {
+    width: 50%;
+    margin: 0 auto;
+    display: block;
+    background: none;
+  }
+
+  .header ul.app-menu {
+    float: none;
+    clear: none;
+    margin: 0 auto;
+    width: 50%;
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .header ul.app-menu li {
+    float: none;
+    margin-right: 0px;
+    display: inline-block;
+  }
+
+  .header .project-menu {
+    float: none;
+    clear: none;
+  }
+
+  .header .project-menu {
+    text-align: right;
+  }
+
+
 }
 
 #app_menu ul {

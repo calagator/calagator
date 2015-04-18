@@ -1,15 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<!doctype html>
+<html class='no-js' lang="en">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> -->
     <%= yield :open_graph_tags %>
     <title>
       <%= "#{yield(:title)} » " if content_for?(:title) -%>
       <%= SETTINGS.name -%>: <%= SETTINGS.tagline -%>
     </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black" />
     <%= csrf_meta_tag %>
@@ -45,37 +45,50 @@
   <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
 
   <div id="outer">
-    <div id="global_header">
-      <%= link_to SETTINGS.name, root_path, id: "project_title" %>
-      <%= image_tag('vo_logo_blue.png', id: "project_logo") %>
-      <div id="top_menu">
-         <div id='app_menu'>
-          <ul>
-              <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
-              <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
-              <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li>
-          </ul>
-        </div>
-        <div id='project_menu'>
+    <section class='header clearfix'>
+      <div class='container clearfix'>
+        <div class='hidden-sm hidden-md hidden-lg project-menu'>
           <% if current_organization %>
             Logged in as: <%= current_organization.title %>
             (<%= link_to 'logout', organization_logout_path %>)
           <% elsif current_admin %>
-              Logged in as Admin.
+            Logged in as Admin.
           <% end %>
-        </div>
-        <%= form_tag search_events_path, :method => :get do %>
-          <div id='search_form'>
-          <label for="search_field">Search Events</label>
-          <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-            <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-          <% else %>
-            <%= text_field_tag 'query', @query, :id => 'search_field' %>
+        </div><!-- .project-menu -->
+        <div class='logo'>
+          <a class='hidden-xs' href="<%= root_path %>">
+            <%= image_tag('logo-big.svg') %>
+          </a>
+          <a class='hidden-sm hidden-md hidden-lg' href="<%= root_path %>">
+            <%= image_tag('logo-small.svg') %>
+          </a>
+        </div><!-- .logo -->
+        <div class='search-form'>
+          <%= form_tag search_events_path, :method => :get do %>
+            <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+              <i class='fa fa-search'></i>
+              <input placeholder="Search events" type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+            <% else %>
+              <i class='fa-fa-search'></i>
+              <%= text_field_tag 'query', @query, :id => 'search_field', :placeholder => 'Search events' %>
+            <% end %>
+          <% end -%>
+        </div><!-- .search-form -->
+        <ul class='app-menu clearfix'>
+          <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+          <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+          <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li>
+        </ul><!-- .app-menu -->
+        <div class='hidden-xs project-menu'>
+          <% if current_organization %>
+            Logged in as: <%= current_organization.title %>
+            (<%= link_to 'logout', organization_logout_path %>)
+          <% elsif current_admin %>
+            Logged in as Admin.
           <% end %>
-          </div>
-        <% end -%>
-      </div>
-    </div>
+        </div><!-- .project-menu -->
+      </div><!-- .container -->
+    </section><!-- .header -->
 
     <% # Pick a subnav %>
 
@@ -98,6 +111,6 @@
       &nbsp;
     </div>
 
-</div>
+  </div>
   </body>
 </html>
