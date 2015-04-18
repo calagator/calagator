@@ -1,0 +1,37 @@
+/* TEAM */
+
+name: Michael Cochran
+twitter: @vongrippen
+
+name: Dounan Hu
+twitter: @dounan1
+
+name: Josh Lewis
+twitter: @joshwlewis
+
+name: Barry Marshall
+twitter: @guitchicken
+
+name: Daniel Pritchett
+twitter: @dpritchett
+
+name: Derick Ruiz
+twitter: @iamderickruiz
+
+name: Daniel Soskel
+twitter: @unstablereality
+
+/* THANKS */
+
+name: Give Camp Memphis
+url: http://givecampmemphis.com
+
+name: Calagator Team
+url: https://github.com/calagator
+
+/* SITE */
+
+Source: https://github.com/VolunteerOdyssey/calagator
+Standards: HTML5, CSS3
+Client Tech: jQuery, Bootstrap
+Server Tech: Ruby, Rails, PostgreSQL
