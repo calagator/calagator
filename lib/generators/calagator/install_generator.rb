@@ -6,7 +6,6 @@ module Calagator
 
     def install
       add_route
-      add_secrets
       add_initializer
       add_javascripts
       add_stylesheets
@@ -23,11 +22,6 @@ module Calagator
 
     def add_route
       inject_into_file 'config/routes.rb', "\s\smount Calagator::Engine => '/'\n", after: "routes.draw do\n"
-    end
-
-    def add_secrets
-      run 'touch config/secrets.yml'
-      append_file 'config/secrets.yml', File.read(File.expand_path('../templates/config/secrets.yml.sample', __FILE__))
     end
 
     def add_initializer

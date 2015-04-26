@@ -3,9 +3,9 @@ require 'spec_helper'
 module Calagator
 
 describe Source::Parser::Meetup, :type => :model do
-  describe "with a meetup.com API key in secrets.yml" do
+  describe "with a meetup.com API key" do
     before do
-      SECRETS.meetup_api_key = "foo"
+      Calagator.meetup_api_key = "foo"
     end
 
     before(:each) do
@@ -40,7 +40,7 @@ describe Source::Parser::Meetup, :type => :model do
 
   context "without a meetup API key" do
     before do
-      SECRETS.meetup_api_key = nil
+      Calagator.meetup_api_key = nil
     end
 
     before(:each) do
