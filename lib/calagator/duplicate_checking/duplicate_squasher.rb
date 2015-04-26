@@ -20,7 +20,7 @@ module DuplicateChecking
           SingleSquasher.new(master, duplicate, model_name).squash
         end
         name = model_name.split("::").last
-        self.success = "Squashed duplicate #{name.pluralize} #{duplicates.map(&:title)} into master #{master.id}."
+        self.success = "Squashed duplicate #{name.pluralize} #{duplicates.map(&:title).sort} into master #{master.id}."
       end
       self
     end
