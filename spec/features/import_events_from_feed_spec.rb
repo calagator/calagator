@@ -12,7 +12,7 @@ feature 'import events from a feed' do
 
   scenario 'A user imports an events from a feed' do
     visit '/'
-    click_on 'Import event(s)'
+    click_on 'Import events'
 
     fill_in 'URL', with: 'http://even.ts/feed'
     click_on 'Import'
