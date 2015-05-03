@@ -1,0 +1,99 @@
+.calendar {
+
+  .button {
+    display: block;
+    width: 24%;
+    float: left;
+    background-color: #207FC2;
+    border-bottom: 3px solid #1E6596;
+    font-family: $font-family-fira-sans;
+    color: #fff;
+    font-weight: 400;
+    font-size: 0.85em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    text-align: center;
+  }
+
+  .month-name {
+    display: block;
+    width: 52%;
+    float: left;
+    font-family: "Fira Sans";
+    font-weight: 600;
+    font-size: 1.5em;
+    text-align: center;
+    margin-top: 0.4em;
+  }
+
+  table,
+  tbody,
+  tr,
+  td {
+    width: 100%;
+    display: block;
+  }
+
+  td {
+    padding: 0;
+  }
+
+  th {
+    display: none;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: rgb(235, 235, 235);
+  }
+
+  li {
+    border-bottom: 1px solid #C5C2C2;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+  }
+
+  li > a {
+    font-family: $font-family-fira-sans;
+    font-size: 1em;
+  }
+
+  li:nth-child(even) {
+    background-color: #F0F0F0
+  }
+
+  .date {
+    background-color: #2A2A2A;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #2BA2F5;
+  }
+
+  .date > span {
+    font-family: $font-family-fira-sans;
+    color: #fff;
+    font-size: 1em;
+  }
+
+  td:not(.today) { // note this needs to be changed.
+      display: none;
+  }
+
+  ul > a {
+    display: none;
+  }
+
+  .organization-name {
+    color: #064064;
+  }
+
+  .event-time {
+    display: block;
+    color: rgba(82, 82, 82, 1);
+  }
+
+}

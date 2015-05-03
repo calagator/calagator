@@ -1,10 +1,259 @@
 /*
- *= require bootstrap
- *= require theme-forms
- *= require layout
- *= require styles
- *= require theme-default
- *= require jquery-ui/jquery-ui
- *= require changes
- *= require articles
-*/
+ *= require formtastic
+ *= require leaflet.awesome-markers
+ *= require recurring_select
+ *= require jquery-ui/datepicker
+ */
+
+@import 'foundation';
+@import 'variables';
+@import 'mixins';
+
+// A lot of layout is probably in these 3 files so including them for now until I can make it better.
+@import 'layout';
+@import 'theme-default';
+@import 'theme-forms';
+
+// I really want to use Fira Sans in this design because Volunteer Odyssey and Fira Sans feels like a match-made in heaven.
+// TODO: I would rather have this as it's own script tag. Bring it out to the head later.
+@import url(http://fonts.googleapis.com/css?family=Fira+Sans:300,400,500,700);
+
+// don't show that search icon on input type=search
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  display: none;
+}
+
+html {
+	/* Typography related rules */
+	text-rendering: optimizeLegibility;
+	-moz-font-feature-settings: "kern=0";
+	-ms-font-feature-settings: "kern" 0;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	-webkit-appearance: none;
+}
+
+.wrapper {
+	width: 100%;
+
+	overflow: hidden;
+
+	position: relative;
+}
+
+header {
+
+	display: block; // eventually replace this with html-5shiv if we need support for older browsers. :/
+
+	.project-menu {
+		display: none;
+	}
+
+	.logo { // the logo container.
+		float: none;
+		// width: 15%;
+		margin: 0 auto;
+		margin-bottom: 10px;
+
+		// experimenting
+		width: 100%;
+		margin-bottom: 0;
+
+		// I like this .. for now ..
+		// TODO: Make it a mixin.
+		background: rgb(255,255,255); /* Old browsers */
+		background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(47%,rgba(246,246,246,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* IE10+ */
+		background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+
+	}
+
+	.logo > .logo-big {
+		display: none;
+	}
+	
+	.logo > .logo-small { // the actual logo. Should change the naming of this?
+		display: block;
+		width: 18%;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		margin: 0 auto;
+	}
+}
+
+.search-form {
+	width: 100%;
+	background-color: rgb(43, 162, 245);
+	padding: 1em 0;
+
+	input {
+		font-family: $font-family-fira-sans;
+		font-size: 1em;
+		font-weight: 300;
+		color: #fff; // make it a variable.
+
+		width: 90%;
+		display: block;
+		margin: 0 auto;
+
+		// reseting some stuff.
+		border: none;
+		outline: none; // Hmm, I'm not sure about this.
+
+		background: #fff;
+		border-radius: 15px;
+		padding-top: 0.5em;
+		padding-bottom: 0.5em;
+		font-weight: 400;
+		padding-left: 0.8em;
+
+	}
+}
+
+nav {
+
+	width: 100%;
+
+	ul.app-menu > li {
+		display: block;
+		float: left;
+		width: 33.333%;
+		text-align: center;
+		padding: 1em 0;
+
+		background-color: #207FC2;
+		border-bottom: 3px solid #1E6596;
+		color: #fff;
+		font-weight: bold;
+		font-size: 1em;
+
+		border-left: 1px solid #1E6596;
+
+		border-top: 1px solid #1E6596
+	}
+
+	ul.app-menu > li:first-child {
+		border-left: none;
+	}
+
+	li > a {
+		font-size: 1em;
+		font-family: $font-family-fira-sans;
+	}
+}
+
+.subnav {
+	background-color: rgb(147, 102, 171);
+	border-top: 1px solid #5A3E69;
+
+	ul {
+		width: 100%;
+	}
+
+	li { // assuming there's a maximum of these of these on the page at any given time (for mobile anyways).
+		width: 33.333%;
+		float: left;
+		padding: 0.5em 0;
+		text-align: center;
+		border-right: 1px solid #5A3E69;
+	}
+
+	li:first-child { // simulating an active state.
+		border-bottom: 3px solid #5A3E69;
+		// border-left: none;
+	}
+
+	li:last-child {
+		border-right: none;
+	}
+
+	li > a {
+		font-size: 0.85em;
+		font-family: $font-family-fira-sans;
+		color: #fff;
+	}
+}
+
+// Chevron styles
+.chevron {
+	display: inline-block; // this should be on a span tag or i tag which are already display: inline;
+	position: relative;
+}
+
+.chevron:before,
+.chevron:after {
+	content: " ";
+	display: block;
+	width: 2px;
+	height: 8px;
+
+	background-color: #fff; // turn this into a variable?
+}
+
+.chevron:before {
+    @include rotate(45);
+}
+
+.chevron:after {
+	@include rotate(137);
+    margin-top: -3px;
+}
+
+.chevron.chevron--direction-right {
+	-webkit-transform:scaleX(-1);
+    -moz-transform:scaleX(-1);
+    -ms-transform:scaleX(-1);
+    -o-transform:scaleX(-1);
+    transform:scaleX(-1);
+}
+
+body.events_index { // /events
+	// @import 'events';
+}
+
+body.events_new { // /events/new
+	// @import 'new-events';
+}
+
+body.sources_new { // /sources/new
+	// @import 'new-source';
+}
+
+body.site_index,
+body.admin_index { // home page
+	// this page probably has nothing special layout-wise.
+	@import 'home';
+}
+
+body.site_index {
+	@import 'calendar';
+}
+
+body.organizations_index { // /organizations 
+	// @import 'organizations';
+}
+
+body.organizations_new { // /organizations/new
+
+}
+
+body.organizations_index,
+body.organizations_new {
+	@import 'organizations';
+}
+
+body.venues_index { // /venues
+	// @import 'venues';
+}
+
+body.venues_show { // individual venues page
+	// @import 'venue';
+}

@@ -1,9 +1,10 @@
-<div id="calendar">
-  <h2 id="month">
-    <%= link_to "<", date: @date.prev_month %>
-    <%= @date.strftime("%B %Y") %>
-    <%= link_to ">", date: @date.next_month %>
-  </h2>
+<div class='calendar'>
+  <div class='month clearfix'>
+    <!-- How do you make RoR spit out a link without generating an a tag? -->
+    <a href="?date=<%= @date.prev_month %>" class='button'><i class='chevron chevron'></i> Prev Month</a>
+    <span class='month-name'><%= @date.strftime("%B %Y") %></span>
+    <a href="?date=<%= @date.next_month %>" class='button'>Next Month <i class='chevron chevron--direction-right'></i></a>
+  </div>
   <% if events_this_month? %>
     <%= calendar @date do |date| %>
       <div class='date'>
@@ -29,7 +30,9 @@
       <% end %>
     <% end %>
   <% else %>
-    <div class='no-events'>No events this month.</div>
+    <div class='no-events'>
+      <p>No events this month.</p>
+    </div>
   <% end %>
 </div>
 

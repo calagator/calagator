@@ -3,15 +3,18 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> -->
-    <%= yield :open_graph_tags %>
     <title>
       <%= "#{yield(:title)} » " if content_for?(:title) -%>
       <%= SETTINGS.name -%>: <%= SETTINGS.tagline -%>
     </title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="Description" content="">
+    <meta http-equiv="cleartype" content="on">
+
+    <%= yield :open_graph_tags %>
+
     <%= csrf_meta_tag %>
     <link rel='search' type='application/opensearchdescription+xml' href='<%= "#{root_path}opensearch.xml" %>'  title='<%= SETTINGS.name %>' />
 
@@ -26,12 +29,8 @@
     <!-- Stylesheets, inserted  -->
     <%= yield :css_insert %>
 
-    <!-- JavaScripts, static -->
-    <%= javascript_include_tag *mapping_js_includes %>
-    <%= javascript_include_tag 'application', 'theme', 'analytics' %>
-
-    <!-- JavaScripts, inserted -->
-    <%= yield :javascript_insert %>
+    <!-- Including only the analytics in the header page -->
+    <%= javascript_include_tag 'analytics' %>
 
     <!-- Auto-discovery, static -->
     <%= auto_discovery_link_tag(:atom, events_url(:format => 'atom'), :title => 'Atom: All Events' )%>
@@ -45,10 +44,11 @@
   </head>
   <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
 
-  <div id="outer">
-    <section class='header clearfix'>
-      <div class='container clearfix'>
-        <div class='hidden-sm hidden-md hidden-lg project-menu'>
+    <div class='wrapper'>
+
+      <header>
+
+        <div class='project-menu'>
           <% if current_organization %>
             Logged in as: <%= current_organization.title %>
             (<%= link_to 'logout', organization_logout_path %>)
@@ -56,62 +56,63 @@
             Logged in as Admin.
           <% end %>
         </div><!-- .project-menu -->
-        <div class='logo'>
-          <a class='hidden-xs' href="<%= root_path %>">
-            <%= image_tag('logo-big.svg') %>
-          </a>
-          <a class='hidden-sm hidden-md hidden-lg' href="<%= root_path %>">
-            <%= image_tag('logo-small.svg') %>
-          </a>
+
+          <div class='logo'>
+            <a class='logo-big' href="<%= root_path %>">
+              <%= image_tag('logo-big.svg') %>
+            </a>
+            <a class='logo-small' href="<%= root_path %>">
+              <%= image_tag('logo-small.svg') %>
+            </a>
         </div><!-- .logo -->
-        <div class='search-form'>
-          <%= form_tag search_events_path, :method => :get do %>
-            <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-              <i class='fa fa-search'></i>
-              <input placeholder="Search events" type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-            <% else %>
-              <i class='fa-fa-search'></i>
-              <%= text_field_tag 'query', @query, :id => 'search_field', :placeholder => 'Search events' %>
-            <% end %>
-          <% end -%>
-        </div><!-- .search-form -->
+      </header>
+
+      <div class='search-form'>
+        <%= form_tag search_events_path, :method => :get do %>
+          <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+            <i class='fa fa-search'></i>
+            <input placeholder="Search events" type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+          <% else %>
+            <i class='fa-fa-search'></i>
+            <%= text_field_tag 'query', @query, :id => 'search_field', :placeholder => 'Search events' %>
+          <% end %>
+        <% end -%>
+      </div><!-- .search-form -->
+      
+      <nav>
         <ul class='app-menu clearfix'>
           <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
           <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
           <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li>
         </ul><!-- .app-menu -->
-        <div class='hidden-xs project-menu'>
-          <% if current_organization %>
-            Logged in as: <%= current_organization.title %>
-            (<%= link_to 'logout', organization_logout_path %>)
-          <% elsif current_admin %>
-            Logged in as Admin.
-          <% end %>
-        </div><!-- .project-menu -->
-      </div><!-- .container -->
-    </section><!-- .header -->
+      </nav>
 
-    <% # Pick a subnav %>
+      <% # Pick a subnav %>
 
-    <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
-    <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
-    <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
-    <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+      <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
+      <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
+      <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
+      <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
 
-    <div id="content">
-      <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
-      <%= render_flash %>
-      <%= yield %>
+      <main role='main' class='content'>
+        <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
+        <%= render_flash %>
+        <%= yield %>
+      </main>
+
+      <!-- old is #top_footer -->
+      <footer>
+        <p><%= URI.parse(SETTINGS.url).host %></p>
+      </footer>
+
     </div>
 
-    <div id="top_footer">
-      <%= URI.parse(SETTINGS.url).host %>
-      <!-- <%= source_code_version %> -->
-      &nbsp;
-      &nbsp;
-      &nbsp;
-    </div>
+    <!-- JavaScripts, static -->
+    <%= javascript_include_tag *mapping_js_includes %><!-- What does this do? -->
+    <%= javascript_include_tag 'application', 'theme' %>
 
-  </div>
+    <!-- JavaScripts, inserted -->
+    <%= yield :javascript_insert %>
+
   </body>
 </html>
