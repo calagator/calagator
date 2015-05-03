@@ -1,8 +1,12 @@
 .calendar {
 
+  .month {
+    border-top: 1px solid #1E6596;
+  }
+
   .button {
     display: block;
-    width: 24%;
+    width: 33.333%;
     float: left;
     background-color: #207FC2;
     border-bottom: 3px solid #1E6596;
@@ -15,15 +19,44 @@
     text-align: center;
   }
 
-  .month-name {
+  .button:first-child {
+    border-right: 1px solid #1E6596;
+  }
+
+  .button:last-child {
+    border-left: 1px solid #1E6596;
+  }
+
+  .button i.chevron {
+    position: relative;
+    top: 2px;
+  }
+
+  .button:first-child i.chevron {
+    margin-right: 0.25em;
+  }
+
+  .button:last-child i.chevron {
+    margin-left: 0.25em;
+  }
+
+  .month-name-container {
     display: block;
-    width: 52%;
+    width: 33.333%;
     float: left;
     font-family: "Fira Sans";
     font-weight: 600;
-    font-size: 1.5em;
     text-align: center;
-    margin-top: 0.4em;
+    background-color: #3A8BC3;
+    border-bottom: 3px solid #207FC2;
+    font-size: 1em;
+    padding-top: 0.78em;
+    padding-bottom: 0.78em;
+    color: #fff;
+  }
+
+  .year { // year probably doesn't need to be displayed on mobile?
+    display: none;
   }
 
   table,
@@ -79,21 +112,35 @@
     font-size: 1em;
   }
 
-  td:not(.today) { // note this needs to be changed.
+  /* td:not(.today) {
       display: none;
-  }
+  } */
 
   ul > a {
     display: none;
   }
 
   .organization-name {
-    color: #064064;
+    color: #207FC2;
+    font-family: $font-family-fira-sans;
+    font-size: 0.85em;
   }
 
   .event-time {
     display: block;
     color: rgba(82, 82, 82, 1);
+    font-size: 0.85em;
+    font-family: $font-family-fira-sans;
+  }
+
+  .event-title {
+    font-size: 1em;
+    font-weight: 500;
+    color: #2A2A2A;
+  }
+
+  .daynumber {
+    font-weight: 500;
   }
 
 }

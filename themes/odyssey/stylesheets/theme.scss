@@ -2,6 +2,7 @@
  *= require formtastic
  *= require leaflet.awesome-markers
  *= require recurring_select
+ *= require jquery-ui/jquery-ui
  *= require jquery-ui/datepicker
  */
 
@@ -79,10 +80,10 @@ header {
 	.logo > .logo-big {
 		display: none;
 	}
-	
+
 	.logo > .logo-small { // the actual logo. Should change the naming of this?
 		display: block;
-		width: 18%;
+		width: 13%;
 		padding-top: 1em;
 		padding-bottom: 1em;
 		margin: 0 auto;
@@ -98,7 +99,7 @@ header {
 		font-family: $font-family-fira-sans;
 		font-size: 1em;
 		font-weight: 300;
-		color: #fff; // make it a variable.
+		color: #2A2A2A; // make it a variable.
 
 		width: 90%;
 		display: block;

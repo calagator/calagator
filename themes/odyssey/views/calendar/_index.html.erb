@@ -2,7 +2,9 @@
   <div class='month clearfix'>
     <!-- How do you make RoR spit out a link without generating an a tag? -->
     <a href="?date=<%= @date.prev_month %>" class='button'><i class='chevron chevron'></i> Prev Month</a>
-    <span class='month-name'><%= @date.strftime("%B %Y") %></span>
+    <div class='month-name-container'>
+      <span class='month-name'><%= @date.strftime("%B"); %></span> <span class='year'><%= @date.strftime("%Y") %></span>
+    </div>
     <a href="?date=<%= @date.next_month %>" class='button'>Next Month <i class='chevron chevron--direction-right'></i></a>
   </div>
   <% if events_this_month? %>
