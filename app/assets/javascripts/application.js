@@ -1,8 +1,6 @@
 //= require jquery
 //= require jquery_ujs
-//= require leaflet
 //= require leaflet.awesome-markers
-//= require leaflet_google_layer
 
 $(document).ready(function(){
   // Shows hidden section when a link is clicked, and hides the link.

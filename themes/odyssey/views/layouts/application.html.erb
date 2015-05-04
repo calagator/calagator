@@ -29,8 +29,12 @@
     <!-- Stylesheets, inserted  -->
     <%= yield :css_insert %>
 
-    <!-- Including only the analytics in the header page -->
-    <%= javascript_include_tag 'analytics' %>
+    <!-- JavaScripts, static -->
+    <%= javascript_include_tag(*mapping_js_includes) %>
+    <%= javascript_include_tag 'application', 'theme', 'analytics' %>
+
+    <!-- JavaScripts, inserted -->
+    <%= yield :javascript_insert %>
 
     <!-- Auto-discovery, static -->
     <%= auto_discovery_link_tag(:atom, events_url(:format => 'atom'), :title => 'Atom: All Events' )%>
@@ -78,7 +82,7 @@
           <% end %>
         <% end -%>
       </div><!-- .search-form -->
-      
+
       <nav>
         <ul class='app-menu clearfix'>
           <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
@@ -106,13 +110,5 @@
       </footer>
 
     </div>
-
-    <!-- JavaScripts, static -->
-    <%= javascript_include_tag *mapping_js_includes %><!-- What does this do? -->
-    <%= javascript_include_tag 'application', 'theme' %>
-
-    <!-- JavaScripts, inserted -->
-    <%= yield :javascript_insert %>
-
   </body>
 </html>
