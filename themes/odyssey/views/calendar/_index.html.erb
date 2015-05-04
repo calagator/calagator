@@ -1,11 +1,18 @@
 <div class='calendar'>
   <div class='month clearfix'>
     <!-- How do you make RoR spit out a link without generating an a tag? -->
-    <a href="?date=<%= @date.prev_month %>" class='button'><i class='chevron chevron'></i> Prev Month</a>
+    <%= link_to root_path(date: @date.prev_month), class: 'button' do %>
+      <i class='chevron chevron'></i> Prev Month
+    <% end %>
+    <!-- <a href="?date=<%= @date.prev_month %>" class='button'><i class='chevron chevron'></i> Prev Month</a> -->
     <div class='month-name-container'>
       <span class='month-name'><%= @date.strftime("%B"); %></span> <span class='year'><%= @date.strftime("%Y") %></span>
     </div>
-    <a href="?date=<%= @date.next_month %>" class='button'>Next Month <i class='chevron chevron--direction-right'></i></a>
+
+    <%= link_to root_path(date: @date.next_month), class: 'button' do %>
+      Next Month <i class='chevron chevron--direction-right'></i>
+    <% end %>
+    <!-- <a href="?date=<%= @date.next_month %>" class='button'>Next Month <i class='chevron chevron--direction-right'></i></a> -->
   </div>
   <script>
     $(function() {

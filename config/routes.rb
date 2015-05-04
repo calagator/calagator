@@ -1,5 +1,4 @@
 Calagator::Application.routes.draw do
-  match 'omfg' => 'site#omfg'
   match 'hello' => 'site#hello'
 
   match 'about' => 'site#about'

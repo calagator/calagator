@@ -49,10 +49,8 @@ module Calagator
     config.assets.version = '1.0'
 
     config.assets.precompile += [
-      "bootstrap.css",
       "leaflet.js",
       "leaflet_google_layer.js",
-      "errors.css",
       "analytics.js",
       "analytics_events.js",
       "calendar.js",
