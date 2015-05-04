@@ -7,6 +7,11 @@
     </div>
     <a href="?date=<%= @date.next_month %>" class='button'>Next Month <i class='chevron chevron--direction-right'></i></a>
   </div>
+  <script>
+    $(function() {
+      $('td .no-events').parent('td').addClass('no-events');
+    });
+  </script>
   <% if events_this_month? %>
     <%= calendar @date do |date| %>
       <div class='date'>
@@ -29,6 +34,8 @@
             </li>
           <% end %>
         </ul>
+      <% else %>
+        <div class='no-events'>
       <% end %>
     <% end %>
   <% else %>

@@ -37,7 +37,7 @@ module CalendarHelper
       classes = []
       classes << "today" if day == Date.today
       classes << "notmonth" if day.month != date.month
-      classes.empty? ? nil : classes.join(" ")
+      classes
     end
 
     def weeks
