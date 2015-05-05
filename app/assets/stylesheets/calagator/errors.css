@@ -79,18 +79,21 @@ a {
 
 @keyframes confused {
   20% {
+  	-moz-transform: rotate3d(0, 0, 1, 2deg);
     -webkit-transform: rotate3d(0, 0, 1, 2deg);
     -ms-transform: rotate3d(0, 0, 1, 2deg);
     transform: rotate3d(0, 0, 1, 2deg);
   }
 
   60% {
+  	-moz-transform: rotate3d(0, 0, 1, -5deg);
     -webkit-transform: rotate3d(0, 0, 1, -5deg);
     -ms-transform: rotate3d(0, 0, 1, -5deg);
     transform: rotate3d(0, 0, 1, -5deg);
   }
 
   100% {
+  	-moz-transform: rotate3d(0, 0, 1, 0deg);
     -webkit-transform: rotate3d(0, 0, 1, 0deg);
     -ms-transform: rotate3d(0, 0, 1, 0deg);
     transform: rotate3d(0, 0, 1, 0deg);
@@ -98,11 +101,16 @@ a {
 }
 
 #alligator img {
+  -moz-transform-origin: top center;
   -webkit-transform-origin: 100px 300px;
   -ms-transform-origin: top center;
   transform-origin: top center;
+  -moz-animation-name: confused;
   -webkit-animation-name: confused;
   animation-name: confused;
+  -moz-animation-duration: 6s;
+  -moz-animation-delay: 0s;
+  -moz-animation-iteration-count: infinite;
   -webkit-animation-duration: 6s;
   -webkit-animation-delay: 0s;
   -webkit-animation-iteration-count: infinite;
