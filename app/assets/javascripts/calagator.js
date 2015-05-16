@@ -2,6 +2,7 @@
 //= require jquery_ujs
 //= require calagator/forms
 //= require leaflet.awesome-markers
+//= require mustache
 
 $(document).ready(function(){
   // Shows hidden section when a link is clicked, and hides the link.
