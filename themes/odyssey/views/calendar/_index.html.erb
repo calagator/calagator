@@ -1,8 +1,8 @@
 <div id="calendar">
   <h2 id="month">
-    <%= link_to "<", date: @date.prev_month %>
+    <%= link_to "< Prev Month", date: @date.prev_month %>
     <%= @date.strftime("%B %Y") %>
-    <%= link_to ">", date: @date.next_month %>
+    <%= link_to "Next Month >", date: @date.next_month %>
   </h2>
   <% if events_this_month? %>
     <%= calendar @date do |date| %>

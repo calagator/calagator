@@ -44,14 +44,24 @@ body.agenda-view {
   }
 
   #month { // h2 
-    padding-top: 10px;
+    // padding-top: 10px;
     text-align: center;
+    padding-bottom: 10px;
+    position: relative;
+    font-size: 20px;
+  }
+
+  #month > a {
+    font-size: 14px;
+    position: relative;
+    top: -2px;
   }
 
   #calendar .calendar {
 
     margin-top: 0;
     margin-bottom: 0;
+    width: 100%;
 
     tbody {
       display: block;
@@ -189,6 +199,11 @@ body.agenda-view {
       text-decoration: none;
       padding: 0 10px;
       color: #999;
+    }
+
+    > a {
+      font-size: 14px;
+      color: #337ab7;
     }
   }
 
