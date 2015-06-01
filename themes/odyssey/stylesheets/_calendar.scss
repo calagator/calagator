@@ -143,4 +143,135 @@
     font-weight: 500;
   }
 
+  td.no-events {
+      display: none;
+  }
+
+}
+
+@media only screen and (min-width: 46.25em) {
+    .calendar {
+        .month > a {
+            width: 25%;
+            padding-top: 1.1em;
+            padding-bottom: 1.1em;
+        }
+
+        .month > .month-name-container {
+            width: 50%;
+            padding-top: 0.9em;
+            padding-bottom: 0.8em;
+        }
+
+        .month > .month-name-container .year {
+            display: inline;
+        }
+    }
+}
+
+@media only screen and (min-width: 53.125em) {
+
+    // turn the calendar back into a table.
+    .calendar {
+
+        // Making the font-size back to 100% because I increased it to 110% earlier.
+        font-size: 90%; // Should I really be doing this?
+
+        .month > a {
+            padding-top: 1em;
+            padding-bottom: 1em;
+        }
+
+        .month > .month-name-container {
+            padding-top: 0.78em;
+            padding-bottom: 0.78em;
+        }
+
+        tr {
+            width: 100%;
+            overflow: auto; // creating a new context for the floats.
+            border-bottom: 1px solid #1E6596;
+        }
+
+        td,
+        th {
+            display: block;
+            float: left;
+            width: 14.2857143%;
+
+            border-right: 1px solid #1E6596;
+        }
+
+        tr > th {
+            background-color: #2A2A2A;
+            color: #fff;
+            padding-top: 1em;
+            padding-bottom: 1em;
+        }
+
+        td:last-child,
+        th:last-child {
+            border-right: none;
+        }
+
+        th {
+            text-align: center;
+            font-family: $font-family-fira-sans;
+        }
+
+        td {
+            height: 8em;
+            // gonna have to figure out how to deal with more than a few events later.
+            // what I'm thinking of is just thinking to /events and filtering with only the current date.
+        }
+
+        .notmonth {
+            background-color: #C3C3C3;
+        }
+        .notmonth > .date {
+            background-color: #C3C3C3;
+        }
+        .notmonth > .date .daynumber {
+            color: #5C5C5C;
+        }
+
+        .notmonth li {
+            background-color: #C3C3C3;
+        }
+
+        td.no-events {
+            display: block;
+        }
+
+        .date > .yearnumber,
+        .date > .monthname {
+            display: none;
+        }
+
+        .date > .daynumber {
+            color: #2A2A2A;
+        }
+
+        .date {
+            background-color: #ededed;
+            border-bottom: none;
+        }
+
+        li {
+            border-bottom: none;
+        }
+
+        li > a:first-child { // organization name
+            display: none;
+        }
+
+        li > br {
+            display: none;
+        }
+
+        li > .event-time {
+            display: none;
+        }
+
+    }
 }

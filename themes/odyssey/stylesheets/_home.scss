@@ -1,3 +1,84 @@
-.view-mode-buttons {
+.view-mode-buttons,
+.search-box-container {
 	display: none;
+}
+
+.search-box {
+	display: block;
+	width: 4em;
+	height: 4em;
+	background-color: #3A8BC3;
+	position: relative;
+	right: 1em;
+	float: right;
+	border-right: 1px solid #1E6596;
+	border-bottom: 4px solid #1E6596;
+}
+
+.search-box > .button {
+	position: relative;
+	top: 1.2em;
+	left: 1.6em;
+}
+
+@media only screen and (min-width: 41.875em) { // 670px
+	.logo-big {
+		display: block;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		padding-left: 1em;
+		width: 55%
+	}
+
+	.logo-small {
+		display: none;
+	}
+}
+
+@media only screen and (min-width: 45em) {
+
+	.wrapper {
+		background-color: #ededed;
+	}
+
+	.search-form {
+		display: none;
+	}
+
+	.logo {
+		float: left;
+		width: 75%;
+	}
+
+	.logo-big {
+		width: 70%;
+		max-width: 414px;
+		max-height: 85px;
+	}
+
+	.search-box-container {
+		display: block;
+		float: right;
+		width: 25%;
+	}
+
+	nav {
+		position: relative;
+		background-color: #ededed;
+
+		padding-right: 1em;
+		padding-left: 1em; // just experimenting at the moment. This will be tweaked for better readability.
+	}
+
+	nav ul {
+		border-left: 1px solid #1E6596;
+		border-right: 1px solid #1E6596;
+	}
+
+	.subnav {
+		margin-left: 1em;
+		margin-right: 1em;
+		margin-bottom: 2em;
+		position: relative;
+	}
 }

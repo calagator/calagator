@@ -50,7 +50,7 @@
 
     <div class='wrapper'>
 
-      <header>
+      <header class='clearfix'>
 
         <div class='project-menu'>
           <% if current_organization %>
@@ -69,6 +69,13 @@
               <%= image_tag('logo-small.svg') %>
             </a>
         </div><!-- .logo -->
+
+        <div class='search-box-container clearfix'>
+            <div class='search-box'>
+                <i class='button button--search button--white'></i>
+            </div>
+        </div><!-- .search-box-container -->
+
       </header>
 
       <div class='search-form'>
