@@ -82,3 +82,40 @@
 		position: relative;
 	}
 }
+
+@media only screen and (min-width: 75.625em) {
+	nav {
+		padding: 0;
+		width: 1000px;
+		margin: 0 auto;
+	}
+
+	.subnav {
+		width: 1000px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.header-container {
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+
+	.logo-big {
+		padding-left: 0;
+	}
+
+	.search-box { // Not satisfied with this box at all. The position, the size, etc.
+		margin-top: 0.25em;
+		right: 0;
+	}
+
+	footer {
+		margin-top: 2em;
+	}
+
+	footer .footer-container {
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+}

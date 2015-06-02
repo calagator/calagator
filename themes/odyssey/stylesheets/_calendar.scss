@@ -147,6 +147,16 @@
       display: none;
   }
 
+  // These are just temporary colors really. Definitely want to style notmonth better.
+  .notmonth .date {
+    background-color: #777777;
+    border-bottom: 1px solid #3C3C3C;
+  }
+
+  .notmonth .organization-name {
+      color: #3C3C3C;
+  }
+
 }
 
 @media only screen and (min-width: 46.25em) {
@@ -221,8 +231,12 @@
 
         td {
             height: 8em;
+            height: 16.5em;
             // gonna have to figure out how to deal with more than a few events later.
             // what I'm thinking of is just thinking to /events and filtering with only the current date.
+
+            // what I'm thinking of at the moment is calculating the cell with the most events, with a maximum of 4 and setting the height equal to that.
+            overflow: hidden;
         }
 
         .notmonth {
@@ -259,10 +273,15 @@
 
         li {
             border-bottom: none;
+            padding-right: 0.5em;
         }
 
         li > a:first-child { // organization name
             display: none;
+        }
+
+        .event-title {
+            font-weight: 400;
         }
 
         li > br {
@@ -273,5 +292,61 @@
             display: none;
         }
 
+        td.today {
+            background-color: #2BA2F5;
+        }
+
+        td.today > .date {
+            background-color: #2BA2F5;
+        }
+
+        td.today > ul {
+            background-color: #2BA2F5;
+        }
+
+        td.today .daynumber {
+            color: #15486C;
+        }
+
+    }
+}
+
+@media only screen and (min-width: 75.625em) { // desktop layout.
+
+    .calendar {
+
+        max-width: 1000px;
+
+        position: relative;
+
+        margin: 0 auto;
+
+        .month > .button {
+            display: block;
+            position: absolute;
+            left: -7.4em;
+            width: 10%;
+            top: 0.5em;
+            border-right: none;
+            border-left: 1px solid #1E6596;
+        }
+
+        .month > .button:last-child {
+            left: initial; // Hmm didn't know this. Gotta acutally remove "left" not set it to 0 for right to work.
+            right: -7.4em;
+            border-left: none;
+            border-right: 1px solid #1E6596;
+        }
+
+        .month > .month-name-container {
+            width: 100%;
+            border-left: 1px solid #207FC2;
+            border-right: 1px solid #207FC2;
+        }
+
+        tbody {
+            border-left: 1px solid #1E6596;
+            border-right: 1px solid #1E6596;
+        }
     }
 }

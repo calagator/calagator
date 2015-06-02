@@ -52,29 +52,31 @@
 
       <header class='clearfix'>
 
-        <div class='project-menu'>
-          <% if current_organization %>
-            Logged in as: <%= current_organization.title %>
-            (<%= link_to 'logout', organization_logout_path %>)
-          <% elsif current_admin %>
-            Logged in as Admin.
-          <% end %>
-        </div><!-- .project-menu -->
+          <div class='header-container'>
+            <div class='project-menu'>
+              <% if current_organization %>
+                Logged in as: <%= current_organization.title %>
+                (<%= link_to 'logout', organization_logout_path %>)
+              <% elsif current_admin %>
+                Logged in as Admin.
+              <% end %>
+            </div><!-- .project-menu -->
 
-          <div class='logo clearfix'>
-            <a class='logo-big' href="<%= root_path %>">
-              <%= image_tag('logo-big.svg') %>
-            </a>
-            <a class='logo-small' href="<%= root_path %>">
-              <%= image_tag('logo-small.svg') %>
-            </a>
-        </div><!-- .logo -->
+              <div class='logo clearfix'>
+                <a class='logo-big' href="<%= root_path %>">
+                  <%= image_tag('logo-big.svg') %>
+                </a>
+                <a class='logo-small' href="<%= root_path %>">
+                  <%= image_tag('logo-small.svg') %>
+                </a>
+            </div><!-- .logo -->
 
-        <div class='search-box-container clearfix'>
-            <div class='search-box'>
-                <i class='button button--search button--white'></i>
-            </div>
-        </div><!-- .search-box-container -->
+            <div class='search-box-container clearfix'>
+                <div class='search-box'>
+                    <i class='button button--search button--white'></i>
+                </div>
+            </div><!-- .search-box-container -->
+        </div><!-- .header-container -->
 
       </header>
 
@@ -92,9 +94,19 @@
 
       <nav>
         <ul class='app-menu clearfix'>
-          <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+        <%= link_to events_path do %>
+            <li class="<%=link_class[:events]%>">Events</li>
+        <% end %>
+        <%= link_to venues_path do %>
+            <li class="<%=link_class[:venues]%>">Venues</li>
+        <% end %>
+        <%= link_to organizations_path do %>
+            <li class="<%=link_class[:organizations]%>">Organizations</li>
+        <% end %>
+          <!-- <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
           <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
-          <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li>
+          <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li> -->
+
         </ul><!-- .app-menu -->
       </nav>
 
@@ -112,9 +124,11 @@
       </main>
 
       <!-- old is #top_footer -->
-      <footer>
-        <p><%= URI.parse(SETTINGS.url).host %></p>
-      </footer>
+    <footer>
+        <div class='footer-container'>
+            <p><%= URI.parse(SETTINGS.url).host %></p>
+        </div>
+    </footer>
 
     </div>
   </body>

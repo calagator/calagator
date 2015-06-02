@@ -122,7 +122,7 @@ nav {
 
 	width: 100%;
 
-	ul.app-menu > li {
+	ul.app-menu > a {
 		display: block;
 		float: left;
 		width: 33.333%;
@@ -140,11 +140,11 @@ nav {
 		border-top: 1px solid #1E6596
 	}
 
-	ul.app-menu > li:first-child {
+	ul.app-menu > a:first-child {
 		border-left: none;
 	}
 
-	li > a {
+	a > li {
 		font-size: 1em;
 		font-family: $font-family-fira-sans;
 	}
@@ -180,6 +180,22 @@ nav {
 		font-family: $font-family-fira-sans;
 		color: #fff;
 	}
+}
+
+footer {
+    background-color: #2ba2f5;
+}
+
+footer .footer-container {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 0.5em;
+}
+
+footer .footer-container p {
+    font-family: $font-family-fira-sans;
+    font-weight: 400;
+    color: #0D2A3D;
 }
 
 // Chevron styles
