@@ -28,7 +28,7 @@
       </div>
       <% if (events=events_for_date(date,@events)).any? %>
         <ul>
-          <% events.each do |event| %>
+          <% events.first(4).each do |event| %>
             <li>
               <% if event.organization.present? %>
                 <%=link_to(event.organization_title, event.organization, :class => 'organization-name') %><br />
@@ -41,6 +41,13 @@
             </li>
           <% end %>
         </ul>
+
+        <% if events.length > 4 %>
+          <%= link_to events_path({date: {start: events.first.start_date, end: events.first.start_date } }), class: 'view-more-events' do %>
+              <span>And <%= events.length - 4 %> more events.</span>
+          <% end %>
+        <% end %>
+        
       <% else %>
         <div class='no-events'>
       <% end %>

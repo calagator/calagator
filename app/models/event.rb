@@ -279,6 +279,10 @@ class Event < ActiveRecord::Base
     end
   end
 
+  def start_date
+      start_time.to_date
+  end
+
 protected
 
   def end_time_later_than_start_time
