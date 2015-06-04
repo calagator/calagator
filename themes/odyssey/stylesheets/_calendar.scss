@@ -234,8 +234,7 @@
         }
 
         td {
-            height: 8em;
-            height: 16.5em;
+            min-height: 19em;
             // gonna have to figure out how to deal with more than a few events later.
             // what I'm thinking of is just thinking to /events and filtering with only the current date.
 
@@ -246,6 +245,10 @@
         .notmonth {
             background-color: #C3C3C3;
         }
+
+        .notmonth ul {
+            background: none;
+        }
         .notmonth > .date {
             background-color: #C3C3C3;
         }
@@ -254,7 +257,8 @@
         }
 
         .notmonth li {
-            background-color: #C3C3C3;
+            background-color: #8E8E8E;
+            border-bottom: 3px solid #565656;
         }
 
         td.no-events {
@@ -278,6 +282,13 @@
         li {
             border-bottom: none;
             padding-right: 0.5em;
+            margin: 0.5em;
+            background-color: rgb(236, 199, 55);
+            border-bottom: 3px solid #998126;
+        }
+
+        li:nth-child(even) {
+            background-color: rgb(236, 199, 55);
         }
 
         li > a:first-child { // organization name
@@ -296,6 +307,15 @@
             display: none;
         }
 
+        .view-more-events {
+            text-align: center;
+            display: block;
+            text-decoration: underline;
+            color: #2a2a2a;
+            font-family: $font-family-fira-sans;
+            font-size: 1em;
+        }
+
         td.today {
             background-color: #2BA2F5;
         }
@@ -308,8 +328,21 @@
             background-color: #2BA2F5;
         }
 
+        td.today > ul li {
+            background-color: #9366AB;
+            border-bottom: 3px solid #5A3E69;
+        }
+
+        td.today > ul li:nth-child(even) {
+            background-color: #9366AB;
+        }
+
         td.today .daynumber {
             color: #15486C;
+        }
+
+        td.today .view-more-events {
+            color: #fff;
         }
 
         .notmonth .date {

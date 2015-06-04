@@ -1,0 +1,16 @@
+<%= content_for :title, "Events" %>
+
+<% tabindex_on '#search_field' %>
+
+<% cache_if(@perform_caching, CacheObserver.daily_key_for("events_index", request)) do %>
+<div class='list_description'>
+  <h2>Viewing <strong><%= @events.size %></strong>
+  <%= params[:date] ? 'filtered' : 'future' %> events
+  <%= events_sort_label(params[:order]) %></h2>
+</div>
+
+<div class='list_items'>
+  <%= render :partial => 'events/table', :locals => { :events => @events } %>
+</div>
+
+<% end %>

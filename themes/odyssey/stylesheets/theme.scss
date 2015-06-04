@@ -12,7 +12,7 @@
 @import 'buttons';
 
 // A lot of layout is probably in these 3 files so including them for now until I can make it better.
-@import 'layout';
+/* @import 'layout'; */
 @import 'theme-default';
 @import 'theme-forms';
 
@@ -20,6 +20,13 @@
 // TODO: I would rather have this as it's own script tag. Bring it out to the head later.
 @import url(http://fonts.googleapis.com/css?family=Fira+Sans:300,400,500,700);
 
+.clearfix:before,
+.clearfix:after {
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
 // don't show that search icon on input type=search
 input[type="search"]::-webkit-search-decoration,
 input[type="search"]::-webkit-search-cancel-button,
