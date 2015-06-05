@@ -6,4 +6,4 @@ gem "rails", "4.1.9"
 gem "turbolinks"
 gem "byebug", :platform => "mri"
 
-gemspec :path => "../../"
+gemspec :path => "../"
