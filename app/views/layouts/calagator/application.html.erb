@@ -45,13 +45,7 @@
 
     <div id="outer">
       <%= render partial: 'layouts/calagator/header' %>
-
-      <div id="content">
-        <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
-        <%= render_flash %>
-        <%= yield %>
-      </div>
-
+      <%= render partial: 'layouts/calagator/content' %>
       <%= render partial: 'layouts/calagator/footer' %>
     </div>
 
