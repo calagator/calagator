@@ -1,58 +1,55 @@
 require 'geokit'
 
-# CALAGATOR: Differences from the defaults are tagged like this below.
+# This is the order in which the geocoders are called in a failover scenario
+# If you only want to use a single geocoder, put a single symbol in the array.
+#
+# Be aware that there are Terms of Use restrictions on how you can use the
+# various geocoders.  Make sure you read up on relevant Terms of Use for each
+# geocoder you are going to use.
 
-# remap Google V3 geocoder so we can reference it in provider list, see:
-# https://github.com/geokit/geokit/issues/86
-Geokit::Geocoders::Google3Geocoder = Geokit::Geocoders::GoogleGeocoder3
+Geokit::Geocoders::provider_order = [:google]
 
-# These defaults are used in GeoKit::Mappable.distance_to and in acts_as_mappable
-GeoKit::default_units = :miles
-GeoKit::default_formula = :sphere
+# These defaults are used in Geokit::Mappable.distance_to and in acts_as_mappable
+Geokit::default_units = :miles
+Geokit::default_formula = :sphere
 
-# This is the timeout value in seconds to be used for calls to the geocoder web
-# services.  For no timeout at all, comment out the setting.  The timeout unit
-# is in seconds.
-GeoKit::Geocoders::request_timeout = 3
+# This is your Google Maps geocoder keys (all optional).
+# See http://www.google.com/apis/maps/signup.html
+# and http://www.google.com/apis/maps/documentation/#Geocoding_Examples
+#
+# Geokit::Geocoders::GoogleGeocoder.client_id = ''
+# Geokit::Geocoders::GoogleGeocoder.cryptographic_key = ''
+# Geokit::Geocoders::GoogleGeocoder.channel = ''
 
-# These settings are used if web service calls must be routed through a proxy.
-# These setting can be nil if not needed, otherwise, addr and port must be
-# filled in at a minimum.  If the proxy requires authentication, the username
-# and password can be provided as well.
-GeoKit::Geocoders::proxy_addr = nil
-GeoKit::Geocoders::proxy_port = nil
-GeoKit::Geocoders::proxy_user = nil
-GeoKit::Geocoders::proxy_pass = nil
+# You can also use the free API key instead of signed requests
+# See https://developers.google.com/maps/documentation/geocoding/#api_key
+# Geokit::Geocoders::GoogleGeocoder.api_key = ''
+#
+# CALAGATOR:
+# We populate this with the API key set for Google Maps in 01_calagator.rb by default
+Geokit::Geocoders::GoogleGeocoder.api_key = Calagator.mapping_google_maps_api_key
+
+# You can also set multiple API KEYS for different domains that may be directed to this same application.
+# The domain from which the current user is being directed will automatically be updated for Geokit via
+# the GeocoderControl class, which gets it's begin filter mixed into the ActionController.
+# You define these keys with a Hash as follows:
+#
+# Geokit::Geocoders::google = { 'rubyonrails.org' => 'RUBY_ON_RAILS_API_KEY', 'ruby-docs.org' => 'RUBY_DOCS_API_KEY' }
 
 # This is your yahoo application key for the Yahoo Geocoder.
 # See http://developer.yahoo.com/faq/index.html#appid
 # and http://developer.yahoo.com/maps/rest/V1/geocode.html
-GeoKit::Geocoders::yahoo = 'REPLACE_WITH_YOUR_YAHOO_KEY'
-
-# This is your Google Maps geocoder key.
-# See http://www.google.com/apis/maps/signup.html
-# and http://www.google.com/apis/maps/documentation/#Geocoding_Examples
 #
-# CALAGATOR: was GeoKit::Geocoders::google = 'REPLACE_WITH_YOUR_GOOGLE_KEY',
-# but since each developer needs their own, we get it from the config/initializers/calagator.rb file.
-#
-google_key = Calagator.mapping_google_maps_api_key
-old_keys_path = Rails.root.join('config','geocoder_api_keys.yml')
-
-if google_key
-  GeoKit::Geocoders::google = google_key
-elsif File.exist? old_keys_path
-  raise "Loading keys from config/geocoder_api_keys.yml is deprecated. Please use config/initializers/calagator.rb instead."
-else
-  puts "Warning: No Google Maps API key was set. Geocoding will not function."
-end
+# Geokit::Geocoders::YahooGeocoder.key = 'REPLACE_WITH_YOUR_YAHOO_KEY'
+# Geokit::Geocoders::YahooGeocoder.secret = 'REPLACE_WITH_YOUR_YAHOO_SECRET'
 
 # This is your username and password for geocoder.us.
 # To use the free service, the value can be set to nil or false.  For
 # usage tied to an account, the value should be set to username:password.
 # See http://geocoder.us
 # and http://geocoder.us/user/signup
-GeoKit::Geocoders::geocoder_us = false
+#
+# Geokit::Geocoders::UsGeocoder.key = 'username:password'
 
 # This is your authorization key for geocoder.ca.
 # To use the free service, the value can be set to nil or false.  For
@@ -60,15 +57,50 @@ GeoKit::Geocoders::geocoder_us = false
 # Geocoder.ca.
 # See http://geocoder.ca
 # and http://geocoder.ca/?register=1
-GeoKit::Geocoders::geocoder_ca = false
+#
+# Geokit::Geocoders::CaGeocoder.key = 'KEY'
 
-# This is the order in which the geocoders are called in a failover scenario
-# If you only want to use a single geocoder, put a single symbol in the array.
-# Valid symbols are :google, :yahoo, :us, and :ca.
-# Be aware that there are Terms of Use restrictions on how you can use the
-# various geocoders.  Make sure you read up on relevant Terms of Use for each
-# geocoder you are going to use.
+# This is your username key for geonames.
+# To use this service either free or premium, you must register a key.
+# See http://www.geonames.org
 #
-# CALAGATOR: was [:google, :us], but this is all we need since we're Google-only.
+# Geokit::Geocoders::GeonamesGeocoder.key = 'KEY'
+
+# Most other geocoders need either no setup or a key
+# Geokit::Geocoders::BingGeocoder.key = ''
+# Geokit::Geocoders::MapQuestGeocoder.key = ''
+# Geokit::Geocoders::YandexGeocoder.key = ''
+# Geokit::Geocoders::MapboxGeocoder.key = 'ACCESS_TOKEN'
+# Geokit::Geocoders::OpencageGeocoder.key = 'some_api_key'
+
+# Geonames has a free service and a premium service, each using a different URL
+# GeonamesGeocoder.premium = true will use http://ws.geonames.net (premium)
+# GeonamesGeocoder.premium = false will use http://api.geonames.org (free)
+# Geokit::Geocoders::GeonamesGeocoder.premium = false
+
+# The IP provider order. Valid symbols are :ip,:geo_plugin.
+# As before, make sure you read up on relevant Terms of Use for each.
+# Geokit::Geocoders::ip_provider_order = [:external,:geo_plugin,:ip]
+
+# Disable HTTPS globally.  This option can also be set on individual
+# geocoder classes.
+# Geokit::Geocoders::secure = false
+
+# Control verification of the server certificate for geocoders using HTTPS
+# Geokit::Geocoders::ssl_verify_mode = OpenSSL::SSL::VERIFY_(PEER/NONE)
 #
-GeoKit::Geocoders::provider_order = [:google3]
+# Setting this to VERIFY_NONE may be needed on systems that don't have
+# a complete or up to date root certificate store. Only applies to
+# the Net::HTTP adapter.
+
+# This is the timeout value in seconds to be used for calls to the geocoder web
+# services.  For no timeout at all, comment out the setting.  The timeout unit
+# is in seconds.
+Geokit::Geocoders::request_timeout = 3
+
+# This setting can be used if web service calls must be routed through a proxy.
+# These setting can be nil if not needed, otherwise, a valid URI must be
+# filled in at a minimum.  If the proxy requires authentication, the username
+# and password can be provided as well.
+#
+# Geokit::Geocoders::proxy = 'https://user:password@host:port'
