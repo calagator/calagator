@@ -11,6 +11,7 @@
 .vagrant
 Makefile
 Gemfile.lock
+gemfiles/*.lock
 Vagrantfile.local
 config/database~custom.yml
 config/geocoder_api_keys.yml
