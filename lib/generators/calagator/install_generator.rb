@@ -6,7 +6,7 @@ module Calagator
 
     def install
       add_route
-      add_initializer
+      add_initializers
       add_javascripts
       add_stylesheets
       add_seeds
@@ -24,8 +24,9 @@ module Calagator
       inject_into_file 'config/routes.rb', "\s\smount Calagator::Engine => '/'\n", after: "routes.draw do\n"
     end
 
-    def add_initializer
-      initializer 'calagator.rb', File.read(File.expand_path('../templates/config/calagator.rb', __FILE__))
+    def add_initializers
+      initializer '01_calagator.rb', File.read(File.expand_path('../templates/config/initializers/01_calagator.rb', __FILE__))
+      initializer '02_geokit.rb',    File.read(File.expand_path('../templates/config/initializers/02_geokit.rb', __FILE__))
     end
 
     def add_javascripts
