@@ -12,7 +12,7 @@
 @import 'buttons';
 
 // A lot of layout is probably in these 3 files so including them for now until I can make it better.
-/* @import 'layout'; */
+@import 'layout';
 @import 'theme-default';
 @import 'theme-forms';
 
@@ -239,7 +239,7 @@ footer .footer-container p {
 }
 
 body.events_index { // /events
-	// @import 'events';
+    @import 'events';
 }
 
 body.events_new { // /events/new

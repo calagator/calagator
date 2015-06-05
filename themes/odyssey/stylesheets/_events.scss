@@ -1,0 +1,28 @@
+table,
+tbody {
+    width: 100%;
+    display: block;
+}
+
+tr {
+    width: 100%;
+    display: block;
+}
+
+.date {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background-color: #2a2a2a;
+    padding: 1em;
+    color: #fff;
+    font-family: $font-family-fira-sans;
+}
+
+.event_summary {
+    width: 100%;
+    display: block;
+    background-color: #FFF;
+    border-bottom: 1px solid rgb(43, 162, 245);
+    padding: 1em;
+}
