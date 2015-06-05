@@ -8,9 +8,9 @@ rvm:
   - rbx-2
 
 gemfile:
-  - ci/gemfiles/rails_4_0.gemfile
-  - ci/gemfiles/rails_4_1.gemfile
-  - ci/gemfiles/rails_4_2.gemfile
+  - gemfiles/rails_4_0.gemfile
+  - gemfiles/rails_4_1.gemfile
+  - gemfiles/rails_4_2.gemfile
 
 env:
   matrix:
