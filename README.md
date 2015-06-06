@@ -52,7 +52,7 @@ This free, open source software was made possible by a group of volunteers that 
 License
 -------
 
-This program is provided under an MIT open source license, read the [LICENSE.txt](http://github.com/calagator/calagator/blob/master/LICENSE.txt) file for details.
+This program is provided under an MIT open source license, read the [MIT-LICENSE.txt](http://github.com/calagator/calagator/blob/master/MIT-LICENSE.txt) file for details.
 
 
 Copyright
