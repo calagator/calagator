@@ -10,7 +10,7 @@ module MappingHelper
   end
 
   def leaflet_js
-    Rails.env.production? ? ["https://d591zijq8zntj.cloudfront.net/leaflet-0.6.4/leaflet.js"] : ["leaflet"]
+    Rails.env.production? ? ["http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.6.4/leaflet.js"] : ["leaflet"]
   end
 
   def map_provider_dependencies
