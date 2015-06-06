@@ -14,7 +14,7 @@ class Venue < ActiveRecord::Base
     def geocode
       return true unless should_geocode?
 
-      self.geo = GeoKit::Geocoders::MultiGeocoder.geocode(venue.geocode_address)
+      self.geo = Geokit::Geocoders::MultiGeocoder.geocode(venue.geocode_address)
       if geo.success
         venue.latitude       = geo.lat
         venue.longitude      = geo.lng
