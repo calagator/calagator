@@ -1,0 +1,20 @@
+      <div id="global_header">
+        <%= link_to Calagator.title, root_path, id: "project_title" %>
+
+        <div id="top_menu">
+          <div id='app_menu'>
+            <ul>
+                <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+                <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+            </ul>
+          </div>
+          <%= render partial: 'layouts/calagator/global_search' %>
+        </div>
+      </div>
+
+      <% # Pick a subnav %>
+
+      <%= render(:partial => 'calagator/events/subnav') if link_class[:events] == 'active' %>
+      <%= render(:partial => 'calagator/venues/subnav') if link_class[:venues] == 'active' %>
+      <%= render(:partial => 'calagator/sources/subnav') if link_class[:import] == 'active' %>
+

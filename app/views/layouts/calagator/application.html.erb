@@ -43,68 +43,13 @@
   </head>
   <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
 
-  <div id="outer">
-    <div id="global_header">
-      <%= link_to Calagator.title, root_path, id: "project_title" %>
-
-      <div id="top_menu">
-         <div id='app_menu'>
-          <ul>
-              <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
-              <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
-          </ul>
-        </div>
-        <div id='project_menu'>
-          <strong>Get Involved:</strong> <%= link_to "Blog", "http://calagator.wordpress.com/", {:class => 'first'} %> | <%= link_to "Forum", "http://groups.google.com/group/pdx-tech-calendar/" %> | <%= link_to "Code", "https://github.com/calagator/calagator" %>
-          <br />
-          <strong>Something not right?</strong> <%= link_to "File an issue", "https://github.com/calagator/calagator/issues" %>
-        </div>
-        <%= form_tag search_events_path, :method => :get do %>
-          <div id='search_form'>
-          <label for="search_field">Search Events</label>
-          <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-            <input type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-          <% else %>
-            <%= text_field_tag 'query', @query, :id => 'search_field' %>
-          <% end %>
-          </div>
-        <% end -%>
-      </div>
+    <div id="outer">
+      <%= render partial: 'layouts/calagator/header' %>
+      <%= render partial: 'layouts/calagator/content' %>
+      <%= render partial: 'layouts/calagator/footer' %>
     </div>
 
-    <% # Pick a subnav %>
-
-    <%= render(:partial => 'calagator/events/subnav') if link_class[:events] == 'active' %>
-    <%= render(:partial => 'calagator/venues/subnav') if link_class[:venues] == 'active' %>
-    <%= render(:partial => 'calagator/sources/subnav') if link_class[:import] == 'active' %>
-
-    <div id="content">
-      <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
-      <%= render_flash %>
-      <%= yield %>
-    </div>
-
-    <div id="top_footer">
-      <%= URI.parse(Calagator.url).host %>
-      <%= source_code_version %>
-      &nbsp;
-      &nbsp;
-      &nbsp;
-    </div>
-
-</div>
-
-    <% if Rails.env == 'production' %>
-      <script type="text/javascript">
-        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
-        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
-        </script>
-        <script type="text/javascript">
-        var pageTracker = _gat._getTracker("UA-168427-7");
-        pageTracker._initData();
-        pageTracker._trackPageview();
-      </script>
-    <% end %>
-
+    <%= render partial: 'layouts/calagator/after_footer' %>
   </body>
 </html>
+
