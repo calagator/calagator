@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_dependency "acts-as-taggable-on", "~> 3.5"
   s.add_dependency "jquery-rails"
   s.add_dependency "jquery-ui-rails", "~> 5.0"
-  s.add_dependency "font-awesome-rails", "~> 3.2"
+  s.add_dependency "font-awesome-rails", "~> 4.3"
   s.add_dependency "paper_trail_manager", "~> 0.3.0"
   s.add_dependency "utf8-cleaner", "~> 0.0.6"
   # s.add_dependency "mofo", path: "vendor/gems/mofo-0.2.8" # vendored fork with hpricot dependency replaced with nokogiri
@@ -55,11 +55,11 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_girl_rails", "~> 4.5"
   s.add_development_dependency "faker", "~> 1.4"
   s.add_development_dependency "capybara", "~> 2.4"
-  s.add_development_dependency "coveralls", "~> 0.7.1"
+  s.add_development_dependency "coveralls", "~> 0.8.1"
   s.add_development_dependency "database_cleaner", "~> 1.4"
   s.add_development_dependency "poltergeist", "~> 1.6"
   s.add_development_dependency "timecop", "~> 0.7.1"
   s.add_development_dependency "webmock", "~> 1.20"
-  s.add_development_dependency "simplecov", "~> 0.9.1"
-  s.add_development_dependency "appraisal", "~> 1.0"
+  s.add_development_dependency "simplecov", "~> 0.10.0"
+  s.add_development_dependency "appraisal", "~> 2.0"
 end

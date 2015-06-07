@@ -10,7 +10,7 @@ module MappingHelper
   end
 
   def leaflet_js
-    Rails.env.production? ? ["http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.6.4/leaflet.js"] : ["leaflet"]
+    Rails.env.production? ? ["http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"] : ["leaflet"]
   end
 
   def map_provider_dependencies
@@ -58,7 +58,8 @@ module MappingHelper
 
         var venueIcon = L.AwesomeMarkers.icon({
           icon: 'star',
-          color: '#{Calagator.mapping_marker_color}'
+          prefix: 'fa',
+          markerColor: '#{Calagator.mapping_marker_color}'
         })
 
         var markers = [#{markers.join(", ")}];
