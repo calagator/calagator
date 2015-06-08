@@ -30,8 +30,8 @@ matrix:
 
 before_script:
   - bundle exec bin/calagator new spec/dummy --dummy --database=$DB --postgres-username=postgres
-  - bundle exec rake app:db:migrate app:db:seed
-  - bundle exec rake app:sunspot:solr:start_with_waiting
+  - travis_retry bundle exec rake app:db:migrate app:db:seed
+  - travis_retry bundle exec rake app:sunspot:solr:start_with_waiting
 
 script:
   - bundle exec rake spec --trace
