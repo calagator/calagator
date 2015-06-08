@@ -35,7 +35,7 @@ Gem::Specification.new do |s|
   s.add_dependency "loofah-activerecord", "~> 1.2"
   s.add_dependency "bluecloth", "~> 2.2"
   s.add_dependency "acts-as-taggable-on", "~> 3.5"
-  s.add_dependency "jquery-rails", "~> 4.0"
+  s.add_dependency "jquery-rails", ">= 3.1", "< 5.0"
   s.add_dependency "jquery-ui-rails", "~> 5.0"
   s.add_dependency "font-awesome-rails", "~> 4.3"
   s.add_dependency "paper_trail_manager", "~> 0.3.0"
