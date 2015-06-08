@@ -12,5 +12,9 @@ module Calagator
       mustache.js
       leaflet
     )
+
+    config.after_initialize do
+      Calagator.configure_search_engine
+    end
   end
 end

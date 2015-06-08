@@ -1,6 +1,6 @@
 module Calagator
 
-class SourcesController < ApplicationController
+class SourcesController < Calagator::ApplicationController
   # POST /import
   # POST /import.xml
   def import

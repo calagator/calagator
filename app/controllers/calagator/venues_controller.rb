@@ -2,7 +2,7 @@ require "calagator/duplicate_checking/controller_actions"
 
 module Calagator
 
-class VenuesController < ApplicationController
+class VenuesController < Calagator::ApplicationController
   # Provides #duplicates and #squash_many_duplicates
   include DuplicateChecking::ControllerActions
   require_admin only: [:duplicates, :squash_many_duplicates]
