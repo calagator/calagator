@@ -57,6 +57,13 @@ module Calagator
     /\bcialis\b/,
   ]
 
+  def self.configure_search_engine
+    kind = search_engine.try(:to_sym)
+
+    Calagator::Event::SearchEngine.use(kind)
+    Calagator::Venue::SearchEngine.use(kind)
+  end
+
   def self.setup(&block)
     yield self
   end
