@@ -1,6 +1,6 @@
 module Calagator
 
-class VersionsController < ApplicationController
+class VersionsController < Calagator::ApplicationController
   def edit
     @version = PaperTrail::Version.find(params[:id])
     @record = @version.next.try(:reify) || @version.item || @version.reify

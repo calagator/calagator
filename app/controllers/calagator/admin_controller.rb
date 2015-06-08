@@ -1,6 +1,6 @@
 module Calagator
 
-class AdminController < ApplicationController
+class AdminController < Calagator::ApplicationController
   require_admin
 
   def index
