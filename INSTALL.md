@@ -14,7 +14,7 @@ If you're looking to build your own community calendar using Calagator, follow t
 
 First, install the `calagator` gem:
 
-    gem install calagator --pre
+    gem install calagator
     
 You can then use the `calagator` command to generate a new Rails application with Calagator installed:
 
