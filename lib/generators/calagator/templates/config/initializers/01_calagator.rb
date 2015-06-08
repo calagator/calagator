@@ -14,10 +14,11 @@ Calagator.setup do |config|
 
   # Optional username and password to use when accessing /admin pages
   # config.admin_username = 'admin'
-  # config.admin_password = 'kitties!'
+  # config.admin_password = ENV['CALAGATOR_ADMIN_PASSWORD']
 
   # API key for Meetup.com, get your own from: http://www.meetup.com/meetup_api/key/
-  config.meetup_api_key = ''
+  # This is sensitive information and should not be stored in version control.
+  config.meetup_api_key = ENV['MEETUP_API_KEY']
 
   # Search engine to use for searching events.
   # Values: :sql, :sunspot.
@@ -38,7 +39,9 @@ Calagator.setup do |config|
   # A Google Maps API key is required to use Google's geocoding service
   # as well as to display maps using their API.
   # Get one at: https://developers.google.com/maps/documentation/javascript/tutorial#api_key
-  config.mapping_google_maps_api_key = ''
+  #
+  # This is sensitive information and should not be stored in version control.
+  config.mapping_google_maps_api_key = ENV['GOOGLE_MAPS_API_KEY']
 
   # The tile provider to use when rendering maps with Leaflet.
   # One of: leaflet, stamen, mapbox, google
