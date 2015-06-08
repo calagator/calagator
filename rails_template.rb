@@ -14,3 +14,5 @@ gem "calagator", (generating_dummy && { path: relative_calagator_path.to_s })
 run "bundle install"
 rake "db:create"
 generate "calagator:install", (generating_dummy && "--dummy")
+generate "sunspot_rails:install"
+
