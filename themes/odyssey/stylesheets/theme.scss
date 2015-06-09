@@ -9,6 +9,7 @@
 @import 'foundation';
 @import 'variables';
 @import 'mixins';
+@import 'utilities';
 @import 'buttons';
 
 // A lot of layout is probably in these 3 files so including them for now until I can make it better.
@@ -238,6 +239,8 @@ footer .footer-container p {
     transform:scaleX(-1);
 }
 
+@import 'header';
+
 body.events_index { // /events
     @import 'events';
 }
@@ -252,8 +255,7 @@ body.sources_new { // /sources/new
 
 body.site_index,
 body.admin_index { // home page
-	// this page probably has nothing special layout-wise.
-	@import 'home';
+
 }
 
 body.site_index {

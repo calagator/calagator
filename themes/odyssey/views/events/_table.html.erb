@@ -15,7 +15,7 @@ skipped = 0
 rowspans = calculate_rowspans(events)
 -%>
 <table class='event_table'>
-  <tbody>
+  <tbody class='clearfix'>
     <% unless events.size==0 %>
       <% events.each_with_index do |event, index| %>
         <tr class='vevent h-event'>
@@ -27,16 +27,19 @@ rowspans = calculate_rowspans(events)
             <% show_year = event.start_time.year != Time.now.year %>
             <%= datetime_format(event.start_time,'%b %d') -%><%= ", "+datetime_format(event.start_time,'%Y') if show_year %>
           </td>
+        </tr>
           <% end %>
           <td class='event_summary'>
-            <a class='summary p-name u-url' href='<%= url_for event_url(event) %>' name='<%= "event-#{event.id}" %>' id='<%= "event-#{event.id}" %>'><%= event.title %></a><br />
-            <%= normalize_time(event, :context => event.start_time.to_date) -%>
+            <% if event.organization && event.organization.title.present? %>
+              <%= link_to event.organization.title, organization_path(event.organization), class: 'p-organization h-card' %>
+            <% end %>
+            <a class='summary p-name u-url' href='<%= url_for event_url(event) %>' name='<%= "event-#{event.id}" %>' id='<%= "event-#{event.id}" %>'><%= event.title %></a>
+            <div class='time'>
+                <%= normalize_time(event, :context => event.start_time.to_date) -%>
+            </div>
             <% if event.venue && !event.venue.title.blank? %>
               <a class='location p-location h-card' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
             <% end -%>
-            <% if event.organization && event.organization.title.present? %>
-              <br/><%= link_to event.organization.title, organization_path(event.organization), class: 'p-organization h-card' %>
-            <% end %>
             <% if !event.description.blank? %>
               <div class='description e-description'>
                 <%= format_description(event.description) -%>
@@ -62,15 +65,12 @@ rowspans = calculate_rowspans(events)
     <% end %>
 
     <tfooter>
-      <tr>
-        <th class='date'>Sort By: <%= link_to "Date", url_for(params.merge(:order => 'date')) %></th>
-        <th class='event_summary'>
-          <%= events_sort_link('name') -%>,
+      <tr class='sort-by'>
+        <th class='sort-by-text'>Sort By:</th>
+        <th class='sort-by-list clearfix'>
+            <%= link_to "Date", url_for(params.merge(:order => 'date')) %>
+          <%= events_sort_link('name') -%>
           <%= events_sort_link('venue') -%>
-          <%- if scores -%>,
-          <%= events_sort_link('score') -%>
-          <%- end -%>,
-          <%= events_sort_link(nil) -%>
         </th>
       </tr>
     </tfooter>
