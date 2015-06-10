@@ -42,7 +42,7 @@ Calagator::Engine.routes.draw do
   end
 
   resources :versions, :only => [:edit]
-  resources :changes, :controller => 'paper_trail_manager/changes'
+  resources :changes, :controller => '/paper_trail_manager/changes'
   get 'recent_changes' => redirect("/changes")
   get 'recent_changes.:format' => redirect("/changes.%{format}")
 
