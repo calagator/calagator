@@ -1,14 +1,8 @@
 /*
  * First come the SCSS @imports below:
- *= require_self
  *
  * Then come the external dependencies:
  *
- *= require jquery.timepicker
- *= require jquery-ui/theme
- *= require formtastic
- *= require font-awesome
- *= require leaflet.awesome-markers
  */
 
 @import 'variables';
@@ -19,3 +13,9 @@
 @import 'layout';
 @import 'mobile';
 @import 'changes';
+
+@import 'jquery.timepicker.css';
+@import 'jquery-ui/theme.css';
+@import 'formtastic.css';
+@import 'font-awesome.css';
+@import 'leaflet.awesome-markers.css.scss';
