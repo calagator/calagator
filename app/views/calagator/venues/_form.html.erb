@@ -12,7 +12,7 @@
       <%= f.input :locality, :label => "City" %>
       <%= f.input :region, :label => "State" %>
       <%= f.input :postal_code, :label => "Zip Code" %>
-      <%= f.input :country, :label => "Country", :as => :text %>
+      <%= f.input :country, :label => "Country", as: :string %>
       <%= f.input :latitude,  :input_html => { :maxlength => 20 } %>
       <%= f.input :longitude, :input_html => { :maxlength => 20 } %>
     <% end %>
