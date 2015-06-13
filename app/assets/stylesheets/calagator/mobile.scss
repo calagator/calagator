@@ -76,14 +76,22 @@
 
   #search_form label {
 	display: none;
+  position: relative;
   }
 
   #search_form input {
+    -webkit-appearance: none;
+    border: none;
+    outline: none;
+  }
+
+  /*#search_form input {
     background: transparent;
     -webkit-appearance: none;
     border: none;
     outline: none
   }
+*/
 
   #search_field {
 	width: 150px;
