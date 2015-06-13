@@ -37,7 +37,7 @@ Calagator::Engine.routes.draw do
       get :map
       get :duplicates
       get :autocomplete
-      get 'tag/:tag', to: :search, as: :tag
+      get 'tag/:tag', to: :index, as: :tag
     end
   end
 
