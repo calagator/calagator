@@ -74,19 +74,17 @@
     top: 10px;
   }
 
+
+  #search_form {
+    right: 15px;
+  }
+
   #search_form label {
 	display: none;
   }
 
-  #search_form input {
-    background: transparent;
-    -webkit-appearance: none;
-    border: none;
-    outline: none
-  }
-
   #search_field {
-	width: 150px;
+	width: 121px;
   }
 
   .sidebar {
