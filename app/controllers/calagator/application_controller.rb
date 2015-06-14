@@ -18,10 +18,13 @@ class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '8813a7fec0bb4fbffd283a3868998eed'
-
-  # Setup theme
+  skip_before_action :verify_authenticity_token, if: :json_request?
 
 protected
+
+  def json_request?
+    request.format.json?
+  end
 
   def self.require_admin(options = {})
     http_basic_authenticate_with(
