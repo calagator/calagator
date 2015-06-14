@@ -86,6 +86,20 @@ describe Venue::Search, :type => :model do
       subject = Venue::Search.new tag: "foo"
       expect(subject.results?).to be_truthy
     end
+
+    describe "handling exceptions" do
+      subject(:venue_search) { Venue::Search.new }
+      before { allow(Venue).to receive(:non_duplicates).and_raise(ActiveRecord::StatementInvalid, "bad times") }
+      before { venue_search.venues }
+
+      it "should set a failure message" do
+        expect(venue_search.failure_message).to eq("There was an error completing your search.")
+      end
+
+      it "should be a hard failure" do
+        expect(venue_search).to be_hard_failure
+      end
+    end
   end
 end
 

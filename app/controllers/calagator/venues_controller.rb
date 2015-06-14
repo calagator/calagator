@@ -13,6 +13,9 @@ class VenuesController < Calagator::ApplicationController
     @search = Venue::Search.new(params.permit!)
     @venues = @search.venues
 
+    flash[:failure] = @search.failure_message
+    return redirect_to venues_path if @search.hard_failure?
+
     respond_to do |format|
       format.html # index.html.erb
       format.kml  # index.kml.erb

@@ -9,11 +9,7 @@ class Venue < ActiveRecord::Base
     end
 
     def venues
-      @venues ||= if query
-        Venue.search(query, include_closed: include_closed, wifi: wifi)
-      else
-        base.business.wifi_status.search.scope
-      end
+      @venues ||= perform_search
     end
 
     def most_active_venues
@@ -28,7 +24,27 @@ class Venue < ActiveRecord::Base
       query || tag || all
     end
 
+    def failure_message
+      @failure_message
+    end
+
+    def hard_failure?
+      @hard_failure
+    end
+
     protected
+
+    def perform_search
+      if query
+        Venue.search(query, include_closed: include_closed, wifi: wifi)
+      else
+        base.business.wifi_status.search.scope
+      end
+    rescue ActiveRecord::StatementInvalid => e
+      @failure_message = "There was an error completing your search."
+      @hard_failure = true
+      []
+    end
 
     def base
       @scope = Venue.non_duplicates
