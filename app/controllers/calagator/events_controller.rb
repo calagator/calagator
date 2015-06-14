@@ -98,11 +98,11 @@ class EventsController < Calagator::ApplicationController
   def search
     @search = Event::Search.new(params)
 
-    flash[:failure] = @search.failure_message
-    return redirect_to root_path if @search.hard_failure?
-
     # setting @events so that we can reuse the index atom builder
     @events = @search.events
+
+    flash[:failure] = @search.failure_message
+    return redirect_to root_path if @search.hard_failure?
 
     render_events(@events)
   end
