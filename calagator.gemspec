@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails"
   s.add_dependency "jquery-ui-rails", "~> 5.0"
   s.add_dependency "font-awesome-rails", "~> 4.3"
-  s.add_dependency "paper_trail_manager", "~> 0.3.0"
+  s.add_dependency "paper_trail_manager", "~> 0.4"
   s.add_dependency "utf8-cleaner", "~> 0.0.6"
   # s.add_dependency "mofo", path: "vendor/gems/mofo-0.2.8" # vendored fork with hpricot dependency replaced with nokogiri
   s.add_dependency "sunspot_rails", "~> 2.1"
