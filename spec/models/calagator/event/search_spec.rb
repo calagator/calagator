@@ -10,12 +10,11 @@ describe Event::Search, :type => :model do
   let(:search_params) { {} }
   subject(:event_search) { Event::Search.new(search_params) }
 
-  before { event_search.events } # fetch the results
-
   describe "by keyword" do
     let(:search_params) { {query: "myquery"} }
 
     it "should find all events matching the keyword, ordered by date" do
+      event_search.events
       expect(Event).to have_received(:search).with("myquery", skip_old: false, order: "date")
     end
 
@@ -23,6 +22,7 @@ describe Event::Search, :type => :model do
       let(:search_params) { {query: "myquery", current: "1"} }
 
       it "should be able to only return current events" do
+        event_search.events
         expect(Event).to have_received(:search).with("myquery", order: "date", skip_old: true)
       end
     end
@@ -38,12 +38,26 @@ describe Event::Search, :type => :model do
         expect(event_search).not_to be_hard_failure
       end
     end
+
+    context "when the search encounters an error" do
+      before { allow(Event).to receive(:search).and_raise(ActiveRecord::StatementInvalid, "bad times") }
+      before { event_search.events }
+
+      it "should set a failure message" do
+        expect(event_search.failure_message).to eq("There was an error completing your search.")
+      end
+
+      it "should be a hard failure" do
+        expect(event_search).to be_hard_failure
+      end
+    end
   end
 
   describe "by tag" do
     let(:search_params) { {tag: "foo"} }
 
     it "should find all events matching the tag, ordered by date" do
+      event_search.events
       expect(Event).to have_received(:search_tag).with("foo", current: false, order: "date")
     end
 
@@ -68,6 +82,19 @@ describe Event::Search, :type => :model do
 
       it "should not be a hard failure" do
         expect(event_search).not_to be_hard_failure
+      end
+    end
+
+    context "when the tag search encounters an error" do
+      before { allow(Event).to receive(:search_tag).and_raise(ActiveRecord::StatementInvalid.new("bad times")) }
+      before { event_search.events }
+
+      it "should set a failure message" do
+        expect(event_search.failure_message).to eq("There was an error completing your search.")
+      end
+
+      it "should be a hard failure" do
+        expect(event_search).to be_hard_failure
       end
     end
   end

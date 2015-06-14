@@ -10,6 +10,10 @@ class Event < ActiveRecord::Base
       validate!
     end
 
+    def events
+      @events ||= perform_search
+    end
+
     # Return +events+ grouped by currentness using a data structure like:
     #
     #   {
@@ -28,14 +32,6 @@ class Event < ActiveRecord::Base
       ["1", "true"].include?(super)
     end
 
-    def events
-      @events ||= if tag
-        Event.search_tag(tag, order: order, current: current)
-      else
-        Event.search(query, order: order, skip_old: current)
-      end
-    end
-
     def failure_message
       @failure_message
     end
@@ -45,6 +41,20 @@ class Event < ActiveRecord::Base
     end
 
     private
+
+    def perform_search
+      if hard_failure?
+        []
+      elsif tag
+        Event.search_tag(tag, order: order, current: current)
+      else
+        Event.search(query, order: order, skip_old: current)
+      end
+    rescue ActiveRecord::StatementInvalid => e
+      @failure_message = "There was an error completing your search."
+      @hard_failure = true
+      []
+    end
 
     def validate!
       unless %w(date name title venue score).include?(order) || order.blank?
