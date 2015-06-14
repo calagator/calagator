@@ -60,14 +60,14 @@ describe EventsController, :type => :controller do
 
     describe "as JSON" do
       it "should accept a JSONP callback" do
-        post :index, :format => "json", :callback => "some_function"
+        get :index, :format => "json", :callback => "some_function"
 
         expect(response.body.split("\n").join).to match /some_function\(.*\)\Z/
       end
 
       describe "without events" do
         before do
-          post :index, :format => "json"
+          get :index, :format => "json"
 
           @struct = ActiveSupport::JSON.decode(response.body)
         end
@@ -86,7 +86,7 @@ describe EventsController, :type => :controller do
           @event = FactoryGirl.create(:event, :with_venue)
           @venue = @event.venue
 
-          post :index, :format => "json"
+          get :index, :format => "json"
 
           @struct = ActiveSupport::JSON.decode(response.body)
         end
@@ -114,7 +114,7 @@ describe EventsController, :type => :controller do
     describe "as ATOM" do
       describe "without events" do
         before do
-          post :index, :format => "atom"
+          get :index, :format => "atom"
           @struct = Hash.from_xml(response.body)
         end
 
@@ -132,7 +132,7 @@ describe EventsController, :type => :controller do
           FactoryGirl.create(:event, :with_venue)
           FactoryGirl.create(:event, :with_venue)
 
-          post :index, :format => "atom"
+          get :index, :format => "atom"
 
           @struct = Hash.from_xml(response.body)
         end
@@ -165,7 +165,7 @@ describe EventsController, :type => :controller do
     describe "as iCalendar" do
       describe "without events" do
         before do
-          post :index, :format => "ics"
+          get :index, :format => "ics"
         end
 
         it "should have a calendar" do
@@ -182,7 +182,7 @@ describe EventsController, :type => :controller do
           @current_event = FactoryGirl.create(:event, :start_time => today + 1.hour)
           @past_event = FactoryGirl.create(:event, :start_time => today - 1.hour)
 
-          post :index, :format => "ics"
+          get :index, :format => "ics"
         end
 
         it "should have a calendar" do
@@ -349,7 +349,7 @@ describe EventsController, :type => :controller do
 
       it "should create a new event without a venue" do
         @params[:event][:venue_id] = nil
-        post "create", @params
+        post :create, @params
         @event = Event.find_by_title(@params[:event][:title])
         expect(response).to redirect_to(@event)
       end
@@ -357,7 +357,7 @@ describe EventsController, :type => :controller do
       it "should associate a venue based on a given venue id" do
         @venue.save!
         @params[:event][:venue_id] = @venue.id.to_s
-        post "create", @params
+        post :create, @params
         @event = Event.find_by_title(@params[:event][:title])
         expect(@event.venue).to eq(@venue)
         expect(response).to redirect_to(@event)
@@ -366,7 +366,7 @@ describe EventsController, :type => :controller do
       it "should associate a venue based on a given venue name" do
         @venue.save!
         @params[:venue_name] = @venue.title
-        post "create", @params
+        post :create, @params
         @event = Event.find_by_title(@params[:event][:title])
         expect(@event.venue).to eq(@venue)
         expect(response).to redirect_to(@event)
@@ -377,7 +377,7 @@ describe EventsController, :type => :controller do
         @venue2 = FactoryGirl.create(:venue)
         @params[:event][:venue_id] = @venue.id.to_s
         @params[:venue_name] = @venue2.title
-        post "create", @params
+        post :create, @params
         @event = Event.find_by_title(@params[:event][:title])
         expect(@event.venue).to eq(@venue)
         expect(response).to redirect_to(@event)
@@ -385,7 +385,7 @@ describe EventsController, :type => :controller do
 
       it "should create a new event and new venue, and redirect to venue edit form" do
         @params[:venue_name] = "New Venue"
-        post "create", @params
+        post :create, @params
         @event = Event.find_by_title(@params[:event][:title])
         @venue = Venue.find_by_title("New Venue")
         expect(@event.venue).to eq(@venue)
@@ -393,12 +393,12 @@ describe EventsController, :type => :controller do
       end
 
       it "should catch errors and redisplay the new event form" do
-        post "create"
+        post :create
         expect(response).to render_template :new
       end
 
       it "should stop evil robots" do
-        post "create", :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+        post :create, :trap_field => "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
         expect(response).to render_template :new
         expect(flash[:failure]).to match /evil robot/i
       end
@@ -410,7 +410,7 @@ describe EventsController, :type => :controller do
           http://example.net
           https://example.net
         DESC
-        post "create", @params
+        post :create, @params
         expect(response).to render_template :new
         expect(flash[:failure]).to match /too many links/i
       end
@@ -426,13 +426,13 @@ describe EventsController, :type => :controller do
           I wouldn't mind seeing a PDX.pm talk about HTTP::Tiny vs Net::HTTP::Tiny vs Net::HTTP
           vs HTTP::Client vs HTTP::Client::Parallel
         DESC
-        post "create", @params
+        post :create, @params
         expect(flash[:failure]).to be_nil
       end
 
       it "should allow the user to preview the event" do
         @params[:preview] = "Preview"
-        post "create", @params
+        post :create, @params
         expect(response).to render_template :new
         expect(response.body).to have_selector '#event_preview'
       end
@@ -440,7 +440,7 @@ describe EventsController, :type => :controller do
       it "should create an event for an existing venue" do
         venue = FactoryGirl.create(:venue)
 
-        post "create",
+        post :create,
           :start_time => now.strftime("%Y-%m-%d"),
           :end_time   => (now + 1.hour).strftime("%Y-%m-%d"),
           :event      => {
@@ -651,7 +651,7 @@ describe EventsController, :type => :controller do
 
       describe "in HTML format" do
         before do
-          post :search, :query => "myquery", :format => "html"
+          get :search, :query => "myquery", :format => "html"
         end
 
         it "should assign search result" do
@@ -688,14 +688,14 @@ describe EventsController, :type => :controller do
 
       describe "in XML format" do
         it "should produce XML" do
-          post :search, :query => "myquery", :format => "xml"
+          get :search, :query => "myquery", :format => "xml"
 
           hash = Hash.from_xml(response.body)
           expect(hash["events"]).to be_a_kind_of Array
         end
 
         it "should include venue details" do
-          post :search, :query => "myquery", :format => "xml"
+          get :search, :query => "myquery", :format => "xml"
 
           hash = Hash.from_xml(response.body)
           event = hash["events"].first
@@ -708,20 +708,20 @@ describe EventsController, :type => :controller do
 
       describe "in JSON format" do
         it "should produce JSON" do
-          post :search, :query => "myquery", :format => "json"
+          get :search, :query => "myquery", :format => "json"
 
           struct = ActiveSupport::JSON.decode(response.body)
           expect(struct).to be_a_kind_of Array
         end
 
         it "should accept a JSONP callback" do
-          post :search, :query => "myquery", :format => "json", :callback => "some_function"
+          get :search, :query => "myquery", :format => "json", :callback => "some_function"
 
           expect(response.body).to match /some_function\(.*\)$/
         end
 
         it "should include venue details" do
-          post :search, :query => "myquery", :format => "json"
+          get :search, :query => "myquery", :format => "json"
 
           struct = ActiveSupport::JSON.decode(response.body)
           event = struct.first
@@ -732,7 +732,7 @@ describe EventsController, :type => :controller do
 
       describe "in ATOM format" do
         it "should produce ATOM" do
-          post :search, :query => "myquery", :format => "atom"
+          get :search, :query => "myquery", :format => "atom"
 
           hash = Hash.from_xml(response.body)
           expect(hash["feed"]["entry"]).to be_a_kind_of Array
@@ -741,13 +741,13 @@ describe EventsController, :type => :controller do
 
       describe "in ICS format" do
         it "should produce ICS" do
-          post :search, :query => "myquery", :format => "ics"
+          get :search, :query => "myquery", :format => "ics"
 
           expect(response.body).to match /BEGIN:VEVENT/
         end
 
         it "should produce events matching the query" do
-          post :search, :query => "myquery", :format => "ics"
+          get :search, :query => "myquery", :format => "ics"
           expect(response.body).to match /SUMMARY:#{current_event_2.title}/
           expect(response.body).to match /SUMMARY:#{past_event.title}/
         end
@@ -756,13 +756,13 @@ describe EventsController, :type => :controller do
       describe "failures" do
         it "sets search failures in the flash message" do
           allow_any_instance_of(Event::Search).to receive_messages failure_message: "OMG"
-          post :search
+          get :search
           expect(flash[:failure]).to eq("OMG")
         end
 
         it "redirects to home if hard failure" do
           allow_any_instance_of(Event::Search).to receive_messages hard_failure?: true
-          post :search
+          get :search
           expect(response).to redirect_to(root_path)
         end
       end
