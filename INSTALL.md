@@ -38,6 +38,10 @@ Calagator's settings can be configured by editing these files in your host appli
 
 Please see these file for more details.
 
+### Time Zone
+
+It's important to make sure your time zone is properly configured in `config/application.rb`. Calagator relies heavily on this setting when displaying event times.
+
 ### API Keys
 
 Calagator uses a number of API keys to communicate with external services.
