@@ -50,6 +50,10 @@ describe Event::Search, :type => :model do
       it "should be a hard failure" do
         expect(event_search).to be_hard_failure
       end
+
+      it "should return no events" do
+        expect(event_search.events).to be_empty
+      end
     end
   end
 
@@ -95,6 +99,10 @@ describe Event::Search, :type => :model do
 
       it "should be a hard failure" do
         expect(event_search).to be_hard_failure
+      end
+
+      it "should return no events" do
+        expect(event_search.events).to be_empty
       end
     end
   end
@@ -149,6 +157,10 @@ describe Event::Search, :type => :model do
       it "should be a hard failure" do
         expect(event_search).to be_hard_failure
       end
+
+      it "should return no events" do
+        expect(event_search.events).to be_empty
+      end
     end
 
     context "when given both search query and tag" do
@@ -160,6 +172,10 @@ describe Event::Search, :type => :model do
 
       it "should be a hard failure" do
         expect(event_search).to be_hard_failure
+      end
+
+      it "should return no events" do
+        expect(event_search.events).to be_empty
       end
     end
   end
