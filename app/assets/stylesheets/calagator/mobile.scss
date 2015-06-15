@@ -175,20 +175,71 @@
       text-align: left;
       margin-right: -1em; }
 
-  .events_change {}
-    .events_change #event_times input[type="text"] {
-      width: 70px; }
-    .events_change #event_times .to {
-      clear: both;
-      text-align: right;
-      font-weight: bold;
-      width: 7em; }
-    .events_change #time_start,
-    .events_change #date_end {
-      margin: 0; }
 
   .events_show #google_map,
   .venues_show #google_map {
     display: none;
   }
+
+  #new_event_form, #edit_event_form{
+    input, label, textarea{
+      display: block;
+      width: 90%;
+    }
+
+    input, textarea{
+      border: 1px solid darkgrey;
+      border-radius: 3px;
+    }
+
+    #date_start, #time_start,
+    #date_end, #time_end{
+      display: inline;
+      margin-left:0;
+      margin-right:0;
+      width: 37%;
+      min-width: 70px;
+    }
+
+    .actions{
+      padding-left:5%;
+    }
+
+    #event_submit_action{
+      width:46.5%;
+      input{
+        height:30px
+      }
+    }
+
+    label{
+      margin-left:0;
+      text-align:left;
+    }
+
+    .inline-hints{
+      width: 90%;
+      margin: 0 2.5%;
+    }
+
+    .at{
+      position:relative;
+      top:4px;
+      font-weight:bold;
+      margin-right:2%;
+      margin-left: 2%;
+    }
+
+    .to{
+      display:block;
+      text-align:left;
+      font-weight:bold;
+      width: 90%;
+    }
+
+    .appropriateness_message{
+      margin-right: 10px;
+    }
+  }
+
 }
