@@ -1,0 +1,148 @@
+main {
+    font-family: $font-family-fira-sans;
+
+    a {
+        color: #0089df;
+    }
+}
+
+.location.vcard {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.location h1 {
+    font-size: 1.2em;
+    margin-bottom: 0.5em;
+}
+
+.location .button {
+    margin-top: 0.5em;
+}
+
+.description {
+    padding: 1em;
+    background-color: #eaeaea;
+}
+
+.description .access_notes {
+    margin-top: 1em;
+}
+
+.description .access_notes h3 {
+    margin-bottom: 0.25em;
+}
+
+.event_list {
+    width: 100%;
+}
+
+.event_list li {
+    padding-left: 0em;
+    margin-bottom: 0;
+}
+
+li .vevent {
+    width: 100%;
+    position: relative;
+}
+
+li .list_date {
+    width: 100%;
+    position: relative;
+    background-color: #2a2a2a;
+    padding: 1em;
+    color: #fff;
+}
+
+li .list_content {
+    padding: 1em;
+}
+
+ul.event_list .list_date {
+    text-align: left;
+}
+
+#events {
+    margin: 0;
+}
+
+#future_events h2 {
+    margin-bottom: 1em;
+    padding-left: 1em;
+}
+
+@media only screen and (min-width: 45em) {
+    #location .adr .button {
+        max-width: 300px;
+    }
+
+    .location.vcard,
+    .description,
+    #events {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+
+    #future_events h2 {
+        padding-left: 0;
+    }
+}
+
+@media only screen and (min-width: 60.0625em) {
+    .single_venue .location.vcard {
+        margin-left: 1em;
+        margin-right: 1em;
+    }
+
+    .contentbar {
+        margin-right: 0px;
+    }
+
+    .description,
+    #events {
+        width: 100%;
+    }
+
+    #venue_sidebar_toggle {
+        display: none;
+    }
+
+    #venue_sidebar {
+        position: relative;
+        margin: 0;
+        margin-left: 2em;
+        margin-right: 2em;
+        width: 94%;
+    }
+}
+
+@media only screen and (min-width: 75.625em) {
+    .single_venue .location.vcard,
+    .description,
+    #events {
+      padding: 0;
+      width: 1000px;
+      margin: 0 auto;
+    }
+
+    .single_venue .location.vcard {
+        margin-bottom: 1em;
+        margin-top: 1em;
+    }
+
+    #venue_sidebar {
+        max-width: 1000px;
+        width: 1000px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #venue_sidebar h3 {
+        padding: 0;
+    }
+
+    #venue_sidebar a {
+        color: #2ba2f5;
+    }
+}

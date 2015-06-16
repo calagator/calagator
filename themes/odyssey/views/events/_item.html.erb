@@ -31,7 +31,6 @@ html_classes << " contentbar" if has_contentbar
     <% unless event.venue.blank? %>
       <div id='location' class='property'>
           <div class="property-detail clearfix location p-location h-card vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
-            <%= map event %>
             <a class="url u-url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
               <span class='fn org p-name' itemprop="name"><%= event.venue.title -%></span>
             </a>
@@ -53,7 +52,7 @@ html_classes << " contentbar" if has_contentbar
                 <span class='country-name p-country-name'><%= event.venue.country -%></span>
               <% end -%>
               <% if event.venue && event.venue.has_full_address? -%>
-                (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
+                <a class='button button--google-maps' href='<%=google_maps_url(event.venue.full_address) -%>'>Open in Google Maps</a>
               <% end -%>
               <% if event.venue.wifi? -%>
                 <div class='wifi_callout'>Public WiFi</div>
@@ -118,21 +117,6 @@ html_classes << " contentbar" if has_contentbar
       </div>
     <% end %>
 
-    <div class="attendees">
-      <script id="attendees-template" type="text/mustache">
-        <h3>Attendees</h3>
-        <span class='plancast-rsvp'>(<a href="{{plan_url}}">Count me in on Plancast</a>)</span>
-        <br />
-        <ul>
-          {{#attendees}}
-            <li>
-              {{#username}}<a href='http://plancast.com/{{username}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
-              {{^username}}<a href='http://plancast.com/user/{{id}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
-            </li>
-          {{/attendees}}
-        </ul>
-      </script>
-    </div>
     <% if event.persisted? %>
       <div class="share">
         <a class="fb-share" href="#"

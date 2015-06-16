@@ -1,6 +1,5 @@
 /*
  *= require formtastic
- *= require leaflet.awesome-markers
  *= require recurring_select
  *= require jquery-ui/jquery-ui
  *= require jquery-ui/datepicker
@@ -249,6 +248,10 @@ body.events_new { // /events/new
 	// @import 'new-events';
 }
 
+body.events_show {
+    @import 'events-show';
+}
+
 body.sources_new { // /sources/new
 	// @import 'new-source';
 }
@@ -280,7 +283,7 @@ body.venues_index { // /venues
 }
 
 body.venues_show { // individual venues page
-	// @import 'venue';
+    @import 'venue';
 }
 
 @media only screen and (min-width: 46.25em) {
