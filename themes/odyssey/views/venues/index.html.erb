@@ -3,9 +3,7 @@
 <% tabindex_on '#search_field' %>
 
 <div id="venues_index">
-<h1>Venues</h1>
 <div id='venues_search'>
-  <h2>Find a venue:</h2>
   <%= form_tag venues_path, :method => 'get' do %>
     <div class='keywords'>
       <%= label_tag :query, "Search venues:" %>
@@ -17,7 +15,7 @@
     </div>
 
     <div class='submit'>
-      <%= submit_tag "Search" %>
+      <%= submit_tag "Search", class: 'button button--google-maps' %>
     </div>
   <% end %>
 </div>
@@ -42,7 +40,7 @@
       <% end -%>
     </div>
 
-    <ul>
+    <ul class='clearfix'>
       <% @venues.each do |venue| %>
         <li>
           <%= link_to(venue.title, venue_url(venue)) %>
@@ -54,10 +52,10 @@
     </ul>
   </div>
 <% else %>
-  <div id='venue_portal'>
+  <div id='venue_portal' class='clearfix'>
     <div id='most_active'>
       <h3>Most Active</h3>
-      <ul>
+      <ul class='clearfix'>
         <% @search.most_active_venues.each do |venue| %>
           <li>
             <%= link_to(venue.title, venue_url(venue)) %>
@@ -68,7 +66,7 @@
     </div>
     <div id='newest'>
       <h3>Newest</h3>
-      <ul>
+      <ul class='clearfix'>
         <% @search.newest_venues.each do |venue| %>
           <li>
             <%= link_to(venue.title, venue_url(venue)) %>
@@ -78,15 +76,7 @@
       </ul>
     </div>
     <div id="exports">
-      <ul>
-        <li><%= link_to 'List all venues', venues_path(:all => 1) %></li>
-        <li><%= link_to 'View a big map', map_venues_path %></li>
-      </ul>
-      <h3>Export venues</h3>
-      <ul>
-        <li><%= link_to 'KML', '/venues.kml' %></li>
-        <li><%= link_to 'JSON', '/venues.json' %></li>
-      </ul>
+        <%= link_to 'List all venues', venues_path(:all => 1), class: 'button button--call-to-action' %>
     </div>
   </div>
   <% end %>

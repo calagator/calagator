@@ -57,6 +57,7 @@ li .list_date {
 
 li .list_content {
     padding: 1em;
+    background-color: #fff;
 }
 
 ul.event_list .list_date {
@@ -70,6 +71,10 @@ ul.event_list .list_date {
 #future_events h2 {
     margin-bottom: 1em;
     padding-left: 1em;
+}
+#venue_sidebar {
+    margin-right: 0;
+    width: 100%;
 }
 
 @media only screen and (min-width: 45em) {
