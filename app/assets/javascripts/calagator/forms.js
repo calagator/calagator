@@ -1,7 +1,7 @@
 //= require jquery-ui
 //= require jquery.timepicker
 
-$(document).on('page:change',function(){
+$(document).on('page:load ready',function(){
   // Initialize autocompletion for venues
   $("input.autocomplete").each(function() {
     $(this).attr('autocomplete', 'off').autocomplete({
@@ -32,7 +32,7 @@ $(document).on('page:change',function(){
   $('.time_picker').timepicker({ 'timeFormat': 'g:i A' });
 
   // Set oldTime to allow time offset functionality
-  var oldTime = $("#time_start").timepicker('getTime');
+  oldTime = $("#time_start").timepicker('getTime');
 });
 
 // Update "time_end" to maintain the same offset from "time_start" if "time_start" changes, and display a highlight to alert the user.

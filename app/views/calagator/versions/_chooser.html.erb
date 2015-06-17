@@ -14,15 +14,13 @@
   </form>
   <% content_for :javascript_insert do %>
     <script type='text/javascript'>
-      $(function() {
-        $('#version').change(function(event) {
-          $('#version_loading').show();
-          var version_id = event.target.value;
-          $('#<%= target %>').load('/versions/'+version_id+'/edit', function(response, status, xhr) {
-            $('#version_loading').hide();
+      $(document).on('change', '#version', function(event){
+        $('#version_loading').show();
+        var version_id = event.target.value;
+        $('#<%= target %>').load('/versions/'+version_id+'/edit', function(response, status, xhr) {
+          $('#version_loading').hide();
           });
-        })
-      })
+        });
     </script>
   <% end %>
 <% end %>
