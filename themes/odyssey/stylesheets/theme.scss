@@ -266,16 +266,15 @@ body.site_index {
 }
 
 body.organizations_index { // /organizations
-	// @import 'organizations';
+    @import 'organizations';
 }
 
 body.organizations_new { // /organizations/new
 
 }
 
-body.organizations_index,
-body.organizations_new {
-	@import 'organizations';
+body.organizations_show {
+    @import 'organization';
 }
 
 body.venues_index { // /venues
