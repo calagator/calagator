@@ -5,7 +5,6 @@ source "https://rubygems.org"
 gem "rails", "4.0.13"
 gem "turbolinks"
 gem "byebug", :platform => "mri"
-
 gem "mysql2", "~> 0.3.18"
 gem "pg", "~> 0.18.1"
 

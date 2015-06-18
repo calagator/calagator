@@ -7,7 +7,7 @@ appraise "rails-4-0" do
 end
 
 appraise "rails-4-1" do
-  gem "rails", "4.1.9"
+  gem "rails", "4.1.11"
   gem "turbolinks"
 
   gem "mysql2", "~> 0.3.18"
@@ -15,7 +15,7 @@ appraise "rails-4-1" do
 end
 
 appraise "rails-4-2" do
-  gem "rails", "4.2.1"
+  gem "rails", "4.2.2"
   gem "turbolinks"
 
   gem "mysql2", "~> 0.3.18"
