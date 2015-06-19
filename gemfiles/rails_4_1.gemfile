@@ -2,10 +2,9 @@
 
 source "https://rubygems.org"
 
-gem "rails", "4.1.9"
+gem "rails", "4.1.11"
 gem "turbolinks"
 gem "byebug", :platform => "mri"
-
 gem "mysql2", "~> 0.3.18"
 gem "pg", "~> 0.18.1"
 
