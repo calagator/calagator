@@ -48,197 +48,21 @@ html {
 
 .wrapper {
 	width: 100%;
-
 	overflow: hidden;
-
 	position: relative;
 }
 
-header {
-
-	display: block; // eventually replace this with html-5shiv if we need support for older browsers. :/
-
-    background: rgb(255,255,255); /* Old browsers */
-    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(47%,rgba(246,246,246,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* IE10+ */
-    background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
-
-	.project-menu {
-		display: none;
-	}
-
-	.logo { // the logo container.
-		float: none;
-		// width: 15%;
-		margin: 0 auto;
-		margin-bottom: 10px;
-
-		// experimenting
-		width: 100%;
-		margin-bottom: 0;
-
-	}
-
-	.logo > .logo-big {
-		display: none;
-	}
-
-	.logo > .logo-small { // the actual logo. Should change the naming of this?
-		display: block;
-		width: 13%;
-		padding-top: 1em;
-		padding-bottom: 1em;
-		margin: 0 auto;
-	}
+@media only screen and (min-width: 46.25em) {
+    body {
+        font-size: 110%;
+    }
 }
 
-.search-form {
-	width: 100%;
-	background-color: rgb(43, 162, 245);
-	padding: 1em 0;
-
-	input {
-		font-family: $font-family-fira-sans;
-		font-size: 1em;
-		font-weight: 300;
-		color: #2A2A2A; // make it a variable.
-
-		width: 90%;
-		display: block;
-		margin: 0 auto;
-
-		// reseting some stuff.
-		border: none;
-		outline: none; // Hmm, I'm not sure about this.
-
-		background: #fff;
-		border-radius: 15px;
-		padding-top: 0.5em;
-		padding-bottom: 0.5em;
-		font-weight: 400;
-		padding-left: 0.8em;
-
-	}
-}
-
-nav {
-
-	width: 100%;
-
-	ul.app-menu > a {
-		display: block;
-		float: left;
-		width: 33.333%;
-		text-align: center;
-		padding: 1em 0;
-
-		background-color: #207FC2;
-		border-bottom: 3px solid #1E6596;
-		color: #fff;
-		font-weight: bold;
-		font-size: 1em;
-
-		border-left: 1px solid #1E6596;
-
-		border-top: 1px solid #1E6596
-	}
-
-	ul.app-menu > a:first-child {
-		border-left: none;
-	}
-
-	a > li {
-		font-size: 1em;
-		font-family: $font-family-fira-sans;
-	}
-}
-
-.subnav {
-	background-color: rgb(147, 102, 171);
-	border-top: 1px solid #5A3E69;
-
-	ul {
-		width: 100%;
-	}
-
-	li { // assuming there's a maximum of these of these on the page at any given time (for mobile anyways).
-		width: 33.333%;
-		float: left;
-		padding: 0.5em 0;
-		text-align: center;
-		border-right: 1px solid #5A3E69;
-	}
-
-	li:first-child { // simulating an active state.
-		border-bottom: 3px solid #5A3E69;
-		// border-left: none;
-	}
-
-	li:last-child {
-		border-right: none;
-	}
-
-	li > a {
-		font-size: 0.85em;
-		font-family: $font-family-fira-sans;
-		color: #fff;
-	}
-}
-
-footer {
-    background-color: #2ba2f5;
-}
-
-footer .footer-container {
-    padding-top: 1em;
-    padding-bottom: 1em;
-    padding-left: 0.5em;
-}
-
-footer .footer-container p {
-    font-family: $font-family-fira-sans;
-    font-weight: 400;
-    color: #0D2A3D;
-}
-
-// Chevron styles
-.chevron {
-	display: inline-block; // this should be on a span tag or i tag which are already display: inline;
-	position: relative;
-}
-
-.chevron:before,
-.chevron:after {
-	content: " ";
-	display: block;
-	width: 2px;
-	height: 8px;
-
-	background-color: #fff; // turn this into a variable?
-}
-
-.chevron:before {
-    @include rotate(45);
-}
-
-.chevron:after {
-	@include rotate(137);
-    margin-top: -3px;
-}
-
-.chevron.chevron--direction-right {
-	-webkit-transform:scaleX(-1);
-    -moz-transform:scaleX(-1);
-    -ms-transform:scaleX(-1);
-    -o-transform:scaleX(-1);
-    transform:scaleX(-1);
-}
-
+// Importing my modules in here.
 @import 'header';
+@import 'navigation';
+@import 'chevron';
+@import 'footer';
 
 body.events_index { // /events
     @import 'events';
@@ -254,11 +78,6 @@ body.events_show {
 
 body.sources_new { // /sources/new
 	// @import 'new-source';
-}
-
-body.site_index,
-body.admin_index { // home page
-
 }
 
 body.site_index {
@@ -283,10 +102,4 @@ body.venues_index { // /venues
 
 body.venues_show { // individual venues page
     @import 'venue';
-}
-
-@media only screen and (min-width: 46.25em) {
-    body {
-        font-size: 110%;
-    }
 }

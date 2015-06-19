@@ -1,0 +1,27 @@
+footer {
+    background-color: #2ba2f5;
+}
+
+footer .footer-container {
+    padding-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 0.5em;
+}
+
+footer .footer-container p {
+    font-family: $font-family-fira-sans;
+    font-weight: 400;
+    color: #0D2A3D;
+}
+
+@media only screen and (min-width: 75.625em) {
+
+	footer {
+		margin-top: 2em;
+	}
+
+	footer .footer-container {
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+}

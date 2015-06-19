@@ -30,24 +30,24 @@
         <ul>
           <% events.first(4).each do |event| %>
             <li>
-              <% if event.organization.present? %>
-                <%=link_to(event.organization_title, event.organization, :class => 'organization-name') %><br />
-              <% end %>
-              <%= link_to event.title, event, :class => "event-title" %>
-              <div class='event-time'>
-                <span class='event-start-time'><%= event.start_time.strftime("%I:%M %p") %></span> - <span class='event-end-time'><%= event.end_time.strftime("%I:%M %p") %>
-              </span>
-              </div>
+                <% if event.organization.present? %>
+                  <%=link_to(event.organization_title, event.organization, :class => 'organization-name') %><br />
+                <% end %>
+                <%= link_to event.title, event, :class => "event-title" %>
+                <div class='event-time'>
+                  <span class='event-start-time'><%= event.start_time.strftime("%I:%M %p") %></span> - <span class='event-end-time'><%= event.end_time.strftime("%I:%M %p") %>
+                </span>
+                </div>
             </li>
           <% end %>
         </ul>
 
         <% if events.length > 4 %>
-          <%= link_to events_path({date: {start: events.first.start_date, end: events.first.start_date } }), class: 'view-more-events' do %>
+          <%= link_to events_path({date: {start: events.first.start_date, end: events.first.start_date } }), class: 'button button--call-to-action view-more-events' do %>
               <span>And <%= events.length - 4 %> more events.</span>
           <% end %>
         <% end %>
-        
+
       <% else %>
         <div class='no-events'>
       <% end %>

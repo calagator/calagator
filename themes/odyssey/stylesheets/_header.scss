@@ -1,3 +1,106 @@
+header {
+
+	display: block; // eventually replace this with html-5shiv if we need support for older browsers. :/
+
+    background: rgb(255,255,255); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(255,255,255,1) 0%, rgba(246,246,246,1) 47%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,1)), color-stop(47%,rgba(246,246,246,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(255,255,255,1) 0%,rgba(246,246,246,1) 47%,rgba(237,237,237,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+
+	.project-menu {
+		display: none;
+	}
+
+	.logo { // the logo container.
+		float: none;
+		// width: 15%;
+		margin: 0 auto;
+		margin-bottom: 10px;
+
+		// experimenting
+		width: 100%;
+		margin-bottom: 0;
+
+	}
+
+	.logo > .logo-big {
+		display: none;
+	}
+
+	.logo > .logo-small { // the actual logo. Should change the naming of this?
+		display: block;
+		width: 13%;
+		padding-top: 1em;
+		padding-bottom: 1em;
+		margin: 0 auto;
+	}
+}
+
+.search-form {
+	width: 100%;
+	background-color: rgb(43, 162, 245);
+	padding: 1em 0;
+
+	input {
+		font-family: $font-family-fira-sans;
+		font-size: 1em;
+		font-weight: 300;
+		color: #2A2A2A; // make it a variable.
+
+		width: 90%;
+		display: block;
+		margin: 0 auto;
+
+		// reseting some stuff.
+		border: none;
+		outline: none; // Hmm, I'm not sure about this.
+
+		background: #fff;
+		border-radius: 15px;
+		padding-top: 0.5em;
+		padding-bottom: 0.5em;
+		font-weight: 400;
+		padding-left: 0.8em;
+
+	}
+}
+
+.subnav {
+	background-color: rgb(147, 102, 171);
+	border-top: 1px solid #5A3E69;
+
+	ul {
+		width: 100%;
+	}
+
+	li { // assuming there's a maximum of these of these on the page at any given time (for mobile anyways).
+		width: 33.333%;
+		float: left;
+		padding: 0.5em 0;
+		text-align: center;
+		border-right: 1px solid #5A3E69;
+	}
+
+	li:first-child { // simulating an active state.
+		border-bottom: 3px solid #5A3E69;
+		// border-left: none;
+	}
+
+	li:last-child {
+		border-right: none;
+	}
+
+	li > a {
+		font-size: 0.85em;
+		font-family: $font-family-fira-sans;
+		color: #fff;
+	}
+}
+
 .view-mode-buttons,
 .search-box-container {
 	display: none;
@@ -5,13 +108,12 @@
 
 .search-box {
 	display: block;
-	width: 4em;
-	height: 4em;
+	width: 3em;
+	height: 3em;
 	background-color: #3A8BC3;
 	position: relative;
 	right: 1em;
 	float: right;
-	border-right: 1px solid #1E6596;
 	border-bottom: 4px solid #1E6596;
 }
 
@@ -19,6 +121,10 @@
 	position: relative;
 	top: 1.2em;
 	left: 1.6em;
+}
+
+.header-container {
+	position: relative;
 }
 
 @media only screen and (min-width: 41.875em) { // 670px
@@ -58,8 +164,10 @@
 
 	.search-box-container {
 		display: block;
-		float: right;
+		position: absolute;
 		width: 25%;
+		top: 8px;
+		right: 0;
 	}
 
 	nav {

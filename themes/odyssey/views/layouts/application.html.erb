@@ -94,7 +94,7 @@
 
       <nav>
         <ul class='app-menu clearfix'>
-        <%= link_to events_path do %>
+        <%= link_to root_path do %>
             <li class="<%=link_class[:events]%>">Events</li>
         <% end %>
         <%= link_to venues_path do %>
@@ -110,13 +110,15 @@
         </ul><!-- .app-menu -->
       </nav>
 
+      <!-- I don't think we actually need a subnav. -->
+      <!--
       <% # Pick a subnav %>
 
       <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
       <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
       <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
       <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
-
+        -->
       <main role='main' class='content'>
         <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
         <%= render_flash %>

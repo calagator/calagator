@@ -4,7 +4,7 @@
     border-top: 1px solid #1E6596;
   }
 
-  .button {
+  .button:not(.button--call-to-action) {
     display: block;
     width: 33.333%;
     float: left;
@@ -19,24 +19,24 @@
     text-align: center;
   }
 
-  .button:first-child {
+  .button:not(.button--call-to-action):first-child {
     border-right: 1px solid #1E6596;
   }
 
-  .button:last-child {
+  .button:not(.button--call-to-action):last-child {
     border-left: 1px solid #1E6596;
   }
 
-  .button i.chevron {
+  .button:not(.button--call-to-action) i.chevron {
     position: relative;
     top: 2px;
   }
 
-  .button:first-child i.chevron {
+  .button:not(.button--call-to-action):first-child i.chevron {
     margin-right: 0.25em;
   }
 
-  .button:last-child i.chevron {
+  .button:not(.button--call-to-action):last-child i.chevron {
     margin-left: 0.25em;
   }
 
@@ -69,6 +69,8 @@
 
   td {
     padding: 0;
+
+    background-color: #DADADA;
   }
 
   th {
@@ -79,11 +81,13 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
-    background-color: rgb(235, 235, 235);
+    background-color: #DADADA;
   }
 
   li {
-    border-bottom: 1px solid #C5C2C2;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #207FC2;
+    // border-bottom: 1px solid #C5C2C2;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
     padding-left: 0.5em;
@@ -98,8 +102,12 @@
     background-color: #F0F0F0
   }
 
+  li:last-child {
+      border-bottom: none;
+  }
+
   .date {
-    background-color: #2A2A2A;
+    background-color: #2a2a2a;
     padding-left: 10px;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -151,10 +159,13 @@
       display: none;
   }
 
+  .notmonth {
+      display: none;
+  }
   // These are just temporary colors really. Definitely want to style notmonth better.
   .notmonth .date {
     background-color: #777777;
-    border-bottom: 1px solid #3C3C3C;
+    border-bottom: 1px solid #717171;
   }
 
   .notmonth .organization-name {
@@ -165,7 +176,7 @@
 
 @media only screen and (min-width: 46.25em) {
     .calendar {
-        .month > a {
+        .month > .button {
             width: 25%;
             padding-top: 1.1em;
             padding-bottom: 1.1em;
@@ -275,7 +286,7 @@
         }
 
         .date {
-            background-color: #ededed;
+            background-color: #DADADA;
             border-bottom: none;
         }
 
@@ -387,6 +398,10 @@
         tbody {
             border-left: 1px solid #1E6596;
             border-right: 1px solid #1E6596;
+        }
+
+        .notmonth {
+            display: table-cell;
         }
     }
 }
