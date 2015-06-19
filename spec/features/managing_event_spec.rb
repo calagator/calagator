@@ -68,7 +68,7 @@ feature 'Event Cloning' do
     fill_in 'start_date', with: '2014-10-27'
     fill_in 'start_time', with: '06:00 PM'
     fill_in 'end_time', with: '11:00 PM'
-    fill_in 'end_date', with: '2014-27-13'
+    fill_in 'end_date', with: '2014-10-28'
     fill_in 'Website', with: 'www.rubynewbies.com'
     fill_in 'Description', with: 'An event for beginners'
     fill_in 'Tags', with: 'beginners,ruby'
