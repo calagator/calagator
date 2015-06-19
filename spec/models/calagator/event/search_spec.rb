@@ -3,99 +3,180 @@ require 'spec_helper'
 module Calagator
 
 describe Event::Search, :type => :model do
+  let(:events) { double }
+  before { allow(Event).to receive(:search).and_return(events) }
+  before { allow(Event).to receive(:search_tag).and_return(events) }
+
+  let(:search_params) { {} }
+  subject(:event_search) { Event::Search.new(search_params) }
+
   describe "by keyword" do
-    it "should be able to only return events that include a specific keyword" do
-      events = double
-      expect(Event).to receive(:search).with("myquery", skip_old: false, order: "date").and_return(events)
+    let(:search_params) { {query: "myquery"} }
 
-      subject = Event::Search.new query: "myquery"
-      expect(subject.events).to eq(events)
+    it "should find all events matching the keyword, ordered by date" do
+      event_search.events
+      expect(Event).to have_received(:search).with("myquery", skip_old: false, order: "date")
     end
 
-    it "should be able to only return current events" do
-      events = double
-      expect(Event).to receive(:search).with("myquery", order: "date", skip_old: true).and_return(events)
+    context "limited to current events" do
+      let(:search_params) { {query: "myquery", current: "1"} }
 
-      subject = Event::Search.new query: "myquery", current: "1"
-      expect(subject.events).to eq(events)
+      it "should be able to only return current events" do
+        event_search.events
+        expect(Event).to have_received(:search).with("myquery", order: "date", skip_old: true)
+      end
     end
 
-    it "should warn if user tries ordering by invalid order" do
-      subject = Event::Search.new query: "myquery", order: "kittens"
-      expect(subject.failure_message).to eq("Unknown ordering option \"kittens\", sorting by date instead.")
-      expect(subject).not_to be_hard_failure
+    context "with an invalid order" do
+      let(:search_params) { {query: "myquery", order: "kittens"} }
+
+      it "should set a failure message as a warning" do
+        expect(event_search.failure_message).to eq("Unknown ordering option \"kittens\", sorting by date instead.")
+      end
+
+      it "should not be a hard failure" do
+        expect(event_search).not_to be_hard_failure
+      end
+    end
+
+    context "when the search encounters an error" do
+      before { allow(Event).to receive(:search).and_raise(ActiveRecord::StatementInvalid, "bad times") }
+      before { event_search.events }
+
+      it "should set a failure message" do
+        expect(event_search.failure_message).to eq("There was an error completing your search.")
+      end
+
+      it "should be a hard failure" do
+        expect(event_search).to be_hard_failure
+      end
+
+      it "should return no events" do
+        expect(event_search.events).to be_empty
+      end
     end
   end
 
   describe "by tag" do
-    it "should be able to only return events matching specific tag" do
-      events = double
-      expect(Event).to receive(:search_tag).with("foo", current: false, order: "date").and_return(events)
+    let(:search_params) { {tag: "foo"} }
 
-      subject = Event::Search.new tag: "foo"
-      expect(subject.events).to eq(events)
+    it "should find all events matching the tag, ordered by date" do
+      event_search.events
+      expect(Event).to have_received(:search_tag).with("foo", current: false, order: "date")
     end
 
-    it "should warn if user tries ordering by invalid order" do
-      subject = Event::Search.new tag: "omg", order: "kittens"
-      expect(subject.failure_message).to eq("Unknown ordering option \"kittens\", sorting by date instead.")
-      expect(subject).not_to be_hard_failure
+    context "with an invalid order" do
+      let(:search_params) { {tag: "omg", order: "kittens"} }
+
+      it "should set a failure message as a warning" do
+        expect(event_search.failure_message).to eq("Unknown ordering option \"kittens\", sorting by date instead.")
+      end
+
+      it "should not be a hard failure" do
+        expect(subject).not_to be_hard_failure
+      end
     end
 
-    it "should warn if user tries ordering tags by score" do
-      subject = Event::Search.new tag: "omg", order: "score"
-      expect(subject.failure_message).to eq("You cannot sort tags by score")
-      expect(subject).not_to be_hard_failure
+    context "attempting to order by score" do
+      let(:search_params) { {tag: "omg", order: "score"} }
+
+      it "should set a failure message as a warning" do
+        expect(event_search.failure_message).to eq("You cannot sort tags by score")
+      end
+
+      it "should not be a hard failure" do
+        expect(event_search).not_to be_hard_failure
+      end
+    end
+
+    context "when the tag search encounters an error" do
+      before { allow(Event).to receive(:search_tag).and_raise(ActiveRecord::StatementInvalid.new("bad times")) }
+      before { event_search.events }
+
+      it "should set a failure message" do
+        expect(event_search.failure_message).to eq("There was an error completing your search.")
+      end
+
+      it "should be a hard failure" do
+        expect(event_search).to be_hard_failure
+      end
+
+      it "should return no events" do
+        expect(event_search.events).to be_empty
+      end
     end
   end
 
   describe "#grouped_events" do
-    it "groups events into a hash by currentness" do
-      past_event = double(:event, current?: false)
-      current_event = double(:event, current?: true)
-      events = [past_event, current_event]
-      expect(Event).to receive(:search).and_return(events)
+    let(:past_event) { double(:event, current?: false) }
+    let(:current_event) { double(:event, current?: true) }
+    let(:events) { [past_event, current_event] }
+    let(:search_params) { {query: "ruby"} }
 
-      expect(subject.grouped_events).to eq({
+    it "groups events into a hash by currentness" do
+      expect(event_search.grouped_events).to eq({
         past: [past_event],
         current: [current_event],
       })
     end
 
-    it "discards past events when passed the current option" do
-      past_event = double(:event, current?: false)
-      current_event = double(:event, current?: true)
-      events = [past_event, current_event]
-      expect(Event).to receive(:search).and_return(events)
+    context "when passed the 'current' option" do
+      let(:search_params) { {query: "ruby", current: "true"} }
 
-      subject = expect(Event::Search.new(current: "true").grouped_events).to eq({
-        past: [],
-        current: [current_event],
-      })
+      it "discards past events" do
+        expect(event_search.grouped_events).to eq({
+          past: [],
+          current: [current_event],
+        })
+      end
     end
 
-    it "orders past events by date desc if passed date to the order option" do
-      current_event = double(:event, current?: true)
-      past_event = double(:event, current?: false)
-      other_past_event = double(:event, current?: false)
-      expect(Event).to receive(:search).and_return([current_event, past_event, other_past_event])
-      expect(Event::Search.new(order: "date").grouped_events).to eq({
-        current: [current_event],
-        past:    [past_event, other_past_event],
-      })
+    context "when passing 'date' to the order option" do
+      let(:search_params) { {query: "ruby", order: "date"} }
+
+      let(:other_past_event) { double(:event, current?: false) }
+      let(:events) { [current_event, past_event, other_past_event] }
+
+      it "orders past events by date desc" do
+        expect(event_search.grouped_events).to eq({
+          current: [current_event],
+          past:    [past_event, other_past_event],
+        })
+      end
     end
   end
 
   describe "hard failures" do
-    it "should hard fail if given no search query" do
-      expect(subject.failure_message).to eq("You must enter a search query")
-      expect(subject).to be_hard_failure
+    context "when given neither search query nor tag" do
+      let(:search_params) { {} }
+
+      it "should set a failure message" do
+        expect(event_search.failure_message).to eq("You must enter a search query")
+      end
+
+      it "should be a hard failure" do
+        expect(event_search).to be_hard_failure
+      end
+
+      it "should return no events" do
+        expect(event_search.events).to be_empty
+      end
     end
 
-    it "should hard fail if searching by both query and tag" do
-      subject = Event::Search.new query: "omg", tag: "bbq"
-      expect(subject.failure_message).to eq("You can't search by tag and query at the same time")
-      expect(subject).to be_hard_failure
+    context "when given both search query and tag" do
+      let(:search_params) { {query: "omg", tag: "bbq"} }
+
+      it "should set a failure message" do
+        expect(event_search.failure_message).to eq("You can't search by tag and query at the same time")
+      end
+
+      it "should be a hard failure" do
+        expect(event_search).to be_hard_failure
+      end
+
+      it "should return no events" do
+        expect(event_search.events).to be_empty
+      end
     end
   end
 end
