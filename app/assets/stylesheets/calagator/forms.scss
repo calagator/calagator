@@ -59,7 +59,7 @@ form.formtastic {
 
 /* @group Autocomplete
 -------------------------------------------------------------- */
-ul.jq-ui-autocomplete {
+ul.ui-autocomplete {
     position: absolute;
     overflow: hidden;
     background-color: #fff;
@@ -69,7 +69,7 @@ ul.jq-ui-autocomplete {
     list-style: none;
     color: #333;
 }
-ul.jq-ui-autocomplete li {
+ul.ui-autocomplete li {
   display: block;
   padding: .3em .5em .3em .3em;
   overflow: hidden;
