@@ -46,7 +46,7 @@
       <% @venues.each do |venue| %>
         <li>
           <%= link_to(venue.title, venue_url(venue)) %>
-          <% if venue.has_full_address? %>
+          <% if venue.full_address.present? %>
             <p class='detail'><%= venue.full_address %></p>
           <% end %>
         </li>

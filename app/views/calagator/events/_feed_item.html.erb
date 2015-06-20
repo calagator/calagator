@@ -23,7 +23,7 @@
       <% if !event.venue.country.blank? %>
         <div class='country-name'><%= event.venue.country %><div>
       <% end %>
-      <% if event.venue && event.venue.has_full_address? %>
+      <% if event.venue && event.venue.full_address.present? %>
         (<a href='<%=google_maps_url(event.venue.full_address)%>'>map</a>)
       <% end %>
     </div>
