@@ -93,3 +93,20 @@
 	font-family: $font-family-fira-sans;
 	font-weight: 400;
 }
+
+.button.button--close:before,
+.button.button--close:after {
+	height: 30px;
+	width: 2px;
+	background-color: #fff;
+}
+
+.button.button--close:before {
+	transform: rotate(45deg);
+}
+
+.button.button--close:after {
+	transform: rotate(-45deg);
+	position: absolute;
+	top: 0px;
+}

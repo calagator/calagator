@@ -102,9 +102,9 @@
     background-color: #F0F0F0
   }
 
-  li:last-child {
+  /* li:last-child {
       border-bottom: none;
-  }
+  } */
 
   .date {
     background-color: #2a2a2a;
@@ -207,10 +207,10 @@
             padding-bottom: 1em;
         }
 
-        .month > .month-name-container {
+        /* .month > .month-name-container {
             padding-top: 0.78em;
             padding-bottom: 0.78em;
-        }
+        } */
 
         tr {
             width: 100%;
@@ -269,7 +269,7 @@
 
         .notmonth li {
             background-color: #8E8E8E;
-            border-bottom: 3px solid #565656;
+            border-bottom: 1px solid #565656;
         }
 
         td.no-events {
@@ -294,14 +294,9 @@
             border-bottom: none;
             padding-right: 0.5em;
             margin: 0.5em;
-            background-color: rgb(236, 199, 55);
-            border-bottom: 3px solid #998126;
+            background-color: #fff;
+            border-bottom: 1px solid #3A8BC3;
         }
-
-        li:nth-child(even) {
-            background-color: rgb(236, 199, 55);
-        }
-
         li > a:first-child { // organization name
             display: none;
         }
@@ -319,12 +314,15 @@
         }
 
         .view-more-events {
-            text-align: center;
+            text-align: left;
             display: block;
             text-decoration: underline;
             color: #2a2a2a;
             font-family: $font-family-fira-sans;
             font-size: 1em;
+            background: none;
+            border: none;
+            padding: 0.5em;
         }
 
         td.today {
@@ -340,12 +338,12 @@
         }
 
         td.today > ul li {
-            background-color: #9366AB;
-            border-bottom: 3px solid #5A3E69;
+            background-color: #2a2a2a;
+            border-bottom: 1px solid $purple-color;
         }
 
-        td.today > ul li:nth-child(even) {
-            background-color: #9366AB;
+        td.today > ul li .event-title {
+            color: #fff;
         }
 
         td.today .daynumber {

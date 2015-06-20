@@ -51,14 +51,18 @@ header {
 		font-weight: 300;
 		color: #2A2A2A; // make it a variable.
 
-		width: 90%;
+		width: 70%;
 		display: block;
 		margin: 0 auto;
 
 		// reseting some stuff.
-		border: none;
-		outline: none; // Hmm, I'm not sure about this.
 
+		border-top: 0;
+		border-left: 0;
+		border-right: 0;
+		border-bottom: 0;
+
+		outline-color: rgb(84, 49, 186);
 		background: #fff;
 		border-radius: 15px;
 		padding-top: 0.5em;
@@ -66,6 +70,27 @@ header {
 		font-weight: 400;
 		padding-left: 0.8em;
 
+		float: left;
+	}
+
+	input[type="search"] {
+		border-top-right-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+
+	input[type="submit"] {
+		width: 30%;
+		float: left;
+		border-top-left-radius: 0;
+		border-bottom-left-radius: 0;
+		float: left;
+		background-color: #1D6FA8;
+		color: #fff;
+	}
+
+	input[type="submit"]:hover,
+	input[type="submit"]:focus {
+		background-color: #2483C5;
 	}
 }
 
@@ -115,12 +140,33 @@ header {
 	right: 1em;
 	float: right;
 	border-bottom: 4px solid #1E6596;
+
+	overflow: hidden;
+	cursor: pointer;
 }
 
 .search-box > .button {
-	position: relative;
+	position: absolute;
 	top: 1.2em;
 	left: 1.6em;
+
+	transition-property: left;
+	transition-duration: 250ms;
+	transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+}
+
+.search-box > .button.button--close {
+	position: absolute;
+	top: 0.55em;
+	left: 5.5em;
+}
+
+.search-box.is-open > .button.button--search {
+	left: -5.5em;
+}
+
+.search-box.is-open > .button.button--close {
+	left: 1.4em;
 }
 
 .header-container {
@@ -128,6 +174,12 @@ header {
 }
 
 @media only screen and (min-width: 41.875em) { // 670px
+
+	header {
+		padding-top: 1em;
+		padding-bottom: 1em;
+	}
+
 	header .logo > .logo-big {
 		display: block;
 		padding-top: 1em;
@@ -148,7 +200,26 @@ header {
 	}
 
 	.search-form {
-		display: none;
+		display: block;
+		float: left;
+		transform: translate3d(100%, 0, 0);
+		position: absolute;
+		top: 0;
+		left: 0;
+		padding: 16px;
+
+		transition-property: transform;
+		transition-duration: 250ms;
+		transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+	}
+
+	.search-form input {
+		padding-top: 0.25em;
+		padding-bottom: 0.25em;
+	}
+
+	.search-form.is-open {
+		transform: translate3d(0%, 0, 0);
 	}
 
 	.logo {
@@ -170,19 +241,6 @@ header {
 		right: 0;
 	}
 
-	nav {
-		position: relative;
-		background-color: #ededed;
-
-		padding-right: 1em;
-		padding-left: 1em; // just experimenting at the moment. This will be tweaked for better readability.
-	}
-
-	nav ul {
-		border-left: 1px solid #1E6596;
-		border-right: 1px solid #1E6596;
-	}
-
 	.subnav {
 		margin-left: 1em;
 		margin-right: 1em;
@@ -192,12 +250,6 @@ header {
 }
 
 @media only screen and (min-width: 75.625em) {
-	nav {
-		padding: 0;
-		width: 1000px;
-		margin: 0 auto;
-	}
-
 	.subnav {
 		width: 1000px;
 		margin-left: auto;

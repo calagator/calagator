@@ -1,7 +1,9 @@
 nav {
 
 	width: 100%;
-
+	position: relative;
+	overflow: hidden;
+	
 	ul.app-menu > a {
 		display: block;
 		float: left;
@@ -45,10 +47,17 @@ nav {
 	}
 }
 
+@media only screen and (min-width: 45em) {
+	nav {
+		margin-bottom: 2em;
+	}
+}
+
 @media only screen and (min-width: 75.625em) {
 	nav {
 		padding: 0;
 		width: 1000px;
 		margin: 0 auto;
+		margin-bottom: 2em;
 	}
 }

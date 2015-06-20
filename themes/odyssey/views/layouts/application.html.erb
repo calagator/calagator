@@ -72,27 +72,15 @@
             </div><!-- .logo -->
 
             <div class='search-box-container clearfix'>
-                <div class='search-box'>
+                <div class='search-box js-search-box'>
                     <i class='button button--search button--white'></i>
+                    <i class='button button--close button--white'></i>
                 </div>
             </div><!-- .search-box-container -->
         </div><!-- .header-container -->
 
       </header>
-
-      <div class='search-form'>
-        <%= form_tag search_events_path, :method => :get do %>
-          <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
-            <i class='fa fa-search'></i>
-            <input placeholder="Search events" type="search" name="query" value="<%= @query %>" results="5" id="search_field">
-          <% else %>
-            <i class='fa-fa-search'></i>
-            <%= text_field_tag 'query', @query, :id => 'search_field', :placeholder => 'Search events' %>
-          <% end %>
-        <% end -%>
-      </div><!-- .search-form -->
-
-      <nav>
+      <nav role="navigation" class="clearfix">
         <ul class='app-menu clearfix'>
         <%= link_to root_path do %>
             <li class="<%=link_class[:events]%>">Events</li>
@@ -106,8 +94,19 @@
           <!-- <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
           <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
           <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li> -->
-
         </ul><!-- .app-menu -->
+        <div class='clearfix search-form js-search-form'>
+          <%= form_tag search_events_path, :method => :get do %>
+            <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
+              <i class='fa fa-search'></i>
+              <input class='js-search-input' placeholder="Search events" type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+            <% else %>
+              <i class='fa-fa-search'></i>
+              <%= text_field_tag 'query', @query, :id => 'search_field', :placeholder => 'Search events' %>
+            <% end %>
+            <input type="submit" class="button button--submit" value="Search">
+          <% end -%>
+        </div><!-- .search-form -->
       </nav>
 
       <!-- I don't think we actually need a subnav. -->
