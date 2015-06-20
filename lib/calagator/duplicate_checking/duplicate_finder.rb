@@ -11,7 +11,9 @@ module DuplicateChecking
       scope = scope.where(query)
       scope.distinct
 
-      records = scope.to_a
+      # SQL distinct is not enough to guarantee unique records in this query
+      records = scope.to_a.uniq
+
       records = group_by_fields(records) if grouped
       records
     end
