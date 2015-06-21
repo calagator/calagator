@@ -27,23 +27,19 @@
       </p>
     <li>
     <li id="event_times" class='input'>
-      <%= f.label :when, "When", :class => 'label' %>
-      <%
-        present = Time.now
-        # Provide initial default values for the start_time and end_time rounded to the upcoming hour.
-        event.start_time ||= present + (60.minutes - present.min.minutes) - present.sec
-        event.end_time   ||= present + (60.minutes - present.min.minutes) - present.sec + 1.hour
-      %>
+      <%= f.label :when, :class => 'label'  do -%>
+        When<abbr title="required">*</abbr>
+      <% end -%>
         <div class="event_start">
-          <%= text_field_tag 'start_date', event.start_time.to_date, :id => 'date_start', :class => 'date_picker' %>
+          <%= text_field_tag 'start_date', format_event_date(event.start_time), :id => 'date_start', :class => 'date_picker' %>
           <span class="at">@</span>
-          <%= text_field_tag 'start_time', event.start_time.strftime('%I:%M %p'), :id => 'time_start', :class => 'time_picker' %>
+          <%= text_field_tag 'start_time', format_event_time(event.start_time), :id => 'time_start', :class => 'time_picker' %>
         </div>
         <span class="to">to</span>
         <div class="event_end">
-          <%= text_field_tag 'end_date', event.end_time.to_date, :id => 'date_end', :class => 'date_picker' %>
+          <%= text_field_tag 'end_date', format_event_date(event.end_time), :id => 'date_end', :class => 'date_picker' %>
           <span class="at">@</span>
-          <%= text_field_tag 'end_time', event.end_time.strftime('%I:%M %p'), :id => 'time_end', :class => 'time_picker' %>
+          <%= text_field_tag 'end_time', format_event_time(event.end_time), :id => 'time_end', :class => 'time_picker' %>
         </div>
         <%= f.semantic_errors :start_date, :start_time, :end_date, :end_time %>
     </li>
