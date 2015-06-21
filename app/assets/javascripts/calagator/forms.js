@@ -1,4 +1,5 @@
-//= require jquery-ui
+//= require jquery-ui/datepicker
+//= require jquery-ui/autocomplete
 //= require jquery.timepicker
 
 $(document).on('page:load ready',function(){
