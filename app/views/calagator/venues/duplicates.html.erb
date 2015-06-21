@@ -44,7 +44,7 @@
                 <td><%= venue.events_count %></td>
                 <td>
                   <%= link_to(venue.title, venue_url(venue)) %>
-                  <% if venue.has_full_address? %>
+                  <% if venue.full_address.present? %>
                     at <%= venue.full_address %>
                   <% end %>
                 </td>

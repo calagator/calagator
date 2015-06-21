@@ -40,7 +40,7 @@ html_classes << " contentbar" if has_contentbar
             <% if !event.venue.country.blank? -%>
             <span class='country-name p-country-name'><%= event.venue.country -%></span>
             <% end -%>
-            <% if event.venue && event.venue.has_full_address? -%>
+            <% if event.venue && event.venue.full_address.present? -%>
             (<a href='<%=google_maps_url(event.venue.full_address) -%>'>map</a>)
             <% end -%>
 

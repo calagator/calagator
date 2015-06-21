@@ -29,7 +29,7 @@
     <h1 class="fn org"><%= @venue.title %></h1>
     <% if @venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
 
-    <% if @venue.has_full_address? %>
+    <% if @venue.full_address.present? %>
       <div class="adr">
         <% if @venue.street_address.present? %>
           <div class="street-address"><%= @venue.street_address %></div>
