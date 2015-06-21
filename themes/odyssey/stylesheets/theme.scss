@@ -68,12 +68,27 @@ body.events_index { // /events
     @import 'events';
 }
 
+body.events_search {
+    @import 'events';
+    @import 'events-search';
+}
+
 body.events_new { // /events/new
 	// @import 'new-events';
 }
 
 body.events_show {
     @import 'events-show';
+}
+
+body.events_search {
+    @import 'events-search';
+}
+
+body.events_new,
+body.events_edit,
+body.organizations_new {
+    @import 'events-new';
 }
 
 body.sources_new { // /sources/new

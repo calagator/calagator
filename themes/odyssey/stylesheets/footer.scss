@@ -12,6 +12,13 @@ footer .footer-container p {
     font-family: $font-family-fira-sans;
     font-weight: 400;
     color: #0D2A3D;
+    display: block;
+    float: left;
+}
+
+footer .footer-container p:last-child {
+    text-align: right;
+    float: right;
 }
 
 @media only screen and (min-width: 75.625em) {

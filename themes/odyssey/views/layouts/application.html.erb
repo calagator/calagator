@@ -53,15 +53,6 @@
       <header class='clearfix'>
 
           <div class='header-container'>
-            <div class='project-menu'>
-              <% if current_organization %>
-                Logged in as: <%= current_organization.title %>
-                (<%= link_to 'logout', organization_logout_path %>)
-              <% elsif current_admin %>
-                Logged in as Admin.
-              <% end %>
-            </div><!-- .project-menu -->
-
               <div class='logo clearfix'>
                 <a class='logo-big' href="<%= root_path %>">
                   <%= image_tag('logo-big.svg') %>
@@ -109,15 +100,13 @@
         </div><!-- .search-form -->
       </nav>
 
-      <!-- I don't think we actually need a subnav. -->
-      <!--
       <% # Pick a subnav %>
-
-      <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
-      <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
-      <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
-      <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
-        -->
+      <% if current_admin %>
+          <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
+          <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
+          <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
+          <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+      <% end %>
       <main role='main' class='content'>
         <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
         <%= render_flash %>
@@ -126,8 +115,13 @@
 
       <!-- old is #top_footer -->
     <footer>
-        <div class='footer-container'>
+        <div class='footer-container clearfix'>
             <p><%= URI.parse(SETTINGS.url).host %></p>
+            <% if current_organization %>
+              <p>Logged in as: <strong><%= current_organization.title %></strong> (<%= link_to 'logout', organization_logout_path %>)</p>
+            <% elsif current_admin %>
+              <p>Logged in as <strong>Admin</strong>.</p>
+            <% end %>
         </div>
     </footer>
 
