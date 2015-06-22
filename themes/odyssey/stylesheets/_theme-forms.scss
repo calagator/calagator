@@ -38,20 +38,22 @@ form.formtastic {
   font-weight: bold;
   text-align: right;
   padding-right: 1em;
-  /* margin-left: -1em; */
-  width: 15%;
+  color: #333;
+  font-size: 100%;
+  line-height: 25px;
+  width: 20%;
 }
 
 .formtastic .input .inline-hints,
 .formtastic .errors,
 .formtastic .inline-errors {
-  margin-left: 15%;
+  margin-left: 20%;
   width: 74%;
 }
 
 .formtastic .actions,
 .formtastic .boolean label {
-  padding-left: 15%;
+  padding-left: 20%;
 }
 
 /* @group Autocomplete
