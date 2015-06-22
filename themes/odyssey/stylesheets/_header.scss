@@ -94,9 +94,7 @@ header {
 }
 
 .subnav {
-	background-color: rgb(147, 102, 171);
-	border-top: 1px solid #5A3E69;
-
+  background-color: desaturate($purple-color, 40%);
 	ul {
 		width: 100%;
 	}
@@ -205,7 +203,7 @@ header {
 		position: absolute;
 		top: 0;
 		left: 0;
-		padding: 16px;
+		padding: 8px;
 
 		transition-property: transform;
 		transition-duration: 250ms;
@@ -213,8 +211,8 @@ header {
 	}
 
 	.search-form input {
-		padding-top: 0.25em;
-		padding-bottom: 0.25em;
+    padding-top: 8px;
+    padding-bottom: 8px;
 	}
 
 	.search-form.is-open {

@@ -9,10 +9,10 @@ nav {
 		float: left;
 		width: 33.333%;
 		text-align: center;
-		padding: 1em 0;
+		padding: 14px 0;
 
-		background-color: $purple-color;
-		border-bottom: 3px solid $purple-color-darker;
+		background-color: $vo-blue;
+		border-bottom: 3px solid lighten($vo-blue, 20%);
 		color: #fff;
 		font-weight: bold;
 		font-size: 1em;

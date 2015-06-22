@@ -25,5 +25,5 @@ $text_highlight: saturate(lighten($vo_blue, 20%), 20%);
 
 $font-family-fira-sans: "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-$purple-color: #730CE8;
-$purple-color-darker: #500AA0;
+$purple-color: desaturate(#730CE8, 30%);
+$purple-color-darker: darken($purple-color, 20%);
