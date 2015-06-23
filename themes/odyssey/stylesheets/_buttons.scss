@@ -78,7 +78,7 @@
 	border-bottom: 3px solid #5A3E69;
 	color: #fff;
 	text-align: center;
-	padding: 1em;
+	padding: 8px 0;
 	font-family: $font-family-fira-sans;
 	font-weight: 400;
 	font-size: 1em;
@@ -102,10 +102,14 @@
 }
 
 .button.button--close:before {
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
 	transform: rotate(45deg);
 }
 
 .button.button--close:after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
 	transform: rotate(-45deg);
 	position: absolute;
 	top: 0px;

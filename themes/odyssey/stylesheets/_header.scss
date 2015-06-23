@@ -72,9 +72,11 @@ header {
 		float: left;
 	}
 
-	input[type="search"] {
+	input[type="text"] {
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
+		padding-top: 4px;
+		padding-bottom: 4px;
 	}
 
 	input[type="submit"] {
@@ -147,9 +149,10 @@ header {
 	top: 1.2em;
 	left: 1.6em;
 
-	transition-property: left;
-	transition-duration: 250ms;
-	transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+	-webkit-transition: left 250ms cubic-bezier(.42, 0, .58, 1);
+	-moz-transition: left 250ms cubic-bezier(.42, 0, .58, 1);
+	-o-transition: left 250ms cubic-bezier(.42, 0, .58, 1);
+	transition: left 250ms cubic-bezier(.42, 0, .58, 1);
 }
 
 .search-box > .button.button--close {
@@ -199,23 +202,32 @@ header {
 	.search-form {
 		display: block;
 		float: left;
+
+		-webkit-transform: translate3d(100%, 0, 0);
+		-moz-transform: translate3d(100%, 0, 0);
+		-o-transform: translate3d(100%, 0, 0);
 		transform: translate3d(100%, 0, 0);
+
 		position: absolute;
 		top: 0;
 		left: 0;
-		padding: 8px;
+		padding: 6px;
 
-		transition-property: transform;
-		transition-duration: 250ms;
-		transition-timing-function: cubic-bezier(.42, 0, .58, 1);
+		-webkit-transition: transform 250ms cubic-bezier(.42, 0, .58, 1);
+		-moz-transition: transform 250ms cubic-bezier(.42, 0, .58, 1);
+		-o-transition: transform 250ms cubic-bezier(.42, 0, .58, 1);
+		transition: transform 250ms cubic-bezier(.42, 0, .58, 1);
 	}
 
 	.search-form input {
-    padding-top: 8px;
-    padding-bottom: 8px;
+    	padding-top: 4px;
+    	padding-bottom: 4px;
 	}
 
 	.search-form.is-open {
+		-webkit-transform: translate3d(0%, 0, 0);
+		-moz-transform: translate3d(0%, 0, 0);
+		-o-transform: translate3d(0%, 0, 0);
 		transform: translate3d(0%, 0, 0);
 	}
 

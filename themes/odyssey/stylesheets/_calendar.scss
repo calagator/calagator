@@ -186,6 +186,7 @@
             width: 50%;
             padding-top: 0.9em;
             padding-bottom: 0.8em;
+            height: 53px;
         }
 
         .month > .month-name-container .year {
@@ -207,10 +208,9 @@
             padding-bottom: 1em;
         }
 
-        /* .month > .month-name-container {
-            padding-top: 0.78em;
-            padding-bottom: 0.78em;
-        } */
+        .month > .month-name-container {
+            height: 49px;
+        }
 
         tr {
             width: 100%;
@@ -372,23 +372,23 @@
 
         .month > .button {
             display: block;
-            position: absolute;
-            left: -7.4em;
+            // position: absolute;
+            // left: -7.4em;
             width: 10%;
-            top: 0.5em;
+            // top: 0.5em;
             border-right: none;
             border-left: 1px solid #1E6596;
         }
 
         .month > .button:last-child {
-            left: initial; // Hmm didn't know this. Gotta acutally remove "left" not set it to 0 for right to work.
-            right: -7.4em;
+            // left: initial; // Hmm didn't know this. Gotta acutally remove "left" not set it to 0 for right to work.
+            // right: -7.4em;
             border-left: none;
             border-right: 1px solid #1E6596;
         }
 
         .month > .month-name-container {
-            width: 100%;
+            width: 80%;
             border-left: 1px solid #207FC2;
             border-right: 1px solid #207FC2;
         }

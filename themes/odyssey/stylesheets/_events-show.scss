@@ -105,6 +105,14 @@ h3 > a {
         padding-left: 1em;
         padding-right: 1em;
     }
+
+    .summary.p-name,
+    .date,
+    #recurrence,
+    #organizer {
+        padding-left: 2em;
+        padding-right: 2em;
+    }
 }
 
 @media only screen and (min-width: 60.0625em) {
@@ -156,5 +164,15 @@ h3 > a {
 
     .sidebar a {
         color: #2ba2f5;
+    }
+
+    .summary.p-name,
+    .date,
+    #recurrence,
+    #organizer {
+        width: 1000px;
+        margin: 0 auto;
+        padding-left: 1em;
+        padding-right: 1em;
     }
 }

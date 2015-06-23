@@ -90,7 +90,7 @@
           <%= form_tag search_events_path, :method => :get do %>
             <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
               <i class='fa fa-search'></i>
-              <input class='js-search-input' placeholder="Search events" type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+              <input class='js-search-input' placeholder="Search events" type="text" name="query" value="<%= @query %>" results="5" id="search_field">
             <% else %>
               <i class='fa-fa-search'></i>
               <%= text_field_tag 'query', @query, :id => 'search_field', :placeholder => 'Search events' %>
