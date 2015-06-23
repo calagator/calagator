@@ -1,0 +1,33 @@
+form.standard_form {
+    padding: 1em;
+}
+
+.formtastic .input .label {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+.events_change #event_times .to {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+.formtastic .input .inline-hints, .formtastic .errors, .formtastic .inline-errors {
+    width: 100%;
+    margin-left: 0;
+}
+
+@media only screen and (min-width: 75.625em) {
+    form.standard_form {
+        width: 1000px;
+        margin: 0 auto;
+        padding: 0;
+    }
+
+    .appropriateness_message {
+        width: 1000px;
+        margin : 0 auto;
+    }
+}

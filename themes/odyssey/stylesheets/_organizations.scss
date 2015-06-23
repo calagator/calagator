@@ -1,0 +1,156 @@
+/* @group Organizations
+----------------------------------------*/
+
+.organizer {
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+#organizations_index #map {
+  width: 400px;
+  height: 300px;
+  float: right;
+}
+
+#organizations_index h1 {
+  margin-bottom: .25em;
+}
+
+#organizations_index p.detail {
+  margin-bottom: 0;
+  color: #aaa;
+}
+
+#organizations_index ul {
+  list-style-type: none;
+  margin: 0;
+}
+
+#organizations_index li {
+  margin-bottom: .25em
+}
+
+#organizations_index li a {
+  font-weight: bold;
+}
+
+#organizations_search_results li {
+  margin-bottom: .5em;
+}
+
+#organizations_search {
+  background: $box_background;
+  padding: 1em;
+  border-bottom: 1px solid #e9e9e9;
+}
+
+#organizations_search h2 {
+  float: left;
+  margin: 0 1em 0 0;
+}
+
+#organizations_search form div {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+#organization_portal {
+}
+
+#organization_portal #most_active,
+#organization_portal #newest,
+#organization_portal #exports {
+  float: left;
+  padding: 1em 1em 2em 0;
+}
+
+#organization_portal #most_active,
+#organization_portal #newest {
+  width: 300px;
+  border-right: 1px solid #e9e9e9;
+  margin-right: 2em;
+}
+
+#organization_portal #exports h3 {
+  margin-top: .5em;
+}
+
+#organization_portal h3 {
+  margin-bottom: .5em;
+}
+
+#organizations_map #map {
+  width: 100%;
+  height: 650px;
+}
+
+/* @end */
+
+
+/* @group Single Organization
+----------------------------------------*/
+
+.single_organization #map {
+  margin-bottom: 2em;
+}
+
+.single_organization .location.vcard {
+  /* background: #e8fbfe;*/
+  /* width: 45em;*/
+  /* height: 16em;*/
+  padding: 1em;
+  margin: 2em 2em 0em -1em;
+}
+
+.single_organization h1 {
+  padding-top: 0.5em;
+  margin: 0;
+  line-height: 1.2em;
+}
+
+.single_organization .location .adr,
+.single_organization .location .address,
+.single_organization .location .info {
+  font-size: 14px;
+}
+
+.single_organization .location.vcard .adr,
+.single_organization .location.vcard .address {
+  margin-bottom: 1em;
+  width: 300px;
+}
+
+.single_organization .location .info {
+}
+
+.single_organization .description,
+.single_organization .tags,
+.single_organization #events {
+  clear: left;
+  width: 500px;
+}
+
+.single_organization .description {
+  background: $box_background;
+  padding: 1em;
+  margin: 1em 0;
+}
+
+.single_organization #events,
+.single_organization .tags {
+  margin-top: 1em;
+}
+
+.single_organization #map {
+  width: 30em;
+  height: 20em;
+  border: 1px solid #222;
+}
+
+.single_organization h3 {
+  padding-top: 1.0em;
+  margin-bottom: 0.5em;
+  line-height: 0.5em;
+}
+
+/* @end */

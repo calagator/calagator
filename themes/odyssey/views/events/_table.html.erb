@@ -1,0 +1,78 @@
+<%-
+# Arguments:
+# * events => Array of Event records.
+# * scores => Offer a sort by score, like for search? Default to false.
+
+scores = defined?(scores) ? scores : false
+
+previous_start_time = nil
+#show_year ||= false
+skipped = 0
+
+# calculate rowspans array for events
+# each entry is number of rows spanned by today_tomorrow_weekday entry, if any, to left of event
+# entry will be > 0 for first event of day, 0 for other events
+rowspans = calculate_rowspans(events)
+-%>
+<table class='event_table'>
+  <tbody class='clearfix'>
+    <% unless events.size==0 %>
+      <% events.each_with_index do |event, index| %>
+        <tr class='vevent h-event'>
+          <% if rowspans[index] > 0 %>
+          <td class='date' rowspan="<%=rowspans[index]%>">
+            <div class='day_of_week <%= today_tomorrow_or_weekday(event).downcase -%>'>
+              <%= today_tomorrow_or_weekday(event) %>
+            </div>
+            <% show_year = event.start_time.year != Time.now.year %>
+            <%= datetime_format(event.start_time,'%b %d') -%><%= ", "+datetime_format(event.start_time,'%Y') if show_year %>
+          </td>
+        </tr>
+          <% end %>
+          <td class='event_summary'>
+            <% if event.organization && event.organization.title.present? %>
+              <%= link_to event.organization.title, organization_path(event.organization), class: 'p-organization h-card' %>
+            <% end %>
+            <a class='summary p-name u-url' href='<%= url_for event_url(event) %>' name='<%= "event-#{event.id}" %>' id='<%= "event-#{event.id}" %>'><%= event.title %></a>
+            <div class='time'>
+                <%= normalize_time(event, :context => event.start_time.to_date) -%>
+            </div>
+            <% if event.venue && !event.venue.title.blank? %>
+              <a class='location p-location h-card' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
+            <% end -%>
+            <% if !event.description.blank? %>
+              <div class='description e-description'>
+                <%= format_description(event.description) -%>
+              </div>
+            <% end -%>
+            <% if !event.url.blank? -%>
+              <%= link_to "Website", event.url, :class => "url u-url", :rel => "nofollow" -%>
+            <% end -%>
+          </td>
+        </tr>
+      <% end %>
+    <% else %>
+      <tr>
+        <td colspan=2>No events were found.</td>
+      </tr>
+    <% end %>
+    <% if skipped > 0 %>
+      <tr>
+        <td colspan=2>
+          <%= link_to "(And #{skipped} more)", events_url %>
+        </td>
+      </tr>
+    <% end %>
+
+    <tfooter>
+      <tr class='sort-by'>
+        <th class='sort-by-text'>Sort By:</th>
+        <th class='sort-by-list clearfix'>
+            <%= link_to "Date", url_for(params.merge(:order => 'date')) %>
+          <%= events_sort_link('name') -%>
+          <%= events_sort_link('venue') -%>
+        </th>
+      </tr>
+    </tfooter>
+  </tbody>
+</table>

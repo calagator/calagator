@@ -56,19 +56,6 @@
     top: 10px;
   }
 
-  .subnav {
-    line-height: inherit;
-    padding-left: 10px;
-    height: inherit;
-    li {
-      padding: 0.25em 0;
-    }
-    a {
-      margin: 0.5em 0;
-      padding: 0.15em 0.5em;
-    }
-  }
-
   #search_form label {
     display: none;
   }
@@ -191,7 +178,7 @@
   }
   .events_show, .venues_show {
     #google_map {
-      display: none;
+      // display: none;
     }
   }
 }
@@ -200,15 +187,6 @@
   #app_menu {
     ul {
       left: 10px;
-      li {
-        margin-right: 5px;
-      }
-    }
-  }
-  .subnav {
-    ul {
-      padding-left: 0px;
-      padding-right: 0px;
       li {
         margin-right: 5px;
       }

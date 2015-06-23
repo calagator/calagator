@@ -1,0 +1,32 @@
+// Chevron styles
+.chevron {
+	display: inline-block; // this should be on a span tag or i tag which are already display: inline;
+	position: relative;
+}
+
+.chevron:before,
+.chevron:after {
+	content: " ";
+	display: block;
+	width: 2px;
+	height: 8px;
+
+	background-color: #fff; // turn this into a variable?
+}
+
+.chevron:before {
+    @include rotate(45);
+}
+
+.chevron:after {
+	@include rotate(137);
+    margin-top: -3px;
+}
+
+.chevron.chevron--direction-right {
+	-webkit-transform:scaleX(-1);
+    -moz-transform:scaleX(-1);
+    -ms-transform:scaleX(-1);
+    -o-transform:scaleX(-1);
+    transform:scaleX(-1);
+}

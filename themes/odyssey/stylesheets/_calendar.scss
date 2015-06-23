@@ -1,0 +1,405 @@
+.calendar {
+
+  .month {
+    border-top: 1px solid #1E6596;
+  }
+
+  .button:not(.button--call-to-action) {
+    display: block;
+    width: 33.333%;
+    float: left;
+    background-color: #207FC2;
+    border-bottom: 3px solid #1E6596;
+    font-family: $font-family-fira-sans;
+    color: #fff;
+    font-weight: 400;
+    font-size: 0.85em;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    text-align: center;
+  }
+
+  .button:not(.button--call-to-action):first-child {
+    border-right: 1px solid #1E6596;
+  }
+
+  .button:not(.button--call-to-action):last-child {
+    border-left: 1px solid #1E6596;
+  }
+
+  .button:not(.button--call-to-action) i.chevron {
+    position: relative;
+    top: 2px;
+  }
+
+  .button:not(.button--call-to-action):first-child i.chevron {
+    margin-right: 0.25em;
+  }
+
+  .button:not(.button--call-to-action):last-child i.chevron {
+    margin-left: 0.25em;
+  }
+
+  .month-name-container {
+    display: block;
+    width: 33.333%;
+    float: left;
+    font-family: "Fira Sans";
+    font-weight: 600;
+    text-align: center;
+    background-color: #3A8BC3;
+    border-bottom: 3px solid #207FC2;
+    font-size: 1em;
+    padding-top: 0.78em;
+    padding-bottom: 0.78em;
+    color: #fff;
+  }
+
+  .year { // year probably doesn't need to be displayed on mobile?
+    display: none;
+  }
+
+  table,
+  tbody,
+  tr,
+  td {
+    width: 100%;
+    display: block;
+  }
+
+  td {
+    padding: 0;
+
+    background-color: #DADADA;
+  }
+
+  th {
+    display: none;
+  }
+
+  ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #DADADA;
+  }
+
+  li {
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #207FC2;
+    // border-bottom: 1px solid #C5C2C2;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 0.5em;
+  }
+
+  li > a {
+    font-family: $font-family-fira-sans;
+    font-size: 1em;
+  }
+
+  li:nth-child(even) {
+    background-color: #F0F0F0
+  }
+
+  /* li:last-child {
+      border-bottom: none;
+  } */
+
+  .date {
+    background-color: #2a2a2a;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #2BA2F5;
+  }
+
+  .date > span {
+    font-family: $font-family-fira-sans;
+    color: #fff;
+    font-size: 1em;
+  }
+
+  /* td:not(.today) {
+      display: none;
+  } */
+
+  ul > a {
+    display: none;
+  }
+
+  ul .view-more-events {
+      display: inline;
+  }
+
+  .organization-name {
+    color: #207FC2;
+    font-family: $font-family-fira-sans;
+    font-size: 0.85em;
+  }
+
+  .event-time {
+    display: block;
+    color: rgba(82, 82, 82, 1);
+    font-size: 0.85em;
+    font-family: $font-family-fira-sans;
+  }
+
+  .event-title {
+    font-size: 1em;
+    font-weight: 500;
+    color: #2A2A2A;
+  }
+
+  .daynumber {
+    font-weight: 500;
+  }
+
+  td.no-events {
+      display: none;
+  }
+
+  .notmonth {
+      display: none;
+  }
+  // These are just temporary colors really. Definitely want to style notmonth better.
+  .notmonth .date {
+    background-color: #777777;
+    border-bottom: 1px solid #717171;
+  }
+
+  .notmonth .organization-name {
+      color: #3C3C3C;
+  }
+
+}
+
+@media only screen and (min-width: 46.25em) {
+    .calendar {
+        .month > .button {
+            width: 25%;
+            padding-top: 1.1em;
+            padding-bottom: 1.1em;
+        }
+
+        .month > .month-name-container {
+            width: 50%;
+            padding-top: 0.9em;
+            padding-bottom: 0.8em;
+            height: 53px;
+        }
+
+        .month > .month-name-container .year {
+            display: inline;
+        }
+    }
+}
+
+@media only screen and (min-width: 53.125em) {
+
+    // turn the calendar back into a table.
+    .calendar {
+
+        // Making the font-size back to 100% because I increased it to 110% earlier.
+        font-size: 90%; // Should I really be doing this?
+
+        .month > a {
+            padding-top: 1em;
+            padding-bottom: 1em;
+        }
+
+        .month > .month-name-container {
+            height: 49px;
+        }
+
+        tr {
+            width: 100%;
+            overflow: auto; // creating a new context for the floats.
+            border-bottom: 1px solid #1E6596;
+        }
+
+        td,
+        th {
+            display: block;
+            float: left;
+            width: 14.2857143%;
+
+            border-right: 1px solid #1E6596;
+        }
+
+        tr > th {
+            background-color: #2A2A2A;
+            color: #fff;
+            padding-top: 1em;
+            padding-bottom: 1em;
+        }
+
+        td:last-child,
+        th:last-child {
+            border-right: none;
+        }
+
+        th {
+            text-align: center;
+            font-family: $font-family-fira-sans;
+        }
+
+        td {
+            min-height: 19em;
+            // gonna have to figure out how to deal with more than a few events later.
+            // what I'm thinking of is just thinking to /events and filtering with only the current date.
+
+            // what I'm thinking of at the moment is calculating the cell with the most events, with a maximum of 4 and setting the height equal to that.
+            overflow: hidden;
+        }
+
+        .notmonth {
+            background-color: #C3C3C3;
+        }
+
+        .notmonth ul {
+            background: none;
+        }
+        .notmonth > .date {
+            background-color: #C3C3C3;
+        }
+        .notmonth > .date .daynumber {
+            color: #5C5C5C;
+        }
+
+        .notmonth li {
+            background-color: #8E8E8E;
+            border-bottom: 1px solid #565656;
+        }
+
+        td.no-events {
+            display: block;
+        }
+
+        .date > .yearnumber,
+        .date > .monthname {
+            display: none;
+        }
+
+        .date > .daynumber {
+            color: #2A2A2A;
+        }
+
+        .date {
+            background-color: #DADADA;
+            border-bottom: none;
+        }
+
+        li {
+            border-bottom: none;
+            padding-right: 0.5em;
+            margin: 0.5em;
+            background-color: #fff;
+            border-bottom: 1px solid #3A8BC3;
+        }
+        li > a:first-child { // organization name
+            display: none;
+        }
+
+        .event-title {
+            font-weight: 400;
+        }
+
+        li > br {
+            display: none;
+        }
+
+        li > .event-time {
+            display: none;
+        }
+
+        .view-more-events {
+            text-align: left;
+            display: block;
+            text-decoration: underline;
+            color: #2a2a2a;
+            font-family: $font-family-fira-sans;
+            font-size: 1em;
+            background: none;
+            border: none;
+            padding: 0.5em;
+        }
+
+        td.today {
+            background-color: #2BA2F5;
+        }
+
+        td.today > .date {
+            background-color: #2BA2F5;
+        }
+
+        td.today > ul {
+            background-color: #2BA2F5;
+        }
+
+        td.today > ul li {
+            background-color: #2a2a2a;
+            border-bottom: 1px solid $purple-color;
+        }
+
+        td.today > ul li .event-title {
+            color: #fff;
+        }
+
+        td.today .daynumber {
+            color: #15486C;
+        }
+
+        td.today .view-more-events {
+            color: #fff;
+        }
+
+        .notmonth .date {
+            border-bottom: none;
+        }
+    }
+}
+
+@media only screen and (min-width: 75.625em) { // desktop layout.
+
+    .calendar {
+
+        max-width: 1000px;
+
+        position: relative;
+
+        margin: 0 auto;
+
+        .month > .button {
+            display: block;
+            // position: absolute;
+            // left: -7.4em;
+            width: 10%;
+            // top: 0.5em;
+            border-right: none;
+            border-left: 1px solid #1E6596;
+        }
+
+        .month > .button:last-child {
+            // left: initial; // Hmm didn't know this. Gotta acutally remove "left" not set it to 0 for right to work.
+            // right: -7.4em;
+            border-left: none;
+            border-right: 1px solid #1E6596;
+        }
+
+        .month > .month-name-container {
+            width: 80%;
+            border-left: 1px solid #207FC2;
+            border-right: 1px solid #207FC2;
+        }
+
+        tbody {
+            border-left: 1px solid #1E6596;
+            border-right: 1px solid #1E6596;
+        }
+
+        .notmonth {
+            display: table-cell;
+        }
+    }
+}

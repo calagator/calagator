@@ -1,9 +1,3 @@
-#organizations_search {
-    background: #afdefc;
-    padding: 1em;
-    border-bottom: 1px solid #e9e9e9;
-}
-
 .keywords {
     margin: 0;
     display: block;
@@ -38,11 +32,11 @@
     padding-left: 0.8em;
 }
 
-#organizations_search form div { // submit button container
+#venues_search form div { // submit button container
     display: block;
 }
 
-#organizations_search form div input[type="submit"] {
+#venues_search form div input[type="submit"] {
     display: block;
     width: 100%;
     max-width: 300px;
@@ -50,8 +44,8 @@
     margin-top: 1em;
 }
 
-#organization_portal #most_active,
-#organization_portal #newest,
+#venue_portal #most_active,
+#venue_portal #newest,
 #venues_search_results .list_description {
     width: 100%;
     border-right: none;
@@ -59,11 +53,11 @@
     padding: 1em 0;
 }
 
-#organization_portal #most_active h3,
-#organization_portal #newest h3,
+#venue_portal #most_active h3,
+#venue_portal #newest h3,
 #venues_search_results .list_description h2,
-#organization_portal #most_active ul li,
-#organization_portal #newest ul li,
+#venue_portal #most_active ul li,
+#venue_portal #newest ul li,
 #venues_search_results .list_description + ul li {
     font-family: $font-family-fira-sans;
     padding-left: 1em;
@@ -82,8 +76,8 @@
     padding-bottom: 1em;
 }
 
-#organization_portal #most_active ul li,
-#organization_portal #newest ul li,
+#venue_portal #most_active ul li,
+#venue_portal #newest ul li,
 #venues_search_results .list_description + ul li {
     margin: 0 1em;
     padding: 1em;
@@ -93,11 +87,11 @@
     background-color: #fff;
 }
 
-#organization_portal #most_active ul li {
+#venue_portal #most_active ul li {
     border-bottom: 1px solid #2BA2F5;
 }
 
-#organization_portal #newest ul li {
+#venue_portal #newest ul li {
     border-bottom: 1px solid rgb(147, 102, 171);
 }
 
@@ -105,25 +99,25 @@
     border-bottom: 1px solid rgb(43, 162, 245);
 }
 
-#organization_portal #most_active ul li a,
-#organization_portal #newest ul li a,
+#venue_portal #most_active ul li a,
+#venue_portal #newest ul li a,
 #venues_search_results .list_description + ul li a {
     font-weight: 400;
 }
 
-#organization_portal #newest h3 {
+#venue_portal #newest h3 {
     color: #fff;
 }
 
-#organization_portal #most_active {
+#venue_portal #most_active {
     background-color: #F2F2F2;
 }
 
-#organization_portal #newest {
+#venue_portal #newest {
     background-color: #2a2a2a;
 }
 
-#organization_portal #exports {
+#venue_portal #exports {
     display: block;
     width: 100%;
     padding: 0;
@@ -140,8 +134,8 @@
 
 @media only screen and (min-width: 45em) {
 
-    #organization_portal #most_active ul li,
-    #organization_portal #newest ul li,
+    #venue_portal #most_active ul li,
+    #venue_portal #newest ul li,
     #venues_search_results .list_description + ul li {
         display: block;
         float: left;
@@ -150,19 +144,19 @@
         margin-right: 2%;
     }
 
-    #organization_portal #exports {
+    #venue_portal #exports {
         padding: 1em;
     }
 
-    #organization_portal #exports .button {
+    #venue_portal #exports .button {
         width: 350px;
         margin: 0 auto;
     }
 }
 
 @media only screen and (min-width: 61.25em) {
-    #organization_portal #most_active ul li,
-    #organization_portal #newest ul li,
+    #venue_portal #most_active ul li,
+    #venue_portal #newest ul li,
     #venues_search_results .list_description + ul li {
         width: 30%;
         margin-left: 1.33333%;
@@ -171,9 +165,9 @@
 }
 
 @media only screen and (min-width: 75.625em) {
-    #organization_portal #most_active,
-    #organization_portal #newest,
-    #organizations_search,
+    #venue_portal #most_active,
+    #venue_portal #newest,
+    #venues_search,
     #venues_search_results {
         width: 1000px;
         margin: 0 auto;
@@ -185,14 +179,14 @@
         margin-top: 1em;
     }
 
-    #organization_portal #most_active,
-    #organization_portal #newest,
+    #venue_portal #most_active,
+    #venue_portal #newest,
     #venues_search_results .list_description,
     #venues_search_results .list_description + ul {
         padding: 1em;
     }
 
-    #organization_portal #exports {
+    #venue_portal #exports {
         margin-top: 2em;
     }
 }

@@ -1,0 +1,48 @@
+.vevent.h-event:not(.not-event-date) {
+    width: 100%;
+    clear: both;
+}
+
+.vevent.h-event .date {
+    border-right: none;
+}
+
+.list_items {
+    width: 100%;
+}
+
+#past {
+    background-color: #EDEDED;
+}
+
+#past h2 {
+    color: #2a2a2a;
+    margin-bottom: 1em;
+}
+
+@media only screen and (min-width: 75.625em) {
+    .sidebar {
+        position: relative;
+        top: auto;
+        right: auto;
+        margin: 0;
+        width: 100%;
+        background: #afdefc;
+
+        padding: 2em;
+        width: 1000px;
+        margin: 0 auto;
+        margin-top: 1em;
+
+        font-family: $font-family-fira-sans;
+        background-color: #DBDBDB;
+    }
+
+    .sidebar h3 {
+        padding: 0;
+    }
+
+    .sidebar a {
+        color: #2ba2f5;
+    }
+}

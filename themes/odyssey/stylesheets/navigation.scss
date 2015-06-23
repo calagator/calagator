@@ -1,0 +1,65 @@
+nav {
+
+	width: 100%;
+	position: relative;
+	overflow: hidden;
+
+	ul {
+		border-left: none;
+		border-right: none;
+	}
+
+	ul.app-menu > a {
+		display: block;
+		float: left;
+		width: 33.333%;
+		text-align: center;
+		padding: 1em;
+
+		background-color: $vo-blue;
+		color: #fff;
+		font-weight: bold;
+		font-size: 1em;
+
+		border-left: 1px solid $vo_blue_darker;
+		border-top: 1px solid $vo_blue_darker;
+	}
+
+	ul.app-menu > a:first-child {
+		border-left: none;
+	}
+
+	a > li {
+		font-size: 1em;
+		font-family: $font-family-fira-sans;
+	}
+}
+
+@media only screen and (min-width: 45em) {
+	nav {
+		position: relative;
+		background-color: #ededed;
+
+		margin-bottom: 2em;
+		padding-right: 1em;
+		padding-left: 1em; // just experimenting at the moment. This will be tweaked for better readability.
+
+		ul.app-menu > a {
+			padding: 8px 0;
+			border-bottom: 3px solid $vo_blue_darker;
+		}
+	}
+	/* nav ul {
+		border-left: 1px solid #1E6596;
+		border-right: 1px solid #1E6596;
+	} */
+}
+
+@media only screen and (min-width: 75.625em) {
+	nav {
+		padding: 0;
+		width: 1000px;
+		margin: 0 auto;
+		margin-bottom: 2em;
+	}
+}

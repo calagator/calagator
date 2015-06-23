@@ -50,7 +50,7 @@ $(document).ready(function () {
 				$moreEvents.html("Click here for " + amountCounter + " more events");
 				$ul.append($moreEvents);
 
-				$moreEvents.click(function (e) { 
+				$moreEvents.click(function (e) {
 
 					$('body').addClass('agenda-view');
 
@@ -67,7 +67,34 @@ $(document).ready(function () {
 	});
 
 	$('#calendar ul').parent().addClass('has-event');
-	
+
+	function findTallestTd() {
+		var height = 0;
+
+		$('.calendar td').each(function () {
+			if ( $(this).height() > height) {
+				height = $(this).height();
+			}
+		});
+
+		return height;
+	}
+
+	var tallestHeight = findTallestTd();
+
+	console.log(findTallestTd());
+
+	if (window.matchMedia("(min-width: 850px)").matches) {
+		$('.calendar td').each(function () {
+			$(this).height(tallestHeight + 'px');
+		});
+	}
+
+	if (window.matchMedia("(max-width: 849px)").matches) {
+		$('.calendar td').each(function () {
+			$(this).height('auto');
+		});
+	}
 	// Properly format the time, but it doesn't seem to be working in mobile.
 	/* $('.event-start-time, .event-end-time').each(function (index, element) {
 		var $element = $(element);

@@ -1,9 +1,26 @@
-<div id="calendar">
-  <h2 id="month">
-    <%= link_to "< Prev Month", date: @date.prev_month %>
-    <%= @date.strftime("%B %Y") %>
-    <%= link_to "Next Month >", date: @date.next_month %>
-  </h2>
+<div class='calendar'>
+  <div class='month clearfix'>
+    <!-- How do you make RoR spit out a link without generating an a tag? -->
+    <%= link_to root_path(date: @date.prev_month), class: 'button prev' do %>
+      <i class='chevron chevron'></i> Prev Month
+    <% end %>
+    <div class='month-name-container'>
+      <span class='month-name'>
+        <%= @date.strftime("%B"); %>
+      </span>
+      <span class='year'>
+        <%= @date.strftime("%Y") %>
+      </span>
+    </div>
+    <%= link_to root_path(date: @date.next_month), class: 'button next' do %>
+      Next Month <i class='chevron chevron--direction-right'></i>
+    <% end %>
+  </div>
+  <script>
+    $(function() {
+      $('td .no-events').parent('td').addClass('no-events');
+    });
+  </script>
   <% if events_this_month? %>
     <%= calendar @date do |date| %>
       <div class='date'>
@@ -13,23 +30,34 @@
       </div>
       <% if (events=events_for_date(date,@events)).any? %>
         <ul>
-          <% events.each do |event| %>
+          <% events.first(4).each do |event| %>
             <li>
-              <% if event.organization.present? %>
-                <%=link_to(event.organization_title, event.organization, :class => 'organization-name') %><br />
-              <% end %>
-              <%= link_to event.title, event, :class => "event-title" %>
-              <div class='event-time'>
-                <span class='event-start-time'><%= event.start_time.strftime("%I:%M %p") %></span> - <span class='event-end-time'><%= event.end_time.strftime("%I:%M %p") %>
-              </span>
-              </div>
+                <% if event.organization.present? %>
+                  <%=link_to(event.organization_title, event.organization, :class => 'organization-name') %><br />
+                <% end %>
+                <%= link_to event.title, event, :class => "event-title" %>
+                <div class='event-time'>
+                  <span class='event-start-time'><%= event.start_time.strftime("%I:%M %p") %></span> - <span class='event-end-time'><%= event.end_time.strftime("%I:%M %p") %>
+                </span>
+                </div>
             </li>
           <% end %>
         </ul>
+
+        <% if events.length > 4 %>
+          <%= link_to events_path({date: {start: events.first.start_date, end: events.first.start_date } }), class: 'button button--call-to-action view-more-events' do %>
+              <span>And <%= events.length - 4 %> more events.</span>
+          <% end %>
+        <% end %>
+
+      <% else %>
+        <div class='no-events'>
       <% end %>
     <% end %>
   <% else %>
-    <div class='no-events'>No events this month.</div>
+    <div class='no-events'>
+      <p>No events this month.</p>
+    </div>
   <% end %>
 </div>
 

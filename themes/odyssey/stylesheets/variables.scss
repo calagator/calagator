@@ -9,6 +9,7 @@ $wifi_blue: #6098e6;
 $red: #CE421D;
 
 $vo_blue: #054974;
+$vo_blue_darker: #032D47;
 $vo_gray: #B7B9BB;
 
 $box_background: lighten($vo_blue, 60%);
@@ -22,3 +23,8 @@ $wifi: $wifi_blue;
 
 $section_head_background: $beige;
 $text_highlight: saturate(lighten($vo_blue, 20%), 20%);
+
+$font-family-fira-sans: "Fira Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+$purple-color: desaturate(#730CE8, 30%);
+$purple-color-darker: darken($purple-color, 20%);

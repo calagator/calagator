@@ -3,31 +3,28 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/> -->
-    <%= yield :open_graph_tags %>
     <title>
       <%= "#{yield(:title)} » " if content_for?(:title) -%>
       <%= SETTINGS.name -%>: <%= SETTINGS.tagline -%>
     </title>
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="Description" content="">
+    <meta http-equiv="cleartype" content="on">
+
+    <%= yield :open_graph_tags %>
+
     <%= csrf_meta_tag %>
     <link rel='search' type='application/opensearchdescription+xml' href='<%= "#{root_path}opensearch.xml" %>'  title='<%= SETTINGS.name %>' />
 
     <!-- Stylesheets, static -->
     <%= stylesheet_link_tag 'application', 'theme', :media => :all %>
 
-    <link rel="stylesheet" href="https://d591zijq8zntj.cloudfront.net/leaflet-0.6.4/leaflet.css" />
-    <!--[if lte IE 8]>
-        <link rel="stylesheet" href="https://d591zijq8zntj.cloudfront.net/leaflet-0.6.4/leaflet.ie.css" />
-    <![endif]-->
-
     <!-- Stylesheets, inserted  -->
     <%= yield :css_insert %>
 
     <!-- JavaScripts, static -->
-    <%= javascript_include_tag *mapping_js_includes %>
     <%= javascript_include_tag 'application', 'theme', 'analytics' %>
 
     <!-- JavaScripts, inserted -->
@@ -45,73 +42,83 @@
   </head>
   <body class="<%= "#{controller.controller_name}_#{action_name}" %> <%= "#{controller.controller_name}_controller" %> <%= %w[new create edit update].include?(action_name) ? "#{controller.controller_name}_change" : "" %>">
 
-  <div id="outer">
-    <section class='header clearfix'>
-      <div class='container clearfix'>
-        <div class='hidden-sm hidden-md hidden-lg project-menu'>
-          <% if current_organization %>
-            Logged in as: <%= current_organization.title %>
-            (<%= link_to 'logout', organization_logout_path %>)
-          <% elsif current_admin %>
-            Logged in as Admin.
-          <% end %>
-        </div><!-- .project-menu -->
-        <div class='logo'>
-          <a class='hidden-xs' href="<%= root_path %>">
-            <%= image_tag('logo-big.svg') %>
-          </a>
-          <a class='hidden-sm hidden-md hidden-lg' href="<%= root_path %>">
-            <%= image_tag('logo-small.svg') %>
-          </a>
-        </div><!-- .logo -->
-        <div class='search-form'>
+    <div class='wrapper'>
+
+      <header class='clearfix'>
+
+          <div class='header-container'>
+              <div class='logo clearfix'>
+                <a class='logo-big' href="<%= root_path %>">
+                  <%= image_tag('logo-big.svg') %>
+                </a>
+                <a class='logo-small' href="<%= root_path %>">
+                  <%= image_tag('logo-small.svg') %>
+                </a>
+            </div><!-- .logo -->
+
+            <div class='search-box-container clearfix'>
+                <div class='search-box js-search-box'>
+                    <i class='button button--search button--white'></i>
+                    <i class='button button--close button--white'></i>
+                </div>
+            </div><!-- .search-box-container -->
+        </div><!-- .header-container -->
+
+      </header>
+      <nav role="navigation" class="clearfix">
+        <ul class='app-menu clearfix'>
+        <%= link_to root_path do %>
+            <li class="<%=link_class[:events]%>">Events</li>
+        <% end %>
+        <%= link_to venues_path do %>
+            <li class="<%=link_class[:venues]%>">Venues</li>
+        <% end %>
+        <%= link_to organizations_path do %>
+            <li class="<%=link_class[:organizations]%>">Organizations</li>
+        <% end %>
+          <!-- <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
+          <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
+          <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li> -->
+        </ul><!-- .app-menu -->
+        <div class='clearfix search-form js-search-form'>
           <%= form_tag search_events_path, :method => :get do %>
             <% if request.env["HTTP_USER_AGENT"] && request.env["HTTP_USER_AGENT"].include?("Safari") %>
               <i class='fa fa-search'></i>
-              <input placeholder="Search events" type="search" name="query" value="<%= @query %>" results="5" id="search_field">
+              <input class='js-search-input' placeholder="Search events" type="text" name="query" value="<%= @query %>" results="5" id="search_field">
             <% else %>
               <i class='fa-fa-search'></i>
               <%= text_field_tag 'query', @query, :id => 'search_field', :placeholder => 'Search events' %>
             <% end %>
+            <input type="submit" class="button button--submit" value="Search">
           <% end -%>
         </div><!-- .search-form -->
-        <ul class='app-menu clearfix'>
-          <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
-          <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
-          <li class='<%=link_class[:organizations]%>'><%= link_to "Organizations", organizations_path %></li>
-        </ul><!-- .app-menu -->
-        <div class='hidden-xs project-menu'>
-          <% if current_organization %>
-            Logged in as: <%= current_organization.title %>
-            (<%= link_to 'logout', organization_logout_path %>)
-          <% elsif current_admin %>
-            Logged in as Admin.
-          <% end %>
-        </div><!-- .project-menu -->
-      </div><!-- .container -->
-    </section><!-- .header -->
+      </nav>
 
-    <% # Pick a subnav %>
+      <% # Pick a subnav %>
+      <% if current_admin %>
+          <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
+          <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
+          <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
+          <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+      <% end %>
+      <main role='main' class='content'>
+        <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
+        <%= render_flash %>
+        <%= yield %>
+      </main>
 
-    <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
-    <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
-    <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
-    <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
+      <!-- old is #top_footer -->
+    <footer>
+        <div class='footer-container clearfix'>
+            <p><%= URI.parse(SETTINGS.url).host %></p>
+            <% if current_organization %>
+              <p>Logged in as: <strong><%= current_organization.title %></strong> (<%= link_to 'logout', organization_logout_path %>)</p>
+            <% elsif current_admin %>
+              <p>Logged in as <strong>Admin</strong>.</p>
+            <% end %>
+        </div>
+    </footer>
 
-    <div id="content">
-      <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
-      <%= render_flash %>
-      <%= yield %>
     </div>
-
-    <div id="top_footer">
-      <%= URI.parse(SETTINGS.url).host %>
-      <!-- <%= source_code_version %> -->
-      &nbsp;
-      &nbsp;
-      &nbsp;
-    </div>
-
-  </div>
   </body>
 </html>
