@@ -1,5 +1,6 @@
 /* Nothing here yet */
 
+//= require 'mailto'
 
 (function (window, document, undefined) {
     window.onload = function windowLoad() {
