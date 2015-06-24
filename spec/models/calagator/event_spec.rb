@@ -516,6 +516,58 @@ describe Event, :type => :model do
     end
   end
 
+  describe "when finding by time" do
+    before do
+      @given_start_time = Time.zone.parse("12:00")
+      @given_end_time = @given_start_time + 5.hours
+      @event_before_time = FactoryGirl.create(:event, start_time: Time.zone.parse("10:00"))
+      @event_after_time = FactoryGirl.create(:event, start_time: Time.zone.parse("14:00"))
+      @event_in_range = FactoryGirl.create(:event, start_time: Time.zone.parse("13:00"), end_time: Time.zone.parse("14:00"))
+    end
+
+    describe "before given time" do
+      before do
+        @events = Event.before_time(@given_start_time)
+      end
+
+      it "should include events with start_time before given time" do
+        expect(@events).to include @event_before_time
+      end
+
+      it "should not include events with start_time after given time" do
+        expect(@events).not_to include(@event_after_time, @event_in_range)
+      end
+    end
+
+    describe "after given time" do
+      before do
+        @events = Event.after_time(@given_start_time)
+      end
+
+      it "should include events with start_time after given time" do
+        expect(@events).to include(@event_after_time, @event_in_range)
+      end
+
+      it "should not include events with start_time before given time" do
+        expect(@events).not_to include(@event_before_time)
+      end
+    end
+
+    describe "within time range" do
+      before do
+        @events = Event.within_times(@given_start_time, @given_end_time)
+      end
+
+      it "should include events with start_time and end_time between given times" do
+        expect(@events).to include(@event_in_range)
+      end
+
+      it "should not include events with start_time and end_time not between given times" do
+        expect(@events).not_to include(@event_before_time)
+      end
+    end
+  end
+
   describe "when ordering" do
     describe "with .ordered_by_ui_field" do
       it "defaults to order by start time" do
