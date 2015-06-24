@@ -31,6 +31,9 @@ $(document).on('page:load ready',function(){
   // Initialize date and time pickers
   $('.date_picker').datepicker({ dateFormat: 'yy-mm-dd' });
   $('.time_picker').timepicker({ 'timeFormat': 'g:i A' });
+  $('.time_picker_filter').timepicker({
+    'step': 60,
+  });
 
   // Set oldTime to allow time offset functionality
   oldTime = $("#time_start").timepicker('getTime');
