@@ -85,6 +85,18 @@ class Event < ActiveRecord::Base
     on_or_after_date(start_date).before_date(end_date)
   }
 
+  scope :before_time, ->(time) {
+    future.order(:start_time).select{|rec| rec.start_time.hour <= time}
+  }
+  scope :after_time, ->(time) {
+    future.order(:start_time).select{|rec| rec.start_time.hour >= time}
+  }
+  scope :within_times, ->(start_time, end_time) {
+    future.order(:start_time).select{|rec|
+      rec.start_time.hour >= start_time && rec.end_time.hour <= end_time
+    }
+  }
+
   scope :future_with_venue, -> {
     future.order("start_time ASC").non_duplicates.includes(:venue)
   }
