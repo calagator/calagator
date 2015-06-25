@@ -10,7 +10,7 @@
 </div>
 
 <div id='list_filters' class='sidebar'>
-  
+
   <h3 class='first'>Filter by date</h3>
 
   <%= form_tag events_url, :method => 'get' do  -%>
@@ -24,13 +24,18 @@
       <%= text_field_tag 'date[end]', @end_date.strftime('%Y-%m-%d'), :id => 'date_end', :class => 'date_picker' %>
     </div>
     <div>
+    <div id='time_filter'>
+      <%= text_field_tag 'time[start]', @start_time.strftime('%I:%M %p'), :id => 'time_start', :class => 'time_picker' %>
+      <span class="at">@</span>
+      <%= text_field_tag 'time[end]', @end_time.strftime('%I:%M %p'), :id => 'time_end', :class => 'time_picker' %>
+    </div>
       <label for="commit">&nbsp;</label>
       <%= submit_tag 'Filter' %>
       <span class="clear_filter"><%= link_to 'Reset', events_url %></span>
     </div>
   </div>
   <% end %>
-  
+
   <h3>Subscribe to</h3>
   <ul>
     <li><%= link_to "iCalendar feed", icalendar_feed_link %></li>
@@ -42,7 +47,7 @@
   <ul>
     <li><%= link_to "iCalendar file", icalendar_export_link %></li>
   </ul>
-  
+
 </div>
 
 <div class='list_items'>
