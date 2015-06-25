@@ -525,34 +525,6 @@ describe Event, :type => :model do
       @event_in_range = FactoryGirl.create(:event, start_time: Time.zone.parse("13:00"), end_time: Time.zone.parse("14:00"))
     end
 
-    describe "before given time" do
-      before do
-        @events = Event.before_time(@given_start_time.hour)
-      end
-
-      it "should include events with start_time before given time" do
-        expect(@events).to include @event_before_time
-      end
-
-      it "should not include events with start_time after given time" do
-        expect(@events).not_to include(@event_after_time, @event_in_range)
-      end
-    end
-
-    describe "after given time" do
-      before do
-        @events = Event.after_time(@given_start_time.hour)
-      end
-
-      it "should include events with start_time after given time" do
-        expect(@events).to include(@event_after_time, @event_in_range)
-      end
-
-      it "should not include events with start_time before given time" do
-        expect(@events).not_to include(@event_before_time)
-      end
-    end
-
     describe "within time range" do
       before do
         @events = Event.within_times(@given_start_time.hour, @given_end_time.hour)
