@@ -527,7 +527,7 @@ describe Event, :type => :model do
 
     describe "before given time" do
       before do
-        @events = Event.before_time(@given_start_time)
+        @events = Event.before_time(@given_start_time.hour)
       end
 
       it "should include events with start_time before given time" do
@@ -541,7 +541,7 @@ describe Event, :type => :model do
 
     describe "after given time" do
       before do
-        @events = Event.after_time(@given_start_time)
+        @events = Event.after_time(@given_start_time.hour)
       end
 
       it "should include events with start_time after given time" do
@@ -555,7 +555,7 @@ describe Event, :type => :model do
 
     describe "within time range" do
       before do
-        @events = Event.within_times(@given_start_time, @given_end_time)
+        @events = Event.within_times(@given_start_time.hour, @given_end_time.hour)
       end
 
       it "should include events with start_time and end_time between given times" do
