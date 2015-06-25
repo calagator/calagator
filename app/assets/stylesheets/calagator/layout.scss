@@ -199,8 +199,8 @@ ul.event_list .day_of_week {
 margin-right: 200px;
 }
 
-#list_filters #date_filter label {
-  width: 3em;
+#list_filters label {
+  width: 35%;
   font-weight: normal;
   display: block;
   float: left;
@@ -208,11 +208,11 @@ margin-right: 200px;
   margin-right: 1em;
 }
 
-#list_filters #date_filter input[type=text] {
-  width: 8em;
+#list_filters input[type=text] {
+  width: 55%;
 }
 
-#list_filters #date_filter .clear_filter {
+#list_filters .clear_filter {
   font-size: inherit;
   float: none;
 }
