@@ -87,7 +87,7 @@ class Event < ActiveRecord::Base
 
   scope :within_times, ->(start_time, end_time) {
     future.order(:start_time).select{|rec|
-      rec.start_time.hour.between?(start_time,end_time) && rec.end_time.hour.between?(start_time,end_time)
+      rec.start_time.hour.between?(start_time,end_time) && rec.end_time.hour.between?(start_time,end_time-1)
     }
   }
 
