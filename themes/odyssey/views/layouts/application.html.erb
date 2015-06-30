@@ -48,13 +48,20 @@
 
           <div class='header-container'>
               <div class='logo clearfix'>
-                <a class='logo-big' href="<%= root_path %>">
+                <a data-tooltip="Go back to the main site" class='logo-big' href="http://volunteerodyssey.com/">
                   <%= image_tag('logo-big.svg') %>
                 </a>
-                <a class='logo-small' href="<%= root_path %>">
-                  <%= image_tag('logo-small.svg') %>
+                <a class='logo-small' href="http://volunteerodyssey.com/">
+                  <%= image_tag('VO_Logo-small.svg') %>
                 </a>
             </div><!-- .logo -->
+            <div class='tagline'>
+                <p>Stand out. Give back.</p>
+            </div>
+
+            <div class='donation-button-container desktop'>
+                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY" class='button button--donate'>Donate with Paypal</a>
+            </div>
 
             <div class='search-box-container clearfix'>
                 <div class='search-box js-search-box'>
@@ -63,6 +70,20 @@
                 </div>
             </div><!-- .search-box-container -->
         </div><!-- .header-container -->
+
+        <div class='social-icons'>
+            <ul class='clearfix'>
+                <li class='facebook'><a href="http://facebook.com/volunteerodyssey"><i class='icon-facebook'></i></a></li>
+                <li class='twitter'><a href="http://www.twitter.com/volodyssey"><i class='icon-twitter'></i></a></li>
+                <li class='linkedin'><a href="http://www.linkedin.com/company/volunteer-odyssey"><i class='icon-linkedin'></i></a></li>
+                <li class='youtube'><a href="http://youtube.com/user/VolunteerOdyssey"><i class='icon-youtube'></i></a></li>
+                <li class='googleplus'><a href="https://plus.google.com/b/113889158126284869703/"><i class='icon-googleplus'></i></a></li>
+            </ul>
+        </div>
+
+        <div class='donation-button-container mobile'>
+            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY" class='button button--donate'>Donate with Paypal</a>
+        </div>
 
       </header>
       <nav role="navigation" class="clearfix">
@@ -108,7 +129,7 @@
       </main>
 
       <!-- old is #top_footer -->
-    <footer>
+    <footer role="contentinfo">
         <div class='footer-container clearfix'>
             <p><%= URI.parse(SETTINGS.url).host %></p>
             <% if current_organization %>

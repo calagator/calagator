@@ -84,6 +84,18 @@
 	font-size: 1em;
 }
 
+.button.button--donate {
+  background-color: #EFC646;
+  border-bottom: none;
+  color: #fff;
+  text-align: center;
+  padding: 8px 0;
+  font-family: $font-family-fira-sans;
+  font-weight: 400;
+  font-size: 1em;
+  color: #032D47;
+}
+
 .button.button--call-to-action {
 	background-color: rgb(245, 43, 74);
 	border-bottom: 3px solid rgb(211, 35, 62);
