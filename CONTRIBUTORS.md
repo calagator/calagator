@@ -37,6 +37,7 @@ These people have contributed to Calagator's design and implementation:
   * Jesse Cooke
   * Jesse Hallett
   * Joe Cohen
+  * Kerri Miller
   * Kevin Scaldaferri
   * Kyle Drake
   * Lance Albertson
