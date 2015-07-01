@@ -14,15 +14,25 @@ class EventsController < Calagator::ApplicationController
   def index
     @start_date = date_or_default_for(:start)
     @end_date = date_or_default_for(:end)
-    @start_time = time_or_default_for(:start)
-    @end_time = time_or_default_for(:end)
 
     query = Event.non_duplicates.ordered_by_ui_field(params[:order]).includes(:venue, :tags)
     @events = params[:date] ?
                 query.within_dates(@start_date, @end_date) :
                 query.future
 
-    @events = query.within_times(@start_time.hour, @end_time.hour) if params[:time]
+   if (@time = params[:time])
+     if (@start_time = Time.zone.parse(@time[:start]) and @end_time = Time.zone.parse(@time[:end]))
+       @events = query.within_times(@start_time.hour, @end_time.hour)
+       @start_time = @start_time.strftime('%I:%M %p')
+       @end_time = @end_time.strftime('%I:%M %p')
+     elsif (@start_time = Time.zone.parse(@time[:start]))
+       @events = query.after_time(@start_time.hour)
+       @start_time = @start_time.strftime('%I:%M %p')
+     elsif (@end_time = Time.zone.parse(@time[:end]))
+       @events = query.before_time(@end_time.hour)
+       @end_time = @end_time.strftime('%I:%M %p')
+     end
+   end
 
     @perform_caching = params[:order].blank? && params[:date].blank?
 
@@ -150,13 +160,6 @@ class EventsController < Calagator::ApplicationController
     Time.zone.today + 3.months
   end
 
-  def default_start_time
-    Time.zone.today.beginning_of_day.time
-  end
-
-  def default_end_time
-    Time.zone.today.end_of_day.time
-  end
 
   # Return a date parsed from user arguments or a default date. The +kind+
   # is a value like :start, which refers to the `params[:date][+kind+]` value.
@@ -168,16 +171,6 @@ class EventsController < Calagator::ApplicationController
     Date.parse(params[:date][kind])
   rescue NoMethodError, ArgumentError, TypeError
     append_flash :failure, "Can't filter by an invalid #{kind} date."
-    default
-  end
-
-  def time_or_default_for(kind)
-    default = send("default_#{kind}_time")
-    return default unless params[:time].present?
-
-    Time.parse(params[:time][kind])
-  rescue NoMethodError, ArgumentError, TypeError
-    append_flash :failure, "Can't filter by an invalid #{kind} time."
     default
   end
 

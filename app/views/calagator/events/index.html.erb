@@ -28,14 +28,14 @@
   </div>
   <div id='time_filter'>
   <h4>by time</h4>
-  <div id='start_time_picker'>
-    <label for="time_start">Begins after:</label>
-    <%= text_field_tag 'time[start]', @start_time.strftime('%I:%M %p'), :id => 'filter_time_start', :class => 'time_picker_filter' %>
-  </div>
-  <div id='end_time_picker'>
-    <label for="time_end">Ends before:</label>
-    <%= text_field_tag 'time[end]', @end_time.strftime('%I:%M %p'), :id => 'filter_time_end', :class => 'time_picker_filter' %>
-  </div>
+    <div id='start_time_picker'>
+      <label for="time_start">Begins after:</label>
+      <%= text_field_tag 'time[start]', @start_time, :id => 'filter_time_start', :class => 'time_picker_filter' %>
+    </div>
+    <div id='end_time_picker'>
+      <label for="time_end">Ends before:</label>
+      <%= text_field_tag 'time[end]', @end_time, :id => 'filter_time_end', :class => 'time_picker_filter' %>
+    </div>
   </div>
   <div>
     <label for="commit">&nbsp;</label>
