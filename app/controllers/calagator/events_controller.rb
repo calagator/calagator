@@ -20,17 +20,17 @@ class EventsController < Calagator::ApplicationController
                 query.within_dates(@start_date, @end_date) :
                 query.future
 
-   if (@time = params[:time])
-     if (@start_time = Time.zone.parse(@time[:start]) and @end_time = Time.zone.parse(@time[:end]))
-       @events = query.within_times(@start_time.hour, @end_time.hour)
-       @start_time = @start_time.strftime('%I:%M %p')
-       @end_time = @end_time.strftime('%I:%M %p')
-     elsif (@start_time = Time.zone.parse(@time[:start]))
-       @events = query.after_time(@start_time.hour)
-       @start_time = @start_time.strftime('%I:%M %p')
-     elsif (@end_time = Time.zone.parse(@time[:end]))
-       @events = query.before_time(@end_time.hour)
-       @end_time = @end_time.strftime('%I:%M %p')
+   if (time = params[:time])
+     if (parsed_start_time = Time.zone.parse(time[:start]) and parsed_end_time = Time.zone.parse(time[:end]))
+       @events = @events.within_times(parsed_start_time.hour, parsed_end_time.hour)
+       @start_time = parsed_start_time.strftime('%I:%M %p')
+       @end_time = parsed_end_time.strftime('%I:%M %p')
+     elsif (parsed_start_time = Time.zone.parse(time[:start]))
+       @events = @events.after_time(parsed_start_time.hour)
+       @start_time = parsed_start_time.strftime('%I:%M %p')
+     elsif (parsed_end_time = Time.zone.parse(time[:end]))
+       @events = @events.before_time(parsed_end_time.hour)
+       @end_time = parsed_end_time.strftime('%I:%M %p')
      end
    end
 

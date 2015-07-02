@@ -86,17 +86,17 @@ class Event < ActiveRecord::Base
   }
 
   scope :within_times, ->(start_time, end_time) {
-    future.order(:start_time).select{|rec|
+    order(:start_time).select{|rec|
       rec.start_time.hour > start_time && rec.end_time.hour < end_time
     }
   }
   scope :before_time, ->(end_time) {
-    future.order(:end_time).select{|rec|
+    order(:end_time).select{|rec|
       rec.end_time.hour < end_time
     }
   }
   scope :after_time, ->(start_time) {
-    future.order(:start_time).select{|rec|
+    order(:start_time).select{|rec|
       rec.start_time.hour >= start_time
     }
   }
