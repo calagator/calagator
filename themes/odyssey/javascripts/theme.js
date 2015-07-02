@@ -1,4 +1,6 @@
-/* Nothing here yet */
+//= require tether.min
+//= require drop.min
+//= require tooltip.min
 
 //= require 'mailto'
 

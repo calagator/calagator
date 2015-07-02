@@ -33,11 +33,73 @@ header {
 
 	.logo > .logo-small { // the actual logo. Should change the naming of this?
 		display: block;
-		width: 13%;
+    width: 25%;
 		padding-top: 1em;
 		padding-bottom: 1em;
 		margin: 0 auto;
 	}
+
+  .tagline p {
+    font-family: $font-family-fira-sans;
+    font-weight: 500;
+    font-size: 1em;
+    text-align: center;
+  }
+
+  .social-icons {
+    margin-top: 1em;
+    margin-bottom: 1em;
+  }
+
+  .social-icons ul {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .social-icons li {
+    float: left;
+    width: 20%;
+  }
+
+  .social-icons .facebook:hover a i {
+    color: #3b5998;
+  }
+
+  .social-icons .twitter:hover a i {
+    color: #55acee;
+  }
+
+  .social-icons .linkedin:hover a i {
+    color: #0077b5;
+  }
+
+  .social-icons .youtube:hover a i {
+    color: #cd201f;
+  }
+
+  .social-icons .googleplus:hover a i {
+    color: #dd4b39;
+  }
+
+  .social-icons li a {
+    display: block;
+    width: 100%;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+  }
+
+  .social-icons i {
+    color: #1F3B4D;
+    font-size: 16px;
+    display: block;
+    width: 16px;
+    height: 16px;
+    margin: 0 auto;
+  }
+
+  .donation-button-container.desktop {
+    display: none;
+  }
 }
 
 .search-form {
@@ -75,8 +137,13 @@ header {
 	input[type="text"] {
 		border-top-right-radius: 0;
 		border-bottom-right-radius: 0;
-		padding-top: 4px;
-		padding-bottom: 4px;
+    -webkit-border-top-right-radius: 0;
+    -webkit-border-bottom-right-radius: 0;
+    -moz-border-top-right-radius: 0;
+    -moz-border-bottom-right-radius: 0;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    -webkit-appearance: none;
 	}
 
 	input[type="submit"] {
@@ -84,9 +151,14 @@ header {
 		float: left;
 		border-top-left-radius: 0;
 		border-bottom-left-radius: 0;
+    -webkit-border-top-left-radius: 0;
+    -webkit-border-bottom-left-radius: 0;
+    -moz-border-top-left-radius: 0;
+    -moz-border-bottom-left-radius: 0;
 		float: left;
 		background-color: #1D6FA8;
 		color: #fff;
+    -webkit-appearance: none;
 	}
 
 	input[type="submit"]:hover,
@@ -178,6 +250,24 @@ header {
 	header {
 		padding-top: 1em;
 		padding-bottom: 1em;
+
+    .donation-button-container.desktop {
+      display: block;
+    }
+
+    .social-icons {
+      margin-top: 0.5em;
+    }
+
+    .social-icons ul {
+      width: 445px;
+      margin-left: 18px;
+    }
+
+    .social-icons ul li i {
+      margin-left: 0;
+      margin-right: 0;
+    }
 	}
 
 	header .logo > .logo-big {
@@ -188,9 +278,40 @@ header {
 		width: 55%
 	}
 
+  header .logo > .logo-big img {
+    width: 100%;
+  }
+
 	header .logo > .logo-small {
 		display: none;
 	}
+
+  .tagline {
+    position: absolute;
+    top: 82%;
+    left: 3%;
+  }
+
+  .tagline p {
+    text-align: left;
+  }
+
+  .donation-button-container.mobile {
+    display: none;
+  }
+
+  .donation-button-container {
+    width: 250px;
+    position: absolute;
+    top: 8px;
+    right: 6%;
+    height: 51px;
+  }
+
+  .donation-button-container .button.button--donate {
+    border-bottom: 4px solid #A3872E;
+    padding: 14px 0;
+  }
 }
 
 @media only screen and (min-width: 45em) {
@@ -219,10 +340,15 @@ header {
 		transition: transform 250ms cubic-bezier(.42, 0, .58, 1);
 	}
 
-	.search-form input {
+  .search-form input[type="text"] {
     	padding-top: 4px;
     	padding-bottom: 4px;
 	}
+
+  .search-form input[type="submit"] {
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
 
 	.search-form.is-open {
 		-webkit-transform: translate3d(0%, 0, 0);
@@ -256,6 +382,17 @@ header {
 		margin-bottom: 2em;
 		position: relative;
 	}
+
+  .donation-button-container {
+    right: 13%;
+  }
+}
+
+@media only screen and (min-width: 46.875em) {
+  .tagline {
+    top: 66px;
+    left: 21px;
+  }
 }
 
 @media only screen and (min-width: 75.625em) {
@@ -287,4 +424,18 @@ header {
 		max-width: 1000px;
 		margin: 0 auto;
 	}
+
+  .donation-button-container {
+    top: 12px;
+    right: 129px;
+  }
+
+  header {
+    .social-icons {
+      width: 1000px;
+      margin: 0 auto;
+      margin-top: 1em;
+      margin-bottom: 0;
+    }
+  }
 }

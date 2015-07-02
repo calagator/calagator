@@ -87,5 +87,8 @@ module Calagator
     config.after_initialize do
       ENV['TZ'] = Time.zone.tzinfo.identifier
     end
+
+    config.assets.paths << Rails.root.join('app', 'assets', 'fonts')
+
   end
 end

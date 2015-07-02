@@ -3,6 +3,7 @@
  *= require recurring_select
  *= require jquery-ui/jquery-ui
  *= require jquery-ui/datepicker
+ *= require tooltip-theme-arrows
  */
 
 @import 'foundation';
@@ -15,6 +16,8 @@
 @import 'layout';
 @import 'theme-default';
 @import 'theme-forms';
+
+@import 'icons';
 
 // I really want to use Fira Sans in this design because Volunteer Odyssey and Fira Sans feels like a match-made in heaven.
 // TODO: I would rather have this as it's own script tag. Bring it out to the head later.
@@ -117,4 +120,8 @@ body.venues_index { // /venues
 
 body.venues_show { // individual venues page
     @import 'venue';
+}
+
+.tooltip-element.tooltip-theme-arrows .tooltip-content {
+    font-family: $font-family-fira-sans;
 }
