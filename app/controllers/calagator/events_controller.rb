@@ -20,6 +20,20 @@ class EventsController < Calagator::ApplicationController
                 query.within_dates(@start_date, @end_date) :
                 query.future
 
+   if (time = params[:time])
+     if (parsed_start_time = Time.zone.parse(time[:start]) and parsed_end_time = Time.zone.parse(time[:end]))
+       @events = @events.within_times(parsed_start_time.hour, parsed_end_time.hour)
+       @start_time = parsed_start_time.strftime('%I:%M %p')
+       @end_time = parsed_end_time.strftime('%I:%M %p')
+     elsif (parsed_start_time = Time.zone.parse(time[:start]))
+       @events = @events.after_time(parsed_start_time.hour)
+       @start_time = parsed_start_time.strftime('%I:%M %p')
+     elsif (parsed_end_time = Time.zone.parse(time[:end]))
+       @events = @events.before_time(parsed_end_time.hour)
+       @end_time = parsed_end_time.strftime('%I:%M %p')
+     end
+   end
+
     @perform_caching = params[:order].blank? && params[:date].blank?
 
     render_events @events
@@ -145,6 +159,7 @@ class EventsController < Calagator::ApplicationController
   def default_end_date
     Time.zone.today + 3.months
   end
+
 
   # Return a date parsed from user arguments or a default date. The +kind+
   # is a value like :start, which refers to the `params[:date][+kind+]` value.
