@@ -17,7 +17,7 @@ Calagator::Engine.routes.draw do
       post :squash_many_duplicates
       get :search
       get :duplicates
-      get 'tag/:tag', to: :search, as: :tag
+      get 'tag/:tag', action: :search, as: :tag
     end
 
     member do
@@ -37,7 +37,7 @@ Calagator::Engine.routes.draw do
       get :map
       get :duplicates
       get :autocomplete
-      get 'tag/:tag', to: :index, as: :tag
+      get 'tag/:tag', action: :index, as: :tag
     end
   end
 
