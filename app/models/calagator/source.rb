@@ -9,7 +9,6 @@
 #  imported_at :datetime
 #  created_at  :datetime
 #  updated_at  :datetime
-#  reimport    :boolean
 #
 
 # == Source
