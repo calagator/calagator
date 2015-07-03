@@ -47,7 +47,7 @@ header {
   }
 
   .social-icons {
-    margin-top: 1em;
+	margin-top: 1em;
     margin-bottom: 1em;
   }
 
@@ -96,6 +96,36 @@ header {
     height: 16px;
     margin: 0 auto;
   }
+
+	.donation-button-container.mobile {
+		border-top: 1px solid #55646F;
+		border-bottom: 1px solid #21272C;
+	}
+
+	.donation-button-container .button.button--donate {
+		height: 32px;
+	}
+
+	.donation-button-container .text-container {
+		display: block;
+		float: left;
+		width: 66.666%;
+		padding: 6px 0;
+		height: 32px;
+	}
+	.donation-button-container .icon-container {
+		display: block;
+		float: left;
+		width: 33.333%;
+		padding: 8px 0;
+		background-color: #2B3338;
+		height: 32px;
+	}
+
+	.donation-button-container .icon-container i {
+		  color: #4B5F6E;
+		  font-size: 1em;
+	}
 
   .donation-button-container.desktop {
     display: none;
@@ -251,23 +281,23 @@ header {
 		padding-top: 1em;
 		padding-bottom: 1em;
 
-    .donation-button-container.desktop {
-      display: block;
-    }
+	    .donation-button-container.desktop {
+	      display: none; /* Temporary */
+	    }
 
-    .social-icons {
-      margin-top: 0.5em;
-    }
+	    .social-icons {
+	      margin-top: 0;
+	    }
 
-    .social-icons ul {
-      width: 445px;
-      margin-left: 18px;
-    }
+	    .social-icons ul {
+	      width: 445px;
+	      margin-left: 18px;
+	    }
 
-    .social-icons ul li i {
-      margin-left: 0;
-      margin-right: 0;
-    }
+	    .social-icons ul li i {
+	      margin-left: 0;
+	      margin-right: 0;
+	    }
 	}
 
 	header .logo > .logo-big {
@@ -279,7 +309,7 @@ header {
 	}
 
   header .logo > .logo-big img {
-    width: 100%;
+	width: 100%;
   }
 
 	header .logo > .logo-small {
@@ -287,31 +317,19 @@ header {
 	}
 
   .tagline {
-    position: absolute;
-    top: 82%;
-    left: 3%;
+	position: absolute;
+	right: 6%;
+	top: 0;
+	margin-top: 1.65em;
   }
 
   .tagline p {
-    text-align: left;
+	text-align: center;
   }
 
   .donation-button-container.mobile {
     display: none;
-  }
-
-  .donation-button-container {
-    width: 250px;
-    position: absolute;
-    top: 8px;
-    right: 6%;
-    height: 51px;
-  }
-
-  .donation-button-container .button.button--donate {
-    border-bottom: 4px solid #A3872E;
-    padding: 14px 0;
-  }
+	}
 }
 
 @media only screen and (min-width: 45em) {
@@ -319,6 +337,10 @@ header {
 	.wrapper {
 		background-color: #ededed;
 	}
+
+	.tagline {
+		right: 12%;
+  	}
 
 	.search-form {
 		display: block;
@@ -389,10 +411,7 @@ header {
 }
 
 @media only screen and (min-width: 46.875em) {
-  .tagline {
-    top: 66px;
-    left: 21px;
-  }
+
 }
 
 @media only screen and (min-width: 75.625em) {
@@ -425,17 +444,19 @@ header {
 		margin: 0 auto;
 	}
 
-  .donation-button-container {
-    top: 12px;
-    right: 129px;
-  }
-
   header {
     .social-icons {
       width: 1000px;
       margin: 0 auto;
-      margin-top: 1em;
       margin-bottom: 0;
     }
+
+	.social-icons ul {
+		margin-left: -12px;
+	}
+	.social-icons ul li i {
+		display: block;
+		margin: 0 auto;
+	}
   }
 }
