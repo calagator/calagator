@@ -85,15 +85,16 @@
 }
 
 .button.button--donate {
-  background-color: #EFC646;
+  background-color: #2F373D;
   border-bottom: none;
   color: #fff;
   text-align: center;
-  padding: 8px 0;
   font-family: $font-family-fira-sans;
   font-weight: 400;
   font-size: 1em;
-  color: #032D47;
+
+  display: block;
+  overflow: hidden;
 }
 
 .button.button--call-to-action {

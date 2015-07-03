@@ -7,6 +7,7 @@ nav {
 	ul {
 		border-left: none;
 		border-right: none;
+		border-bottom: 1px solid #032D47;
 	}
 
 	ul.app-menu > a {
@@ -32,6 +33,43 @@ nav {
 		font-size: 1em;
 		font-family: $font-family-fira-sans;
 	}
+
+	ul.app-menu .button.button--donate {
+		padding: 0;
+	}
+
+	ul.app-menu .button.button--donate .text-container {
+		float: left;
+		display: block;
+		width: 70%;
+		padding: 1em;
+	}
+
+	ul.app-menu .button.button--donate .icon-container {
+		float: left;
+		width: 30%;
+		padding: 17px;
+		background-color: #2B3338;
+	}
+
+	ul.app-menu .button.button--donate .icon-container i {
+		  color: #4B5F6E;
+	}
+
+	ul.app-menu .button.button--donate {
+		display: none;
+	}
+}
+
+@media only screen and (min-width: 41.875em) {
+	nav {
+		ul.app-menu > a {
+			width: 25%;
+		}
+		ul.app-menu .button.button--donate {
+			display: block;
+		}
+	}
 }
 
 @media only screen and (min-width: 45em) {
@@ -46,6 +84,18 @@ nav {
 		ul.app-menu > a {
 			padding: 8px 0;
 			border-bottom: 3px solid $vo_blue_darker;
+		}
+
+		ul.app-menu .button.button--donate {
+			display: block;
+			border-bottom: 3px solid #272E34;
+		}
+		ul.app-menu .button.button--donate .text-container {
+			padding: 8px 0;
+		}
+
+		ul.app-menu .button.button--donate .icon-container {
+			padding: 9px 0;
 		}
 	}
 	/* nav ul {

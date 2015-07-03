@@ -59,10 +59,6 @@
                 <p>Stand out. Give back.</p>
             </div>
 
-            <div class='donation-button-container desktop'>
-              <%= link_to 'Donate to Volunteer Odyssey', 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' %>
-            </div>
-
             <div class='search-box-container clearfix'>
                 <div class='search-box js-search-box'>
                     <i class='button button--search button--white'></i>
@@ -82,7 +78,15 @@
         </div>
 
         <div class='donation-button-container mobile'>
-          <%= link_to 'Donate to Volunteer Odyssey', 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' %>
+          <!-- <%= link_to 'Donate to Volunteer Odyssey', 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' %> -->
+          <%= link_to 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' do %>
+          <div class='text-container'>
+              <span class='donate-text'>Donate</span>
+          </div>
+          <div class='icon-container'>
+              <i class='icon-cc-paypal'></i>
+          </div>
+          <% end %>
         </div>
 
       </header>
@@ -96,6 +100,17 @@
         <% end %>
         <%= link_to organizations_path do %>
             <li class="<%=link_class[:organizations]%>">Organizations</li>
+        <% end %>
+
+        <%= link_to 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' do %>
+            <li data-tooltip="Make a donation with Paypal">
+                <div class='text-container'>
+                    <span class='donate-text'>Donate</span>
+                </div>
+                <div class='icon-container'>
+                    <i class='icon-cc-paypal'></i>
+                </div>
+            </li>
         <% end %>
           <!-- <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
           <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>

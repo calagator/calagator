@@ -182,6 +182,7 @@
             width: 25%;
             padding-top: 1.1em;
             padding-bottom: 1.1em;
+            height: 53px;
         }
 
         .month > .month-name-container {
@@ -205,13 +206,17 @@
         // Making the font-size back to 100% because I increased it to 110% earlier.
         font-size: 90%; // Should I really be doing this?
 
+        .month > .button {
+            height: 50px;
+        }
+
         .month > a {
             padding-top: 1em;
             padding-bottom: 1em;
         }
 
         .month > .month-name-container {
-            height: 49px;
+            height: 50px;
         }
 
         tr {
@@ -358,6 +363,10 @@
 
         .notmonth .date {
             border-bottom: none;
+        }
+
+        .notmonth {
+            display: table-cell;
         }
     }
 }
