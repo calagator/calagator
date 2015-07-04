@@ -135,7 +135,7 @@
       <!-- old is #top_footer -->
     <footer role="contentinfo">
         <div class='footer-container clearfix'>
-            <p><%= URI.parse(SETTINGS.url).host %></p>
+            <p><%= link_to 'www.volunteerodyssey.org', 'https://www.volunteerodyssey.org/' %></p>
             <% if current_organization %>
               <p>Logged in as: <strong><%= current_organization.title %></strong> (<%= link_to 'logout', organization_logout_path %>)</p>
             <% elsif current_admin %>
