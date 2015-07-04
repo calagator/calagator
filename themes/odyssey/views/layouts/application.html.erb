@@ -47,7 +47,7 @@
       <header class='clearfix'>
 
           <div class='header-container'>
-              <div class='logo clearfix'>
+              <div class='logo'>
                 <a data-tooltip="Go back to the main site" class='logo-big' href="http://volunteerodyssey.com/">
                   <%= image_tag('logo-big.svg') %>
                 </a>
@@ -55,27 +55,23 @@
                   <%= image_tag('VO_Logo-small.svg') %>
                 </a>
             </div><!-- .logo -->
-            <div class='tagline'>
-                <p>Stand out. Give back.</p>
+            <div class='tagline'>Stand out. Give back.</div>
+            <div class='social-icons'>
+                <ul>
+                    <li class='facebook'><a href="http://facebook.com/volunteerodyssey"><i class='icon-facebook'></i></a></li>
+                    <li class='twitter'><a href="http://www.twitter.com/volodyssey"><i class='icon-twitter'></i></a></li>
+                    <li class='linkedin'><a href="http://www.linkedin.com/company/volunteer-odyssey"><i class='icon-linkedin'></i></a></li>
+                    <li class='youtube'><a href="http://youtube.com/user/VolunteerOdyssey"><i class='icon-youtube'></i></a></li>
+                    <li class='googleplus'><a href="https://plus.google.com/b/113889158126284869703/"><i class='icon-googleplus'></i></a></li>
+                </ul>
             </div>
-
-            <div class='search-box-container clearfix'>
+            <div class='search-box-container'>
                 <div class='search-box js-search-box'>
                     <i class='button button--search button--white'></i>
                     <i class='button button--close button--white'></i>
                 </div>
             </div><!-- .search-box-container -->
         </div><!-- .header-container -->
-
-        <div class='social-icons'>
-            <ul class='clearfix'>
-                <li class='facebook'><a href="http://facebook.com/volunteerodyssey"><i class='icon-facebook'></i></a></li>
-                <li class='twitter'><a href="http://www.twitter.com/volodyssey"><i class='icon-twitter'></i></a></li>
-                <li class='linkedin'><a href="http://www.linkedin.com/company/volunteer-odyssey"><i class='icon-linkedin'></i></a></li>
-                <li class='youtube'><a href="http://youtube.com/user/VolunteerOdyssey"><i class='icon-youtube'></i></a></li>
-                <li class='googleplus'><a href="https://plus.google.com/b/113889158126284869703/"><i class='icon-googleplus'></i></a></li>
-            </ul>
-        </div>
 
         <div class='donation-button-container mobile'>
           <%= link_to 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' do %>
