@@ -103,28 +103,20 @@ header {
 	}
 
 	.donation-button-container .button.button--donate {
-		height: 32px;
+		height: 36px;
 	}
 
 	.donation-button-container .text-container {
-		display: block;
-		float: left;
-		width: 66.666%;
-		padding: 6px 0;
+		display: inline;
+		padding: 6px;
 		height: 32px;
+    font-weight: bold;
 	}
 	.donation-button-container .icon-container {
-		display: block;
-		float: left;
-		width: 33.333%;
-		padding: 8px 0;
-		background-color: #2B3338;
+		display: inline;
+    line-height: 32px;
+		padding: 6px;
 		height: 32px;
-	}
-
-	.donation-button-container .icon-container i {
-		  color: #4B5F6E;
-		  font-size: 1em;
 	}
 
   .donation-button-container.desktop {

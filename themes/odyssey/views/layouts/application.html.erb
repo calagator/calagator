@@ -78,11 +78,8 @@
         </div>
 
         <div class='donation-button-container mobile'>
-          <!-- <%= link_to 'Donate to Volunteer Odyssey', 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' %> -->
           <%= link_to 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' do %>
-          <div class='text-container'>
-              <span class='donate-text'>Donate</span>
-          </div>
+          <div class='text-container'>Donate</div>
           <div class='icon-container'>
               <i class='icon-cc-paypal'></i>
           </div>
@@ -104,12 +101,8 @@
 
         <%= link_to 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' do %>
             <li data-tooltip="Make a donation with Paypal">
-                <div class='text-container'>
-                    <span class='donate-text'>Donate</span>
-                </div>
-                <div class='icon-container'>
-                    <i class='icon-cc-paypal'></i>
-                </div>
+                <div class='text-container'>Donate</div>
+                <div class='icon-container'><i class='icon-cc-paypal'></i></div>
             </li>
         <% end %>
           <!-- <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
