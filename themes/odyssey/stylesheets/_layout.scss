@@ -164,7 +164,7 @@ ul.event_list .day_of_week {
 }
 
 .contentbar {
-margin-right: 200px;
+  margin-right: 200px;
 }
 
 #list_filters #date_filter label {
@@ -673,7 +673,7 @@ fieldset .no_label, fieldset .help {
 ----------------------------------------*/
 
 .attendees {
-  overflow: auto;}
+overflow: auto;}
 
 .attendees h3 {
   display: inline;
@@ -683,18 +683,18 @@ fieldset .no_label, fieldset .help {
   clear: both;
   margin: 0;
   padding: 0;
-  float: left;}
+float: left;}
 
 .attendees li {
   list-style-type: none;
   float: left;
   margin: 0px 8px 8px 0px;
-  padding: 0; }
+padding: 0; }
 
-  .attendees li .avatar {
-    width: 50px;
-    height: 50px;
-  }
+.attendees li .avatar {
+  width: 50px;
+  height: 50px;
+}
 
 .plancast-rsvp {
   font-size: 11px;

@@ -1,5 +1,5 @@
 @mixin rotate($degrees) {
   -ms-transform: rotate($degrees +deg);
-    -webkit-transform: rotate($degrees +deg);
-    transform: rotate($degrees +deg);
+  -webkit-transform: rotate($degrees +deg);
+  transform: rotate($degrees +deg);
 }

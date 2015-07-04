@@ -1,87 +1,87 @@
 .button {
-	background: none;
-	border: none;
-	position: relative;
+  background: none;
+  border: none;
+  position: relative;
 }
 
 .button,
 .button:before,
 .button:after {
-	display: block;
+  display: block;
 }
 
 .button:before,
 .button:after {
-	content: " "
+  content: " "
 }
 
 .button.button--add:before,
 .button.button--add:after {
-	background-color: #615C80;
-	// background-color: #fff;
-	height: 30px;
-	width: 4px;
-	// width: 2px;
+  background-color: #615C80;
+  // background-color: #fff;
+  height: 30px;
+  width: 4px;
+  // width: 2px;
 }
 
 .button.button--add:after {
-	position: relative;
-	top: -30px;
-    -ms-transform: rotate(90deg);
-    -o-transform: rotate(90deg);
-    -moz-transform: rotate(90deg);
-    -webkit-transform: rotate(90deg);
-    transform: rotate(90deg);
+  position: relative;
+  top: -30px;
+  -ms-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
 }
 
 .button.button--search {
-	background-color: transparent;
-	border-radius: 2em;
-	height: 20px;
-	width: 20px;
+  background-color: transparent;
+  border-radius: 2em;
+  height: 20px;
+  width: 20px;
 }
 
 .button.button--search:before {
-	height: 15px;
-	width: 15px;
-	border-radius: 2em;
-	border: 2px solid #615C80;
-	position: relative;
-	top: -7px;
-	left: -11px;
+  height: 15px;
+  width: 15px;
+  border-radius: 2em;
+  border: 2px solid #615C80;
+  position: relative;
+  top: -7px;
+  left: -11px;
 }
 
 .button.button--search:after {
-	width: 2px;
-	height: 11px;
-	background-color: #615C80;
-	position: relative;
-	top: -11px;
-	left: 5px;
-	-ms-transform: rotate(-45deg);
-	-o-transform: rotate(-45deg);
-	-moz-transform: rotate(-45deg);
-	-webkit-transform: rotate(-45deg);
-	transform: rotate(-45deg);
+  width: 2px;
+  height: 11px;
+  background-color: #615C80;
+  position: relative;
+  top: -11px;
+  left: 5px;
+  -ms-transform: rotate(-45deg);
+  -o-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  transform: rotate(-45deg);
 }
 
 .button.button--search.button--white:before {
-	border: 2px solid #fff;
+  border: 2px solid #fff;
 }
 
 .button.button--search.button--white:after {
-	background-color: #fff;
+  background-color: #fff;
 }
 
 .button.button--google-maps {
-	background-color: #9366ab;
-	border-bottom: 3px solid #5A3E69;
-	color: #fff;
-	text-align: center;
-	padding: 8px 0;
-	font-family: $font-family-fira-sans;
-	font-weight: 400;
-	font-size: 1em;
+  background-color: #9366ab;
+  border-bottom: 3px solid #5A3E69;
+  color: #fff;
+  text-align: center;
+  padding: 8px 0;
+  font-family: $font-family-fira-sans;
+  font-weight: 400;
+  font-size: 1em;
 }
 
 .button.button--donate {
@@ -98,32 +98,32 @@
 }
 
 .button.button--call-to-action {
-	background-color: rgb(245, 43, 74);
-	border-bottom: 3px solid rgb(211, 35, 62);
-	color: #fff;
-	text-align: center;
-	padding: 1em;
-	font-family: $font-family-fira-sans;
-	font-weight: 400;
+  background-color: rgb(245, 43, 74);
+  border-bottom: 3px solid rgb(211, 35, 62);
+  color: #fff;
+  text-align: center;
+  padding: 1em;
+  font-family: $font-family-fira-sans;
+  font-weight: 400;
 }
 
 .button.button--close:before,
 .button.button--close:after {
-	height: 30px;
-	width: 2px;
-	background-color: #fff;
+  height: 30px;
+  width: 2px;
+  background-color: #fff;
 }
 
 .button.button--close:before {
-	-webkit-transform: rotate(45deg);
-	-moz-transform: rotate(45deg);
-	transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
 .button.button--close:after {
-	-webkit-transform: rotate(-45deg);
-	-moz-transform: rotate(-45deg);
-	transform: rotate(-45deg);
-	position: absolute;
-	top: 0px;
+  -webkit-transform: rotate(-45deg);
+  -moz-transform: rotate(-45deg);
+  transform: rotate(-45deg);
+  position: absolute;
+  top: 0px;
 }

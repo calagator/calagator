@@ -1,68 +1,68 @@
 * {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 *:before,
-*:after {
+  *:after {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-}
+  }
 
-html {
+  html {
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
-}
-body {
+  }
+  body {
     margin: 0;
     font-size: 100%;
-}
-h1,
-h2,
-h3,
-h4,
-p,
-blockquote,
-figure,
-ol,
-ul {
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  blockquote,
+  figure,
+  ol,
+  ul {
     margin: 0;
     padding: 0;
-}
-ul,
-ol {
+  }
+  ul,
+  ol {
     list-style-type: none;
-}
-li {
+  }
+  li {
     display: block;
-}
-h1,
-h2,
-h3,
-h4 {
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
     font-size: inherit;
-}
-a {
+  }
+  a {
     text-decoration: none;
     color: inherit;
-}
-img {
+  }
+  img {
     max-width: 100%;
     height: auto;
     border: 0;
-}
+  }
 
-svg:not(:root) {
-  overflow: hidden;
-}
+  svg:not(:root) {
+    overflow: hidden;
+  }
 
-main {
+  main {
     display: block;
-}
+  }
 
-/* Tables still need 'cellspacing="0"' in the markup. */
-table { border-collapse: separate; border-spacing: 0; }
-caption, th, td { text-align: left; font-weight: normal; }
-table, td, th { vertical-align: middle; }
+  /* Tables still need 'cellspacing="0"' in the markup. */
+  table { border-collapse: separate; border-spacing: 0; }
+  caption, th, td { text-align: left; font-weight: normal; }
+  table, td, th { vertical-align: middle; }

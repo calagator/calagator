@@ -1,15 +1,15 @@
 /* ##############################################################
 
-   forms.css
-   * Sets up some default styling for forms
-   * Gives you classes to enhance your forms
+forms.css
+ * Sets up some default styling for forms
+ * Gives you classes to enhance your forms
 
-   Usage:
-   * For text fields, use class .title or .text
+ Usage:
+ * For text fields, use class .title or .text
 
-   Originally based on blueprint-css v0.7.1
+ Originally based on blueprint-css v0.7.1
 
-############################################################## */
+ ############################################################## */
 @import "variables";
 
 fieldset .trap { display: none }
@@ -59,14 +59,14 @@ form.formtastic {
 /* @group Autocomplete
 -------------------------------------------------------------- */
 ul.jq-ui-autocomplete {
-    position: absolute;
-    overflow: hidden;
-    background-color: #fff;
-    border: 1px solid #aaa;
-    margin: 0px;
-    padding: 0;
-    list-style: none;
-    color: #333;
+  position: absolute;
+  overflow: hidden;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  margin: 0px;
+  padding: 0;
+  list-style: none;
+  color: #333;
 }
 ul.jq-ui-autocomplete li {
   display: block;
