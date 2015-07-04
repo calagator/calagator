@@ -1,5 +1,5 @@
 footer {
-    background-color: #2ba2f5;
+  background: $vo-blue;
 }
 
 footer .footer-container {
@@ -10,10 +10,10 @@ footer .footer-container {
 
 footer .footer-container p {
     font-family: $font-family-fira-sans;
-    font-weight: 400;
-    color: #0D2A3D;
+    color: white;
     display: block;
     float: left;
+    margin-right: 12px;
 }
 
 footer .footer-container p:last-child {

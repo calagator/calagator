@@ -85,7 +85,7 @@
 }
 
 .button.button--donate {
-  background-color: #2F373D;
+  background-color: darken(desaturate($vo-blue, 20%), 5%);
   border-bottom: none;
   color: #fff;
   text-align: center;

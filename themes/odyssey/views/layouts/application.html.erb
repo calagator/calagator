@@ -47,7 +47,7 @@
       <header class='clearfix'>
 
           <div class='header-container'>
-              <div class='logo clearfix'>
+              <div class='logo'>
                 <a data-tooltip="Go back to the main site" class='logo-big' href="http://volunteerodyssey.com/">
                   <%= image_tag('logo-big.svg') %>
                 </a>
@@ -55,11 +55,17 @@
                   <%= image_tag('VO_Logo-small.svg') %>
                 </a>
             </div><!-- .logo -->
-            <div class='tagline'>
-                <p>Stand out. Give back.</p>
+            <div class='tagline'>Stand out. Give back.</div>
+            <div class='social-icons'>
+                <ul>
+                    <li class='facebook'><a href="http://facebook.com/volunteerodyssey"><i class='icon-facebook'></i></a></li>
+                    <li class='twitter'><a href="http://www.twitter.com/volodyssey"><i class='icon-twitter'></i></a></li>
+                    <li class='linkedin'><a href="http://www.linkedin.com/company/volunteer-odyssey"><i class='icon-linkedin'></i></a></li>
+                    <li class='youtube'><a href="http://youtube.com/user/VolunteerOdyssey"><i class='icon-youtube'></i></a></li>
+                    <li class='googleplus'><a href="https://plus.google.com/b/113889158126284869703/"><i class='icon-googleplus'></i></a></li>
+                </ul>
             </div>
-
-            <div class='search-box-container clearfix'>
+            <div class='search-box-container'>
                 <div class='search-box js-search-box'>
                     <i class='button button--search button--white'></i>
                     <i class='button button--close button--white'></i>
@@ -67,22 +73,9 @@
             </div><!-- .search-box-container -->
         </div><!-- .header-container -->
 
-        <div class='social-icons'>
-            <ul class='clearfix'>
-                <li class='facebook'><a href="http://facebook.com/volunteerodyssey"><i class='icon-facebook'></i></a></li>
-                <li class='twitter'><a href="http://www.twitter.com/volodyssey"><i class='icon-twitter'></i></a></li>
-                <li class='linkedin'><a href="http://www.linkedin.com/company/volunteer-odyssey"><i class='icon-linkedin'></i></a></li>
-                <li class='youtube'><a href="http://youtube.com/user/VolunteerOdyssey"><i class='icon-youtube'></i></a></li>
-                <li class='googleplus'><a href="https://plus.google.com/b/113889158126284869703/"><i class='icon-googleplus'></i></a></li>
-            </ul>
-        </div>
-
         <div class='donation-button-container mobile'>
-          <!-- <%= link_to 'Donate to Volunteer Odyssey', 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' %> -->
           <%= link_to 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' do %>
-          <div class='text-container'>
-              <span class='donate-text'>Donate</span>
-          </div>
+          <div class='text-container'>Donate</div>
           <div class='icon-container'>
               <i class='icon-cc-paypal'></i>
           </div>
@@ -104,12 +97,8 @@
 
         <%= link_to 'https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=LTC9GXPZBX5XY', class: 'button button--donate' do %>
             <li data-tooltip="Make a donation with Paypal">
-                <div class='text-container'>
-                    <span class='donate-text'>Donate</span>
-                </div>
-                <div class='icon-container'>
-                    <i class='icon-cc-paypal'></i>
-                </div>
+                <div class='text-container'>Donate</div>
+                <div class='icon-container'><i class='icon-cc-paypal'></i></div>
             </li>
         <% end %>
           <!-- <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
@@ -146,7 +135,7 @@
       <!-- old is #top_footer -->
     <footer role="contentinfo">
         <div class='footer-container clearfix'>
-            <p><%= URI.parse(SETTINGS.url).host %></p>
+            <p><%= link_to 'www.volunteerodyssey.org', 'https://www.volunteerodyssey.org/' %></p>
             <% if current_organization %>
               <p>Logged in as: <strong><%= current_organization.title %></strong> (<%= link_to 'logout', organization_logout_path %>)</p>
             <% elsif current_admin %>
