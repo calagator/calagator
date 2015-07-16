@@ -82,9 +82,15 @@ Calagator has tests that verify functionality against Solr automatically, if the
 
 You should set up a firewall to protect the ports utilized by the Solr search service. These ports are described in the [config/sunspot.yml](config/sunspot.yml) file.
 
-<!--
 ## Customization
 
+There are two places you'll want to customize right away. Both are *.html.erb files you'll need to create.
+
+`views/calagator/site/_description.html.erb` is the description in the sidebar on the home page of your calendar.
+
+`views/calagator/site/about.html.erb` is the about page linked to from the home page. The existing sidebar has links to anchors called `find_local_events`, `share_local_events`, and `get_involved` as suggested sections of the About page.
+
+<!--
 **TODO: engine CSS and view overrides, variables.scss, config.scss(?)**
 -->
 
