@@ -125,8 +125,11 @@ div.time-picker li {
 /* @group Success, notice and error boxes
 -------------------------------------------------------------- */
 
-.flash      { padding: .8em; margin: 1em 250px 1em 0 ;  }
 
+.flash { width: 1000px; margin: 1em auto; padding: 0.8em; }
+form {
+  .flash  { margin: 1em 250px 1em 0; width: 100%;  }
+}
 .error, .failure      { background: #FFC5A3; color: #C00; border: #C00}
 .notice     { background: #bcf794; }
 .success    { background: #98f0f7; color: $dk_green;  }

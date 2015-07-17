@@ -119,13 +119,14 @@
         </div><!-- .search-form -->
       </nav>
 
-      <% # Pick a subnav %>
-      <% if current_admin %>
+      <!-- subnav -->
+      <% if current_admin || current_organization %>
           <%= render(:partial => 'events/subnav') if link_class[:events] == 'active' %>
           <%= render(:partial => 'venues/subnav') if link_class[:venues] == 'active' %>
           <%= render(:partial => 'organizations/subnav') if link_class[:organizations] == 'active' %>
           <%= render(:partial => 'sources/subnav') if link_class[:import] == 'active' %>
       <% end %>
+      <!-- end subnav -->
       <main role='main' class='content'>
         <%# flash[:success] = "yay"; flash[:failure] = "meh" %>
         <%= render_flash %>
