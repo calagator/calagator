@@ -10,6 +10,6 @@ class OrganizationLoginsController < ApplicationController
 
   def destroy
     session[:organization_id] = nil
-    redirect_to events_path, flash: { success: 'Logged out.' }
+    redirect_to root_path, flash: { success: 'Logged out.' }
   end
 end
