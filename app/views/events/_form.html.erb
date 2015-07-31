@@ -108,7 +108,7 @@
       <%= hidden_field(:event, :venue_id, :value => (!event.venue.nil? ? event.venue.id : params[:event_venue_id])) %>
       <%= image_tag "spinner.gif", :id=> "event_venue_loading", :style => "display: none; margin-left: 0.5em;" %>
       <p class='inline-hints'>
-        Type the name of a venue to search. If it doesn't exist, we'll create it for you.
+        What is the name of the venue for this event? If we don't recognize the venue, we'll ask you for the address on the next page.
       </p>
     <li>
     <li id="event_times" class='input'>
