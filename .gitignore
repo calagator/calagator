@@ -51,3 +51,4 @@ pkg/
 spec/dummy
 .sass-cache
 .DS_Store
+.idea/
