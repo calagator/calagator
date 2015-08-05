@@ -23,7 +23,14 @@ if options[:database] == "postgresql" && ARGV.any? { |arg| arg =~ /--postgres-us
   end
 end
 
-gem "calagator", (generating_dummy && { path: relative_calagator_path.to_s })
+if yes?("Is this for development on the Calagator gem? [yes/no]")
+  gpath = ask("Please enter the local path to the gem:")
+  gem "calagator", (generating_dummy && { path: relative_calagator_path.to_s }), path: gpath
+else
+  gem "calagator", (generating_dummy && { path: relative_calagator_path.to_s })
+end
+
+# gem "calagator", (generating_dummy && { path: relative_calagator_path.to_s })
 run "bundle install"
 rake "db:create"
 generate "calagator:install", (generating_dummy && "--dummy")
