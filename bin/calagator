@@ -26,7 +26,9 @@ calagator install: install Calagator into an existing Rails application
       none
 END
 
-TEMPLATE = File.expand_path("../../rails_template.rb", __FILE__)
+__DIR__ = File.dirname(__FILE__)
+TEMPLATE = File.expand_path(File.join(__DIR__, "..", "rails_template.rb"))
+puts TEMPLATE
 
 command = ARGV.shift
 
