@@ -23,9 +23,15 @@ if options[:database] == "postgresql" && ARGV.any? { |arg| arg =~ /--postgres-us
   end
 end
 
+
 if yes?("Is this for development on the Calagator gem? [yes/no]")
-  gpath = ask("Please enter the local path to the gem:")
-  gem "calagator", (generating_dummy && { path: relative_calagator_path.to_s }), path: gpath
+  gpath = ask("Please enter the local path to the gem (defaults to remote gem if path does not exist):")
+  if Dir.exists?(gpath)
+    gem "calagator", (generating_dummy && { path: relative_calagator_path.to_s }), path: gpath
+  else
+    puts "Not a valid path, installing remote gem"
+    gem "calagator", (generating_dummy && { path: relative_calagator_path.to_s })
+  end
 else
   gem "calagator", (generating_dummy && { path: relative_calagator_path.to_s })
 end
