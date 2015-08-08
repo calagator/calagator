@@ -76,6 +76,15 @@ body {
   top: 15px;
 }
 
+#admin_search_form {
+  padding-bottom: 15px;
+}
+
+#admin_search_field {
+  border-radius: 4px;
+  border: 1px solid gray;
+}
+
 .subnav {
   font-size: 1.2em;
   background: $subnav;
