@@ -25,15 +25,15 @@ Before you start, you will need to:
 
 4. Initialize your database by running:
 
-        bin/rake app:db:migrate app:db:test:prepare
+        rake app:db:migrate app:db:test:prepare
 
     If you like, you can also generate some sample data with 
 
-        bin/rake app:db:seed
+        rake app:db:seed
 
 5. At this point, you should be set up to run Calagator's test suite:
 
-        bin/rspec
+        rspec
 
 6. You're now ready to start up Calagator in `development` mode, which automatically reloads code as you change it:
 
