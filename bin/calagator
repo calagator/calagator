@@ -1,20 +1,6 @@
 #!/usr/bin/env ruby
 
-TEMPLATE = File.expand_path("../../rails_template.rb", __FILE__)
-
-command = ARGV.shift
-
-case command
-when /_\d+\.\d+\.\d+_/, 'new'
-  system "rails #{command} #{ARGV.join(' ')} -m #{TEMPLATE} --skip-bundle"
-when 'install'
-  system "bundle exec rake rails:template LOCATION=#{TEMPLATE}"
-else
-  puts DATA.read
-end
-
-__END__
-
+help_text =<<END
 calagator: setup Calagator in a new or existing Rails applicaton
 
 Usage:
@@ -27,7 +13,7 @@ calagator new: generates a new Rails app and install Calagator into it
     --dummy   # Generates an app suitable for use in spec/dummy for Calagator
               # development and testing
 
-    In the case of `calagator new`, all other options will be passed along 
+    In the case of `calagator new`, all other options will be passed along
     to `rails new`; see `rails new --help` for supported options.
 
     To generate an app using a specific Rails version, e.g. for 4.2.1:
@@ -38,4 +24,24 @@ calagator install: install Calagator into an existing Rails application
 
     Options:
       none
+END
+
+__DIR__ = File.dirname(__FILE__)
+TEMPLATE = File.expand_path(File.join(__DIR__, "..", "rails_template.rb"))
+puts TEMPLATE
+
+command = ARGV.shift
+
+case command
+when /_\d+\.\d+\.\d+_/, 'new'
+  system "rails #{command} #{ARGV.join(' ')} -m #{TEMPLATE} --skip-bundle"
+when 'install'
+  system "bundle exec rake rails:template LOCATION=#{TEMPLATE}"
+else
+  puts help_text
+end
+
+__END__
+
+
 

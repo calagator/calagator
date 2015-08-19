@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ['>= 2.0.0', '< 2.2.0']
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE.txt", "Rakefile", "README.md"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE.txt", "Rakefile", "README.md", "rails_template.rb"]
   s.test_files = Dir["spec/**/*"]
 
   # When changing this Rails requirement, also update RAILS_REQUIREMENT in rails_template.rb
@@ -63,4 +63,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "simplecov", "~> 0.10.0"
   s.add_development_dependency "appraisal", "~> 2.0"
   s.add_development_dependency "gem-release", "~> 0.7"
+
+  #executables
+  s.executables << 'calagator'
 end
