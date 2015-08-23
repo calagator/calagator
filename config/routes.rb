@@ -43,7 +43,7 @@ Calagator::Engine.routes.draw do
 
   resources :versions, :only => [:edit]
 
-  # Rails 4.0 prevents referencing controllers outside of the Calagator namespace. 
+  # Rails 4.0 prevents referencing controllers outside of the Calagator namespace.
   # Work around this by aliasing PaperTrailManager inside Calagator:
   Calagator::PaperTrailManager ||= ::PaperTrailManager
   resources :changes, controller: 'paper_trail_manager/changes'

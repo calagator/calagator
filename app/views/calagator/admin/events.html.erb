@@ -2,6 +2,15 @@
 
 <p>Locking an event prevents editing or deleting it.</p>
 
+
+<%= form_tag admin_events_path, :method => :get do %>
+  <div id="admin_search_form">
+  <label for="admin_search_field">Search Events</label>
+    <%= search_field_tag "query", @admin_query, :id => "admin_search_field" %>
+    <%= submit_tag("Search") %>
+  </div>
+<% end -%>
+
 <table style="width: 60%; border: 1px solid black;">
   <thead>
     <tr style="background-color: #ccc;">
@@ -17,9 +26,9 @@
       <td style="border: 1px solid gray"><%= event.start_time %></td>
       <td style="border: 1px solid gray">
         <% if event.locked %>
-        <%= button_to "Unlock", lock_event_path(:event_id => event.id) %>
+        <%= button_to "Unlock", lock_event_path(:event_id => event.id, :query => @admin_query) %>
         <% else %>
-        <%= button_to "Lock", lock_event_path(:event_id => event.id) %>
+        <%= button_to "Lock", lock_event_path(:event_id => event.id, :query => @admin_query) %>
         <% end %>
       </td>
     </tr>
