@@ -39,7 +39,8 @@ Vagrant.configure(2) do |config|
 
   # Use more memory so Bundler works.
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = defined?(MEMORY) ? MEMORY : 1024
+    vb.memory = defined?(MEMORY) ? MEMORY : 2048
+    vb.cpus = 2
   end
 
   # avoid tty errors in ubuntu

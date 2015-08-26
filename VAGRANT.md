@@ -31,12 +31,25 @@ Use Vagrant by issuing the commands below. The `local%` and `virtual%` in the co
 **Run** the application on the virtual machine, it will be accessible on [http://localhost:8000/](http://localhost:8000/):
 
     local% vagrant ssh
-    virtual% rails server
 
-**Test** the application within the virtual machine:
+Now following [DEVELOPMENT.md](DEVELOPMENT.md):
 
-    local% vagrant ssh
-    virtual% bundle exec rake
+    virtual% bundle exec bin/calagator new spec/dummy --dummy
+    virtual% bundle exec rake app:db:migrate app:db:test:prepare
+
+Optional seeding of database with data:
+
+    virtual% bundle exec rake app:db:seed
+
+Run the test suite:
+
+    virtual% bundle exec rspec
+
+Run the server bound to 0.0.0.0 so the host OS can reach it:
+
+    virtual% bundle exec spec/dummy/bin/rails server -b 0.0.0.0
+
+You can reach the calagator app from the host OS at http://localhost:8000/ .
 
 **Reload** the virtual machine, needed if you changed the `Gemfile` or `config` files, or used a revision control command that updated them:
 

@@ -27,7 +27,7 @@ Before you start, you will need to:
 
         bundle exec rake app:db:migrate app:db:test:prepare
 
-    If you like, you can also generate some sample data with 
+    If you like, you can also generate some sample data with
 
         bundle exec rake app:db:seed
 
@@ -38,8 +38,11 @@ Before you start, you will need to:
 6. You're now ready to start up Calagator in `development` mode, which automatically reloads code as you change it:
 
         bundle exec spec/dummy/bin/rails server
-        
+
    If all went according to plan, you should be able to access your running Calagator at: [http://localhost:3000](http://localhost:3000).
 
     To stop the server, press `CTRL-C`.
 
+    If you're running calagator in a Vagrantbox, add `-b 0.0.0.0` to the bundle exec command to handle requests from the host OS:
+
+    `bundle exec spec/dummy/bin/rails server -b 0.0.0.0`
