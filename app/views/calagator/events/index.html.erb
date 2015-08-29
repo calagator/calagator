@@ -19,22 +19,22 @@
     <h4>by date</h4>
     <div id='start_calendar'>
       <label for='date_start'>From</label>
-      <%= text_field_tag 'date[start]', @start_date.strftime('%Y-%m-%d'), :id => 'date_start', :class => 'date_picker' %>
+      <%= text_field_tag 'date[start]', @browse.start_date.strftime('%Y-%m-%d'), :id => 'date_start', :class => 'date_picker' %>
     </div>
     <div id='end_calendar'>
       <label for='date_end'>To</label>
-      <%= text_field_tag 'date[end]', @end_date.strftime('%Y-%m-%d'), :id => 'date_end', :class => 'date_picker' %>
+      <%= text_field_tag 'date[end]', @browse.end_date.strftime('%Y-%m-%d'), :id => 'date_end', :class => 'date_picker' %>
     </div>
   </div>
   <div id='time_filter'>
   <h4>by time</h4>
     <div id='start_time_picker'>
       <label for="time_start">Begins after:</label>
-      <%= text_field_tag 'time[start]', @start_time, :id => 'filter_time_start', :class => 'time_picker_filter' %>
+      <%= text_field_tag 'time[start]', @browse.start_time, :id => 'filter_time_start', :class => 'time_picker_filter' %>
     </div>
     <div id='end_time_picker'>
       <label for="time_end">Ends before:</label>
-      <%= text_field_tag 'time[end]', @end_time, :id => 'filter_time_end', :class => 'time_picker_filter' %>
+      <%= text_field_tag 'time[end]', @browse.end_time, :id => 'filter_time_end', :class => 'time_picker_filter' %>
     </div>
   </div>
   <div>

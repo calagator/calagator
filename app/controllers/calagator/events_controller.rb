@@ -12,18 +12,10 @@ class EventsController < Calagator::ApplicationController
   # GET /events
   # GET /events.xml
   def index
-    browse = Event::Browse.new(params)
-
-    @events = browse.events
-    @start_date = browse.start_date
-    @end_date = browse.end_date
-    @start_time = browse.start_time
-    @end_time = browse.end_time
-
-    browse.errors.each { |error| append_flash :failure, error }
-
+    @browse = Event::Browse.new(params)
+    @events = @browse.events
+    @browse.errors.each { |error| append_flash :failure, error }
     @perform_caching = params[:order].blank? && params[:date].blank?
-
     render_events @events
   end
 

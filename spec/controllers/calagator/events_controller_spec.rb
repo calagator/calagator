@@ -218,38 +218,38 @@ describe EventsController, :type => :controller do
 
           it "should use the default if not given the parameter" do
             get :index, :date => {}
-            expect(assigns[date_field]).to eq send(date_field)
+            expect(assigns[:browse].send(date_field)).to eq send(date_field)
             expect(flash[:failure]).to be_nil
           end
 
           it "should use the default if given a malformed parameter" do
             get :index, :date => "omgkittens"
-            expect(assigns[date_field]).to eq send(date_field)
+            expect(assigns[:browse].send(date_field)).to eq send(date_field)
             expect(response.body).to have_selector(".flash_failure", text: 'invalid')
           end
 
           it "should use the default if given a missing parameter" do
             get :index, :date => {:foo => "bar"}
-            expect(assigns[date_field]).to eq send(date_field)
+            expect(assigns[:browse].send(date_field)).to eq send(date_field)
             expect(response.body).to have_selector(".flash_failure", text: 'invalid')
           end
 
           it "should use the default if given an empty parameter" do
             get :index, :date => {date_kind => ""}
-            expect(assigns[date_field]).to eq send(date_field)
+            expect(assigns[:browse].send(date_field)).to eq send(date_field)
             expect(response.body).to have_selector(".flash_failure", text: 'invalid')
           end
 
           it "should use the default if given an invalid parameter" do
             get :index, :date => {date_kind => "omgkittens"}
-            expect(assigns[date_field]).to eq send(date_field)
+            expect(assigns[:browse].send(date_field)).to eq send(date_field)
             expect(response.body).to have_selector(".flash_failure", text: 'invalid')
           end
 
           it "should use the value if valid" do
             expected = Date.yesterday
             get :index, :date => {date_kind => expected.to_s("%Y-%m-%d")}
-            expect(assigns[date_field]).to eq expected
+            expect(assigns[:browse].send(date_field)).to eq expected
           end
         end
       end
