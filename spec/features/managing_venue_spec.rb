@@ -4,6 +4,7 @@ feature 'Venue Editing' do
   let!(:venue) { create(:venue) }
   let!(:event) { create(:event, venue: venue, start_time: Time.now.end_of_day - 1.hour) }
   let!(:new_venue) { build(:venue) }
+  let!(:venue_with_tags) {create(:venue, :with_multiple_tags)}
 
   scenario 'A user edits an existing venue' do
 
@@ -44,6 +45,27 @@ feature 'Venue Editing' do
     expect(page).to have_content 'Public WiFi'
     expect(page).to have_content 'Just pay the ticket price.'
     expect(page).to have_content 'This venue is no longer open for business.' if new_venue.closed
+  end
+
+  scenario 'A user edits a venue with more than one tag' do
+    visit '/'
+
+    click_on 'Venues'
+
+    within '#newest' do
+      click_on venue_with_tags.title
+    end
+
+    click_on 'edit'
+
+    fill_in 'Venue Name', with: 'A Tagged Venue'
+    click_on 'Update Venue'
+
+    expect(page).to have_content 'tag1, tag2'
+
+    within '.tags' do
+      expect(page).to have_css 'a', count: 2
+    end
   end
 end
 

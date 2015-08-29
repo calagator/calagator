@@ -19,6 +19,10 @@ FactoryGirl.define do
     wifi true
     access_notes "Access permitted."
     after(:create) { Sunspot.commit if Calagator::Venue::SearchEngine.kind == :sunspot }
+
+    trait :with_multiple_tags do
+      after(:create) { |venue| venue.update_attributes(tag_list: 'tag1, tag2') }
+    end
   end
 
   factory :event, class: Calagator::Event do
@@ -30,6 +34,10 @@ FactoryGirl.define do
 
     trait :with_venue do
       association :venue
+    end
+
+    trait :with_multiple_tags do
+      after(:create) { |event| event.update_attributes(tag_list: 'tag1, tag2') }
     end
   end
 

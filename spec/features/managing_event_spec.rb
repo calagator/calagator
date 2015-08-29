@@ -4,6 +4,7 @@ feature 'Event Editing' do
   background do
     Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Future', start_time: Time.zone.now
+    create :event, :with_multiple_tags, title: 'Tagged Event', start_time: Time.zone.now
   end
 
   after do
@@ -40,6 +41,25 @@ feature 'Event Editing' do
     click_on 'Calagator'
     within '#tomorrow' do
       expect(page).to have_content 'Ruby ABCs'
+    end
+  end
+
+  scenario 'A user edits an event with more than one tag' do
+    visit '/'
+
+    within '#today' do
+      click_on 'Tagged Event'
+    end
+
+    click_on 'edit'
+
+    fill_in 'Event Name', with: 'A Tagged Event'
+    click_on 'Update Event'
+
+    expect(page).to have_content 'tag1, tag2'
+
+    within '.tags' do
+      expect(page).to have_css 'a', count: 2
     end
   end
 end
