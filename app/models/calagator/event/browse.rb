@@ -11,11 +11,11 @@ module Calagator
         end
 
         if parsed_start_time && parsed_end_time
-          scope = within_times(scope, parsed_start_time.hour, parsed_end_time.hour)
+          scope = within_times(scope, parsed_start_time, parsed_end_time)
         elsif parsed_start_time
-          scope = after_time(scope, parsed_start_time.hour)
+          scope = after_time(scope, parsed_start_time)
         elsif parsed_end_time
-          scope = before_time(scope, parsed_end_time.hour)
+          scope = before_time(scope, parsed_end_time)
         end
 
         scope
@@ -41,19 +41,19 @@ module Calagator
 
       def within_times(scope, start_time, end_time)
         scope.order(:start_time).select do |rec|
-          rec.start_time.hour > start_time && rec.end_time.hour < end_time
+          rec.start_time.hour > start_time.hour && rec.end_time.hour < end_time.hour
         end
       end
 
       def before_time(scope, end_time)
         scope.order(:end_time).select do |rec|
-          rec.end_time.hour < end_time
+          rec.end_time.hour < end_time.hour
         end
       end
 
       def after_time(scope, start_time)
         scope.order(:start_time).select do |rec|
-          rec.start_time.hour >= start_time
+          rec.start_time.hour >= start_time.hour
         end
       end
     end
