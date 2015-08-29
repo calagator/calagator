@@ -290,6 +290,53 @@ describe EventsController, :type => :controller do
         expect(results).to eq matching
       end
     end
+
+    describe "and filtering by time range" do
+      around do |example|
+        Timecop.freeze("2010-01-01") do
+          example.run
+        end
+      end
+
+      let!(:within) { [
+        Event.create!(
+          title: "within",
+          start_time: Time.zone.parse("2010-01-16 10:00"),
+          end_time: Time.zone.parse("2010-01-16 11:00"),
+        ),
+      ] }
+
+      let!(:before) { [
+        Event.create!(
+          title: "before",
+          start_time: Time.zone.parse("2010-01-16 05:00"),
+          end_time: Time.zone.parse("2010-01-16 06:00"),
+        ),
+      ] }
+
+      let!(:after) { [
+        Event.create!(
+          title: "after",
+          start_time: Time.zone.parse("2010-01-16 15:00"),
+          end_time: Time.zone.parse("2010-01-16 16:00"),
+        ),
+      ] }
+
+      it "should return matching events before an end time" do
+        get :index, time: { start: "", end: "09:00 AM" }
+        expect(assigns[:events]).to eq before
+      end
+
+      it "should return matching events within a time range" do
+        get :index, time: { start: "09:00 AM", end: "01:00 PM" }
+        expect(assigns[:events]).to eq within
+      end
+
+      it "should return matching events after a start time" do
+        get :index, time: { start: "01:00 PM", end: "" }
+        expect(assigns[:events]).to eq after
+      end
+    end
   end
 
   describe "#show" do
