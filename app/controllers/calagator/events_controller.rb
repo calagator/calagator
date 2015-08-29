@@ -15,7 +15,6 @@ class EventsController < Calagator::ApplicationController
     @browse = Event::Browse.new(params)
     @events = @browse.events
     @browse.errors.each { |error| append_flash :failure, error }
-    @perform_caching = params[:order].blank? && params[:date].blank?
     render_events @events
   end
 

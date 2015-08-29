@@ -1,8 +1,14 @@
 module Calagator
   class Event < ActiveRecord::Base
-    class Browse < Struct.new(:params)
+    class Browse < Struct.new(:order, :date, :time)
+      def initialize(attributes={})
+        members.each do |key|
+          send "#{key}=", attributes[key]
+        end
+      end
+
       def events
-        order.filter_by_date.filter_by_time.scope
+        @events ||= sort.filter_by_date.filter_by_time.scope
       end
 
       def start_date
@@ -25,19 +31,23 @@ module Calagator
         @errors ||= []
       end
 
+      def default?
+        values.all?(&:blank?)
+      end
+
       protected
 
       def scope
         @scope ||= Event.non_duplicates.includes(:venue, :tags)
       end
 
-      def order
-        @scope = scope.ordered_by_ui_field(params[:order])
+      def sort
+        @scope = scope.ordered_by_ui_field(order)
         self
       end
 
       def filter_by_date
-        @scope = if params[:date]
+        @scope = if date
           scope.within_dates(start_date, end_date)
         else
           scope.future
@@ -54,15 +64,15 @@ module Calagator
       private
 
       def date_for(kind)
-        return unless params[:date].present?
-        Date.parse(params[:date][kind])
+        return unless date.present?
+        Date.parse(date[kind])
       rescue NoMethodError, ArgumentError, TypeError
         errors << "Can't filter by an invalid #{kind} date."
         nil
       end
 
       def time_for(kind)
-        Time.zone.parse(params[:time][kind]) rescue nil
+        Time.zone.parse(time[kind]) rescue nil
       end
 
       def before_time
