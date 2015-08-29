@@ -17,20 +17,8 @@ class EventsController < Calagator::ApplicationController
 
     browse = Event::Browse.new(params, @start_date, @end_date)
     @events = browse.events
-
-   if (time = params[:time])
-     if (parsed_start_time = Time.zone.parse(time[:start]) and parsed_end_time = Time.zone.parse(time[:end]))
-       @events = @events.within_times(parsed_start_time.hour, parsed_end_time.hour)
-       @start_time = parsed_start_time.strftime('%I:%M %p')
-       @end_time = parsed_end_time.strftime('%I:%M %p')
-     elsif (parsed_start_time = Time.zone.parse(time[:start]))
-       @events = @events.after_time(parsed_start_time.hour)
-       @start_time = parsed_start_time.strftime('%I:%M %p')
-     elsif (parsed_end_time = Time.zone.parse(time[:end]))
-       @events = @events.before_time(parsed_end_time.hour)
-       @end_time = parsed_end_time.strftime('%I:%M %p')
-     end
-   end
+    @start_time = browse.start_time
+    @end_time = browse.end_time
 
     @perform_caching = params[:order].blank? && params[:date].blank?
 
