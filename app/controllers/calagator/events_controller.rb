@@ -12,11 +12,11 @@ class EventsController < Calagator::ApplicationController
   # GET /events
   # GET /events.xml
   def index
-    @start_date = date_or_default_for(:start)
-    @end_date = date_or_default_for(:end)
+    browse = Event::Browse.new(params, self)
 
-    browse = Event::Browse.new(params, @start_date, @end_date)
     @events = browse.events
+    @start_date = browse.start_date
+    @end_date = browse.end_date
     @start_time = browse.start_time
     @end_time = browse.end_time
 
@@ -134,30 +134,6 @@ class EventsController < Calagator::ApplicationController
       format.xml  { render :xml  => events.to_xml(root: "events", :include => :venue) }
       format.json { render :json => events.to_json(:include => :venue), :callback => params[:callback] }
     end
-  end
-
-  # Return the default start date.
-  def default_start_date
-    Time.zone.today
-  end
-
-  # Return the default end date.
-  def default_end_date
-    Time.zone.today + 3.months
-  end
-
-
-  # Return a date parsed from user arguments or a default date. The +kind+
-  # is a value like :start, which refers to the `params[:date][+kind+]` value.
-  # If there's an error, set an error message to flash.
-  def date_or_default_for(kind)
-    default = send("default_#{kind}_date")
-    return default unless params[:date].present?
-
-    Date.parse(params[:date][kind])
-  rescue NoMethodError, ArgumentError, TypeError
-    append_flash :failure, "Can't filter by an invalid #{kind} date."
-    default
   end
 
   def find_and_redirect_if_locked
