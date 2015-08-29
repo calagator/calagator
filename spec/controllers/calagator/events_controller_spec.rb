@@ -206,8 +206,8 @@ describe EventsController, :type => :controller do
     describe "and filtering by date range" do
       [:start, :end].each do |date_kind|
         describe "for #{date_kind} date" do
-          let(:start_date) { Date.parse("2010-01-01") }
-          let(:end_date) { Date.parse("2010-04-01") }
+          let(:start_date) { "2010-01-01" }
+          let(:end_date) { "2010-04-01" }
           let(:date_field) { "#{date_kind}_date" }
 
           around do |example|
@@ -247,8 +247,8 @@ describe EventsController, :type => :controller do
           end
 
           it "should use the value if valid" do
-            expected = Date.yesterday
-            get :index, :date => {date_kind => expected.to_s("%Y-%m-%d")}
+            expected = Date.yesterday.to_s("%Y-%m-%d")
+            get :index, :date => {date_kind => expected}
             expect(assigns[:browse].send(date_field)).to eq expected
           end
         end

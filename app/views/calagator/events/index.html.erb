@@ -19,11 +19,11 @@
     <h4>by date</h4>
     <div id='start_calendar'>
       <label for='date_start'>From</label>
-      <%= text_field_tag 'date[start]', @browse.start_date.strftime('%Y-%m-%d'), :id => 'date_start', :class => 'date_picker' %>
+      <%= text_field_tag 'date[start]', @browse.start_date, :id => 'date_start', :class => 'date_picker' %>
     </div>
     <div id='end_calendar'>
       <label for='date_end'>To</label>
-      <%= text_field_tag 'date[end]', @browse.end_date.strftime('%Y-%m-%d'), :id => 'date_end', :class => 'date_picker' %>
+      <%= text_field_tag 'date[end]', @browse.end_date, :id => 'date_end', :class => 'date_picker' %>
     </div>
   </div>
   <div id='time_filter'>

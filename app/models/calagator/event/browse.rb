@@ -12,11 +12,11 @@ module Calagator
       end
 
       def start_date
-        date_for(:start) || Time.zone.today
+        date_for(:start).strftime('%Y-%m-%d')
       end
 
       def end_date
-        date_for(:end) || Time.zone.today + 3.months
+        date_for(:end).strftime('%Y-%m-%d')
       end
 
       def start_time
@@ -48,7 +48,7 @@ module Calagator
 
       def filter_by_date
         @scope = if date
-          scope.within_dates(start_date, end_date)
+          scope.within_dates(date_for(:start), date_for(:end))
         else
           scope.future
         end
@@ -63,12 +63,16 @@ module Calagator
 
       private
 
+      def default_date_for(kind)
+        kind == :start ? Time.zone.today : Time.zone.today + 3.months
+      end
+
       def date_for(kind)
-        return unless date.present?
+        return default_date_for(kind) unless date.present?
         Date.parse(date[kind])
       rescue NoMethodError, ArgumentError, TypeError
         errors << "Can't filter by an invalid #{kind} date."
-        nil
+        default_date_for(kind)
       end
 
       def time_for(kind)
