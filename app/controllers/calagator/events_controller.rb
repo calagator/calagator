@@ -15,10 +15,8 @@ class EventsController < Calagator::ApplicationController
     @start_date = date_or_default_for(:start)
     @end_date = date_or_default_for(:end)
 
-    query = Event.non_duplicates.ordered_by_ui_field(params[:order]).includes(:venue, :tags)
-    @events = params[:date] ?
-                query.within_dates(@start_date, @end_date) :
-                query.future
+    browse = Event::Browse.new(params, @start_date, @end_date)
+    @events = browse.events
 
    if (time = params[:time])
      if (parsed_start_time = Time.zone.parse(time[:start]) and parsed_end_time = Time.zone.parse(time[:end]))
