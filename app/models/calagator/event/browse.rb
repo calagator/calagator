@@ -46,13 +46,8 @@ module Calagator
       end
 
       def filter_by_time
-        if time_for(:start) && time_for(:end)
-          @scope = within_times(scope, time_for(:start), time_for(:end))
-        elsif time_for(:start)
-          @scope = after_time(scope, time_for(:start))
-        elsif time_for(:end)
-          @scope = before_time(scope, time_for(:end))
-        end
+        @scope = after_time if time_for(:start)
+        @scope = before_time if time_for(:end)
         self
       end
 
@@ -70,22 +65,12 @@ module Calagator
         Time.zone.parse(params[:time][kind]) rescue nil
       end
 
-      def within_times(scope, start_time, end_time)
-        scope.order(:start_time).select do |event|
-          event.start_time.hour > start_time.hour && event.end_time.hour < end_time.hour
-        end
+      def before_time
+        scope.select { |event| event.end_time.hour <= time_for(:end).hour }
       end
 
-      def before_time(scope, end_time)
-        scope.order(:end_time).select do |event|
-          event.end_time.hour < end_time.hour
-        end
-      end
-
-      def after_time(scope, start_time)
-        scope.order(:start_time).select do |event|
-          event.start_time.hour >= start_time.hour
-        end
+      def after_time
+        scope.select { |event| event.start_time.hour >= time_for(:start).hour }
       end
     end
   end
