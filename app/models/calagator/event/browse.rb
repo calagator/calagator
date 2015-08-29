@@ -6,19 +6,19 @@ module Calagator
       end
 
       def start_date
-        date_or_default_for(:start)
+        date_for(:start) || Time.zone.today
       end
 
       def end_date
-        date_or_default_for(:end)
+        date_for(:end) || Time.zone.today + 3.months
       end
 
       def start_time
-        parsed_start_time.strftime('%I:%M %p') if parsed_start_time
+        time_for(:start).strftime('%I:%M %p') if time_for(:start)
       end
 
       def end_time
-        parsed_end_time.strftime('%I:%M %p') if parsed_end_time
+        time_for(:end).strftime('%I:%M %p') if time_for(:end)
       end
 
       def errors
@@ -46,42 +46,28 @@ module Calagator
       end
 
       def filter_by_time
-        if parsed_start_time && parsed_end_time
-          @scope = within_times(scope, parsed_start_time, parsed_end_time)
-        elsif parsed_start_time
-          @scope = after_time(scope, parsed_start_time)
-        elsif parsed_end_time
-          @scope = before_time(scope, parsed_end_time)
+        if time_for(:start) && time_for(:end)
+          @scope = within_times(scope, time_for(:start), time_for(:end))
+        elsif time_for(:start)
+          @scope = after_time(scope, time_for(:start))
+        elsif time_for(:end)
+          @scope = before_time(scope, time_for(:end))
         end
         self
       end
 
       private
 
-      def default_start_date
-        Time.zone.today
-      end
-
-      def default_end_date
-        Time.zone.today + 3.months
-      end
-
-      def date_or_default_for(kind)
-        default = send("default_#{kind}_date")
-        return default unless params[:date].present?
-
+      def date_for(kind)
+        return unless params[:date].present?
         Date.parse(params[:date][kind])
       rescue NoMethodError, ArgumentError, TypeError
         errors << "Can't filter by an invalid #{kind} date."
-        default
+        nil
       end
 
-      def parsed_start_time
-        Time.zone.parse(params[:time][:start]) rescue nil
-      end
-
-      def parsed_end_time
-        Time.zone.parse(params[:time][:end]) rescue nil
+      def time_for(kind)
+        Time.zone.parse(params[:time][kind]) rescue nil
       end
 
       def within_times(scope, start_time, end_time)
