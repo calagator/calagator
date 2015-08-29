@@ -40,20 +40,20 @@ module Calagator
       end
 
       def within_times(scope, start_time, end_time)
-        scope.order(:start_time).select do |rec|
-          rec.start_time.hour > start_time.hour && rec.end_time.hour < end_time.hour
+        scope.order(:start_time).select do |event|
+          event.start_time.hour > start_time.hour && event.end_time.hour < end_time.hour
         end
       end
 
       def before_time(scope, end_time)
-        scope.order(:end_time).select do |rec|
-          rec.end_time.hour < end_time.hour
+        scope.order(:end_time).select do |event|
+          event.end_time.hour < end_time.hour
         end
       end
 
       def after_time(scope, start_time)
-        scope.order(:start_time).select do |rec|
-          rec.start_time.hour >= start_time.hour
+        scope.order(:start_time).select do |event|
+          event.start_time.hour >= start_time.hour
         end
       end
     end
