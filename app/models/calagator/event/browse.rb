@@ -2,23 +2,7 @@ module Calagator
   class Event < ActiveRecord::Base
     class Browse < Struct.new(:params, :start_date, :end_date)
       def events
-        scope = Event.non_duplicates.ordered_by_ui_field(params[:order]).includes(:venue, :tags)
-
-        scope = if params[:date]
-          scope.within_dates(start_date, end_date)
-        else
-          scope.future
-        end
-
-        if parsed_start_time && parsed_end_time
-          scope = within_times(scope, parsed_start_time, parsed_end_time)
-        elsif parsed_start_time
-          scope = after_time(scope, parsed_start_time)
-        elsif parsed_end_time
-          scope = before_time(scope, parsed_end_time)
-        end
-
-        scope
+        order.filter_by_date.filter_by_time.scope
       end
 
       def start_time
@@ -27,6 +11,37 @@ module Calagator
 
       def end_time
         parsed_end_time.strftime('%I:%M %p') if parsed_end_time
+      end
+
+      protected
+
+      def scope
+        @scope ||= Event.non_duplicates.includes(:venue, :tags)
+      end
+
+      def order
+        @scope = scope.ordered_by_ui_field(params[:order])
+        self
+      end
+
+      def filter_by_date
+        @scope = if params[:date]
+          scope.within_dates(start_date, end_date)
+        else
+          scope.future
+        end
+        self
+      end
+
+      def filter_by_time
+        if parsed_start_time && parsed_end_time
+          @scope = within_times(scope, parsed_start_time, parsed_end_time)
+        elsif parsed_start_time
+          @scope = after_time(scope, parsed_start_time)
+        elsif parsed_end_time
+          @scope = before_time(scope, parsed_end_time)
+        end
+        self
       end
 
       private
