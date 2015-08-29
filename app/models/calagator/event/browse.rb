@@ -1,6 +1,6 @@
 module Calagator
   class Event < ActiveRecord::Base
-    class Browse < Struct.new(:params, :controller)
+    class Browse < Struct.new(:params)
       def events
         order.filter_by_date.filter_by_time.scope
       end
@@ -19,6 +19,10 @@ module Calagator
 
       def end_time
         parsed_end_time.strftime('%I:%M %p') if parsed_end_time
+      end
+
+      def errors
+        @errors ||= []
       end
 
       protected
@@ -68,7 +72,7 @@ module Calagator
 
         Date.parse(params[:date][kind])
       rescue NoMethodError, ArgumentError, TypeError
-        controller.send :append_flash, :failure, "Can't filter by an invalid #{kind} date."
+        errors << "Can't filter by an invalid #{kind} date."
         default
       end
 
