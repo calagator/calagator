@@ -1,35 +1,16 @@
 module Calagator
   class Event < ActiveRecord::Base
     class Browse < Struct.new(:params, :controller)
-      attr_reader :start_date, :end_date
-
-      # Return the default start date.
-      def default_start_date
-        Time.zone.today
-      end
-
-      # Return the default end date.
-      def default_end_date
-        Time.zone.today + 3.months
-      end
-
-      # Return a date parsed from user arguments or a default date. The +kind+
-      # is a value like :start, which refers to the `params[:date][+kind+]` value.
-      # If there's an error, set an error message to flash.
-      def date_or_default_for(kind)
-        default = send("default_#{kind}_date")
-        return default unless params[:date].present?
-
-        Date.parse(params[:date][kind])
-      rescue NoMethodError, ArgumentError, TypeError
-        controller.send :append_flash, :failure, "Can't filter by an invalid #{kind} date."
-        default
-      end
-
       def events
-        @start_date = date_or_default_for(:start)
-        @end_date = date_or_default_for(:end)
         order.filter_by_date.filter_by_time.scope
+      end
+
+      def start_date
+        date_or_default_for(:start)
+      end
+
+      def end_date
+        date_or_default_for(:end)
       end
 
       def start_time
@@ -72,6 +53,24 @@ module Calagator
       end
 
       private
+
+      def default_start_date
+        Time.zone.today
+      end
+
+      def default_end_date
+        Time.zone.today + 3.months
+      end
+
+      def date_or_default_for(kind)
+        default = send("default_#{kind}_date")
+        return default unless params[:date].present?
+
+        Date.parse(params[:date][kind])
+      rescue NoMethodError, ArgumentError, TypeError
+        controller.send :append_flash, :failure, "Can't filter by an invalid #{kind} date."
+        default
+      end
 
       def parsed_start_time
         Time.zone.parse(params[:time][:start]) rescue nil
