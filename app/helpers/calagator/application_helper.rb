@@ -51,18 +51,16 @@ module ApplicationHelper
 
   # returns html markup with source (if any), imported/created time, and - if modified - modified time
   def datestamp(item)
-    stamp = "This item was "
-    if item.source.nil?
-      stamp << "added directly to #{Calagator.title}"
+    source = if item.source.nil?
+      "added directly to #{Calagator.title}"
     else
-      stamp << "imported from " << link_to(truncate(item.source.name, :length => 40), url_for(item.source))
+      "imported from #{link_to truncate(item.source.name, length: 40), url_for(item.source)}"
     end
-    stamp << " <br />" << content_tag(:strong, normalize_time(item.created_at, :format => :html) )
-    if item.updated_at > item.created_at
-      stamp << " and last updated <br />" << content_tag(:strong, normalize_time(item.updated_at, :format => :html) )
+    created = " <br /><strong>#{normalize_time(item.created_at, format: :html)}</strong>"
+    updated = if item.updated_at > item.created_at
+      " and last updated <br /><strong>#{normalize_time(item.updated_at, format: :html)}</strong>"
     end
-    stamp << "."
-    stamp.html_safe
+    raw "This item was #{source}#{created}#{updated}."
   end
 
   # Caches +block+ in view only if the +condition+ is true.
