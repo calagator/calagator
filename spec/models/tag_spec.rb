@@ -20,7 +20,7 @@ describe ActsAsTaggableOn::Tag, :type => :model do
       expect(@valid_machine_tag.machine_tag[:url]).to eq "http://www.meetup.com/1234"
     end
 
-    it "should redirect to 'defunct' page with archive url as query param" do
+    it "should redirect to 'defunct' page with archive url as query param when using a defunct provider" do
       @event = FactoryGirl.create :event, tag_list: 'upcoming:event=1234'
       event_date = @event.start_time.strftime("%Y%m%d")
       expect(@event.tags.last.machine_tag[:url]).to eq "http://localhost:3000/defunct?url=https://web.archive.org/web/#{event_date}/http://upcoming.yahoo.com/event/1234"
