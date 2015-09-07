@@ -100,11 +100,6 @@ module ApplicationHelper
     # TODO Figure out how to set tabindex, because neither of these work right.
   end
 
-  # Returns a string with safely encoded entities thanks to #h, while preserving any existing HTML entities.
-  def cleanse(string)
-    return escape_once(string)
-  end
-
   def subnav_class_for(controller_name, action_name)
     return [
       "#{controller.controller_name}_#{controller.action_name}_subnav",
