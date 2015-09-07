@@ -64,32 +64,68 @@ module TagModelExtensions
   #     :value     => "1234",
   #     :url       => "http://www.meetup.com/1234",
   def machine_tag
-    if components = self.name.match(MACHINE_TAG_PATTERN)
-      namespace, predicate, value = components.captures
+    return {} unless matches?
+    {
+      namespace: namespace,
+      predicate: predicate,
+      value:     value,
+      url:       url,
+    }
+  end
 
-      result = {
-        :namespace => namespace,
-        :predicate => predicate,
-        :value     => value,
-      }
+  private
 
-      if machine_tag = MACHINE_TAG_URLS[namespace]
-        if url_template = machine_tag[predicate]
-          result[:url] = sprintf(url_template, value)
-          if namespace =~ /\A(upcoming|gowalla|shizzow)\Z/
-            domain = "http://localhost:3000" if Rails.env.development? || Rails.env.test?
-            domain = "http://calagator.org" if Rails.env.production?
-            archive_date = Event.tagged_with(self).first.start_time.strftime("%Y%m%d") if Event.tagged_with(self).first
-            archive_date = Venue.tagged_with(self).first.created_at.strftime("%Y%m%d") if Venue.tagged_with(self).first
-            result[:url] = "#{domain}/defunct?url=https://web.archive.org/web/#{archive_date}/#{result[:url]}"
-          end
+  def matches?
+    name =~ MACHINE_TAG_PATTERN
+  end
+
+  def namespace
+    components = name.match(MACHINE_TAG_PATTERN)
+    namespace, predicate, value = components.captures
+    namespace
+  end
+
+  def predicate
+    components = name.match(MACHINE_TAG_PATTERN)
+    namespace, predicate, value = components.captures
+    predicate
+  end
+
+  def value
+    components = name.match(MACHINE_TAG_PATTERN)
+    namespace, predicate, value = components.captures
+    value
+  end
+
+  def url
+    url = nil
+    if machine_tag = MACHINE_TAG_URLS[namespace]
+      if url_template = machine_tag[predicate]
+        url = sprintf(url_template, value)
+        if namespace =~ /\A(upcoming|gowalla|shizzow)\Z/
+          url = "#{domain}/defunct?url=https://web.archive.org/web/#{archive_date}/#{url}"
         end
       end
-
-      return result
-    else
-      return {}
     end
+    url
+  end
+
+  def archive_date
+    return event.start_time.strftime("%Y%m%d") if event
+    return venue.created_at.strftime("%Y%m%d") if venue
+  end
+
+  def event
+    Event.tagged_with(self).first
+  end
+
+  def venue
+    Venue.tagged_with(self).first
+  end
+
+  def domain
+    return "http://localhost:3000" if Rails.env.development? || Rails.env.test?
+    return "http://calagator.org" if Rails.env.production?
   end
 end
 
