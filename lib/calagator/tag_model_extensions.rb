@@ -43,7 +43,7 @@ module TagModelExtensions
   } unless defined?(MACHINE_TAG_URLS)
 
   # Regular expression for parsing machine tags
-  MACHINE_TAG_PATTERN = /([^:]+):([^=]+)=(.+)/ unless defined?(MACHINE_TAG_PATTERN)
+  MACHINE_TAG_PATTERN = /(?<namespace>[^:]+):(?<predicate>[^=]+)=(?<value>.+)/ unless defined?(MACHINE_TAG_PATTERN)
 
   # Machine tag predicates that refer to place entries
   VENUE_PREDICATES = %w(venue place spot biz) unless defined?(VENUE_PREDICATES)
@@ -64,7 +64,7 @@ module TagModelExtensions
   #     :value     => "1234",
   #     :url       => "http://www.meetup.com/1234",
   def machine_tag
-    return {} unless matches?
+    return {} unless matches
     {
       namespace: namespace,
       predicate: predicate,
@@ -75,26 +75,20 @@ module TagModelExtensions
 
   private
 
-  def matches?
-    name =~ MACHINE_TAG_PATTERN
+  def matches
+    name.match(MACHINE_TAG_PATTERN)
   end
 
   def namespace
-    components = name.match(MACHINE_TAG_PATTERN)
-    namespace, predicate, value = components.captures
-    namespace
+    matches[:namespace]
   end
 
   def predicate
-    components = name.match(MACHINE_TAG_PATTERN)
-    namespace, predicate, value = components.captures
-    predicate
+    matches[:predicate]
   end
 
   def value
-    components = name.match(MACHINE_TAG_PATTERN)
-    namespace, predicate, value = components.captures
-    value
+    matches[:value]
   end
 
   def url
