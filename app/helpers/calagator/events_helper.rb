@@ -34,7 +34,7 @@ module EventsHelper
   end
 
   def google_maps_url(address)
-    return "http://maps.google.com/maps?q=#{cgi_escape(address)}"
+    "http://maps.google.com/maps?q=#{URI.encode(address)}"
   end
 
   #---[ Event sorting ]----------------------------------------------------

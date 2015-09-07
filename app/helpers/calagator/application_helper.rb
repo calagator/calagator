@@ -108,11 +108,6 @@ module ApplicationHelper
         nil
     ].compact.join(" ")
   end
-
-  # CGI escape a string-like object. The issue is that CGI::escape fails if used on a RailsXss SafeBuffer: https://github.com/rails/rails_xss/issues/8
-  def cgi_escape(data)
-    return CGI::escape(data.to_str)
-  end
 end
 
 end
