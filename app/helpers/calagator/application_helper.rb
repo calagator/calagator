@@ -73,26 +73,6 @@ module ApplicationHelper
     end
   end
 
-  # Insert a chunk of +javascript+ into the page, and execute it when the document is ready.
-  def insert_javascript(javascript)
-    content_for(:javascript_insert) do
-      (<<-HERE).html_safe
-        <script>
-          $(document).ready(function() {
-            #{javascript}
-          });
-        </script>
-      HERE
-    end
-  end
-
-  # Focus cursor on DOM element specified by +xpath_query+ using JavaScript, e.g.:
-  #
-  #   <% focus_on '#search_field' %>
-  def focus_on(xpath_query)
-    insert_javascript "$('#{xpath_query}').focus();"
-  end
-
   def subnav_class_for(controller_name, action_name)
     css_class = "#{controller.controller_name}_#{controller.action_name}_subnav"
     css_class += " active" if [controller.controller_name, controller.action_name] == [controller_name, action_name]

@@ -3,8 +3,7 @@
     <li class='input'>
       <p class='inline-hints'>You can <%= venue.new_record? ? "enter" : "edit" %> the details of your venue below.  The more information we have about your venue, the easier it will be for people to find it.</p>
     </li>
-    <%= f.input :title, :label => "Venue Name" %>
-    <% focus_on '#venue_title' %>
+    <%= f.input :title, label: "Venue Name", input_html: { autofocus: true } %>
     <%= f.input :address, :label => "Full Address", :hint => "(one-line version of full address)" %>
 
     <% unless venue.new_record? %>

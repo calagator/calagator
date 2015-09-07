@@ -8,8 +8,7 @@
         <%= Calagator::Source::Parser.labels.to_sentence %>
       </p>
     </li>
-    <%= f.input :url, :label => "URL" %>
-    <% focus_on '#source_url' %>
+    <%= f.input :url, label: "URL", input_html: { autofocus: true } %>
   <% end %>
 
   <%= f.actions do %>
