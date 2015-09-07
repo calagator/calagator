@@ -95,7 +95,7 @@ module TagModelExtensions
     return unless machine_tag = MACHINE_TAG_URLS[namespace]
     return unless url_template = machine_tag[predicate]
     url = sprintf(url_template, value)
-    url = "#{domain}/defunct?url=https://web.archive.org/web/#{archive_date}/#{url}" if defunct?
+    url = "#{site_root_url}defunct?url=https://web.archive.org/web/#{archive_date}/#{url}" if defunct?
     url
   end
 
@@ -115,8 +115,8 @@ module TagModelExtensions
     Event.tagged_with(self).limit(1).pluck(:start_time).first
   end
 
-  def domain
-    Rails.env.production? ? "http://calagator.org" : "http://localhost:3000"
+  def site_root_url
+    Calagator.url
   end
 end
 
