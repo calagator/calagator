@@ -92,16 +92,15 @@ module TagModelExtensions
   end
 
   def url
-    url = nil
-    if machine_tag = MACHINE_TAG_URLS[namespace]
-      if url_template = machine_tag[predicate]
-        url = sprintf(url_template, value)
-        if namespace =~ /\A(upcoming|gowalla|shizzow)\Z/
-          url = "#{domain}/defunct?url=https://web.archive.org/web/#{archive_date}/#{url}"
-        end
-      end
-    end
+    return unless machine_tag = MACHINE_TAG_URLS[namespace]
+    return unless url_template = machine_tag[predicate]
+    url = sprintf(url_template, value)
+    url = "#{domain}/defunct?url=https://web.archive.org/web/#{archive_date}/#{url}" if defunct?
     url
+  end
+
+  def defunct?
+    %w(upcoming gowalla shizzow).include? namespace
   end
 
   def archive_date
