@@ -2,14 +2,6 @@
 module Calagator
 
 module TagModelExtensions
-  def self.included(base)
-    base.class_eval do
-      scope :machine_tags, -> { where("name LIKE '%:%=%'") }
-    end
-  end
-
-  #---[ Machine tags ]----------------------------------------------------
-
   # Structure of machine tag namespaces and predicates to their URLs. See
   # #machine_tag for details.
   MACHINE_TAG_URLS = {
