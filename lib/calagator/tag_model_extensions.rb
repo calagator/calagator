@@ -104,21 +104,19 @@ module TagModelExtensions
   end
 
   def archive_date
-    return event.start_time.strftime("%Y%m%d") if event
-    return venue.created_at.strftime("%Y%m%d") if venue
+    (venue_date || event_date).strftime("%Y%m%d")
   end
 
-  def event
-    Event.tagged_with(self).first
+  def venue_date
+    Venue.tagged_with(self).limit(1).pluck(:created_at).first
   end
 
-  def venue
-    Venue.tagged_with(self).first
+  def event_date
+    Event.tagged_with(self).limit(1).pluck(:start_time).first
   end
 
   def domain
-    return "http://localhost:3000" if Rails.env.development? || Rails.env.test?
-    return "http://calagator.org" if Rails.env.production?
+    Rails.env.production? ? "http://calagator.org" : "http://localhost:3000"
   end
 end
 
