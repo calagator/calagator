@@ -101,12 +101,9 @@ module ApplicationHelper
   end
 
   def subnav_class_for(controller_name, action_name)
-    return [
-      "#{controller.controller_name}_#{controller.action_name}_subnav",
-      controller.controller_name == controller_name && controller.action_name == action_name ?
-        "active" :
-        nil
-    ].compact.join(" ")
+    css_class = "#{controller.controller_name}_#{controller.action_name}_subnav"
+    css_class += " active" if [controller.controller_name, controller.action_name] == [controller_name, action_name]
+    css_class
   end
 end
 
