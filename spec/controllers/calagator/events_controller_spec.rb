@@ -204,90 +204,33 @@ describe EventsController, :type => :controller do
     end
 
     describe "and filtering by date range" do
-      [:start, :end].each do |date_kind|
-        describe "for #{date_kind} date" do
-          let(:start_date) { Date.parse("2010-01-01") }
-          let(:end_date) { Date.parse("2010-04-01") }
-          let(:date_field) { "#{date_kind}_date" }
+      let!(:within) { [
+        Event.create!(
+          title: "matching1",
+          start_time: Time.zone.parse("2010-01-16 00:00"),
+          end_time: Time.zone.parse("2010-01-16 01:00")
+        ),
+      ] }
 
-          around do |example|
-            Timecop.freeze(start_date) do
-              example.run
-            end
-          end
+      let!(:before) { [
+        Event.create!(
+          title: "nonmatchingbefore",
+          start_time: Time.zone.parse("2010-01-15 23:00"),
+          end_time: Time.zone.parse("2010-01-15 23:59")
+        ),
+      ] }
 
-          it "should use the default if not given the parameter" do
-            get :index, :date => {}
-            expect(assigns[date_field]).to eq send(date_field)
-            expect(flash[:failure]).to be_nil
-          end
-
-          it "should use the default if given a malformed parameter" do
-            get :index, :date => "omgkittens"
-            expect(assigns[date_field]).to eq send(date_field)
-            expect(response.body).to have_selector(".flash_failure", text: 'invalid')
-          end
-
-          it "should use the default if given a missing parameter" do
-            get :index, :date => {:foo => "bar"}
-            expect(assigns[date_field]).to eq send(date_field)
-            expect(response.body).to have_selector(".flash_failure", text: 'invalid')
-          end
-
-          it "should use the default if given an empty parameter" do
-            get :index, :date => {date_kind => ""}
-            expect(assigns[date_field]).to eq send(date_field)
-            expect(response.body).to have_selector(".flash_failure", text: 'invalid')
-          end
-
-          it "should use the default if given an invalid parameter" do
-            get :index, :date => {date_kind => "omgkittens"}
-            expect(assigns[date_field]).to eq send(date_field)
-            expect(response.body).to have_selector(".flash_failure", text: 'invalid')
-          end
-
-          it "should use the value if valid" do
-            expected = Date.yesterday
-            get :index, :date => {date_kind => expected.to_s("%Y-%m-%d")}
-            expect(assigns[date_field]).to eq expected
-          end
-        end
-      end
+      let!(:after) { [
+        Event.create!(
+          title: "nonmatchingafter",
+          start_time: Time.zone.parse("2010-01-17 00:01"),
+          end_time: Time.zone.parse("2010-01-17 01:00")
+        ),
+      ] }
 
       it "should return matching events" do
-        # Given
-        matching = [
-          Event.create!(
-            :title => "matching1",
-            :start_time => Time.zone.parse("2010-01-16 00:00"),
-            :end_time => Time.zone.parse("2010-01-16 01:00")
-          ),
-          Event.create!(:title => "matching2",
-            :start_time => Time.zone.parse("2010-01-16 23:00"),
-            :end_time => Time.zone.parse("2010-01-17 00:00")
-          ),
-        ]
-
-        non_matching = [
-          Event.create!(
-            :title => "nonmatchingbefore",
-            :start_time => Time.zone.parse("2010-01-15 23:00"),
-            :end_time => Time.zone.parse("2010-01-15 23:59")
-          ),
-          Event.create!(
-            :title => "nonmatchingafter",
-            :start_time => Time.zone.parse("2010-01-17 00:01"),
-            :end_time => Time.zone.parse("2010-01-17 01:00")
-          ),
-        ]
-
-        # When
-        get :index, :date => {:start => "2010-01-16", :end => "2010-01-16"}
-        results = assigns[:events]
-
-        # Then
-        expect(results.size).to eq 2
-        expect(results).to eq matching
+        get :index, date: { start: "2010-01-16", end: "2010-01-16" }
+        expect(assigns[:events]).to eq within
       end
     end
 
