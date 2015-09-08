@@ -30,48 +30,53 @@ html_classes << " contentbar" if has_contentbar
 
     <% unless event.venue.blank? %>
       <div id='location' class='property'>
-          <div class="property-detail clearfix location p-location h-card vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
-            <a class="url u-url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
-              <span class='fn org p-name' itemprop="name"><%= event.venue.title -%></span>
-            </a>
-            <% if event.venue.closed? %><p class='closed_callout'>This venue is no longer open for business.</p><% end %>
-            <div class="adr p-adr h-adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-              <% if !event.venue.street_address.blank? -%>
-                <div class="street-address p-street-address" itemprop="streetAddress"><%= event.venue.street_address -%></div>
-              <% end %>
-              <% if !event.venue.locality.blank? -%>
-                <span class="locality p-locality" itemprop="addressLocality"><%= event.venue.locality -%></span><%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
-              <% end -%>
-              <% if !event.venue.region.blank? -%>
-                <span class="region p-region" itemprop="addressRegion"><%= event.venue.region -%></span><%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
-              <% end -%>
-              <% if !event.venue.postal_code.blank? -%>
-                <span class="postal-code p-postal-code"  itemprop="postalCode"><%= event.venue.postal_code -%></span><%= "," if  event.venue.country.present? %>
-              <% end -%>
-              <% if !event.venue.country.blank? -%>
-                <span class='country-name p-country-name'><%= event.venue.country -%></span>
-              <% end -%>
-              <% if event.venue && event.venue.has_full_address? -%>
-                <a class='button button--google-maps' href='<%=google_maps_url(event.venue.full_address) -%>'>Open in Google Maps</a>
-              <% end -%>
-              <% if event.venue.wifi? -%>
-                <div class='wifi_callout'>Public WiFi</div>
-              <% end -%>
-              <% if event.venue.access_notes.present? -%>
-                <div class="access_notes">
-                  <h3>Access Notes</h3>
-                  <%= format_description event.venue.access_notes %>
-                </div>
-              <% end -%>
-            <% unless event.venue_details.blank? -%>
-              <p class="p-description">
-                <%= format_description(event.venue_details) %>
-              </p>
+        <div class="property-detail clearfix location p-location h-card vcard<%= " closed" if event.venue.closed? %>"  itemprop="location" itemscope itemtype="http://schema.org/Place">
+          <a class="url u-url" href='<%= event.venue.new_record? ? "#" : venue_url(event.venue) %>'>
+            <span class='fn org p-name' itemprop="name"><%= event.venue.title -%></span>
+          </a>
+          <% if event.venue.closed? %>
+            <p class='closed_callout'>This venue is no longer open for business.</p>
+          <% end %>
+          <div class="adr p-adr h-adr" itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
+            <% if !event.venue.street_address.blank? -%>
+              <div class="street-address p-street-address" itemprop="streetAddress"><%= event.venue.street_address -%></div>
+            <% end %>
+            <% if !event.venue.locality.blank? -%>
+              <span class="locality p-locality" itemprop="addressLocality"><%= event.venue.locality -%></span>
+              <%= "," if event.venue.region.present? or event.venue.postal_code.present? or event.venue.country.present? %>
+            <% end -%>
+            <% if !event.venue.region.blank? -%>
+              <span class="region p-region" itemprop="addressRegion"><%= event.venue.region -%></span>
+              <%= "," if event.venue.country.present? and not event.venue.postal_code.present? %>
+            <% end -%>
+            <% if !event.venue.postal_code.blank? -%>
+              <span class="postal-code p-postal-code"  itemprop="postalCode"><%= event.venue.postal_code -%></span>
+              <%= "," if  event.venue.country.present? %>
+            <% end -%>
+            <% if !event.venue.country.blank? -%>
+              <span class='country-name p-country-name'><%= event.venue.country -%></span>
+            <% end -%>
+            <% if event.venue && event.venue.has_full_address? -%>
+              <a class='button button--google-maps' href='<%=google_maps_url(event.venue.full_address) -%>'>Open in Google Maps</a>
+            <% end -%>
+            <% if event.venue.wifi? -%>
+              <div class='wifi_callout'>Public WiFi</div>
+            <% end -%>
+            <% if event.venue.access_notes.present? -%>
+              <div class="access_notes">
+                <h3>Access Notes</h3>
+                <%= format_description event.venue.access_notes %>
+              </div>
             <% end -%>
           </div>
-        <% end -%>
+          <% unless event.venue_details.blank? -%>
+            <p class="p-description">
+              <%= format_description(event.venue_details) %>
+            </p>
+          <% end -%>
+        </div>
       </div>
-    </div>
+    <% end -%>
 
     <% unless event.description.blank? -%>
       <div id='description' class='property'>
