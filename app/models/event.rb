@@ -52,6 +52,8 @@ class Event < ActiveRecord::Base
 
   before_destroy :verify_lock_status
 
+  validates_length_of :title, :url, :rrule, :contact_information, :signup_instructions, maximum: 255
+
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
