@@ -30,6 +30,18 @@ describe ActsAsTaggableOn::Tag, :type => :model do
       end
     end
 
+    describe "#venue?" do
+      it "knows when its a venue" do
+        subject = ActsAsTaggableOn::Tag.new(name: 'upcoming:venue=1234')
+        expect(subject.machine_tag.venue?).to be_truthy
+      end
+
+      it "knows when its not a venue" do
+        subject = ActsAsTaggableOn::Tag.new(name: 'meetup:group=1234')
+        expect(subject.machine_tag.venue?).to be_falsy
+      end
+    end
+
     context "when invalid" do
       subject do
         ActsAsTaggableOn::Tag.new(name: 'not a machine tag')
