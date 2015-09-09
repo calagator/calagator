@@ -8,6 +8,10 @@ class MachineTag < Struct.new(:name)
     end
   end
 
+  def self.configure
+    yield self
+  end
+
   cattr_accessor(:urls) { Hash.new }
   cattr_accessor(:venue_predicates) { Array.new }
   cattr_accessor(:defunct_namespaces) { Array.new }
