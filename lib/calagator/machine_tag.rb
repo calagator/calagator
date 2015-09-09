@@ -11,6 +11,7 @@ class MachineTag < Struct.new(:name)
   cattr_accessor(:urls) { Hash.new }
   cattr_accessor(:venue_predicates) { Array.new }
   cattr_accessor(:defunct_namespaces) { Array.new }
+  cattr_accessor(:site_root_url) { "http://example.com/" }
 
   # Return a machine tag hash for this tag, or an empty hash if this isn't a
   # machine tag. The hash will always contain :namespace, :predicate and :value
@@ -84,10 +85,6 @@ class MachineTag < Struct.new(:name)
 
   def event_date
     Event.tagged_with(name).limit(1).pluck(:start_time).first
-  end
-
-  def site_root_url
-    Calagator.url
   end
 end
 

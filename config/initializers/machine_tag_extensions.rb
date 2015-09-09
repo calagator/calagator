@@ -45,3 +45,5 @@ Calagator::MachineTag.venue_predicates = %w(venue place spot biz)
 
 Calagator::MachineTag.defunct_namespaces = %w(upcoming gowalla shizzow)
 
+Calagator::MachineTag.site_root_url = Calagator.url
+
