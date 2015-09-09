@@ -78,6 +78,10 @@ module TagModelExtensions
       }
     end
 
+    def venue?
+      VENUE_PREDICATES.include? predicate
+    end
+
     private
 
     def matches

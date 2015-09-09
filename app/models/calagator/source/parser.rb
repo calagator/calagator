@@ -84,8 +84,7 @@ class Source::Parser < Struct.new(:opts)
       duplicates.first.progenitor
     else
       venue_machine_tag_name = venue.tag_list.find do |tag_name|
-        predicate = TagModelExtensions::MachineTag.new(tag_name).to_hash[:predicate]
-        ActsAsTaggableOn::Tag::VENUE_PREDICATES.include? predicate
+        TagModelExtensions::MachineTag.new(tag_name).venue?
       end
       matched_venue = Venue.tagged_with(venue_machine_tag_name).first
 
