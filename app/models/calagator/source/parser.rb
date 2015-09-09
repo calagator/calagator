@@ -84,7 +84,7 @@ class Source::Parser < Struct.new(:opts)
       duplicates.first.progenitor
     else
       venue_machine_tag_name = venue.tag_list.find do |tag_name|
-        TagModelExtensions::MachineTag.new(tag_name).venue?
+        MachineTag.new(tag_name).venue?
       end
       matched_venue = Venue.tagged_with(venue_machine_tag_name).first
 

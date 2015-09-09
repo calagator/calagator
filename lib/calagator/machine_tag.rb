@@ -1,7 +1,13 @@
 # We're extending ActsAsTaggableOn's Tag model to include support for machine tags and such.
 module Calagator
 
-module TagModelExtensions
+class MachineTag < Struct.new(:name)
+  module TagExtensions
+    def machine_tag
+      MachineTag.new(name).to_hash
+    end
+  end
+
   # Structure of machine tag namespaces and predicates to their URLs. See
   # #machine_tag for details.
   MACHINE_TAG_URLS = {
@@ -63,70 +69,64 @@ module TagModelExtensions
   #     :predicate => "group",
   #     :value     => "1234",
   #     :url       => "http://www.meetup.com/1234",
-  def machine_tag
-    MachineTag.new(name).to_hash
+  def to_hash
+    return {} unless matches
+    {
+      namespace: namespace,
+      predicate: predicate,
+      value:     value,
+      url:       url,
+    }
   end
 
-  class MachineTag < Struct.new(:name)
-    def to_hash
-      return {} unless matches
-      {
-        namespace: namespace,
-        predicate: predicate,
-        value:     value,
-        url:       url,
-      }
-    end
+  def venue?
+    VENUE_PREDICATES.include? predicate
+  end
 
-    def venue?
-      VENUE_PREDICATES.include? predicate
-    end
+  private
 
-    private
+  def matches
+    name.match(MACHINE_TAG_PATTERN)
+  end
 
-    def matches
-      name.match(MACHINE_TAG_PATTERN)
-    end
+  def namespace
+    matches[:namespace]
+  end
 
-    def namespace
-      matches[:namespace]
-    end
+  def predicate
+    matches[:predicate]
+  end
 
-    def predicate
-      matches[:predicate]
-    end
+  def value
+    matches[:value]
+  end
 
-    def value
-      matches[:value]
-    end
+  def url
+    return unless machine_tag = MACHINE_TAG_URLS[namespace]
+    return unless url_template = machine_tag[predicate]
+    url = sprintf(url_template, value)
+    url = "#{site_root_url}defunct?url=https://web.archive.org/web/#{archive_date}/#{url}" if defunct?
+    url
+  end
 
-    def url
-      return unless machine_tag = MACHINE_TAG_URLS[namespace]
-      return unless url_template = machine_tag[predicate]
-      url = sprintf(url_template, value)
-      url = "#{site_root_url}defunct?url=https://web.archive.org/web/#{archive_date}/#{url}" if defunct?
-      url
-    end
+  def defunct?
+    %w(upcoming gowalla shizzow).include? namespace
+  end
 
-    def defunct?
-      %w(upcoming gowalla shizzow).include? namespace
-    end
+  def archive_date
+    (venue_date || event_date).strftime("%Y%m%d")
+  end
 
-    def archive_date
-      (venue_date || event_date).strftime("%Y%m%d")
-    end
+  def venue_date
+    Venue.tagged_with(name).limit(1).pluck(:created_at).first
+  end
 
-    def venue_date
-      Venue.tagged_with(name).limit(1).pluck(:created_at).first
-    end
+  def event_date
+    Event.tagged_with(name).limit(1).pluck(:start_time).first
+  end
 
-    def event_date
-      Event.tagged_with(name).limit(1).pluck(:start_time).first
-    end
-
-    def site_root_url
-      Calagator.url
-    end
+  def site_root_url
+    Calagator.url
   end
 end
 
