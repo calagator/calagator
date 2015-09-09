@@ -9,11 +9,11 @@ module TagsHelper
     internal_url = "/#{type.pluralize}/tag/#{tag.name}"
 
     link_classes = [link_class, "p-category"]
-    link_classes << "external #{tag.machine_tag[:namespace]} #{tag.machine_tag[:predicate]}" if tag.machine_tag[:url]
+    link_classes << "external #{tag.machine_tag.namespace} #{tag.machine_tag.predicate}" if tag.machine_tag.url
 
     link_text = [tag_icon(tag.name), escape_once(tag.name)].compact.join(' ').html_safe
 
-    link_to link_text, (tag.machine_tag[:url] || internal_url), :class => link_classes.compact.join(' ')
+    link_to link_text, (tag.machine_tag.url || internal_url), class: link_classes.compact.join(' ')
   end
   private :tag_link
 
