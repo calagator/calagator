@@ -54,6 +54,8 @@ class MachineTag < Struct.new(:name)
   # Machine tag predicates that refer to place entries
   VENUE_PREDICATES = %w(venue place spot biz) unless defined?(VENUE_PREDICATES)
 
+  DEFUNCT_NAMESPACES = %w(upcoming gowalla shizzow)
+
   # Return a machine tag hash for this tag, or an empty hash if this isn't a
   # machine tag. The hash will always contain :namespace, :predicate and :value
   # key-value pairs. It may also contain an :url if one is known.
@@ -110,7 +112,7 @@ class MachineTag < Struct.new(:name)
   end
 
   def defunct?
-    %w(upcoming gowalla shizzow).include? namespace
+    DEFUNCT_NAMESPACES.include? namespace
   end
 
   def archive_date
