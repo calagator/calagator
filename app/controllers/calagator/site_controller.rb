@@ -29,6 +29,8 @@ class SiteController < Calagator::ApplicationController
   end
 
   def defunct
+    @url = params[:url]
+    raise ArgumentError if /^javascript:/.match(@url)
   end
 end
 
