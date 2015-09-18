@@ -78,7 +78,7 @@ class Venue < ActiveRecord::Base
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi, :access_notes
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
-  duplicate_finding_scope -> { non_duplicates.order('LOWER(venues.title)') }
+  duplicate_finding_scope -> { non_duplicates.order('LOWER(venues.title), venues.id') }
 
   # Named scopes
   scope :masters,          -> { non_duplicates.includes(:source, :events, :tags, :taggings) }
