@@ -116,27 +116,15 @@ module DuplicateChecking
       self._duplicate_finding_duplicate_scope
     end
 
-    # Return Hash of Events grouped by the +type+.
+    # Return Hash of duplicate events grouped by the +type+.
     def find_duplicates_by_type(type='na')
       case type.to_s.strip
       when 'na', ''
         { [] => duplicate_finding_na_scope.call }
       else
-        kind = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
-        find_duplicates_by(kind, where: duplicate_finding_duplicate_scope.call)
+        fields = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
+        DuplicateFinder.new(self, fields, where: duplicate_finding_duplicate_scope.call).find
       end
-    end
-
-    # Return events with duplicate values for a given set of fields.
-    #
-    # Options:
-    # * :grouped => Return Hash of events grouped by commonality, rather than returning an Array. Defaults to false.
-    # * :where => String that specifies additional arguments to add to the WHERE clause.
-    # * :select => String that specified additional arguments to add to the SELECT clause.
-    # * :from => String that specifies additional arguments to add to the FROM clause
-    # * :joins => String that specifies additional argument to add to a JOINS clause.
-    def find_duplicates_by(fields, options={})
-      DuplicateFinder.new(self, fields, options).find
     end
 
     # Squash duplicates. Options accept ActiveRecord instances or IDs.

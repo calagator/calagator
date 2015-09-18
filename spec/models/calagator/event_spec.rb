@@ -143,42 +143,6 @@ describe Event, :type => :model do
     end
   end
 
-  describe "when finding duplicates by type" do
-    def assert_default_find_duplicates_by_type(type)
-      expect(Event).to receive(:future).and_return 42
-      expect(Event.find_duplicates_by_type(type)).to eq({ [] => 42 })
-    end
-
-    it "should find all future events if called with nil" do
-      assert_default_find_duplicates_by_type(nil)
-    end
-
-    it "should find all future events if called with empty string" do
-      assert_default_find_duplicates_by_type('')
-    end
-
-    it "should find all future events if called with 'na'" do
-      assert_default_find_duplicates_by_type('na')
-    end
-
-    def assert_specific_find_by_duplicates_by(type, queried)
-      expect(Event).to receive(:find_duplicates_by).with(queried, where: anything())
-      Event.find_duplicates_by_type(type)
-    end
-
-    it "should find events with all duplicate fields if called with 'all'" do
-      assert_specific_find_by_duplicates_by('all', :all)
-    end
-
-    it "should find events with any duplicate fields if called with 'any'" do
-      assert_specific_find_by_duplicates_by('any', :any)
-    end
-
-    it "should find events with duplicate titles if called with 'title'" do
-      assert_specific_find_by_duplicates_by('title', [:title])
-    end
-  end
-
   describe "when processing date" do
     before do
       @event = Event.new(:title => "MyEvent")
