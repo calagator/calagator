@@ -87,7 +87,7 @@ describe Venue, :type => :model do
   end
 
   describe "when finding duplicates [integration test]" do
-    subject do
+    subject! do
       FactoryGirl.create(:venue, title: "Venue A")
     end
 
@@ -135,7 +135,7 @@ describe Venue, :type => :model do
 
     it "should match non duplicate venues when searching by default" do
       venue = FactoryGirl.create(:venue, title: "Venue B")
-      expect(Venue.find_duplicates_by_type).to eq({ [] => [subject, venue] })
+      expect(Venue.find_duplicates_by_type).to eq({ [nil] => [subject, venue] })
     end
   end
 

@@ -4,13 +4,15 @@ module DuplicateChecking
   class DuplicateFinder < Struct.new(:model, :fields)
     def find
       scope = model.select("#{model.table_name}.*")
-      scope.from!("#{model.table_name}, #{model.table_name} b")
-      scope.where!("#{model.table_name}.id <> b.id")
-      scope.where!("#{model.table_name}.duplicate_of_id" => nil)
-      scope.where!(query)
-      scope.distinct!
-
       scope = yield(scope) if block_given?
+
+      unless fields.empty? || fields == [:na]
+        scope.from!("#{model.table_name}, #{model.table_name} b")
+        scope.where!("#{model.table_name}.id <> b.id")
+        scope.where!("#{model.table_name}.duplicate_of_id" => nil)
+        scope.where!(query)
+        scope.distinct!
+      end
 
       group_by_fields(scope.to_a)
     end

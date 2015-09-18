@@ -544,7 +544,7 @@ describe Event, :type => :model do
     it "should return future events when provided na" do
       future = Event.create!(title: subject.title, start_time: 1.day.from_now)
       events = Event.find_duplicates_by_type("na")
-      expect(events).to eq({ [] => [subject, future] })
+      expect(events).to eq({ [nil] => [subject, future] })
     end
 
     it "should find duplicate title by title" do
