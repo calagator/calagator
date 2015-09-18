@@ -63,7 +63,7 @@ class Event < ActiveRecord::Base
   duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
   duplicate_finding_na_scope -> { future }
-  duplicate_finding_duplicate_scope -> { ["a.start_time >= ?", 1.day.ago] }
+  duplicate_finding_duplicate_scope -> { future }
 
   # Named scopes
   scope :after_date, lambda { |date|
@@ -71,7 +71,7 @@ class Event < ActiveRecord::Base
   }
   scope :on_or_after_date, lambda { |date|
     time = date.beginning_of_day
-    where("(start_time >= :time) OR (end_time IS NOT NULL AND end_time > :time)",
+    where("(events.start_time >= :time) OR (events.end_time IS NOT NULL AND events.end_time > :time)",
       :time => time).order(:start_time)
   }
   scope :before_date, lambda { |date|

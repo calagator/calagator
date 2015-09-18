@@ -1,15 +1,16 @@
 module Calagator
 
 module DuplicateChecking
-  class DuplicateFinder < Struct.new(:model, :fields, :where)
+  class DuplicateFinder < Struct.new(:model, :fields)
     def find
-      scope = model.select("a.*")
-      scope = scope.from("#{model.table_name} a, #{model.table_name} b")
-      scope = scope.where(where)
-      scope = scope.where("a.id <> b.id")
-      scope = scope.where("a.duplicate_of_id" => nil)
-      scope = scope.where(query)
-      scope = scope.distinct
+      scope = model.select("#{model.table_name}.*")
+      scope.from!("#{model.table_name}, #{model.table_name} b")
+      scope.where!("#{model.table_name}.id <> b.id")
+      scope.where!("#{model.table_name}.duplicate_of_id" => nil)
+      scope.where!(query)
+      scope.distinct!
+
+      scope = yield(scope) if block_given?
 
       group_by_fields(scope.to_a)
     end
@@ -40,28 +41,28 @@ module DuplicateChecking
 
     def query_from_all
       attributes.map do |attr|
-        "((a.#{attr} = b.#{attr}) OR (a.#{attr} IS NULL AND b.#{attr} IS NULL))"
+        "((#{model.table_name}.#{attr} = b.#{attr}) OR (#{model.table_name}.#{attr} IS NULL AND b.#{attr} IS NULL))"
       end.join(" AND ")
     end
 
     def query_from_any
       attributes.map do |attr|
-        query = "(a.#{attr} = b.#{attr} AND ("
+        query = "(#{model.table_name}.#{attr} = b.#{attr} AND ("
         column = model.columns.find {|column| column.name.to_sym == attr}
         case column.type
         when :integer, :decimal
-          query << "a.#{attr} != 0 AND "
+          query << "#{model.table_name}.#{attr} != 0 AND "
         when :string, :text
-          query << "a.#{attr} != '' AND "
+          query << "#{model.table_name}.#{attr} != '' AND "
         end
-        query << "a.#{attr} IS NOT NULL))"
+        query << "#{model.table_name}.#{attr} IS NOT NULL))"
       end.join(" OR ")
     end
 
     def query_from_fields
       raise ArgumentError, "Unknown fields: #{fields.inspect}" if (Array(fields) - attributes).any?
       Array(fields).map do |attr|
-        "a.#{attr} = b.#{attr}"
+        "#{model.table_name}.#{attr} = b.#{attr}"
       end.join(" AND ")
     end
 

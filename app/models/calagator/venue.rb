@@ -79,7 +79,7 @@ class Venue < ActiveRecord::Base
   duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi, :access_notes
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
   duplicate_finding_na_scope -> { where(duplicate_of_id: nil).order('LOWER(venues.title)') }
-  duplicate_finding_duplicate_scope -> { "a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL" }
+  duplicate_finding_duplicate_scope -> { where(duplicate_of_id: nil).order('LOWER(venues.title)') }
 
   # Named scopes
   scope :masters,          -> { where(duplicate_of_id: nil).includes(:source, :events, :tags, :taggings) }

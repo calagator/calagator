@@ -14,6 +14,12 @@
 #
 #     # Declare associations that should be ignored during duplicate squashing
 #     duplicate_squashing_ignores_associations :tags
+#
+#     # Declare an optional default scope to be used for find_duplicates_by_type("na")
+#     duplicate_finding_na_scope -> { active }
+#
+#     # Declare an optional default scope to be used for find_duplicates_by_type
+#     duplicate_finding_duplicate_scope -> { active }
 #   end
 #
 #   # Set duplicates on objects
@@ -121,7 +127,9 @@ module DuplicateChecking
       if type == "na" || type.blank?
         { [] => duplicate_finding_na_scope.call }
       else
-        DuplicateFinder.new(self, type.split(","), duplicate_finding_duplicate_scope.call).find
+        DuplicateFinder.new(self, type.split(",")).find do |scope|
+          scope.instance_exec &duplicate_finding_duplicate_scope
+        end
       end
     end
 
