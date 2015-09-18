@@ -1,33 +1,29 @@
 module Calagator
 
 module DuplicateChecking
-  class DuplicateFinder < Struct.new(:model, :fields, :options)
+  class DuplicateFinder < Struct.new(:model, :fields, :where)
     def find
       scope = model.select("a.*")
       scope = scope.from("#{model.table_name} a, #{model.table_name} b")
-      scope = scope.where(options[:where]) if options[:where]
+      scope = scope.where(where)
       scope = scope.where("a.id <> b.id")
       scope = scope.where("a.duplicate_of_id" => nil)
       scope = scope.where(query)
-      scope.distinct
+      scope = scope.distinct
 
-      # SQL distinct is not enough to guarantee unique records in this query
-      records = scope.to_a.uniq
-
-      records = group_by_fields(records)
-      records
+      group_by_fields(scope.to_a)
     end
 
     def fields
-      super || :all
+      super.map(&:to_sym)
     end
 
     private
 
     def query
       case fields
-        when :all then query_from_all
-        when :any then query_from_any
+        when [:all] then query_from_all
+        when [:any] then query_from_any
         else query_from_fields
       end
     end
@@ -70,7 +66,7 @@ module DuplicateChecking
     end
 
     def attributes
-      # TODO make find_duplicates_by(:all) pay attention to ignore fields
+      # TODO make :all pay attention to ignore fields
       model.new.attribute_names.map(&:to_sym).reject do |attr|
         [:id, :created_at, :updated_at, :duplicate_of_id, :version].include?(attr)
       end

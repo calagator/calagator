@@ -118,12 +118,10 @@ module DuplicateChecking
 
     # Return Hash of duplicate events grouped by the +type+.
     def find_duplicates_by_type(type='na')
-      case type.to_s.strip
-      when 'na', ''
+      if type == "na" || type.blank?
         { [] => duplicate_finding_na_scope.call }
       else
-        fields = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
-        DuplicateFinder.new(self, fields, where: duplicate_finding_duplicate_scope.call).find
+        DuplicateFinder.new(self, type.split(","), duplicate_finding_duplicate_scope.call).find
       end
     end
 
