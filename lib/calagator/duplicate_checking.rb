@@ -114,7 +114,7 @@ module DuplicateChecking
     end
 
     # Return Hash of duplicate events grouped by the +type+.
-    def find_duplicates_by_type(type='na')
+    def find_duplicates_by_type(type)
       DuplicateFinder.new(self, type.split(",")).find do |scope|
         scope.instance_exec &duplicate_finding_scope
       end

@@ -593,13 +593,13 @@ describe EventsController, :type => :controller do
         get 'duplicates', :type => 'title'
 
         # Current duplicates
-        assigns[:grouped_events].select{|keys,values| keys.include?(current_master.title)}.tap do |events|
+        assigns[:grouped].select{|keys,values| keys.include?(current_master.title)}.tap do |events|
           expect(events).not_to be_empty
           expect(events.first.last.size).to eq 2
         end
 
         # Past duplicates
-        expect(assigns[:grouped_events].select{|keys,values| keys.include?(past_master.title)}).to be_empty
+        expect(assigns[:grouped].select{|keys,values| keys.include?(past_master.title)}).to be_empty
       end
 
       it "should redirect duplicate events to their master" do

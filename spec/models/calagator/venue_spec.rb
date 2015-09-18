@@ -133,9 +133,9 @@ describe Venue, :type => :model do
       expect(Venue.find_duplicates_by_type("all")).to eq({ [nil] => [subject, venue] })
     end
 
-    it "should match non duplicate venues when searching by default" do
+    it "should match non duplicate venues when searching by na" do
       venue = FactoryGirl.create(:venue, title: "Venue B")
-      expect(Venue.find_duplicates_by_type).to eq({ [nil] => [subject, venue] })
+      expect(Venue.find_duplicates_by_type("na")).to eq({ [nil] => [subject, venue] })
     end
   end
 
