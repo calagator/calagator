@@ -166,7 +166,6 @@ class Event < ActiveRecord::Base
     else
       kind = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
       find_duplicates_by(kind,
-        :grouped => true,
         :where => "a.start_time >= #{connection.quote(Time.now - 1.day)}")
     end
   end

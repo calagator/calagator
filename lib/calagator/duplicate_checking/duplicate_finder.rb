@@ -14,7 +14,7 @@ module DuplicateChecking
       # SQL distinct is not enough to guarantee unique records in this query
       records = scope.to_a.uniq
 
-      records = group_by_fields(records) if grouped
+      records = group_by_fields(records)
       records
     end
 
@@ -32,14 +32,10 @@ module DuplicateChecking
       end
     end
 
-    def grouped
-      options[:grouped] || false
-    end
-
     def group_by_fields records
       # Group by the field values we're matching on; skip any values for which we only have one record
       records = records.group_by do |record|
-        fields.map do |field|
+        Array(fields).map do |field|
           record.read_attribute(field)
         end
       end

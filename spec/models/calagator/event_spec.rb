@@ -162,7 +162,7 @@ describe Event, :type => :model do
     end
 
     def assert_specific_find_by_duplicates_by(type, queried)
-      expect(Event).to receive(:find_duplicates_by).with(queried, {:grouped => true, :where => anything()})
+      expect(Event).to receive(:find_duplicates_by).with(queried, where: anything())
       Event.find_duplicates_by_type(type)
     end
 
@@ -574,49 +574,53 @@ describe Event, :type => :model do
 
     # Find duplicates, create another event with the given attributes, and find duplicates again
     # TODO Refactor #find_duplicates_create_a_clone_and_find_again and its uses into something simpler, like #assert_duplicate_count.
-    def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes, create_class = Event)
-      before_results = create_class.find_duplicates_by( find_duplicates_arguments)
-      clone = create_class.create!(clone_attributes)
-      after_results = Event.find_duplicates_by(find_duplicates_arguments)
-      return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
+    def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes)
+      before = Event.find_duplicates_by(find_duplicates_arguments)
+      clone = Event.create!(clone_attributes)
+      after = Event.find_duplicates_by(find_duplicates_arguments)
+      return [before, after]
     end
 
     it "should find duplicate title by title" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:title, {:title => @event.title, :start_time => @event.start_time} )
-      expect(post.size).to eq(pre.size + 2)
+      before, after = find_duplicates_create_a_clone_and_find_again(:title, title: @event.title, start_time: @event.start_time )
+      expect(before).to be_empty
+      expect(after[[@event.title]].size).to eq(2)
     end
 
     it "should find duplicate title by any" do
-      # TODO figure out why the #find_duplicates_create_a_clone_and_find_again isn't giving expected results and a workaround was needed.
-      #pre, post = find_duplicates_create_a_clone_and_find_again(:any, {:title => @event.title, :start_time => @event.start_time} )
-      #post.size.should eq(pre.size + 2)
-      dup_title = Event.create!({:title => @event.title, :start_time => @event.start_time + 1.minute})
-      expect(Event.find_duplicates_by(:any)).to include dup_title
+      before, after = find_duplicates_create_a_clone_and_find_again(:title, title: @event.title, start_time: @event.start_time + 1.minute)
+      expect(before).to be_empty
+      expect(after[[@event.title]].size).to eq(2)
     end
 
     it "should not find duplicate title by url" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:url, {:title => @event.title, :start_time => @event.start_time} )
-      expect(post.size).to eq pre.size
+      before, after = find_duplicates_create_a_clone_and_find_again(:url, title: @event.title, start_time: @event.start_time)
+      expect(before).to be_empty
+      expect(after).to be_empty
     end
 
     it "should find complete duplicates by all" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(id: nil))
-      expect(post.size).to eq(pre.size + 2)
+      before, after = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(id: nil))
+      expect(before).to be_empty
+      expect(after[[nil]].size).to eq(2)
     end
 
     it "should not find incomplete duplicates by all" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(title: "SpaceCube", start_time: @event.start_time, id: nil))
-      expect(post.size).to eq pre.size
+      before, after = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(title: "SpaceCube", start_time: @event.start_time, id: nil))
+      expect(before).to be_empty
+      expect(after).to be_empty
     end
 
     it "should find duplicate for matching multiple fields" do
-      pre, post = find_duplicates_create_a_clone_and_find_again([:title, :start_time], {:title => @event.title, :start_time => @event.start_time })
-      expect(post.size).to eq(pre.size + 2)
+      before, after = find_duplicates_create_a_clone_and_find_again([:title, :start_time], title: @event.title, start_time: @event.start_time)
+      expect(before).to be_empty
+      expect(after[[@event.title, @event.start_time]].size).to eq(2)
     end
 
     it "should not find duplicates for mismatching multiple fields" do
-      pre, post = find_duplicates_create_a_clone_and_find_again([:title, :start_time], {:title => "SpaceCube", :start_time => @event.start_time })
-      expect(post.size).to eq pre.size
+      before, after = find_duplicates_create_a_clone_and_find_again([:title, :start_time], title: "SpaceCube", start_time: @event.start_time)
+      expect(before).to be_empty
+      expect(after).to be_empty
     end
   end
 
