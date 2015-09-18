@@ -568,8 +568,19 @@ describe Event, :type => :model do
   end
 
   describe "with finding duplicates (integration test)" do
+    before do
+      # this event should always be omitted from the results
+      past = FactoryGirl.create(:event, start_time: 1.week.ago)
+    end
+
     subject do
       FactoryGirl.create(:event)
+    end
+
+    it "should return future events when provided na" do
+      future = Event.create!(title: subject.title, start_time: 1.day.from_now)
+      events = Event.find_duplicates_by_type("na")
+      expect(events).to eq({ [] => [subject, future] })
     end
 
     it "should find duplicate title by title" do

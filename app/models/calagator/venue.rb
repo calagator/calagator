@@ -78,33 +78,14 @@ class Venue < ActiveRecord::Base
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi, :access_notes
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
+  duplicate_finding_na_scope -> { where(duplicate_of_id: nil).order('LOWER(venues.title)') }
+  duplicate_finding_duplicate_scope -> { "a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL" }
 
   # Named scopes
   scope :masters,          -> { where(duplicate_of_id: nil).includes(:source, :events, :tags, :taggings) }
   scope :with_public_wifi, -> { where(wifi: true) }
   scope :in_business,      -> { where(closed: false) }
   scope :out_of_business,  -> { where(closed: true) }
-
-  #===[ Finders ]=========================================================
-
-  # Return Hash of Venues grouped by the +type+, e.g., a 'title'. Each Venue
-  # record will include an <tt>events_count</tt> field containing the number of
-  # events at the venue, which improves performance for displaying these.
-  def self.find_duplicates_by_type(type='na')
-    case type
-    when 'na', nil, ''
-      # The LEFT OUTER JOIN makes sure that venues without any events are also returned.
-      return { [] => \
-        self.where('venues.duplicate_of_id IS NULL').order('LOWER(venues.title)')
-      }
-    else
-      kind = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
-
-      return self.find_duplicates_by(kind, 
-        :where    => 'a.duplicate_of_id IS NULL AND b.duplicate_of_id IS NULL'
-      )
-    end
-  end
 
   #===[ Search ]==========================================================
 

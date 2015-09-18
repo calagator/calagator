@@ -83,6 +83,8 @@ module DuplicateChecking
       klass.instance_eval do
         cattr_accessor(:_duplicate_checking_ignores_attributes) { Set.new }
         cattr_accessor(:_duplicate_squashing_ignores_associations) { Set.new }
+        cattr_accessor(:_duplicate_finding_na_scope) { -> { all } }
+        cattr_accessor(:_duplicate_finding_duplicate_scope) { -> { all } }
 
         belongs_to :duplicate_of, :class_name => name, :foreign_key => DUPLICATE_MARK_COLUMN
         has_many   :duplicates,   :class_name => name, :foreign_key => DUPLICATE_MARK_COLUMN
@@ -102,6 +104,27 @@ module DuplicateChecking
     def duplicate_squashing_ignores_associations(*args)
       _duplicate_squashing_ignores_associations.merge(args.map(&:to_sym)) unless args.empty?
       _duplicate_squashing_ignores_associations
+    end
+
+    def duplicate_finding_na_scope(*args)
+      self._duplicate_finding_na_scope = args.first unless args.empty?
+      self._duplicate_finding_na_scope
+    end
+
+    def duplicate_finding_duplicate_scope(*args)
+      self._duplicate_finding_duplicate_scope = args.first unless args.empty?
+      self._duplicate_finding_duplicate_scope
+    end
+
+    # Return Hash of Events grouped by the +type+.
+    def find_duplicates_by_type(type='na')
+      case type.to_s.strip
+      when 'na', ''
+        { [] => duplicate_finding_na_scope.call }
+      else
+        kind = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
+        find_duplicates_by(kind, where: duplicate_finding_duplicate_scope.call)
+      end
     end
 
     # Return events with duplicate values for a given set of fields.
