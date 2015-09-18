@@ -93,43 +93,43 @@ describe Venue, :type => :model do
 
     it "should not match totally different records" do
       FactoryGirl.create(:venue)
-      expect(Venue.find_duplicates_by(:title)).to be_empty
+      expect(Venue.find_duplicates_by_type("title")).to be_empty
     end
 
     it "should not match similar records when not searching by duplicated fields" do
       FactoryGirl.create :venue, title: @existing.title
-      expect(Venue.find_duplicates_by(:description)).to be_empty
+      expect(Venue.find_duplicates_by_type("description")).to be_empty
     end
 
     it "should match similar records when searching by duplicated fields" do
       FactoryGirl.create :venue, title: @existing.title
-      expect(Venue.find_duplicates_by(:title)).to be_present
+      expect(Venue.find_duplicates_by_type("title")).to be_present
     end
 
     it "should match similar records when searching by :any" do
       FactoryGirl.create :venue, title: @existing.title
-      expect(Venue.find_duplicates_by(:any)).to be_present
+      expect(Venue.find_duplicates_by_type("any")).to be_present
     end
 
     it "should not match similar records when searching by multiple fields where not all are duplicated" do
       FactoryGirl.create :venue, title: @existing.title
-      expect(Venue.find_duplicates_by([:title, :description])).to be_empty
+      expect(Venue.find_duplicates_by_type("title,description")).to be_empty
     end
 
     it "should match similar records when searching by multiple fields where all are duplicated" do
       FactoryGirl.create(:venue, :title => @existing.title, :description => @existing.description)
-      expect(Venue.find_duplicates_by([:title, :description])).to be_present
+      expect(Venue.find_duplicates_by_type("title,description")).to be_present
     end
 
     it "should not match dissimilar records when searching by :all" do
       FactoryGirl.create(:venue)
-      expect(Venue.find_duplicates_by(:all)).to be_empty
+      expect(Venue.find_duplicates_by_type("all")).to be_empty
     end
 
     it "should match similar records when searching by :all" do
       attributes = @existing.attributes.reject{ |k,v| k == 'id'}
       Venue.create!(attributes)
-      expect(Venue.find_duplicates_by(:all)).to be_present
+      expect(Venue.find_duplicates_by_type("all")).to be_present
     end
 
     it "should match non duplicate venues when searching by default" do

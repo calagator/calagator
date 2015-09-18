@@ -574,43 +574,43 @@ describe Event, :type => :model do
 
     it "should find duplicate title by title" do
       clone = Event.create!(title: subject.title, start_time: subject.start_time )
-      events = Event.find_duplicates_by(:title)
+      events = Event.find_duplicates_by_type("title")
       expect(events).to eq({ [subject.title] => [subject, clone] })
     end
 
     it "should find duplicate title by any" do
       clone = Event.create!(title: subject.title, start_time: subject.start_time + 1.minute)
-      events = Event.find_duplicates_by(:title)
+      events = Event.find_duplicates_by_type("title")
       expect(events).to eq({ [subject.title] => [subject, clone] })
     end
 
     it "should not find duplicate title by url" do
       clone = Event.create!(title: subject.title, start_time: subject.start_time)
-      events = Event.find_duplicates_by(:url)
+      events = Event.find_duplicates_by_type("url")
       expect(events).to be_empty
     end
 
     it "should find complete duplicates by all" do
       clone = Event.create!(subject.attributes.merge(id: nil))
-      events = Event.find_duplicates_by(:all)
+      events = Event.find_duplicates_by_type("all")
       expect(events).to eq({ [nil] => [subject, clone] })
     end
 
     it "should not find incomplete duplicates by all" do
       clone = Event.create!(subject.attributes.merge(title: "SpaceCube", start_time: subject.start_time, id: nil))
-      events = Event.find_duplicates_by(:all)
+      events = Event.find_duplicates_by_type("all")
       expect(events).to be_empty
     end
 
     it "should find duplicate for matching multiple fields" do
       clone = Event.create!(title: subject.title, start_time: subject.start_time)
-      events = Event.find_duplicates_by([:title, :start_time])
+      events = Event.find_duplicates_by_type("title,start_time")
       expect(events).to eq({ [subject.title, subject.start_time] => [subject, clone] })
     end
 
     it "should not find duplicates for mismatching multiple fields" do
       clone = Event.create!(title: "SpaceCube", start_time: subject.start_time)
-      events = Event.find_duplicates_by([:title, :start_time])
+      events = Event.find_duplicates_by_type("title,start_time")
       expect(events).to be_empty
     end
   end
