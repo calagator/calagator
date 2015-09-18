@@ -78,11 +78,10 @@ class Venue < ActiveRecord::Base
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi, :access_notes
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
-  duplicate_finding_na_scope -> { where(duplicate_of_id: nil).order('LOWER(venues.title)') }
-  duplicate_finding_duplicate_scope -> { where(duplicate_of_id: nil).order('LOWER(venues.title)') }
+  duplicate_finding_scope -> { non_duplicates.order('LOWER(venues.title)') }
 
   # Named scopes
-  scope :masters,          -> { where(duplicate_of_id: nil).includes(:source, :events, :tags, :taggings) }
+  scope :masters,          -> { non_duplicates.includes(:source, :events, :tags, :taggings) }
   scope :with_public_wifi, -> { where(wifi: true) }
   scope :in_business,      -> { where(closed: false) }
   scope :out_of_business,  -> { where(closed: true) }

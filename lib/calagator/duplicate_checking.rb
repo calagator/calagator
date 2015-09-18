@@ -15,11 +15,8 @@
 #     # Declare associations that should be ignored during duplicate squashing
 #     duplicate_squashing_ignores_associations :tags
 #
-#     # Declare an optional default scope to be used for find_duplicates_by_type("na")
-#     duplicate_finding_na_scope -> { active }
-#
-#     # Declare an optional default scope to be used for find_duplicates_by_type
-#     duplicate_finding_duplicate_scope -> { active }
+#     # Declare an optional scope to be applied in find_duplicates_by_type
+#     duplicate_finding_scope -> { active }
 #   end
 #
 #   # Set duplicates on objects
@@ -89,8 +86,7 @@ module DuplicateChecking
       klass.instance_eval do
         cattr_accessor(:_duplicate_checking_ignores_attributes) { Set.new }
         cattr_accessor(:_duplicate_squashing_ignores_associations) { Set.new }
-        cattr_accessor(:_duplicate_finding_na_scope) { -> { all } }
-        cattr_accessor(:_duplicate_finding_duplicate_scope) { -> { all } }
+        cattr_accessor(:_duplicate_finding_scope) { -> { all } }
 
         belongs_to :duplicate_of, :class_name => name, :foreign_key => DUPLICATE_MARK_COLUMN
         has_many   :duplicates,   :class_name => name, :foreign_key => DUPLICATE_MARK_COLUMN
@@ -112,23 +108,18 @@ module DuplicateChecking
       _duplicate_squashing_ignores_associations
     end
 
-    def duplicate_finding_na_scope(*args)
-      self._duplicate_finding_na_scope = args.first unless args.empty?
-      self._duplicate_finding_na_scope
-    end
-
-    def duplicate_finding_duplicate_scope(*args)
-      self._duplicate_finding_duplicate_scope = args.first unless args.empty?
-      self._duplicate_finding_duplicate_scope
+    def duplicate_finding_scope(*args)
+      self._duplicate_finding_scope = args.first unless args.empty?
+      self._duplicate_finding_scope
     end
 
     # Return Hash of duplicate events grouped by the +type+.
     def find_duplicates_by_type(type='na')
       if type == "na" || type.blank?
-        { [] => duplicate_finding_na_scope.call }
+        { [] => duplicate_finding_scope.call }
       else
         DuplicateFinder.new(self, type.split(",")).find do |scope|
-          scope.instance_exec &duplicate_finding_duplicate_scope
+          scope.instance_exec &duplicate_finding_scope
         end
       end
     end

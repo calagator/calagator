@@ -62,8 +62,7 @@ class Event < ActiveRecord::Base
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
-  duplicate_finding_na_scope -> { future }
-  duplicate_finding_duplicate_scope -> { future }
+  duplicate_finding_scope -> { future }
 
   # Named scopes
   scope :after_date, lambda { |date|
