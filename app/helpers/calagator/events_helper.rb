@@ -3,12 +3,10 @@ module Calagator
 module EventsHelper
   include TimeRangeHelper # provides normalize_time
 
-  def today_tomorrow_or_weekday(record)
-    if record.ongoing?
-      "Started #{record.start_time.strftime('%A')}"
-    else
-      record.start_time.strftime('%A')
-    end
+  def today_tomorrow_or_weekday(event)
+    output = event.start_time.strftime('%A')
+    output = "Started #{output}" if event.ongoing?
+    output
   end
 
 # calculate rowspans for an array of events
@@ -30,7 +28,7 @@ module EventsHelper
       previous_start_time = event.start_time
     end
 
-    return rowspans
+    rowspans
   end
 
   def google_maps_url(address)
@@ -52,8 +50,6 @@ module EventsHelper
   def events_sort_label(key)
     if key.present? or @tag.present?
       sanitize " by <strong>#{sorting_label_for(key, @tag.present?)}.</strong>"
-    else
-      nil
     end
   end
 
@@ -80,7 +76,7 @@ module EventsHelper
       raise ArgumentError, "Unknown option(s): #{unknown.inspect}"
     end
 
-    return filter.present? ?
+    filter.present? ?
       search_events_url(common.merge(filter)) :
       events_url(common)
   end
@@ -91,29 +87,29 @@ module EventsHelper
   #
   # @see #_events_feed_linker for details on parameters and exceptions.
   def google_events_subscription_link(filter={})
-    link = _events_feed_linker(filter, :format => "ics")
-    return "#{GOOGLE_EVENT_SUBSCRIBE_BASE}#{CGI::escape(link)}"
+    link = _events_feed_linker(filter, format: "ics")
+    "#{GOOGLE_EVENT_SUBSCRIBE_BASE}#{CGI.escape(link)}"
   end
 
   # Returns an iCalendar subscription URL.
   #
   # @see #_events_feed_linker for details on parameters and exceptions.
   def icalendar_feed_link(filter={})
-    return _events_feed_linker(filter, :protocol => "webcal", :format => "ics")
+    _events_feed_linker(filter, protocol: "webcal", format: "ics")
   end
 
   # Returns an iCalendar export URL.
   #
   # @see #_events_feed_linker for details on parameters and exceptions.
   def icalendar_export_link(filter={})
-    return _events_feed_linker(filter, :format => "ics")
+    _events_feed_linker(filter, format: "ics")
   end
 
   # Returns an ATOM subscription URL.
   #
   # @see #_events_feed_linker for details on parameters and exceptions.
   def atom_feed_link(filter={})
-    return _events_feed_linker(filter, :format => "atom")
+    _events_feed_linker(filter, format: "atom")
   end
 
   #--[ Sharing buttons ]-----------------------------------------
@@ -124,11 +120,11 @@ module EventsHelper
     lengths = tweet_text_sizer(event)
 
     result = []
-    result << "#{truncate(event.title, :length => lengths[:title])} -"
+    result << "#{truncate(event.title, length: lengths[:title])} -"
     result << event.start_time.strftime("%I:%M%p %m.%d.%Y") # "04:00PM 08.01.2012"
-    result << "@ #{truncate(event.venue.title, :length => lengths[:venue])}" if event.venue
+    result << "@ #{truncate(event.venue.title, length: lengths[:venue])}" if event.venue
 
-    return result.join(" ")
+    result.join(" ")
   end
 
   # Will increase the maximum length of either the event title or venue
