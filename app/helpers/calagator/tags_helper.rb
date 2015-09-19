@@ -2,14 +2,17 @@ module Calagator
 
 module TagsHelper
   def tag_links_for(model)
-    model.tags.sort_by(&:name).map{|tag| tag_link(model.class.model_name.human.downcase, tag)}.join(', ').html_safe
+    class_name = model.class.model_name.human.downcase.pluralize
+    model.tags.sort_by(&:name).map do |tag|
+      tag_link(class_name, tag)
+    end.join(', ').html_safe
   end
 
-  def tag_link(type, tag, link_class=nil)
-    internal_url = "/#{type.pluralize}/tag/#{tag.name}"
+  def tag_link(class_name, tag, link_class=nil)
+    internal_url = "/#{class_name}/tag/#{tag.name}"
 
     link_classes = [link_class, "p-category"]
-    link_classes << "external #{tag.machine_tag.namespace} #{tag.machine_tag.predicate}" if tag.machine_tag.url
+    link_classes += ["external", tag.machine_tag.namespace, tag.machine_tag.predicate] if tag.machine_tag.url
 
     link_text = [tag_icon(tag.name), escape_once(tag.name)].compact.join(' ').html_safe
 
@@ -17,14 +20,19 @@ module TagsHelper
   end
   private :tag_link
 
+  def tag_icon(tag_name)
+    return unless icon_exists_for?(tag_name)
+    image_tag(asset_path("tag_icons/#{tag_name}.png"), title: tag_name)
+  end
+  private :tag_icon
+
   def icon_exists_for?(tag_name)
     !!Rails.application.assets["tag_icons/#{tag_name}.png"]
   end
+  private :icon_exists_for?
 
-  def tag_icon(tag_name)
-    if icon_exists_for?(tag_name)
-      image_tag(asset_path("tag_icons/#{tag_name}.png"), title: tag_name)
-    end
+  def display_tag_icons(event)
+    get_tag_icon_links(event).join(' ').html_safe
   end
 
   def get_tag_icon_links(event)
@@ -33,10 +41,8 @@ module TagsHelper
       link_to(icon, tag_events_path(tag_name)) if icon
     end
   end
+  private :get_tag_icon_links
 
-  def display_tag_icons(event)
-    get_tag_icon_links(event).join(' ').html_safe
-  end
 end
 
 end
