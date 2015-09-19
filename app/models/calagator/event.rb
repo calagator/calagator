@@ -85,15 +85,16 @@ class Event < ActiveRecord::Base
   }
 
   # Expand the simple sort order names from the URL into more intelligent SQL order strings
-  scope :ordered_by_ui_field, lambda{|ui_field|
-    case ui_field
-      when 'name'
-        order('lower(events.title), start_time')
-      when 'venue'
-        includes(:venue).order('lower(venues.title), start_time').references(:venues)
-      else # when 'date', nil
-        order('start_time')
+  scope :ordered_by_ui_field, lambda { |ui_field|
+    scope = case ui_field
+    when 'name'
+      order('lower(events.title)')
+    when 'venue'
+      includes(:venue).order('lower(venues.title)').references(:venues)
+    else
+      all
     end
+    scope.order('start_time')
   }
 
   #---[ Overrides ]-------------------------------------------------------
