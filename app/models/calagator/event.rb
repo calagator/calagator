@@ -162,12 +162,6 @@ class Event < ActiveRecord::Base
     SearchEngine.search(query, opts)
   end
 
-  #---[ Transformations ]-------------------------------------------------
-
-  def location
-    venue && venue.location
-  end
-
   #---[ Date related ]----------------------------------------------------
 
   # Is this event current?

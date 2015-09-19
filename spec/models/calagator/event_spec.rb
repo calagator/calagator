@@ -286,14 +286,6 @@ describe Event, :type => :model do
     end
   end
 
-  describe "#location" do
-    it "delegates to the venue's location" do
-      event = Event.new
-      event.build_venue latitude: 45.5200, longitude: 122.6819
-      expect(event.location).to eq([45.5200, 122.6819])
-    end
-  end
-
   describe ".search_tag" do
     before do
       @c = FactoryGirl.create(:event, title: "c", tag_list: ["tag", "wtf"], start_time: 3.minutes.ago)
