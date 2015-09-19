@@ -2,32 +2,35 @@ module Calagator
 
 module TagsHelper
   def tag_links_for(model)
-    class_name = model.class.model_name.human.downcase.pluralize
     model.tags.sort_by(&:name).map do |tag|
-      TagLink.new(class_name, tag, self).render
+      TagLink.new(model.class.table_name, tag, self).render
     end.join(', ').html_safe
   end
 
   class TagLink < Struct.new(:class_name, :tag, :context)
     def render
-      context.link_to link_text, (tag.machine_tag.url || internal_url), class: link_classes.compact.join(' ')
+      context.link_to text, url, class: css_class
     end
 
     private
 
-    def link_text
+    def text
       icon = TagIcon.new(tag.name, context)
       [icon.exists? && icon.image_tag, context.escape_once(tag.name)].compact.join(' ').html_safe
     end
 
-    def internal_url
-      "/#{class_name}/tag/#{tag.name}"
+    def url
+      machine_tag.url || "/#{class_name}/tag/#{tag.name}"
     end
 
-    def link_classes
+    def css_class
       classes = ["p-category"]
-      classes += ["external", tag.machine_tag.namespace, tag.machine_tag.predicate] if tag.machine_tag.url
-      classes
+      classes += ["external", machine_tag.namespace, machine_tag.predicate] if machine_tag.url
+      classes.join(' ')
+    end
+
+    def machine_tag
+      tag.machine_tag
     end
   end
 
