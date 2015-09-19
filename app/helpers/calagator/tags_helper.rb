@@ -22,14 +22,19 @@ module TagsHelper
 
   def tag_icon(tag_name)
     return unless icon_exists_for?(tag_name)
-    image_tag(asset_path("tag_icons/#{tag_name}.png"), title: tag_name)
+    image_tag(asset_path(tag_icon_path(tag_name)), title: tag_name)
   end
   private :tag_icon
 
   def icon_exists_for?(tag_name)
-    !!Rails.application.assets["tag_icons/#{tag_name}.png"]
+    !!Rails.application.assets[tag_icon_path(tag_name)]
   end
   private :icon_exists_for?
+
+  def tag_icon_path(tag_name)
+    "tag_icons/#{tag_name}.png"
+  end
+  private :tag_icon_path
 
   def display_tag_icons(event)
     get_tag_icon_links(event).join(' ').html_safe
