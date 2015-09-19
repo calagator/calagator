@@ -40,7 +40,8 @@ class Event < ActiveRecord::Base
   has_paper_trail
   acts_as_taggable
 
-  xss_foliate :strip => [:title], :sanitize => [:description, :venue_details]
+  xss_foliate strip: [:title, :description, :venue_details]
+
   include DecodeHtmlEntitiesHack
 
   # Associations
