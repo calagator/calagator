@@ -36,8 +36,8 @@ class Event < ActiveRecord::Base
           time :start_time
           time :end_time
 
-          text :venue_title
-          string :venue_title
+          text(:venue_title) { venue.try(:title) }
+          string(:venue_title) { venue.try(:title) }
 
           boolean(:duplicate) { |event| event.duplicate? }
         end

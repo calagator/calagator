@@ -100,7 +100,7 @@ class Event < ActiveRecord::Base
     end
 
     def location
-      [event.venue_title, event.venue.full_address].compact.join(": ") if event.venue
+      [event.venue.title, event.venue.full_address].compact.join(": ") if event.venue
     end
 
     def dtstart

@@ -168,10 +168,6 @@ class Event < ActiveRecord::Base
     venue && venue.location
   end
 
-  def venue_title
-    venue && venue.title
-  end
-
   #---[ Date related ]----------------------------------------------------
 
   # Is this event current?
