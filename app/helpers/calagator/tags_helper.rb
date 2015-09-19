@@ -14,7 +14,8 @@ module TagsHelper
     link_classes = [link_class, "p-category"]
     link_classes += ["external", tag.machine_tag.namespace, tag.machine_tag.predicate] if tag.machine_tag.url
 
-    link_text = [TagIcon.new(tag.name, self).image_tag, escape_once(tag.name)].compact.join(' ').html_safe
+    icon = TagIcon.new(tag.name, self)
+    link_text = [icon.exists? && icon.image_tag, escape_once(tag.name)].compact.join(' ').html_safe
 
     link_to link_text, (tag.machine_tag.url || internal_url), class: link_classes.compact.join(' ')
   end
@@ -22,15 +23,14 @@ module TagsHelper
 
   class TagIcon < Struct.new(:name, :context)
     def image_tag
-      return unless exists?
       context.image_tag(image_path, title: name)
     end
 
-    private
-
     def exists?
-      !!Rails.application.assets[image_path]
+      Rails.application.assets[image_path]
     end
+
+    private
 
     def image_path
       "tag_icons/#{name}.png"
@@ -38,17 +38,11 @@ module TagsHelper
   end
 
   def display_tag_icons(event)
-    get_tag_icon_links(event).join(' ').html_safe
-  end
-
-  def get_tag_icon_links(event)
     event.tag_list.map do |tag_name|
-      icon = TagIcon.new(tag_name, self).image_tag
-      link_to(icon, tag_events_path(tag_name)) if icon
-    end
+      icon = TagIcon.new(tag_name, self)
+      link_to(icon.image_tag, tag_events_path(tag_name)) if icon.exists?
+    end.join(' ').html_safe
   end
-  private :get_tag_icon_links
-
 end
 
 end
