@@ -34,6 +34,13 @@ module TagsHelper
     end
   end
 
+  def display_tag_icons(event)
+    event.tag_list.map do |tag_name|
+      icon = TagIcon.new(tag_name, self)
+      link_to(icon.image_tag, tag_events_path(tag_name)) if icon.exists?
+    end.join(' ').html_safe
+  end
+
   class TagIcon < Struct.new(:name, :context)
     def image_tag
       context.image_tag(image_path, title: name)
@@ -48,13 +55,6 @@ module TagsHelper
     def image_path
       "tag_icons/#{name}.png"
     end
-  end
-
-  def display_tag_icons(event)
-    event.tag_list.map do |tag_name|
-      icon = TagIcon.new(tag_name, self)
-      link_to(icon.image_tag, tag_events_path(tag_name)) if icon.exists?
-    end.join(' ').html_safe
   end
 end
 
