@@ -27,6 +27,7 @@ require "calagator/url_prefixer"
 require "paper_trail"
 require "loofah-activerecord"
 require "loofah/activerecord/xss_foliate"
+require "active_model/sequential_validator"
 require "kernel_time"
 
 # == Event
@@ -50,19 +51,12 @@ class Event < ActiveRecord::Base
 
   # Validations
   validates :title, :description, :url, blacklist: true
-  validates_presence_of :title, :start_time
+  validates :start_time, :end_time, sequential: true
+  validates :title, :start_time, presence: true
   validates_format_of :url,
     :with => /\Ahttps?:\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\Z/,
     :allow_blank => true,
     :allow_nil => true
-
-  validate :end_time_later_than_start_time
-  def end_time_later_than_start_time
-    if start_time && end_time && end_time < start_time
-      errors.add(:end_time, "cannot be before start")
-    end
-  end
-  private :end_time_later_than_start_time
 
   # Duplicates
   include DuplicateChecking
