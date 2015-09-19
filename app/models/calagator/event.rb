@@ -47,14 +47,20 @@ class Event < ActiveRecord::Base
   belongs_to :source
 
   # Validations
+  validates :title, :description, :url, blacklist: true
   validates_presence_of :title, :start_time
-  validate :end_time_later_than_start_time
   validates_format_of :url,
     :with => /\Ahttps?:\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\Z/,
     :allow_blank => true,
     :allow_nil => true
 
-  validates :title, :description, :url, blacklist: true
+  validate :end_time_later_than_start_time
+  def end_time_later_than_start_time
+    if start_time && end_time && end_time < start_time
+      errors.add(:end_time, "cannot be before start")
+    end
+  end
+  private :end_time_later_than_start_time
 
   # Duplicates
   include DuplicateChecking
@@ -101,13 +107,11 @@ class Event < ActiveRecord::Base
 
   # Return the title but strip out any whitespace.
   def title
-    # TODO Generalize this code so we can use it on other attributes in the different model classes. The solution should use an #alias_method_chain to make sure it's not breaking any explicit overrides for an attribute.
     read_attribute(:title).to_s.strip
   end
 
   # Return description without those pesky carriage-returns.
   def description
-    # TODO Generalize this code so we can reuse it on other attributes.
     read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
   end
 
@@ -141,6 +145,8 @@ class Event < ActiveRecord::Base
   end
   private :time_for
 
+  #---[ Lock toggling ]---------------------------------------------------
+
   def lock_editing!
     update_attribute(:locked, true)
   end
@@ -150,9 +156,6 @@ class Event < ActiveRecord::Base
   end
 
   #---[ Searching ]-------------------------------------------------------
-
-  # NOTE: The `Event.search` method is implemented elsewhere! For example, it's
-  # added by SearchEngine::ActsAsSolr if you're using that search engine.
 
   def self.search_tag(tag, opts={})
     includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order])
@@ -164,17 +167,14 @@ class Event < ActiveRecord::Base
 
   #---[ Date related ]----------------------------------------------------
 
-  # Is this event current?
   def current?
     (end_time || start_time) >= Date.today.to_time
   end
 
-  # Is this event old?
   def old?
     (end_time || start_time + 1.hour) <= Time.zone.now.beginning_of_day
   end
 
-  # Did this event start before today but ends today or later?
   def ongoing?
     start_time < Date.today.to_time && end_time && end_time >= Date.today.to_time
   end
@@ -184,14 +184,6 @@ class Event < ActiveRecord::Base
       (end_time - start_time)
     else
       0
-    end
-  end
-
-  private
-
-  def end_time_later_than_start_time
-    if start_time && end_time && end_time < start_time
-      errors.add(:end_time, "cannot be before start")
     end
   end
 end
