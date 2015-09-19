@@ -14,7 +14,7 @@ describe Venue::Search, :type => :model do
       subject { Venue::Search.new }
 
       it "should not include closed venues" do
-        expect(subject.venues).to eq([@open_venue, @wifi_venue])
+        expect(subject.venues).to match_array([@open_venue, @wifi_venue])
       end
 
       it "should not declare results" do
@@ -25,7 +25,7 @@ describe Venue::Search, :type => :model do
     describe "and showing all venues" do
       it "should include closed venues when asked to with the include_closed parameter" do
         subject = Venue::Search.new all: '1', include_closed: '1'
-        expect(subject.venues).to eq([@open_venue, @closed_venue, @wifi_venue])
+        expect(subject.venues).to match_array([@open_venue, @closed_venue, @wifi_venue])
       end
 
       it "should include ONLY closed venues when asked to with the closed parameter" do
