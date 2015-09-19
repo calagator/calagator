@@ -4,22 +4,23 @@ module TagsHelper
   def tag_links_for(model)
     class_name = model.class.model_name.human.downcase.pluralize
     model.tags.sort_by(&:name).map do |tag|
-      tag_link(class_name, tag)
+      TagLink.new(class_name, tag, self).render
     end.join(', ').html_safe
   end
 
-  def tag_link(class_name, tag, link_class=nil)
-    internal_url = "/#{class_name}/tag/#{tag.name}"
+  class TagLink < Struct.new(:class_name, :tag, :context)
+    def render
+      internal_url = "/#{class_name}/tag/#{tag.name}"
 
-    link_classes = [link_class, "p-category"]
-    link_classes += ["external", tag.machine_tag.namespace, tag.machine_tag.predicate] if tag.machine_tag.url
+      link_classes = ["p-category"]
+      link_classes += ["external", tag.machine_tag.namespace, tag.machine_tag.predicate] if tag.machine_tag.url
 
-    icon = TagIcon.new(tag.name, self)
-    link_text = [icon.exists? && icon.image_tag, escape_once(tag.name)].compact.join(' ').html_safe
+      icon = TagIcon.new(tag.name, context)
+      link_text = [icon.exists? && icon.image_tag, context.escape_once(tag.name)].compact.join(' ').html_safe
 
-    link_to link_text, (tag.machine_tag.url || internal_url), class: link_classes.compact.join(' ')
+      context.link_to link_text, (tag.machine_tag.url || internal_url), class: link_classes.compact.join(' ')
+    end
   end
-  private :tag_link
 
   class TagIcon < Struct.new(:name, :context)
     def image_tag
