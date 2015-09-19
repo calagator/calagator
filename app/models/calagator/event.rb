@@ -103,12 +103,12 @@ class Event < ActiveRecord::Base
 
   # Return the title but strip out any whitespace.
   def title
-    read_attribute(:title).to_s.strip
+    super.strip if super
   end
 
   # Return description without those pesky carriage-returns.
   def description
-    read_attribute(:description).to_s.gsub("\r\n", "\n").gsub("\r", "\n")
+    super.gsub(/\r\n?/, "\n") if super
   end
 
   def url=(value)
@@ -164,15 +164,13 @@ class Event < ActiveRecord::Base
   end
 
   def ongoing?
-    start_time < Date.today.to_time && end_time && end_time >= Date.today.to_time
+    return unless end_time && start_time
+    (start_time..end_time).cover?(Date.today.to_time)
   end
 
   def duration
-    if end_time && start_time
-      (end_time - start_time)
-    else
-      0
-    end
+    return 0 unless end_time && start_time
+    (end_time - start_time)
   end
 end
 
