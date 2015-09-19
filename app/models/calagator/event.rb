@@ -182,16 +182,6 @@ class Event < ActiveRecord::Base
 
   #---[ Date related ]----------------------------------------------------
 
-  # Returns an array of the dates spanned by the event.
-  def dates
-    raise ArgumentError, "can't get dates for an event with no start time" unless start_time
-    if end_time
-      (start_time.to_date..end_time.to_date).to_a
-    else
-      [start_time.to_date]
-    end
-  end
-
   # Is this event current?
   def current?
     (end_time || start_time) >= Date.today.to_time

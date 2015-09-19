@@ -105,7 +105,7 @@ class Event < ActiveRecord::Base
 
     def dtstart
       if multiday?
-        event.dates.first
+        event.start_time.to_date
       else
         event.start_time
       end
@@ -113,7 +113,7 @@ class Event < ActiveRecord::Base
 
     def dtend
       if multiday?
-        event.dates.last + 1.day
+        event.end_time.to_date + 1.day
       else
         event.end_time || event.start_time + 1.hour
       end
@@ -149,7 +149,7 @@ class Event < ActiveRecord::Base
 
     # Treat any event with a duration of at least 20 hours as a multiday event.
     def multiday?
-      event.dates.size > 1 && event.duration.seconds > 20.hours
+      event.duration.seconds > 20.hours
     end
   end
 end
