@@ -34,19 +34,9 @@ module ApplicationHelper
     time.strftime(format).gsub(/\*0*/,'').html_safe
   end
 
-  def self.source_code_version_raw
-    # Return a string describing the source code version being used
-    return "" unless system("git status 2>&1 >/dev/null")
-    " - Git timestamp: #{`git log -1 --format=format:"%ad" 2>&1`}"
-  rescue Errno::ENOENT
-    # Fail quietly if that didn't work; we don't want to get in the way.
-    ""
-  end
-
-  Calagator::ApplicationController::SOURCE_CODE_VERSION = self.source_code_version_raw
-
+  # Return a string describing the source code version being used
   def source_code_version
-    Calagator::ApplicationController::SOURCE_CODE_VERSION
+    Calagator::VERSION
   end
 
   # returns html markup with source (if any), imported/created time, and - if modified - modified time
