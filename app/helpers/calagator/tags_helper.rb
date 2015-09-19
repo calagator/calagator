@@ -10,15 +10,24 @@ module TagsHelper
 
   class TagLink < Struct.new(:class_name, :tag, :context)
     def render
-      internal_url = "/#{class_name}/tag/#{tag.name}"
-
-      link_classes = ["p-category"]
-      link_classes += ["external", tag.machine_tag.namespace, tag.machine_tag.predicate] if tag.machine_tag.url
-
-      icon = TagIcon.new(tag.name, context)
-      link_text = [icon.exists? && icon.image_tag, context.escape_once(tag.name)].compact.join(' ').html_safe
-
       context.link_to link_text, (tag.machine_tag.url || internal_url), class: link_classes.compact.join(' ')
+    end
+
+    private
+
+    def link_text
+      icon = TagIcon.new(tag.name, context)
+      [icon.exists? && icon.image_tag, context.escape_once(tag.name)].compact.join(' ').html_safe
+    end
+
+    def internal_url
+      "/#{class_name}/tag/#{tag.name}"
+    end
+
+    def link_classes
+      classes = ["p-category"]
+      classes += ["external", tag.machine_tag.namespace, tag.machine_tag.predicate] if tag.machine_tag.url
+      classes
     end
   end
 
