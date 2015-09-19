@@ -75,7 +75,7 @@ class Event < ActiveRecord::Base
   }
   scope :before_date, lambda { |date|
     time = date.beginning_of_day
-    where("start_time < :time", :time => time).order(:start_time)
+    where("start_time < :time", :time => time).order(start_time: :desc)
   }
   scope :future, lambda { on_or_after_date(Time.zone.today) }
   scope :past, lambda { before_date(Time.zone.today) }
@@ -84,13 +84,6 @@ class Event < ActiveRecord::Base
       end_date = end_date + 1.day
     end
     on_or_after_date(start_date).before_date(end_date)
-  }
-
-  scope :future_with_venue, -> {
-    future.order("start_time ASC").non_duplicates.includes(:venue)
-  }
-  scope :past_with_venue, -> {
-    past.order("start_time DESC").non_duplicates.includes(:venue)
   }
 
   # Expand the simple sort order names from the URL into more intelligent SQL order strings

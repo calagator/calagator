@@ -53,7 +53,7 @@ class VenuesController < Calagator::ApplicationController
       format.html
       format.xml  { render xml: @venue }
       format.json { render json: @venue, callback: params[:callback] }
-      format.ics  { render ics: @venue.events.order("start_time ASC").non_duplicates }
+      format.ics  { render ics: @venue.events.order("start_time ASC") }
     end
 
   rescue ActiveRecord::RecordNotFound => e
