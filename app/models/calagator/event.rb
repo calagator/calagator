@@ -62,6 +62,7 @@ class Event < ActiveRecord::Base
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
+  duplicate_finding_scope -> { future.order(:id) }
 
   # Named scopes
   scope :after_date, lambda { |date|
@@ -69,7 +70,7 @@ class Event < ActiveRecord::Base
   }
   scope :on_or_after_date, lambda { |date|
     time = date.beginning_of_day
-    where("(start_time >= :time) OR (end_time IS NOT NULL AND end_time > :time)",
+    where("(events.start_time >= :time) OR (events.end_time IS NOT NULL AND events.end_time > :time)",
       :time => time).order(:start_time)
   }
   scope :before_date, lambda { |date|
@@ -154,21 +155,6 @@ class Event < ActiveRecord::Base
 
   def unlock_editing!
     update_attribute(:locked, false)
-  end
-
-  #---[ Queries ]---------------------------------------------------------
-
-  # Return Hash of Events grouped by the +type+.
-  def self.find_duplicates_by_type(type='na')
-    case type.to_s.strip
-    when 'na', ''
-      { [] => future }
-    else
-      kind = %w[all any].include?(type) ? type.to_sym : type.split(',').map(&:to_sym)
-      find_duplicates_by(kind,
-        :grouped => true,
-        :where => "a.start_time >= #{connection.quote(Time.now - 1.day)}")
-    end
   end
 
   #---[ Searching ]-------------------------------------------------------

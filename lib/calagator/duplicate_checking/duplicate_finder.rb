@@ -1,45 +1,45 @@
 module Calagator
 
 module DuplicateChecking
-  class DuplicateFinder < Struct.new(:model, :fields, :options)
+  class DuplicateFinder < Struct.new(:model, :fields)
     def find
-      scope = model.select("a.*")
-      scope = scope.from("#{model.table_name} a, #{model.table_name} b")
-      scope = scope.where(options[:where]) if options[:where]
-      scope = scope.where("a.id <> b.id")
-      scope = scope.where("a.duplicate_of_id" => nil)
-      scope = scope.where(query)
-      scope.distinct
-
-      # SQL distinct is not enough to guarantee unique records in this query
-      records = scope.to_a.uniq
-
-      records = group_by_fields(records) if grouped
-      records
+      scope = model.all
+      scope = yield(scope) if block_given?
+      scope = apply_query(scope) unless na?
+      group_by_fields(scope.to_a)
     end
 
     def fields
-      super || :all
+      super.map(&:to_sym)
     end
 
     private
 
-    def query
-      case fields
-        when :all then query_from_all
-        when :any then query_from_any
-        else query_from_fields
-      end
+    def na?
+      fields.empty? || fields == [:na]
     end
 
-    def grouped
-      options[:grouped] || false
+    def apply_query scope
+      scope = scope.select("#{model.table_name}.*")
+      scope.from!("#{model.table_name}, #{model.table_name} b")
+      scope.where!("#{model.table_name}.id <> b.id")
+      scope.where!("#{model.table_name}.duplicate_of_id" => nil)
+      scope.where!(query)
+      scope.distinct!
+    end
+
+    def query
+      case fields
+        when [:all] then query_from_all
+        when [:any] then query_from_any
+        else query_from_fields
+      end
     end
 
     def group_by_fields records
       # Group by the field values we're matching on; skip any values for which we only have one record
       records = records.group_by do |record|
-        fields.map do |field|
+        Array(fields).map do |field|
           record.read_attribute(field)
         end
       end
@@ -48,36 +48,43 @@ module DuplicateChecking
 
     def query_from_all
       attributes.map do |attr|
-        "((a.#{attr} = b.#{attr}) OR (a.#{attr} IS NULL AND b.#{attr} IS NULL))"
+        "((#{full_attr(attr)} = b.#{attr}) OR (#{full_attr(attr)} IS NULL AND b.#{attr} IS NULL))"
       end.join(" AND ")
     end
 
     def query_from_any
       attributes.map do |attr|
-        query = "(a.#{attr} = b.#{attr} AND ("
-        column = model.columns.find {|column| column.name.to_sym == attr}
-        case column.type
-        when :integer, :decimal
-          query << "a.#{attr} != 0 AND "
-        when :string, :text
-          query << "a.#{attr} != '' AND "
-        end
-        query << "a.#{attr} IS NOT NULL))"
+        "(#{full_attr(attr)} = b.#{attr} AND (#{is_truthy_subquery(attr)}))"
       end.join(" OR ")
+    end
+
+    def is_truthy_subquery(attr)
+      column = model.columns.find { |column| column.name.to_sym == attr }
+      query = case column.type
+      when :integer, :decimal then
+        "#{full_attr(attr)} != 0 AND "
+      when :string, :text
+        "#{full_attr(attr)} != '' AND "
+      end
+      "#{query}#{full_attr(attr)} IS NOT NULL"
     end
 
     def query_from_fields
       raise ArgumentError, "Unknown fields: #{fields.inspect}" if (Array(fields) - attributes).any?
       Array(fields).map do |attr|
-        "a.#{attr} = b.#{attr}"
+        "#{full_attr(attr)} = b.#{attr}"
       end.join(" AND ")
     end
 
     def attributes
-      # TODO make find_duplicates_by(:all) pay attention to ignore fields
+      # TODO make :all pay attention to ignore fields
       model.new.attribute_names.map(&:to_sym).reject do |attr|
         [:id, :created_at, :updated_at, :duplicate_of_id, :version].include?(attr)
       end
+    end
+
+    def full_attr(attr)
+      "#{model.table_name}.#{attr}"
     end
   end
 end

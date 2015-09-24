@@ -143,42 +143,6 @@ describe Event, :type => :model do
     end
   end
 
-  describe "when finding duplicates by type" do
-    def assert_default_find_duplicates_by_type(type)
-      expect(Event).to receive(:future).and_return 42
-      expect(Event.find_duplicates_by_type(type)).to eq({ [] => 42 })
-    end
-
-    it "should find all future events if called with nil" do
-      assert_default_find_duplicates_by_type(nil)
-    end
-
-    it "should find all future events if called with empty string" do
-      assert_default_find_duplicates_by_type('')
-    end
-
-    it "should find all future events if called with 'na'" do
-      assert_default_find_duplicates_by_type('na')
-    end
-
-    def assert_specific_find_by_duplicates_by(type, queried)
-      expect(Event).to receive(:find_duplicates_by).with(queried, {:grouped => true, :where => anything()})
-      Event.find_duplicates_by_type(type)
-    end
-
-    it "should find events with all duplicate fields if called with 'all'" do
-      assert_specific_find_by_duplicates_by('all', :all)
-    end
-
-    it "should find events with any duplicate fields if called with 'any'" do
-      assert_specific_find_by_duplicates_by('any', :any)
-    end
-
-    it "should find events with duplicate titles if called with 'title'" do
-      assert_specific_find_by_duplicates_by('title', [:title])
-    end
-  end
-
   describe "when processing date" do
     before do
       @event = Event.new(:title => "MyEvent")
@@ -569,54 +533,60 @@ describe Event, :type => :model do
 
   describe "with finding duplicates (integration test)" do
     before do
-      @event = FactoryGirl.create(:event)
+      # this event should always be omitted from the results
+      past = FactoryGirl.create(:event, start_time: 1.week.ago)
     end
 
-    # Find duplicates, create another event with the given attributes, and find duplicates again
-    # TODO Refactor #find_duplicates_create_a_clone_and_find_again and its uses into something simpler, like #assert_duplicate_count.
-    def find_duplicates_create_a_clone_and_find_again(find_duplicates_arguments, clone_attributes, create_class = Event)
-      before_results = create_class.find_duplicates_by( find_duplicates_arguments)
-      clone = create_class.create!(clone_attributes)
-      after_results = Event.find_duplicates_by(find_duplicates_arguments)
-      return [before_results.sort_by(&:created_at), after_results.sort_by(&:created_at)]
+    subject do
+      FactoryGirl.create(:event)
+    end
+
+    it "should return future events when provided na" do
+      future = Event.create!(title: subject.title, start_time: 1.day.from_now)
+      events = Event.find_duplicates_by_type("na")
+      expect(events).to eq({ [nil] => [subject, future] })
     end
 
     it "should find duplicate title by title" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:title, {:title => @event.title, :start_time => @event.start_time} )
-      expect(post.size).to eq(pre.size + 2)
+      clone = Event.create!(title: subject.title, start_time: subject.start_time )
+      events = Event.find_duplicates_by_type("title")
+      expect(events).to eq({ [subject.title] => [subject, clone] })
     end
 
     it "should find duplicate title by any" do
-      # TODO figure out why the #find_duplicates_create_a_clone_and_find_again isn't giving expected results and a workaround was needed.
-      #pre, post = find_duplicates_create_a_clone_and_find_again(:any, {:title => @event.title, :start_time => @event.start_time} )
-      #post.size.should eq(pre.size + 2)
-      dup_title = Event.create!({:title => @event.title, :start_time => @event.start_time + 1.minute})
-      expect(Event.find_duplicates_by(:any)).to include dup_title
+      clone = Event.create!(title: subject.title, start_time: subject.start_time + 1.minute)
+      events = Event.find_duplicates_by_type("title")
+      expect(events).to eq({ [subject.title] => [subject, clone] })
     end
 
     it "should not find duplicate title by url" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:url, {:title => @event.title, :start_time => @event.start_time} )
-      expect(post.size).to eq pre.size
+      clone = Event.create!(title: subject.title, start_time: subject.start_time)
+      events = Event.find_duplicates_by_type("url")
+      expect(events).to be_empty
     end
 
     it "should find complete duplicates by all" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(id: nil))
-      expect(post.size).to eq(pre.size + 2)
+      clone = Event.create!(subject.attributes.merge(id: nil))
+      events = Event.find_duplicates_by_type("all")
+      expect(events).to eq({ [nil] => [subject, clone] })
     end
 
     it "should not find incomplete duplicates by all" do
-      pre, post = find_duplicates_create_a_clone_and_find_again(:all, @event.attributes.merge(title: "SpaceCube", start_time: @event.start_time, id: nil))
-      expect(post.size).to eq pre.size
+      clone = Event.create!(subject.attributes.merge(title: "SpaceCube", start_time: subject.start_time, id: nil))
+      events = Event.find_duplicates_by_type("all")
+      expect(events).to be_empty
     end
 
     it "should find duplicate for matching multiple fields" do
-      pre, post = find_duplicates_create_a_clone_and_find_again([:title, :start_time], {:title => @event.title, :start_time => @event.start_time })
-      expect(post.size).to eq(pre.size + 2)
+      clone = Event.create!(title: subject.title, start_time: subject.start_time)
+      events = Event.find_duplicates_by_type("title,start_time")
+      expect(events).to eq({ [subject.title, subject.start_time] => [subject, clone] })
     end
 
     it "should not find duplicates for mismatching multiple fields" do
-      pre, post = find_duplicates_create_a_clone_and_find_again([:title, :start_time], {:title => "SpaceCube", :start_time => @event.start_time })
-      expect(post.size).to eq pre.size
+      clone = Event.create!(title: "SpaceCube", start_time: subject.start_time)
+      events = Event.find_duplicates_by_type("title,start_time")
+      expect(events).to be_empty
     end
   end
 

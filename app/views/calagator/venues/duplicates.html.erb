@@ -25,7 +25,7 @@
     </ul>
   </div>
 
-  <% unless @grouped_venues.empty? %>
+  <% unless @grouped.empty? %>
     <%= form_tag :action => "squash_many_duplicates", :method => :post %>
       <div class="flash notice">
         Select only one set of master and duplicate venues. If you select an unrelated venue, it will be merged into the same single master record.
@@ -33,7 +33,7 @@
       <div class='list_items'>
         <%= hidden_field_tag(:type, @type) %>
         <table>
-          <% for value, group in @grouped_venues %>
+          <% for value, group in @grouped %>
             <tr>
               <th>Master?</th><th>Duplicate?</th><th># of Events</th><th>Venue<%= " (#{value})" unless value.blank? %></th>
             </tr>

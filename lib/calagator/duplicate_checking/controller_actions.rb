@@ -4,10 +4,10 @@ module DuplicateChecking
   module ControllerActions
     # GET /#{model_class}/duplicates
     def duplicates
-      @type = params[:type]
-      @grouped_venues = @grouped_events = model_class.find_duplicates_by_type(@type)
+      @type = params[:type] || "na"
+      @grouped = model_class.find_duplicates_by_type(@type)
     rescue ArgumentError => e
-      @grouped_venues = @grouped_events = {}
+      @grouped = {}
       flash[:failure] = e.to_s
     end
 
