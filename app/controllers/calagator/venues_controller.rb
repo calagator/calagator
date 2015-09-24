@@ -81,8 +81,12 @@ class VenuesController < Calagator::ApplicationController
         format.html
         format.xml  { render xml: venue }
         format.json { render json: venue, callback: params[:callback] }
-        format.ics  { render ics: venue.events.order("start_time ASC") }
+        format.ics  { render ics: venue_events }
       end
+    end
+
+    def venue_events
+      venue.events.order(:start_time)
     end
   end
 
