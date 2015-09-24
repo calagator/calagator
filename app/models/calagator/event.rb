@@ -100,11 +100,6 @@ class Event < ActiveRecord::Base
 
   #---[ Overrides ]-------------------------------------------------------
 
-  # Return description without those pesky carriage-returns.
-  def description
-    super.gsub(/\r\n?/, "\n") if super
-  end
-
   def url=(value)
     super UrlPrefixer.prefix(value)
   end

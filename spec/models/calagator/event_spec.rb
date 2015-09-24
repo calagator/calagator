@@ -623,27 +623,6 @@ describe Event, :type => :model do
     end
   end
 
-  describe "when normalizing line-endings in the description" do
-    before do
-      @event = Event.new
-    end
-
-    it "should not molest contents without carriage-returns" do
-      @event.description         = "foo\nbar"
-      expect(@event.description).to eq "foo\nbar"
-    end
-
-    it "should replace CRLF with LF" do
-      @event.description         = "foo\r\nbar"
-      expect(@event.description).to eq "foo\nbar"
-    end
-
-    it "should replace stand-alone CR with LF" do
-      @event.description         = "foo\rbar"
-      expect(@event.description).to eq "foo\nbar"
-    end
-  end
-
   describe "when converting to iCal" do
     def ical_roundtrip(events, opts = {})
       parsed_events = RiCal.parse_string(Event::IcalRenderer.render(events, opts)).first.events
