@@ -2,40 +2,59 @@ module Calagator
 
 module TagsHelper
   def tag_links_for(model)
-    model.tags.sort_by(&:name).map{|tag| tag_link(model.class.model_name.human.downcase, tag)}.join(', ').html_safe
+    model.tags.sort_by(&:name).map do |tag|
+      TagLink.new(model.class.table_name, tag, self).render
+    end.join(', ').html_safe
   end
 
-  def tag_link(type, tag, link_class=nil)
-    internal_url = "/#{type.pluralize}/tag/#{tag.name}"
-
-    link_classes = [link_class, "p-category"]
-    link_classes << "external #{tag.machine_tag.namespace} #{tag.machine_tag.predicate}" if tag.machine_tag.url
-
-    link_text = [tag_icon(tag.name), escape_once(tag.name)].compact.join(' ').html_safe
-
-    link_to link_text, (tag.machine_tag.url || internal_url), class: link_classes.compact.join(' ')
-  end
-  private :tag_link
-
-  def icon_exists_for?(tag_name)
-    !!Rails.application.assets["tag_icons/#{tag_name}.png"]
-  end
-
-  def tag_icon(tag_name)
-    if icon_exists_for?(tag_name)
-      image_tag(asset_path("tag_icons/#{tag_name}.png"), title: tag_name)
+  class TagLink < Struct.new(:class_name, :tag, :context)
+    def render
+      context.link_to text, url, class: css_class
     end
-  end
 
-  def get_tag_icon_links(event)
-    event.tag_list.map do |tag_name|
-      icon = tag_icon(tag_name)
-      link_to(icon, tag_events_path(tag_name)) if icon
+    private
+
+    def text
+      icon = TagIcon.new(tag.name, context)
+      [icon.exists? && icon.image_tag, context.escape_once(tag.name)].compact.join(' ').html_safe
+    end
+
+    def url
+      machine_tag.url || "/#{class_name}/tag/#{tag.name}"
+    end
+
+    def css_class
+      classes = ["p-category"]
+      classes += ["external", machine_tag.namespace, machine_tag.predicate] if machine_tag.url
+      classes.join(' ')
+    end
+
+    def machine_tag
+      tag.machine_tag
     end
   end
 
   def display_tag_icons(event)
-    get_tag_icon_links(event).join(' ').html_safe
+    event.tag_list.map do |tag_name|
+      icon = TagIcon.new(tag_name, self)
+      link_to(icon.image_tag, tag_events_path(tag_name)) if icon.exists?
+    end.join(' ').html_safe
+  end
+
+  class TagIcon < Struct.new(:name, :context)
+    def image_tag
+      context.image_tag(image_path, title: name)
+    end
+
+    def exists?
+      Rails.application.assets[image_path]
+    end
+
+    private
+
+    def image_path
+      "tag_icons/#{name}.png"
+    end
   end
 end
 
