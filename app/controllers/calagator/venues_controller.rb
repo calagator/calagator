@@ -71,8 +71,7 @@ class VenuesController < Calagator::ApplicationController
     end
 
     def redirect_to_progenitor
-      return unless venue.duplicate?
-      redirect_to venue.progenitor
+      redirect_to venue.progenitor if venue.duplicate?
     end
 
     def render_venue
