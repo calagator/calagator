@@ -53,30 +53,34 @@ class VenuesController < Calagator::ApplicationController
 
 
   # GET /venues/1
-  before_action :show_all_if_not_found, :ensure_progenitor, only: :show
-
-  def show_all_if_not_found
-    venue
-  rescue ActiveRecord::RecordNotFound => e
-    flash[:failure] = e.to_s
-    redirect_to venues_path
-    false
-  end
-  private :show_all_if_not_found
-
-  def ensure_progenitor
-    return unless venue.duplicate?
-    redirect_to venue.progenitor
-    false
-  end
-  private :ensure_progenitor
-
   def show
-    respond_to do |format|
-      format.html
-      format.xml  { render xml: venue }
-      format.json { render json: venue, callback: params[:callback] }
-      format.ics  { render ics: venue.events.order("start_time ASC") }
+    Show.new(self).call
+  end
+
+  class Show < SimpleDelegator
+    def call
+      return if show_all_if_not_found
+      return if ensure_progenitor
+      respond_to do |format|
+        format.html
+        format.xml  { render xml: venue }
+        format.json { render json: venue, callback: params[:callback] }
+        format.ics  { render ics: venue.events.order("start_time ASC") }
+      end
+    end
+
+    private
+
+    def show_all_if_not_found
+      return if venue
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:failure] = e.to_s
+      redirect_to venues_path
+    end
+
+    def ensure_progenitor
+      return unless venue.duplicate?
+      redirect_to venue.progenitor
     end
   end
 
