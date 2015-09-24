@@ -57,7 +57,7 @@ class Event < ActiveRecord::Base
     :allow_blank => true,
     :allow_nil => true
 
-  before_destroy :verify_lock_status
+  before_destroy { !locked } # prevent locked events from being destroyed
 
   # Duplicates
   include DuplicateChecking
@@ -169,12 +169,6 @@ class Event < ActiveRecord::Base
   def duration
     return 0 unless end_time && start_time
     (end_time - start_time)
-  end
-
-  private
-
-  def verify_lock_status
-    return !locked
   end
 end
 
