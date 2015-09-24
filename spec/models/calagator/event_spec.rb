@@ -216,11 +216,6 @@ describe Event, :type => :model do
       expect(event.start_time).to eq Time.zone.parse("2009-01-02 03:45")
     end
 
-    it "should set from an Array of Strings" do
-      event = Event.new(:start_time => ["2009-01-03", "02:14"])
-      expect(event.start_time).to eq Time.zone.parse("2009-01-03 02:14")
-    end
-
     it "should set from Date" do
       event = Event.new(:start_time => Date.parse("2009-02-01"))
       expect(event.start_time).to eq Time.zone.parse("2009-02-01")
@@ -252,11 +247,6 @@ describe Event, :type => :model do
     it "should set from date-time String" do
       event = Event.new(:end_time => "2009-01-02 03:45")
       expect(event.end_time).to eq Time.zone.parse("2009-01-02 03:45")
-    end
-
-    it "should set from an Array of Strings" do
-      event = Event.new(:end_time => ["2009-01-03", "02:14"])
-      expect(event.end_time).to eq Time.zone.parse("2009-01-03 02:14")
     end
 
     it "should set from Date" do
