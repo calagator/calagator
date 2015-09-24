@@ -59,14 +59,7 @@ class VenuesController < Calagator::ApplicationController
 
   class Show < SimpleDelegator
     def call
-      return if show_all_if_not_found
-      return if ensure_progenitor
-      respond_to do |format|
-        format.html
-        format.xml  { render xml: venue }
-        format.json { render json: venue, callback: params[:callback] }
-        format.ics  { render ics: venue.events.order("start_time ASC") }
-      end
+      show_all_if_not_found or redirect_to_progenitor or render_venue
     end
 
     private
@@ -78,9 +71,18 @@ class VenuesController < Calagator::ApplicationController
       redirect_to venues_path
     end
 
-    def ensure_progenitor
+    def redirect_to_progenitor
       return unless venue.duplicate?
       redirect_to venue.progenitor
+    end
+
+    def render_venue
+      respond_to do |format|
+        format.html
+        format.xml  { render xml: venue }
+        format.json { render json: venue, callback: params[:callback] }
+        format.ics  { render ics: venue.events.order("start_time ASC") }
+      end
     end
   end
 
@@ -106,17 +108,20 @@ class VenuesController < Calagator::ApplicationController
 
   class CreateOrUpdate < SimpleDelegator
     def call
-      return if evil_robot?
-      venue.attributes = params.permit![:venue].to_h
-      venue.save ? render_success : render_failure
+      block_spammers or save
     end
 
     private
 
-    def evil_robot?
+    def block_spammers
       return unless params[:trap_field].present?
       flash[:failure] = "<h3>Evil Robot</h3> We didn't save this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
       render_failure
+    end
+
+    def save
+      venue.attributes = params.permit![:venue].to_h
+      venue.save ? render_success : render_failure
     end
 
     def render_success
@@ -146,13 +151,10 @@ class VenuesController < Calagator::ApplicationController
 
   class Destroy < SimpleDelegator
     def call
-      return if prevent_destruction_of_venue_with_events
-      venue.destroy
-      respond_to do |format|
-        format.html { redirect_to venues_path, flash: { success: %("#{venue.title}" has been deleted) } }
-        format.xml  { head :ok }
-      end
+      prevent_destruction_of_venue_with_events or destroy
     end
+
+    private
 
     def prevent_destruction_of_venue_with_events
       return if venue.events.none?
@@ -160,6 +162,14 @@ class VenuesController < Calagator::ApplicationController
       respond_to do |format|
         format.html { redirect_to venue, flash: { failure: message } }
         format.xml  { render xml: message, status: :unprocessable_entity }
+      end
+    end
+
+    def destroy
+      venue.destroy
+      respond_to do |format|
+        format.html { redirect_to venues_path, flash: { success: %("#{venue.title}" has been deleted) } }
+        format.xml  { head :ok }
       end
     end
   end
