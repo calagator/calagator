@@ -31,6 +31,12 @@ describe Event, :type => :model do
       event.unlock_editing!
       expect(event.locked).to eq(false)
     end
+
+    it "can't be deleted if it's locked" do
+      event = Event.create(:title => "Event title", :start_time => Time.zone.parse('2008.04.12'))
+      event.lock_editing!
+      expect(event.destroy).to eq(false)
+    end
   end
 
   describe "when checking time status" do
