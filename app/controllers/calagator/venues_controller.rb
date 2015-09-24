@@ -7,6 +7,10 @@ class VenuesController < Calagator::ApplicationController
   include DuplicateChecking::ControllerActions
   require_admin only: [:duplicates, :squash_many_duplicates]
 
+  def venue
+    @venue ||= params[:id] ? Venue.find(params[:id]) : Venue.new
+  end
+
 
   # GET /venues
   def index
@@ -91,42 +95,44 @@ class VenuesController < Calagator::ApplicationController
 
 
   # POST /venues, # PUT /venues/1
-  before_action :prevent_evil_robots, only: [:create, :update]
-
-  def prevent_evil_robots
-    return unless params[:trap_field].present?
-    flash[:failure] = "<h3>Evil Robot</h3> We didn't save this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
-    render_failure
-    false
-  end
-  private :prevent_evil_robots
-
   def create
-    venue.attributes = params.permit![:venue].to_h
-    venue.save ? render_success : render_failure
+    CreateOrUpdate.new(self).call
   end
   alias_method :update, :create
 
-  def render_success
-    respond_to do |format|
-      format.html { redirect_to from_event || venue, flash: { success: "Venue was successfully saved." } }
-      format.xml  { render xml: venue, status: :created, location: venue }
+  class CreateOrUpdate < SimpleDelegator
+    def call
+      return if evil_robot?
+      venue.attributes = params.permit![:venue].to_h
+      venue.save ? render_success : render_failure
+    end
+
+    private
+
+    def evil_robot?
+      return unless params[:trap_field].present?
+      flash[:failure] = "<h3>Evil Robot</h3> We didn't save this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
+      render_failure
+    end
+
+    def render_success
+      respond_to do |format|
+        format.html { redirect_to from_event || venue, flash: { success: "Venue was successfully saved." } }
+        format.xml  { render xml: venue, status: :created, location: venue }
+      end
+    end
+
+    def render_failure
+      respond_to do |format|
+        format.html { render action: venue.new_record? ? "new" : "edit" }
+        format.xml  { render xml: venue.errors, status: :unprocessable_entity }
+      end
+    end
+
+    def from_event
+      Event.find_by_id(params[:from_event])
     end
   end
-  private :render_success
-
-  def render_failure
-    respond_to do |format|
-      format.html { render action: venue.new_record? ? "new" : "edit" }
-      format.xml  { render xml: venue.errors, status: :unprocessable_entity }
-    end
-  end
-  private :render_failure
-
-  def from_event
-    Event.find_by_id(params[:from_event])
-  end
-  private :from_event
 
 
   # DELETE /venues/1
@@ -150,12 +156,6 @@ class VenuesController < Calagator::ApplicationController
       format.html { redirect_to venues_path, flash: { success: %("#{venue.title}" has been deleted) } }
       format.xml  { head :ok }
     end
-  end
-
-  private
-
-  def venue
-    @venue ||= params[:id] ? Venue.find(params[:id]) : Venue.new
   end
 end
 
