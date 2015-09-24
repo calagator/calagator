@@ -7,6 +7,7 @@ class VenuesController < Calagator::ApplicationController
   include DuplicateChecking::ControllerActions
   require_admin only: [:duplicates, :squash_many_duplicates]
 
+
   # GET /venues
   def index
     @search = Venue::Search.new(params.permit!)
@@ -28,6 +29,7 @@ class VenuesController < Calagator::ApplicationController
   end
   private :render_venues
 
+
   # GET /autocomplete via AJAX
   def autocomplete
     @venues = Venue
@@ -39,10 +41,12 @@ class VenuesController < Calagator::ApplicationController
     render json: @venues, callback: params[:callback]
   end
 
+
   # GET /venues/map
   def map
     @venues = Venue.non_duplicates.in_business
   end
+
 
   # GET /venues/1
   before_action :show_all_if_not_found, :ensure_progenitor, only: :show
@@ -72,16 +76,19 @@ class VenuesController < Calagator::ApplicationController
     end
   end
 
+
   # GET /venues/new
   def new
     venue
     render layout: params[:layout] != "false"
   end
 
+
   # GET /venues/1/edit
   def edit
     venue
   end
+
 
   # POST /venues, # PUT /venues/1
   before_action :prevent_evil_robots, only: [:create, :update]
@@ -120,6 +127,7 @@ class VenuesController < Calagator::ApplicationController
     Event.find_by_id(params[:from_event])
   end
   private :from_event
+
 
   # DELETE /venues/1
   before_action :prevent_destruction_of_venue_with_events, only: :destroy
