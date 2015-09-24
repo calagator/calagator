@@ -100,11 +100,6 @@ class Event < ActiveRecord::Base
 
   #---[ Overrides ]-------------------------------------------------------
 
-  # Return the title but strip out any whitespace.
-  def title
-    super.strip if super
-  end
-
   # Return description without those pesky carriage-returns.
   def description
     super.gsub(/\r\n?/, "\n") if super
