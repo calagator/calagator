@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
   s.add_dependency "lucene_query", "0.1"
 
   s.add_development_dependency "sqlite3", "~> 1.3"
-  s.add_development_dependency "rspec-activemodel-mocks", "~> 1.0"
+  s.add_development_dependency "rspec-activemodel-mocks", "~> 1.0.2"
   s.add_development_dependency "rspec-its", "~> 1.1"
   s.add_development_dependency "rspec-rails", "~> 3.2"
   s.add_development_dependency "rspec-collection_matchers", "~> 1.1"
