@@ -66,9 +66,8 @@ class VenuesController < Calagator::ApplicationController
 
     def show_all_if_not_found
       return if venue
-    rescue ActiveRecord::RecordNotFound => e
-      flash[:failure] = e.to_s
-      redirect_to venues_path
+    rescue ActiveRecord::RecordNotFound => exception
+      redirect_to venues_path, flash: { failure: exception.to_s }
     end
 
     def redirect_to_progenitor
