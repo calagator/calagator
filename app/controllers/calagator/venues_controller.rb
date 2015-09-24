@@ -136,25 +136,27 @@ class VenuesController < Calagator::ApplicationController
 
 
   # DELETE /venues/1
-  before_action :prevent_destruction_of_venue_with_events, only: :destroy
-
-  def prevent_destruction_of_venue_with_events
-    return unless venue.events.any?
-
-    message = "Cannot destroy venue that has associated events, you must reassociate all its events first."
-    respond_to do |format|
-      format.html { redirect_to venue, flash: { failure: message } }
-      format.xml  { render xml: message, status: :unprocessable_entity }
-    end
-    false
-  end
-  private :prevent_destruction_of_venue_with_events
-
   def destroy
-    venue.destroy
-    respond_to do |format|
-      format.html { redirect_to venues_path, flash: { success: %("#{venue.title}" has been deleted) } }
-      format.xml  { head :ok }
+    Destroy.new(self).call
+  end
+
+  class Destroy < SimpleDelegator
+    def call
+      return if prevent_destruction_of_venue_with_events
+      venue.destroy
+      respond_to do |format|
+        format.html { redirect_to venues_path, flash: { success: %("#{venue.title}" has been deleted) } }
+        format.xml  { head :ok }
+      end
+    end
+
+    def prevent_destruction_of_venue_with_events
+      return if venue.events.none?
+      message = "Cannot destroy venue that has associated events, you must reassociate all its events first."
+      respond_to do |format|
+        format.html { redirect_to venue, flash: { failure: message } }
+        format.xml  { render xml: message, status: :unprocessable_entity }
+      end
     end
   end
 end
