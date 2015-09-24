@@ -34,35 +34,23 @@ module ApplicationHelper
     time.strftime(format).gsub(/\*0*/,'').html_safe
   end
 
-  def self.source_code_version_raw
-    # Return a string describing the source code version being used
-    return "" unless system("git status 2>&1 >/dev/null")
-    " - Git timestamp: #{`git log -1 --format=format:"%ad" 2>&1`}"
-  rescue Errno::ENOENT
-    # Fail quietly if that didn't work; we don't want to get in the way.
-    ""
-  end
-
-  Calagator::ApplicationController::SOURCE_CODE_VERSION = self.source_code_version_raw
-
+  # Return a string describing the source code version being used
   def source_code_version
-    Calagator::ApplicationController::SOURCE_CODE_VERSION
+    Calagator::VERSION
   end
 
   # returns html markup with source (if any), imported/created time, and - if modified - modified time
   def datestamp(item)
-    stamp = "This item was "
-    if item.source.nil?
-      stamp << "added directly to #{Calagator.title}"
+    source = if item.source.nil?
+      "added directly to #{Calagator.title}"
     else
-      stamp << "imported from " << link_to(truncate(item.source.name, :length => 40), url_for(item.source))
+      "imported from #{link_to truncate(item.source.name, length: 40), url_for(item.source)}"
     end
-    stamp << " <br />" << content_tag(:strong, normalize_time(item.created_at, :format => :html) )
-    if item.updated_at > item.created_at
-      stamp << " and last updated <br />" << content_tag(:strong, normalize_time(item.updated_at, :format => :html) )
+    created = " <br /><strong>#{normalize_time(item.created_at, format: :html)}</strong>"
+    updated = if item.updated_at > item.created_at
+      " and last updated <br /><strong>#{normalize_time(item.updated_at, format: :html)}</strong>"
     end
-    stamp << "."
-    stamp.html_safe
+    raw "This item was #{source}#{created}#{updated}."
   end
 
   # Caches +block+ in view only if the +condition+ is true.
@@ -75,50 +63,10 @@ module ApplicationHelper
     end
   end
 
-  # Insert a chunk of +javascript+ into the page, and execute it when the document is ready.
-  def insert_javascript(javascript)
-    content_for(:javascript_insert) do
-      (<<-HERE).html_safe
-        <script>
-          $(document).ready(function() {
-            #{javascript}
-          });
-        </script>
-      HERE
-    end
-  end
-
-  # Focus cursor on DOM element specified by +xpath_query+ using JavaScript, e.g.:
-  #
-  #   <% focus_on '#search_field' %>
-  def focus_on(xpath_query)
-    insert_javascript "$('#{xpath_query}').focus();"
-  end
-
-  # Set the first tabindex to DOM element specified by +xpath_query+.
-  def tabindex_on(xpath_query)
-    #insert_javascript "$('#{xpath_query}')[0].tabindex = 1;"
-    #insert_javascript "$('#{xpath_query}')[0].attributes['tabindex'] = 1;"
-    # TODO Figure out how to set tabindex, because neither of these work right.
-  end
-
-  # Returns a string with safely encoded entities thanks to #h, while preserving any existing HTML entities.
-  def cleanse(string)
-    return escape_once(string)
-  end
-
   def subnav_class_for(controller_name, action_name)
-    return [
-      "#{controller.controller_name}_#{controller.action_name}_subnav",
-      controller.controller_name == controller_name && controller.action_name == action_name ?
-        "active" :
-        nil
-    ].compact.join(" ")
-  end
-
-  # CGI escape a string-like object. The issue is that CGI::escape fails if used on a RailsXss SafeBuffer: https://github.com/rails/rails_xss/issues/8
-  def cgi_escape(data)
-    return CGI::escape(data.to_str)
+    css_class = "#{controller.controller_name}_#{controller.action_name}_subnav"
+    css_class += " active" if [controller.controller_name, controller.action_name] == [controller_name, action_name]
+    css_class
   end
 end
 

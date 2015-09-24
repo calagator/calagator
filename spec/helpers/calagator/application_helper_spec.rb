@@ -3,24 +3,6 @@ require 'spec_helper'
 module Calagator
 
 describe ApplicationHelper, :type => :helper do
-  describe "when escaping HTML while preserving entities (cleanse)" do
-    it "should preserve plain text" do
-      expect(cleanse("Allison to Lillia")).to eq "Allison to Lillia"
-    end
-
-    it "should escape HTML" do
-      expect(cleanse("<Fiona>")).to eq "&lt;Fiona&gt;"
-    end
-
-    it "should preserve HTML entities" do
-      expect(cleanse("Allison &amp; Lillia")).to eq "Allison &amp; Lillia"
-    end
-
-    it "should handle text, HTML and entities together" do
-      expect(cleanse("&quot;<Allison> &amp; Lillia&quot;")).to eq "&quot;&lt;Allison&gt; &amp; Lillia&quot;"
-    end
-  end
-
   describe "#format_description" do
     it "should autolink" do
       expect(helper.format_description("foo http://mysite.com/~user bar")).to eq \
@@ -42,26 +24,9 @@ describe ApplicationHelper, :type => :helper do
     end
   end
 
-  describe "the source code version date" do
-    it "returns the timestamp from git" do
-      expect(ApplicationHelper).to receive(:system).with(/git/).and_return(true)
-      expect(ApplicationHelper).to receive(:`).with(/git/).and_return("Tue Jul 29 01:22:49 2014 -0700")
-      expect(ApplicationHelper.source_code_version_raw).to match(/Git timestamp: Tue Jul 29 01:22:49 2014 -0700/)
-    end
-
-    describe "when the git command can't be found" do
-      it "returns empty string" do
-        expect(ApplicationHelper).to receive(:system).with(/git/).and_return(true)
-        expect(ApplicationHelper).to receive(:`).with(/git/).and_raise(Errno::ENOENT)
-        expect(ApplicationHelper.source_code_version_raw).to eq("")
-      end
-    end
-
-    describe "when the git command returns a non-zero exit status" do
-      it "returns empty string" do
-        expect(ApplicationHelper).to receive(:system).with(/git/).and_return(false)
-        expect(ApplicationHelper.source_code_version_raw).to eq("")
-      end
+  describe "#source_code_version" do
+    it "returns the gem version" do
+      expect(helper.source_code_version).to eq(Calagator::VERSION)
     end
   end
 
