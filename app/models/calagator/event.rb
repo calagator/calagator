@@ -28,7 +28,6 @@ require "paper_trail"
 require "loofah-activerecord"
 require "loofah/activerecord/xss_foliate"
 require "active_model/sequential_validator"
-require "kernel_time"
 
 # == Event
 #
@@ -118,7 +117,7 @@ class Event < ActiveRecord::Base
   # Set the start_time to the given +value+, which could be a Time, Date,
   # DateTime, String, Array of Strings, or nil.
   def start_time=(value)
-    super Time(value)
+    super time_for(value)
   rescue ArgumentError
     errors.add :start_time, "is invalid"
     super nil
@@ -127,11 +126,19 @@ class Event < ActiveRecord::Base
   # Set the end_time to the given +value+, which could be a Time, Date,
   # DateTime, String, Array of Strings, or nil.
   def end_time=(value)
-    super Time(value)
+    super time_for(value)
   rescue ArgumentError
     errors.add :end_time, "is invalid"
     super nil
   end
+
+  def time_for(value)
+    value = value.join(' ') if value.kind_of?(Array)
+    value = value.to_s if value.kind_of?(Date)
+    value = Time.zone.parse(value) if value.kind_of?(String) # this will throw ArgumentError if invalid
+    value
+  end
+  private :time_for
 
   #---[ Lock toggling ]---------------------------------------------------
 
