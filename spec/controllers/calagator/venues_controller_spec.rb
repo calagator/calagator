@@ -8,23 +8,20 @@ describe VenuesController, :type => :controller do
 
   render_views
 
-  it "should redirect duplicate venues to their master" do
-    venue_master = FactoryGirl.create(:venue)
-    venue_duplicate = FactoryGirl.create(:venue)
+  context "concerning duplicates" do
+    let!(:venue_master) { FactoryGirl.create(:venue) }
+    let!(:venue_duplicate) { FactoryGirl.create(:venue, duplicate_of: venue_master) }
 
-    # No redirect when they're unique
-    get 'show', :id => venue_duplicate.id
-    expect(response).not_to be_redirect
-    expect(assigns(:venue).id).to eq venue_duplicate.id
+    it "redirects duplicate venues to their master" do
+      get 'show', id: venue_duplicate.id
+      expect(response).to redirect_to(venue_url(venue_master.id))
+    end
 
-    # Mark as duplicate
-    venue_duplicate.duplicate_of = venue_master
-    venue_duplicate.save!
-
-    # Now check that redirection happens
-    get 'show', :id => venue_duplicate.id
-    expect(response).to be_redirect
-    expect(response).to redirect_to(venue_url(venue_master.id))
+    it "doesn't redirect non-duplicates" do
+      get 'show', id: venue_master.id
+      expect(response).not_to be_redirect
+      expect(assigns(:venue).id).to eq venue_master.id
+    end
   end
 
   context "with admin auth for duplicates" do
