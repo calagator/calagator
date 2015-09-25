@@ -110,7 +110,7 @@ class VenuesController < Calagator::ApplicationController
 
   class CreateOrUpdate < SimpleDelegator
     def call
-      block_spammers or save
+      block_spammers or (save and render_success) or render_failure
     end
 
     private
@@ -122,8 +122,7 @@ class VenuesController < Calagator::ApplicationController
     end
 
     def save
-      venue.attributes = params.permit![:venue].to_h
-      venue.save ? render_success : render_failure
+      venue.update_attributes params.permit![:venue].to_h
     end
 
     def render_success
