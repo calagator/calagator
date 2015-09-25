@@ -1,7 +1,7 @@
 module Calagator
 
 class Venue < ActiveRecord::Base
-  class Geocoder < Struct.new(:venue, :geo)
+  class Geocoder < Struct.new(:venue)
     cattr_accessor(:perform_geocoding) { true }
     class << self
       alias_method :perform_geocoding?, :perform_geocoding
@@ -13,22 +13,25 @@ class Venue < ActiveRecord::Base
 
     def geocode
       return true unless should_geocode?
-
-      self.geo = Geokit::Geocoders::MultiGeocoder.geocode(venue.geocode_address)
-      if geo.success
-        venue.latitude       = geo.lat
-        venue.longitude      = geo.lng
-        venue.street_address = geo.street_address if venue.street_address.blank?
-        venue.locality       = geo.city           if venue.locality.blank?
-        venue.region         = geo.state          if venue.region.blank?
-        venue.postal_code    = geo.zip            if venue.postal_code.blank?
-        venue.country        = geo.country_code   if venue.country.blank?
-      end
-
+      map_geo_to_venue if geo.success
       log
     end
 
     private
+
+    def geo
+      @geo ||= Geokit::Geocoders::MultiGeocoder.geocode(venue.geocode_address)
+    end
+
+    def map_geo_to_venue
+      venue.latitude       = geo.lat
+      venue.longitude      = geo.lng
+      venue.street_address = geo.street_address if venue.street_address.blank?
+      venue.locality       = geo.city           if venue.locality.blank?
+      venue.region         = geo.state          if venue.region.blank?
+      venue.postal_code    = geo.zip            if venue.postal_code.blank?
+      venue.country        = geo.country_code   if venue.country.blank?
+    end
 
     def should_geocode?
       [
