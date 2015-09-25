@@ -42,11 +42,11 @@ class Source::Parser::Ical < Source::Parser
   def events
     calendars.flat_map do |calendar|
       calendar.events.map do |component|
-        vevent = VEvent.new(component)
-        next if vevent.old?
+        VEvent.new(component)
+      end.reject(&:old?).map do |vevent|
         vevent.to_event(calendar, source)
       end
-    end.compact
+    end
   end
 
   def dedup(events)
