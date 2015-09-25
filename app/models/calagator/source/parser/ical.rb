@@ -23,7 +23,10 @@ class Source::Parser::Ical < Source::Parser
 
   def to_events
     return false unless calendars
-    dedup(events(calendars))
+    events = calendars.flat_map(&:events).each do |event|
+      event.source = source
+    end
+    dedup(events)
   end
 
   private
@@ -41,12 +44,6 @@ class Source::Parser::Ical < Source::Parser
     self.class.read_url(url).tap do |content|
       content.gsub! /\r\n/, "\n" # normalize line endings
       content.gsub! /;TZID=GMT:(.*)/, ':\1Z' # normalize timezones
-    end
-  end
-
-  def events(calendars)
-    calendars.flat_map(&:events).each do |event|
-      event.source = source
     end
   end
 
