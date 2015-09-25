@@ -44,19 +44,19 @@ ICAL
   end
 
   it "should find a property set by its key" do
-    expect(vvenue.vcard_hash['NAME']).to eq 'Apple Store Pioneer Place'
+    expect(vvenue.name).to eq 'Apple Store Pioneer Place'
   end
 
   it "should find a property set by its key and meta-qualifier by its key when one wasn't specified" do
-    expect(vvenue.vcard_hash['URL']).to eq 'http://eventful.com/V0-001-001423875-1'
+    expect(vvenue.url).to eq 'http://eventful.com/V0-001-001423875-1'
   end
 
   it "should find a property set by its key and multiple meta-qualifiers by its key when one wasn't specified" do
-    expect(vvenue.vcard_hash['COUNTRY']).to eq 'United States'
+    expect(vvenue.country).to eq 'United States'
   end
 
   it "should find a property set by its key and meta-qualifier with odd characters by its key when one wasn't specified" do
-    expect(vvenue.vcard_hash['REGION']).to eq 'Oregon'
+    expect(vvenue.region).to eq 'Oregon'
   end
 end
 

@@ -97,6 +97,40 @@ class Source::Parser::Ical < Source::Parser
       content.match(/^UID:(?<uid>.+)$/)[:uid]
     end
 
+    def name
+      vcard_hash['NAME']
+    end
+
+    def address
+      vcard_hash['ADDRESS']
+    end
+
+    def city
+      vcard_hash['CITY']
+    end
+
+    def region
+      vcard_hash['REGION']
+    end
+
+    def postalcode
+      vcard_hash['POSTALCODE']
+    end
+
+    def country
+      vcard_hash['COUNTRY']
+    end
+
+    def geo
+      vcard_hash['GEO']
+    end
+
+    def url
+      vcard_hash['URL']
+    end
+
+    private
+
     def vcard_hash
       # Only use first vcard of a VVENUE
       vcard = RiCal.parse_string(content).first
@@ -106,8 +140,6 @@ class Source::Parser::Ical < Source::Parser
 
       hash_from_vcard_lines(vcard_lines)
     end
-
-    private
 
     VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/
 
@@ -168,15 +200,15 @@ class Source::Parser::Ical < Source::Parser
 
       # VVENUE entries are considered just Vcards,
       # treating them as such.
-      if vvenue && vcard_hash = vvenue.vcard_hash
-        location = vcard_hash['GEO'].split(/;/).map(&:to_f)
+      if vvenue
+        location = vvenue.geo.split(/;/).map(&:to_f)
         venue.attributes = {
-          title:          vcard_hash['NAME'],
-          street_address: vcard_hash['ADDRESS'],
-          locality:       vcard_hash['CITY'],
-          region:         vcard_hash['REGION'],
-          postal_code:    vcard_hash['POSTALCODE'],
-          country:        vcard_hash['COUNTRY'],
+          title:          vvenue.name,
+          street_address: vvenue.address,
+          locality:       vvenue.city,
+          region:         vvenue.region,
+          postal_code:    vvenue.postalcode,
+          country:        vvenue.country,
           latitude:       location.first,
           longitude:      location.last,
         }
