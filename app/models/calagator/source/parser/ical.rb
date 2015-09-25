@@ -47,7 +47,9 @@ class Source::Parser::Ical < Source::Parser
       calendar.events.map do |component|
         VEvent.new(component)
       end.reject(&:old?).map do |vevent|
-        vevent.to_event(calendar, source)
+        vevent.to_event(calendar)
+      end.each do |event|
+        event.source = source
       end
     end
   end
@@ -66,8 +68,8 @@ class Source::Parser::Ical < Source::Parser
       (component.dtend || component.dtstart).to_time < cutoff
     end
 
-    def to_event(calendar, source)
-      event = EventParser.parse(component, source)
+    def to_event(calendar)
+      event = EventParser.parse(component)
       venue = VenueParser.parse(content_venue(calendar), component.location)
       event.venue = venue if venue
       event
@@ -88,14 +90,13 @@ class Source::Parser::Ical < Source::Parser
     end
   end
 
-  class EventParser < Struct.new(:component, :source)
-    def self.parse(component, source)
-      new(component, source).parse
+  class EventParser < Struct.new(:component)
+    def self.parse(component)
+      new(component).parse
     end
 
     def parse
       Event.new({
-        source:      source,
         title:       component.summary,
         description: component.description,
         url:         component.url,
