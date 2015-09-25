@@ -44,7 +44,7 @@ end
 describe Source::Parser::Ical::VenueParser, "when parsing VCARD lines", :type => :model do
    before(:each) do
      # Note that each line here represents a single, complete property definition -- this method doesn't do any magical unwrapping of text.
-     @vcard_hash = described_class.hash_from_vcard_lines(%(
+     @vcard_hash = described_class.new.send :hash_from_vcard_lines, %(
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.html
 UID:V0-001-001423875-1@eventful.com
 NAME:Apple Store Pioneer Place
@@ -56,7 +56,7 @@ COUNTRY;;;ABBREV=USA:United States
 POSTALCODE:97204
 GEO:45.518798;-122.677583
 URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
-CATEGORIES:apple applecom appleinc technology).split("\n"))
+CATEGORIES:apple applecom appleinc technology).split("\n")
   end
 
   it "should find a property set by its key" do

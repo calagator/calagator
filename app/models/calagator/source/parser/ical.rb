@@ -109,8 +109,12 @@ class Source::Parser::Ical < Source::Parser
   # Arguments:
   # * value - String with iCalendar data to parse which contains a VVENUE item.
   # * fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
-  class VenueParser
+  class VenueParser < Struct.new(:value, :fallback)
     def self.parse(value, fallback=nil)
+      new(value, fallback).parse
+    end
+
+    def parse
       venue = Venue.new
 
       # VVENUE entries are considered just Vcards,
@@ -139,7 +143,9 @@ class Source::Parser::Ical < Source::Parser
       venue
     end
 
-    def self.vcard_hash_from_value(value)
+    private
+
+    def vcard_hash_from_value(value)
       value ||= ""
       return unless data = value.scan(VENUE_CONTENT_RE).first
 
@@ -159,7 +165,7 @@ class Source::Parser::Ical < Source::Parser
     #
     # Arguments:
     # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
-    def self.hash_from_vcard_lines(vcard_lines)
+    def hash_from_vcard_lines(vcard_lines)
       vcard_lines.reduce({}) do |vcard_hash, vcard_line|
         if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
           _, key, qualifier, value = *matcher
