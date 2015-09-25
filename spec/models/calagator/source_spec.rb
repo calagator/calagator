@@ -10,6 +10,7 @@ describe Source, "in general", :type => :model do
       :url => "http://my.url/",
       :start_time => Time.now + 1.day,
       :end_time => nil,
+      :old? => false,
       :venue => nil,
       :duplicate_of_id => nil)
   end

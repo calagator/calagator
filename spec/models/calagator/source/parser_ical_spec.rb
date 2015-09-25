@@ -2,11 +2,17 @@ require 'spec_helper'
 
 module Calagator
   describe Source::Parser::Ical, type: :model do
+    around do |example|
+      Timecop.freeze("2000-01-01") do
+        example.run
+      end
+    end
+
     def events_from_ical_at(filename)
       url = "http://foo.bar/"
       source = Calagator::Source.new(:title => "Calendar event feed", :url => url)
       stub_request(:get, url).to_return(body: read_sample(filename))
-      return source.to_events(:skip_old => false)
+      return source.to_events
     end
 
     describe "in general" do
@@ -28,7 +34,7 @@ module Calagator
       before(:each) do
         url = "http://foo.bar/"
         stub_request(:get, url).to_return(body: read_sample('ical_upcoming_many.ics'))
-        @events = Source::Parser.to_events(url: url, skip_old: false)
+        @events = Source::Parser.to_events(url: url)
       end
 
       it "venues should be" do
@@ -43,7 +49,7 @@ module Calagator
       before(:each) do
         url = "http://foo.bar/"
         stub_request(:get, url).to_return(body: read_sample('ical_eventful_many.ics'))
-        @events = Source::Parser.to_events(url: url, skip_old: false)
+        @events = Source::Parser.to_events(url: url)
       end
 
       it "should find multiple events" do
@@ -152,7 +158,7 @@ module Calagator
         url = "http://foo.bar/"
         stub_request(:get, url).to_return(body: read_sample('ical_z.ics'))
         @source = Source.new(:title => "Non-local time", :url => url)
-        events = @source.create_events!(:skip_old => false)
+        events = @source.create_events!
         event = events.first
 
         expect(event.start_time).to eq Time.parse('Thu Jul 01 08:00:00 +0000 2010')
@@ -278,20 +284,8 @@ END:VCALENDAR))
         @source = Source.new(title: "Title", url: url)
       end
 
-      # for following specs a 'valid' event does not start after it ends"
-      it "should be able to import all valid events" do
-        events = @source.create_events!(:skip_old => false)
-        expect(events.map(&:title)).to eq [
-          "Past start and no end",
-          "Current start and no end",
-          "Past start and current end",
-          "Current start and current end",
-          "Past start and past end"
-        ]
-      end
-
       it "should be able to skip invalid and old events" do
-        events = @source.create_events!(:skip_old => true)
+        events = @source.create_events!
         expect(events.map(&:title)).to eq [
           "Current start and no end",
           "Past start and current end",

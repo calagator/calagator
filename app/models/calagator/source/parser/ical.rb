@@ -25,7 +25,7 @@ class Source::Parser::Ical < Source::Parser
 
     events = calendars.flat_map do |calendar|
       calendar.events.map do |component|
-        next if skip_old? and old?(component)
+        next if old?(component)
         component_to_event(component, calendar)
       end
     end
@@ -36,11 +36,6 @@ class Source::Parser::Ical < Source::Parser
   end
 
   private
-
-  def skip_old?
-    # Skip old events by default
-    true unless opts[:skip_old] == false
-  end
 
   def old?(component)
     cutoff = Time.now.yesterday

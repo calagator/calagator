@@ -103,7 +103,7 @@ describe Event, :type => :model do
       @basic_event = Event.new(
         :title => 'Web 2.0 Conference',
         :url => 'http://www.web2con.com/',
-        :start_time => Time.zone.parse('2007-10-05'),
+        :start_time => 1.day.from_now,
         :end_time => nil,
         :venue => @basic_venue)
     end
@@ -113,7 +113,7 @@ describe Event, :type => :model do
       actual_ical = Event::IcalRenderer.render(@basic_event)
       stub_request(:get, url).to_return(body: actual_ical)
 
-      events = Source::Parser.to_events(url: url, skip_old: false)
+      events = Source::Parser.to_events(url: url)
 
       expect(events.size).to eq 1
       event = events.first
@@ -131,7 +131,7 @@ describe Event, :type => :model do
       url = "http://foo.bar/"
       stub_request(:get, url).to_return(body: actual_ical)
 
-      events = Source::Parser.to_events(url: url, skip_old: false)
+      events = Source::Parser.to_events(url: url)
 
       expect(events.size).to eq 1
       event = events.first

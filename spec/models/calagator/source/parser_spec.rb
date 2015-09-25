@@ -2,6 +2,12 @@ require 'spec_helper'
 
 module Calagator
   describe Source::Parser, type: :model do
+    around do |example|
+      Timecop.freeze("2000-01-01") do
+        example.run
+      end
+    end
+
     describe "when reading content" do
       it "should read from a normal URL" do
         stub_request(:get, "http://a.real/~url").to_return(body: "42")
@@ -66,7 +72,7 @@ module Calagator
       </div>})
           stub_request(:get, url).to_return(body: @cal_content)
           @events = @cal_source.to_events
-          @created_events = @cal_source.create_events!(:skip_old => false)
+          @created_events = @cal_source.create_events!
         end
 
         it "should only parse one event" do
@@ -107,7 +113,7 @@ module Calagator
           stub_request(:get, url).to_return(body: cal_content)
 
           cal_source = Source.new(title: "Calendar event feed", url: url)
-          imported_event = cal_source.create_events!(:skip_old => false).first
+          imported_event = cal_source.create_events!.first
           expect(imported_event).not_to be_marked_as_duplicate
         end
       end
@@ -137,7 +143,7 @@ module Calagator
 
           cal_source = Source.new(title: "Calendar event feed", url: url)
           @parsed_events  = cal_source.to_events
-          @created_events = cal_source.create_events!(:skip_old => false)
+          @created_events = cal_source.create_events!
         end
 
         it "should parse two events" do
@@ -177,7 +183,7 @@ module Calagator
 
         source = Source.new(title: "Event with squashed venue", url: url)
 
-        event = source.to_events(:skip_old => false).first
+        event = source.to_events.first
         expect(event.venue.title).to eq "Master"
       end
 
@@ -190,7 +196,7 @@ module Calagator
 
         source = Source.new(title: "Event with duplicate machine-tagged venue", url: plancast_url)
 
-        event = source.to_events(:skip_old => false).first
+        event = source.to_events.first
 
         expect(event.venue).to eq venue
       end
