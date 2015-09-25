@@ -54,16 +54,44 @@ class Source::Parser::Ical < Source::Parser
   def component_to_event(component, calendar)
     venue = VenueParser.parse(content_venue(component, calendar), component.location)
     venue = venue_or_duplicate(venue) if venue
-    event = Event.new({
-      source:      source,
-      title:       component.summary,
-      description: component.description,
-      url:         component.url,
-      start_time:  normalized_start_time(component),
-      end_time:    normalized_end_time(component),
-      venue:       venue,
-    })
+    event = EventParser.parse(component, source)
+    event.venue = venue
     event_or_duplicate(event)
+  end
+
+  class EventParser
+    def self.parse(component, source)
+      Event.new({
+        source:      source,
+        title:       component.summary,
+        description: component.description,
+        url:         component.url,
+        start_time:  normalized_start_time(component),
+        end_time:    normalized_end_time(component),
+      })
+    end
+
+    # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
+    def self.normalized_start_time(component)
+      if component.dtstart_property.tzid
+        component.dtstart
+      else
+        Time.zone.parse(component.dtstart_property.value)
+      end
+    end
+
+    # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
+    def self.normalized_end_time(component)
+      if component.dtstart_property.tzid
+        component.dtend
+      elsif component.dtend_property
+        Time.zone.parse(component.dtend_property.value)
+      elsif component.duration
+        component.duration_property.add_to_date_time_value(normalized_start_time(component))
+      else
+        normalized_start_time(component)
+      end
+    end
   end
 
   def content_venue(component, calendar)
@@ -76,28 +104,6 @@ class Source::Parser::Ical < Source::Parser
   rescue => exception
     Rails.logger.info("Source::Parser::Ical.to_events : Failed to parse content_venue for event -- #{exception}")
     nil
-  end
-
-  # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-  def normalized_start_time(component)
-    if component.dtstart_property.tzid
-      component.dtstart
-    else
-      Time.zone.parse(component.dtstart_property.value)
-    end
-  end
-
-  # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-  def normalized_end_time(component)
-    if component.dtstart_property.tzid
-      component.dtend
-    elsif component.dtend_property
-      Time.zone.parse(component.dtend_property.value)
-    elsif component.duration
-      component.duration_property.add_to_date_time_value(normalized_start_time(component))
-    else
-      normalized_start_time(component)
-    end
   end
 
   def munge_gmt_dates(content)
