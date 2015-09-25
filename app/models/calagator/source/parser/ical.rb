@@ -175,32 +175,31 @@ class Source::Parser::Ical < Source::Parser
   # * fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
   class VenueParser < Struct.new(:vvenue, :fallback)
     def to_venue
-      venue = Venue.new
+      from_vvenue or from_fallback or return
+    end
 
-      # VVENUE entries are considered just Vcards,
-      # treating them as such.
-      if vvenue
-        location = vvenue.geo.split(/;/).map(&:to_f)
-        venue.attributes = {
-          title:          vvenue.name,
-          street_address: vvenue.address,
-          locality:       vvenue.city,
-          region:         vvenue.region,
-          postal_code:    vvenue.postalcode,
-          country:        vvenue.country,
-          latitude:       location.first,
-          longitude:      location.last,
-        }
+    private
 
-      elsif fallback.present?
-        venue.title = fallback
-      else
-        return nil
+    def from_vvenue
+      return unless vvenue
+      location = vvenue.geo.split(/;/).map(&:to_f)
+      Venue.new({
+        title:          vvenue.name,
+        street_address: vvenue.address,
+        locality:       vvenue.city,
+        region:         vvenue.region,
+        postal_code:    vvenue.postalcode,
+        country:        vvenue.country,
+        latitude:       location.first,
+        longitude:      location.last,
+      }) do |venue|
+        venue.geocode!
       end
+    end
 
-      venue.geocode!
-
-      venue
+    def from_fallback
+      return unless fallback.present?
+      Venue.new(title: fallback)
     end
   end
 end
