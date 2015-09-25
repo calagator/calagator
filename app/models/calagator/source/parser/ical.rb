@@ -60,10 +60,9 @@ class Source::Parser::Ical < Source::Parser
       title:       component.summary,
       description: component.description,
       url:         component.url,
+      start_time:  normalized_start_time(component),
+      end_time:    normalized_end_time(component),
     })
-
-    dates_for_tz(component, event)
-
     event.venue = to_venue(content_venue(component, calendar), component.location)
     event_or_duplicate(event)
   end
@@ -82,21 +81,24 @@ class Source::Parser::Ical < Source::Parser
   end
 
   # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-  def dates_for_tz(component, event)
+  def normalized_start_time(component)
     if component.dtstart_property.tzid
-      event.start_time  = component.dtstart
-      event.end_time    = component.dtend
+      component.dtstart
     else
-      event.start_time  = Time.zone.parse(component.dtstart_property.value)
-      if component.dtend_property
-        event.end_time = Time.zone.parse(component.dtend_property.value)
-      else
-        if component.duration
-          event.end_time = component.duration_property.add_to_date_time_value(event.start_time)
-        else
-          event.end_time = event.start_time
-        end
-      end
+      Time.zone.parse(component.dtstart_property.value)
+    end
+  end
+
+  # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
+  def normalized_end_time(component)
+    if component.dtstart_property.tzid
+      component.dtend
+    elsif component.dtend_property
+      Time.zone.parse(component.dtend_property.value)
+    elsif component.duration
+      component.duration_property.add_to_date_time_value(normalized_start_time(component))
+    else
+      normalized_start_time(component)
     end
   end
 
