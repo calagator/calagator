@@ -43,11 +43,13 @@ class Source::Parser::Ical < Source::Parser
   end
 
   def events(calendars)
-    calendars.flat_map do |calendar|
-      calendar.events.map do |component|
+    calendars.map do |calendar|
+      VCalendar.new(calendar)
+    end.flat_map do |vcalendar|
+      vcalendar.events.map do |component|
         VEvent.new(component)
       end.reject(&:old?).map do |vevent|
-        vevent.to_event(calendar)
+        vevent.to_event(vcalendar)
       end.each do |event|
         event.source = source
       end
@@ -62,22 +64,32 @@ class Source::Parser::Ical < Source::Parser
     end.uniq
   end
 
+  class VCalendar < Struct.new(:calendar)
+    def events
+      calendar.events
+    end
+
+    def to_s
+      calendar.to_s
+    end
+  end
+
   class VEvent < Struct.new(:component)
     def old?
       cutoff = Time.now.yesterday
       (component.dtend || component.dtstart).to_time < cutoff
     end
 
-    def to_event(calendar)
+    def to_event(vcalendar)
       event = EventParser.new(component).to_event
-      event.venue = VenueParser.new(content_venue(calendar), component.location).to_venue
+      event.venue = VenueParser.new(content_venue(vcalendar), component.location).to_venue
       event
     end
 
     private
 
-    def content_venue(calendar)
-      content_venues = calendar.to_s.scan(VENUE_CONTENT_RE)
+    def content_venue(vcalendar)
+      content_venues = vcalendar.to_s.scan(VENUE_CONTENT_RE)
 
       # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
       venue_uid = component.location_property.params["VVENUE"]
