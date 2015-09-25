@@ -20,8 +20,8 @@ class Source::Parser::Ical < Source::Parser
   end
 
   def to_events
-    return false unless calendars
-    events = calendars.flat_map(&:events).reject(&:old?).map(&:to_event).each do |event|
+    return false unless vcalendars
+    events = vcalendars.flat_map(&:vevents).reject(&:old?).map(&:to_event).each do |event|
       event.source = source
     end
     dedup(events)
@@ -29,8 +29,8 @@ class Source::Parser::Ical < Source::Parser
 
   private
 
-  def calendars
-    @calendars ||= VCalendar.parse(content)
+  def vcalendars
+    @vcalendars ||= VCalendar.parse(content)
   end
 
   def content
@@ -58,15 +58,15 @@ class Source::Parser::Ical < Source::Parser
       raise # Unknown error, reraise
     end
 
-    def events
+    def vevents
       calendar.events.map do |component|
-        VEvent.new(component, venues)
+        VEvent.new(component, vvenues)
       end
     end
 
     VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
 
-    def venues
+    def vvenues
       calendar.to_s.scan(VENUE_CONTENT_RE).map do |venue_content|
         VVenue.new(venue_content)
       end
