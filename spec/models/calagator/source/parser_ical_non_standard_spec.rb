@@ -29,7 +29,7 @@ END:VVENUE))
   end
 
   it "should have the adress as is" do
-    @venue.street_address == '700 Southwest Fifth Avenue Suite #1035'
+    expect(@venue.street_address).to eq '700 Southwest Fifth Avenue Suite #1035'
   end
 
   it "should have a locality" do
@@ -37,7 +37,7 @@ END:VVENUE))
   end
 
   it "should have the locality as is" do
-    @venue.locality == 'Portland'
+    expect(@venue.locality).to eq 'Portland'
   end
 end
 
@@ -72,19 +72,19 @@ CATEGORIES:apple applecom appleinc technology).split("\n"))
   end
 
   it "should find a property set by its key and multiple meta-qualifier by" do
-    @vcard_hash['COUNTRY;;;ABBREV=USA'] == 'United States'
+    expect(@vcard_hash['COUNTRY;;;ABBREV=USA']).to eq 'United States'
   end
 
   it "should find a property set by its key and multiple meta-qualifiers by its key when one wasn't specified" do
-    @vcard_hash['COUNTRY'] == 'United States'
+    expect(@vcard_hash['COUNTRY']).to eq 'United States'
   end
 
   it "should find a property set by its key and meta-qualifier with odd characters" do
-    @vcard_hash['REGION;KMeta=none&bizzare'] == 'Oregon'
+    expect(@vcard_hash['REGION;KMeta=none&bizzare']).to eq 'Oregon'
   end
 
   it "should find a property set by its key and meta-qualifier with odd characters by its key when one wasn't specified" do
-    @vcard_hash['REGION'] == 'Oregon'
+    expect(@vcard_hash['REGION']).to eq 'Oregon'
   end
 end
 
