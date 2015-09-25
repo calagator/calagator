@@ -15,9 +15,10 @@ class Source::Parser::Ical < Source::Parser
 
   VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
 
-  # Override Base::read_url to handle "webcal" scheme addresses.
+  # Override Source::Parser.read_url to handle "webcal" scheme addresses.
   def self.read_url(url)
-    super(url.gsub(/^webcal:/, 'http:'))
+    url.gsub!(/^webcal:/, 'http:')
+    super
   end
 
   def to_events
