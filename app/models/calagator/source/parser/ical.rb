@@ -81,10 +81,13 @@ class Source::Parser::Ical < Source::Parser
 
     private
 
+    def venue_uid
+      component.location_property.params["VVENUE"]
+    end
+
     def vvenue
       venues = calendar.venues
       # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
-      venue_uid = component.location_property.params["VVENUE"]
       # finding in the venues array an item matching the uid
       venue_uid ? venues.find{|venue| venue.match(/^UID:#{venue_uid}$/m)} : nil
     rescue => exception
