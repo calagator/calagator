@@ -62,8 +62,8 @@ class Source::Parser::Ical < Source::Parser
       url:         component.url,
       start_time:  normalized_start_time(component),
       end_time:    normalized_end_time(component),
+      venue:       to_venue(content_venue(component, calendar), component.location),
     })
-    event.venue = to_venue(content_venue(component, calendar), component.location)
     event_or_duplicate(event)
   end
 
