@@ -59,8 +59,12 @@ class Source::Parser::Ical < Source::Parser
     event_or_duplicate(event)
   end
 
-  class EventParser
+  class EventParser < Struct.new(:component, :source)
     def self.parse(component, source)
+      new(component, source).parse
+    end
+
+    def parse
       Event.new({
         source:      source,
         title:       component.summary,
@@ -71,8 +75,10 @@ class Source::Parser::Ical < Source::Parser
       })
     end
 
+    private
+
     # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-    def self.normalized_start_time(component)
+    def normalized_start_time(component)
       if component.dtstart_property.tzid
         component.dtstart
       else
@@ -81,7 +87,7 @@ class Source::Parser::Ical < Source::Parser
     end
 
     # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-    def self.normalized_end_time(component)
+    def normalized_end_time(component)
       if component.dtstart_property.tzid
         component.dtend
       elsif component.dtend_property
