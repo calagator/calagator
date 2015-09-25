@@ -63,18 +63,23 @@ module Calagator
       end
 
       it "should match each event with its venue" do
-        event_titles_and_street_addresses = [
+        expect(@events.map { |event| [event.title, event.venue.street_address] }).to eq [
           ["iMovie and iDVD Workshop", "7293 SW Bridgeport Road"],
+          ["iMovie and iDVD Workshop", "700 Southwest Fifth Avenue Suite #1035"],
           ["Portland Macintosh Users Group (PMUG)", "Jean Vollum Natural Capital Center"],
-          ["Morning Meetings: IT", "622 SE Grand Avenue"]
+          ["Morning Meetings: IT", "622 SE Grand Avenue"],
+          ["Portland Python Users' Group", "622 SE Grand Avenue"],
+          ["Computer Basics Class", "12375 SW Fifth Street"],
+          ["Code 'n' Splode", "622 SE Grand Avenue"],
+          ["Google Analytics Seminars for Success in Portland,OR", "310 SW Lincoln Street"],
+          ["PDXPHP Monthly Meeting", "1731 SE Tenth Avenue"],
+          ["Portland Ruby Brigade", "622 SE Grand Avenue"],
+          ["Portland Cisco Router Training: 2-Day Hands-On Seminar", "15525 NW Gateway Court"],
+          ["Post Card & Souvenir Distributors Association Convention & Tra de Show", "1000 NE Multnomah"],
+          ["Portland Cisco ASA Training:  2-Day Hands-On Seminar", "15525 NW Gateway Court"],
+          ["Mythbusters", "Southwest Broadway at Main Street"],
+          ["Wood Technology Clinic & Show", "777 NE Martin Luther King Jr Boulevard"],
         ]
-
-        # Make sure each of the above events has the expected street address
-        event_titles_and_street_addresses.each do |event_title, street_address|
-          expect(@events.find { |event|
-            event.title == event_title && event.venue.street_address == street_address
-          }).not_to be_nil
-        end
       end
     end
 
