@@ -52,6 +52,8 @@ class Source::Parser::Ical < Source::Parser
   end
 
   def component_to_event(component, calendar)
+    venue = VenueParser.parse(content_venue(component, calendar), component.location)
+    venue = venue_or_duplicate(venue) if venue
     event = Event.new({
       source:      source,
       title:       component.summary,
@@ -59,7 +61,7 @@ class Source::Parser::Ical < Source::Parser
       url:         component.url,
       start_time:  normalized_start_time(component),
       end_time:    normalized_end_time(component),
-      venue:       to_venue(content_venue(component, calendar), component.location),
+      venue:       venue,
     })
     event_or_duplicate(event)
   end
@@ -107,69 +109,74 @@ class Source::Parser::Ical < Source::Parser
   # Arguments:
   # * value - String with iCalendar data to parse which contains a VVENUE item.
   # * fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
-  def to_venue(value, fallback=nil)
-    venue = Venue.new
+  class VenueParser
+    def self.parse(value, fallback=nil)
+      venue = Venue.new
 
-    # VVENUE entries are considered just Vcards,
-    # treating them as such.
-    if vcard_hash = vcard_hash_from_value(value)
-      venue.attributes = {
-        title:          vcard_hash['NAME'],
-        street_address: vcard_hash['ADDRESS'],
-        locality:       vcard_hash['CITY'],
-        region:         vcard_hash['REGION'],
-        postal_code:    vcard_hash['POSTALCODE'],
-        country:        vcard_hash['COUNTRY'],
-      }
-      venue.latitude, venue.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
+      # VVENUE entries are considered just Vcards,
+      # treating them as such.
+      if vcard_hash = vcard_hash_from_value(value)
+        location = vcard_hash['GEO'].split(/;/).map(&:to_f)
+        venue.attributes = {
+          title:          vcard_hash['NAME'],
+          street_address: vcard_hash['ADDRESS'],
+          locality:       vcard_hash['CITY'],
+          region:         vcard_hash['REGION'],
+          postal_code:    vcard_hash['POSTALCODE'],
+          country:        vcard_hash['COUNTRY'],
+          latitude:       location.first,
+          longitude:      location.last,
+        }
 
-    elsif fallback.present?
-      venue.title = fallback
-    else
-      return nil
+      elsif fallback.present?
+        venue.title = fallback
+      else
+        return nil
+      end
+
+      venue.geocode!
+
+      venue
     end
 
-    venue.geocode!
-    venue_or_duplicate(venue)
-  end
+    def self.vcard_hash_from_value(value)
+      value ||= ""
+      return unless data = value.scan(VENUE_CONTENT_RE).first
 
-  def vcard_hash_from_value(value)
-    value ||= ""
-    return unless data = value.scan(VENUE_CONTENT_RE).first
+      # Only use first vcard of a VVENUE
+      vcard = RiCal.parse_string(data).first
 
-    # Only use first vcard of a VVENUE
-    vcard = RiCal.parse_string(data).first
+      # Extract all properties, including non-standard ones, into an array of "KEY;meta-qualifier:value" strings
+      vcard_lines = vcard.export_properties_to(StringIO.new(''))
 
-    # Extract all properties, including non-standard ones, into an array of "KEY;meta-qualifier:value" strings
-    vcard_lines = vcard.export_properties_to(StringIO.new(''))
+      # Turn a String-like object into an Enumerable.
+      vcard_lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
 
-    # Turn a String-like object into an Enumerable.
-    vcard_lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
+      hash_from_vcard_lines(vcard_lines)
+    end
 
-    hash_from_vcard_lines(vcard_lines)
-  end
+    # Return hash parsed from VCARD lines.
+    #
+    # Arguments:
+    # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
+    def self.hash_from_vcard_lines(vcard_lines)
+      vcard_lines.reduce({}) do |vcard_hash, vcard_line|
+        if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
+          _, key, qualifier, value = *matcher
 
-  # Return hash parsed from VCARD lines.
-  #
-  # Arguments:
-  # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
-  def hash_from_vcard_lines(vcard_lines)
-    vcard_lines.reduce({}) do |vcard_hash, vcard_line|
-      if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
-        _, key, qualifier, value = *matcher
+          if qualifier
+            # Add entry for a key and its meta-qualifier
+            vcard_hash["#{key}#{qualifier}"] = value
 
-        if qualifier
-          # Add entry for a key and its meta-qualifier
-          vcard_hash["#{key}#{qualifier}"] = value
-
-          # Add fallback entry for a key from the matching meta-qualifier, e.g. create key "foo" from contents of key with meta-qualifier "foo;bar".
-          vcard_hash[key] ||= value
-        else
-          # Add entry for a key without a meta-qualifier.
-          vcard_hash[key] = value
+            # Add fallback entry for a key from the matching meta-qualifier, e.g. create key "foo" from contents of key with meta-qualifier "foo;bar".
+            vcard_hash[key] ||= value
+          else
+            # Add entry for a key without a meta-qualifier.
+            vcard_hash[key] = value
+          end
         end
+        vcard_hash
       end
-      vcard_hash
     end
   end
 end
