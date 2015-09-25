@@ -100,12 +100,12 @@
   <div id='events'>
     <div id='future_events'>
       <h2>Future events happening here</h2>
-      <%= render :partial => 'calagator/events/list', :locals => { :events => @venue.future_events } %>
+      <%= render partial: 'calagator/events/list', locals: { events: @venue.events.future} %>
     </div>
 
     <div id='past_events'>
       <h2>Past events that happened here</h2>
-      <%= render :partial => 'calagator/events/list', :locals => { :events => @venue.past_events } %>
+      <%= render partial: 'calagator/events/list', locals: { events: @venue.events.past } %>
     </div>
   </div>
 </div>

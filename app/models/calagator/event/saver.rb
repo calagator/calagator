@@ -5,8 +5,8 @@ class Event < ActiveRecord::Base
     def save
       event.attributes = params[:event] || {}
       event.venue      = find_or_initialize_venue
-      event.start_time = [ params[:start_date], params[:start_time] ]
-      event.end_time   = [ params[:end_date], params[:end_time] ]
+      event.start_time = [ params[:start_date], params[:start_time] ].join(' ')
+      event.end_time   = [ params[:end_date], params[:end_time] ].join(' ')
       event.tags.reload # Reload the #tags association because its members may have been modified when #tag_list was set above.
 
       attempt_save?

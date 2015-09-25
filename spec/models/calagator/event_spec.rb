@@ -222,11 +222,6 @@ describe Event, :type => :model do
       expect(event.start_time).to eq Time.zone.parse("2009-01-02 03:45")
     end
 
-    it "should set from an Array of Strings" do
-      event = Event.new(:start_time => ["2009-01-03", "02:14"])
-      expect(event.start_time).to eq Time.zone.parse("2009-01-03 02:14")
-    end
-
     it "should set from Date" do
       event = Event.new(:start_time => Date.parse("2009-02-01"))
       expect(event.start_time).to eq Time.zone.parse("2009-02-01")
@@ -260,11 +255,6 @@ describe Event, :type => :model do
       expect(event.end_time).to eq Time.zone.parse("2009-01-02 03:45")
     end
 
-    it "should set from an Array of Strings" do
-      event = Event.new(:end_time => ["2009-01-03", "02:14"])
-      expect(event.end_time).to eq Time.zone.parse("2009-01-03 02:14")
-    end
-
     it "should set from Date" do
       event = Event.new(:end_time => Date.parse("2009-02-01"))
       expect(event.end_time).to eq Time.zone.parse("2009-02-01")
@@ -281,26 +271,6 @@ describe Event, :type => :model do
     end
   end
 
-  describe "#dates" do
-    it "returns an array of dates spanned by the event" do
-      event = Event.new(start_time: "2010-01-01", end_time: "2010-01-03")
-      expect(event.dates).to eq([
-        Date.parse("2010-01-01"),
-        Date.parse("2010-01-02"),
-        Date.parse("2010-01-03"),
-      ])
-    end
-
-    it "returns an array of one date when there is no end time" do
-      event = Event.new(start_time: "2010-01-01")
-      expect(event.dates).to eq([Date.parse("2010-01-01")])
-    end
-
-    it "throws ArgumentError when there is no start time" do
-      expect { Event.new.dates }.to raise_error(ArgumentError)
-    end
-  end
-
   describe "#duration" do
     it "returns the event length in seconds" do
       event = Event.new(start_time: "2010-01-01", end_time: "2010-01-03")
@@ -309,14 +279,6 @@ describe Event, :type => :model do
 
     it "returns zero if start and end times aren't present" do
       expect(Event.new.duration).to eq(0)
-    end
-  end
-
-  describe "#location" do
-    it "delegates to the venue's location" do
-      event = Event.new
-      event.build_venue latitude: 45.5200, longitude: 122.6819
-      expect(event.location).to eq([45.5200, 122.6819])
     end
   end
 
@@ -664,27 +626,6 @@ describe Event, :type => :model do
       event.title = "New Title"
       event.save!
       expect(event.versions.count).to eq 2
-    end
-  end
-
-  describe "when normalizing line-endings in the description" do
-    before do
-      @event = Event.new
-    end
-
-    it "should not molest contents without carriage-returns" do
-      @event.description         = "foo\nbar"
-      expect(@event.description).to eq "foo\nbar"
-    end
-
-    it "should replace CRLF with LF" do
-      @event.description         = "foo\r\nbar"
-      expect(@event.description).to eq "foo\nbar"
-    end
-
-    it "should replace stand-alone CR with LF" do
-      @event.description         = "foo\rbar"
-      expect(@event.description).to eq "foo\nbar"
     end
   end
 
