@@ -21,7 +21,7 @@ class Source::Parser::Ical < Source::Parser
   end
 
   def to_events
-    return false unless calendars = content_calendars
+    return false unless calendars
 
     events = calendars.flat_map do |calendar|
       calendar.events.map do |component|
@@ -42,10 +42,12 @@ class Source::Parser::Ical < Source::Parser
     (component.dtend || component.dtstart).to_time < cutoff
   end
 
-  def content_calendars
-    content = self.class.read_url(url).gsub(/\r\n/, "\n")
-    content = munge_gmt_dates(content)
-    RiCal.parse_string(content)
+  def calendars
+    @calendars ||= begin
+      content = self.class.read_url(url).gsub(/\r\n/, "\n")
+      content = munge_gmt_dates(content)
+      RiCal.parse_string(content)
+    end
   rescue Exception => exception
     return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
     raise # Unknown error, reraise
