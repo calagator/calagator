@@ -43,7 +43,7 @@ class Source::Parser::Ical < Source::Parser
   end
 
   def content_calendars
-    content = self.class.read_url(opts[:url]).gsub(/\r\n/, "\n")
+    content = self.class.read_url(url).gsub(/\r\n/, "\n")
     content = munge_gmt_dates(content)
     RiCal.parse_string(content)
   rescue Exception => e
@@ -56,7 +56,7 @@ class Source::Parser::Ical < Source::Parser
 
   def component_to_event(component, calendar)
     event = Event.new({
-      source:      opts[:source],
+      source:      source,
       title:       component.summary,
       description: component.description,
       url:         component.url,
@@ -64,7 +64,7 @@ class Source::Parser::Ical < Source::Parser
 
     dates_for_tz(component, event)
 
-    event.venue = to_venue(content_venue(component, calendar), opts.merge(fallback: component.location))
+    event.venue = to_venue(content_venue(component, calendar), component.location)
     event_or_duplicate(event)
   end
 
@@ -108,10 +108,8 @@ class Source::Parser::Ical < Source::Parser
   #
   # Arguments:
   # * value - String with iCalendar data to parse which contains a VVENUE item.
-  #
-  # Options:
-  # * :fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
-  def to_venue(value, opts={})
+  # * fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
+  def to_venue(value, fallback=nil)
     venue = Venue.new
 
     # VVENUE entries are considered just Vcards,
@@ -127,8 +125,8 @@ class Source::Parser::Ical < Source::Parser
       }
       venue.latitude, venue.longitude = vcard_hash['GEO'].split(/;/).map(&:to_f)
 
-    elsif opts[:fallback].present?
-      venue.title = opts[:fallback]
+    elsif fallback.present?
+      venue.title = fallback
     else
       return nil
     end

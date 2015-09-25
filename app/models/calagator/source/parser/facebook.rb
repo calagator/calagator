@@ -21,17 +21,17 @@ class Source::Parser::Facebook < Source::Parser
     }
 
   def to_events
-    return unless data = to_events_api_helper(opts[:url]) do |event_id|
+    return unless data = to_events_api_helper(url) do |event_id|
       "http://graph.facebook.com/#{event_id}"
     end
 
     raise ::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
 
     event = Event.new({
-      source:      opts[:source],
+      source:      source,
       title:       data['name'],
       description: data['description'],
-      url:         opts[:url],
+      url:         url,
       tag_list:    "facebook:event=#{data['id']}",
       venue:       to_venue(data),
 
@@ -50,7 +50,7 @@ class Source::Parser::Facebook < Source::Parser
     return if fields.blank?
 
     venue = Venue.new({
-      source:         opts[:source],
+      source:         source,
       title:          data['location'],
       street_address: fields['street'],
       locality:       fields['city'],

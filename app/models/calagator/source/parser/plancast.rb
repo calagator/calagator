@@ -7,7 +7,7 @@ class Source::Parser::Plancast < Source::Parser
   def to_events
     return unless data = get_data
     event = Event.new({
-      source:      opts[:source],
+      source:      source,
       title:       data['what'],
       description: data['description'],
 
@@ -27,7 +27,7 @@ class Source::Parser::Plancast < Source::Parser
   private
 
   def get_data
-    to_events_api_helper(opts[:url]) do |event_id|
+    to_events_api_helper(url) do |event_id|
       [
         'http://api.plancast.com/02/plans/show.json',
         {
@@ -42,7 +42,7 @@ class Source::Parser::Plancast < Source::Parser
     value = "" if value.nil?
     if value.present?
       venue = Venue.new({
-        source: opts[:source],
+        source: source,
         title: value['name'],
         address: value['address'],
         tag_list: "plancast:place=#{value['id']}",
