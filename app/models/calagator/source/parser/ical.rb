@@ -161,25 +161,16 @@ class Source::Parser::Ical < Source::Parser
       hash_from_vcard_lines(vcard_lines)
     end
 
+    VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/
+
     # Return hash parsed from VCARD lines.
     #
     # Arguments:
     # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
     def hash_from_vcard_lines(vcard_lines)
       vcard_lines.reduce({}) do |vcard_hash, vcard_line|
-        if matcher = vcard_line.match(/^([^;]+?)(;[^:]*?)?:(.*)$/)
-          _, key, qualifier, value = *matcher
-
-          if qualifier
-            # Add entry for a key and its meta-qualifier
-            vcard_hash["#{key}#{qualifier}"] = value
-
-            # Add fallback entry for a key from the matching meta-qualifier, e.g. create key "foo" from contents of key with meta-qualifier "foo;bar".
-            vcard_hash[key] ||= value
-          else
-            # Add entry for a key without a meta-qualifier.
-            vcard_hash[key] = value
-          end
+        vcard_line.match(VCARD_LINES_RE) do |match|
+          vcard_hash[match[:key]] ||= match[:value]
         end
         vcard_hash
       end

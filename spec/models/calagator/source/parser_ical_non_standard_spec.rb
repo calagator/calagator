@@ -63,24 +63,12 @@ CATEGORIES:apple applecom appleinc technology).split("\n")
     expect(@vcard_hash['NAME']).to eq 'Apple Store Pioneer Place'
   end
 
-  it "should find a property set by its key and meta-qualifier" do
-    expect(@vcard_hash['URL;X-LABEL=Venue Info']).to eq 'http://eventful.com/V0-001-001423875-1'
-  end
-
   it "should find a property set by its key and meta-qualifier by its key when one wasn't specified" do
     expect(@vcard_hash['URL']).to eq 'http://eventful.com/V0-001-001423875-1'
   end
 
-  it "should find a property set by its key and multiple meta-qualifier by" do
-    expect(@vcard_hash['COUNTRY;;;ABBREV=USA']).to eq 'United States'
-  end
-
   it "should find a property set by its key and multiple meta-qualifiers by its key when one wasn't specified" do
     expect(@vcard_hash['COUNTRY']).to eq 'United States'
-  end
-
-  it "should find a property set by its key and meta-qualifier with odd characters" do
-    expect(@vcard_hash['REGION;KMeta=none&bizzare']).to eq 'Oregon'
   end
 
   it "should find a property set by its key and meta-qualifier with odd characters by its key when one wasn't specified" do
