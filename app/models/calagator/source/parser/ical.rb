@@ -21,7 +21,7 @@ class Source::Parser::Ical < Source::Parser
 
   def to_events
     return false unless calendars
-    events = calendars.flat_map(&:events).each do |event|
+    events = calendars.flat_map(&:events).reject(&:old?).map(&:to_event).each do |event|
       event.source = source
     end
     dedup(events)
@@ -58,13 +58,13 @@ class Source::Parser::Ical < Source::Parser
       raise # Unknown error, reraise
     end
 
-    VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
-
     def events
       calendar.events.map do |component|
         VEvent.new(component, venues)
-      end.reject(&:old?).map(&:to_event)
+      end
     end
+
+    VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
 
     def venues
       calendar.to_s.scan(VENUE_CONTENT_RE).map do |venue_content|
@@ -80,7 +80,7 @@ class Source::Parser::Ical < Source::Parser
     end
 
     def to_event
-      event = EventParser.new(component).to_event
+      event = EventParser.new(self).to_event
       event.venue = VenueParser.new(vvenue, component.location).to_venue
       event
     end
@@ -136,14 +136,14 @@ class Source::Parser::Ical < Source::Parser
     end
   end
 
-  class EventParser < Struct.new(:component)
+  class EventParser < Struct.new(:vevent)
     def to_event
       Event.new({
-        title:       component.summary,
-        description: component.description,
-        url:         component.url,
-        start_time:  normalized_start_time(component),
-        end_time:    normalized_end_time(component),
+        title:       vevent.component.summary,
+        description: vevent.component.description,
+        url:         vevent.component.url,
+        start_time:  normalized_start_time(vevent.component),
+        end_time:    normalized_end_time(vevent.component),
       })
     end
 
