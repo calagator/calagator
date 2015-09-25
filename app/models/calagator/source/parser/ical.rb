@@ -30,14 +30,11 @@ class Source::Parser::Ical < Source::Parser
   private
 
   def vcalendars
-    @vcalendars ||= VCalendar.parse(content)
+    @vcalendars ||= VCalendar.parse(raw_ical)
   end
 
-  def content
-    self.class.read_url(url).tap do |content|
-      content.gsub! /\r\n/, "\n" # normalize line endings
-      content.gsub! /;TZID=GMT:(.*)/, ':\1Z' # normalize timezones
-    end
+  def raw_ical
+    self.class.read_url(url)
   end
 
   def dedup(events)
@@ -49,10 +46,14 @@ class Source::Parser::Ical < Source::Parser
   end
 
   class VCalendar < Struct.new(:calendar)
-    def self.parse(content)
-      RiCal.parse_string(content).map do |calendar|
+    def self.parse(raw_ical)
+      raw_ical.gsub! /\r\n/, "\n" # normalize line endings
+      raw_ical.gsub! /;TZID=GMT:(.*)/, ':\1Z' # normalize timezones
+
+      RiCal.parse_string(raw_ical).map do |calendar|
         VCalendar.new(calendar)
       end
+
     rescue Exception => exception
       return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
       raise # Unknown error, reraise
