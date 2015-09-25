@@ -23,14 +23,21 @@ class Venue < ActiveRecord::Base
       @geo ||= Geokit::Geocoders::MultiGeocoder.geocode(venue.geocode_address)
     end
 
+    VENUE_GEO_FIELD_MAP = {
+      latitude:       :lat,
+      longitude:      :lng,
+      street_address: :street_address,
+      locality:       :city,
+      region:         :state,
+      postal_code:    :zip,
+      country:        :country_code,
+    }
+
     def map_geo_to_venue
-      venue.latitude       = geo.lat
-      venue.longitude      = geo.lng
-      venue.street_address = geo.street_address if venue.street_address.blank?
-      venue.locality       = geo.city           if venue.locality.blank?
-      venue.region         = geo.state          if venue.region.blank?
-      venue.postal_code    = geo.zip            if venue.postal_code.blank?
-      venue.country        = geo.country_code   if venue.country.blank?
+      VENUE_GEO_FIELD_MAP.each do |venue_field, geo_field|
+        next if venue[venue_field].present?
+        venue[venue_field] = geo.send(geo_field)
+      end
     end
 
     def should_geocode?
