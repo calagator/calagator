@@ -28,15 +28,17 @@ class Source::Parser::Ical < Source::Parser
   private
 
   def calendars
-    @calendars ||= begin
-      content = self.class.read_url(url)
-      content.gsub! /\r\n/, "\n" # normalize line endings
-      content.gsub! /;TZID=GMT:(.*)/, ':\1Z' # normalize timezones
-      RiCal.parse_string(content)
-    end
+    @calendars ||= RiCal.parse_string(content)
   rescue Exception => exception
     return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
     raise # Unknown error, reraise
+  end
+
+  def content
+    self.class.read_url(url).tap do |content|
+      content.gsub! /\r\n/, "\n" # normalize line endings
+      content.gsub! /;TZID=GMT:(.*)/, ':\1Z' # normalize timezones
+    end
   end
 
   def events
