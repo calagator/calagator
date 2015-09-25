@@ -86,6 +86,30 @@ class Source::Parser::Ical < Source::Parser
       event
     end
 
+    delegate :summary, :description, :url, to: :ri_cal_event
+
+    # translate the start and end dates correctly depending on whether it's a floating or fixed timezone
+
+    def start_time
+      if ri_cal_event.dtstart_property.tzid
+        ri_cal_event.dtstart
+      else
+        Time.zone.parse(ri_cal_event.dtstart_property.value)
+      end
+    end
+
+    def end_time
+      if ri_cal_event.dtstart_property.tzid
+        ri_cal_event.dtend
+      elsif ri_cal_event.dtend_property
+        Time.zone.parse(ri_cal_event.dtend_property.value)
+      elsif ri_cal_event.duration
+        ri_cal_event.duration_property.add_to_date_time_value(start_time)
+      else
+        start_time
+      end
+    end
+
     private
 
     def venue_uid
@@ -140,36 +164,12 @@ class Source::Parser::Ical < Source::Parser
   class EventParser < Struct.new(:vevent)
     def to_event
       Event.new({
-        title:       vevent.ri_cal_event.summary,
-        description: vevent.ri_cal_event.description,
-        url:         vevent.ri_cal_event.url,
-        start_time:  normalized_start_time(vevent.ri_cal_event),
-        end_time:    normalized_end_time(vevent.ri_cal_event),
+        title:       vevent.summary,
+        description: vevent.description,
+        url:         vevent.url,
+        start_time:  vevent.start_time,
+        end_time:    vevent.end_time,
       })
-    end
-
-    private
-
-    # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-    def normalized_start_time(ri_cal_event)
-      if ri_cal_event.dtstart_property.tzid
-        ri_cal_event.dtstart
-      else
-        Time.zone.parse(ri_cal_event.dtstart_property.value)
-      end
-    end
-
-    # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-    def normalized_end_time(ri_cal_event)
-      if ri_cal_event.dtstart_property.tzid
-        ri_cal_event.dtend
-      elsif ri_cal_event.dtend_property
-        Time.zone.parse(ri_cal_event.dtend_property.value)
-      elsif ri_cal_event.duration
-        ri_cal_event.duration_property.add_to_date_time_value(normalized_start_time(ri_cal_event))
-      else
-        normalized_start_time(ri_cal_event)
-      end
     end
   end
 
