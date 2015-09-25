@@ -13,8 +13,6 @@ module Calagator
 class Source::Parser::Ical < Source::Parser
   self.label = :iCalendar
 
-  VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
-
   # Override Source::Parser.read_url to handle "webcal" scheme addresses.
   def self.read_url(url)
     url.gsub!(/^webcal:/, 'http:')
@@ -56,6 +54,8 @@ class Source::Parser::Ical < Source::Parser
   end
 
   class VCalendar < Struct.new(:calendar)
+    VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
+
     def events
       calendar.events.map do |component|
         VEvent.new(component, venues)
@@ -98,16 +98,11 @@ class Source::Parser::Ical < Source::Parser
     end
 
     def vcard_hash
-      return unless data = content.scan(VENUE_CONTENT_RE).first
-
       # Only use first vcard of a VVENUE
-      vcard = RiCal.parse_string(data).first
+      vcard = RiCal.parse_string(content).first
 
-      # Extract all properties, including non-standard ones, into an array of "KEY;meta-qualifier:value" strings
+      # Extract all properties into an array of "KEY;meta-qualifier:value" strings
       vcard_lines = vcard.export_properties_to(StringIO.new(''))
-
-      # Turn a String-like object into an Enumerable.
-      vcard_lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
 
       hash_from_vcard_lines(vcard_lines)
     end
@@ -116,10 +111,6 @@ class Source::Parser::Ical < Source::Parser
 
     VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/
 
-    # Return hash parsed from VCARD lines.
-    #
-    # Arguments:
-    # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
     def hash_from_vcard_lines(vcard_lines)
       vcard_lines.reduce({}) do |vcard_hash, vcard_line|
         vcard_line.match(VCARD_LINES_RE) do |match|
