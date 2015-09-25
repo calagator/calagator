@@ -45,13 +45,13 @@ class Source::Parser::Ical < Source::Parser
     end.uniq
   end
 
-  class VCalendar < Struct.new(:calendar)
+  class VCalendar < Struct.new(:ri_cal_calendar)
     def self.parse(raw_ical)
       raw_ical.gsub! /\r\n/, "\n" # normalize line endings
       raw_ical.gsub! /;TZID=GMT:(.*)/, ':\1Z' # normalize timezones
 
-      RiCal.parse_string(raw_ical).map do |calendar|
-        VCalendar.new(calendar)
+      RiCal.parse_string(raw_ical).map do |ri_cal_calendar|
+        VCalendar.new(ri_cal_calendar)
       end
 
     rescue Exception => exception
@@ -60,46 +60,46 @@ class Source::Parser::Ical < Source::Parser
     end
 
     def vevents
-      calendar.events.map do |component|
-        VEvent.new(component, vvenues)
+      ri_cal_calendar.events.map do |ri_cal_event|
+        VEvent.new(ri_cal_event, vvenues)
       end
     end
 
     VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
 
     def vvenues
-      calendar.to_s.scan(VENUE_CONTENT_RE).map do |venue_content|
-        VVenue.new(venue_content)
+      ri_cal_calendar.to_s.scan(VENUE_CONTENT_RE).map do |raw_ical_venue|
+        VVenue.new(raw_ical_venue)
       end
     end
   end
 
-  class VEvent < Struct.new(:component, :venues)
+  class VEvent < Struct.new(:ri_cal_event, :vvenues)
     def old?
       cutoff = Time.now.yesterday
-      (component.dtend || component.dtstart).to_time < cutoff
+      (ri_cal_event.dtend || ri_cal_event.dtstart).to_time < cutoff
     end
 
     def to_event
       event = EventParser.new(self).to_event
-      event.venue = VenueParser.new(vvenue, component.location).to_venue
+      event.venue = VenueParser.new(vvenue, ri_cal_event.location).to_venue
       event
     end
 
     private
 
     def venue_uid
-      component.location_property.try(:params).try(:[], "VVENUE")
+      ri_cal_event.location_property.try(:params).try(:[], "VVENUE")
     end
 
     def vvenue
-      venues.find { |venue| venue.uid == venue_uid } if venue_uid
+      vvenues.find { |venue| venue.uid == venue_uid } if venue_uid
     end
   end
 
-  class VVenue < Struct.new(:content)
+  class VVenue < Struct.new(:raw_ical_venue)
     def uid
-      content.match(/^UID:(?<uid>.+)$/)[:uid]
+      raw_ical_venue.match(/^UID:(?<uid>.+)$/)[:uid]
     end
 
     def method_missing(method, *args, &block)
@@ -117,7 +117,7 @@ class Source::Parser::Ical < Source::Parser
 
     def vcard_hash
       # Only use first vcard of a VVENUE
-      vcard = RiCal.parse_string(content).first
+      vcard = RiCal.parse_string(raw_ical_venue).first
 
       # Extract all properties into an array of "KEY;meta-qualifier:value" strings
       vcard_lines = vcard.export_properties_to(StringIO.new(''))
@@ -140,35 +140,35 @@ class Source::Parser::Ical < Source::Parser
   class EventParser < Struct.new(:vevent)
     def to_event
       Event.new({
-        title:       vevent.component.summary,
-        description: vevent.component.description,
-        url:         vevent.component.url,
-        start_time:  normalized_start_time(vevent.component),
-        end_time:    normalized_end_time(vevent.component),
+        title:       vevent.ri_cal_event.summary,
+        description: vevent.ri_cal_event.description,
+        url:         vevent.ri_cal_event.url,
+        start_time:  normalized_start_time(vevent.ri_cal_event),
+        end_time:    normalized_end_time(vevent.ri_cal_event),
       })
     end
 
     private
 
     # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-    def normalized_start_time(component)
-      if component.dtstart_property.tzid
-        component.dtstart
+    def normalized_start_time(ri_cal_event)
+      if ri_cal_event.dtstart_property.tzid
+        ri_cal_event.dtstart
       else
-        Time.zone.parse(component.dtstart_property.value)
+        Time.zone.parse(ri_cal_event.dtstart_property.value)
       end
     end
 
     # Helper to set the start and end dates correctly depending on whether it's a floating or fixed timezone
-    def normalized_end_time(component)
-      if component.dtstart_property.tzid
-        component.dtend
-      elsif component.dtend_property
-        Time.zone.parse(component.dtend_property.value)
-      elsif component.duration
-        component.duration_property.add_to_date_time_value(normalized_start_time(component))
+    def normalized_end_time(ri_cal_event)
+      if ri_cal_event.dtstart_property.tzid
+        ri_cal_event.dtend
+      elsif ri_cal_event.dtend_property
+        Time.zone.parse(ri_cal_event.dtend_property.value)
+      elsif ri_cal_event.duration
+        ri_cal_event.duration_property.add_to_date_time_value(normalized_start_time(ri_cal_event))
       else
-        normalized_start_time(component)
+        normalized_start_time(ri_cal_event)
       end
     end
   end
