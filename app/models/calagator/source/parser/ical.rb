@@ -29,7 +29,9 @@ class Source::Parser::Ical < Source::Parser
   private
 
   def calendars
-    @calendars ||= RiCal.parse_string(content)
+    @calendars ||= RiCal.parse_string(content).map do |calendar|
+      VCalendar.new(calendar)
+    end
   rescue Exception => exception
     return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
     raise # Unknown error, reraise
@@ -43,16 +45,8 @@ class Source::Parser::Ical < Source::Parser
   end
 
   def events(calendars)
-    calendars.map do |calendar|
-      VCalendar.new(calendar)
-    end.flat_map do |vcalendar|
-      vcalendar.events.map do |component|
-        VEvent.new(component)
-      end.reject(&:old?).map do |vevent|
-        vevent.to_event(vcalendar)
-      end.each do |event|
-        event.source = source
-      end
+    calendars.flat_map(&:events).each do |event|
+      event.source = source
     end
   end
 
@@ -66,7 +60,9 @@ class Source::Parser::Ical < Source::Parser
 
   class VCalendar < Struct.new(:calendar)
     def events
-      calendar.events
+      calendar.events.map do |component|
+        VEvent.new(component, self)
+      end.reject(&:old?).map(&:to_event)
     end
 
     def to_s
@@ -74,15 +70,15 @@ class Source::Parser::Ical < Source::Parser
     end
   end
 
-  class VEvent < Struct.new(:component)
+  class VEvent < Struct.new(:component, :calendar)
     def old?
       cutoff = Time.now.yesterday
       (component.dtend || component.dtstart).to_time < cutoff
     end
 
-    def to_event(vcalendar)
+    def to_event
       event = EventParser.new(component).to_event
-      event.venue = VenueParser.new(content_venue(vcalendar), component.location).to_venue
+      event.venue = VenueParser.new(content_venue(calendar), component.location).to_venue
       event
     end
 
