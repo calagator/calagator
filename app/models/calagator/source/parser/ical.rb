@@ -46,12 +46,9 @@ class Source::Parser::Ical < Source::Parser
     content = self.class.read_url(url).gsub(/\r\n/, "\n")
     content = munge_gmt_dates(content)
     RiCal.parse_string(content)
-  rescue Exception => e
-    if e.message =~ /Invalid icalendar file/
-      false # Invalid data, give up.
-    else
-      raise e # Unknown error, we should care.
-    end
+  rescue Exception => exception
+    return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
+    raise # Unknown error, reraise
   end
 
   def component_to_event(component, calendar)
@@ -74,9 +71,8 @@ class Source::Parser::Ical < Source::Parser
     venue_uid = component.location_property.params["VVENUE"]
     # finding in the content_venues array an item matching the uid
     venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
-  rescue Exception => e
-    # Ignore
-    Rails.logger.info("Source::Parser::Ical.to_events : Failed to parse content_venue for event -- #{e}")
+  rescue => exception
+    Rails.logger.info("Source::Parser::Ical.to_events : Failed to parse content_venue for event -- #{exception}")
     nil
   end
 
