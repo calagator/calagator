@@ -9,7 +9,7 @@ class Venue < ActiveRecord::Base
     end
 
     def geocode
-      return true unless should_geocode?
+      return unless should_geocode?
       map_geo_to_venue if geo.success
       log
     end
