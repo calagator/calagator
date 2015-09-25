@@ -93,11 +93,8 @@ class Venue < ActiveRecord::Base
 
   # Display a single line address.
   def full_address
-    if [street_address, locality, region, postal_code, country].any?(&:present?)
-      "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
-    else
-      nil
-    end
+    full_address = "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
+    full_address.strip != "," && full_address
   end
 
   #===[ Geocoding helpers ]===============================================
@@ -110,9 +107,8 @@ class Venue < ActiveRecord::Base
   # Return this venue's latitude/longitude location,
   # or nil if it doesn't have one.
   def location
-    if [latitude, longitude].all?(&:present?)
-      [latitude, longitude]
-    end
+    location = [latitude, longitude]
+    location.all?(&:present?) && location
   end
 
   attr_accessor :force_geocoding
