@@ -241,7 +241,7 @@ describe "Venue geocoding", :type => :model do
     expect {
       @venue.latitude = 45.0
       @venue.longitude = -122.0
-    }.to change { @venue.location }.from(nil).to([BigDecimal("45.0"), BigDecimal("-122.0")])
+    }.to change { @venue.location }.from(false).to([BigDecimal("45.0"), BigDecimal("-122.0")])
   end
 
   describe "with geocoding" do

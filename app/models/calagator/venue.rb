@@ -33,6 +33,7 @@ require "calagator/url_prefixer"
 require "paper_trail"
 require "loofah-activerecord"
 require "loofah/activerecord/xss_foliate"
+require "validate_url"
 
 module Calagator
 
@@ -58,20 +59,10 @@ class Venue < ActiveRecord::Base
   before_save :geocode!
 
   # Validations
-  validates_presence_of :title
-  validates_format_of :url,
-    :with => /(http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/,
-    :allow_blank => true,
-    :allow_nil => true
-  validates_inclusion_of :latitude,
-    :in => -90..90,
-    :allow_nil => true,
-    :message => "must be between -90 and 90"
-  validates_inclusion_of :longitude,
-    :in => -180..180,
-    :allow_nil => true,
-    :message => "must be between -180 and 180"
-
+  validates :title, presence: true
+  validates :url, url: { allow_blank: true }
+  validates :latitude, inclusion: { in: -90..90, allow_nil: true }
+  validates :longitude, inclusion: { in: -180..180, allow_nil: true }
   validates :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone, blacklist: true
 
   # Duplicates
@@ -102,11 +93,8 @@ class Venue < ActiveRecord::Base
 
   # Display a single line address.
   def full_address
-    if [street_address, locality, region, postal_code, country].any?(&:present?)
-      "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
-    else
-      nil
-    end
+    full_address = "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
+    full_address.strip != "," && full_address
   end
 
   #===[ Geocoding helpers ]===============================================
@@ -119,9 +107,8 @@ class Venue < ActiveRecord::Base
   # Return this venue's latitude/longitude location,
   # or nil if it doesn't have one.
   def location
-    if [latitude, longitude].all?(&:present?)
-      [latitude, longitude]
-    end
+    location = [latitude, longitude]
+    location.all?(&:present?) && location
   end
 
   attr_accessor :force_geocoding
