@@ -22,7 +22,7 @@ class Source::Parser::Ical < Source::Parser
 
   def to_events
     return false unless calendars
-    dedup(events)
+    dedup(events(calendars))
   end
 
   private
@@ -41,7 +41,7 @@ class Source::Parser::Ical < Source::Parser
     end
   end
 
-  def events
+  def events(calendars)
     calendars.flat_map do |calendar|
       calendar.events.map do |component|
         VEvent.new(component)
