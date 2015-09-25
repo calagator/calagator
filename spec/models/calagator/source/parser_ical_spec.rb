@@ -180,48 +180,6 @@ module Calagator
       end
     end
 
-    describe "munge_gmt_dates" do
-      it "should return unexpected-format strings unmodified" do
-        munged = Source::Parser::Ical.new.send(:munge_gmt_dates, 'justin bieber on a train')
-        expect(munged).to eq 'justin bieber on a train'
-      end
-
-      it "should return GMT-less ical strings unmodified" do
-        icard = %{
-BEGIN:VCALENDAR
-BEGIN:VEVENT
-DTSTART:20200507T080000
-DTEND:20200507T090000
-END:VEVENT
-END:VCALENDAR
-        }
-
-        expect(Source::Parser::Ical.new.send(:munge_gmt_dates, icard)).to eq icard
-      end
-
-      it "should replace TZID=GMT with a TZID-less UTC time" do
-        icard = %{
-BEGIN:VCALENDAR
-BEGIN:VEVENT
-DTSTART;TZID=GMT:20200507T080000
-DTEND;TZID=GMT:20200507T090000
-END:VEVENT
-END:VCALENDAR
-        }
-
-        munged = %{
-BEGIN:VCALENDAR
-BEGIN:VEVENT
-DTSTART:20200507T080000Z
-DTEND:20200507T090000Z
-END:VEVENT
-END:VCALENDAR
-        }
-
-        expect(Source::Parser::Ical.new.send(:munge_gmt_dates, icard)).to eq munged
-      end
-    end
-
     describe "when skipping old events" do
       before(:each) do
         url = "http://foo.bar/"

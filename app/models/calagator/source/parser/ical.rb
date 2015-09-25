@@ -44,8 +44,9 @@ class Source::Parser::Ical < Source::Parser
 
   def calendars
     @calendars ||= begin
-      content = self.class.read_url(url).gsub(/\r\n/, "\n")
-      content = munge_gmt_dates(content)
+      content = self.class.read_url(url)
+      content.gsub! /\r\n/, "\n" # normalize line endings
+      content.gsub! /;TZID=GMT:(.*)/, ':\1Z' # normalize timezones
       RiCal.parse_string(content)
     end
   rescue Exception => exception
@@ -112,10 +113,6 @@ class Source::Parser::Ical < Source::Parser
   rescue => exception
     Rails.logger.info("Source::Parser::Ical.to_events : Failed to parse content_venue for event -- #{exception}")
     nil
-  end
-
-  def munge_gmt_dates(content)
-    content.gsub(/;TZID=GMT:(.*)/, ':\1Z')
   end
 
   # Return an Venue extracted from an iCalendar input.
