@@ -96,6 +96,38 @@ class Source::Parser::Ical < Source::Parser
     def uid
       content.match(/^UID:(?<uid>.+)$/)[:uid]
     end
+
+    def vcard_hash
+      return unless data = content.scan(VENUE_CONTENT_RE).first
+
+      # Only use first vcard of a VVENUE
+      vcard = RiCal.parse_string(data).first
+
+      # Extract all properties, including non-standard ones, into an array of "KEY;meta-qualifier:value" strings
+      vcard_lines = vcard.export_properties_to(StringIO.new(''))
+
+      # Turn a String-like object into an Enumerable.
+      vcard_lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
+
+      hash_from_vcard_lines(vcard_lines)
+    end
+
+    private
+
+    VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/
+
+    # Return hash parsed from VCARD lines.
+    #
+    # Arguments:
+    # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
+    def hash_from_vcard_lines(vcard_lines)
+      vcard_lines.reduce({}) do |vcard_hash, vcard_line|
+        vcard_line.match(VCARD_LINES_RE) do |match|
+          vcard_hash[match[:key]] ||= match[:value]
+        end
+        vcard_hash
+      end
+    end
   end
 
   class EventParser < Struct.new(:component)
@@ -145,7 +177,7 @@ class Source::Parser::Ical < Source::Parser
 
       # VVENUE entries are considered just Vcards,
       # treating them as such.
-      if vvenue && vcard_hash = vcard_hash_from_value(vvenue.content)
+      if vvenue && vcard_hash = vvenue.vcard_hash
         location = vcard_hash['GEO'].split(/;/).map(&:to_f)
         venue.attributes = {
           title:          vcard_hash['NAME'],
@@ -167,39 +199,6 @@ class Source::Parser::Ical < Source::Parser
       venue.geocode!
 
       venue
-    end
-
-    private
-
-    def vcard_hash_from_value(value)
-      value ||= ""
-      return unless data = value.scan(VENUE_CONTENT_RE).first
-
-      # Only use first vcard of a VVENUE
-      vcard = RiCal.parse_string(data).first
-
-      # Extract all properties, including non-standard ones, into an array of "KEY;meta-qualifier:value" strings
-      vcard_lines = vcard.export_properties_to(StringIO.new(''))
-
-      # Turn a String-like object into an Enumerable.
-      vcard_lines = vcard_lines.respond_to?(:lines) ? vcard_lines.lines : vcard_lines
-
-      hash_from_vcard_lines(vcard_lines)
-    end
-
-    VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/
-
-    # Return hash parsed from VCARD lines.
-    #
-    # Arguments:
-    # * vcard_lines - Array of "KEY;meta-qualifier:value" strings.
-    def hash_from_vcard_lines(vcard_lines)
-      vcard_lines.reduce({}) do |vcard_hash, vcard_line|
-        vcard_line.match(VCARD_LINES_RE) do |match|
-          vcard_hash[match[:key]] ||= match[:value]
-        end
-        vcard_hash
-      end
     end
   end
 end

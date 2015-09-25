@@ -2,12 +2,12 @@ require 'spec_helper'
 
 module Calagator
 
-describe Calagator::Source::Parser::Ical::VenueParser, "when parsing VVENUE", :type => :model do
+describe Source::Parser::Ical::VenueParser, "when parsing VVENUE", :type => :model do
    subject do
      described_class.new(vvenue).to_venue
    end
 
-   let(:vvenue) { double(content: <<-ICAL) }
+   let(:vvenue) { Source::Parser::Ical::VVenue.new(<<-ICAL) }
 BEGIN:VVENUE
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
   html
@@ -44,7 +44,7 @@ ICAL
   end
 end
 
-describe Source::Parser::Ical::VenueParser, "when parsing VCARD lines", :type => :model do
+describe Source::Parser::Ical::VVenue, "when parsing VCARD lines", :type => :model do
    before(:each) do
      # Note that each line here represents a single, complete property definition -- this method doesn't do any magical unwrapping of text.
      @vcard_hash = described_class.new.send :hash_from_vcard_lines, %(
