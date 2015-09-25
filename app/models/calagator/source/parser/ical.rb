@@ -58,16 +58,18 @@ class Source::Parser::Ical < Source::Parser
   class VCalendar < Struct.new(:calendar)
     def events
       calendar.events.map do |component|
-        VEvent.new(component, self)
+        VEvent.new(component, venues)
       end.reject(&:old?).map(&:to_event)
     end
 
     def venues
-      calendar.to_s.scan(VENUE_CONTENT_RE)
+      calendar.to_s.scan(VENUE_CONTENT_RE).map do |venue_content|
+        VVenue.new(venue_content)
+      end
     end
   end
 
-  class VEvent < Struct.new(:component, :calendar)
+  class VEvent < Struct.new(:component, :venues)
     def old?
       cutoff = Time.now.yesterday
       (component.dtend || component.dtstart).to_time < cutoff
@@ -82,17 +84,17 @@ class Source::Parser::Ical < Source::Parser
     private
 
     def venue_uid
-      component.location_property.params["VVENUE"]
+      component.location_property.try(:params).try(:[], "VVENUE")
     end
 
     def vvenue
-      venues = calendar.venues
-      # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
-      # finding in the venues array an item matching the uid
-      venue_uid ? venues.find{|venue| venue.match(/^UID:#{venue_uid}$/m)} : nil
-    rescue => exception
-      Rails.logger.info("Source::Parser::Ical.to_events : Failed to parse content_venue for event -- #{exception}")
-      nil
+      venues.find { |venue| venue.uid == venue_uid } if venue_uid
+    end
+  end
+
+  class VVenue < Struct.new(:content)
+    def uid
+      content.match(/^UID:(?<uid>.+)$/)[:uid]
     end
   end
 
@@ -137,13 +139,13 @@ class Source::Parser::Ical < Source::Parser
   # Arguments:
   # * value - String with iCalendar data to parse which contains a VVENUE item.
   # * fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
-  class VenueParser < Struct.new(:value, :fallback)
+  class VenueParser < Struct.new(:vvenue, :fallback)
     def to_venue
       venue = Venue.new
 
       # VVENUE entries are considered just Vcards,
       # treating them as such.
-      if vcard_hash = vcard_hash_from_value(value)
+      if vvenue && vcard_hash = vcard_hash_from_value(vvenue.content)
         location = vcard_hash['GEO'].split(/;/).map(&:to_f)
         venue.attributes = {
           title:          vcard_hash['NAME'],

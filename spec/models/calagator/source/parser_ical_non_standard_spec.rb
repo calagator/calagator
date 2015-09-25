@@ -4,7 +4,10 @@ module Calagator
 
 describe Calagator::Source::Parser::Ical::VenueParser, "when parsing VVENUE", :type => :model do
    subject do
-     described_class.new(<<-ICAL).to_venue
+     described_class.new(vvenue).to_venue
+   end
+
+   let(:vvenue) { double(content: <<-ICAL) }
 BEGIN:VVENUE
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
   html
@@ -23,7 +26,6 @@ URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
 CATEGORIES:apple applecom appleinc technology
 END:VVENUE
 ICAL
-  end
 
   it "should have a street_address" do
     expect(subject.street_address).not_to be_nil
