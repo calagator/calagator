@@ -21,13 +21,21 @@ class Source::Parser::Ical < Source::Parser
 
   def to_events
     return false unless vcalendars
-    events = vcalendars.flat_map(&:vevents).reject(&:old?).map(&:to_event).each do |event|
+    events = vcalendars.flat_map(&:vevents).reject(&:old?).map do |vevent|
+      to_event(vevent)
+    end.each do |event|
       event.source = source
     end
     dedup(events)
   end
 
   private
+
+  def to_event(vevent)
+    event = EventParser.new(vevent).to_event
+    event.venue = VenueParser.new(vevent.vvenue, vevent.location).to_venue
+    event
+  end
 
   def vcalendars
     @vcalendars ||= VCalendar.parse(raw_ical)
@@ -80,13 +88,7 @@ class Source::Parser::Ical < Source::Parser
       (ri_cal_event.dtend || ri_cal_event.dtstart).to_time < cutoff
     end
 
-    def to_event
-      event = EventParser.new(self).to_event
-      event.venue = VenueParser.new(vvenue, ri_cal_event.location).to_venue
-      event
-    end
-
-    delegate :summary, :description, :url, to: :ri_cal_event
+    delegate :location, :summary, :description, :url, to: :ri_cal_event
 
     # translate the start and end dates correctly depending on whether it's a floating or fixed timezone
 
@@ -110,14 +112,14 @@ class Source::Parser::Ical < Source::Parser
       end
     end
 
+    def vvenue
+      vvenues.find { |venue| venue.uid == venue_uid } if venue_uid
+    end
+
     private
 
     def venue_uid
       ri_cal_event.location_property.try(:params).try(:[], "VVENUE")
-    end
-
-    def vvenue
-      vvenues.find { |venue| venue.uid == venue_uid } if venue_uid
     end
   end
 
