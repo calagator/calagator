@@ -30,12 +30,7 @@ class Source::Parser::Ical < Source::Parser
   private
 
   def calendars
-    @calendars ||= RiCal.parse_string(content).map do |calendar|
-      VCalendar.new(calendar)
-    end
-  rescue Exception => exception
-    return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
-    raise # Unknown error, reraise
+    @calendars ||= VCalendar.parse(content)
   end
 
   def content
@@ -54,6 +49,15 @@ class Source::Parser::Ical < Source::Parser
   end
 
   class VCalendar < Struct.new(:calendar)
+    def self.parse(content)
+      RiCal.parse_string(content).map do |calendar|
+        VCalendar.new(calendar)
+      end
+    rescue Exception => exception
+      return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
+      raise # Unknown error, reraise
+    end
+
     VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
 
     def events
