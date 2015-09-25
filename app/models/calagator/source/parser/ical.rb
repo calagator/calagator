@@ -22,13 +22,7 @@ class Source::Parser::Ical < Source::Parser
 
   def to_events
     return false unless calendars
-    events.map do |event|
-      event = event_or_duplicate(event)
-      event.venue = venue_or_duplicate(event.venue) if event.venue
-      event
-    end.uniq do |event|
-      [event.attributes, event.venue.try(:attributes)]
-    end
+    dedup(events)
   end
 
   private
@@ -53,6 +47,14 @@ class Source::Parser::Ical < Source::Parser
         vevent.to_event(calendar, source)
       end
     end.compact
+  end
+
+  def dedup(events)
+    events.map do |event|
+      event = event_or_duplicate(event)
+      event.venue = venue_or_duplicate(event.venue) if event.venue
+      event
+    end.uniq
   end
 
   class VEvent < Struct.new(:component)
