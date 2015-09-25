@@ -247,7 +247,7 @@ describe "Venue geocoding", :type => :model do
   describe "with geocoding" do
     # Enable geocoding for just these tests
     around do |example|
-      original = Venue::Geocoder.perform_geocoding?
+      original = Venue::Geocoder.perform_geocoding
       Venue::Geocoder.perform_geocoding = true
       example.run
       Venue::Geocoder.perform_geocoding = original
