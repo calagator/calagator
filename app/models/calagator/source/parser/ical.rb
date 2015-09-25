@@ -22,18 +22,11 @@ class Source::Parser::Ical < Source::Parser
 
   def to_events
     return false unless calendars
-
-    events = calendars.flat_map do |calendar|
-      calendar.events.map do |component|
-        vevent = VEvent.new(component)
-        next if vevent.old?
-        vevent.to_event(calendar, source)
-      end
-    end
-
-    events.compact.uniq do |event|
+    events.map do |event|
       event = event_or_duplicate(event)
       event.venue = venue_or_duplicate(event.venue) if event.venue
+      event
+    end.uniq do |event|
       [event.attributes, event.venue.try(:attributes)]
     end
   end
@@ -50,6 +43,16 @@ class Source::Parser::Ical < Source::Parser
   rescue Exception => exception
     return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
     raise # Unknown error, reraise
+  end
+
+  def events
+    calendars.flat_map do |calendar|
+      calendar.events.map do |component|
+        vevent = VEvent.new(component)
+        next if vevent.old?
+        vevent.to_event(calendar, source)
+      end
+    end.compact
   end
 
   class VEvent < Struct.new(:component)
