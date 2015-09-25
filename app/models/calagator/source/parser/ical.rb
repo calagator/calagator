@@ -69,9 +69,8 @@ class Source::Parser::Ical < Source::Parser
     end
 
     def to_event(calendar)
-      event = EventParser.parse(component)
-      venue = VenueParser.parse(content_venue(calendar), component.location)
-      event.venue = venue if venue
+      event = EventParser.new(component).to_event
+      event.venue = VenueParser.new(content_venue(calendar), component.location).to_venue
       event
     end
 
@@ -91,11 +90,7 @@ class Source::Parser::Ical < Source::Parser
   end
 
   class EventParser < Struct.new(:component)
-    def self.parse(component)
-      new(component).parse
-    end
-
-    def parse
+    def to_event
       Event.new({
         title:       component.summary,
         description: component.description,
@@ -136,11 +131,7 @@ class Source::Parser::Ical < Source::Parser
   # * value - String with iCalendar data to parse which contains a VVENUE item.
   # * fallback - String to use as the title for the location if the +value+ doesn't contain a VVENUE.
   class VenueParser < Struct.new(:value, :fallback)
-    def self.parse(value, fallback=nil)
-      new(value, fallback).parse
-    end
-
-    def parse
+    def to_venue
       venue = Venue.new
 
       # VVENUE entries are considered just Vcards,

@@ -3,8 +3,8 @@ require 'spec_helper'
 module Calagator
 
 describe Calagator::Source::Parser::Ical::VenueParser, "when parsing VVENUE", :type => :model do
-   before(:each) do
-     @venue = described_class.parse(%(
+   subject do
+     described_class.new(<<-ICAL).to_venue
 BEGIN:VVENUE
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
   html
@@ -21,23 +21,24 @@ POSTALCODE:97204
 GEO:45.518798;-122.677583
 URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
 CATEGORIES:apple applecom appleinc technology
-END:VVENUE))
+END:VVENUE
+ICAL
   end
 
   it "should have a street_address" do
-    expect(@venue.street_address).not_to be_nil
+    expect(subject.street_address).not_to be_nil
   end
 
   it "should have the adress as is" do
-    expect(@venue.street_address).to eq '700 Southwest Fifth Avenue Suite #1035'
+    expect(subject.street_address).to eq '700 Southwest Fifth Avenue Suite #1035'
   end
 
   it "should have a locality" do
-    expect(@venue.locality).not_to be_nil
+    expect(subject.locality).not_to be_nil
   end
 
   it "should have the locality as is" do
-    expect(@venue.locality).to eq 'Portland'
+    expect(subject.locality).to eq 'Portland'
   end
 end
 
