@@ -97,36 +97,15 @@ class Source::Parser::Ical < Source::Parser
       content.match(/^UID:(?<uid>.+)$/)[:uid]
     end
 
-    def name
-      vcard_hash['NAME']
+    def method_missing(method, *args, &block)
+      vcard_hash_key = method.to_s.upcase
+      return vcard_hash[vcard_hash_key] if vcard_hash.has_key?(vcard_hash_key)
+      super
     end
 
-    def address
-      vcard_hash['ADDRESS']
-    end
-
-    def city
-      vcard_hash['CITY']
-    end
-
-    def region
-      vcard_hash['REGION']
-    end
-
-    def postalcode
-      vcard_hash['POSTALCODE']
-    end
-
-    def country
-      vcard_hash['COUNTRY']
-    end
-
-    def geo
-      vcard_hash['GEO']
-    end
-
-    def url
-      vcard_hash['URL']
+    def respond_to?(method, include_private = false)
+      vcard_hash_key = method.to_s.upcase
+      vcard_hash.has_key?(vcard_hash_key) || super
     end
 
     private
