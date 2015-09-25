@@ -62,8 +62,8 @@ class Source::Parser::Ical < Source::Parser
       end.reject(&:old?).map(&:to_event)
     end
 
-    def to_s
-      calendar.to_s
+    def venues
+      calendar.to_s.scan(VENUE_CONTENT_RE)
     end
   end
 
@@ -75,19 +75,18 @@ class Source::Parser::Ical < Source::Parser
 
     def to_event
       event = EventParser.new(component).to_event
-      event.venue = VenueParser.new(content_venue(calendar), component.location).to_venue
+      event.venue = VenueParser.new(vvenue, component.location).to_venue
       event
     end
 
     private
 
-    def content_venue(vcalendar)
-      content_venues = vcalendar.to_s.scan(VENUE_CONTENT_RE)
-
+    def vvenue
+      venues = calendar.venues
       # finding the event venue id - VVENUE=V0-001-001423875-1@eventful.com
       venue_uid = component.location_property.params["VVENUE"]
-      # finding in the content_venues array an item matching the uid
-      venue_uid ? content_venues.find{|content_venue| content_venue.match(/^UID:#{venue_uid}$/m)} : nil
+      # finding in the venues array an item matching the uid
+      venue_uid ? venues.find{|venue| venue.match(/^UID:#{venue_uid}$/m)} : nil
     rescue => exception
       Rails.logger.info("Source::Parser::Ical.to_events : Failed to parse content_venue for event -- #{exception}")
       nil
