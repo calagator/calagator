@@ -26,7 +26,7 @@ END:VVENUE
 ICAL
   end
 
-  it "should have the adress as is" do
+  it "should have the address as-is" do
     expect(subject.address).to eq '700 Southwest Fifth Avenue Suite #1035'
   end
 
@@ -48,6 +48,18 @@ ICAL
 
   it "should find a property set by its key and meta-qualifier with odd characters by its key when one wasn't specified" do
     expect(subject.region).to eq 'Oregon'
+  end
+
+  it "responds to fields that it has" do
+    expect(subject).to respond_to(:address)
+  end
+
+  it "does not respond to fields that it does not have" do
+    expect(subject).to_not respond_to(:omg)
+  end
+
+  it "raises an exception if field is not there" do
+    expect{subject.omg}.to raise_exception(NoMethodError)
   end
 end
 
