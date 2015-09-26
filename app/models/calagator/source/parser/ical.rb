@@ -39,8 +39,8 @@ class Source::Parser::Ical < Source::Parser
   end
 
   def to_event(vevent)
-    event = EventParser.new(vevent).to_event
-    event.venue = VenueParser.new(vevent.vvenue, vevent.location).to_venue
+    event = EventMapper.new(vevent).to_event
+    event.venue = VenueMapper.new(vevent.vvenue, vevent.location).to_venue
     event.source = source
     event
   end
@@ -54,7 +54,7 @@ class Source::Parser::Ical < Source::Parser
   end
 
   # Converts a VEvent instance into an Event
-  class EventParser < Struct.new(:vevent)
+  class EventMapper < Struct.new(:vevent)
     def to_event
       Event.new({
         title:       vevent.summary,
@@ -67,7 +67,7 @@ class Source::Parser::Ical < Source::Parser
   end
 
   # Converts a VVenue instance into a Venue
-  class VenueParser < Struct.new(:vvenue, :fallback)
+  class VenueMapper < Struct.new(:vvenue, :fallback)
     def to_venue
       from_vvenue or from_fallback or return
     end
