@@ -290,6 +290,15 @@ describe "Venue geocoding", :type => :model do
       @venue.save
       expect(@venue.locality).to eq "Cleveland"
     end
+
+    it "should overwrite latitude and longitude values if forced" do
+      @venue.latitude = @venue.longitude = 1.0
+      @venue.force_geocoding = "1"
+      expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
+      @venue.save
+      expect(@venue.latitude).to eq 0.0
+      expect(@venue.longitude).to eq 0.0
+    end
   end
 end
 

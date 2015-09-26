@@ -21,8 +21,6 @@ class Venue < ActiveRecord::Base
     end
 
     VENUE_GEO_FIELD_MAP = {
-      latitude:       :lat,
-      longitude:      :lng,
       street_address: :street_address,
       locality:       :city,
       region:         :state,
@@ -31,6 +29,10 @@ class Venue < ActiveRecord::Base
     }
 
     def map_geo_to_venue
+      # always overwrite lat and long
+      venue.latitude = geo.lat
+      venue.longitude = geo.lng
+
       VENUE_GEO_FIELD_MAP.each do |venue_field, geo_field|
         next if venue[venue_field].present?
         venue[venue_field] = geo.send(geo_field)
