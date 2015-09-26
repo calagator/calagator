@@ -23,13 +23,9 @@ class Source::Parser::Ical < Source::Parser
 
   def to_events
     return false unless vcalendars
-    events = vcalendars.flat_map(&:vevents).reject(&:old?).map do |vevent|
-      event = EventParser.new(vevent).to_event
-      event.venue = VenueParser.new(vevent.vvenue, vevent.location).to_venue
-      event.source = source
-      event
-    end
-    dedup(events)
+    current_vevents = vcalendars.flat_map(&:vevents).reject(&:old?)
+    current_events = current_vevents.map { |vevent| to_event(vevent) }
+    dedup(current_events)
   end
 
   private
@@ -40,6 +36,13 @@ class Source::Parser::Ical < Source::Parser
 
   def raw_ical
     self.class.read_url(url)
+  end
+
+  def to_event(vevent)
+    event = EventParser.new(vevent).to_event
+    event.venue = VenueParser.new(vevent.vvenue, vevent.location).to_venue
+    event.source = source
+    event
   end
 
   def dedup(events)
