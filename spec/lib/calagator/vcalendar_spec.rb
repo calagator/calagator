@@ -1,13 +1,11 @@
 require 'spec_helper'
+require 'calagator/vcalendar'
 
 module Calagator
 
-describe Source::Parser::Ical::VenueParser, "when parsing VVENUE", :type => :model do
-   subject do
-     described_class.new(vvenue).to_venue
-   end
-
-   let(:vvenue) { Source::Parser::Ical::VVenue.new(<<-ICAL) }
+describe VVenue, "when parsing VVENUE", :type => :model do
+  subject do
+    described_class.new(<<-ICAL)
 BEGIN:VVENUE
 X-VVENUE-INFO:http://evdb.com/docs/ical-venue/draft-norris-ical-venue.
   html
@@ -26,37 +24,30 @@ URL;X-LABEL=Venue Info:http://eventful.com/V0-001-001423875-1
 CATEGORIES:apple applecom appleinc technology
 END:VVENUE
 ICAL
-
-  it "should have a street_address" do
-    expect(subject.street_address).not_to be_nil
   end
 
   it "should have the adress as is" do
-    expect(subject.street_address).to eq '700 Southwest Fifth Avenue Suite #1035'
-  end
-
-  it "should have a locality" do
-    expect(subject.locality).not_to be_nil
+    expect(subject.address).to eq '700 Southwest Fifth Avenue Suite #1035'
   end
 
   it "should have the locality as is" do
-    expect(subject.locality).to eq 'Portland'
+    expect(subject.city).to eq 'Portland'
   end
 
   it "should find a property set by its key" do
-    expect(vvenue.name).to eq 'Apple Store Pioneer Place'
+    expect(subject.name).to eq 'Apple Store Pioneer Place'
   end
 
   it "should find a property set by its key and meta-qualifier by its key when one wasn't specified" do
-    expect(vvenue.url).to eq 'http://eventful.com/V0-001-001423875-1'
+    expect(subject.url).to eq 'http://eventful.com/V0-001-001423875-1'
   end
 
   it "should find a property set by its key and multiple meta-qualifiers by its key when one wasn't specified" do
-    expect(vvenue.country).to eq 'United States'
+    expect(subject.country).to eq 'United States'
   end
 
   it "should find a property set by its key and meta-qualifier with odd characters by its key when one wasn't specified" do
-    expect(vvenue.region).to eq 'Oregon'
+    expect(subject.region).to eq 'Oregon'
   end
 end
 
