@@ -76,7 +76,6 @@ class Source::Parser::Ical < Source::Parser
 
     def from_vvenue
       return unless vvenue
-      location = vvenue.geo.split(/;/).map(&:to_f)
       Venue.new({
         title:          vvenue.name,
         street_address: vvenue.address,
@@ -84,8 +83,8 @@ class Source::Parser::Ical < Source::Parser
         region:         vvenue.region,
         postal_code:    vvenue.postalcode,
         country:        vvenue.country,
-        latitude:       location.first,
-        longitude:      location.last,
+        latitude:       vvenue.latitude,
+        longitude:      vvenue.longitude,
       }) do |venue|
         venue.geocode!
       end

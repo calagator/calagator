@@ -87,7 +87,20 @@ module Calagator
       vcard_hash.has_key?(vcard_hash_key) || super
     end
 
+    def latitude
+      geo_latlng.first
+    end
+
+    def longitude
+      geo_latlng.last
+    end
+
     private
+
+    def geo_latlng
+      return [] unless geo
+      geo.split(/;/).map(&:to_f)
+    end
 
     def vcard_hash
       # Only use first vcard of a VVENUE
