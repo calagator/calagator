@@ -228,7 +228,7 @@ describe "Venue geocoding", :type => :model do
     @geo_failure = double("geo", :success => false)
     @geo_success = double("geo", :success => true, :lat => 0.0, :lng => 0.0,
                         :street_address => "622 SE Grand Ave.", :city => "Portland",
-                        :state => "OR", :country_code => "US", :zip => "97214")
+                        :state => "OR", :country_code => "", :zip => "97214")
     @geocodable_address = "#{@geo_success.street_address}, #{@geo_success.city}" \
                           "#{@geo_success.state} #{@geo_success.zip}"
   end
@@ -289,6 +289,13 @@ describe "Venue geocoding", :type => :model do
       expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
       @venue.save
       expect(@venue.locality).to eq "Cleveland"
+    end
+
+    it "should not overwrite present fields with empty values" do
+      @venue.country = "US"
+      expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
+      @venue.save
+      expect(@venue.country).to eq "US"
     end
 
     it "should overwrite latitude and longitude values if forced" do
