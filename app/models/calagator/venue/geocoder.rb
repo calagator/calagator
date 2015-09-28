@@ -1,38 +1,47 @@
 module Calagator
 
 class Venue < ActiveRecord::Base
-  class Geocoder < Struct.new(:venue, :geo)
+  class Geocoder < Struct.new(:venue)
     cattr_accessor(:perform_geocoding) { true }
-    class << self
-      alias_method :perform_geocoding?, :perform_geocoding
-    end
 
     def self.geocode(venue)
       new(venue).geocode
     end
 
     def geocode
-      return true unless should_geocode?
-
-      self.geo = Geokit::Geocoders::MultiGeocoder.geocode(venue.geocode_address)
-      if geo.success
-        venue.latitude       = geo.lat
-        venue.longitude      = geo.lng
-        venue.street_address = geo.street_address if venue.street_address.blank?
-        venue.locality       = geo.city           if venue.locality.blank?
-        venue.region         = geo.state          if venue.region.blank?
-        venue.postal_code    = geo.zip            if venue.postal_code.blank?
-        venue.country        = geo.country_code   if venue.country.blank?
-      end
-
+      return unless should_geocode?
+      map_geo_to_venue if geo.success
       log
     end
 
     private
 
+    def geo
+      @geo ||= Geokit::Geocoders::MultiGeocoder.geocode(venue.geocode_address)
+    end
+
+    VENUE_GEO_FIELD_MAP = {
+      street_address: :street_address,
+      locality:       :city,
+      region:         :state,
+      postal_code:    :zip,
+      country:        :country_code,
+    }
+
+    def map_geo_to_venue
+      # always overwrite lat and long
+      venue.latitude = geo.lat
+      venue.longitude = geo.lng
+
+      VENUE_GEO_FIELD_MAP.each do |venue_field, geo_field|
+        next if venue[venue_field].present?
+        venue[venue_field] = geo.send(geo_field)
+      end
+    end
+
     def should_geocode?
       [
-        self.class.perform_geocoding?,
+        perform_geocoding,
         (venue.location.blank? || venue.force_geocoding == "1"),
         venue.geocode_address.present?,
         venue.duplicate_of.blank?
