@@ -40,10 +40,7 @@ class Source < ActiveRecord::Base
   # for this source for this to work.
   def create_events!
     save!
-    events = to_events.select(&:valid?)
-    events.reject!(&:old?)
-    events.each(&:save!)
-    events
+    to_events.select{ |event| event.valid? && !event.old? }.each(&:save!)
   end
 
   # Normalize the URL.
