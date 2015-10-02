@@ -27,8 +27,8 @@ class VenuesController < Calagator::ApplicationController
       format.html # index.html.erb
       format.kml  # index.kml.erb
       format.xml  { render xml:  venues }
-      format.json { render json: venues, callback: params[:callback] }
-      format.js   { render json: venues, callback: params[:callback] }
+      format.json { render json: venues }
+      format.js   { render json: venues }
     end
   end
   private :render_venues
@@ -42,7 +42,7 @@ class VenuesController < Calagator::ApplicationController
       .where(["LOWER(title) LIKE ?", "%#{params[:term]}%".downcase])
       .order('LOWER(title)')
 
-    render json: @venues, callback: params[:callback]
+    render json: @venues
   end
 
 
@@ -78,7 +78,7 @@ class VenuesController < Calagator::ApplicationController
       respond_to do |format|
         format.html
         format.xml  { render xml: venue }
-        format.json { render json: venue, callback: params[:callback] }
+        format.json { render json: venue }
         format.ics  { render ics: venue_events }
       end
     end

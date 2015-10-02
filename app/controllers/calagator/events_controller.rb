@@ -112,7 +112,7 @@ class EventsController < Calagator::ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml  => event.to_xml(root: "events", :include => :venue) }
-      format.json { render :json => event.to_json(:include => :venue), :callback => params[:callback] }
+      format.json { render :json => event.to_json(:include => :venue) }
       format.ics  { render :ics  => [event] }
     end
   end
@@ -125,7 +125,7 @@ class EventsController < Calagator::ApplicationController
       format.ics  { render :ics => events || Event.future.non_duplicates }
       format.atom { render :template => 'calagator/events/index' }
       format.xml  { render :xml  => events.to_xml(root: "events", :include => :venue) }
-      format.json { render :json => events.to_json(:include => :venue), :callback => params[:callback] }
+      format.json { render :json => events.to_json(:include => :venue) }
     end
   end
 

@@ -59,12 +59,6 @@ describe EventsController, :type => :controller do
     end
 
     describe "as JSON" do
-      it "should accept a JSONP callback" do
-        get :index, :format => "json", :callback => "some_function"
-
-        expect(response.body.split("\n").join).to match /some_function\(.*\)\Z/
-      end
-
       describe "without events" do
         before do
           get :index, :format => "json"
@@ -702,12 +696,6 @@ describe EventsController, :type => :controller do
 
           struct = ActiveSupport::JSON.decode(response.body)
           expect(struct).to be_a_kind_of Array
-        end
-
-        it "should accept a JSONP callback" do
-          get :search, :query => "myquery", :format => "json", :callback => "some_function"
-
-          expect(response.body).to match /some_function\(.*\)$/
         end
 
         it "should include venue details" do

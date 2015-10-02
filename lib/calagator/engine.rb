@@ -2,6 +2,8 @@ module Calagator
   class Engine < ::Rails::Engine
     isolate_namespace Calagator
 
+    middleware.use "Rack::JSONP"
+
     config.assets.precompile += %w( 
       markers-soft.png
       markers-shadow.png
