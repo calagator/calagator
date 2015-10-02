@@ -9,16 +9,12 @@ require "open-uri"
 # directly, use a subclass of Parser to do the parsing instead.
 module Calagator
 
-class Source::Parser < Struct.new(:opts)
+class Source::Parser < Struct.new(:url, :source)
   # Return an Array of unsaved Event instances.
-  #
-  # Options: (these vary between specific parsers)
-  # * :url - URL string to read as parser input.
-  # * :content - String to read as parser input.
-  def self.to_events(opts)
+  def self.to_events(url: nil, source: nil)
     # Return events from the first parser that suceeds
-    events = matched_parsers(opts[:url]).lazy.collect { |parser|
-      parser.new(opts).to_events
+    events = matched_parsers(url).lazy.collect { |parser|
+      parser.new(url, source).to_events
     }.detect(&:present?)
 
     events || []

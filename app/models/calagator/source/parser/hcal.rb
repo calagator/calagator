@@ -23,7 +23,7 @@ class Source::Parser::Hcal < Source::Parser
   def to_events
     hcals.map do |hcal|
       event = Event.new
-      event.source = opts[:source]
+      event.source = source
       EVENT_TO_HCALENDAR_FIELD_MAP.each do |field, mofo_field|
         next unless hcal.respond_to?(mofo_field)
         next unless value = decoded_field(hcal, mofo_field)
@@ -43,7 +43,7 @@ class Source::Parser::Hcal < Source::Parser
     when :dtstart
       HTMLEntities.new.decode(raw_field)
     when :location
-      to_venue(opts.merge(:value => raw_field))
+      to_venue(raw_field)
     else
       raw_field
     end
@@ -60,10 +60,10 @@ class Source::Parser::Hcal < Source::Parser
   #
   # Options:
   # * :value -- hCard or string location
-  def to_venue(opts)
+  def to_venue(value)
     venue = Venue.new
-    venue.source = opts[:source]
-    case raw = opts[:value]
+    venue.source = source
+    case raw = value
     when String
       venue.title = raw
     when HCard
@@ -99,7 +99,7 @@ class Source::Parser::Hcal < Source::Parser
   end
 
   def hcals
-    content = self.class.read_url(opts[:url])
+    content = self.class.read_url(url)
     something = hCalendar.find(:text => content)
     something.is_a?(hCalendar) ? [something] : something
   end

@@ -38,12 +38,9 @@ class Source < ActiveRecord::Base
 
   # Create events for this source. Returns the events created. URL must be set
   # for this source for this to work.
-  def create_events!(opts={})
+  def create_events!
     save!
-    events = to_events(opts).select(&:valid?)
-    events.reject!(&:old?) if opts[:skip_old]
-    events.each(&:save!)
-    events
+    to_events.select{ |event| event.valid? && !event.old? }.each(&:save!)
   end
 
   # Normalize the URL.
@@ -56,17 +53,10 @@ class Source < ActiveRecord::Base
   end
 
   # Returns an Array of Event objects that were read from this source.
-  #
-  # Options:
-  # * :url -- URL of data to import. Defaults to record's #url attribute.
-  # * :skip_old -- Should old events be skipped? Default is true.
-  def to_events(opts={})
+  def to_events
     raise ActiveRecord::RecordInvalid, self unless valid?
-
     self.imported_at = Time.now
-    opts[:url] ||= self.url
-    opts[:source] = self
-    Source::Parser.to_events(opts)
+    Source::Parser.to_events(url: url, source: self)
   end
 
   # Return the name of the source, which can be its title or URL.

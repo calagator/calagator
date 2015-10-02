@@ -20,6 +20,7 @@ describe SourcesController, :type => :controller do
         :venue => @venue,
         :start_time => Time.now+1.week,
         :end_time => nil,
+        :old? => false,
         :duplicate_of_id => nil)
 
       @source = Source.new(:url => "http://my.url/")
