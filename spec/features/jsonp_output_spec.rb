@@ -4,6 +4,6 @@ require 'rails_helper'
 feature "JSONP API results" do
   scenario "User requests events.json with a JSONP callback specified" do
     visit "/events.json?callback=myFunction"
-    expect(page).to have_content /^myFunction\(/
+    expect(page).to have_content /^(?:\/\*\*\/)?myFunction\(/
   end
 end
