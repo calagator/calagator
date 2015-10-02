@@ -11,6 +11,10 @@ feature 'search for events' do
   scenario 'User searches for an event by name' do
     visit '/'
 
+    # We're using send_keys here instead of fill_in in order to trigger the
+    # correct events for JavaScript autocompletion.
+    #
+    # https://github.com/calagator/calagator/pull/448#issuecomment-129621567
     find_field('Search Events').native.send_keys "Ruby\n"
 
     within('#current') do
