@@ -55,8 +55,6 @@ class Event < ActiveRecord::Base
   validates :title, :start_time, presence: true
   validates :url, url: { allow_blank: true }
 
-  before_destroy { !locked } # prevent locked events from being destroyed
-
   # Duplicates
   include DuplicateChecking
   duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
@@ -148,6 +146,8 @@ class Event < ActiveRecord::Base
   def self.search(query, opts={})
     SearchEngine.search(query, opts)
   end
+
+  before_destroy { !locked } # prevent locked events from being destroyed
 
   #---[ Date related ]----------------------------------------------------
 
