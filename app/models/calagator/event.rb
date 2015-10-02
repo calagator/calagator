@@ -61,41 +61,7 @@ class Event < ActiveRecord::Base
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
   duplicate_finding_scope -> { future.order(:id) }
 
-  # Named scopes
-  scope :after_date, lambda { |date|
-    where(["start_time >= ?", date]).order(:start_time)
-  }
-  scope :on_or_after_date, lambda { |date|
-    time = date.beginning_of_day
-    where("(events.start_time >= :time) OR (events.end_time IS NOT NULL AND events.end_time > :time)",
-      :time => time).order(:start_time)
-  }
-  scope :before_date, lambda { |date|
-    time = date.beginning_of_day
-    where("start_time < :time", :time => time).order(start_time: :desc)
-  }
-  scope :future, lambda { on_or_after_date(Time.zone.today) }
-  scope :past, lambda { before_date(Time.zone.today) }
-  scope :within_dates, lambda { |start_date, end_date|
-    if start_date == end_date
-      end_date = end_date + 1.day
-    end
-    on_or_after_date(start_date).before_date(end_date)
-  }
-
-  # Expand the simple sort order names from the URL into more intelligent SQL order strings
-  scope :ordered_by_ui_field, lambda { |ui_field|
-    scope = case ui_field
-    when 'name'
-      order('lower(events.title)')
-    when 'venue'
-      includes(:venue).order('lower(venues.title)').references(:venues)
-    else
-      all
-    end
-    scope.order('start_time')
-  }
-
+  extend Finders
   #---[ Overrides ]-------------------------------------------------------
 
   def url=(value)
@@ -135,16 +101,6 @@ class Event < ActiveRecord::Base
 
   def unlock_editing!
     update_attribute(:locked, false)
-  end
-
-  #---[ Searching ]-------------------------------------------------------
-
-  def self.search_tag(tag, opts={})
-    includes(:venue).tagged_with(tag).ordered_by_ui_field(opts[:order])
-  end
-
-  def self.search(query, opts={})
-    SearchEngine.search(query, opts)
   end
 
   before_destroy { !locked } # prevent locked events from being destroyed

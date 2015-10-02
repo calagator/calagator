@@ -69,17 +69,7 @@ class Venue < ActiveRecord::Base
   duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
   duplicate_finding_scope -> { non_duplicates.order(:title, :id) }
 
-  # Named scopes
-  scope :masters,          -> { non_duplicates.includes(:source, :events, :tags, :taggings) }
-  scope :with_public_wifi, -> { where(wifi: true) }
-  scope :in_business,      -> { where(closed: false) }
-  scope :out_of_business,  -> { where(closed: true) }
-
-  #===[ Search ]==========================================================
-
-  def self.search(query, opts={})
-    SearchEngine.search(query, opts)
-  end
+  extend Finders
 
   #===[ Overrides ]=======================================================
 
