@@ -127,12 +127,6 @@ describe VenuesController, :type => :controller do
         struct = ActiveSupport::JSON.decode(response.body)
         expect(struct).to be_a_kind_of Array
       end
-
-      it "should accept a JSONP callback" do
-        xhr :get, :index, :format => "json", :callback => "some_function"
-
-        expect(response.body.split("\n").join).to match /some_function\(.*\)$/
-      end
     end
 
   end
@@ -158,12 +152,6 @@ describe VenuesController, :type => :controller do
           %w[id title description address].each do |field|
             expect(struct[field]).to eq @venue.send(field)
           end
-        end
-
-        it "should accept a JSONP callback" do
-          xhr :get, :show, :id => @venue.to_param, :format => "json", :callback => "some_function"
-
-          expect(response.body.split("\n").join).to match /some_function\(.*\)$/
         end
       end
     end
