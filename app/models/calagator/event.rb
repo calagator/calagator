@@ -28,6 +28,7 @@ require "paper_trail"
 require "loofah-activerecord"
 require "loofah/activerecord/xss_foliate"
 require "active_model/sequential_validator"
+require "validate_url"
 
 # == Event
 #
@@ -52,10 +53,7 @@ class Event < ActiveRecord::Base
   validates :title, :description, :url, blacklist: true
   validates :start_time, :end_time, sequential: true
   validates :title, :start_time, presence: true
-  validates_format_of :url,
-    :with => /\Ahttps?:\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\Z/,
-    :allow_blank => true,
-    :allow_nil => true
+  validates :url, url: { allow_blank: true }
 
   before_destroy { !locked } # prevent locked events from being destroyed
 
