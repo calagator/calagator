@@ -45,10 +45,10 @@ Gem::Specification.new do |s|
   s.add_dependency "utf8-cleaner", "~> 0.0.6"
   # s.add_dependency "mofo", path: "vendor/gems/mofo-0.2.8" # vendored fork with hpricot dependency replaced with nokogiri
   s.add_dependency "sunspot_rails", "~> 2.1"
-  s.add_dependency "sunspot_solr",  "~> 2.1"
   s.add_dependency "lucene_query", "0.1"
   s.add_dependency "rack-contrib", "~> 1.0"
 
+  s.add_development_dependency "sunspot_solr",  "~> 2.1"
   s.add_development_dependency "sqlite3", "~> 1.3"
   s.add_development_dependency "rspec-activemodel-mocks", "~> 1.0.2"
   s.add_development_dependency "rspec-its", "~> 1.1"
