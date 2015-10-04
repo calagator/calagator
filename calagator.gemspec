@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
 
   s.required_ruby_version = ['>= 2.0.0', '< 2.3.0']
 
-  s.files = Dir["{app,config,db,lib,vendor}/**/*"] +["MIT-LICENSE.txt", "Rakefile", "README.md", "rails_template.rb"]
+  s.files = Dir["{app,config,lib,vendor}/**/*"] + Dir["db/**/*.rb"] + ["MIT-LICENSE.txt", "Rakefile", "README.md", "rails_template.rb"]
   s.test_files = Dir["spec/**/*"]
   s.executables << 'calagator'
 
