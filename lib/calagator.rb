@@ -23,7 +23,6 @@ require "font-awesome-rails"
 require "paper_trail_manager"
 require "utf8-cleaner"
 require "sunspot_rails"
-require "sunspot_solr"
 require "lucene_query"
 require "rack/contrib/jsonp"
 
