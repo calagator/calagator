@@ -1,4 +1,5 @@
 require "calagator/engine"
+require "calagator/version"
 
 require "formtastic"
 require "rails_autolink"
