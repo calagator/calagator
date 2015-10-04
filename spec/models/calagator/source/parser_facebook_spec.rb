@@ -3,14 +3,27 @@ require 'spec_helper'
 module Calagator
 
 describe Source::Parser::Facebook, :type => :model do
+  before do
+    Calagator.facebook_access_token = "foo"
+  end
 
   describe "when importing an event" do
     before(:each) do
       url = 'http://facebook.com/event.php?eid=247619485255249'
-      graph_url = "http://graph.facebook.com/247619485255249"
+      graph_url = "https://graph.facebook.com/247619485255249?access_token=foo"
       stub_request(:get, graph_url).to_return(body: read_sample('facebook.json'), headers: { content_type: "application/json" })
       @events = Source::Parser::Facebook.to_events(url: url)
       @event = @events.first
+    end
+
+    context "without an app access token configured" do
+      before do
+        Calagator.facebook_access_token = nil
+      end
+
+      it "should find no events" do
+        expect(@events.size).to eq 1
+      end
     end
 
     it "should find one event" do
@@ -63,8 +76,12 @@ describe Source::Parser::Facebook, :type => :model do
       should_parse 'http://www.facebook.com/event.php?eid=247619485255249'
     end
 
-    it "should parse a API uri" do
+    it "should parse an HTTP API uri" do
       should_parse 'http://graph.facebook.com/247619485255249'
+    end
+
+    it "should parse an HTTPS API uri" do
+      should_parse 'https://graph.facebook.com/247619485255249'
     end
   end
 

@@ -20,6 +20,11 @@ Calagator.setup do |config|
   # This is sensitive information and should not be stored in version control.
   config.meetup_api_key = ENV['MEETUP_API_KEY']
 
+  # Access token for Facebook:
+  # 1. Create a new app for your site at https://developers.facebook.com/apps
+  # 2. Visit https://developers.facebook.com/tools/access_token/ to find the "App Token"
+  config.facebook_access_token = ENV['FACEBOOK_ACCESS_TOKEN']
+
   # Search engine to use for searching events.
   # Values: :sql, :sunspot.
   config.search_engine = :sql
