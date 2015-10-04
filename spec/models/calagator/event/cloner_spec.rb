@@ -22,15 +22,17 @@ describe Event::Cloner do
 
     describe "#start_time" do
       it "should equal todays date with the same time" do
-        start_time = Date.today + original.start_time.hour.hours
-        subject.start_time.should == start_time
+        subject.start_time.to_date.should == Date.today
+        subject.start_time.hour.should == original.start_time.hour
+        subject.start_time.min.should == original.start_time.min
       end
     end
 
     describe "#end_time" do
       it "should equal todays date with the same time" do
-        end_time = Date.today + original.end_time.hour.hours
-        subject.end_time.should == end_time
+        subject.end_time.to_date.should == Date.today
+        subject.end_time.hour.should == original.end_time.hour
+        subject.end_time.min.should == original.end_time.min
       end
     end
 
