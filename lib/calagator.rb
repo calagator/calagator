@@ -34,6 +34,7 @@ module Calagator
     :admin_username,
     :admin_password,
     :meetup_api_key,
+    :facebook_access_token,
     :search_engine,
     :icalendar_sequence_offset,
     :mapping_marker_color,

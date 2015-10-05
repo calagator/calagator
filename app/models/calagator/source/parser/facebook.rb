@@ -3,7 +3,10 @@ module Calagator
 class Source::Parser::Facebook < Source::Parser
   self.label = :Facebook
 
-  # NOTE: This pattern's goal is to get the Facebook event identifier in the first capture group, so the "(?:foo)" non-capturing group syntax is used to match but not capture those groups -- search the web for "ruby class rexep non-capturing" for details.
+  # NOTE: This pattern's goal is to get the Facebook event identifier in the
+  # first capture group, so the "(?:foo)" non-capturing group syntax is used
+  # to match but not capture those groups -- 
+  # search the web for "ruby class rexep non-capturing" for details.
   self.url_pattern = %r{(?x)              # Ignore regexp whitespace and comments
     ^
       (?:https?://)?                      # Optional http URI prefix
@@ -22,10 +25,14 @@ class Source::Parser::Facebook < Source::Parser
 
   def to_events
     return unless data = to_events_api_helper(url) do |event_id|
-      "http://graph.facebook.com/#{event_id}"
+      raise Calagator::Source::Parser::HttpAuthenticationRequiredError unless Calagator.facebook_access_token.present?
+      [
+        "https://graph.facebook.com/#{event_id}",
+        { access_token: Calagator.facebook_access_token }
+      ]
     end
 
-    raise ::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
+    raise Calagator::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
 
     event = Event.new({
       source:      source,
