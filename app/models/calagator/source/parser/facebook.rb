@@ -24,13 +24,12 @@ class Source::Parser::Facebook < Source::Parser
     }
 
   def to_events
-    return [] unless Calagator.facebook_access_token.present?
+    raise Calagator::Source::Parser::HttpAuthenticationRequiredError unless Calagator.facebook_access_token.present?
+
     return unless data = to_events_api_helper(url) do |event_id|
       [
         "https://graph.facebook.com/#{event_id}",
-        { 
-          access_token: Calagator.facebook_access_token
-        }
+        { access_token: Calagator.facebook_access_token }
       ]
     end
 
