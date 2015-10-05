@@ -24,7 +24,7 @@ module Calagator
     VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
 
     def vvenues
-      ri_cal_calendar.to_s.scan(VENUE_CONTENT_RE).map do |raw_ical_venue|
+      @vvenues ||= ri_cal_calendar.to_s.scan(VENUE_CONTENT_RE).map do |raw_ical_venue|
         VVenue.new(raw_ical_venue)
       end
     end
