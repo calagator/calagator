@@ -554,10 +554,11 @@ describe Event, :type => :model do
 
   describe "when squashing duplicates (integration test)" do
     before do
-      @event = FactoryGirl.create(:event)
+      @event = FactoryGirl.create(:event, :with_venue)
+      @venue = @event.venue
     end
 
-    it "should consolidate associations, and merge tags" do
+    it "should consolidate associations, merge tags, and update the venue's counter_cache" do
       @event.tag_list = %w[first second] # master event contains one duplicate tag, and one unique tag
 
       clone = Event.create!(@event.attributes.merge(id: nil))
@@ -565,10 +566,12 @@ describe Event, :type => :model do
       clone.save!
       clone.reload
       expect(clone).not_to be_duplicate
+      expect(@venue.reload.events_count).to eq 2
 
       Event.squash(@event, clone)
       expect(@event.tag_list.to_a.sort).to eq %w[first second third] # master now contains all three tags
       expect(clone.duplicate_of).to eq @event
+      expect(@venue.reload.events_count).to eq 1
     end
   end
 
