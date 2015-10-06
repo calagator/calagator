@@ -9,6 +9,16 @@ module EventsHelper
     output
   end
 
+  # Cast date to_date unless date is undefined
+  def format_event_date(date)
+    date ? date.to_date : ""
+  end
+
+  # Cast date to time unless date is undefined
+  def format_event_time(date)
+    date ? date.strftime('%I:%M %p') : ""
+  end
+
 # calculate rowspans for an array of events
 # argument:  array of events
 # returns:  rowspans, an array in which each entry corresponds to an event in events;
