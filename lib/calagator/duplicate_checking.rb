@@ -87,6 +87,7 @@ module DuplicateChecking
         cattr_accessor(:_duplicate_checking_ignores_attributes) { Set.new }
         cattr_accessor(:_duplicate_squashing_ignores_associations) { Set.new }
         cattr_accessor(:_duplicate_finding_scope) { -> { all } }
+        cattr_accessor(:_after_squashing_duplicates) { ->(master) {} }
 
         belongs_to :duplicate_of, :class_name => name, :foreign_key => DUPLICATE_MARK_COLUMN
         has_many   :duplicates,   :class_name => name, :foreign_key => DUPLICATE_MARK_COLUMN
@@ -113,6 +114,11 @@ module DuplicateChecking
       self._duplicate_finding_scope
     end
 
+    def after_squashing_duplicates(*args)
+      self._after_squashing_duplicates = args.first unless args.empty?
+      self._after_squashing_duplicates
+    end
+
     # Return Hash of duplicate events grouped by the +type+.
     def find_duplicates_by_type(type)
       DuplicateFinder.new(self, type.split(",")).find do |scope|
@@ -126,7 +132,9 @@ module DuplicateChecking
     # :duplicates => ActiveRecord instance(s) to mark as duplicates
     # :master => ActiveRecord instance to use as master
     def squash(master, duplicates)
-      DuplicateSquasher.new(master, duplicates, name.downcase).squash
+      DuplicateSquasher.new(master, duplicates, name.downcase).squash.tap do |squasher|
+        after_squashing_duplicates.call(master) unless squasher.failure
+      end
     end
   end
 end

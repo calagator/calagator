@@ -75,27 +75,19 @@ class Venue < ActiveRecord::Base
   scope :in_business,      -> { where(closed: false) }
   scope :out_of_business,  -> { where(closed: true) }
 
-  #===[ Search ]==========================================================
-
   def self.search(query, opts={})
     SearchEngine.search(query, opts)
   end
 
-  #===[ Overrides ]=======================================================
-
   def url=(value)
     super UrlPrefixer.prefix(value)
   end
-
-  #===[ Address helpers ]=================================================
 
   # Display a single line address.
   def full_address
     full_address = "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
     full_address.strip != "," && full_address
   end
-
-  #===[ Geocoding helpers ]===============================================
 
   # Get an address we can use for geocoding
   def geocode_address
@@ -114,6 +106,10 @@ class Venue < ActiveRecord::Base
   def geocode!
     Geocoder.geocode(self)
     true # Try to geocode, but don't complain if we can't.
+  end
+
+  def update_events_count!
+    update_attribute(:events_count, events.non_duplicates.count)
   end
 end
 
