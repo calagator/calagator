@@ -23,6 +23,18 @@ body {
   padding: .5em 30px .5em 40px;
   font-size: 70%;
   clear: both;
+  height: 50px;
+  position: relative;
+
+  #nird_logo {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, 0%);
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100px;
+  }
 }
 
 @import url(https://fonts.googleapis.com/css?family=Sanchez);
