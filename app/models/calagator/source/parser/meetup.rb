@@ -7,15 +7,17 @@ class Source::Parser::Meetup < Source::Parser
   def to_events
     return fallback unless Calagator.meetup_api_key.present?
     return unless data = get_data
+    start_time = Time.at(data['time']/1000).utc
     event = Event.new({
       source:      source,
-      title:       data['name'],
+      title:       "#{data['group']['name']} - #{data['name']}",
       description: data['description'],
       url:         data['event_url'],
       venue:       to_venue(data['venue']),
-      tag_list:    "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}",
+      tag_list:    "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}#{group_topics(data)}",
       # Meetup sends us milliseconds since the epoch in UTC
-      start_time:  Time.at(data['time']/1000).utc,
+      start_time:  start_time,
+      end_time: data['duration'] ? start_time + data['duration']/1000 : nil
     })
 
     [event_or_duplicate(event)]
@@ -37,10 +39,16 @@ class Source::Parser::Meetup < Source::Parser
         "https://api.meetup.com/2/event/#{event_id}",
         {
           key: Calagator.meetup_api_key,
-          sign: 'true'
+          sign: 'true',
+          fields: 'topics'
         }
       ]
     end
+  end
+
+  def group_topics(data)
+    topics = data['group']['topics']
+    topics.map{ |t| t['name'].downcase }.join(', ').insert(0, ', ') unless topics.empty?
   end
 
   def to_venue(value)

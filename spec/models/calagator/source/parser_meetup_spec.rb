@@ -10,7 +10,7 @@ describe Source::Parser::Meetup, :type => :model do
 
     before(:each) do
       meetup_url = "http://www.meetup.com/pdxpython/events/ldhnqyplbnb/"
-      api_url = "https://api.meetup.com/2/event/ldhnqyplbnb?key=foo&sign=true"
+      api_url = "https://api.meetup.com/2/event/ldhnqyplbnb?key=foo&sign=true&fields=topics"
 
       stub_request(:get, api_url).to_return(body: read_sample('meetup.json'), headers: { content_type: "application/json" })
       @events = Source::Parser::Meetup.to_events(url: meetup_url)
@@ -22,12 +22,12 @@ describe Source::Parser::Meetup, :type => :model do
     end
 
     it "should set event details" do
-      expect(@event.title).to eq "eLearning Network Meetup"
+      expect(@event.title).to eq "eLearning Network - eLearning Network Meetup"
       expect(@event.start_time).to eq Time.zone.parse("Thu Aug 11 00:00:00 UTC 2011")
     end
 
     it "should tag Meetup events with automagic machine tags" do
-      expect(@event.tag_list).to eq ["meetup:event=ldhnqyplbnb", "meetup:group=eLearningNetwork"]
+      expect(@event.tag_list).to eq ["meetup:event=ldhnqyplbnb", "meetup:group=eLearningNetwork", "ruby", "python", "javascript"]
     end
 
     it "should populate a venue when structured data is provided" do
