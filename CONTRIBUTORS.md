@@ -30,6 +30,7 @@ These people have contributed to Calagator's design and implementation:
   * Fred Willmore
   * Gabrielle Roth
   * Garrison Jensen
+  * Guru Khalsa
   * Igal Koshevoy
   * James Kurczodyna
   * Jeff Schwaber
