@@ -8,15 +8,13 @@ class Source::Parser::Meetup < Source::Parser
     return fallback unless Calagator.meetup_api_key.present?
     return unless data = get_data
     start_time = Time.at(data['time']/1000).utc
-    group_topics = data['group']['topics']
-    topics_string = group_topics.map{ |t| t['name'].downcase }.join(', ').insert(0, ', ') unless group_topics.empty?
     event = Event.new({
       source:      source,
       title:       "#{data['group']['name']} - #{data['name']}",
       description: data['description'],
       url:         data['event_url'],
       venue:       to_venue(data['venue']),
-      tag_list:    "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}#{topics_string}",
+      tag_list:    "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}#{get_group_topics(data)}",
       # Meetup sends us milliseconds since the epoch in UTC
       start_time:  start_time,
       end_time: data['duration'] ? start_time + data['duration']/1000 : nil
@@ -33,6 +31,11 @@ class Source::Parser::Meetup < Source::Parser
       %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?},
       lambda { |matcher| "http://www.meetup.com/#{matcher[1]}/events/#{matcher[2]}/ical" }
     )
+  end
+
+  def get_group_topics(data)
+    group_topics = data['group']['topics']
+    group_topics.map{ |t| t['name'].downcase }.join(', ').insert(0, ', ') unless group_topics.empty?
   end
 
   def get_data

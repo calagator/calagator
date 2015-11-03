@@ -7,11 +7,8 @@ class SourcesController < Calagator::ApplicationController
     @importer = Source::Importer.new(params.permit![:source])
     respond_to do |format|
       if @importer.import
-        if @importer.events.count == 1
-          format.html { redirect_to @importer.events.first, flash: { success: render_to_string(layout: false) } }
-        else
-          format.html { redirect_to events_path, flash: { success: render_to_string(layout: false) } }
-        end
+        redirect_target = @importer.events.count == 1 ? @importer.events.first : events_path
+        format.html { redirect_to redirect_target, flash: { success: render_to_string(layout: false) } }
         format.xml  { render xml: @importer.source, events: @importer.events }
       else
         format.html { redirect_to new_source_path(url: @importer.source.url), flash: { failure: @importer.failure_message } }
