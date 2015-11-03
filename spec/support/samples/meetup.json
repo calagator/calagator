@@ -26,6 +26,23 @@
         "name": "eLearning Network",
         "group_lon": -122.69000244140625,
         "join_mode": "open",
-        "urlname": "eLearningNetwork"
+        "urlname": "eLearningNetwork",
+        "topics": [
+            {
+            "urlkey": "ruby",
+            "name": "Ruby",
+            "id": 1040
+            },
+            {
+            "urlkey": "python",
+            "name": "Python",
+            "id": 1064
+            },
+            {
+            "urlkey": "javascript",
+            "name": "JavaScript",
+            "id": 7029
+            }
+        ]
     }
 }
