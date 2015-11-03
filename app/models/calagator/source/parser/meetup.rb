@@ -2,7 +2,6 @@ module Calagator
 
 class Source::Parser::Meetup < Source::Parser
   self.label = :Meetup
-  #change url pattern to: %r{^http://(?:www\.)?meetup\.com/([^/]+)/events/([^/]+)/?}  then also need to change to_events_api_helper 
   self.url_pattern = %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
 
   def to_events

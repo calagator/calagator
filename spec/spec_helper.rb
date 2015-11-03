@@ -27,7 +27,6 @@ require "capybara/poltergeist"
 require "timecop"
 require "webmock"
 
-
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
