@@ -14,7 +14,7 @@ class Source::Parser::Meetup < Source::Parser
       description: data['description'],
       url:         data['event_url'],
       venue:       to_venue(data['venue']),
-      tag_list:    "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}#{get_group_topics(data)}",
+      tag_list:    "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}#{group_topics(data)}",
       # Meetup sends us milliseconds since the epoch in UTC
       start_time:  start_time,
       end_time: data['duration'] ? start_time + data['duration']/1000 : nil
@@ -33,11 +33,6 @@ class Source::Parser::Meetup < Source::Parser
     )
   end
 
-  def get_group_topics(data)
-    group_topics = data['group']['topics']
-    group_topics.map{ |t| t['name'].downcase }.join(', ').insert(0, ', ') unless group_topics.empty?
-  end
-
   def get_data
     to_events_api_helper(url, "problem") do |event_id|
       [
@@ -49,6 +44,11 @@ class Source::Parser::Meetup < Source::Parser
         }
       ]
     end
+  end
+
+  def group_topics(data)
+    topics = data['group']['topics']
+    topics.map{ |t| t['name'].downcase }.join(', ').insert(0, ', ') unless topics.empty?
   end
 
   def to_venue(value)
