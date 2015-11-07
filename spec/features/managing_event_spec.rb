@@ -79,6 +79,27 @@ feature 'Event Editing' do
     expect(page).to have_content 'Event was successfully saved'
     expect(page).to have_content 'An Imported Event'
   end
+
+  scenario 'A user edits an imported event and adds links' do
+    visit '/'
+
+    within '#today' do
+      click_on 'Imported Event'
+    end
+
+    click_on 'edit'
+
+    fill_in 'Description', with: "I have 4 links, but I want to add one more.\n
+      http://test.com\n
+      http://example.com\n
+      http://google.com\n
+      http://yahoo.com\n
+      http://disallowed.com"
+
+    click_on 'Update Event'
+
+    expect(page).to have_content 'too many links'
+  end
 end
 
 feature 'Event Cloning' do
