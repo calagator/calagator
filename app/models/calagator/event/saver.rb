@@ -32,7 +32,7 @@ class Event < ActiveRecord::Base
     end
 
     def spam?
-      evil_robot? || too_many_links?
+      evil_robot? || ( !imported? && too_many_links? )
     end
 
     def evil_robot?
@@ -45,6 +45,10 @@ class Event < ActiveRecord::Base
       if event.description.present? && event.description.scan(/https?:\/\//i).size > 3
         self.failure = "We allow a maximum of 3 links in a description. You have too many links."
       end
+    end
+
+    def imported?
+      event.source.present?
     end
 
     def preview?
