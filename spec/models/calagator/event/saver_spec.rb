@@ -43,7 +43,7 @@ module Calagator
       end
 
       it "should fail to save an imported event with links added" do
-        imported_event.description << "\n\nhttp://disallowed.link"
+        params[:event] = { description: "#{imported_event.description}\n\nhttp://disallowed.link" }
         saver = Event::Saver.new(imported_event, params)
         saver.save
         expect(saver.failure).to include "too many links"
