@@ -5,7 +5,6 @@ feature 'Event Editing' do
     Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Future', start_time: Time.zone.now
     create :event, :with_multiple_tags, title: 'Tagged Event', start_time: Time.zone.now
-    create :event, :with_source, title: 'Imported Event', start_time: Time.zone.now
   end
 
   after do
@@ -62,43 +61,6 @@ feature 'Event Editing' do
     within '.tags' do
       expect(page).to have_css 'a', count: 2
     end
-  end
-
-  scenario 'A user edits an imported event with many links' do
-    visit '/'
-
-    within '#today' do
-      click_on 'Imported Event'
-    end
-
-    click_on 'edit'
-
-    fill_in 'Event Name', with: 'An Imported Event'
-    click_on 'Update Event'
-
-    expect(page).to have_content 'Event was successfully saved'
-    expect(page).to have_content 'An Imported Event'
-  end
-
-  scenario 'A user edits an imported event and adds links' do
-    visit '/'
-
-    within '#today' do
-      click_on 'Imported Event'
-    end
-
-    click_on 'edit'
-
-    fill_in 'Description', with: "I have 4 links, but I want to add one more.\n
-      http://test.com\n
-      http://example.com\n
-      http://google.com\n
-      http://yahoo.com\n
-      http://disallowed.com"
-
-    click_on 'Update Event'
-
-    expect(page).to have_content 'too many links'
   end
 end
 
