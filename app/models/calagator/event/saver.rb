@@ -57,6 +57,7 @@ class Event < ActiveRecord::Base
     end
 
     def link_count(text)
+      return 0 if text.blank?
       text.scan(/https?:\/\//i).size
     end
 
