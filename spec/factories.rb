@@ -39,9 +39,25 @@ FactoryGirl.define do
     trait :with_multiple_tags do
       after(:create) { |event| event.update_attributes(tag_list: 'tag1, tag2') }
     end
+
+    trait :with_source do
+      association :source
+      sequence(:description) do |n| 
+        "Description of Event #{n}.\n
+        http://test.com\n
+        http://example.com\n
+        http://google.com\n
+        http://yahoo.com"
+      end
+    end
   end
 
   factory :duplicate_event, parent: :event do
     association :duplicate_of, factory: :event
+  end
+
+  factory :source, class: Calagator::Source do
+    sequence(:title) { |n| "Source #{n}" }
+    url { "http://example.com" }
   end
 end
