@@ -14,10 +14,10 @@ module Calagator
       end
 
       it "should fail to save an event with too many links" do
-        event.description << "\n\nhttp://google.com"
-        event.description << "\n\nhttp://example.com"
-        event.description << "\n\nhttp://calagator.com"
-        event.description << "\n\nhttp://disallowed.link"
+        event.description = "http://google.com\n
+                            http://example.com\n
+                            http://calagator.com\n
+                            http://disallowed.link"
         saver = Event::Saver.new(event, params)
         saver.save
         expect(saver.failure).to include "too many links"
