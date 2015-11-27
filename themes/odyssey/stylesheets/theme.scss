@@ -6,6 +6,10 @@
  *= require tooltip-theme-arrows
  */
 
+
+// I really want to use Fira Sans in this design because Volunteer Odyssey and Fira Sans feels like a match-made in heaven.
+@import url(//fonts.googleapis.com/css?family=Fira+Sans:300,400,500,700);
+
 @import 'foundation';
 @import 'variables';
 @import 'mixins';
@@ -18,10 +22,6 @@
 @import 'theme-forms';
 
 @import 'icons';
-
-// I really want to use Fira Sans in this design because Volunteer Odyssey and Fira Sans feels like a match-made in heaven.
-// TODO: I would rather have this as it's own script tag. Bring it out to the head later.
-@import url(//fonts.googleapis.com/css?family=Fira+Sans:300,400,500,700);
 
 .clearfix:before,
 .clearfix:after {
@@ -61,6 +61,19 @@ html {
     }
 }
 
+// Fix font rendering in Windows Chrome:
+body {
+  -webkit-animation-delay: 0.1s;
+  -webkit-animation-name: fontfix;
+  -webkit-animation-duration: 0.1s;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: linear;
+}
+@-webkit-keyframes fontfix {
+  from { opacity: 1; }
+  to   { opacity: 1; }
+}
+
 // Importing my modules in here.
 @import 'header';
 @import 'navigation';
@@ -68,20 +81,20 @@ html {
 @import 'footer';
 
 body.events_index { // /events
-    @import 'events';
+  @import 'events';
 }
 
 body.events_search {
-    @import 'events';
-    @import 'events-search';
+  @import 'events';
+  @import 'events-search';
 }
 
 body.events_new { // /events/new
-	// @import 'new-events';
+// @import 'new-events';
 }
 
 body.events_show {
-    @import 'events-show';
+  @import 'events-show';
 }
 
 body.events_search {
