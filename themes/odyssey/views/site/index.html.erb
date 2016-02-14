@@ -1,21 +1,11 @@
 <% tabindex_on '#search_field' %>
-<div id="homepage_sidebar">
-  <% if @overview.tags.present? %>
-    <div id="tagcloud">
-      <h2>Popular tags</h2>
-      <% tag_cloud @overview.tags, %w(tagcloud_level_0 tagcloud_level_1 tagcloud_level_2 tagcloud_level_3 tagcloud_level_4) do |tag, css_class| %>
-        <%= link_to tag.name, search_events_path(tag: tag.name), class: css_class %>
-        <span class="spacer">&middot;</span>
-      <% end %>
-    </div>
-  <% end %>
-</div>
 <div class='view-mode-buttons'>
   <button class='btn btn-primary agenda-view js-agenda-view'>Agenda View</button>
   <button class='btn btn-primary month-view js-month-view'>Month View</button>
 </div>
 
 <%= render :partial => 'calendar/index', :layout => false %>
+
 <% content_for :javascript_insert do %>
   <%= javascript_include_tag 'calendar' %>
 <% end %>
