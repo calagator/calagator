@@ -11,7 +11,8 @@ class Event < ActiveRecord::Base
 
     def clone
       clone = Event.new
-      ATTRIBUTES.each do |attribute|
+      attrs = Event.attribute_names - %w(id start_time end_time source_id duplicate_of_id parent_id locked)
+      attrs.each do |attribute|
         clone.send "#{attribute}=", event.send(attribute)
       end
       if event.start_time
