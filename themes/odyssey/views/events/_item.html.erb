@@ -91,7 +91,7 @@ html_classes << " contentbar" if has_contentbar
       <div id='website' class='property'>
         <h3>
           Website:
-          <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url u-url", :rel => "nofollow", :itemprop => "url" %>
+          <%= link_to "#{truncate(event.url, :length => 128)}", h(event.url), :class => "url u-url", :rel => "nofollow", :itemprop => "url", :target => "_blank" %>
         </h3>
       </div>
     <% end -%>
@@ -108,7 +108,7 @@ html_classes << " contentbar" if has_contentbar
       <div id='signup-instructions' class='property'>
         <h3>Signup Instructions</h3>
         <div class='signup-instructions property-detail'>
-          <%= auto_link event.signup_instructions, html: { rel: :nofollow } %>
+          <%= auto_link event.signup_instructions, html: { rel: :nofollow , :target => "_blank"} %>
         </div>
       </div>
     <% end %>
