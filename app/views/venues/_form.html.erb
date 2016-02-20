@@ -12,9 +12,7 @@
       <%= f.input :locality, :label => "City" %>
       <%= f.input :region, :label => "State" %>
       <%= f.input :postal_code, :label => "Zip Code" %>
-      <%= f.input :country, :label => "Country", :as => :text %>
-      <%= f.input :latitude,  :input_html => { :maxlength => 20 } %>
-      <%= f.input :longitude, :input_html => { :maxlength => 20 } %>
+      <%= f.input :country, :label => "Country", :as => :string %>
     <% end %>
 
     <%= f.input :wifi, :label => "This venue has public wireless internet access" %>
@@ -24,14 +22,6 @@
 
     <%= f.input(:closed, :label => "This venue is no longer open for business") unless venue.new_record? %>
 
-    <% unless venue.new_record? %>
-      <%= f.input :force_geocoding,
-                  :label => venue.location ? "Re-geocode?" : "Geocode?",
-                  :as => :boolean,
-                  :hint => venue.location \
-                            ? "([#{venue.latitude}, #{venue.longitude}] currently; if checked, we'll try again.)" \
-                            : "(if checked, we'll try to determine a map position for this venue.)" %>
-    <% end %>
 
     <li class='trap'>
       <%= label 'trap', 'field', "Leave this field blank or we'll think you're a robot." %>
