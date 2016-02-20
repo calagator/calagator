@@ -45,6 +45,9 @@
   </div>
 <% else %>
   <div id='organization_portal'>
+    <div id="exports">
+      <%= link_to 'List all organizations', organizations_path(:all => 1), class: 'button button--call-to-action' %>
+    </div>
     <div id='most_active'>
       <h3>Most Active</h3>
       <ul class='clearfix'>
@@ -66,11 +69,6 @@
           </li>
         <% end %>
       </ul>
-    </div>
-    <div id="exports">
-        <div id="exports">
-            <%= link_to 'List all organizations', organizations_path(:all => 1), class: 'button button--call-to-action' %>
-        </div>
     </div>
   </div>
   <% end %>
