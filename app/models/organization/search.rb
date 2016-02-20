@@ -29,7 +29,7 @@ class Organization < ActiveRecord::Base
     protected
 
     def base
-      @scope = Organization.non_duplicates
+      @scope = Organization.order(:title).non_duplicates
       self
     end
 

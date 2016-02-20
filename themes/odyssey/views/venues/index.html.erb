@@ -53,6 +53,9 @@
   </div>
 <% else %>
   <div id='venue_portal' class='clearfix'>
+    <div id="exports">
+      <%= link_to 'List all venues', venues_path(:all => 1), class: 'button button--call-to-action' %>
+    </div>
     <div id='most_active'>
       <h3>Most Active</h3>
       <ul class='clearfix'>
@@ -74,9 +77,6 @@
           </li>
         <% end %>
       </ul>
-    </div>
-    <div id="exports">
-        <%= link_to 'List all venues', venues_path(:all => 1), class: 'button button--call-to-action' %>
     </div>
   </div>
   <% end %>

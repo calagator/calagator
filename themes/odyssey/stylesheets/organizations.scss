@@ -55,7 +55,7 @@
 
 #organization_portal #most_active,
 #organization_portal #newest,
-#venues_search_results .list_description {
+#organizations_search_results .list_description {
     width: 100%;
     border-right: none;
     margin-right: 0;
@@ -64,30 +64,30 @@
 
 #organization_portal #most_active h3,
 #organization_portal #newest h3,
-#venues_search_results .list_description h2,
+#organizations_search_results .list_description h2,
 #organization_portal #most_active ul li,
 #organization_portal #newest ul li,
-#venues_search_results .list_description + ul li {
+#organizations_search_results .list_description + ul li {
     font-family: $font-family-fira-sans;
     padding-left: 1em;
 }
 
-#venues_search_results .list_description h2 {
+#organizations_search_results .list_description h2 {
     color: #fff;
 }
 
-#venues_search_results .list_description,
-#venues_search_results .list_description + ul {
+#organizations_search_results .list_description,
+#organizations_search_results .list_description + ul {
     background-color: #2a2a2a;
 }
 
-#venues_search_results .list_description + ul {
+#organizations_search_results .list_description + ul {
     padding-bottom: 1em;
 }
 
 #organization_portal #most_active ul li,
 #organization_portal #newest ul li,
-#venues_search_results .list_description + ul li {
+#organizations_search_results .list_description + ul li {
     margin: 0 1em;
     padding: 1em;
     font-weight: 300;
@@ -104,13 +104,13 @@
     border-bottom: 1px solid rgb(147, 102, 171);
 }
 
-#venues_search_results .list_description + ul li {
+#organizations_search_results .list_description + ul li {
     border-bottom: 1px solid rgb(43, 162, 245);
 }
 
 #organization_portal #most_active ul li a,
 #organization_portal #newest ul li a,
-#venues_search_results .list_description + ul li a {
+#organizations_search_results .list_description + ul li a {
     font-weight: 400;
 }
 
@@ -132,12 +132,12 @@
     padding: 0;
 }
 
-#venues_index p.detail {
+#organizations_index p.detail {
   margin-bottom: 0;
   color: #575757;
 }
 
-#venues_search_results {
+#organizations_search_results {
     margin-top: 1em;
 }
 
@@ -145,7 +145,7 @@
 
     #organization_portal #most_active ul li,
     #organization_portal #newest ul li,
-    #venues_search_results .list_description + ul li {
+    #organizations_search_results .list_description + ul li {
         display: block;
         float: left;
         width: 46%;
@@ -166,7 +166,7 @@
 @media only screen and (min-width: 61.25em) {
     #organization_portal #most_active ul li,
     #organization_portal #newest ul li,
-    #venues_search_results .list_description + ul li {
+    #organizations_search_results .list_description + ul li {
         width: 30%;
         margin-left: 1.33333%;
         margin-right: 1.3333%;
@@ -177,21 +177,21 @@
     #organization_portal #most_active,
     #organization_portal #newest,
     #organizations_search,
-    #venues_search_results {
+    #organizations_search_results {
         width: 1000px;
         margin: 0 auto;
         display: block;
         float: none;
     }
 
-    #venues_search_results {
+    #organizations_search_results {
         margin-top: 1em;
     }
 
     #organization_portal #most_active,
     #organization_portal #newest,
-    #venues_search_results .list_description,
-    #venues_search_results .list_description + ul {
+    #organizations_search_results .list_description,
+    #organizations_search_results .list_description + ul {
         padding: 1em;
     }
 
