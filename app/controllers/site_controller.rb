@@ -10,16 +10,21 @@ class SiteController < ApplicationController
   end
 
   def index
-    @overview = Event::Overview.new
+    @events = Event
+    if params[:my] and current_organization
+      org_id = current_organization.id
+      @events = @events.where(organization_id: org_id)
+    end
+    @overview = Event::Overview.new(@events)
     respond_to do |format|
       format.html { }
       format.any  { redirect_to events_path(format: params[:format]) }
     end
-    @events_by_date = Event.all.group_by do |e|
+    @events_by_date = @events.all.group_by do |e|
       e.start_time.to_date
     end
     @date = params[:date] ? Date.parse(params[:date]) : Date.today
-    @events = Event.all
+    @events = @events.all
   end
 
   # Displays the about page.
