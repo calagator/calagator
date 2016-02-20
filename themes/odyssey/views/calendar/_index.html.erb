@@ -33,9 +33,9 @@
           <% events.first(4).each do |event| %>
             <li>
                 <% if event.organization.present? %>
-                  <%=link_to(event.organization_title, event.organization, :class => 'organization-name') %><br />
+                  <%=link_to(event.organization_title, event.organization, :class => 'organization-name', :target => "_blank") %><br />
                 <% end %>
-                <%= link_to event.title, event, :class => "event-title" %>
+                <%= link_to event.title, event, :class => "event-title", :target => "_blank" %>
                 <div class='event-time'>
                   <span class='event-start-time'><%= event.start_time.strftime("%I:%M %p") %></span> - <span class='event-end-time'><%= event.end_time.strftime("%I:%M %p") %>
                 </span>
