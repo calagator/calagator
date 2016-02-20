@@ -96,7 +96,7 @@
       <%= hidden_field_tag :update_all, true %>
     <% end %>
     <% if current_admin %>
-      <%= f.input :organization, as: :select, collection: Organization.all %>
+      <%= f.input :organization, as: :select, collection: Organization.order(:title) %>
     <% else %>
       <%= f.input :organization, input_html: { disabled: true } %>
     <% end %>
