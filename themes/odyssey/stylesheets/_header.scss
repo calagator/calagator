@@ -197,6 +197,12 @@ header {
     border-right: none;
   }
 
+  &#events_subnav{
+    li > a{
+      display: block;
+    }
+  }
+
   li > a {
     font-size: 0.85em;
     font-family: $font-family-fira-sans;
