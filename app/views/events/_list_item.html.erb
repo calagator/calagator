@@ -19,12 +19,12 @@ show_year ||= false
       <%= display_tag_icons(event) %>
     </div>
     <div>
-    <%= normalize_time(event, :context => event.start_time.to_date) -%>
+    Time: <%= normalize_time(event, :context => event.start_time.to_date) -%>
     <% if event.venue && !event.venue.title.blank? %>
-      <br/><a class='location p-location h-card' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
+      <br/>Venue: <a class='location p-location h-card' href='<%= url_for venue_url(event.venue) %>'><%= event.venue.title -%></a>
     <% end -%>
     <% if event.organization && !event.organization.title.blank? %>
-      <br/><a class='location p-location h-card' href='<%= url_for organization_url(event.organization) %>'><%= event.organization.title -%></a>
+      <br/>Organization: <a class='location p-location h-card' href='<%= url_for organization_url(event.organization) %>'><%= event.organization.title -%></a>
     <% end -%>
     </div>
     <% if !event.description.blank? %>
@@ -37,4 +37,3 @@ show_year ||= false
     <% end -%>
   </div>
 </div>
-

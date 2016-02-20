@@ -105,8 +105,6 @@ group :test do
   gem 'poltergeist', '1.5.1'
   gem 'timecop', '~> 0.7'
   gem 'webmock', '~> 1.20'
-
-  gem 'pry-rails', '~> 0.3.3'
 end
 
 # Gems used only for assets and not required
