@@ -25,6 +25,9 @@ html_classes << " contentbar" if has_contentbar
     <% if event.organization %>
       <div id='organizer' class='property'>
         <h4>Organized by <%= link_to event.organization.title, event.organization %>.</h4>
+        <% if !event.organization.volio_url.blank? %>
+          <span class='volio'><%= link_to '(View on Volio)', event.organization.volio_url, target: '_blank' %></span>
+        <% end %>
       </div>
     <% end %>
 
