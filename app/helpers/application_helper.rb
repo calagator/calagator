@@ -4,7 +4,7 @@ module ApplicationHelper
 
   # Returns HTML string of an event or venue description for display in a view.
   def format_description(string)
-    sanitize(auto_link(upgrade_br(markdown(string))))
+    sanitize(auto_link(upgrade_br(markdown(simple_format(string)))))
   end
 
   def markdown(text)
