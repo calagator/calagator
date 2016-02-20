@@ -58,6 +58,9 @@ li .list_date {
 li .list_content {
     padding: 1em;
     background-color: #fff;
+    a.summary.p-name{
+      font-size: 1.5em;
+    }
 }
 
 ul.event_list .list_date {
@@ -68,9 +71,12 @@ ul.event_list .list_date {
     margin: 0;
 }
 
-#future_events h2 {
-    margin-bottom: 1em;
-    padding-left: 1em;
+#future_events {
+    margin-bottom: 1.3em;
+    h2{
+      margin-bottom: 1em;
+      padding-left: 1em;
+    }
 }
 #organization_sidebar {
     margin-right: 0;

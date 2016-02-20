@@ -40,7 +40,7 @@
 
     <div class='info'>
       <% if @organization.description.present? %>
-        <div class='description'><%= @organization.description %></div>
+        <div class='description'><%= format_description(@organization.description) %></div>
       <% end %>
 
       <% if @organization.url.present? %>
