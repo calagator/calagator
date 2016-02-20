@@ -216,6 +216,7 @@ GEM
     rest-client (1.6.7)
       mime-types (>= 1.16)
     ri_cal (0.8.8)
+    rmagick (2.15.4)
     rsolr (1.0.12)
       builder (>= 2.1.2)
     rspec-activemodel-mocks (1.0.1)
@@ -353,6 +354,7 @@ DEPENDENCIES
   recurring_select (< 2.0)
   rest-client (= 1.6.7)
   ri_cal (= 0.8.8)
+  rmagick
   rspec-activemodel-mocks
   rspec-collection_matchers
   rspec-its

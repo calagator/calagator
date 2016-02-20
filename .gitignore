@@ -41,6 +41,7 @@ public/stylesheets/active_scaffold
 public/stylesheets/all.css
 public/stylesheets/record_select
 public/themes/
+public/uploads/
 solr/data/*
 solr/pids/*
 tags

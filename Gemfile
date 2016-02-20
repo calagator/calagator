@@ -48,6 +48,7 @@ gem 'sunspot_solr',  '2.1.1'
 gem 'lucene_query', '0.1'
 gem 'recurring_select', '< 2.0'
 gem 'carrierwave', '~> 0.10.0'
+gem 'rmagick'
 
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
