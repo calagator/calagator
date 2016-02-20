@@ -1,9 +1,15 @@
 <div id="events_subnav" class="subnav">
   <div class='container'>
     <ul class="clearfix">
-      <li><%= link_to 'Browse Events', root_url,
-              :class => subnav_class_for("site", "index") %>
-      </li>
+      <% if current_organization %>
+          <li><%= link_to 'My Events', root_url(my: true),
+                          :class => subnav_class_for("site", "index") %>
+          </li>
+      <% else %>
+        <li><%= link_to 'Browse Events', root_url,
+                :class => subnav_class_for("site", "index") %>
+        </li>
+      <% end %>
       <% if current_admin || current_organization %>
         <li><%= link_to 'Add an event', new_event_url,
                 :class => subnav_class_for("events", "new") %>
