@@ -85,12 +85,14 @@
   <%= f.inputs :name => "#{'Editing: ' unless event.new_record?} <em>#{event.title}</em>".html_safe do %>
     <% if event.has_recurrences? %>
       <li class='radio input' id='event_update_all'>
-        <%= label_tag :recurrence, "Recurrence", class: 'label' %>
-        <%= radio_button_tag :update_all, false, checked: true %>
-        <%= label_tag :update_all_false, "Update only this event" %>
-        <br/>
-        <%= radio_button_tag :update_all, true %>
-        <%= label_tag :update_all_true, "Update this event and all future occurrences" %>
+        <%= label_tag :update_all, "Recurrence", class: 'label' %>
+        <%= select_tag :update_all,
+              options_for_select([
+                ["- Choose events to update... -", nil],
+                ["Update this event only", false],
+                ["Update all events in this series", true]]
+              )
+        %>
       </li>
     <% else %>
       <%= hidden_field_tag :update_all, true %>
