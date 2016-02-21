@@ -46,7 +46,7 @@ gem 'mofo', path: 'vendor/gems/mofo-0.2.8' # vendored fork with hpricot dependen
 gem 'sunspot_rails', '2.1.1'
 gem 'sunspot_solr',  '2.1.1'
 gem 'lucene_query', '0.1'
-gem 'recurring_select', '< 2.0'
+gem 'recurring_select', github: "VolunteerOdyssey/recurring_select", branch: "vo"
 
 # Some dependencies are only needed for test and development environments. On
 # production servers, you can skip their installation by running:
