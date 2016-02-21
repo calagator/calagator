@@ -28,11 +28,11 @@
   </div>
 
   <div class="location vcard">
-    <% if !@organization.logo.url.blank? %>
+    <% if @organization.logo.url.present? %>
         <span class='org-logo'><%= image_tag @organization.logo.url %></span>
     <% end %>
     <h1 class="fn org"><%= @organization.title %></h1>
-    <% if !@organization.volio_url.blank? %>
+    <% if @organization.volio_url.present? %>
         <span class='volio'><%= link_to '(View on Volio)', @organization.volio_url, target: '_blank' %></span>
     <% end %>
     <% if current_admin %>

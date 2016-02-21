@@ -51,10 +51,12 @@
       <h3>Most Active</h3>
       <ul>
         <% @search.most_active_organizations.each do |organization| %>
-          <li>
-            <%= link_to(organization.title, organization_url(organization)) %>
-            <p class='detail'><%= organization.events_count %> events</p>
-          </li>
+          <%= link_to(organization_url(organization)) do %>
+            <li>
+              <%= organization.title %>
+              <p class='detail'><%= organization.events_count %> events</p>
+            </li>
+          <% end %>
         <% end %>
       </ul>
     </div>
@@ -62,10 +64,12 @@
       <h3>Newest</h3>
       <ul>
         <% @search.newest_organizations.each do |organization| %>
-          <li>
-            <%= link_to(organization.title, organization_url(organization)) %>
-            <p class='detail'>Added <%= time_ago_in_words(organization.created_at) %> ago</p>
-          </li>
+          <%= link_to(organization_url(organization)) do %>
+            <li>
+              <%= organization.title %>
+              <p class='detail'>Added <%= time_ago_in_words(organization.created_at) %> ago</p>
+            </li>
+          <% end %>
         <% end %>
       </ul>
     </div>
