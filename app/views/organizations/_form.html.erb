@@ -14,6 +14,8 @@
                 :input_html => {:rows => 12},
                 :hint => "(Format text using #{link_to("Markdown", "http://www.simpleeditions.com/59001/markdown-an-introduction", :target => "_blank")} and HTML)".html_safe %>
 
+    <%= f.input :logo %>
+    <%= f.input :logo_cache, :as => :hidden %>
     <%= f.input :tag_list, :required => false,
                 :label => 'Tags',
                 :hint => "(Tags are comma-separated keywords that make it easier to find your event and boost its position in searches.)".html_safe %>

@@ -1,4 +1,5 @@
 class Organization < ActiveRecord::Base
+  mount_uploader :logo, LogoUploader
   include StripWhitespace
 
   has_paper_trail
