@@ -62,7 +62,9 @@
         <% @search.most_active_venues.each do |venue| %>
           <li>
             <%= link_to(venue.title, venue_url(venue)) %>
-            <p class='detail'><%= venue.events_count %> events</p>
+            <% if venue.events_count %>
+              <p class='detail'><%= venue.events_count %> events</p>
+            <% end %>
           </li>
         <% end %>
       </ul>

@@ -54,7 +54,9 @@
           <%= link_to(organization_url(organization)) do %>
             <li>
               <%= organization.title %>
-              <p class='detail'><%= organization.events_count %> events</p>
+              <% if organization.events_count %>
+                <p class='detail'><%= organization.events_count %> events</p>
+              <% end %>
             </li>
           <% end %>
         <% end %>
