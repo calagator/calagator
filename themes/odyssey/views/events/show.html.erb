@@ -17,10 +17,6 @@
     <%= javascript_include_tag 'analytics_events' %>
 <% end %>
 
-<%= render :partial => 'events/item', :locals => {:event => @event} %>
-
-<a href="#" id="event_sidebar_toggle" class="expander_toggle">Export or edit this event...</a>
-
 <% if current_admin || (current_organization and @event.organitzation == current_organization) %>
     <div id="events_subnav" class="subnav">
       <div class='container'>
@@ -38,6 +34,10 @@
       </div>
     </div>
 <% end %>
+
+<%= render :partial => 'events/item', :locals => {:event => @event} %>
+
+<a href="#" id="event_sidebar_toggle" class="expander_toggle">Export or edit this event...</a>
 
 <div id="event_sidebar" class='single_view_right sidebar'>
   <h3 class='first'>Export to</h3>
