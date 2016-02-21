@@ -13,6 +13,7 @@ $(document).ready(function() {
     // Ensure proper state on change.
     $("input:radio[name='update_all']").change(toggleScheduleVisibility);
   }
+
   function toggleScheduleVisibility() {
     var update_all = $("input:radio[name='update_all']:checked").val() === 'true';
     if (update_all) {

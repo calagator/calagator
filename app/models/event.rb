@@ -110,9 +110,9 @@ class Event < ActiveRecord::Base
   }
 
   def schedule
-    IceCube::Schedule.new(start_time, end_time: end_time) do |s|
+    @schedule ||= IceCube::Schedule.new(start_time, end_time: end_time) do |s|
       s.add_exception_time(start_time)
-      s.add_recurrence_rule(rule.until(1.year.from_now)) if rule
+      s.add_recurrence_rule(rule) if rule.present?
     end
   end
 
@@ -124,7 +124,11 @@ class Event < ActiveRecord::Base
   end
 
   def rule
-    RecurringSelect.dirty_hash_to_rule(rrule) if rrule.present?
+    rrule.present? && RecurringSelect.dirty_hash_to_rule(rrule).tap do |rule|
+      if !rule.occurrence_count && !rule.until_time
+        rule.until(1.year.from_now)
+      end
+    end
   end
 
   # Existing occurrences of this event, excluding self
