@@ -81,7 +81,7 @@
 </div>
 <% end -%>
 
-<%= semantic_form_for(event, :html => {:id => 'event_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
+<%= semantic_form_for(event, :html => {:multipart => true, :id => 'event_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
   <%= f.inputs :name => "#{'Editing: ' unless event.new_record?} <em>#{event.title}</em>".html_safe do %>
     <% if event.has_recurrences? %>
       <li class='radio input' id='event_update_all'>
@@ -146,6 +146,8 @@
     <%= f.input :description,
                 :input_html => {:rows => 12},
                 :hint => "Describe the event. Things like what volunteers will do, what to bring, and who benefits from the work are good things to put here. You may format text using #{link_to("Markdown", "http://www.simpleeditions.com/59001/markdown-an-introduction", :target => "_blank")} and HTML".html_safe %>
+    <%= f.input :image %>
+    <%= f.input :image_cache, :as => :hidden %>
     <%= f.input :tag_list, :required => false,
                 :label => 'Tags',
                 :hint => "Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>plancast:plan=ABCD</code> to associate this with a particular <a href='http://plancast.com/'>Plancast</a> event.".html_safe %>

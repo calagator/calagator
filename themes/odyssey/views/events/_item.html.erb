@@ -125,6 +125,14 @@ html_classes << " contentbar" if has_contentbar
       </div>
     <% end %>
 
+    <% unless event.image.url.blank? -%>
+        <div id='event-image' class='property'>
+          <%= link_to event.image.url do %>
+              <%= image_tag event.image.url(:preview), :style => 'background: #ffffff' %>
+          <% end %>
+        </div>
+    <% end %>
+
     <% if event.persisted? %>
       <div class="share">
         <a class="fb-share" href="#"

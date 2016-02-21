@@ -23,6 +23,8 @@
 #
 # A model representing a calendar event.
 class Event < ActiveRecord::Base
+  mount_uploader :image, EventImageUploader
+
   has_paper_trail
   acts_as_taggable
 
