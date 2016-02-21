@@ -41,7 +41,7 @@ class Event < ActiveRecord::Base
   delegate :title, to: :organization, prefix: true, allow_nil: true
 
   # Validations
-  validates_presence_of :title, :start_time
+  validates_presence_of :title, :start_time, :minimum_age
   validate :end_time_later_than_start_time
   validates_format_of :url,
     :with => /\Ahttps?:\/\/(\w+:?\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?\Z/,

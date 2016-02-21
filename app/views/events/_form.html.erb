@@ -131,10 +131,29 @@
       <%= f.select_recurring :rrule, nil, allow_blank: true  %>
     </li>
     <%= f.input :url, as: :url, label: 'Website' %>
-    <%= f.input :minimum_age,
+    <div class="minimum_age">
+      <%= f.input :minimum_age,
                 as: :select,
                 include_blank: false,
-                collection: (1..65).to_a.unshift(['- all ages -', nil]) %>
+                prompt: "Please select",
+                collection: ['All ages',
+                             'All ages with parent',
+                             '21',
+                             '18',
+                             '17 with parent',
+                             '17',
+                             '16 with parent',
+                             '16',
+                             '15 with parent',
+                             '15',
+                             '14 with parent',
+                             '14',attr_
+                             '13 with parent',
+                             '13',
+                             '12 with parent',
+                             '12',
+                             'Other - see sescription'] %>
+    </div>
     <%= f.input :signup_instructions,
                 as: :text,
                 hint: "If volunteers need to signup, describe how (email, phone, web, etc.).",
