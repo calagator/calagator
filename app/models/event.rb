@@ -125,7 +125,6 @@ class Event < ActiveRecord::Base
 
   def rule
     rrule.present? && RecurringSelect.dirty_hash_to_rule(rrule).tap do |rule|
-      puts rule.to_hash
       if !rule.occurrence_count && !rule.until_time
         rule.until(1.year.from_now)
       end
