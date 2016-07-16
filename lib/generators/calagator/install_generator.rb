@@ -28,6 +28,7 @@ module Calagator
     def add_initializers
       initializer '01_calagator.rb', File.read(File.expand_path('../templates/config/initializers/01_calagator.rb', __FILE__))
       initializer '02_geokit.rb',    File.read(File.expand_path('../templates/config/initializers/02_geokit.rb', __FILE__))
+      initializer '03_recaptcha.rb', File.read(File.expand_path('../templates/config/initializers/03_recaptcha.rb', __FILE__))
     end
 
     def add_javascripts
