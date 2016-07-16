@@ -104,13 +104,18 @@ class VenuesController < Calagator::ApplicationController
 
   # POST /venues, # PUT /venues/1
   def create
-    CreateOrUpdate.new(self).call
+    CreateOrUpdate.new(self).call(recaptcha_verified?(venue))
   end
   alias_method :update, :create
 
   class CreateOrUpdate < SimpleDelegator
-    def call
-      block_spammers or (save and render_success) or render_failure
+    def call(verified)
+      if verified
+        block_spammers or (save and render_success) or render_failure
+      else
+        render_failure
+      end
+
     end
 
     private
@@ -133,6 +138,7 @@ class VenuesController < Calagator::ApplicationController
     end
 
     def render_failure
+      flash[:failure] = "<h3>Please fix any errors and try again</h3>"
       respond_to do |format|
         format.html { render action: venue.new_record? ? "new" : "edit" }
         format.xml  { render xml: venue.errors, status: :unprocessable_entity }

@@ -52,5 +52,11 @@
     <% end %>
   <% end %>
 
+  <% if recaptcha_enabled? -%>
+    <div style="margin: 0 0 20px 0;">
+        <%= recaptcha_tags %>
+    </div>
+  <% end -%>
+
   <%= f.actions :submit %>
 <% end %>
