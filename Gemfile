@@ -11,6 +11,8 @@ gem "rails", "4.2.1"
 # turbolinks is used by the dummy application by default
 gem "turbolinks"
 
+gem "recaptcha", require: "recaptcha/rails"
+
 # can't declare platform specific development dependencies in the gemspec.
 gem "byebug", platform: "mri"
 

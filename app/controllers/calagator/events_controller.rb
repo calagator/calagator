@@ -1,10 +1,12 @@
+require "recaptcha/rails"
+require "calagator/duplicate_checking"
 require "calagator/duplicate_checking/controller_actions"
 
 module Calagator
 
 class EventsController < Calagator::ApplicationController
   # Provides #duplicates and #squash_many_duplicates
-  include DuplicateChecking::ControllerActions
+  include Calagator::DuplicateChecking::ControllerActions
   require_admin only: [:duplicates, :squash_many_duplicates]
 
   before_filter :find_and_redirect_if_locked, :only => [:edit, :update, :destroy]
@@ -55,7 +57,7 @@ class EventsController < Calagator::ApplicationController
   def create_or_update
     saver = Event::Saver.new(@event, params.permit!)
     respond_to do |format|
-      if saver.save
+      if recaptcha_verified?(@event) && saver.save
         format.html {
           flash[:success] = 'Event was successfully saved.'
           if saver.has_new_venue?
