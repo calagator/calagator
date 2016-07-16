@@ -14,11 +14,16 @@ class ApplicationController < ActionController::Base
   helper Calagator::TimeRangeHelper
 
   helper :all # include all helpers, all the time
+  helper_method :recaptcha_enabled?
 
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
   protect_from_forgery # :secret => '8813a7fec0bb4fbffd283a3868998eed'
   skip_before_action :verify_authenticity_token, if: :json_request?
+
+  def recaptcha_enabled?
+    ENV.key?("RECAPTCHA_SECRET_KEY")
+  end
 
 protected
 
@@ -79,6 +84,11 @@ protected
   # Return string with contents HTML escaped once.
   def escape_once(*args)
     help.escape_once(*args)
+  end
+
+  def recaptcha_verified?(model)
+    return verify_recaptcha(model: model) if recaptcha_enabled?
+    true
   end
 end
 

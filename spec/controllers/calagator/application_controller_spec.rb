@@ -42,6 +42,34 @@ describe ApplicationController, :type => :controller do
       expect(controller.send(:escape_once, escaped)).to eq escaped
     end
   end
+
+  describe "#recaptcha_enabled?" do
+    subject { controller.send(:recaptcha_enabled?) }
+
+    context "when ENV key not set" do
+      before do
+        @recaptcha_secret = ENV["RECAPTCHA_SECRET_KEY"]
+        ENV.delete("RECAPTCHA_SECRET_KEY")
+      end
+
+      after do
+        ENV["RECAPTCHA_SECRET_KEY"] = @recaptcha_secret
+      end
+      it { is_expected.to be_falsey }
+    end
+
+    context "when ENV key is set" do
+      before do
+        @recaptcha_secret = ENV["RECAPTCHA_SECRET_KEY"]
+        ENV["RECAPTCHA_SECRET_KEY"] = "asdf"
+      end
+
+      after do
+        ENV["RECAPTCHA_SECRET_KEY"] = @recaptcha_secret
+      end
+      it { is_expected.to be_truthy }
+    end
+  end
 end
 
 end
