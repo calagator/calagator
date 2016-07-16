@@ -9,6 +9,7 @@ module Calagator
       add_initializers
       add_javascripts
       add_stylesheets
+      add_assets
       add_seeds
       run 'rm -f public/index.html'
       unless options[:dummy]
@@ -35,6 +36,11 @@ module Calagator
 
     def add_stylesheets
       append_file 'app/assets/stylesheets/application.css', '//= require calagator'
+    end
+
+    def add_assets
+      run "cp #{File.expand_path("../../../../app/assets/images/spinner.gif", __FILE__)} app/assets/images/"
+      run "cp #{File.expand_path("../../../../app/assets/images/site-icon.png", __FILE__)} app/assets/images/"
     end
 
     def add_seeds
