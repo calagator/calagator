@@ -24,6 +24,7 @@ These people have contributed to Calagator's design and implementation:
   * Daniel Hedlund
   * Don Park
   * Donald Plummer
+  * E. Dunham
   * Ed Borasky
   * Finn Terdal
   * [frankes](http://openclipart.org/user-detail/frankes)
