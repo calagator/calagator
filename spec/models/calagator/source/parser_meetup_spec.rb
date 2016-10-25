@@ -17,6 +17,14 @@ describe Source::Parser::Meetup, :type => :model do
       @event = @events.first
     end
 
+    it "matches HTTP meetup URLs" do
+      expect(subject.url_pattern).to match "http://www.meetup.com/pdxpython/events/ldhnqyplbnb/"
+    end
+
+    it "matches HTTPS meetup URLs" do
+      expect(subject.url_pattern).to match "https://www.meetup.com/pdxpython/events/ldhnqyplbnb/"
+    end
+
     it "should find one event" do
       expect(@events.size).to eq 1
     end

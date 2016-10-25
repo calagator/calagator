@@ -2,7 +2,7 @@ module Calagator
 
 class Source::Parser::Meetup < Source::Parser
   self.label = :Meetup
-  self.url_pattern = %r{^http://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
+  self.url_pattern = %r{^https?://(?:www\.)?meetup\.com/[^/]+/events/([^/]+)/?}
 
   def to_events
     return fallback unless Calagator.meetup_api_key.present?
