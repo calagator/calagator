@@ -42,7 +42,7 @@ module EventsHelper
   end
 
   def google_maps_url(address)
-    "http://maps.google.com/maps?q=#{URI.encode(address)}"
+    "https://maps.google.com/maps?q=#{URI.encode(address)}"
   end
 
   #---[ Event sorting ]----------------------------------------------------
@@ -91,7 +91,7 @@ module EventsHelper
       events_url(common)
   end
 
-  GOOGLE_EVENT_SUBSCRIBE_BASE = "http://www.google.com/calendar/render?cid="
+  GOOGLE_EVENT_SUBSCRIBE_BASE = "https://www.google.com/calendar/render?cid="
 
   # Returns a Google Calendar subscription URL.
   #

@@ -6,14 +6,14 @@ module MappingHelper
   end
 
   def leaflet_js
-    Rails.env.production? ? ["http://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"] : ["leaflet"]
+    Rails.env.production? ? ["https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"] : ["leaflet"]
   end
 
   def map_provider_dependencies
     {
       "stamen" => ["http://maps.stamen.com/js/tile.stamen.js?v1.2.3"],
       "mapbox" => ["https://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.standalone.js"],
-      "esri"   => ["http://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"],
+      "esri"   => ["https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"],
       "google" => [
         "https://maps.googleapis.com/maps/api/js?key=#{Calagator.mapping_google_maps_api_key}&sensor=false",
         "leaflet_google_layer"
