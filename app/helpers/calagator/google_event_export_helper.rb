@@ -15,7 +15,7 @@ module GoogleEventExportHelper
     private
 
     def url
-      "http://www.google.com/calendar/event?action=TEMPLATE&trp=true&"
+      "https://www.google.com/calendar/event?action=TEMPLATE&trp=true&"
     end
 
     def query
