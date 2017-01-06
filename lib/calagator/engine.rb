@@ -11,6 +11,9 @@ module Calagator
       markers-shadow@2x.png
       leaflet.js
       leaflet_google_layer.js
+      site-icon.png
+      spinner.gif
+      tag_icons/*
       mustache.js
       leaflet
     )
