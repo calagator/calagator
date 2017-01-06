@@ -43,7 +43,7 @@ module TagsHelper
 
   class TagIcon < Struct.new(:name, :context)
     def image_tag
-      context.image_tag(image_path, title: name)
+      context.image_tag(image_path, title: name, alt: name)
     end
 
     def exists?
