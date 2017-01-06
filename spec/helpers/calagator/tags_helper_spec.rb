@@ -19,13 +19,6 @@ describe TagsHelper, type: :helper do
       @untagged_event = Event.new
     end
 
-    it "should render image tags inline and whitespace separated" do
-      expect(helper.display_tag_icons(@event)).to match_dom_of \
-        %(<a href="/events/tag/ruby"><img title="ruby" src="/assets/tag_icons/ruby.png" alt="Ruby" /></a> ) +
-        %(<a href="/events/tag/pizza"><img title="pizza" src="/assets/tag_icons/pizza.png" alt="Pizza" /></a>)
-
-    end
-
     it "should render nothing if no image tags" do
       expect(helper.display_tag_icons(@event2)).to eq " "
     end
