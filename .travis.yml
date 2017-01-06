@@ -21,6 +21,7 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
+    - rvm: 2.4.0
     - rvm: rbx-2
   exclude:
     - rvm: rbx-2
