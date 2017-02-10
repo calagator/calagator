@@ -5,6 +5,7 @@ module Calagator
 describe Source::Parser::Facebook, :type => :model do
   let(:event_url) { "http://facebook.com/event.php?eid=247619485255249" }
   let(:graph_url) { "https://graph.facebook.com/247619485255249?access_token=foo" }
+  let(:facebook_json) { read_sample('facebook.json') }
 
   context "with an app access token configured" do
     before do
@@ -13,7 +14,7 @@ describe Source::Parser::Facebook, :type => :model do
 
     describe "when importing an event" do
       before(:each) do
-        stub_request(:get, graph_url).to_return(body: read_sample('facebook.json'), headers: { content_type: "application/json" })
+        stub_request(:get, graph_url).to_return(body: facebook_json, headers: { content_type: "application/json" })
         @events = Source::Parser::Facebook.to_events(url: event_url)
         @event = @events.first
       end
@@ -44,6 +45,18 @@ describe Source::Parser::Facebook, :type => :model do
         expect(@event.venue.country).to        eq "United States"
         expect(@event.venue.latitude.to_s).to  eq "45.5236"
         expect(@event.venue.longitude.to_s).to eq "-122.675"
+      end
+
+      describe "with no end time" do
+        let(:facebook_json) do
+          facebook_response = JSON.parse(read_sample('facebook.json'))
+          facebook_response.delete('end_time')
+          facebook_response.to_json
+        end
+
+        it "should successfully parse the event" do
+          expect(@event.end_time).to be_nil
+        end
       end
     end
 
