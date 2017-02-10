@@ -47,10 +47,6 @@ describe Source::Parser::Facebook, :type => :model do
         expect(@event.venue.longitude.to_s).to eq "-122.675"
       end
 
-      describe "with no start time" do
-
-      end
-
       describe "with no end time" do
         let(:facebook_json) do
           facebook_response = JSON.parse(read_sample('facebook.json'))
