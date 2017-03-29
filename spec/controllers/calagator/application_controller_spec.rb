@@ -44,29 +44,25 @@ describe ApplicationController, :type => :controller do
   end
 
   describe "#recaptcha_enabled?" do
-    subject { controller.send(:recaptcha_enabled?) }
+    let(:temporary_key) { nil }
 
-    context "when ENV key not set" do
-      before do
-        @recaptcha_secret = ENV["RECAPTCHA_SECRET_KEY"]
-        ENV.delete("RECAPTCHA_SECRET_KEY")
+    subject do
+      result = nil
+
+      Recaptcha.with_configuration(public_key: temporary_key) do
+        result = controller.send(:recaptcha_enabled?)
       end
 
-      after do
-        ENV["RECAPTCHA_SECRET_KEY"] = @recaptcha_secret
-      end
+      result
+    end
+
+    context "when Recaptcha public_key is not set" do
       it { is_expected.to be_falsey }
     end
 
     context "when ENV key is set" do
-      before do
-        @recaptcha_secret = ENV["RECAPTCHA_SECRET_KEY"]
-        ENV["RECAPTCHA_SECRET_KEY"] = "asdf"
-      end
+      let(:temporary_key) { "asdf" }
 
-      after do
-        ENV["RECAPTCHA_SECRET_KEY"] = @recaptcha_secret
-      end
       it { is_expected.to be_truthy }
     end
   end
