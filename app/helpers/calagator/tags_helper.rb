@@ -47,7 +47,7 @@ module TagsHelper
     end
 
     def exists?
-      Rails.application.assets[image_path]
+      Rails.application.assets && Rails.application.assets[image_path]
     end
 
     private
