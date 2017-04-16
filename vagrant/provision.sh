@@ -3,7 +3,7 @@
 APPDIR="/vagrant"
 VAGRANT_USER="vagrant"
 PGSQL_VERSION=9.3
-RUBY_VERSION=2.1
+RUBY_VERSION=2.2
 
 # Fix locale so that Postgres creates databases in UTF-8
 if [ "${LANG}" != "en_US.UTF-8" ] ; then
@@ -19,7 +19,7 @@ if [ ! -e "/etc/apt/sources.list.d/brightbox-ruby-ng-trusty.list" ] ; then
 fi
 
 # remove preinstalled ruby
-apt-get remove ruby1.9.1 libruby1.9.1
+apt-get remove ruby1.9.1 libruby1.9.1 libruby2.1
 
 # Required packages
 apt-get install -y ruby${RUBY_VERSION} ruby${RUBY_VERSION}-dev build-essential phantomjs libcurl4-openssl-dev libsqlite3-dev libxml2 libxml2-dev libxslt1.1 libxslt1-dev nodejs
