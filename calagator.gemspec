@@ -7,8 +7,8 @@ require "calagator/version"
 Gem::Specification.new do |s|
   s.name        = "calagator"
   s.version     = Calagator::VERSION
-  s.authors     = ["The Calagator Team"]
-  s.email       = ["calagator-development@googlegroups.com"]
+  s.authors     = ["the Calagator team"]
+  s.email       = ["info@calagator.org"]
   s.homepage    = "https://github.com/calagator/calagator"
   s.summary     = "A calendar for communities"
   s.description = "Calagator is an open source community calendaring platform"
