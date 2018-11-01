@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Recent Changes' do
+feature 'Recent Changes', js: true do
   let(:event_title) { 'The Newest Event' }
 
   background do

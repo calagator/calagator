@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Venue Editing' do
+feature 'Venue Editing', js: true do
   let!(:venue) { create(:venue) }
   let!(:event) { create(:event, venue: venue, start_time: Time.now.end_of_day - 1.hour) }
   let!(:new_venue) { build(:venue) }
@@ -69,7 +69,7 @@ feature 'Venue Editing' do
   end
 end
 
-feature 'Venue Deletion' do
+feature 'Venue Deletion', js: true do
   background do
     create :venue, title: 'Test Venue'
   end
@@ -82,7 +82,9 @@ feature 'Venue Deletion' do
       click_on 'Test Venue'
     end
 
-    click_on 'delete'
+    accept_alert do
+      click_on 'delete'
+    end
 
     expect(page).to have_content %("Test Venue" has been deleted)
 

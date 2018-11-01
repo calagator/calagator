@@ -22,8 +22,9 @@ require "rspec-rails"
 require "rspec/collection_matchers"
 require "factory_girl_rails"
 require "capybara"
+require "capybara/rspec"
 require "database_cleaner"
-require "capybara/poltergeist"
+require "selenium-webdriver"
 require "timecop"
 require "webmock"
 
@@ -61,13 +62,8 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  require 'capybara/poltergeist'
-  Capybara.register_driver :poltergeist do |app|
-    Capybara::Poltergeist::Driver.new(app, timeout: 90)
-  end
-  Capybara.javascript_driver = :poltergeist
-
-  # config.include(Capybara::Webkit::RspecMatchers, :type => :feature)
+  Capybara.default_driver = :selenium_chrome_headless
+  Capybara.javascript_driver = :selenium_chrome
 
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
@@ -136,7 +132,4 @@ RSpec.configure do |config|
   end
 
   config.alias_example_to :fscenario, focus: true
-
-  # all features should run using the capybara js driver
-  config.alias_example_group_to :feature, capybara_feature: true, type: :feature, js: true
 end

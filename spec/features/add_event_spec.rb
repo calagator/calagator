@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Event Creation' do
+feature 'Event Creation', js: true do
   scenario 'User adds an event at an existing venue' do
     create :venue, title: 'Empire State Building'
 
@@ -51,7 +51,7 @@ feature 'Event Creation' do
 
     expect(page).to have_content 'Event was successfully saved'
     expect(page).to have_content "Please tell us more about where it's being held."
-    expect(page).to have_content 'Version Editing: Portland Zoo'
+    expect(page).to have_content(/Version [\d\D]+ Editing: Portland Zoo/)
 
     expect(find_field('Venue Name').value).to have_content 'Portland Zoo'
 

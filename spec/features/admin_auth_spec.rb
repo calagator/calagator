@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Administrative suite is hidden behind an http basic auth wall' do
+xfeature 'Administrative suite is hidden behind an http basic auth wall' do
   [
     '/admin',
     '/events/duplicates',
