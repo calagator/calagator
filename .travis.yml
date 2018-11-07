@@ -1,8 +1,8 @@
-sudo: false
-language: ruby
 dist: trusty
+sudo: required
 add_ons:
   chrome: stable
+language: ruby
 
 rvm:
   - 2.2.6
