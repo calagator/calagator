@@ -54,16 +54,27 @@ RSpec.configure do |config|
   config.before(:suite) do |example|
     DatabaseCleaner.clean_with(:truncation)
   end
+
   config.before(:each) do |example|
     DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
   end
+
   config.after(:each) do
     DatabaseCleaner.clean
   end
 
-  Capybara.default_driver = :selenium_chrome_headless
-  Capybara.javascript_driver = :selenium_chrome
+  Capybara.register_driver :chrome_headless do |app|
+    args = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu no-sandbox --window-size=1240,1400])
+    Capybara::Selenium::Driver.new(
+      app,
+      browser: :chrome,
+      options: args
+    )
+  end
+
+  Capybara.default_driver = :rack_test
+  Capybara.javascript_driver = :chrome_headless
 
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with

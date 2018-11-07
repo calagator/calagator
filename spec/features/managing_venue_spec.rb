@@ -7,7 +7,6 @@ feature 'Venue Editing', js: true do
   let!(:venue_with_tags) {create(:venue, :with_multiple_tags)}
 
   scenario 'A user edits an existing venue' do
-
     visit "/"
     click_on venue.title
     click_on 'edit'
