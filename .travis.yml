@@ -1,5 +1,8 @@
 sudo: false
 language: ruby
+dist: trusty
+add_ons:
+  chrome: stable
 
 rvm:
   - 2.2.6
