@@ -32,6 +32,9 @@ matrix:
     - rvm: rbx-2
       gemfile: gemfiles/rails_4_1.gemfile
 
+before_install:
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+
 before_script:
   - bundle exec bin/calagator new spec/dummy --dummy --database=$DB --postgres-username=postgres
   - travis_retry bundle exec rake app:db:migrate app:db:seed
