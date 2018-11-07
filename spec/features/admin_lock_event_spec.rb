@@ -6,7 +6,7 @@ xfeature 'Event locking' do
     create :event, title: 'Ruby Newbies', start_time: Time.zone.now
     create :event, title: 'Ruby Privateers', start_time: Time.zone.now, locked: true
 
-    page.driver.basic_authorize Calagator.admin_username, Calagator.admin_password
+    page.driver.browser.basic_authorize Calagator.admin_username, Calagator.admin_password
 
     visit '/admin'
     click_on 'Lock events'
