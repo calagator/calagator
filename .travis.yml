@@ -33,6 +33,7 @@ matrix:
       gemfile: gemfiles/rails_4_1.gemfile
 
 before_install:
+  - "export DISPLAY=:99.0"
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 before_script:
@@ -43,4 +44,3 @@ before_script:
 script:
   - bundle exec rake spec --trace
 cache: bundler
-
