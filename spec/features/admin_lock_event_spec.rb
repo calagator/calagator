@@ -1,5 +1,7 @@
 require 'rails_helper'
 
+# Disabled pending a way to both set up the full event page size so that the editing sidebar is accessible
+# and also that will handle basic auth
 xfeature 'Event locking' do
   background do
     create :venue, title: 'Empire State Building'

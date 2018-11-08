@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-xfeature 'Admin lock events search' do
+feature 'Admin lock events search' do
   background do
     create :venue, title: 'Empire State Building'
     create :event, title: 'Ruby Newbies', start_time: Time.zone.now
