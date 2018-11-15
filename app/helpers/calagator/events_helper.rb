@@ -97,7 +97,7 @@ module EventsHelper
   #
   # @see #_events_feed_linker for details on parameters and exceptions.
   def google_events_subscription_link(filter={})
-    link = _events_feed_linker(filter, format: "ics")
+    link = _events_feed_linker(filter, protocol: "webcal", format: "ics")
     "#{GOOGLE_EVENT_SUBSCRIBE_BASE}#{CGI.escape(link)}"
   end
 

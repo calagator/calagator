@@ -56,15 +56,15 @@ describe EventsHelper, :type => :helper do
     end
 
     it "should generate a default link" do
-      expect(method).to eq "https://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents.ics"
+      expect(method).to eq "https://www.google.com/calendar/render?cid=webcal%3A%2F%2Ftest.host%2Fevents.ics"
     end
 
     it "should generate a search link" do
-      expect(method(:query => "my query")).to eq "https://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Fquery%3Dmy%2Bquery"
+      expect(method(:query => "my query")).to eq "https://www.google.com/calendar/render?cid=webcal%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Fquery%3Dmy%2Bquery"
     end
 
     it "should generate a tag link" do
-      expect(method(:tag => "mytag")).to eq "https://www.google.com/calendar/render?cid=http%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Ftag%3Dmytag"
+      expect(method(:tag => "mytag")).to eq "https://www.google.com/calendar/render?cid=webcal%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Ftag%3Dmytag"
     end
   end
 
