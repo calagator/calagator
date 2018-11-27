@@ -6,7 +6,7 @@ source "https://rubygems.org"
 gemspec
 
 # develop against latest rails
-gem "rails", "4.2.1"
+gem "rails", "4.2.10"
 
 # turbolinks is used by the dummy application by default
 gem "turbolinks"
