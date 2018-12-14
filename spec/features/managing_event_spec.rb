@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Event Editing' do
+feature 'Event Editing', js: true do
   background do
     Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Future', start_time: Time.zone.now
@@ -19,6 +19,7 @@ feature 'Event Editing' do
     end
 
     click_on 'edit'
+    expect(page).to have_content 'Editing: Ruby Future'
 
     expect(find_field('Event Name').value).to have_content 'Ruby Future'
     fill_in 'Event Name', with: 'Ruby ABCs'
@@ -64,7 +65,7 @@ feature 'Event Editing' do
   end
 end
 
-feature 'Event Cloning' do
+feature 'Event Cloning', js: true do
   background do
     Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Event Part One', start_time: 4.days.from_now
@@ -107,7 +108,7 @@ feature 'Event Cloning' do
   end
 end
 
-feature 'Event Deletion' do
+feature 'Event Deletion', js: true do
   background do
     create :event, title: 'Ruby and You', start_time: 1.day.from_now
   end
@@ -119,7 +120,9 @@ feature 'Event Deletion' do
       click_on 'Ruby and You'
     end
 
-    click_on 'delete'
+    accept_alert do
+      click_on 'delete'
+    end
 
     expect(page).to have_content '"Ruby and You" has been deleted'
 

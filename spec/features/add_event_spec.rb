@@ -1,20 +1,27 @@
 require 'rails_helper'
 
-feature 'Event Creation' do
-  scenario 'User adds an event at an existing venue' do
+feature 'Event Creation', js: true do
+  before do
     create :venue, title: 'Empire State Building'
+    create :venue, title: 'New Relic'
+    create :venue, title: 'Urban Airship'
+  end
 
-    visit '/'
-    click_on 'Add an event'
+  scenario 'User adds an event at an existing venue' do
+    # visit '/'
+    # click_on 'Add an event'
+    visit '/events/new'
 
     fill_in 'Event Name', with: 'Ruby Newbies'
-    find_field('Venue').native.send_keys 'Empire State'
+    find_field('Venue').native.send_keys 'empire'
+    expect(page).to have_text('Empire State Building')
+
     click_on 'Empire State Building'
 
     fill_in 'start_date', with: '2014-08-05'
     fill_in 'start_time', with: '06:00 PM'
-    fill_in 'end_time', with: '11:00 PM'
     fill_in 'end_date', with: '2014-08-06'
+    fill_in 'end_time', with: '11:00 PM'
     fill_in 'Website', with: 'www.rubynewbies.com'
     fill_in 'Description', with: 'An event for beginners'
     fill_in 'Venue details', with: 'On the third floor'
@@ -51,7 +58,7 @@ feature 'Event Creation' do
 
     expect(page).to have_content 'Event was successfully saved'
     expect(page).to have_content "Please tell us more about where it's being held."
-    expect(page).to have_content 'Version Editing: Portland Zoo'
+    expect(page).to have_content(/Version [\d\D]+ Editing: Portland Zoo/)
 
     expect(find_field('Venue Name').value).to have_content 'Portland Zoo'
 
@@ -87,9 +94,6 @@ feature 'Event Creation' do
   end
 
   scenario 'User begins typing a venue name' do
-    create :venue, title: 'New Relic'
-    create :venue, title: 'Urban Airship'
-
     visit '/events/new'
     find_field('Venue').native.send_keys 'urban'
 

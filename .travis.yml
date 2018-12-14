@@ -1,4 +1,5 @@
-sudo: false
+add_ons:
+  chrome: stable
 language: ruby
 
 rvm:
@@ -29,7 +30,12 @@ matrix:
     - rvm: rbx-2
       gemfile: gemfiles/rails_4_1.gemfile
 
+before_install:
+  - sudo apt-get install chromium-chromedriver
+  - google-chrome-stable --headless --disable-gpu
+
 before_script:
+  - "export PATH=$PATH:/usr/lib/chromium-browser/"
   - bundle exec bin/calagator new spec/dummy --dummy --database=$DB --postgres-username=postgres
   - travis_retry bundle exec rake app:db:migrate app:db:seed
   - travis_retry bundle exec rake app:sunspot:solr:start_with_waiting
@@ -37,4 +43,3 @@ before_script:
 script:
   - bundle exec rake spec --trace
 cache: bundler
-

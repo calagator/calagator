@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'search for events' do
+feature 'search for events', js: true do
   background do
     create :event, title: 'Ruby Future', start_time: today + 1.day
     create :event, title: 'Python Past', start_time: today - 1.day
