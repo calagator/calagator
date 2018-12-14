@@ -35,6 +35,7 @@ before_install:
   - google-chrome-stable --headless --disable-gpu
 
 before_script:
+  - "export PATH=$PATH:/usr/lib/chromium-browser/"
   - bundle exec bin/calagator new spec/dummy --dummy --database=$DB --postgres-username=postgres
   - travis_retry bundle exec rake app:db:migrate app:db:seed
   - travis_retry bundle exec rake app:sunspot:solr:start_with_waiting
