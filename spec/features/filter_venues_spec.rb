@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'browse venue by tag' do
+feature 'browse venue by tag', js: true do
   background do
     create :venue, title: 'Giant Stadium', tag_list: 'old'
   end

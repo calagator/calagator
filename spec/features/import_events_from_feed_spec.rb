@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'import events from a feed' do
+feature 'import events from a feed', js: true do
   background do
     Timecop.travel('2010-01-01')
     stub_request(:get, 'http://even.ts/feed').to_return(body: read_sample('ical_multiple_calendars.ics'))

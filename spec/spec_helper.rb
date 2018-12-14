@@ -22,8 +22,9 @@ require "rspec-rails"
 require "rspec/collection_matchers"
 require "factory_girl_rails"
 require "capybara"
+require "capybara/rspec"
 require "database_cleaner"
-require "capybara/poltergeist"
+require "selenium-webdriver"
 require "timecop"
 require "webmock"
 
@@ -53,21 +54,27 @@ RSpec.configure do |config|
   config.before(:suite) do |example|
     DatabaseCleaner.clean_with(:truncation)
   end
+
   config.before(:each) do |example|
     DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
     DatabaseCleaner.start
   end
+
   config.after(:each) do
     DatabaseCleaner.clean
   end
 
-  require 'capybara/poltergeist'
-  Capybara.register_driver :poltergeist do |app|
-    Capybara::Poltergeist::Driver.new(app, timeout: 90)
+  Capybara.register_driver :chrome_headless do |app|
+    args = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu no-sandbox --window-size=1240,1400])
+    Capybara::Selenium::Driver.new(
+      app,
+      browser: :chrome,
+      options: args
+    )
   end
-  Capybara.javascript_driver = :poltergeist
 
-  # config.include(Capybara::Webkit::RspecMatchers, :type => :feature)
+  Capybara.default_driver = :rack_test
+  Capybara.javascript_driver = :chrome_headless
 
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
@@ -136,7 +143,4 @@ RSpec.configure do |config|
   end
 
   config.alias_example_to :fscenario, focus: true
-
-  # all features should run using the capybara js driver
-  config.alias_example_group_to :feature, capybara_feature: true, type: :feature, js: true
 end
