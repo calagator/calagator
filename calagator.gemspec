@@ -67,5 +67,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3", "~> 1.3"
   s.add_development_dependency "sunspot_solr",  "~> 2.1"
   s.add_development_dependency "timecop", "~> 0.7.1"
-  s.add_development_dependency "webmock", "~> 1.20"
+  s.add_development_dependency "webmock", "~> 3.4"
 end
