@@ -10,6 +10,7 @@ These people have contributed to Calagator's design and implementation:
   * Ann-Marie Horcher
   * Anselm Hook
   * Audrey Eschright
+  * Alyssa R
   * Ben Hengst
   * Ben Kerney
   * Bill Burcham

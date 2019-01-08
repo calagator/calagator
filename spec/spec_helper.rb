@@ -20,7 +20,7 @@ require "rspec-activemodel-mocks"
 require "rspec/its"
 require "rspec-rails"
 require "rspec/collection_matchers"
-require "factory_girl_rails"
+require "factory_bot_rails"
 require "capybara"
 require "capybara/rspec"
 require "database_cleaner"
@@ -48,7 +48,7 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
-  config.include FactoryGirl::Syntax::Methods
+  config.include FactoryBot::Syntax::Methods
   config.use_transactional_fixtures = false
 
   config.before(:suite) do |example|

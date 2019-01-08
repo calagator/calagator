@@ -5,7 +5,7 @@ module Calagator
 describe Event::Cloner do
   describe "when cloning" do
     let :original do
-      FactoryGirl.build(:event,
+      FactoryBot.build(:event,
         :id => 42,
         :start_time => Time.zone.parse("2008-01-19 10:00:00"),
         :end_time => Time.zone.parse("2008-01-19 17:00:00"),

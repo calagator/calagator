@@ -24,10 +24,10 @@ if options[:database] == "postgresql" && ARGV.any? { |arg| arg =~ /--postgres-us
   end
 end
 
-# FactoryGirl and Faker are required for Calagator's db:seed task
+# FactoryBot and Faker are required for Calagator's db:seed task
 spec = Gem::Specification::load(File.expand_path("../calagator.gemspec", __FILE__))
 spec ||= Gem::Specification::find_by_name('calagator')
-required_dev_gems = ["factory_girl_rails", "faker"]
+required_dev_gems = ["factory_bot_rails", "faker"]
 
 
 gem_group :development, :test do
@@ -46,4 +46,3 @@ run "bundle install"
 rake "db:create"
 generate "calagator:install", (generating_dummy && "--dummy")
 generate "sunspot_rails:install"
-

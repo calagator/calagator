@@ -32,7 +32,7 @@ describe ApplicationHelper, :type => :helper do
 
   describe "#datestamp" do
     it "constructs a sentence describing the item's history" do
-      event = FactoryGirl.create(:event, created_at: "2010-01-01", updated_at: "2010-01-02")
+      event = FactoryBot.create(:event, created_at: "2010-01-01", updated_at: "2010-01-02")
       event.create_source! title: "google", url: "http://google.com"
       allow(event.source).to receive_messages id: 1
       expect(helper.datestamp(event)).to eq(

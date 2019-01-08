@@ -31,7 +31,7 @@ describe VersionsController, :type => :controller do
       @update_title = "myevent v2"
       @final_title = "myevent v3"
 
-      @event = FactoryGirl.create(:event, :title => @create_title)
+      @event = FactoryBot.create(:event, :title => @create_title)
 
       @event.title = @update_title
       @event.save!

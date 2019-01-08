@@ -5,73 +5,73 @@ module Calagator
 describe Venue, :type => :model do
   shared_examples_for "#search" do
     it "returns everything when searching by empty string" do
-      venue1 = FactoryGirl.create(:venue)
-      venue2 = FactoryGirl.create(:venue)
+      venue1 = FactoryBot.create(:venue)
+      venue2 = FactoryBot.create(:venue)
       expect(Venue.search("")).to match_array([venue1, venue2])
     end
 
     it "searches venue titles by substring" do
-      venue1 = FactoryGirl.create(:venue, title: "wtfbbq")
-      venue2 = FactoryGirl.create(:venue, title: "zomg!")
+      venue1 = FactoryBot.create(:venue, title: "wtfbbq")
+      venue2 = FactoryBot.create(:venue, title: "zomg!")
       expect(Venue.search("zomg")).to eq([venue2])
     end
 
     it "searches venue descriptions by substring" do
-      venue1 = FactoryGirl.create(:venue, description: "wtfbbq")
-      venue2 = FactoryGirl.create(:venue, description: "zomg!")
+      venue1 = FactoryBot.create(:venue, description: "wtfbbq")
+      venue2 = FactoryBot.create(:venue, description: "zomg!")
       expect(Venue.search("zomg")).to eq([venue2])
     end
 
     it "searches venue tags by exact match" do
-      venue1 = FactoryGirl.create(:venue, tag_list: ["wtf", "bbq", "zomg"])
-      venue2 = FactoryGirl.create(:venue, tag_list: ["wtf", "bbq", "omg"])
+      venue1 = FactoryBot.create(:venue, tag_list: ["wtf", "bbq", "zomg"])
+      venue2 = FactoryBot.create(:venue, tag_list: ["wtf", "bbq", "omg"])
       expect(Venue.search("omg")).to eq([venue2])
     end
 
     it "searches case-insensitively" do
-      venue1 = FactoryGirl.create(:venue, title: "WTFBBQ")
-      venue2 = FactoryGirl.create(:venue, title: "ZOMG!")
+      venue1 = FactoryBot.create(:venue, title: "WTFBBQ")
+      venue2 = FactoryBot.create(:venue, title: "ZOMG!")
       expect(Venue.search("zomg")).to eq([venue2])
     end
 
     it "sorts by title" do
-      venue2 = FactoryGirl.create(:venue, title: "zomg")
-      venue1 = FactoryGirl.create(:venue, title: "omg")
+      venue2 = FactoryBot.create(:venue, title: "zomg")
+      venue1 = FactoryBot.create(:venue, title: "omg")
       expect(Venue.search("", order: "name")).to eq([venue1, venue2])
     end
 
     it "can limit to venues with wifi" do
-      venue1 = FactoryGirl.create(:venue, wifi: false)
-      venue2 = FactoryGirl.create(:venue, wifi: true)
+      venue1 = FactoryBot.create(:venue, wifi: false)
+      venue2 = FactoryBot.create(:venue, wifi: true)
       expect(Venue.search("", wifi: true)).to eq([venue2])
     end
 
     it "excludes closed venues" do
-      venue1 = FactoryGirl.create(:venue, closed: true)
-      venue2 = FactoryGirl.create(:venue, closed: false)
+      venue1 = FactoryBot.create(:venue, closed: true)
+      venue2 = FactoryBot.create(:venue, closed: false)
       expect(Venue.search("")).to eq([venue2])
     end
 
     it "can include closed venues" do
-      venue1 = FactoryGirl.create(:venue, closed: true)
-      venue2 = FactoryGirl.create(:venue, closed: false)
+      venue1 = FactoryBot.create(:venue, closed: true)
+      venue2 = FactoryBot.create(:venue, closed: false)
       expect(Venue.search("", include_closed: true)).to match_array([venue1, venue2])
     end
 
     it "can limit number of venues" do
-      2.times { FactoryGirl.create(:venue) }
+      2.times { FactoryBot.create(:venue) }
       expect(Venue.search("", limit: 1).count).to eq(1)
     end
 
     it "does not search multiple terms" do
-      venue2 = FactoryGirl.create(:venue, title: "zomg")
-      venue1 = FactoryGirl.create(:venue, title: "omg")
+      venue2 = FactoryBot.create(:venue, title: "zomg")
+      venue1 = FactoryBot.create(:venue, title: "omg")
       expect(Venue.search("zomg omg")).to eq([])
     end
 
     it "ANDs terms together to narrow search results" do
-      venue2 = FactoryGirl.create(:venue, title: "zomg omg")
-      venue1 = FactoryGirl.create(:venue, title: "zomg cats")
+      venue2 = FactoryBot.create(:venue, title: "zomg omg")
+      venue1 = FactoryBot.create(:venue, title: "zomg cats")
       expect(Venue.search("zomg omg")).to eq([venue2])
     end
 

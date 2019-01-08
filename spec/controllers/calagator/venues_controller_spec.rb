@@ -9,8 +9,8 @@ describe VenuesController, :type => :controller do
   render_views
 
   context "concerning duplicates" do
-    let!(:venue_master) { FactoryGirl.create(:venue) }
-    let!(:venue_duplicate) { FactoryGirl.create(:venue, duplicate_of: venue_master) }
+    let!(:venue_master) { FactoryBot.create(:venue) }
+    let!(:venue_duplicate) { FactoryBot.create(:venue, duplicate_of: venue_master) }
 
     it "redirects duplicate venues to their master" do
       get 'show', id: venue_duplicate.id
@@ -44,7 +44,7 @@ describe VenuesController, :type => :controller do
 
   describe "when creating venues" do
     it "should redirect to the newly created venue" do
-      post :create, venue: FactoryGirl.attributes_for(:venue)
+      post :create, venue: FactoryBot.attributes_for(:venue)
       expect(response).to redirect_to(assigns(:venue))
     end
 
@@ -56,17 +56,17 @@ describe VenuesController, :type => :controller do
 
   describe "when updating venues" do
     before do
-      @venue = FactoryGirl.create(:venue)
+      @venue = FactoryBot.create(:venue)
     end
 
     it "should redirect to the updated venue" do
-      put :update, id: @venue.id, venue: FactoryGirl.attributes_for(:venue)
+      put :update, id: @venue.id, venue: FactoryBot.attributes_for(:venue)
       expect(response).to redirect_to(@venue)
     end
 
     it "should redirect to any associated event" do
-      @event = FactoryGirl.create(:event, venue: @venue)
-      put :update, id: @venue.id, from_event: @event.id, venue: FactoryGirl.attributes_for(:venue)
+      @event = FactoryBot.create(:event, venue: @venue)
+      put :update, id: @venue.id, from_event: @event.id, venue: FactoryBot.attributes_for(:venue)
       expect(response).to redirect_to(@event)
     end
 
@@ -86,7 +86,7 @@ describe VenuesController, :type => :controller do
 
   describe "when rendering the edit venue page" do
     it "passes the template the specified venue" do
-      @venue = FactoryGirl.create(:venue)
+      @venue = FactoryBot.create(:venue)
       get :edit, id: @venue.id
       expect(assigns[:venue]).to eq(@venue)
     end
@@ -94,9 +94,9 @@ describe VenuesController, :type => :controller do
 
   describe "when rendering the map page" do
     before do
-      @open_venue = FactoryGirl.create(:venue)
-      @closed_venue = FactoryGirl.create(:venue, closed: true)
-      @duplicate_venue = FactoryGirl.create(:venue, duplicate_of: @open_venue)
+      @open_venue = FactoryBot.create(:venue)
+      @closed_venue = FactoryBot.create(:venue, closed: true)
+      @duplicate_venue = FactoryBot.create(:venue, duplicate_of: @open_venue)
     end
 
     it "only shows open non-duplicate venues" do
@@ -107,7 +107,7 @@ describe VenuesController, :type => :controller do
 
   describe "when rendering the venues index" do
     before do
-      @venues = [FactoryGirl.create(:venue), FactoryGirl.create(:venue)]
+      @venues = [FactoryBot.create(:venue), FactoryBot.create(:venue)]
     end
 
     it "should assign the search object to @search" do
@@ -140,7 +140,7 @@ describe VenuesController, :type => :controller do
     describe "in JSON format" do
       describe "with events" do
         before do
-          @venue = FactoryGirl.build(:venue, :id => 123)
+          @venue = FactoryBot.build(:venue, :id => 123)
           allow(Venue).to receive(:find).and_return(@venue)
         end
 
@@ -159,9 +159,9 @@ describe VenuesController, :type => :controller do
     describe "in HTML format" do
       describe "venue with future and past events" do
         before do
-          @venue = FactoryGirl.create(:venue)
-          @future_event = FactoryGirl.create(:event, :venue => @venue)
-          @past_event = FactoryGirl.create(:event, :venue => @venue,
+          @venue = FactoryBot.create(:venue)
+          @future_event = FactoryBot.create(:event, :venue => @venue)
+          @past_event = FactoryBot.create(:event, :venue => @venue,
             :start_time => Time.now - 1.week + 1.hour,
             :end_time => Time.now - 1.week + 2.hours)
 
@@ -185,9 +185,9 @@ describe VenuesController, :type => :controller do
 
     describe "as an iCalendar" do
       before do
-        @venue = FactoryGirl.create(:venue)
-        @future_event = FactoryGirl.create(:event, :venue => @venue, :start_time => today + 1.hour)
-        @past_event = FactoryGirl.create(:event, :venue => @venue, :start_time => today - 1.hour)
+        @venue = FactoryBot.create(:venue)
+        @future_event = FactoryBot.create(:event, :venue => @venue, :start_time => today + 1.hour)
+        @past_event = FactoryBot.create(:event, :venue => @venue, :start_time => today - 1.hour)
 
         get :show, :id => @venue.to_param, :format => "ics"
       end
@@ -214,7 +214,7 @@ describe VenuesController, :type => :controller do
   describe "DELETE" do
     describe "when deleting a venue without events" do
       before do
-        @venue = FactoryGirl.create(:venue)
+        @venue = FactoryBot.create(:venue)
       end
 
       shared_examples_for "destroying a Venue record without events" do
@@ -256,7 +256,7 @@ describe VenuesController, :type => :controller do
 
     describe "when deleting a venue with events" do
       before do
-        @event = FactoryGirl.create(:event, :with_venue)
+        @event = FactoryBot.create(:event, :with_venue)
         @venue = @event.venue
       end
 

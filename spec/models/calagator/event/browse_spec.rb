@@ -94,21 +94,21 @@ module Calagator
       let(:end_time) { "05:00 pm" }
 
       let!(:before) do
-        FactoryGirl.create(:event,
+        FactoryBot.create(:event,
                            title: "before",
                            start_time: Time.zone.parse("10:00"),
                            end_time: Time.zone.parse("14:00"))
       end
 
       let!(:after) do
-        FactoryGirl.create(:event,
+        FactoryBot.create(:event,
                            title: "after",
                            start_time: Time.zone.parse("14:00"),
                            end_time: Time.zone.parse("18:00"))
       end
 
       let!(:within) do
-        FactoryGirl.create(:event,
+        FactoryBot.create(:event,
                            title: "within",
                            start_time: Time.zone.parse("13:00"),
                            end_time: Time.zone.parse("14:00"))
@@ -147,27 +147,27 @@ module Calagator
 
     describe "when ordering" do
       it "defaults to order by start time" do
-        event1 = FactoryGirl.create(:event, start_time: Time.zone.parse("3003-01-01"))
-        event2 = FactoryGirl.create(:event, start_time: Time.zone.parse("3002-01-01"))
-        event3 = FactoryGirl.create(:event, start_time: Time.zone.parse("3001-01-01"))
+        event1 = FactoryBot.create(:event, start_time: Time.zone.parse("3003-01-01"))
+        event2 = FactoryBot.create(:event, start_time: Time.zone.parse("3002-01-01"))
+        event3 = FactoryBot.create(:event, start_time: Time.zone.parse("3001-01-01"))
 
         browse = Event::Browse.new
         expect(browse.events).to eq([event3, event2, event1])
       end
 
       it "can order by event name" do
-        event1 = FactoryGirl.create(:event, title: "CU there")
-        event2 = FactoryGirl.create(:event, title: "Be there")
-        event3 = FactoryGirl.create(:event, title: "An event")
+        event1 = FactoryBot.create(:event, title: "CU there")
+        event2 = FactoryBot.create(:event, title: "Be there")
+        event3 = FactoryBot.create(:event, title: "An event")
 
         browse = Event::Browse.new(order: "name")
         expect(browse.events).to eq([event3, event2, event1])
       end
 
       it "can order by venue name" do
-        event1 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "C venue"))
-        event2 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "B venue"))
-        event3 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "A venue"))
+        event1 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: "C venue"))
+        event2 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: "B venue"))
+        event3 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: "A venue"))
 
         browse = Event::Browse.new(order: "venue")
         expect(browse.events).to eq([event3, event2, event1])
