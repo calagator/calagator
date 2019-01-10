@@ -136,20 +136,20 @@ describe EventsHelper, :type => :helper do
 
   describe "#tweet_text" do
     it "contructs a tweet" do
-      event = FactoryGirl.create(:event,
+      event = FactoryBot.create(:event,
         title: "hip and/or hop",
         start_time: "2010-01-01 12:00:00",
         end_time: "2010-01-02 12:00:00")
-      event.venue = FactoryGirl.create(:venue, title: "holocene")
+      event.venue = FactoryBot.create(:venue, title: "holocene")
       expect(tweet_text(event)).to eq("hip and/or hop - 12:00PM 01.01.2010 @ holocene")
     end
 
     it "crops it at 140 characters" do
-      event = FactoryGirl.create(:event,
+      event = FactoryBot.create(:event,
         title: "hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop",
         start_time: "2010-01-01 12:00:00",
         end_time: "2010-01-02 12:00:00")
-      event.venue = FactoryGirl.create(:venue, title: "holocene")
+      event.venue = FactoryBot.create(:venue, title: "holocene")
       expect(tweet_text(event)).to eq("hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop, hip and/or hop, h... - 12:00PM 01.01.2010 @ holocene")
     end
   end

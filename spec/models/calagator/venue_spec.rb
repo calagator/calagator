@@ -88,42 +88,42 @@ describe Venue, :type => :model do
 
   describe "when finding duplicates [integration test]" do
     subject! do
-      FactoryGirl.create(:venue, title: "Venue A")
+      FactoryBot.create(:venue, title: "Venue A")
     end
 
     it "should not match totally different records" do
-      FactoryGirl.create(:venue)
+      FactoryBot.create(:venue)
       expect(Venue.find_duplicates_by_type("title")).to be_empty
     end
 
     it "should not match similar records when not searching by duplicated fields" do
-      FactoryGirl.create :venue, title: subject.title
+      FactoryBot.create :venue, title: subject.title
       expect(Venue.find_duplicates_by_type("description")).to be_empty
     end
 
     it "should match similar records when searching by duplicated fields" do
-      venue = FactoryGirl.create(:venue, title: subject.title)
+      venue = FactoryBot.create(:venue, title: subject.title)
       expect(Venue.find_duplicates_by_type("title")).to eq({ [subject.title] => [subject, venue] })
     end
 
     it "should match similar records when searching by :any" do
-      venue = FactoryGirl.create(:venue, title: subject.title)
+      venue = FactoryBot.create(:venue, title: subject.title)
       expect(Venue.find_duplicates_by_type("any")).to eq({ [nil] => [subject, venue] })
     end
 
     it "should not match similar records when searching by multiple fields where not all are duplicated" do
-      FactoryGirl.create(:venue, title: subject.title)
+      FactoryBot.create(:venue, title: subject.title)
       expect(Venue.find_duplicates_by_type("title,description")).to be_empty
     end
 
     it "should match similar records when searching by multiple fields where all are duplicated" do
-      venue = FactoryGirl.create(:venue, title: subject.title, description: subject.description)
+      venue = FactoryBot.create(:venue, title: subject.title, description: subject.description)
       expect(Venue.find_duplicates_by_type("title,description")).to \
         eq({ [subject.title, subject.description] => [subject, venue] })
     end
 
     it "should not match dissimilar records when searching by :all" do
-      FactoryGirl.create(:venue)
+      FactoryBot.create(:venue)
       expect(Venue.find_duplicates_by_type("all")).to be_empty
     end
 
@@ -134,7 +134,7 @@ describe Venue, :type => :model do
     end
 
     it "should match non duplicate venues when searching by na" do
-      venue = FactoryGirl.create(:venue, title: "Venue B")
+      venue = FactoryBot.create(:venue, title: "Venue B")
       expect(Venue.find_duplicates_by_type("na")).to eq({ [nil] => [subject, venue] })
     end
   end
@@ -337,7 +337,7 @@ describe "Venue geocode addressing", :type => :model do
     end
 
     it "should create a new version after updating" do
-      venue = FactoryGirl.create :venue
+      venue = FactoryBot.create :venue
       expect(venue.versions.count).to eq 1
 
       venue.title += " (change)"
@@ -347,7 +347,7 @@ describe "Venue geocode addressing", :type => :model do
     end
 
     it "should store old content in past versions" do
-      venue = FactoryGirl.create :venue
+      venue = FactoryBot.create :venue
       original_title = venue.title
 
       venue.title += " (change)"

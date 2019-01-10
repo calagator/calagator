@@ -18,13 +18,13 @@ describe ActsAsTaggableOn::Tag, :type => :model do
       end
 
       it "should redirect to 'defunct' page with archive url as query param when using a defunct provider" do
-        @event = FactoryGirl.create :event, tag_list: 'upcoming:event=1234'
+        @event = FactoryBot.create :event, tag_list: 'upcoming:event=1234'
         event_date = @event.start_time.strftime("%Y%m%d")
         expect(@event.tags.last.machine_tag.url).to eq "http://my-calagator.org/defunct?url=https://web.archive.org/web/#{event_date}/http://upcoming.yahoo.com/event/1234"
       end
 
       it "should redirect correctly for venue tags also" do
-        @venue = FactoryGirl.create :venue, tag_list: 'upcoming:venue=1234'
+        @venue = FactoryBot.create :venue, tag_list: 'upcoming:venue=1234'
         venue_date = @venue.created_at.strftime("%Y%m%d")
         expect(@venue.tags.last.machine_tag.url).to eq "http://my-calagator.org/defunct?url=https://web.archive.org/web/#{venue_date}/http://upcoming.yahoo.com/venue/1234"
       end

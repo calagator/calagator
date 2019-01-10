@@ -1,6 +1,6 @@
 require "faker"
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :venue, class: Calagator::Venue do
     sequence(:title) { |n| "Venue #{n}" }
     sequence(:description) { |n| "Description of Venue #{n}." }
@@ -15,9 +15,9 @@ FactoryGirl.define do
     sequence(:email) { |n| "info@venue#{n}.com" }
     sequence(:telephone) { |n| "(#{n}#{n}#{n}) #{n}#{n}#{n}-#{n}#{n}#{n}#{n}" }
     sequence(:url) { |n| "http://#{n}.com" }
-    closed false
-    wifi true
-    access_notes "Access permitted."
+    closed { false }
+    wifi { true }
+    access_notes { "Access permitted." }
     after(:create) { Sunspot.commit if Calagator::Venue::SearchEngine.kind == :sunspot }
 
     trait :with_multiple_tags do
@@ -42,7 +42,7 @@ FactoryGirl.define do
 
     trait :with_source do
       association :source
-      sequence(:description) do |n| 
+      sequence(:description) do |n|
         "Description of Event #{n}.\n
         http://test.com\n
         http://example.com\n

@@ -2,14 +2,14 @@
 
 begin
   require 'faker'
-  require 'factory_girl'
+  require 'factory_bot_rails'
 rescue LoadError
-  puts "Calagator's seeds require faker and factory_girl."
+  puts "Calagator's seeds require faker and factory_bot_rails."
   puts "Add them to your gemfile and try again."
   exit 1
 end
 
-FactoryGirl.define do
+FactoryBot.define do
   factory :seed_venue, class: Calagator::Venue do
     title           { Faker::Company.name }
     description     { Faker::Lorem.paragraph }
@@ -66,7 +66,7 @@ FactoryGirl.define do
 end
 
 puts "Seeding database with sample data..."
-FactoryGirl.create_list(:seed_venue, 25, :with_events)
-FactoryGirl.create_list(:seed_venue, 25)
-FactoryGirl.create_list(:seed_event, 25, :with_venue)
-FactoryGirl.create_list(:seed_event, 25)
+FactoryBot.create_list(:seed_venue, 25, :with_events)
+FactoryBot.create_list(:seed_venue, 25)
+FactoryBot.create_list(:seed_event, 25, :with_venue)
+FactoryBot.create_list(:seed_event, 25)

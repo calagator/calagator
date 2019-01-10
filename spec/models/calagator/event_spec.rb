@@ -41,15 +41,15 @@ describe Event, :type => :model do
 
   describe "when checking time status" do
     it "should be old if event ended before today" do
-      expect(FactoryGirl.build(:event, start_time: 2.days.ago, end_time: 1.day.ago)).to be_old
+      expect(FactoryBot.build(:event, start_time: 2.days.ago, end_time: 1.day.ago)).to be_old
     end
 
     it "should be current if event is happening today" do
-      expect(FactoryGirl.build(:event, start_time: 1.hour.from_now)).to be_current
+      expect(FactoryBot.build(:event, start_time: 1.hour.from_now)).to be_current
     end
 
     it "should be ongoing if it began before today but ends today or later" do
-      expect(FactoryGirl.build(:event, start_time: 1.day.ago, end_time: 1.day.from_now)).to be_ongoing
+      expect(FactoryBot.build(:event, start_time: 1.day.ago, end_time: 1.day.from_now)).to be_ongoing
     end
   end
 
@@ -284,9 +284,9 @@ describe Event, :type => :model do
 
   describe ".search_tag" do
     before do
-      @c = FactoryGirl.create(:event, title: "c", tag_list: ["tag", "wtf"], start_time: 3.minutes.ago)
-      @b = FactoryGirl.create(:event, title: "b", tag_list: ["omg", "wtf"], start_time: 2.minutes.ago)
-      @a = FactoryGirl.create(:event, title: "a", tag_list: ["tag", "omg"], start_time: 1.minutes.ago)
+      @c = FactoryBot.create(:event, title: "c", tag_list: ["tag", "wtf"], start_time: 3.minutes.ago)
+      @b = FactoryBot.create(:event, title: "b", tag_list: ["omg", "wtf"], start_time: 2.minutes.ago)
+      @a = FactoryBot.create(:event, title: "a", tag_list: ["tag", "omg"], start_time: 1.minutes.ago)
     end
 
     it "finds events with the given tag" do
@@ -445,27 +445,27 @@ describe Event, :type => :model do
   describe "when ordering" do
     describe "with .ordered_by_ui_field" do
       it "defaults to order by start time" do
-        event1 = FactoryGirl.create(:event, start_time: Time.zone.parse("2003-01-01"))
-        event2 = FactoryGirl.create(:event, start_time: Time.zone.parse("2002-01-01"))
-        event3 = FactoryGirl.create(:event, start_time: Time.zone.parse("2001-01-01"))
+        event1 = FactoryBot.create(:event, start_time: Time.zone.parse("2003-01-01"))
+        event2 = FactoryBot.create(:event, start_time: Time.zone.parse("2002-01-01"))
+        event3 = FactoryBot.create(:event, start_time: Time.zone.parse("2001-01-01"))
 
         events = Event.ordered_by_ui_field(nil)
         expect(events).to eq([event3, event2, event1])
       end
 
       it "can order by event name" do
-        event1 = FactoryGirl.create(:event, title: "CU there")
-        event2 = FactoryGirl.create(:event, title: "Be there")
-        event3 = FactoryGirl.create(:event, title: "An event")
+        event1 = FactoryBot.create(:event, title: "CU there")
+        event2 = FactoryBot.create(:event, title: "Be there")
+        event3 = FactoryBot.create(:event, title: "An event")
 
         events = Event.ordered_by_ui_field("name")
         expect(events).to eq([event3, event2, event1])
       end
 
       it "can order by venue name" do
-        event1 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "C venue"))
-        event2 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "B venue"))
-        event3 = FactoryGirl.create(:event, venue: FactoryGirl.create(:venue, title: "A venue"))
+        event1 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: "C venue"))
+        event2 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: "B venue"))
+        event3 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: "A venue"))
 
         events = Event.ordered_by_ui_field("venue")
         expect(events).to eq([event3, event2, event1])
@@ -475,8 +475,8 @@ describe Event, :type => :model do
 
   describe "with finding duplicates" do
     before do
-      @non_duplicate_event = FactoryGirl.create(:event)
-      @duplicate_event = FactoryGirl.create(:duplicate_event)
+      @non_duplicate_event = FactoryBot.create(:event)
+      @duplicate_event = FactoryBot.create(:duplicate_event)
       @events = [@non_duplicate_event, @duplicate_event]
     end
 
@@ -496,11 +496,11 @@ describe Event, :type => :model do
   describe "with finding duplicates (integration test)" do
     before do
       # this event should always be omitted from the results
-      past = FactoryGirl.create(:event, start_time: 1.week.ago)
+      past = FactoryBot.create(:event, start_time: 1.week.ago)
     end
 
     subject do
-      FactoryGirl.create(:event)
+      FactoryBot.create(:event)
     end
 
     it "should return future events when provided na" do
@@ -554,7 +554,7 @@ describe Event, :type => :model do
 
   describe "when squashing duplicates (integration test)" do
     before do
-      @event = FactoryGirl.create(:event, :with_venue)
+      @event = FactoryBot.create(:event, :with_venue)
       @venue = @event.venue
     end
 
@@ -643,11 +643,11 @@ describe Event, :type => :model do
     end
 
     it "should produce parsable iCal output" do
-      expect { ical_roundtrip( FactoryGirl.build(:event) ) }.not_to raise_error
+      expect { ical_roundtrip( FactoryBot.build(:event) ) }.not_to raise_error
     end
 
     it "should represent an event without an end time as a 1-hour block" do
-      event = FactoryGirl.build(:event, :start_time => now, :end_time => nil)
+      event = FactoryBot.build(:event, :start_time => now, :end_time => nil)
       expect(event.end_time).to be_blank
 
       rt = ical_roundtrip(event)
@@ -655,14 +655,14 @@ describe Event, :type => :model do
     end
 
     it "should set the appropriate end time if one is given" do
-      event = FactoryGirl.build(:event, :start_time => now, :end_time => now + 2.hours)
+      event = FactoryBot.build(:event, :start_time => now, :end_time => now + 2.hours)
 
       rt = ical_roundtrip(event)
       expect(rt.dtend - rt.dtstart).to eq 2.hours
     end
 
     describe "when comparing Event's attributes to its iCalendar output" do
-      let(:event) { FactoryGirl.build(:event, :id => 123, :created_at => now) }
+      let(:event) { FactoryBot.build(:event, :id => 123, :created_at => now) }
       let(:ical) { ical_roundtrip(event) }
 
       { :summary => :title,
@@ -689,34 +689,34 @@ describe Event, :type => :model do
     end
 
     it "should call the URL helper to generate a UID" do
-      event = FactoryGirl.build(:event)
+      event = FactoryBot.build(:event)
       expect(ical_roundtrip(event, :url_helper => lambda {|e| "UID'D!" }).uid).to eq "UID'D!"
     end
 
     it "should strip HTML from the description" do
-      event = FactoryGirl.create(:event, :description => "<blink>OMFG HTML IS TEH AWESOME</blink>")
+      event = FactoryBot.create(:event, :description => "<blink>OMFG HTML IS TEH AWESOME</blink>")
       expect(ical_roundtrip(event).description).not_to include "<blink>"
     end
 
     it "should include tags in the description" do
-      event = FactoryGirl.build(:event)
+      event = FactoryBot.build(:event)
       event.tag_list = "tags, folksonomy, categorization"
       expect(ical_roundtrip(event).description).to include event.tag_list.to_s
     end
 
     it "should leave URL blank if no URL is provided" do
-      event = FactoryGirl.build(:event, :url => nil)
+      event = FactoryBot.build(:event, :url => nil)
       expect(ical_roundtrip(event).url).to be_nil
     end
 
     it "should have Source URL if URL helper is given)" do
-      event = FactoryGirl.build(:event)
+      event = FactoryBot.build(:event)
       expect(ical_roundtrip(event, :url_helper => lambda{|e| "FAKE"} ).description).to match /FAKE/
     end
 
     it "should create multi-day entries for multi-day events" do
       time = Time.zone.now
-      event = FactoryGirl.build(:event, :start_time => time, :end_time => time + 4.days)
+      event = FactoryBot.build(:event, :start_time => time, :end_time => time + 4.days)
       parsed_event = ical_roundtrip( event )
 
       start_time = Date.current
@@ -730,13 +730,13 @@ describe Event, :type => :model do
       end
 
       it "should set an initial sequence on a new event" do
-        event = FactoryGirl.create(:event)
+        event = FactoryBot.create(:event)
         ical = event_to_ical(event)
         expect(ical.sequence).to eq 1
       end
 
       it "should increment the sequence if it is updated" do
-        event = FactoryGirl.create(:event)
+        event = FactoryBot.create(:event)
         event.update_attribute(:title, "Update 1")
         ical = event_to_ical(event)
         expect(ical.sequence).to eq 2
@@ -744,7 +744,7 @@ describe Event, :type => :model do
 
       # it "should offset the squence based the global Calagator.icalendar_sequence_offset" do
         # Calagator.should_receive(:icalendar_sequence_offset).and_return(41)
-        # event = FactoryGirl.build(:event)
+        # event = FactoryBot.build(:event)
         # ical = event_to_ical(event)
         # ical.sequence.should eq 42
       # end
@@ -752,7 +752,7 @@ describe Event, :type => :model do
 
     describe "- the headers" do
       before do
-        @data = Event::IcalRenderer.render(FactoryGirl.build(:event))
+        @data = Event::IcalRenderer.render(FactoryBot.build(:event))
       end
 
       it "should include the calendar name" do

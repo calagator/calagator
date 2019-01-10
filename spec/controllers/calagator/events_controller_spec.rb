@@ -32,8 +32,8 @@ describe EventsController, :type => :controller do
 
       describe "with events" do
         before do
-          FactoryGirl.create(:event, :with_venue)
-          FactoryGirl.create(:event, :with_venue)
+          FactoryBot.create(:event, :with_venue)
+          FactoryBot.create(:event, :with_venue)
 
           get :index, :format => "xml"
 
@@ -77,7 +77,7 @@ describe EventsController, :type => :controller do
 
       describe "with events" do
         before do
-          @event = FactoryGirl.create(:event, :with_venue)
+          @event = FactoryBot.create(:event, :with_venue)
           @venue = @event.venue
 
           get :index, :format => "json"
@@ -123,8 +123,8 @@ describe EventsController, :type => :controller do
 
       describe "with events" do
         before do
-          FactoryGirl.create(:event, :with_venue)
-          FactoryGirl.create(:event, :with_venue)
+          FactoryBot.create(:event, :with_venue)
+          FactoryBot.create(:event, :with_venue)
 
           get :index, :format => "atom"
 
@@ -173,8 +173,8 @@ describe EventsController, :type => :controller do
 
       describe "with events" do
         before do
-          @current_event = FactoryGirl.create(:event, :start_time => today + 1.hour)
-          @past_event = FactoryGirl.create(:event, :start_time => today - 1.hour)
+          @current_event = FactoryBot.create(:event, :start_time => today + 1.hour)
+          @past_event = FactoryBot.create(:event, :start_time => today - 1.hour)
 
           get :index, :format => "ics"
         end
@@ -286,7 +286,7 @@ describe EventsController, :type => :controller do
     end
 
     it "should redirect from a duplicate event to its master" do
-      master = FactoryGirl.create(:event, id: 4321)
+      master = FactoryBot.create(:event, id: 4321)
       event = Event.new(:start_time => now, :duplicate_of => master)
       expect(Event).to receive(:find).and_return(event)
 
@@ -316,8 +316,8 @@ describe EventsController, :type => :controller do
         "end_time"       => "",
         "start_time"     => ""
       }.with_indifferent_access
-      @venue = FactoryGirl.build(:venue)
-      @event = FactoryGirl.build(:event, :venue => @venue)
+      @venue = FactoryBot.build(:venue)
+      @event = FactoryBot.build(:event, :venue => @venue)
     end
 
     describe "#new" do
@@ -358,7 +358,7 @@ describe EventsController, :type => :controller do
 
       it "should associate a venue by id when both an id and a name are provided" do
         @venue.save!
-        @venue2 = FactoryGirl.create(:venue)
+        @venue2 = FactoryBot.create(:venue)
         @params[:event][:venue_id] = @venue.id.to_s
         @params[:venue_name] = @venue2.title
         post :create, @params
@@ -422,7 +422,7 @@ describe EventsController, :type => :controller do
       end
 
       it "should create an event for an existing venue" do
-        venue = FactoryGirl.create(:venue)
+        venue = FactoryBot.create(:venue)
 
         post :create,
           :start_time => now.strftime("%Y-%m-%d"),
@@ -447,7 +447,7 @@ describe EventsController, :type => :controller do
 
     describe "#update" do
       before(:each) do
-        @event = FactoryGirl.create(:event, :with_venue, id: 42)
+        @event = FactoryBot.create(:event, :with_venue, id: 42)
         @venue = @event.venue
         @params.merge!(id: 42)
       end
@@ -465,7 +465,7 @@ describe EventsController, :type => :controller do
       end
 
       it "should associate a venue based on a given venue id" do
-        @venue = FactoryGirl.create(:venue)
+        @venue = FactoryBot.create(:venue)
         @params[:event][:venue_id] = @venue.id.to_s
         put "update", @params
         expect(@event.reload.venue).to eq(@venue)
@@ -473,7 +473,7 @@ describe EventsController, :type => :controller do
       end
 
       it "should associate a venue based on a given venue name" do
-        @venue = FactoryGirl.create(:venue)
+        @venue = FactoryBot.create(:venue)
         @params[:venue_name] = @venue.title
         put "update", @params
         expect(@event.reload.venue).to eq(@venue)
@@ -481,8 +481,8 @@ describe EventsController, :type => :controller do
       end
 
       it "should associate a venue by id when both an id and a name are provided" do
-        @venue = FactoryGirl.create(:venue)
-        @venue2 = FactoryGirl.create(:venue)
+        @venue = FactoryBot.create(:venue)
+        @venue2 = FactoryBot.create(:venue)
         @params[:event][:venue_id] = @venue.id.to_s
         @params[:venue_name] = @venue2.title
         put "update", @params
@@ -537,7 +537,7 @@ describe EventsController, :type => :controller do
 
     describe "#clone" do
       before do
-        @event = FactoryGirl.create(:event)
+        @event = FactoryBot.create(:event)
 
         allow(Event).to receive(:find).and_return(@event)
 
@@ -578,11 +578,11 @@ describe EventsController, :type => :controller do
       render_views
 
       it "should find current duplicates and not past duplicates" do
-        current_master = FactoryGirl.create(:event, :title => "Current")
-        current_duplicate = FactoryGirl.create(:event, :title => current_master.title)
+        current_master = FactoryBot.create(:event, :title => "Current")
+        current_duplicate = FactoryBot.create(:event, :title => current_master.title)
 
-        past_master = FactoryGirl.create(:event, :title => "Past", :start_time => now - 2.days)
-        past_duplicate = FactoryGirl.create(:event, :title => past_master.title, :start_time => now - 1.day)
+        past_master = FactoryBot.create(:event, :title => "Past", :start_time => now - 2.days)
+        past_duplicate = FactoryBot.create(:event, :title => past_master.title, :start_time => now - 1.day)
 
         get 'duplicates', :type => 'title'
 
@@ -597,8 +597,8 @@ describe EventsController, :type => :controller do
       end
 
       it "should redirect duplicate events to their master" do
-        event_master = FactoryGirl.create(:event)
-        event_duplicate = FactoryGirl.create(:event)
+        event_master = FactoryBot.create(:event)
+        event_duplicate = FactoryBot.create(:event)
 
         get 'show', :id => event_duplicate.id
         expect(response).not_to be_redirect
@@ -629,9 +629,9 @@ describe EventsController, :type => :controller do
     describe "when returning results" do
       render_views
 
-      let!(:current_event) { FactoryGirl.create(:event, :with_venue, title: "MyQuery") }
-      let!(:current_event_2) { FactoryGirl.create(:event, :with_venue, description: "WOW myquery!") }
-      let!(:past_event) { FactoryGirl.create(:event, :with_venue, title: "old myquery") }
+      let!(:current_event) { FactoryBot.create(:event, :with_venue, title: "MyQuery") }
+      let!(:current_event_2) { FactoryBot.create(:event, :with_venue, description: "WOW myquery!") }
+      let!(:past_event) { FactoryBot.create(:event, :with_venue, title: "old myquery") }
 
       describe "in HTML format" do
         before do
@@ -749,7 +749,7 @@ describe EventsController, :type => :controller do
 
   describe "#destroy" do
     it "should destroy events" do
-      event = FactoryGirl.build(:event)
+      event = FactoryBot.build(:event)
       expect(event).to receive(:destroy)
       expect(Event).to receive(:find).and_return(event)
 
@@ -758,7 +758,7 @@ describe EventsController, :type => :controller do
     end
 
     it "should not allow a user to destroy a locked event" do
-      event = FactoryGirl.create(:event)
+      event = FactoryBot.create(:event)
       event.lock_editing!
 
       delete 'destroy', :id => event.id
