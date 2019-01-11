@@ -34,7 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails"
   s.add_dependency "jquery-ui-rails", "~> 5.0"
   s.add_dependency "loofah", "~> 2.0"
-  s.add_dependency "loofah-activerecord", "~> 1.2"
+  s.add_dependency "loofah-activerecord", ">= 1.2", "< 3.0"
   s.add_dependency "lucene_query", "0.1"
   s.add_dependency "nokogiri"
   s.add_dependency "paper_trail_manager", "~> 0.5.0"
