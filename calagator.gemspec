@@ -64,7 +64,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-rails", "~> 3.2"
   s.add_development_dependency "selenium-webdriver"
   s.add_development_dependency "simplecov", "~> 0.10.0"
-  s.add_development_dependency "sqlite3", "~> 1.3"
+  s.add_development_dependency "sqlite3", "~> 1.3.6"
   s.add_development_dependency "sunspot_solr",  "~> 2.1"
   s.add_development_dependency "timecop", "~> 0.7.1"
   s.add_development_dependency "webmock", "~> 1.20"
