@@ -79,21 +79,6 @@ html_classes << " contentbar" if has_contentbar
       <%= format_description(event.description) %>
     </div>
     <% end -%>
-    <div class="attendees">
-      <script id="attendees-template" type="text/mustache">
-        <h3>Attendees</h3>
-        <span class='plancast-rsvp'>(<a href="{{plan_url}}">Count me in on Plancast</a>)</span>
-        <br />
-        <ul>
-          {{#attendees}}
-            <li>
-              {{#username}}<a href='http://plancast.com/{{username}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
-              {{^username}}<a href='http://plancast.com/user/{{id}}'><img class='avatar' src='{{pic_square}}'/></a>{{/username}}
-            </li>
-          {{/attendees}}
-        </ul>
-      </script>
-    </div>
     <% if event.persisted? %>
       <h3>Share</h3>
       <div class="share">
