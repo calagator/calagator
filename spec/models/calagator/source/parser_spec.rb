@@ -8,6 +8,10 @@ module Calagator
       end
     end
 
+    before do
+      Calagator.meetup_api_key = "foo"
+    end
+
     describe "when reading content" do
       it "should read from a normal URL" do
         stub_request(:get, "http://a.real/~url").to_return(body: "42")
@@ -193,16 +197,12 @@ module Calagator
       it "should use an existing venue when importing an event with a matching machine tag that describes a venue" do
         venue = Venue.create!(:title => "Custom Urban Airship", :tag_list => "meetup:venue=774133")
 
-        meetup_url = 'http://www.meetup.com/eLearningNetwork/events/23638211/'
-        api_url = 'https://api.meetup.com/2/event/23638211?fields=topics&key=foo&sign=true'
-        ical_url = 'http://www.meetup.com/eLearningNetwork/events/23638211/ical'
+        meetup_url = "http://www.meetup.com/pdxpython/events/ldhnqyplbnb/"
+        api_url = "https://api.meetup.com/2/event/ldhnqyplbnb?key=foo&sign=true&fields=topics"
 
-        [meetup_url, api_url, ical_url].each do |url|
-          stub_request(:get, url).to_return(body: read_sample('meetup.json'), headers: { content_type: "application/json" })
-        end
+        stub_request(:get, api_url).to_return(body: read_sample('meetup.json'), headers: { content_type: "application/json" })
 
         source = Source.new(title: "Event with duplicate machine-tagged venue", url: meetup_url)
-
         event = source.to_events.first
 
         expect(event.venue).to eq venue
