@@ -37,7 +37,6 @@ module Calagator
         expect(Source::Parser.parsers.to_a).to eq [
           Source::Parser::Facebook,
           Source::Parser::Meetup,
-          Source::Parser::Plancast,
           Source::Parser::Hcal,
           Source::Parser::Ical,
         ]
@@ -192,13 +191,17 @@ module Calagator
       end
 
       it "should use an existing venue when importing an event with a matching machine tag that describes a venue" do
-        venue = Venue.create!(:title => "Custom Urban Airship", :tag_list => "plancast:place=1520153")
+        venue = Venue.create!(:title => "Custom Urban Airship", :tag_list => "meetup:venue=774133")
 
-        plancast_url = 'http://plancast.com/p/3cos/indiewebcamp'
-        api_url = 'http://api.plancast.com/02/plans/show.json?extensions=place&plan_id=3cos'
-        stub_request(:get, api_url).to_return(body: read_sample('plancast.json'), headers: { content_type: "application/json" })
+        meetup_url = 'http://www.meetup.com/eLearningNetwork/events/23638211/'
+        api_url = 'https://api.meetup.com/2/event/23638211?fields=topics&key=foo&sign=true'
+        ical_url = 'http://www.meetup.com/eLearningNetwork/events/23638211/ical'
 
-        source = Source.new(title: "Event with duplicate machine-tagged venue", url: plancast_url)
+        [meetup_url, api_url, ical_url].each do |url|
+          stub_request(:get, url).to_return(body: read_sample('meetup.json'), headers: { content_type: "application/json" })
+        end
+
+        source = Source.new(title: "Event with duplicate machine-tagged venue", url: meetup_url)
 
         event = source.to_events.first
 
@@ -206,7 +209,7 @@ module Calagator
       end
 
       describe "choosing parsers by matching URLs" do
-        { "Calagator::Source::Parser::Plancast" => "http://plancast.com/p/3cos/indiewebcamp",
+        { "Calagator::Source::Parser::Facebook" => "http://facebook.com/event.php?eid=247619485255249",
           "Calagator::Source::Parser::Meetup"   => "http://www.meetup.com/pdxweb/events/23287271/" }.each do |parser_name, url|
 
           it "should only invoke the #{parser_name} parser when given #{url}" do
