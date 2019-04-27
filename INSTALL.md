@@ -4,7 +4,7 @@ Calagator is distributed as a [Rails engine](http://guides.rubyonrails.org/engin
 
 ## Requirements
 
-Calagator requires Ruby 1.9.3 - 2.1.x, and a host application built on Rails 4 or newer.
+Calagator requires Ruby 2.2.0 - 2.3.x, and a host application built on Rails 4 or newer.
 
 ## Running a site based on Calagator
 
@@ -14,7 +14,7 @@ If you're looking to build your own community calendar using Calagator, follow t
 
 First, install the `calagator` gem:
 
-    gem install calagator --pre
+    gem install calagator
     
 You can then use the `calagator` command to generate a new Rails application with Calagator installed:
 
@@ -35,8 +35,9 @@ Calagator's settings can be configured by editing these files in your host appli
 
 * `config/initializers/01_calagator.rb`
 * `config/initializers/02_geokit.rb`
+* `config/initializers/03_recaptcha.rb`
 
-Please see these file for more details.
+Please see these files for more details.
 
 ### Time Zone
 
