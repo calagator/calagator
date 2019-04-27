@@ -11,30 +11,6 @@
   <meta property="og:url" content="<%= event_url(@event) %>">
 <% end %>
 
-<% content_for :javascript_insert do %>
-  <%= javascript_include_tag 'mustache' %>
-  <script type='text/javascript'>
-    var plancast = function(){
-      var plan = $('.external.plancast.plan:first');
-      if (plan.length > 0) {
-        var plan_id = plan.text().split('=')[1];
-        $.getJSON("http://api.plancast.com/02/plans/show.json?jsonp=?",
-                  { extensions: "attendees",
-                    plan_id: plan_id },
-                    function(data) {
-                      if (data.attendees.length > 0) {
-                        $('.attendees').append(Mustache.to_html($('#attendees-template').html(), data));
-                      }
-                    }
-                 );
-      };
-    };
-    $(document).ready(plancast);
-    $(document).on('page:load', plancast);
-  </script>
-<% end %>
-
-
 <a href="#" id="event_sidebar_toggle" class="expander_toggle">Export or edit this event...</a>
 
 <div id="event_sidebar" class='single_view_right sidebar'>

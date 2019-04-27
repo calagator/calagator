@@ -115,7 +115,6 @@ end
 end
 
 require 'calagator/source/parser/not_found'
-require 'calagator/source/parser/plancast'
 require 'calagator/source/parser/meetup'
 require 'calagator/source/parser/facebook'
 require 'calagator/source/parser/ical'

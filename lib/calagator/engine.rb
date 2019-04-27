@@ -14,7 +14,6 @@ module Calagator
       site-icon.png
       spinner.gif
       tag_icons/*
-      mustache.js
       leaflet
     )
 

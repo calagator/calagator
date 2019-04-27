@@ -4,7 +4,6 @@
 //= require calagator/forms
 //= require calagator/mapping
 //= require leaflet.awesome-markers
-//= require mustache
 
 // Shows hidden section when a link is clicked, and hides the link.
 //

@@ -16,11 +16,7 @@ Calagator::MachineTag.configure do |config|
       'event' => "http://upcoming.yahoo.com/event/%s",
       'venue' => "http://upcoming.yahoo.com/venue/%s"
     },
-      'plancast' => {
-      'activity' => "http://plancast.com/a/%s",
-      'plan' => "http://plancast.com/p/%s"
-    },
-      'yelp' => {
+    'yelp' => {
       'biz' => "http://www.yelp.com/biz/%s"
     },
       'foursquare' => {
