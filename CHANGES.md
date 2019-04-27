@@ -10,14 +10,15 @@ Conventions used in this document:
 
 List of Calagator releases and changes, with the latest at the top:
 
-  * [master]
-  * v1.0.0 - **[!] Major Changes [!]**
+### v1.0.0
     * [!] This release completely changes the way in which Calagator is distributed, moving from a standalone Rails app to a [Rails engine](http://guides.rubyonrails.org/engines.html). Instead of deploying Calagator instance from a modified version of this code, Calagator is now included as a gem within a new Rails app. Please review the updated installation instructions in INSTALL.md.
     * If you are upgrading a site based on an earlier version of Calagator, please [drop us a line](http://groups.google.com/group/calagator-development/). We've recently upgraded [calagator.org](http://calagator.org) and can help to point you in the right direction.
     * [THEME] The theme system has been removed, favoring the [view overriding](http://guides.rubyonrails.org/engines.html#overriding-views) functionality provided by Rails engines.
 This works much the same way as the previous theme system, allowing any Calagator view to be overridden by creating a file at the corresponding path within your app's `app/views/calagator` directory.
     * [SETTING] The YAML-based settings and secrets mechanisms have been replaced with an initializer inside the host application. See INSTALL.md for details.
     * [MIGRATION] Database migrations are now installed into your host application.
+    * [DEPENDENCY] Upgraded to Rails 4.2.11.1.
+    * Numerous additional dependency upgrades and bugfixes.
 
 ### Pre-1.0
 
