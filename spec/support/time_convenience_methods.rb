@@ -5,4 +5,3 @@ end
 def today
   now.midnight
 end
-

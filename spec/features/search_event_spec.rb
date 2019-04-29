@@ -4,8 +4,8 @@ feature 'search for events', js: true do
   background do
     create :event, title: 'Ruby Future', start_time: today + 1.day
     create :event, title: 'Python Past', start_time: today - 1.day
-    create :event, title: 'Ruby Part 2 Past', start_time: today - 2.day
-    create :event, title: 'Ruby Part 1 Past', start_time: today - 3.day
+    create :event, title: 'Ruby Part 2 Past', start_time: today - 2.days
+    create :event, title: 'Ruby Part 1 Past', start_time: today - 3.days
   end
 
   scenario 'User searches for an event by name' do

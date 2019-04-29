@@ -10,11 +10,11 @@ require 'geokit'
 # various geocoders.  Make sure you read up on relevant Terms of Use for each
 # geocoder you are going to use.
 
-Geokit::Geocoders::provider_order = [:google]
+Geokit::Geocoders.provider_order = [:google]
 
 # These defaults are used in Geokit::Mappable.distance_to and in acts_as_mappable
-Geokit::default_units = :miles
-Geokit::default_formula = :sphere
+Geokit.default_units = :miles
+Geokit.default_formula = :sphere
 
 # This is your Google Maps geocoder keys (all optional).
 # See http://www.google.com/apis/maps/signup.html
@@ -99,7 +99,7 @@ Geokit::Geocoders::GoogleGeocoder.api_key = Calagator.mapping_google_maps_api_ke
 # This is the timeout value in seconds to be used for calls to the geocoder web
 # services.  For no timeout at all, comment out the setting.  The timeout unit
 # is in seconds.
-Geokit::Geocoders::request_timeout = 3
+Geokit::Geocoders.request_timeout = 3
 
 # This setting can be used if web service calls must be routed through a proxy.
 # These setting can be nil if not needed, otherwise, a valid URI must be

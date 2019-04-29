@@ -10,5 +10,4 @@ feature 'browse venue by tag', js: true do
 
     expect(page).to have_content 'Giant Stadium'
   end
-
 end

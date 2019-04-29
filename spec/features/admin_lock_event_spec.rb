@@ -40,4 +40,3 @@ xfeature 'Event locking' do
     expect(page).to have_selector('a', text: 'delete')
   end
 end
-

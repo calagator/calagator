@@ -1,6 +1,6 @@
 module Calagator
   class InstallGenerator < Rails::Generators::Base
-    source_root File.expand_path('../templates', __FILE__)
+    source_root File.expand_path('templates', __dir__)
 
     class_option :dummy, type: :boolean, default: false
 
@@ -26,9 +26,9 @@ module Calagator
     end
 
     def add_initializers
-      initializer '01_calagator.rb', File.read(File.expand_path('../templates/config/initializers/01_calagator.rb', __FILE__))
-      initializer '02_geokit.rb',    File.read(File.expand_path('../templates/config/initializers/02_geokit.rb', __FILE__))
-      initializer '03_recaptcha.rb', File.read(File.expand_path('../templates/config/initializers/03_recaptcha.rb', __FILE__))
+      initializer '01_calagator.rb', File.read(File.expand_path('templates/config/initializers/01_calagator.rb', __dir__))
+      initializer '02_geokit.rb',    File.read(File.expand_path('templates/config/initializers/02_geokit.rb', __dir__))
+      initializer '03_recaptcha.rb', File.read(File.expand_path('templates/config/initializers/03_recaptcha.rb', __dir__))
     end
 
     def add_javascripts
@@ -40,8 +40,8 @@ module Calagator
     end
 
     def add_assets
-      run "cp #{File.expand_path("../../../../app/assets/images/spinner.gif", __FILE__)} app/assets/images/"
-      run "cp #{File.expand_path("../../../../app/assets/images/site-icon.png", __FILE__)} app/assets/images/"
+      run "cp #{File.expand_path('../../../app/assets/images/spinner.gif', __dir__)} app/assets/images/"
+      run "cp #{File.expand_path('../../../app/assets/images/site-icon.png', __dir__)} app/assets/images/"
     end
 
     def add_seeds

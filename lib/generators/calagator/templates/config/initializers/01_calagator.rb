@@ -82,7 +82,7 @@ Calagator.setup do |config|
   # Map to display on /venues page:
   config.venues_map_options = {
     # Zoom magnification level:
-    zoom: 12,
+    zoom: 12
 
     # Center of the map, in latitude and longitude.
     # If no center is specified, the map will zoom to fit all markers.
@@ -92,7 +92,6 @@ Calagator.setup do |config|
   # Patterns for detecting spam events and venues
   config.blacklist_patterns = [
     /\b(online|overseas).+(drugstore|pharmacy)\b/,
-    /\bcialis\b/,
+    /\bcialis\b/
   ]
-
 end

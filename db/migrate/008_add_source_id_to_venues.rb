@@ -7,4 +7,3 @@ class AddSourceIdToVenues < ActiveRecord::Migration
     remove_column :venues, :source_id
   end
 end
-

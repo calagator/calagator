@@ -17,71 +17,70 @@
 #   tag.machine_tag.url       # "http://www.meetup.com/1234"
 
 module Calagator
+  class MachineTag < Struct.new(:name)
+    module TagExtensions
+      def machine_tag
+        MachineTag.new(name)
+      end
+    end
 
-class MachineTag < Struct.new(:name)
-  module TagExtensions
-    def machine_tag
-      MachineTag.new(name)
+    def self.configure
+      yield self
+    end
+
+    cattr_accessor(:urls) { {} }
+    cattr_accessor(:venue_predicates) { [] }
+    cattr_accessor(:defunct_namespaces) { [] }
+    cattr_accessor(:site_root_url) { 'http://example.com/' }
+
+    def venue?
+      venue_predicates.include? predicate
+    end
+
+    def namespace
+      matches[:namespace]
+    end
+
+    def predicate
+      matches[:predicate]
+    end
+
+    def value
+      matches[:value]
+    end
+
+    def url
+      return unless machine_tag = urls[namespace]
+      return unless url_template = machine_tag[predicate]
+
+      url = format(url_template, value)
+      url = "#{site_root_url}defunct?url=https://web.archive.org/web/#{archive_date}/#{url}" if defunct?
+      url
+    end
+
+    private
+
+    # Regular expression for parsing machine tags
+    MACHINE_TAG_PATTERN = /(?<namespace>[^:]+):(?<predicate>[^=]+)=(?<value>.+)/.freeze
+
+    def matches
+      name.match(MACHINE_TAG_PATTERN) || {}
+    end
+
+    def defunct?
+      defunct_namespaces.include? namespace
+    end
+
+    def archive_date
+      (venue_date || event_date).strftime('%Y%m%d')
+    end
+
+    def venue_date
+      Venue.tagged_with(name).limit(1).pluck(:created_at).first
+    end
+
+    def event_date
+      Event.tagged_with(name).limit(1).pluck(:start_time).first
     end
   end
-
-  def self.configure
-    yield self
-  end
-
-  cattr_accessor(:urls) { Hash.new }
-  cattr_accessor(:venue_predicates) { Array.new }
-  cattr_accessor(:defunct_namespaces) { Array.new }
-  cattr_accessor(:site_root_url) { "http://example.com/" }
-
-  def venue?
-    venue_predicates.include? predicate
-  end
-
-  def namespace
-    matches[:namespace]
-  end
-
-  def predicate
-    matches[:predicate]
-  end
-
-  def value
-    matches[:value]
-  end
-
-  def url
-    return unless machine_tag = urls[namespace]
-    return unless url_template = machine_tag[predicate]
-    url = sprintf(url_template, value)
-    url = "#{site_root_url}defunct?url=https://web.archive.org/web/#{archive_date}/#{url}" if defunct?
-    url
-  end
-
-  private
-
-  # Regular expression for parsing machine tags
-  MACHINE_TAG_PATTERN = /(?<namespace>[^:]+):(?<predicate>[^=]+)=(?<value>.+)/
-
-  def matches
-    name.match(MACHINE_TAG_PATTERN) || {}
-  end
-
-  def defunct?
-    defunct_namespaces.include? namespace
-  end
-
-  def archive_date
-    (venue_date || event_date).strftime("%Y%m%d")
-  end
-
-  def venue_date
-    Venue.tagged_with(name).limit(1).pluck(:created_at).first
-  end
-
-  def event_date
-    Event.tagged_with(name).limit(1).pluck(:start_time).first
-  end
-end
-
 end

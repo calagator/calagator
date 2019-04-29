@@ -1,9 +1,9 @@
-if !File.exist?("spec/dummy")
-  puts "Missing dummy app in spec/dummy! Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one."
+unless File.exist?('spec/dummy')
+  puts 'Missing dummy app in spec/dummy! Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one.'
   exit 1
 end
 
-unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
+unless RUBY_ENGINE == 'rbx' # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
   require 'simplecov'
   require 'coveralls'
 
@@ -14,19 +14,19 @@ unless RUBY_ENGINE == "rbx" # SimpleCov slows down Rubinius dramatically (using 
   SimpleCov.start('rails')
 end
 
-require "rails_helper"
-require "sass"
-require "rspec-activemodel-mocks"
-require "rspec/its"
-require "rspec-rails"
-require "rspec/collection_matchers"
-require "factory_bot_rails"
-require "capybara"
-require "capybara/rspec"
-require "database_cleaner"
-require "selenium-webdriver"
-require "timecop"
-require "webmock"
+require 'rails_helper'
+require 'sass'
+require 'rspec-activemodel-mocks'
+require 'rspec/its'
+require 'rspec-rails'
+require 'rspec/collection_matchers'
+require 'factory_bot_rails'
+require 'capybara'
+require 'capybara/rspec'
+require 'database_cleaner'
+require 'selenium-webdriver'
+require 'timecop'
+require 'webmock'
 
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
@@ -51,7 +51,7 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   config.use_transactional_fixtures = false
 
-  config.before(:suite) do |example|
+  config.before(:suite) do |_example|
     DatabaseCleaner.clean_with(:truncation)
   end
 
@@ -117,7 +117,7 @@ RSpec.configure do |config|
     # Enable only the newer, non-monkey-patching expect syntax.
     # For more details, see:
     #   - http://myronmars.to/n/dev-blog/2012/06/rspecs-new-expectation-syntax
-    expectations.syntax = [:should, :expect]
+    expectations.syntax = %i[should expect]
   end
 
   # rspec-mocks config goes here. You can use an alternate test double
@@ -126,7 +126,7 @@ RSpec.configure do |config|
     # Enable only the newer, non-monkey-patching expect syntax.
     # For more details, see:
     #   - http://teaisaweso.me/blog/2013/05/27/rspecs-new-message-expectation-syntax/
-    mocks.syntax = [:should, :expect]
+    mocks.syntax = %i[should expect]
 
     # Prevents you from mocking or stubbing a method that does not exist on
     # a real object. This is generally recommended.

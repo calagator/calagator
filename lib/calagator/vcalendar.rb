@@ -1,4 +1,4 @@
-require "ri_cal"
+require 'ri_cal'
 
 module Calagator
   class VCalendar < Struct.new(:ri_cal_calendar)
@@ -9,9 +9,9 @@ module Calagator
       RiCal.parse_string(raw_ical).map do |ri_cal_calendar|
         VCalendar.new(ri_cal_calendar)
       end
-
     rescue Exception => exception
       return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
+
       raise # Unknown error, reraise
     end
 
@@ -21,7 +21,7 @@ module Calagator
       end
     end
 
-    VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
+    VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m.freeze
 
     def vvenues
       @vvenues ||= ri_cal_calendar.to_s.scan(VENUE_CONTENT_RE).map do |raw_ical_venue|
@@ -32,7 +32,7 @@ module Calagator
 
   class VEvent < Struct.new(:ri_cal_event, :vvenues)
     def old?
-      cutoff = Time.now.yesterday
+      cutoff = Time.now.in_time_zone.yesterday
       (ri_cal_event.dtend || ri_cal_event.dtstart).to_time < cutoff
     end
 
@@ -67,7 +67,7 @@ module Calagator
     private
 
     def venue_uid
-      ri_cal_event.location_property.try(:params).try(:[], "VVENUE")
+      ri_cal_event.location_property.try(:params).try(:[], 'VVENUE')
     end
   end
 
@@ -78,13 +78,14 @@ module Calagator
 
     def method_missing(method, *args, &block)
       vcard_hash_key = method.to_s.upcase
-      return vcard_hash[vcard_hash_key] if vcard_hash.has_key?(vcard_hash_key)
+      return vcard_hash[vcard_hash_key] if vcard_hash.key?(vcard_hash_key)
+
       super
     end
 
     def respond_to?(method, include_private = false)
       vcard_hash_key = method.to_s.upcase
-      vcard_hash.has_key?(vcard_hash_key) || super
+      vcard_hash.key?(vcard_hash_key) || super
     end
 
     def latitude
@@ -99,6 +100,7 @@ module Calagator
 
     def geo_latlng
       return [] unless geo
+
       geo.split(/;/).map(&:to_f)
     end
 
@@ -112,14 +114,13 @@ module Calagator
       hash_from_vcard_lines(vcard_lines)
     end
 
-    VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/
+    VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/.freeze
 
     def hash_from_vcard_lines(vcard_lines)
-      vcard_lines.reduce({}) do |vcard_hash, vcard_line|
+      vcard_lines.each_with_object({}) do |vcard_line, vcard_hash|
         vcard_line.match(VCARD_LINES_RE) do |match|
           vcard_hash[match[:key]] ||= match[:value]
         end
-        vcard_hash
       end
     end
   end

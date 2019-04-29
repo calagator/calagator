@@ -5,8 +5,8 @@ class RemoveUpdates < ActiveRecord::Migration
 
   def down
     create_table :updates do |t|
-      t.integer "source_id"
-      t.text    "status"
+      t.integer 'source_id'
+      t.text    'status'
       t.timestamps
     end
   end

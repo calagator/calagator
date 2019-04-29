@@ -1,4 +1,4 @@
-require "formtastic"
+require 'formtastic'
 # --------------------------------------------------------------------------------------------------
 # Please note: If you're subclassing Formtastic::FormBuilder, Formtastic uses
 # class_attribute for these configuration attributes instead of the deprecated
@@ -71,7 +71,6 @@ Formtastic::FormBuilder.all_fields_required_by_default = false
 # specifying that class here.  Defaults to Formtastic::FormBuilder.
 # Formtastic::Helpers::FormHelper.builder = MyCustomBuilder
 
-
 # # Hack to disable Formtastic's HTML5 'required' attributes until Chrome properly supports the novalidate option.
 # module NoHtmlRequired
 #   def input_html_options_with_no_html_5_required_attribute
@@ -88,13 +87,13 @@ Formtastic::FormBuilder.all_fields_required_by_default = false
 #
 #   More info: https://github.com/justinfrench/formtastic/wiki/Upgrading-to-Formtastic-3.1
 
-require "formtastic/version"
+require 'formtastic/version'
 
 if Formtastic::VERSION.to_f < 4.0
   Formtastic::FormBuilder.action_class_finder = Formtastic::ActionClassFinder
   Formtastic::FormBuilder.input_class_finder  = Formtastic::InputClassFinder
 else
-  warn "FIXME: Manual setting of Formtastic::FormBuilder #action_class_finder " +
-         "and #input_class_finder in config/initializers/formtastic.rb can be " +
-         "removed."
+  warn 'FIXME: Manual setting of Formtastic::FormBuilder #action_class_finder ' +
+       'and #input_class_finder in config/initializers/formtastic.rb can be ' +
+       'removed.'
 end
