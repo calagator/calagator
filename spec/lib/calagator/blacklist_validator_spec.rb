@@ -45,7 +45,7 @@ module Calagator
       let(:blacklist_file_path) { Rails.root.join('config/blacklist.txt') }
 
       before do
-        allow(File).to receive(:exists?).with(blacklist_file_path).and_return(true)
+        allow(File).to receive(:exist?).with(blacklist_file_path).and_return(true)
         expect(File).to receive(:readlines).with(blacklist_file_path).and_return(['Kltpzyxm'])
       end
 
