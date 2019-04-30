@@ -35,7 +35,7 @@
 #   * config/blacklist-local.txt
 
 class BlacklistValidator < ActiveModel::EachValidator
-  BLACKLIST_DEFAULT_MESSAGE = "contains blacklisted content"
+  BLACKLIST_DEFAULT_MESSAGE = 'contains blacklisted content'.freeze
 
   def validate_each(record, attribute, value)
     if value.present? && patterns.any? { |pattern| value.match(pattern) }
@@ -53,14 +53,14 @@ class BlacklistValidator < ActiveModel::EachValidator
     @patterns ||= options.fetch(:patterns) do
       [
         Calagator.blacklist_patterns,
-        get_blacklist_patterns_from(options.fetch(:blacklist, "blacklist.txt")),
+        get_blacklist_patterns_from(options.fetch(:blacklist, 'blacklist.txt'))
       ].flatten.compact
     end
   end
 
   def get_blacklist_patterns_from(filename)
-    filename = Rails.root.join('config',filename) unless filename.match(/[\/\\]/)
-    return unless File.exists?(filename)
+    filename = Rails.root.join('config', filename) unless filename =~ %r{[/\\]}
+    return unless File.exist?(filename)
 
     File.readlines(filename).map do |line|
       Regexp.new(line.strip, Regexp::IGNORECASE)

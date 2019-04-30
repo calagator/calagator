@@ -1,7 +1,7 @@
 module Calagator
   class Event < ActiveRecord::Base
     class Browse < Struct.new(:order, :date, :time)
-      def initialize(attributes={})
+      def initialize(attributes = {})
         members.each do |key|
           send "#{key}=", attributes[key]
         end
@@ -48,9 +48,9 @@ module Calagator
 
       def filter_by_date
         @scope = if date
-          scope.within_dates(date_for(:start), date_for(:end))
-        else
-          scope.future
+                   scope.within_dates(date_for(:start), date_for(:end))
+                 else
+                   scope.future
         end
         self
       end
@@ -68,7 +68,8 @@ module Calagator
       end
 
       def date_for(kind)
-        return default_date_for(kind) unless date.present?
+        return default_date_for(kind) if date.blank?
+
         Date.parse(date[kind])
       rescue NoMethodError, ArgumentError, TypeError
         errors << "Can't filter by an invalid #{kind} date."
@@ -76,7 +77,9 @@ module Calagator
       end
 
       def time_for(kind)
-        Time.zone.parse(time[kind]) rescue nil
+        Time.zone.parse(time[kind])
+      rescue StandardError
+        nil
       end
 
       def before_time

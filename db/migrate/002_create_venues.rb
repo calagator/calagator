@@ -8,7 +8,6 @@ class CreateVenues < ActiveRecord::Migration
 
       t.timestamps
     end
-
   end
 
   def self.down

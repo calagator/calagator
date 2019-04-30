@@ -1,6 +1,7 @@
 #!/usr/bin/env ruby
 
-USAGE = <<-END
+# rubocop:disable Layout/IndentHeredoc
+USAGE = <<-END.freeze
 calagator: setup Calagator in a new or existing Rails applicaton
 
 Usage:
@@ -25,8 +26,9 @@ calagator install: install Calagator into an existing Rails application
     Options:
       none
 END
+# rubocop:enable Layout/IndentHeredoc
 
-TEMPLATE_PATH = File.expand_path("../../rails_template.rb", __FILE__)
+TEMPLATE_PATH = File.expand_path('../rails_template.rb', __dir__)
 
 command = ARGV.shift
 
@@ -38,4 +40,3 @@ when 'install'
 else
   puts USAGE
 end
-

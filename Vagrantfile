@@ -1,16 +1,14 @@
 # You can override settings in this file by creating a `Vagrantfile.local`
 # file, see the `VAGRANT.md` file for instructions.
 overrides = "#{__FILE__}.local"
-if File.exist?(overrides)
-    eval File.read(overrides)
-end
+eval File.read(overrides) if File.exist?(overrides)
 
 Vagrant.configure(2) do |config|
   # The most common configuration options are documented and commented below.
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
-  config.vm.box = "ubuntu/trusty64"
+  config.vm.box = 'ubuntu/trusty64'
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
@@ -19,8 +17,8 @@ Vagrant.configure(2) do |config|
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine.
-  config.vm.network "forwarded_port", guest: 80, host: defined?(HTTP_PORT) ? HTTP_PORT : 8080
-  config.vm.network "forwarded_port", guest: 3000, host: defined?(RAILS_PORT) ? RAILS_PORT : 8000
+  config.vm.network 'forwarded_port', guest: 80, host: defined?(HTTP_PORT) ? HTTP_PORT : 8080
+  config.vm.network 'forwarded_port', guest: 3000, host: defined?(RAILS_PORT) ? RAILS_PORT : 8000
 
   # Create a private network, which allows host-only access to the machine
   # using a specific IP.
@@ -38,7 +36,7 @@ Vagrant.configure(2) do |config|
   # config.vm.synced_folder "../data", "/vagrant_data"
 
   # Use more memory so Bundler works.
-  config.vm.provider "virtualbox" do |vb|
+  config.vm.provider 'virtualbox' do |vb|
     vb.memory = defined?(MEMORY) ? MEMORY : 2048
     vb.cpus = 2
   end
@@ -46,5 +44,5 @@ Vagrant.configure(2) do |config|
   # avoid tty errors in ubuntu
   # https://github.com/mitchellh/vagrant/issues/1673
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
-  config.vm.provision :shell, :path => "vagrant/provision.sh"
+  config.vm.provision :shell, path: 'vagrant/provision.sh'
 end

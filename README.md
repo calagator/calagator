@@ -1,6 +1,4 @@
-[![Gem Version](https://badge.fury.io/rb/calagator.svg)](http://badge.fury.io/rb/calagator)
 [![Build Status](https://travis-ci.org/calagator/calagator.svg?branch=master)](http://travis-ci.org/calagator/calagator)
-[![Code Climate](https://codeclimate.com/github/calagator/calagator/badges/gpa.svg)](https://codeclimate.com/github/calagator/calagator)
 [![Coverage Status](https://coveralls.io/repos/calagator/calagator/badge.svg)](https://coveralls.io/r/calagator/calagator)
 
 Calagator

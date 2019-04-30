@@ -28,21 +28,21 @@ class ActsAsTaggableOnMigration < ActiveRecord::Migration
     #   t.datetime :created_at
     # end
 
-    remove_index :taggings, :column => ["tag_id", "taggable_id", "taggable_type"]
+    remove_index :taggings, column: %w[tag_id taggable_id taggable_type]
     add_index :taggings, :tag_id
-    add_index :taggings, [:taggable_id, :taggable_type, :context]
+    add_index :taggings, %i[taggable_id taggable_type context]
   end
 
   def self.down
     remove_index :taggings, :tag_id
-    remove_index :taggings, :column => [:taggable_id, :taggable_type, :context]
+    remove_index :taggings, column: %i[taggable_id taggable_type context]
 
     remove_column :taggings, :tagger_id
     remove_column :taggings, :tagger_type
     remove_column :taggings, :context
     remove_column :taggings, :created_at
 
-    add_index "taggings", ["tag_id", "taggable_id", "taggable_type"], :name => "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", :unique => true
+    add_index 'taggings', %w[tag_id taggable_id taggable_type], name: 'index_taggings_on_tag_id_and_taggable_id_and_taggable_type', unique: true
 
     # drop_table :taggings
     # drop_table :tags

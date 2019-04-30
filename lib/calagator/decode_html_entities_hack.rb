@@ -14,20 +14,18 @@
 # undoing everything it does. Don't use that mode.
 #
 module Calagator
+  module DecodeHtmlEntitiesHack
+    def self.included(base)
+      base.set_callback(:validate, :before, :decode_html_entities)
+    end
 
-module DecodeHtmlEntitiesHack
-  def self.included(base)
-    base.set_callback(:validate, :before, :decode_html_entities)
-  end
-
-  def decode_html_entities
-    self.attributes.each do |field, value|
-      decoded_content = HTMLEntities.new.decode(value)
-      if decoded_content.present? && !(decoded_content == value)
-        self.send("#{field}=", decoded_content)
+    def decode_html_entities
+      attributes.each do |field, value|
+        decoded_content = HTMLEntities.new.decode(value)
+        if decoded_content.present? && decoded_content != value
+          send("#{field}=", decoded_content)
+        end
       end
     end
   end
-end
-
 end

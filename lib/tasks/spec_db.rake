@@ -1,8 +1,8 @@
 namespace :spec do
   namespace :db do
-    databases = [:postgresql, :mysql, :sqlite3]
+    databases = %i[postgresql mysql sqlite3]
 
-    desc "Run specs against all databases"
+    desc 'Run specs against all databases'
     task :all do
       failed = false
 
@@ -20,12 +20,10 @@ namespace :spec do
 
     def test_against(kind)
       sample = Rails.root + "config/database~#{kind}.sample.yml"
-      custom = Rails.root + "config/database~custom.yml"
-      backup = Rails.root + "config/database~custom.yml.backup"
+      custom = Rails.root + 'config/database~custom.yml'
+      backup = Rails.root + 'config/database~custom.yml.backup'
 
-      if custom.exist?
-        mv custom, backup
-      end
+      mv custom, backup if custom.exist?
 
       cp sample, custom
 
@@ -35,19 +33,15 @@ namespace :spec do
         Dir.chdir(Rails.root) do
           puts
           puts "## Database: #{kind}"
-          succeeded = system "unset BUNDLE_GEMFILE BUNDLE_BIN_PATH RUBYOPT; bundle --quiet && rake db:create:all db:migrate db:test:prepare spec"
+          succeeded = system 'unset BUNDLE_GEMFILE BUNDLE_BIN_PATH RUBYOPT; bundle --quiet && rake db:create:all db:migrate db:test:prepare spec'
         end
       ensure
         rm custom
 
-        if backup.exist?
-          mv backup, custom
-        end
+        mv backup, custom if backup.exist?
       end
 
-      unless succeeded
-        raise "Tests failed against database '#{kind}'"
-      end
+      raise "Tests failed against database '#{kind}'" unless succeeded
     end
   end
 end

@@ -2,17 +2,17 @@ require 'rails_helper'
 
 feature 'Venue Editing', js: true do
   let!(:venue) { create(:venue) }
-  let!(:event) { create(:event, venue: venue, start_time: Time.now.end_of_day - 1.hour) }
+  let!(:event) { create(:event, venue: venue, start_time: Time.now.in_time_zone.end_of_day - 1.hour) }
   let!(:new_venue) { build(:venue) }
-  let!(:venue_with_tags) {create(:venue, :with_multiple_tags)}
+  let!(:venue_with_tags) { create(:venue, :with_multiple_tags) }
 
   scenario 'A user edits an existing venue' do
-    visit "/"
+    visit '/'
     click_on venue.title
     click_on 'edit'
 
     venue_name = find_field('Venue Name').value
-    expect(venue_name).to have_content "#{venue.title}"
+    expect(venue_name).to have_content venue.title.to_s
 
     fill_in 'Venue Name', with: new_venue.title
     fill_in 'Street address', with: new_venue.street_address
@@ -87,8 +87,8 @@ feature 'Venue Deletion', js: true do
 
     expect(page).to have_content %("Test Venue" has been deleted)
 
-    click_on "List all venues"
+    click_on 'List all venues'
 
-    expect(page).to have_content "Sorry, there are no venues"
+    expect(page).to have_content 'Sorry, there are no venues'
   end
 end

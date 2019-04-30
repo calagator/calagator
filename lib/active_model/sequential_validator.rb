@@ -1,5 +1,5 @@
 class SequentialValidator < ActiveModel::Validator
-  def validate record
+  def validate(record)
     values = options[:attributes].map do |attribute|
       record.send(attribute)
     end.compact
@@ -8,4 +8,3 @@ class SequentialValidator < ActiveModel::Validator
     end
   end
 end
-

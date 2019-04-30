@@ -9,7 +9,7 @@ module StripWhitespace
         fields.each do |field|
           setter = "#{field}=".to_sym
           value = record.send(field.to_sym)
-          if value.respond_to?(:strip) and record.respond_to?(setter)
+          if value.respond_to?(:strip) && record.respond_to?(setter)
             record.send(setter, value.strip)
           end
         end

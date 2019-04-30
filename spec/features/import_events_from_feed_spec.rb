@@ -17,7 +17,7 @@ feature 'import events from a feed', js: true do
     fill_in 'URL', with: 'http://even.ts/feed'
     click_on 'Import'
 
-    expect(find(".flash")).to have_content %(
+    expect(find('.flash')).to have_content %(
       Imported 3 entries:
 
       Coffee with Jason
@@ -27,7 +27,7 @@ feature 'import events from a feed', js: true do
 
     expect(page).to have_content 'Viewing 3 future events'
 
-    expect(find(".event_table")).to have_content %(
+    expect(find('.event_table')).to have_content %(
       Thursday Apr 8
 
       Coffee with Jason

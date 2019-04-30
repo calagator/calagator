@@ -1,10 +1,8 @@
 module Calagator
-
   class AdminController < Calagator::ApplicationController
     require_admin
 
-    def index
-    end
+    def index; end
 
     def events
       if params[:query].blank?
@@ -19,7 +17,7 @@ module Calagator
         return redirect_to admin_events_path if @search.hard_failure?
       end
 
-      render "calagator/admin/events"
+      render 'calagator/admin/events'
     end
 
     def lock_event
@@ -32,9 +30,7 @@ module Calagator
         @event.lock_editing!
         flash[:success] = "Locked event #{@event.title} (#{@event.id})"
       end
-      redirect_to :action => :events, :query => params[:query]
+      redirect_to action: :events, query: params[:query]
     end
-
   end
-
 end

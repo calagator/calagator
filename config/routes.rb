@@ -8,9 +8,9 @@ Calagator::Engine.routes.draw do
   get 'defunct' => 'site#defunct'
 
   get 'admin' => 'admin#index'
-  get "admin/index"
-  get "admin/events"
-  post "lock_event" => "admin#lock_event"
+  get 'admin/index'
+  get 'admin/events'
+  post 'lock_event' => 'admin#lock_event'
 
   resources :events do
     collection do
@@ -41,7 +41,7 @@ Calagator::Engine.routes.draw do
     end
   end
 
-  resources :versions, :only => [:edit]
+  resources :versions, only: [:edit]
 
   # Rails 4.0 prevents referencing controllers outside of the Calagator namespace.
   # Work around this by aliasing PaperTrailManager inside Calagator:
@@ -51,8 +51,8 @@ Calagator::Engine.routes.draw do
   # In Rails 4.1+, we could use a leading slash to the controller path:
   # resources :changes, controller: '/paper_trail_manager/changes'
 
-  get 'recent_changes' => redirect("/changes")
-  get 'recent_changes.:format' => redirect("/changes.%{format}")
+  get 'recent_changes' => redirect('/changes')
+  get 'recent_changes.:format' => redirect('/changes.%{format}')
 
   get 'css/:name' => 'site#style'
   get 'css/:name.:format' => 'site#style'

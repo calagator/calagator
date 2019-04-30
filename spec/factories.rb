@@ -1,4 +1,4 @@
-require "faker"
+require 'faker'
 
 FactoryBot.define do
   factory :venue, class: Calagator::Venue do
@@ -17,11 +17,11 @@ FactoryBot.define do
     sequence(:url) { |n| "http://#{n}.com" }
     closed { false }
     wifi { true }
-    access_notes { "Access permitted." }
+    access_notes { 'Access permitted.' }
     after(:create) { Sunspot.commit if Calagator::Venue::SearchEngine.kind == :sunspot }
 
     trait :with_multiple_tags do
-      after(:create) { |venue| venue.update_attributes(tag_list: 'tag1, tag2') }
+      after(:create) { |venue| venue.update(tag_list: 'tag1, tag2') }
     end
   end
 
@@ -37,7 +37,7 @@ FactoryBot.define do
     end
 
     trait :with_multiple_tags do
-      after(:create) { |event| event.update_attributes(tag_list: 'tag1, tag2') }
+      after(:create) { |event| event.update(tag_list: 'tag1, tag2') }
     end
 
     trait :with_source do
@@ -58,6 +58,6 @@ FactoryBot.define do
 
   factory :source, class: Calagator::Source do
     sequence(:title) { |n| "Source #{n}" }
-    url { "http://example.com" }
+    url { 'http://example.com' }
   end
 end

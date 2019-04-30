@@ -20,7 +20,6 @@ module DomEquivalence
   end
 end
 
-
 class RSpec::Core::ExampleGroup
   include DomEquivalence
 end
