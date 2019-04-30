@@ -42,16 +42,16 @@ module Calagator
         it 'should save the source object when creating events' do
           expect(@source).to receive(:save!)
           post :import, source: { url: @source.url }
-          expect(flash[:success]).to match /Imported/i
+          expect(flash[:success]).to match(/Imported/i)
         end
 
         it 'should limit the number of created events to list in the flash' do
           excess = 5
           events = (1..(5 + excess))\
-                   .each_with_object([]) { |_i, _result| result << @event; }
+                   .each_with_object([]) { |_i, result| result << @event }
           expect(@source).to receive(:to_events).and_return(events)
           post :import, source: { url: @source.url }
-          expect(flash[:success]).to match /And #{excess} other events/si
+          expect(flash[:success]).to match(/And #{excess} other events/si)
         end
       end
 
@@ -79,37 +79,37 @@ module Calagator
         it 'should fail when host responds with no events' do
           expect(@source).to receive(:create_events!).and_return([])
           post :import, source: { url: 'http://invalid.host' }
-          expect(flash[:failure]).to match /Unable to find any upcoming events to import from this source/
+          expect(flash[:failure]).to match(/Unable to find any upcoming events to import from this source/)
         end
 
         it 'should fail when host responds with a 404' do
           assert_import_raises(Source::Parser::NotFound)
-          expect(flash[:failure]).to match /No events found at remote site/
+          expect(flash[:failure]).to match(/No events found at remote site/)
         end
 
         it 'should fail when host responds with an error' do
           assert_import_raises(OpenURI::HTTPError.new('omfg', 'bbq'))
-          expect(flash[:failure]).to match /Couldn't download events/
+          expect(flash[:failure]).to match(/Couldn't download events/)
         end
 
         it 'should fail when host is not responding' do
           assert_import_raises(Errno::EHOSTUNREACH.new('omfg'))
-          expect(flash[:failure]).to match /Couldn't connect to remote site/
+          expect(flash[:failure]).to match(/Couldn't connect to remote site/)
         end
 
         it 'should fail when host is not found' do
           assert_import_raises(SocketError.new('omfg'))
-          expect(flash[:failure]).to match /Couldn't find IP address for remote site/
+          expect(flash[:failure]).to match(/Couldn't find IP address for remote site/)
         end
 
         it 'should fail when host requires authentication' do
           assert_import_raises(Source::Parser::HttpAuthenticationRequiredError.new('omfg'))
-          expect(flash[:failure]).to match /requires authentication/
+          expect(flash[:failure]).to match(/requires authentication/)
         end
 
         it 'should fail when host throws something strange' do
           assert_import_raises(TypeError)
-          expect(flash[:failure]).to match /Unknown error: TypeError/
+          expect(flash[:failure]).to match(/Unknown error: TypeError/)
         end
       end
     end
@@ -315,7 +315,7 @@ module Calagator
 
       describe 'with successful save' do
         def do_post
-          expect(@source).to receive(:update_attributes).and_return(true)
+          expect(@source).to receive(:update).and_return(true)
           post :create, source: {}
         end
 
@@ -332,7 +332,7 @@ module Calagator
 
       describe 'with failed save' do
         def do_post
-          expect(@source).to receive(:update_attributes).and_return(false)
+          expect(@source).to receive(:update).and_return(false)
           allow(@source).to receive_messages(new_record?: true)
           post :create, source: {}
         end
@@ -352,7 +352,7 @@ module Calagator
 
       describe 'with successful update' do
         def do_put
-          expect(@source).to receive(:update_attributes).and_return(true)
+          expect(@source).to receive(:update).and_return(true)
           put :update, id: '1'
         end
 
@@ -379,7 +379,7 @@ module Calagator
 
       describe 'with failed update' do
         def do_put
-          expect(@source).to receive(:update_attributes).and_return(false)
+          expect(@source).to receive(:update).and_return(false)
           put :update, id: '1'
         end
 
