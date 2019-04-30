@@ -2,7 +2,7 @@ require 'spec_helper'
 
 module Calagator
   describe TimeRangeHelper do
-    let(:start_time) { DateTime.new(2008, 4, 1, 9, 0o0).in_time_zone }
+    let(:start_time) { Time.utc(2008, 4, 1, 9, 0o0) }
 
     # Test all permutations of
     # - context-date: with vs without
@@ -12,13 +12,13 @@ module Calagator
       ['start time only', nil,
        '<time class="dtstart dt-start" title="2008-04-01T09:00:00" datetime="2008-04-01T09:00:00">Tuesday, April 1, 2008 at 9am</time>',
        '<time class="dtstart dt-start" title="2008-04-01T09:00:00" datetime="2008-04-01T09:00:00">9am</time>'],
-      ['same day & am-pm', DateTime.new(2008, 4, 1, 11, 0o0).in_time_zone,
+      ['same day & am-pm', Time.utc(2008, 4, 1, 11, 0o0),
        '<time class="dtstart dt-start" title="2008-04-01T09:00:00" datetime="2008-04-01T09:00:00">Tuesday, April 1, 2008 from 9</time>&ndash;<time class="dtend dt-end" title="2008-04-01T11:00:00" datetime="2008-04-01T11:00:00">11am</time>',
        '<time class="dtstart dt-start" title="2008-04-01T09:00:00" datetime="2008-04-01T09:00:00">9</time>&ndash;<time class="dtend dt-end" title="2008-04-01T11:00:00" datetime="2008-04-01T11:00:00">11am</time>'],
-      ['same day, different am-pm', DateTime.new(2008, 4, 1, 13, 30).in_time_zone,
+      ['same day, different am-pm', Time.utc(2008, 4, 1, 13, 30),
        '<time class="dtstart dt-start" title="2008-04-01T09:00:00" datetime="2008-04-01T09:00:00">Tuesday, April 1, 2008 from 9am</time>&ndash;<time class="dtend dt-end" title="2008-04-01T13:30:00" datetime="2008-04-01T13:30:00">1:30pm</time>',
        '<time class="dtstart dt-start" title="2008-04-01T09:00:00" datetime="2008-04-01T09:00:00">9am</time>&ndash;<time class="dtend dt-end" title="2008-04-01T13:30:00" datetime="2008-04-01T13:30:00">1:30pm</time>'],
-      ['different days', DateTime.new(2009, 4, 1, 13, 30).in_time_zone,
+      ['different days', Time.utc(2009, 4, 1, 13, 30),
        '<time class="dtstart dt-start" title="2008-04-01T09:00:00" datetime="2008-04-01T09:00:00">Tuesday, April 1, 2008 at 9am</time> through <time class="dtend dt-end" title="2009-04-01T13:30:00" datetime="2009-04-01T13:30:00">Wednesday, April 1, 2009 at 1:30pm</time>',
        '<time class="dtstart dt-start" title="2008-04-01T09:00:00" datetime="2008-04-01T09:00:00">9am</time> through <time class="dtend dt-end" title="2009-04-01T13:30:00" datetime="2009-04-01T13:30:00">Wednesday, April 1, 2009 at 1:30pm</time>']
     ]
