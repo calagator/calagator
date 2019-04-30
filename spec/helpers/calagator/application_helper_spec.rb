@@ -14,11 +14,12 @@ module Calagator
       end
 
       it 'should process Markdown references' do
-        expect(helper.format_description("
-  [SocketStream][1], a phenomenally fast real-time web framework for Node.js
+        desc = <<-DESC.strip_heredoc
+          [SocketStream][1], a phenomenally fast real-time web framework for Node.js
 
-  [1]: https://github.com/socketstream/socketstream
-        ")).to eq \
+          [1]: https://github.com/socketstream/socketstream
+        DESC
+        expect(helper.format_description(desc)).to eq \
           '<p><a href="https://github.com/socketstream/socketstream">SocketStream</a>, a phenomenally fast real-time web framework for Node.js</p>'
       end
     end
