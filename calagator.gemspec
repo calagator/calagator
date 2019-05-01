@@ -14,14 +14,14 @@ Gem::Specification.new do |s|
   s.description = 'Calagator is an open source community calendaring platform'
   s.license     = 'MIT'
 
-  s.required_ruby_version = ['>= 2.2.0', '< 2.4.0']
+  s.required_ruby_version = ['>= 2.2.0', '< 2.6.0']
 
   s.files = Dir['{app,config,lib,vendor}/**/*'] + Dir['db/**/*.rb'] + ['MIT-LICENSE.txt', 'Rakefile', 'README.md', 'rails_template.rb']
   s.test_files = Dir['spec/**/*']
   s.executables << 'calagator'
 
   # When changing this Rails requirement, also update RAILS_REQUIREMENT in rails_template.rb
-  s.add_dependency 'rails', '~> 4.0'
+  s.add_dependency 'rails', '~> 4.2'
 
   # s.add_dependency "mofo", path: "vendor/gems/mofo-0.2.8" # vendored fork with hpricot dependency replaced with nokogiri
 
