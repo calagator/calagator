@@ -15,7 +15,8 @@ module Calagator
 
       def text
         icon = TagIcon.new(tag.name, context)
-        [icon.exists? && icon.image_tag, context.escape_once(tag.name)].compact.join(' ').html_safe
+        i = icon.exists? ? icon.image_tag : nil
+        [i, context.escape_once(tag.name)].compact.join(' ').html_safe
       end
 
       def url
@@ -46,7 +47,11 @@ module Calagator
       end
 
       def exists?
-        Rails.application.assets && Rails.application.assets[image_path]
+        if Rails.configuration.assets.compile
+          Rails.application.precompiled_assets.include?(image_path)
+        else
+          Rails.application.assets_manifest.assets[image_path].present?
+        end
       end
 
       private
