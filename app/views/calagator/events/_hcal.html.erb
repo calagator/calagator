@@ -1,24 +1,24 @@
-<div class="vevent">
-  <h1 class="summary"><%= @event.title %></h1>
+<div class="vevent h-event">
+  <h1 class="summary p-name"><%= @event.title %></h1>
   <div class='date'><%= normalize_time(@event) -%></div>
   <% unless @event.venue.blank? %>
-    <div class="location vcard">
-    <a class="url" href='<%= url_for venue_url(@event.venue) %>'><span class='fn org'><%= @event.venue.title -%></span></a>
-    <div class="adr">
+    <div class="location vcard p-location h-card">
+    <a class="url" href='<%= url_for venue_url(@event.venue) %>'><span class='fn org p-name'><%= @event.venue.title -%></span></a>
+    <div class="adr p-adr h-adr">
       <% if !@event.venue.street_address.blank? -%>
-        <div class="street-address"><%= @event.venue.street_address -%></div>
+        <div class="street-address p-street-address"><%= @event.venue.street_address -%></div>
       <% end %>
       <% if !@event.venue.locality.blank? -%>
-        <span class="locality"><%= @event.venue.locality -%></span>
+        <span class="locality p-locality"><%= @event.venue.locality -%></span>
       <% end -%>
       <% if !@event.venue.region.blank? -%>
-        , <span class="region"><%= @event.venue.region -%></span>
+        , <span class="region p-region"><%= @event.venue.region -%></span>
       <% end -%>
       <% if !@event.venue.postal_code.blank? -%>
-        <span class="postal-code"><%= @event.venue.postal_code -%></span>
+        <span class="postal-code p-postal-code"><%= @event.venue.postal_code -%></span>
       <% end -%>
       <% if !@event.venue.country.blank? -%>
-        <div class='country-name'><%= @event.venue.country -%></div>
+        <div class="country-name p-country-name"><%= @event.venue.country -%></div>
       <% end -%>
       <% if @event.venue && @event.venue.full_address.present? -%>
         (<a href='<%=google_maps_url(@event.venue.full_address) -%>'>map</a>)
@@ -27,14 +27,14 @@
     </div>
   <% end -%>
   <% unless @event.description.blank? -%>
-  <div class="description">
+  <div class="description p-description">
     <%= format_description(@event.description) %>
   </div>
   <% end -%>
   <% unless @event.url.blank? -%>
   <h3>Links</h3>
   <ul>
-    <li><%= link_to "Website", @event.url, :class => "url" -%></li>
+    <li><%= link_to "Website", @event.url, :class => "url u-url" -%></li>
   </ul>
   <% end -%>
 </div>
