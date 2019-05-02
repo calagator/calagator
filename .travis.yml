@@ -28,7 +28,7 @@ before_install:
   - sudo apt-get install chromium-chromedriver
   - google-chrome-stable --headless --disable-gpu
   - gem update --system
-  - gem install bundler
+  - gem install bundler -v 1.17.3
 
 before_script:
   - "export PATH=$PATH:/usr/lib/chromium-browser/"
