@@ -2,10 +2,12 @@
 
 source 'https://rubygems.org'
 
-gem 'byebug', platform: 'mri'
-gem 'mysql2', '~> 0.3.18'
-gem 'pg', '~> 0.18.1'
-gem 'rails', '4.2.2'
+gem 'rails', '4.2.11.1'
 gem 'turbolinks'
+gem 'recaptcha', require: 'recaptcha/rails'
+gem 'byebug', platform: 'mri'
+gem 'launchy'
+gem 'mysql2', '~> 0.5.2'
+gem 'pg', '~> 0.18.1'
 
 gemspec path: '../'

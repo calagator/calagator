@@ -3,14 +3,12 @@ add_ons:
 language: ruby
 
 rvm:
-  - 2.2.6
-  - 2.3.3
-  - 2.4.0
+  - 2.3.7
+  - 2.4.6
+  - 2.5.5
   - rbx-2
 
 gemfile:
-  - gemfiles/rails_4_0.gemfile
-  - gemfiles/rails_4_1.gemfile
   - gemfiles/rails_4_2.gemfile
 
 env:
@@ -22,17 +20,14 @@ env:
 matrix:
   fast_finish: true
   allow_failures:
-    - rvm: 2.4.0
+    - rvm: 2.5.5
     - rvm: rbx-2
-  exclude:
-    - rvm: rbx-2
-      gemfile: gemfiles/rails_4_0.gemfile
-    - rvm: rbx-2
-      gemfile: gemfiles/rails_4_1.gemfile
 
 before_install:
   - sudo apt-get install chromium-chromedriver
   - google-chrome-stable --headless --disable-gpu
+  - gem uninstall -i $(rvm gemdir)@global -ax bundler
+  - gem install bundler -v 1.17.3
 
 before_script:
   - "export PATH=$PATH:/usr/lib/chromium-browser/"
