@@ -4,7 +4,7 @@ Calagator is distributed as a [Rails engine](http://guides.rubyonrails.org/engin
 
 ## Requirements
 
-Calagator requires Ruby 2.2.0 - 2.3.x, and a host application built on Rails 4 or newer.
+Calagator requires Ruby >= 2.4.0, and a host application built on Rails 4 or newer.
 
 ## Running a site based on Calagator
 
