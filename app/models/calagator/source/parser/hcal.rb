@@ -2,19 +2,17 @@
 #
 # Reads hCalendar events.
 
-vendored_mofo_dir = File.expand_path('../../../../../vendor/gems/mofo-0.2.8/lib', File.dirname(__FILE__))
-$: << vendored_mofo_dir
-require 'mofo'
+require 'microformats'
 
 module Calagator
   class Source::Parser::Hcal < Source::Parser
     self.label = :hCalendar
 
     EVENT_TO_HCALENDAR_FIELD_MAP = {
-      title: :summary,
+      title: :name,
       description: :description,
-      start_time: :dtstart,
-      end_time: :dtend,
+      start_time: :start,
+      end_time: :end,
       url: :url,
       venue: :location
     }.freeze
@@ -23,9 +21,9 @@ module Calagator
       hcals.map do |hcal|
         event = Event.new
         event.source = source
-        EVENT_TO_HCALENDAR_FIELD_MAP.each do |field, mofo_field|
-          next unless hcal.respond_to?(mofo_field)
-          next unless value = decoded_field(hcal, mofo_field)
+        EVENT_TO_HCALENDAR_FIELD_MAP.each do |field, hcal_field|
+          next unless hcal.respond_to?(hcal_field)
+          next unless value = decoded_field(hcal, hcal_field)
 
           event.send "#{field}=", value
         end
@@ -37,12 +35,12 @@ module Calagator
 
     private
 
-    def decoded_field(hcal, mofo_field)
-      return unless raw_field = hcal.send(mofo_field)
+    def decoded_field(hcal, hcal_field)
+      return unless raw_field = hcal.send(hcal_field)
 
-      decoded_field = case mofo_field
-                      when :dtstart
-                        HTMLEntities.new.decode(raw_field)
+      decoded_field = case hcal_field
+                      when :start, :end
+                        Time.parse(raw_field).in_time_zone
                       when :location
                         to_venue(raw_field)
                       else
@@ -51,7 +49,7 @@ module Calagator
     end
 
     VENUE_TO_HCARD_FIELD_MAP = {
-      title: :fn,
+      title: :name,
       telephone: :tel,
       email: :email,
       description: :note
@@ -64,21 +62,21 @@ module Calagator
     def to_venue(value)
       venue = Venue.new
       venue.source = source
-      case raw = value
+      case value
       when String
-        venue.title = raw
-      when HCard
-        assign_fields(venue, raw)
-        assign_geo(venue, raw) if raw.respond_to?(:geo)
-        assign_address(venue, raw) if raw.respond_to?(:adr)
+        venue.title = value
+      when Microformats::ParserResult
+        assign_fields(venue, value)
+        assign_geo(venue, value) if value.respond_to?(:geo)
+        assign_address(venue, value) if value.respond_to?(:adr)
       end
       venue.geocode!
       venue_or_duplicate(venue)
     end
 
     def assign_fields(venue, raw)
-      VENUE_TO_HCARD_FIELD_MAP.each do |field, mofo_field|
-        venue[field] = raw.send(mofo_field).try(:strip_html) if raw.respond_to?(mofo_field)
+      VENUE_TO_HCARD_FIELD_MAP.each do |field, hcal_field|
+        venue[field] = raw.send(hcal_field) if raw.respond_to?(hcal_field)
       end
     end
 
@@ -99,9 +97,7 @@ module Calagator
     end
 
     def hcals
-      content = self.class.read_url(url)
-      something = hCalendar.find(text: content)
-      something.is_a?(hCalendar) ? [something] : something
+      Microformats.parse(url).items.select { |item| item.type == 'h-event' }
     end
   end
 end

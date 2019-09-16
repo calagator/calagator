@@ -23,8 +23,6 @@ Gem::Specification.new do |s|
   # When changing this Rails requirement, also update RAILS_REQUIREMENT in rails_template.rb
   s.add_dependency 'rails', '~> 4.2'
 
-  # s.add_dependency "mofo", path: "vendor/gems/mofo-0.2.8" # vendored fork with hpricot dependency replaced with nokogiri
-
   s.add_dependency 'acts-as-taggable-on', '~> 3.5'
   s.add_dependency 'bluecloth', '~> 2.2'
   s.add_dependency 'font-awesome-rails', '~> 4.3'
@@ -36,6 +34,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'loofah', '~> 2.0'
   s.add_dependency 'loofah-activerecord', '>= 1.2', '< 3.0'
   s.add_dependency 'lucene_query', '0.1'
+  s.add_dependency 'microformats', '~> 4.0.7'
   s.add_dependency 'nokogiri'
   s.add_dependency 'paper_trail_manager', '~> 0.5.0'
   s.add_dependency 'rack-contrib', '~> 1.0'
