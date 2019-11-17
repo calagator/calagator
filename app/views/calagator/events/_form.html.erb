@@ -15,7 +15,7 @@
 
 <%= semantic_form_for(event, :html => {:id => 'event_form', :class => 'standard_form', :novalidate => 'novalidate'}) do |f| %>
   <%= f.inputs :name => "#{'Editing: ' unless event.new_record?} <em>#{event.title}</em>".html_safe do %>
-    <%= f.input :title, label: "Event Name", input_html: { autofocus: true } %>
+    <%= f.input :title, label: "Event Name", required: true, input_html: { autofocus: true } %>
     <li class="string input required stringish" id="event_venue_title_input">
       <%= label_tag :venue_name, "Venue", :class => 'label' %>
       <%= text_field_tag 'venue_name', '', :class=> 'autocomplete', :value => !event.venue.nil? ? event.venue.title : params[:venue_name] %>
@@ -27,17 +27,21 @@
     </li>
     <li id="event_times" class='input'>
       <%= f.label :when, :class => 'label'  do -%>
-        When<abbr title="required">*</abbr>
+        When<abbr title="required" aria-hidden="true">*</abbr>
       <% end -%>
         <div class="event_start">
-          <%= text_field_tag 'start_date', format_event_date(event.start_time), :id => 'date_start', :class => 'date_picker' %>
-          <span class="at">@</span>
-          <%= text_field_tag 'start_time', format_event_time(event.start_time), :id => 'time_start', :class => 'time_picker' %>
+          <%= label_tag :date_start, "Start Date", :class => ['label', 'sr-only'] %>
+          <%= text_field_tag 'start_date', format_event_date(event.start_time), :id => 'date_start', :class => 'date_picker', required: true %>
+          <span class="at" aria-hidden="true">@</span>
+          <%= label_tag :time_start, "Start Time", :class => ['label', 'sr-only'] %>
+          <%= text_field_tag 'start_time', format_event_time(event.start_time), :id => 'time_start', :class => 'time_picker', required: true %>
         </div>
-        <span class="to">to</span>
+        <span class="to" aria-hidden="true">to</span>
         <div class="event_end">
+          <%= label_tag :date_end, "End Date", :class => ['label', 'sr-only'] %>
           <%= text_field_tag 'end_date', format_event_date(event.end_time), :id => 'date_end', :class => 'date_picker' %>
-          <span class="at">@</span>
+          <span class="at" aria-hidden="true">@</span>
+          <%= label_tag :time_end, "End Time", :class => ['label', 'sr-only'] %>
           <%= text_field_tag 'end_time', format_event_time(event.end_time), :id => 'time_end', :class => 'time_picker' %>
         </div>
         <%= f.semantic_errors :start_date, :start_time, :end_date, :end_time %>
