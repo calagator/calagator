@@ -31,7 +31,7 @@ Formtastic::FormBuilder.all_fields_required_by_default = false
 # '<abbr title="required">*</abbr>'. In other words, if you configure formtastic.required
 # in your locale, it will replace the abbr title properly. But if you don't want to use
 # abbr tag, you can simply give a string as below
-# Formtastic::FormBuilder.required_string = "(required)"
+Formtastic::FormBuilder.required_string = proc { %{<abbr title="#{Formtastic::I18n.t(:required)}" aria-hidden="true">*</abbr>}.html_safe }
 
 # Set the string that will be appended to the labels/fieldsets which are optional
 # Defaults to an empty string ("") and also accepts procs (see required_string above)
@@ -88,6 +88,10 @@ Formtastic::FormBuilder.all_fields_required_by_default = false
 #   warning from spewing during test runs.
 #
 #   More info: https://github.com/justinfrench/formtastic/wiki/Upgrading-to-Formtastic-3.1
+
+# You can opt-in to Formtastic's use of the HTML5 `required` attribute on `<input>`, `<select>`
+# and `<textarea>` tags by setting this to true (defaults to false).
+Formtastic::FormBuilder.use_required_attribute = true
 
 require 'formtastic/version'
 
