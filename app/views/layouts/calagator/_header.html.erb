@@ -3,12 +3,12 @@
           <%= link_to Calagator.title, root_path, id: "project_title" %>
 
           <div id="top_menu">
-            <div id='app_menu'>
+            <nav id='app_menu'>
               <ul>
                   <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
                   <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
               </ul>
-            </div>
+            </nav>
             <%= render partial: 'layouts/calagator/global_search' %>
           </div>
         </div>
