@@ -3,7 +3,7 @@
           <%= link_to Calagator.title, root_path, id: "project_title" %>
 
           <div id="top_menu">
-            <nav id='app_menu'>
+            <nav id='app_menu' aria-label='primary'>
               <ul>
                   <li class='<%=link_class[:events]%>'><%= link_to "Events", events_path %></li>
                   <li class='<%=link_class[:venues]%>'><%= link_to "Venues", venues_path %></li>
