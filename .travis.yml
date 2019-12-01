@@ -11,6 +11,9 @@ rvm:
 gemfile:
   - gemfiles/rails_4_2.gemfile
 
+services:
+  - mysql
+
 env:
   matrix:
     - DB=mysql
