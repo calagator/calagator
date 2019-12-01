@@ -10,6 +10,17 @@ Conventions used in this document:
 
 List of Calagator releases and changes, with the latest at the top:
 
+### v1.1.0
+
+Enhancements:
+
+    * Replace mofo with microformats for better h-event parsing and maintainability (#587)
+    * Add microformats2 tags to hCalendar markup export (#588)
+
+Bug fixes:
+
+    * Fix tag icons (#586)
+
 ### v1.0.0
     * [!] This release completely changes the way in which Calagator is distributed, moving from a standalone Rails app to a [Rails engine](http://guides.rubyonrails.org/engines.html). Instead of deploying Calagator instance from a modified version of this code, Calagator is now included as a gem within a new Rails app. Please review the updated installation instructions in INSTALL.md.
     * If you are upgrading a site based on an earlier version of Calagator, please [drop us a line](http://groups.google.com/group/calagator-development/). We've recently upgraded [calagator.org](http://calagator.org) and can help to point you in the right direction.
