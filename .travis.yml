@@ -8,6 +8,9 @@ rvm:
   - 2.5.5
   - rbx-2
 
+jdk:
+  - openjdk8
+
 gemfile:
   - gemfiles/rails_4_2.gemfile
 
