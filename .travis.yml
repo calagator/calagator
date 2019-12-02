@@ -1,5 +1,6 @@
 add_ons:
   chrome: stable
+
 language: ruby
 
 rvm:
@@ -31,10 +32,8 @@ matrix:
     - rvm: rbx-2
 
 before_install:
-  - sudo apt-get install chromium-chromedriver
-  - google-chrome-stable --headless --disable-gpu
-  - gem uninstall -i $(rvm gemdir)@global -ax bundler
-  - gem install bundler -v 1.17.3
+  - gem uninstall -v '>= 2' -i $(rvm gemdir)@global -ax bundler || true
+  - gem install bundler -v '< 2'
 
 before_script:
   - "export PATH=$PATH:/usr/lib/chromium-browser/"
