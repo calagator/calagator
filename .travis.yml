@@ -3,6 +3,10 @@ add_ons:
 
 language: ruby
 
+services:
+  - mysql
+  - postgresql
+
 rvm:
   - 2.4.9
   - 2.5.7
@@ -45,4 +49,5 @@ before_script:
 
 script:
   - bundle exec rake spec --trace
+
 cache: bundler
