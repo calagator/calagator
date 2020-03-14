@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails-observers'
   s.add_dependency 'rails_autolink', '~> 1.1'
   s.add_dependency 'recaptcha', '~> 5.3.0'
-  s.add_dependency 'rest-client', '~> 1.8'
+  s.add_dependency 'rest-client', '~> 2.0'
   s.add_dependency 'ri_cal', '~> 0.8.8'
   s.add_dependency 'sassc-rails', '~> 1.3'
   s.add_dependency 'sunspot_rails', '~> 2.1'
