@@ -1,0 +1,77 @@
+name: Tests
+
+on:
+  pull_request:
+    branches:
+      - 'master'
+  push:
+    branches:
+      - 'master'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:11.5
+        ports: ["5432:5432"]
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    strategy:
+      fail-fast: false
+      matrix:
+        db:
+          - mysql
+          - postgresql
+          - sqlite3
+        ruby:
+          - 2.5.7
+          - 2.6.5
+          - 2.7.0
+        gemfile:
+          - gemfiles/rails_4_2.gemfile
+
+    env:
+      BUNDLER_VERSION: 1.17.3
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v1
+        with:
+          java-version: 8
+      - uses: actions/setup-ruby@v1
+        with:
+          ruby-version: ${{ matrix.ruby }}
+      - uses: actions/cache@v1
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-${{ matrix.ruby}}-gems-${{ hashFiles('**/calagator.gemspec') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.ruby }}-gems-
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install libpq-dev postgresql-client libmysqlclient-dev mysql-client sqlite3 libsqlite3-dev
+          gem install bundler -v $BUNDLER_VERSION
+      - name: bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      - name: Generate host app for testing
+        run: bundle _1.17.3_ exec bin/calagator new spec/dummy --dummy --database=${{ matrix.db }} --postgres-username=postgres
+      - name: Set Postgres Username + Host
+        if: matrix.db == 'postgresql'
+        run: |
+          sed -e $'s/adapter: postgresql/adapter: postgresql\\\n  username: postgres\\\n  host: localhost/' -i -- spec/dummy/config/database.yml
+      - name: Set MySQL Password
+        if: matrix.db == 'mysql'
+        run: |
+          sed -e 's/password:.*/password: root/' -i -- spec/dummy/config/database.yml
+      - name: Prepare Database
+        run: bundle exec rake app:db:create app:db:migrate app:db:seed
+      - name: Start Solr
+        run: bundle exec rake app:sunspot:solr:start_with_waiting
+      - name: Run RSpec
+        run: bundle exec rake spec
