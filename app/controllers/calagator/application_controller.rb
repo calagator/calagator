@@ -21,7 +21,7 @@ module Calagator
     skip_before_action :verify_authenticity_token, if: :json_request?
 
     def recaptcha_enabled?
-      Recaptcha.configuration.public_key.present?
+      Recaptcha.configuration.site_key.present?
     end
 
     protected

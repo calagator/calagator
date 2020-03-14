@@ -48,14 +48,14 @@ module Calagator
       subject do
         result = nil
 
-        Recaptcha.with_configuration(public_key: temporary_key) do
+        Recaptcha.with_configuration(site_key: temporary_key) do
           result = controller.send(:recaptcha_enabled?)
         end
 
         result
       end
 
-      context 'when Recaptcha public_key is not set' do
+      context 'when Recaptcha site_key is not set' do
         it { is_expected.to be_falsey }
       end
 
