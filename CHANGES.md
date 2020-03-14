@@ -225,7 +225,7 @@ Prior to version 1.0, Calagator was distributed as a standalone Rails app instea
   * v0.20090914
     * [DEPENDENCY] Upgraded to Ruby on Rails 2.3.x and updated many gems.
     * [THEME] Upgraded `theme_support`, which expects layouts to be in `MYTHEME/views/layouts` rather than `MYTHEME/layouts`.
-    * [SETTING] Added `SECRETS.administrator_email` with email to send errors, extracted it from `config/initalizer/exception_notification_setup.rb`.
+    * [SETTING] Added `SECRETS.administrator_email` with email to send errors, extracted it from `config/initializer/exception_notification_setup.rb`.
     * [MIGRATION] Added PaperTrail plugin to provide complete version tracking of all changes, including deletes.
     * Added recent changes tracking and rollback using PaperTrail.
     * Added new README.md, INSTALL.md, CONTRIBUTORS.md, and CHANGES.md files.

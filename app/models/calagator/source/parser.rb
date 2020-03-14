@@ -11,7 +11,7 @@ module Calagator
   class Source::Parser < Struct.new(:url, :source)
     # Return an Array of unsaved Event instances.
     def self.to_events(url: nil, source: nil)
-      # Return events from the first parser that suceeds
+      # Return events from the first parser that succeeds
       events = matched_parsers(url).lazy.collect do |parser|
         parser.new(url, source).to_events
       end.detect(&:present?)
