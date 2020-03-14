@@ -33,6 +33,7 @@ matrix:
   fast_finish: true
   allow_failures:
     - rvm: 2.6.3
+    - rvm: 2.7.0
     - rvm: rbx-2
 
 before_install:
