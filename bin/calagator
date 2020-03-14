@@ -2,7 +2,7 @@
 
 # rubocop:disable Layout/IndentHeredoc
 USAGE = <<-END.freeze
-calagator: setup Calagator in a new or existing Rails applicaton
+calagator: setup Calagator in a new or existing Rails application
 
 Usage:
   calagator new APP_PATH [options]
