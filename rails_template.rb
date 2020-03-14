@@ -43,5 +43,14 @@ end
 gem 'calagator', (generating_dummy && { path: relative_calagator_path.to_s })
 run 'bundle install'
 rake 'db:create'
+inside('app/assets') do
+  create_file('config/manifest.js') do
+    <<-MANIFEST
+//= link application.js
+//= link application.css
+//= link calagator/manifest.js
+    MANIFEST
+  end
+end
 generate 'calagator:install', (generating_dummy && '--dummy')
 generate 'sunspot_rails:install'
