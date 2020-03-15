@@ -45,10 +45,10 @@ run 'bundle install'
 rake 'db:create'
 inside('app/assets') do
   create_file('config/manifest.js') do
-    <<-MANIFEST
-//= link application.js
-//= link application.css
-//= link calagator/manifest.js
+    <<-MANIFEST.strip_heredoc
+      //= link application.js
+      //= link application.css
+      //= link calagator/manifest.js
     MANIFEST
   end
 end
