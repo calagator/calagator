@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StripWhitespace
   def self.included(base)
     base.extend(ClassMethods)

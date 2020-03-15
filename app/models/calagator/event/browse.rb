@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   class Event < ActiveRecord::Base
     class Browse < Struct.new(:order, :date, :time)
@@ -20,11 +22,11 @@ module Calagator
       end
 
       def start_time
-        time_for(:start).strftime('%I:%M %p') if time_for(:start)
+        time_for(:start)&.strftime('%I:%M %p')
       end
 
       def end_time
-        time_for(:end).strftime('%I:%M %p') if time_for(:end)
+        time_for(:end)&.strftime('%I:%M %p')
       end
 
       def errors

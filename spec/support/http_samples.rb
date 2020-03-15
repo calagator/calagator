@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 SAMPLES_PATH = File.expand_path(File.dirname(__FILE__) + '/samples') unless defined?(SAMPLES_PATH)
 
 def read_sample(path_fragment)

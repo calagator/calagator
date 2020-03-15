@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # We're extending ActsAsTaggableOn's Tag model to include support for machine
 # tags.
 #

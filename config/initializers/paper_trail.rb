@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # SerializedAttributes is deprecated in Rails 4.2.x, and will be removed in
 #   Rails 5. PaperTrail spews a ton of deprecation warnings about this issue,
 #   and while a fix for this issue is in their pending (as of 6/30/15) 4.0

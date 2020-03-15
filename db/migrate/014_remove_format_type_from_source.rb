@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveFormatTypeFromSource < ActiveRecord::Migration
   def self.up
     remove_column :sources, :format_type

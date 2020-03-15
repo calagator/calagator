@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # = DuplicateChecking
 #
 # This mixin provides a way for ActiveRecord classes to find and squash duplicates.

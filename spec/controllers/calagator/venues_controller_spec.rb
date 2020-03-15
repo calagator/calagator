@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require './spec/controllers/squash_many_duplicates_examples'
 

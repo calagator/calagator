@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   module TimeRangeHelper
     extend self

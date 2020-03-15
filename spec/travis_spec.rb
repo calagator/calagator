@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if ENV['DB']
   describe 'travis matrix' do
     it 'should be testing the right db' do

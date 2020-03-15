@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # = DecodeHtmlEntitiesHack
 #
 # Loofah encodes HTML entities in every string that gets passed through it.

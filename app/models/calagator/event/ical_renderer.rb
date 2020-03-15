@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Return an iCalendar string representing an Array of Event instances.
 #
 # Arguments:

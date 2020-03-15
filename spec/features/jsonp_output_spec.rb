@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 # Basic middleware integration test to ensure Rack::JSONP continues to do its job

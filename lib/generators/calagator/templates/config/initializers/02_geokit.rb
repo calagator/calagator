@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Edit this file to configure Geokit, which Calagator uses to geocode venues.
 # Geocoding lets us find the latitude/longitude of an entered address.
 

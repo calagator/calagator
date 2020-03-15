@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   class Venue < ActiveRecord::Base
     class SearchEngine

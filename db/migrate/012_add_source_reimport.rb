@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSourceReimport < ActiveRecord::Migration
   def self.up
     add_column :sources, :reimport, :boolean

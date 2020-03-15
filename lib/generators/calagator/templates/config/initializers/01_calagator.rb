@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Calagator.setup do |config|
   # Site name
   config.title = 'Calagator'

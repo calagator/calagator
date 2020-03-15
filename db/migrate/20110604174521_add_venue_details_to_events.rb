@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddVenueDetailsToEvents < ActiveRecord::Migration
   def self.up
     add_column :events, :venue_details, :text

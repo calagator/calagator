@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 desc 'Reindex Calagator models with Sunspot'
 task 'sunspot:reindex:calagator' do
   # Silence warnings about already-initialized constants caused by

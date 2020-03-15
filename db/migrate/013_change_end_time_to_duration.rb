@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeEndTimeToDuration < ActiveRecord::Migration
   def self.up
     add_column :events, :duration, :integer

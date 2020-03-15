@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   class Source::Parser::Meetup < Source::Parser
     self.label = :Meetup

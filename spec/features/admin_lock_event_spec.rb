@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 # Disabled pending a way to both set up the full event page size so that the editing sidebar is accessible

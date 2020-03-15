@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 # Non-database model derived from: http://railscasts.com/episodes/219-active-model

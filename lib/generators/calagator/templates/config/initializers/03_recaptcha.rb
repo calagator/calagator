@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'recaptcha/rails'
 
 Recaptcha.configure do |config|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   module EventsHelper
     include TimeRangeHelper # provides normalize_time
@@ -88,7 +90,7 @@ module Calagator
         events_url(common)
     end
 
-    GOOGLE_EVENT_SUBSCRIBE_BASE = 'https://www.google.com/calendar/render?cid='.freeze
+    GOOGLE_EVENT_SUBSCRIBE_BASE = 'https://www.google.com/calendar/render?cid='
 
     # Returns a Google Calendar subscription URL.
     #

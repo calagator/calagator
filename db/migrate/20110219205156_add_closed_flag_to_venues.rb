@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddClosedFlagToVenues < ActiveRecord::Migration
   def self.up
     add_column :venues, :closed, :boolean, default: false

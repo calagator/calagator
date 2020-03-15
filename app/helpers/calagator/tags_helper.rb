@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   module TagsHelper
     def tag_links_for(model)

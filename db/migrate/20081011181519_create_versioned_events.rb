@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateVersionedEvents < ActiveRecord::Migration
   # NOTE: This migration's contents have been commented-out because they relied
   # on the old +acts_as_versioned+ plugin that has since replaced with the

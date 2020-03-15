@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :spec do
   namespace :db do
     databases = %i[postgresql mysql sqlite3]

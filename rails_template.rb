@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rubygems'
 require 'pathname'
 
-RAILS_REQUIREMENT = '~> 4.2'.freeze
+RAILS_REQUIREMENT = '~> 4.2'
 
 def assert_minimum_rails_version
   requirement = Gem::Requirement.new(RAILS_REQUIREMENT)

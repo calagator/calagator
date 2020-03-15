@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   class Event < ActiveRecord::Base
     class Search < Struct.new(:query, :tag, :order, :current)

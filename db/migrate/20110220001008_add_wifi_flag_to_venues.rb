@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddWifiFlagToVenues < ActiveRecord::Migration
   def self.up
     add_column :venues, :wifi, :boolean, default: false

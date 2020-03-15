@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddEndTimeToEvents < ActiveRecord::Migration
   def self.up
     add_column :events, :end_time, :timestamp

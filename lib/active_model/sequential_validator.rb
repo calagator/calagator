@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class SequentialValidator < ActiveModel::Validator
   def validate(record)
     values = options[:attributes].map do |attribute|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Allow tests to run on for Rails 4.2 on Ruby 2.6+
 # Via: https://github.com/rails/rails/issues/34790#issuecomment-450502805
 

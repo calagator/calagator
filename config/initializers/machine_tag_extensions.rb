@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'acts-as-taggable-on'
 require 'calagator/machine_tag'
-ActsAsTaggableOn::Tag.send :include, Calagator::MachineTag::TagExtensions
+ActsAsTaggableOn::Tag.include Calagator::MachineTag::TagExtensions
 
 # Structure of machine tag namespaces and predicates to their URLs. See
 # Calagator::MachineTag for details.

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'calagator/duplicate_checking/controller_actions'
 
 module Calagator

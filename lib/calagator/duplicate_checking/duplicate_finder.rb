@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   module DuplicateChecking
     class DuplicateFinder < Struct.new(:model, :fields)
@@ -60,7 +62,7 @@ module Calagator
       def is_truthy_subquery(attr)
         column = model.columns.find { |column| column.name.to_sym == attr }
         query = case column.type
-                when :integer, :decimal then
+                when :integer, :decimal
                   "#{full_attr(attr)} != 0 AND "
                 when :string, :text
                   "#{full_attr(attr)} != '' AND "

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # = ThemeReader
 #
 # Returns name of the theme to use.

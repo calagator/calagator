@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # `ri_cal` relies on a monkeypatch that was removed in Rails 3.1. This adds it back because `ri_cal` hasn't been updated to deal with this.
 class Time
   unless respond_to?(:get_zone)
