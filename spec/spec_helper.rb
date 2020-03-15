@@ -3,16 +3,7 @@ unless File.exist?('spec/dummy')
   exit 1
 end
 
-unless RUBY_ENGINE == 'rbx' # SimpleCov slows down Rubinius dramatically (using rbx 2.2.6)
-  require 'simplecov'
-  require 'coveralls'
-
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
-    SimpleCov::Formatter::HTMLFormatter,
-    Coveralls::SimpleCov::Formatter,
-  ]
-  SimpleCov.start('rails')
-end
+require 'simplecov'
 
 require 'rails_helper'
 require 'sass'

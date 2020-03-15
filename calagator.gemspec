@@ -64,6 +64,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rubocop', '~> 0.67.2'
   s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'simplecov', '~> 0.16'
+  s.add_development_dependency 'simplecov-lcov', '~> 0.8'
   s.add_development_dependency 'sqlite3', '~> 1.3.6'
   s.add_development_dependency 'sunspot_solr', '~> 2.1'
   s.add_development_dependency 'timecop', '~> 0.7.1'
