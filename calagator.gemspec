@@ -51,7 +51,6 @@ Gem::Specification.new do |s|
 
   s.add_development_dependency 'appraisal', '~> 2.0'
   s.add_development_dependency 'capybara', '~> 3.31'
-  s.add_development_dependency 'coveralls', '~> 0.8.1'
   s.add_development_dependency 'database_cleaner', '~> 1.4'
   s.add_development_dependency 'factory_bot_rails', '~> 4.11.1'
   s.add_development_dependency 'faker', '~> 1.4'
@@ -63,7 +62,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-rails', '~> 3.2'
   s.add_development_dependency 'rubocop', '~> 0.67.2'
   s.add_development_dependency 'selenium-webdriver'
-  s.add_development_dependency 'simplecov', '~> 0.16'
+  s.add_development_dependency 'simplecov', '~> 0.18'
   s.add_development_dependency 'simplecov-lcov', '~> 0.8'
   s.add_development_dependency 'sqlite3', '~> 1.3.6'
   s.add_development_dependency 'sunspot_solr', '~> 2.1'
