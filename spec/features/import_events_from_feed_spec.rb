@@ -17,27 +17,23 @@ feature 'import events from a feed', js: true do
     fill_in 'URL', with: 'http://even.ts/feed'
     click_on 'Import'
 
-    expect(find('.flash')).to have_content %(
+    expect(find('.flash')).to have_content <<~FLASH.strip
       Imported 3 entries:
-
       Coffee with Jason
       Coffee with Mike
       Coffee with Kim
-    )
+    FLASH
 
     expect(page).to have_content 'Viewing 3 future events'
 
-    expect(find('.event_table')).to have_content %(
-      Thursday Apr 8
-
-      Coffee with Jason
+    expect(find('.event_table')).to have_content <<~TABLE.strip
+      Thursday
+      Apr 8 Coffee with Jason
       7–8am
-
       Coffee with Mike
       7–8am
-
       Coffee with Kim
       7–8am
-    )
+    TABLE
   end
 end

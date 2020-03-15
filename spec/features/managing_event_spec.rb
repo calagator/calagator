@@ -35,9 +35,9 @@ feature 'Event Editing', js: true do
     expect(page).to have_content 'Event was successfully saved'
     expect(page).to have_content 'Ruby ABCs'
     expect(page).to have_content 'Friday, October 10, 2014 from 6–7pm'
-    expect(page).to have_content 'Website http://www.rubynewbies.com'
-    expect(page).to have_content 'Description An event for beginners'
-    expect(page).to have_content 'Tags beginners, ruby'
+    expect(page).to have_content "Website\nhttp://www.rubynewbies.com"
+    expect(page).to have_content "Description\nAn event for beginners"
+    expect(page).to have_content "Tags\nbeginners, ruby"
 
     click_on 'Calagator'
     within '#tomorrow' do
@@ -98,9 +98,9 @@ feature 'Event Cloning', js: true do
     expect(page).to have_content 'Event was successfully saved'
     expect(page).to have_content 'Ruby Event Part Two'
     expect(page).to have_content 'Monday, October 27, 2014 at 6pm'
-    expect(page).to have_content 'Website http://www.rubynewbies.com'
-    expect(page).to have_content 'Description An event for beginners'
-    expect(page).to have_content 'Tags beginners, ruby'
+    expect(page).to have_content "Website\nhttp://www.rubynewbies.com"
+    expect(page).to have_content "Description\nAn event for beginners"
+    expect(page).to have_content "Tags\nbeginners, ruby"
 
     click_on 'Calagator'
     click_on 'View future events »'
