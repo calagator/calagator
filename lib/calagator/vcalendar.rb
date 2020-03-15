@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'ri_cal'
 
 module Calagator
@@ -10,7 +12,7 @@ module Calagator
         VCalendar.new(ri_cal_calendar)
       end
     rescue Exception => exception
-      return false if exception.message =~ /Invalid icalendar file/ # Invalid data, give up.
+      return false if /Invalid icalendar file/.match?(exception.message) # Invalid data, give up.
 
       raise # Unknown error, reraise
     end

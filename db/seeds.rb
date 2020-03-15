@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 begin
   require 'faker'
   require 'factory_bot_rails'

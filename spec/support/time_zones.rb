@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module TimeZoneHelpers
   def self.randomize_time_zone!
     Time.zone = ActiveSupport::TimeZone.all.sample

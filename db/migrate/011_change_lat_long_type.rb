@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeLatLongType < ActiveRecord::Migration
   def self.up
     # :decimal is more precise than :float, and we need that for lat/long.

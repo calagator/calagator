@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   class Source::Parser::Facebook < Source::Parser
     self.label = :Facebook

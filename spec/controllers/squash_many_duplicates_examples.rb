@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples '#squash_many_duplicates' do |model|
   before do
     @master = FactoryBot.create(model, title: 'master')

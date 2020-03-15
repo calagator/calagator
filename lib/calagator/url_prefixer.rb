@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UrlPrefixer
   def self.prefix(value)
     if value.blank? || value.include?('://')

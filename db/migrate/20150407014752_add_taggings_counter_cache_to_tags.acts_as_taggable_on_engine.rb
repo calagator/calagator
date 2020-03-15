@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddTaggingsCounterCacheToTags < ActiveRecord::Migration
   def self.up
     add_column :tags, :taggings_count, :integer, default: 0

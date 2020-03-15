@@ -1,32 +1,31 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-# rubocop:disable Layout/IndentHeredoc
-USAGE = <<-END.freeze
-calagator: setup Calagator in a new or existing Rails application
+USAGE = <<~END
+  calagator: setup Calagator in a new or existing Rails application
 
-Usage:
-  calagator new APP_PATH [options]
-  calagator install
+  Usage:
+    calagator new APP_PATH [options]
+    calagator install
 
-calagator new: generates a new Rails app and install Calagator into it
-
-  Options:
-    --dummy   # Generates an app suitable for use in spec/dummy for Calagator
-              # development and testing
-
-    In the case of `calagator new`, all other options will be passed along
-    to `rails new`; see `rails new --help` for supported options.
-
-    To generate an app using a specific Rails version, e.g. for 4.2.1:
-
-      calagator _4.2.1_ new my_great_calendar
-
-calagator install: install Calagator into an existing Rails application
+  calagator new: generates a new Rails app and install Calagator into it
 
     Options:
-      none
+      --dummy   # Generates an app suitable for use in spec/dummy for Calagator
+                # development and testing
+
+      In the case of `calagator new`, all other options will be passed along
+      to `rails new`; see `rails new --help` for supported options.
+
+      To generate an app using a specific Rails version, e.g. for 4.2.1:
+
+        calagator _4.2.1_ new my_great_calendar
+
+  calagator install: install Calagator into an existing Rails application
+
+      Options:
+        none
 END
-# rubocop:enable Layout/IndentHeredoc
 
 TEMPLATE_PATH = File.expand_path('../rails_template.rb', __dir__)
 

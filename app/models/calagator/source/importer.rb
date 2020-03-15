@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   class Source < ActiveRecord::Base
     class Importer < Struct.new(:source, :events)

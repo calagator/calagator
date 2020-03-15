@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Cleanup < ActiveRecord::Migration
   # Remove obsolete tables and columns that may have been left behind by other migrations.
   def self.up

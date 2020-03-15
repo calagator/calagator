@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # = BlacklistValidator
 #
 # A naively simple mixin that blacklists content in ActiveModel objects.
@@ -35,7 +37,7 @@
 #   * config/blacklist-local.txt
 
 class BlacklistValidator < ActiveModel::EachValidator
-  BLACKLIST_DEFAULT_MESSAGE = 'contains blacklisted content'.freeze
+  BLACKLIST_DEFAULT_MESSAGE = 'contains blacklisted content'
 
   def validate_each(record, attribute, value)
     if value.present? && patterns.any? { |pattern| value.match(pattern) }
@@ -59,7 +61,7 @@ class BlacklistValidator < ActiveModel::EachValidator
   end
 
   def get_blacklist_patterns_from(filename)
-    filename = Rails.root.join('config', filename) unless filename =~ %r{[/\\]}
+    filename = Rails.root.join('config', filename) unless %r{[/\\]}.match?(filename)
     return unless File.exist?(filename)
 
     File.readlines(filename).map do |line|

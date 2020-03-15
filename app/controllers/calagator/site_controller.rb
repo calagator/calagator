@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   class SiteController < Calagator::ApplicationController
     # Raise exception, mostly for confirming that exception_notification works
@@ -29,7 +31,7 @@ module Calagator
 
     def defunct
       @url = params[:url]
-      raise ArgumentError if /^javascript:/.match(@url)
+      raise ArgumentError if /^javascript:/.match?(@url)
     end
   end
 end

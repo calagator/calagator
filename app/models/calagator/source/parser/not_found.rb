@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Calagator::Source::Parser
   # == Source::Parser::NotFound
   #

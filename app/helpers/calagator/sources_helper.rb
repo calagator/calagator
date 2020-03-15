@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   module SourcesHelper
     # Return HTML with a link to the the external source URL.

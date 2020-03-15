@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'recaptcha/rails'
 require 'calagator/duplicate_checking'
 require 'calagator/duplicate_checking/controller_actions'

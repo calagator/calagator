@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActsAsTaggableOnMigration < ActiveRecord::Migration
   def self.up
     # We already have a Tag model with a name

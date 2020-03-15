@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def now
   Time.zone.now
 end

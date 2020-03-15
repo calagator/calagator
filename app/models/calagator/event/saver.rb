@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   class Event < ActiveRecord::Base
     class Saver < Struct.new(:event, :params, :failure)

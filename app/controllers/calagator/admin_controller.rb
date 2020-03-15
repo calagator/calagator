@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   class AdminController < Calagator::ApplicationController
     require_admin

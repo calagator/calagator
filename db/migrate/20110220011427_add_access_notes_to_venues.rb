@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAccessNotesToVenues < ActiveRecord::Migration
   def self.up
     add_column :venues, :access_notes, :text

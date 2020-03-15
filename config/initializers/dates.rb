@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 my_formats = {
   yyyymmdd: '%Y-%m-%d',
   long_date: '%A, %B %d, %Y'

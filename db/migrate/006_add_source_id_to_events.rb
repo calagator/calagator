@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddSourceIdToEvents < ActiveRecord::Migration
   def self.up
     add_column :events, :source_id, :integer

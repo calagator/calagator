@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'formtastic'
 # --------------------------------------------------------------------------------------------------
 # Please note: If you're subclassing Formtastic::FormBuilder, Formtastic uses

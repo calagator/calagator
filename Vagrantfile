@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # You can override settings in this file by creating a `Vagrantfile.local`
 # file, see the `VAGRANT.md` file for instructions.
 overrides = "#{__FILE__}.local"

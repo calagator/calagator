@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Calagator
   module DuplicateChecking
     class DuplicateSquasher < Struct.new(:master, :duplicates, :model_name, :failure, :success)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddRruleToEvents < ActiveRecord::Migration
   # NOTE: Some of this migration's contents have been commented-out because
   # they used tables created for the old +acts_as_versioned+ plugin that has

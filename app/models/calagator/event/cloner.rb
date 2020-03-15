@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Return a new record with fields selectively copied from the original, and
 # the start_time and end_time adjusted so that their date is set to today and
 # their time-of-day is set to the original record's time-of-day.

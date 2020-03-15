@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 module Calagator
@@ -149,7 +151,7 @@ module Calagator
           stub_request(:get, url).to_return(body: cal_content)
 
           cal_source = Source.new(title: 'Calendar event feed', url: url)
-          @parsed_events  = cal_source.to_events
+          @parsed_events = cal_source.to_events
           @created_events = cal_source.create_events!
         end
 
@@ -212,7 +214,6 @@ module Calagator
       describe 'choosing parsers by matching URLs' do
         { 'Calagator::Source::Parser::Facebook' => 'http://facebook.com/event.php?eid=247619485255249',
           'Calagator::Source::Parser::Meetup' => 'http://www.meetup.com/pdxweb/events/23287271/' }.each do |parser_name, url|
-
           it "should only invoke the #{parser_name} parser when given #{url}" do
             parser = parser_name.constantize
             expect_any_instance_of(parser).to receive(:to_events).and_return([Event.new])

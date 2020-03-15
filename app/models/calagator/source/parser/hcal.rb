@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # == Source::Parser::Hcal
 #
 # Reads hCalendar events.

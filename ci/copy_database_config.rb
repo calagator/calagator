@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 
 which_config = "ci/database.#{ENV['DB'] || 'sqlite'}.yml"

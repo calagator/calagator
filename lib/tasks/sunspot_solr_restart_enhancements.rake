@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'wait_for_solr'
 
 task 'sunspot:solr:start_with_waiting' => :environment do
