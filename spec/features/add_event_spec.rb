@@ -33,10 +33,10 @@ feature 'Event Creation', js: true do
     expect(page).to have_content 'Ruby Newbies'
     expect(page).to have_content 'Empire State Building'
     expect(page).to have_content 'Tuesday, August 5, 2014 at 6pm through Wednesday, August 6, 2014 at 11pm'
-    expect(page).to have_content 'Website http://www.rubynewbies.com'
-    expect(page).to have_content 'Description An event for beginners'
+    expect(page).to have_content "Website\nhttp://www.rubynewbies.com"
+    expect(page).to have_content "Description\nAn event for beginners"
     expect(page).to have_content 'On the third floor'
-    expect(page).to have_content 'Tags beginners, ruby'
+    expect(page).to have_content "Tags\nbeginners, ruby"
   end
 
   scenario 'User adds an event at a new venue' do
@@ -58,7 +58,7 @@ feature 'Event Creation', js: true do
 
     expect(page).to have_content 'Event was successfully saved'
     expect(page).to have_content "Please tell us more about where it's being held."
-    expect(page).to have_content(/Version [\d\D]+ Editing: Portland Zoo/)
+    expect(page).to have_content(/Version\n[\d\D]+\nEditing: Portland Zoo/)
 
     expect(find_field('Venue Name').value).to have_content 'Portland Zoo'
 
@@ -78,16 +78,16 @@ feature 'Event Creation', js: true do
     expect(page).to have_content 'Ruby Zoo'
     expect(page).to have_content 'Zoo of Portland'
     expect(page).to have_content 'Thursday, May 15, 2014 from 4–9pm'
-    expect(page).to have_content 'Zoo of Portland 4001 SW Canyon Rd Portland, OR 97221 (map)'
+    expect(page).to have_content "Zoo of Portland\n4001 SW Canyon Rd\nPortland, OR 97221 (map)"
     expect(page).to have_content 'Next to the gorillas'
-    expect(page).to have_content 'Website http://www.rubyzoo.com'
-    expect(page).to have_content 'Description An ruby event at the zoo'
-    expect(page).to have_content 'Tags ruby, zoo'
+    expect(page).to have_content "Website\nhttp://www.rubyzoo.com"
+    expect(page).to have_content "Description\nAn ruby event at the zoo"
+    expect(page).to have_content "Tags\nruby, zoo"
 
     click_link 'Zoo of Portland'
 
     expect(page).to have_content 'Zoo of Portland'
-    expect(page).to have_content '4001 SW Canyon Rd Portland, OR 97221 (map)'
+    expect(page).to have_content "4001 SW Canyon Rd\nPortland, OR 97221 (map)"
     expect(page).to have_content 'www.portland.zoo'
     expect(page).to have_content 'zoo@portland.zoo'
     expect(page).to have_content '123-444-5555'
