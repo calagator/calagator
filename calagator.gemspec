@@ -56,7 +56,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'factory_bot_rails', '~> 4.11.1'
   s.add_development_dependency 'faker', '~> 1.4'
   s.add_development_dependency 'gem-release', '~> 2.0'
-  s.add_development_dependency 'rspec-activemodel-mocks', '~> 1.0.2'
+  s.add_development_dependency 'rspec-activemodel-mocks', '~> 1.1.0'
   s.add_development_dependency 'rspec-collection_matchers', '~> 1.1'
   s.add_development_dependency 'rspec-its', '~> 1.1'
   s.add_development_dependency 'rspec-rails', '~> 3.2'
