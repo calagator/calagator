@@ -9,6 +9,7 @@ unless ENV['SKIP_COVERAGE'] || RUBY_ENGINE == 'rbx'
   end
 
   SimpleCov.start 'rails' do
+    enable_coverage :branch
     coverage_dir 'coverage'
 
     formatter SimpleCov::Formatter::MultiFormatter.new([
