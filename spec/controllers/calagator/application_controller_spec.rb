@@ -5,16 +5,16 @@ require 'spec_helper'
 module Calagator
   describe ApplicationController, type: :controller do
     describe '#append_flash' do
-      before :each do
+      before do
         flash.clear
       end
 
-      it "should set flash message if one isn't set already" do
+      it "sets flash message if one isn't set already" do
         controller.send(:append_flash, :failure, 'Hello.')
         expect(flash[:failure]).to eq 'Hello.'
       end
 
-      it 'should append flash message if one is already set' do
+      it 'appends flash message if one is already set' do
         controller.send(:append_flash, :failure, 'Hello.')
         controller.send(:append_flash, :failure, 'World.')
         expect(flash[:failure]).to eq 'Hello. World.'
@@ -22,11 +22,11 @@ module Calagator
     end
 
     describe '#help' do
-      it 'should respond to a view helper method' do
+      it 'responds to a view helper method' do
         expect(controller.send(:help)).to respond_to :link_to
       end
 
-      it 'should not respond to an invalid method' do
+      it 'does not respond to an invalid method' do
         expect(controller.send(:help)).not_to respond_to :no_such_method
       end
     end
@@ -35,18 +35,16 @@ module Calagator
       let(:raw) { 'this & that' }
       let(:escaped) { 'this &amp; that' }
 
-      it 'should escape raw string' do
+      it 'escapes raw string' do
         expect(controller.send(:escape_once, raw)).to eq escaped
       end
 
-      it 'should not escape an already escaped string' do
+      it 'does not escape an already escaped string' do
         expect(controller.send(:escape_once, escaped)).to eq escaped
       end
     end
 
     describe '#recaptcha_enabled?' do
-      let(:temporary_key) { nil }
-
       subject do
         result = nil
 
@@ -56,6 +54,8 @@ module Calagator
 
         result
       end
+
+      let(:temporary_key) { nil }
 
       context 'when Recaptcha site_key is not set' do
         it { is_expected.to be_falsey }

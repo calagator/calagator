@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-feature 'import events from a feed', js: true do
-  background do
+describe 'import events from a feed', js: true do
+  before do
     Timecop.travel('2010-01-01')
     stub_request(:get, 'http://even.ts/feed').to_return(body: read_sample('ical_multiple_calendars.ics'))
   end
@@ -12,7 +12,7 @@ feature 'import events from a feed', js: true do
     Timecop.return
   end
 
-  scenario 'A user imports an events from a feed' do
+  it 'A user imports an events from a feed' do
     visit '/'
     click_on 'Import events'
 

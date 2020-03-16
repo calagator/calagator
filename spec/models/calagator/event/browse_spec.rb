@@ -17,45 +17,45 @@ module Calagator
             end
           end
 
-          it 'should use the default if not given the parameter' do
-            browse = Event::Browse.new(date: {})
+          it 'uses the default if not given the parameter' do
+            browse = described_class.new(date: {})
             expect(browse.send(date_field)).to eq send(date_field)
             expect(browse.errors).to be_empty
           end
 
-          it 'should use the default if given a malformed parameter' do
-            browse = Event::Browse.new(date: 'omgkittens')
+          it 'uses the default if given a malformed parameter' do
+            browse = described_class.new(date: 'omgkittens')
             expect(browse.send(date_field)).to eq send(date_field)
             expect(browse.errors).to include(/invalid/)
           end
 
-          it 'should use the default if given a missing parameter' do
-            browse = Event::Browse.new(date: { foo: 'bar' })
+          it 'uses the default if given a missing parameter' do
+            browse = described_class.new(date: { foo: 'bar' })
             expect(browse.send(date_field)).to eq send(date_field)
             expect(browse.errors).to include(/invalid/)
           end
 
-          it 'should use the default if given an empty parameter' do
-            browse = Event::Browse.new(date: { date_kind => '' })
+          it 'uses the default if given an empty parameter' do
+            browse = described_class.new(date: { date_kind => '' })
             expect(browse.send(date_field)).to eq send(date_field)
             expect(browse.errors).to include(/invalid/)
           end
 
-          it 'should use the default if given an invalid parameter' do
-            browse = Event::Browse.new(date: { date_kind => 'omgkittens' })
+          it 'uses the default if given an invalid parameter' do
+            browse = described_class.new(date: { date_kind => 'omgkittens' })
             expect(browse.send(date_field)).to eq send(date_field)
             expect(browse.errors).to include(/invalid/)
           end
 
-          it 'should use the value if valid' do
+          it 'uses the value if valid' do
             expected = Date.yesterday.to_s('%Y-%m-%d')
-            browse = Event::Browse.new(date: { date_kind => expected })
+            browse = described_class.new(date: { date_kind => expected })
             expect(browse.send(date_field)).to eq expected
           end
         end
       end
 
-      it 'should return matching events' do
+      it 'returns matching events' do
         # Given
         matching = [
           Event.create!(
@@ -82,7 +82,7 @@ module Calagator
         ]
 
         # When
-        browse = Event::Browse.new(date: { start: '2010-01-16', end: '2010-01-16' })
+        browse = described_class.new(date: { start: '2010-01-16', end: '2010-01-16' })
         results = browse.events
 
         # Then
@@ -117,30 +117,30 @@ module Calagator
 
       context 'before time' do
         subject do
-          Event::Browse.new(time: { end: end_time })
+          described_class.new(time: { end: end_time })
         end
 
-        it 'should return events with end_time before given end time' do
+        it 'returns events with end_time before given end time' do
           expect(subject.events).to contain_exactly(before, within)
         end
       end
 
       context 'after time' do
         subject do
-          Event::Browse.new(time: { start: start_time })
+          described_class.new(time: { start: start_time })
         end
 
-        it 'should include events with start_time after given start time' do
+        it 'includes events with start_time after given start time' do
           expect(subject.events).to contain_exactly(after, within)
         end
       end
 
       context 'within time range' do
         subject do
-          Event::Browse.new(time: { start: start_time, end: end_time })
+          described_class.new(time: { start: start_time, end: end_time })
         end
 
-        it 'should include events with start_time and end_time between given times' do
+        it 'includes events with start_time and end_time between given times' do
           expect(subject.events).to contain_exactly(within)
         end
       end
@@ -152,7 +152,7 @@ module Calagator
         event2 = FactoryBot.create(:event, start_time: Time.zone.parse('3002-01-01'))
         event3 = FactoryBot.create(:event, start_time: Time.zone.parse('3001-01-01'))
 
-        browse = Event::Browse.new
+        browse = described_class.new
         expect(browse.events).to eq([event3, event2, event1])
       end
 
@@ -161,7 +161,7 @@ module Calagator
         event2 = FactoryBot.create(:event, title: 'Be there')
         event3 = FactoryBot.create(:event, title: 'An event')
 
-        browse = Event::Browse.new(order: 'name')
+        browse = described_class.new(order: 'name')
         expect(browse.events).to eq([event3, event2, event1])
       end
 
@@ -170,20 +170,20 @@ module Calagator
         event2 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'B venue'))
         event3 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'A venue'))
 
-        browse = Event::Browse.new(order: 'venue')
+        browse = described_class.new(order: 'venue')
         expect(browse.events).to eq([event3, event2, event1])
       end
     end
 
     describe '#default?' do
       it 'is true when no params are supplied' do
-        subject = Event::Browse.new
-        expect(subject.default?).to be_truthy
+        subject = described_class.new
+        expect(subject).to be_default
       end
 
       it 'is false when any params are supplied' do
-        subject = Event::Browse.new(order: 'title')
-        expect(subject.default?).to be_falsey
+        subject = described_class.new(order: 'title')
+        expect(subject).not_to be_default
       end
     end
   end

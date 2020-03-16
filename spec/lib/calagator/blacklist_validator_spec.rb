@@ -5,6 +5,8 @@ require 'calagator/blacklist_validator'
 
 module Calagator
   describe BlacklistValidator do
+    subject { klass.new }
+
     let(:klass) do
       Class.new do
         include ActiveModel::Validations
@@ -13,15 +15,13 @@ module Calagator
       end
     end
 
-    subject { klass.new }
-
     describe 'with default blacklist' do
-      it 'should be valid when clean' do
+      it 'is valid when clean' do
         subject.title = 'Title'
         expect(subject).to be_valid
       end
 
-      it 'should not be valid when it features blacklisted word' do
+      it 'is not valid when it features blacklisted word' do
         subject.title = 'Foo bar cialis'
         expect(subject).not_to be_valid
       end
@@ -32,12 +32,12 @@ module Calagator
         klass.validates :title, blacklist: { patterns: [/Kltpzyxm/i] }
       end
 
-      it 'should be valid when clean' do
+      it 'is valid when clean' do
         subject.title = 'Title'
         expect(subject).to be_valid
       end
 
-      it 'should not be valid when it features custom blacklisted word' do
+      it 'is not valid when it features custom blacklisted word' do
         subject.title = 'fooKLTPZYXMbar'
         expect(subject).not_to be_valid
       end
@@ -51,12 +51,12 @@ module Calagator
         expect(File).to receive(:readlines).with(blacklist_file_path).and_return(['Kltpzyxm'])
       end
 
-      it 'should be valid when clean' do
+      it 'is valid when clean' do
         subject.title = 'Title'
         expect(subject).to be_valid
       end
 
-      it 'should not be valid when it features custom blacklisted word' do
+      it 'is not valid when it features custom blacklisted word' do
         subject.title = 'fooKLTPZYXMbar'
         expect(subject).not_to be_valid
       end

@@ -2,13 +2,13 @@
 
 require 'rails_helper'
 
-feature 'Venue Editing', js: true do
+describe 'Venue Editing', js: true do
   let!(:venue) { create(:venue) }
   let!(:event) { create(:event, venue: venue, start_time: Time.now.in_time_zone.end_of_day - 1.hour) }
   let!(:new_venue) { build(:venue) }
   let!(:venue_with_tags) { create(:venue, :with_multiple_tags) }
 
-  scenario 'A user edits an existing venue' do
+  it 'A user edits an existing venue' do
     visit '/'
     click_on venue.title
     click_on 'edit'
@@ -50,7 +50,7 @@ feature 'Venue Editing', js: true do
     end
   end
 
-  scenario 'A user edits a venue with more than one tag' do
+  it 'A user edits a venue with more than one tag' do
     visit '/'
 
     click_on 'Venues'
@@ -72,12 +72,12 @@ feature 'Venue Editing', js: true do
   end
 end
 
-feature 'Venue Deletion', js: true do
-  background do
+describe 'Venue Deletion', js: true do
+  before do
     create :venue, title: 'Test Venue'
   end
 
-  scenario 'A user deletes a venue' do
+  it 'A user deletes a venue' do
     visit '/'
     click_on 'Venues'
 

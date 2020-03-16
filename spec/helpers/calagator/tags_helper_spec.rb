@@ -20,15 +20,15 @@ module Calagator
         @untagged_event = Event.new
       end
 
-      it 'should render nothing if no image tags' do
+      it 'renders nothing if no image tags' do
         expect(helper.display_tag_icons(@event2)).to eq ' '
       end
 
-      it 'should render nothing if event has no tags' do
+      it 'renders nothing if event has no tags' do
         expect(helper.display_tag_icons(@untagged_event)).to eq ''
       end
 
-      it 'should render an image if the event tag has one associated' do
+      it 'renders an image if the event tag has one associated' do
         expect(helper.display_tag_icons(@event)).to include 'img'
       end
     end

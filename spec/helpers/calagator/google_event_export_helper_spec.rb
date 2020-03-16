@@ -20,11 +20,11 @@ module Calagator
       end
 
       shared_examples_for 'exported event' do
-        it 'should have title' do
+        it 'has title' do
           params['text'].should == @event.title
         end
 
-        it 'should have time range in utc' do
+        it 'has time range in utc' do
           format = '%Y%m%dT%H%M%SZ'
           params['dates'].should == [
             @event.start_time.utc.strftime(format),
@@ -32,33 +32,35 @@ module Calagator
           ].join('/')
         end
 
-        it 'should have venue title and address' do
+        it 'has venue title and address' do
           params['location'].should == "#{@event.venue.title}, #{@event.venue.geocode_address}"
         end
       end
 
       describe "an event's text doesn't need truncation" do
         let(:event_description) { 'My event description.' }
+
         include_context 'exported event setup'
 
-        it_should_behave_like 'exported event'
+        it_behaves_like 'exported event'
 
-        it 'should have a complete event description' do
+        it 'has a complete event description' do
           params['details'].should include event_description
         end
       end
 
       describe "an event's text needs truncation" do
         let(:event_description) { 'My event description. ' * 100 }
+
         include_context 'exported event setup'
 
-        it_should_behave_like 'exported event'
+        it_behaves_like 'exported event'
 
-        it 'should have a truncated event description' do
+        it 'has a truncated event description' do
           params['details'].should include event_description[0..100]
         end
 
-        it 'should have a truncated URL' do
+        it 'has a truncated URL' do
           expect(@export.size).to be < event_description.size
         end
       end

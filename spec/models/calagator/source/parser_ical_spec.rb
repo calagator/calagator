@@ -18,22 +18,22 @@ module Calagator
     end
 
     describe 'in general' do
-      it 'should read http URLs as-is' do
+      it 'reads http URLs as-is' do
         url = 'http://foo.bar/'
         stub_request(:get, url).to_return(body: '42')
-        expect(Source::Parser::Ical.read_url(url)).to eq '42'
+        expect(described_class.read_url(url)).to eq '42'
       end
 
-      it 'should read webcal URLs as http' do
+      it 'reads webcal URLs as http' do
         webcal_url = 'webcal://foo.bar/'
         http_url   = 'http://foo.bar/'
         stub_request(:get, http_url).to_return(body: '42')
-        expect(Source::Parser::Ical.read_url(webcal_url)).to eq '42'
+        expect(described_class.read_url(webcal_url)).to eq '42'
       end
     end
 
     describe 'when parsing events and their venues' do
-      before(:each) do
+      before do
         url = 'http://foo.bar/'
         stub_request(:get, url).to_return(body: read_sample('ical_upcoming_many.ics'))
         @events = Source::Parser.to_events(url: url)
@@ -47,23 +47,23 @@ module Calagator
     end
 
     describe 'when parsing multiple items in an Eventful feed' do
-      before(:each) do
+      before do
         url = 'http://foo.bar/'
         stub_request(:get, url).to_return(body: read_sample('ical_eventful_many.ics'))
         @events = Source::Parser.to_events(url: url)
       end
 
-      it 'should find multiple events' do
+      it 'finds multiple events' do
         expect(@events.size).to eq 15
       end
 
-      it 'should find venues for events' do
+      it 'finds venues for events' do
         @events.each do |event|
           expect(event.venue.title).not_to be_nil
         end
       end
 
-      it 'should match each event with its venue' do
+      it 'matches each event with its venue' do
         expect(@events.map { |event| [event.title, event.venue.street_address] }).to eq [
           ['iMovie and iDVD Workshop', '7293 SW Bridgeport Road'],
           ['iMovie and iDVD Workshop', '700 Southwest Fifth Avenue Suite #1035'],
@@ -85,7 +85,7 @@ module Calagator
     end
 
     describe 'with iCalendar events' do
-      it 'should parse Apple iCalendar v3 format' do
+      it 'parses Apple iCalendar v3 format' do
         events = events_from_ical_at('ical_apple_v3.ics')
 
         expect(events.size).to eq 1
@@ -96,7 +96,7 @@ module Calagator
         expect(event.venue).to be_nil
       end
 
-      it 'should parse basic iCalendar format' do
+      it 'parses basic iCalendar format' do
         events = events_from_ical_at('ical_basic.ics')
 
         expect(events.size).to eq 1
@@ -106,7 +106,7 @@ module Calagator
         expect(event.venue).to be_nil
       end
 
-      it 'should parse basic iCalendar format with a duration and set the correct end time' do
+      it 'parses basic iCalendar format with a duration and set the correct end time' do
         events = events_from_ical_at('ical_basic_with_duration.ics')
 
         expect(events.size).to eq 1
@@ -117,7 +117,7 @@ module Calagator
         expect(event.venue).to be_nil
       end
 
-      it 'should parse Google iCalendar feed with multiple events' do
+      it 'parses Google iCalendar feed with multiple events' do
         events = events_from_ical_at('ical_google.ics')
         # TODO: add specs for venues/locations
 
@@ -142,25 +142,25 @@ module Calagator
         expect(event.end_time).to eq Time.parse('2007-01-16 18:30:00 PST').in_time_zone
       end
 
-      it 'should parse non-Vcard locations' do
+      it 'parses non-Vcard locations' do
         events = events_from_ical_at('ical_google.ics')
         expect(events.first.venue.title).to eq 'CubeSpace'
       end
 
-      it 'should parse a calendar file with multiple calendars' do
+      it 'parses a calendar file with multiple calendars' do
         events = events_from_ical_at('ical_multiple_calendars.ics')
         expect(events.size).to eq 3
         expect(events.map(&:title)).to eq ['Coffee with Jason', 'Coffee with Mike', 'Coffee with Kim']
       end
 
-      it 'should not swallow errors' do
+      it 'does not swallow errors' do
         expect(RiCal).to receive(:parse_string).and_raise(TypeError)
         expect { events_from_ical_at('ical_multiple_calendars.ics') }.to raise_error(TypeError)
       end
     end
 
     describe 'when importing events with non-local times' do
-      it 'should store time ending in Z as UTC' do
+      it 'stores time ending in Z as UTC' do
         url = 'http://foo.bar/'
         stub_request(:get, url).to_return(body: read_sample('ical_z.ics'))
         @source = Source.new(title: 'Non-local time', url: url)
@@ -177,7 +177,7 @@ module Calagator
         expect(event.end_time).to eq Time.parse('Thu Jul 01 09:00:00 +0000 2010').in_time_zone
       end
 
-      it 'should store time with TZID=GMT in UTC' do
+      it 'stores time with TZID=GMT in UTC' do
         events = events_from_ical_at('ical_gmt.ics')
         expect(events.size).to eq 1
         event = events.first
@@ -187,7 +187,7 @@ module Calagator
     end
 
     describe 'when skipping old events' do
-      before(:each) do
+      before do
         url = 'http://foo.bar/'
         stub_request(:get, url).to_return(body:
                                           %(BEGIN:VCALENDAR
@@ -248,7 +248,7 @@ END:VCALENDAR))
         @source = Source.new(title: 'Title', url: url)
       end
 
-      it 'should be able to skip invalid and old events' do
+      it 'is able to skip invalid and old events' do
         events = @source.create_events!
         expect(events.map(&:title)).to eq [
           'Current start and no end',
@@ -259,7 +259,7 @@ END:VCALENDAR))
     end
 
     describe 'when parsing an invalid ical' do
-      before(:each) do
+      before do
         url = 'http://foo.bar/'
         stub_request(:get, url).to_return(body:
                                           %(BEGIN:VCALENDAR
@@ -269,7 +269,7 @@ END:VCALENDAR))
         @source = Source.new(title: 'Title', url: url)
       end
 
-      it 'should return no events' do
+      it 'returns no events' do
         @source.create_events!.should == []
       end
     end

@@ -25,8 +25,8 @@ xfeature 'Event locking' do
     click_on 'Ruby Newbies'
 
     expect(page).to have_content('This event is currently locked and cannot be edited.')
-    expect(page).to_not have_selector('a', text: 'edit')
-    expect(page).to_not have_selector('a', text: 'delete')
+    expect(page).not_to have_selector('a', text: 'edit')
+    expect(page).not_to have_selector('a', text: 'delete')
   end
 
   scenario 'Admin unlocks a locked event' do
@@ -37,7 +37,7 @@ xfeature 'Event locking' do
     expect(page).to have_content('Unlocked event Ruby Privateers')
     click_on 'Ruby Privateers'
 
-    expect(page).to_not have_content('This event is currently locked and cannot be edited.')
+    expect(page).not_to have_content('This event is currently locked and cannot be edited.')
     expect(page).to have_selector('a', text: 'edit')
     expect(page).to have_selector('a', text: 'delete')
   end

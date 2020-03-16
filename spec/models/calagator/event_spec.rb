@@ -5,51 +5,51 @@ require 'spec_helper'
 module Calagator
   describe Event, type: :model do
     describe 'in general'  do
-      it 'should be valid' do
-        event = Event.new(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
+      it 'is valid' do
+        event = described_class.new(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
         expect(event).to be_valid
       end
 
-      it 'should add a http:// prefix to urls without one' do
-        event = Event.new(title: 'Event title', start_time: Time.zone.parse('2008.04.12'), url: 'google.com')
+      it 'adds a http:// prefix to urls without one' do
+        event = described_class.new(title: 'Event title', start_time: Time.zone.parse('2008.04.12'), url: 'google.com')
         expect(event).to be_valid
       end
 
       it 'validates blacklisted words' do
         BlacklistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
-        event = Event.new(title: 'Foo bar cialis', start_time: Time.zone.parse('2008.04.12'), url: 'google.com')
+        event = described_class.new(title: 'Foo bar cialis', start_time: Time.zone.parse('2008.04.12'), url: 'google.com')
         expect(event).not_to be_valid
       end
 
       it 'can be locked' do
-        event = Event.create(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
+        event = described_class.create(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
         event.lock_editing!
         expect(event.locked).to eq(true)
       end
 
       it 'can be unlocked' do
-        event = Event.create(title: 'Event title', start_time: Time.zone.parse('2008.04.12'), locked: true)
+        event = described_class.create(title: 'Event title', start_time: Time.zone.parse('2008.04.12'), locked: true)
         event.unlock_editing!
         expect(event.locked).to eq(false)
       end
 
       it "can't be deleted if it's locked" do
-        event = Event.create(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
+        event = described_class.create(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
         event.lock_editing!
         expect(event.destroy).to eq(false)
       end
     end
 
     describe 'when checking time status' do
-      it 'should be old if event ended before today' do
+      it 'is old if event ended before today' do
         expect(FactoryBot.build(:event, start_time: 2.days.ago, end_time: 1.day.ago)).to be_old
       end
 
-      it 'should be current if event is happening today' do
+      it 'is current if event is happening today' do
         expect(FactoryBot.build(:event, start_time: 1.hour.from_now)).to be_current
       end
 
-      it 'should be ongoing if it began before today but ends today or later' do
+      it 'is ongoing if it began before today but ends today or later' do
         expect(FactoryBot.build(:event, start_time: 1.day.ago, end_time: 1.day.from_now)).to be_ongoing
       end
     end
@@ -57,21 +57,21 @@ module Calagator
     describe 'dealing with tags' do
       before do
         @tags = 'some, tags'
-        @event = Event.new(title: 'Tagging Day', start_time: now)
+        @event = described_class.new(title: 'Tagging Day', start_time: now)
       end
 
-      it 'should be taggable' do
+      it 'is taggable' do
         expect(@event.tag_list).to eq []
       end
 
-      it 'should just cache tagging if it is a new record' do
+      it 'justs cache tagging if it is a new record' do
         expect(@event).not_to receive :save
         expect(@event).to be_new_record
         @event.tag_list = @tags
         expect(@event.tag_list.to_s).to eq @tags
       end
 
-      it 'should use tags with punctuation' do
+      it 'uses tags with punctuation' do
         tags = ['.net', 'foo-bar']
         @event.tag_list = tags.join(', ')
         @event.save
@@ -80,7 +80,7 @@ module Calagator
         expect(@event.tags.map(&:name).sort).to eq tags.sort
       end
 
-      it 'should not interpret numeric tags as IDs' do
+      it 'does not interpret numeric tags as IDs' do
         tag = '123'
         @event.tag_list = tag
         @event.save
@@ -89,10 +89,10 @@ module Calagator
         expect(@event.tags.first.name).to eq '123'
       end
 
-      it 'should return a collection of events for a given tag' do
+      it 'returns a collection of events for a given tag' do
         @event.tag_list = @tags
         @event.save
-        expect(Event.tagged_with('tags')).to eq [@event]
+        expect(described_class.tagged_with('tags')).to eq [@event]
       end
     end
 
@@ -100,7 +100,7 @@ module Calagator
       before do
         @basic_hcal = read_sample('hcal_basic.xml')
         @basic_venue = mock_model(Venue, title: 'Argent Hotel, San Francisco, CA', full_address: '50 3rd St, San Francisco, CA 94103')
-        @basic_event = Event.new(
+        @basic_event = described_class.new(
           title: 'Web 2.0 Conference',
           url: 'http://www.web2con.com/',
           start_time: 1.day.from_now,
@@ -109,7 +109,7 @@ module Calagator
         )
       end
 
-      it 'should parse an iCalendar into an Event' do
+      it 'parses an iCalendar into an Event' do
         url = 'http://foo.bar/'
         actual_ical = Event::IcalRenderer.render(@basic_event)
         stub_request(:get, url).to_return(body: actual_ical)
@@ -125,7 +125,7 @@ module Calagator
         expect(event.venue.title).to match "#{@basic_event.venue.title}: #{@basic_event.venue.full_address}"
       end
 
-      it 'should parse an iCalendar into an Event without a URL and generate it' do
+      it 'parses an iCalendar into an Event without a URL and generate it' do
         generated_url = 'http://foo.bar/'
         @basic_event.url = nil
         actual_ical = Event::IcalRenderer.render(@basic_event, url_helper: ->(_event) { generated_url })
@@ -146,22 +146,22 @@ module Calagator
 
     describe 'when processing date' do
       before do
-        @event = Event.new(title: 'MyEvent')
+        @event = described_class.new(title: 'MyEvent')
       end
 
-      it 'should fail to validate if start time is nil' do
+      it 'fails to validate if start time is nil' do
         @event.start_time = nil
         expect(@event).not_to be_valid
         expect(@event.errors[:start_time].size).to eq(1)
       end
 
-      it 'should fail to validate if start time is blank' do
+      it 'fails to validate if start time is blank' do
         @event.start_time = ''
         expect(@event).not_to be_valid
         expect(@event.errors[:start_time].size).to eq(1)
       end
 
-      it 'should fail to validate if end_time is earlier than start time ' do
+      it 'fails to validate if end_time is earlier than start time' do
         @event.start_time = now
         @event.end_time = @event.start_time - 2.hours
         expect(@event).to be_invalid
@@ -171,7 +171,7 @@ module Calagator
 
     describe 'when processing url' do
       before do
-        @event = Event.new(title: 'MyEvent', start_time: now)
+        @event = described_class.new(title: 'MyEvent', start_time: now)
       end
 
       let(:valid_urls) do
@@ -197,14 +197,14 @@ module Calagator
         ]
       end
 
-      it 'should validate with valid urls (with scheme included or not)' do
+      it 'validates with valid urls (with scheme included or not)' do
         valid_urls.each do |valid_url|
           @event.url = valid_url
           expect(@event).to be_valid
         end
       end
 
-      it 'should fail to validate with invalid urls (with scheme included or not)' do
+      it 'fails to validate with invalid urls (with scheme included or not)' do
         invalid_urls.each do |invalid_url|
           @event.url = invalid_url
           expect(@event).to be_invalid
@@ -213,32 +213,32 @@ module Calagator
     end
 
     describe '#start_time=' do
-      it 'should clear with nil' do
-        expect(Event.new(start_time: nil).start_time).to be_nil
+      it 'clears with nil' do
+        expect(described_class.new(start_time: nil).start_time).to be_nil
       end
 
-      it 'should set from date String' do
-        event = Event.new(start_time: '2009-01-02')
+      it 'sets from date String' do
+        event = described_class.new(start_time: '2009-01-02')
         expect(event.start_time).to eq Time.zone.parse('2009-01-02')
       end
 
-      it 'should set from date-time String' do
-        event = Event.new(start_time: '2009-01-02 03:45')
+      it 'sets from date-time String' do
+        event = described_class.new(start_time: '2009-01-02 03:45')
         expect(event.start_time).to eq Time.zone.parse('2009-01-02 03:45')
       end
 
-      it 'should set from Date' do
-        event = Event.new(start_time: Date.parse('2009-02-01'))
+      it 'sets from Date' do
+        event = described_class.new(start_time: Date.parse('2009-02-01'))
         expect(event.start_time).to eq Time.zone.parse('2009-02-01')
       end
 
-      it 'should set from DateTime' do
-        event = Event.new(start_time: Time.zone.parse('2009-01-01 05:30'))
+      it 'sets from DateTime' do
+        event = described_class.new(start_time: Time.zone.parse('2009-01-01 05:30'))
         expect(event.start_time).to eq Time.zone.parse('2009-01-01 05:30')
       end
 
-      it 'should flag an invalid time and reset to nil' do
-        event = Event.new(start_time: '2010/1/1')
+      it 'flags an invalid time and reset to nil' do
+        event = described_class.new(start_time: '2010/1/1')
         event.start_time = '1/0'
         expect(event.start_time).to be_nil
         expect(event.errors[:start_time]).to be_present
@@ -246,44 +246,44 @@ module Calagator
     end
 
     describe '#end_time=' do
-      it 'should clear with nil' do
-        expect(Event.new(end_time: nil).end_time).to be_nil
+      it 'clears with nil' do
+        expect(described_class.new(end_time: nil).end_time).to be_nil
       end
 
-      it 'should set from date String' do
-        event = Event.new(end_time: '2009-01-02')
+      it 'sets from date String' do
+        event = described_class.new(end_time: '2009-01-02')
         expect(event.end_time).to eq Time.zone.parse('2009-01-02')
       end
 
-      it 'should set from date-time String' do
-        event = Event.new(end_time: '2009-01-02 03:45')
+      it 'sets from date-time String' do
+        event = described_class.new(end_time: '2009-01-02 03:45')
         expect(event.end_time).to eq Time.zone.parse('2009-01-02 03:45')
       end
 
-      it 'should set from Date' do
-        event = Event.new(end_time: Date.parse('2009-02-01'))
+      it 'sets from Date' do
+        event = described_class.new(end_time: Date.parse('2009-02-01'))
         expect(event.end_time).to eq Time.zone.parse('2009-02-01')
       end
 
-      it 'should set from DateTime' do
-        event = Event.new(end_time: Time.zone.parse('2009-01-01 05:30'))
+      it 'sets from DateTime' do
+        event = described_class.new(end_time: Time.zone.parse('2009-01-01 05:30'))
         expect(event.end_time).to eq Time.zone.parse('2009-01-01 05:30')
       end
 
-      it 'should flag an invalid time' do
-        event = Event.new(end_time: '1/0')
+      it 'flags an invalid time' do
+        event = described_class.new(end_time: '1/0')
         expect(event.errors[:end_time]).to be_present
       end
     end
 
     describe '#duration' do
       it 'returns the event length in seconds' do
-        event = Event.new(start_time: '2010-01-01', end_time: '2010-01-03')
+        event = described_class.new(start_time: '2010-01-01', end_time: '2010-01-03')
         expect(event.duration).to eq(172_800)
       end
 
       it "returns zero if start and end times aren't present" do
-        expect(Event.new.duration).to eq(0)
+        expect(described_class.new.duration).to eq(0)
       end
     end
 
@@ -295,11 +295,11 @@ module Calagator
       end
 
       it 'finds events with the given tag' do
-        Event.search_tag('tag').should == [@c, @a]
+        described_class.search_tag('tag').should == [@c, @a]
       end
 
       it 'accepts an order option' do
-        Event.search_tag('tag', order: 'name').should == [@a, @c]
+        described_class.search_tag('tag', order: 'name').should == [@a, @c]
       end
     end
 
@@ -311,48 +311,48 @@ module Calagator
 
         @this_venue = Venue.create!(title: 'This venue')
 
-        @started_before_today_and_ends_after_today = Event.create!(
+        @started_before_today_and_ends_after_today = described_class.create!(
           title: 'Event in progress',
           start_time: @yesterday,
           end_time: @tomorrow,
           venue_id: @this_venue.id
         )
 
-        @started_midnight_and_continuing_after = Event.create!(
+        @started_midnight_and_continuing_after = described_class.create!(
           title: 'Midnight start',
           start_time: @today_midnight,
           end_time: @tomorrow,
           venue_id: @this_venue.id
         )
 
-        @started_and_ended_yesterday = Event.create!(
+        @started_and_ended_yesterday = described_class.create!(
           title: 'Yesterday start',
           start_time: @yesterday,
           end_time: @yesterday.end_of_day,
           venue_id: @this_venue.id
         )
 
-        @started_today_and_no_end_time = Event.create!(
+        @started_today_and_no_end_time = described_class.create!(
           title: 'nil end time',
           start_time: @today_midnight,
           end_time: nil,
           venue_id: @this_venue.id
         )
 
-        @starts_and_ends_tomorrow = Event.create!(
+        @starts_and_ends_tomorrow = described_class.create!(
           title: 'starts and ends tomorrow',
           start_time: @tomorrow,
           end_time: @tomorrow.end_of_day,
           venue_id: @this_venue.id
         )
 
-        @starts_after_tomorrow = Event.create!(
+        @starts_after_tomorrow = described_class.create!(
           title: 'Starting after tomorrow',
           start_time: @tomorrow + 1.day,
           venue_id: @this_venue.id
         )
 
-        @started_before_today_and_ends_at_midnight = Event.create!(
+        @started_before_today_and_ends_at_midnight = described_class.create!(
           title: 'Midnight end',
           start_time: @yesterday,
           end_time: @today_midnight,
@@ -364,27 +364,27 @@ module Calagator
 
       describe 'for future events' do
         before do
-          @future_events = Event.future
+          @future_events = described_class.future
         end
 
-        it 'should include events that started earlier today' do
+        it 'includes events that started earlier today' do
           expect(@future_events).to include @started_midnight_and_continuing_after
         end
 
-        it 'should include events with no end time that started today' do
+        it 'includes events with no end time that started today' do
           expect(@future_events).to include @started_today_and_no_end_time
         end
 
-        it 'should include events that started before today and ended after today' do
-          events = Event.future
+        it 'includes events that started before today and ended after today' do
+          events = described_class.future
           expect(events).to include @started_before_today_and_ends_after_today
         end
 
-        it 'should include events with no end time that started today' do
+        it 'includes events with no end time that started today' do
           expect(@future_events).to include @started_today_and_no_end_time
         end
 
-        it 'should not include events that ended before today' do
+        it 'does not include events that ended before today' do
           expect(@future_events).not_to include @started_and_ended_yesterday
         end
       end
@@ -393,63 +393,63 @@ module Calagator
         before do
           @another_venue = Venue.create!(title: 'Another venue')
 
-          @future_event_another_venue = Event.create!(
+          @future_event_another_venue = described_class.create!(
             title: 'Starting after tomorrow',
             start_time: @tomorrow + 1.day,
             venue_id: @another_venue.id
           )
 
-          @future_event_no_venue = Event.create!(
+          @future_event_no_venue = described_class.create!(
             title: 'Starting after tomorrow',
             start_time: @tomorrow + 1.day
           )
         end
 
         # TODO: Consider moving these examples elsewhere because they don't appear to relate to this scope. This comment applies to the examples from here...
-        it 'should include events that started earlier today' do
+        it 'includes events that started earlier today' do
           expect(@future_events_for_this_venue).to include @started_midnight_and_continuing_after
         end
 
-        it 'should include events with no end time that started today' do
+        it 'includes events with no end time that started today' do
           expect(@future_events_for_this_venue).to include @started_today_and_no_end_time
         end
 
-        it 'should include events that started before today and ended after today' do
+        it 'includes events that started before today and ended after today' do
           expect(@future_events_for_this_venue).to include @started_before_today_and_ends_after_today
         end
 
-        it 'should not include events that ended before today' do
+        it 'does not include events that ended before today' do
           expect(@future_events_for_this_venue).not_to include @started_and_ended_yesterday
         end
         # TODO: ...to here.
 
-        it 'should not include events for another venue' do
+        it 'does not include events for another venue' do
           expect(@future_events_for_this_venue).not_to include @future_event_another_venue
         end
 
-        it 'should not include events with no venue' do
+        it 'does not include events with no venue' do
           expect(@future_events_for_this_venue).not_to include @future_event_no_venue
         end
       end
 
       describe 'for date range' do
-        it 'should include events that started earlier today' do
-          events = Event.within_dates(@today_midnight, @tomorrow)
+        it 'includes events that started earlier today' do
+          events = described_class.within_dates(@today_midnight, @tomorrow)
           expect(events).to include @started_midnight_and_continuing_after
         end
 
-        it 'should include events that started before today and end after today' do
-          events = Event.within_dates(@today_midnight, @tomorrow)
+        it 'includes events that started before today and end after today' do
+          events = described_class.within_dates(@today_midnight, @tomorrow)
           expect(events).to include @started_before_today_and_ends_after_today
         end
 
-        it 'should not include past events' do
-          events = Event.within_dates(@today_midnight, @tomorrow)
+        it 'does not include past events' do
+          events = described_class.within_dates(@today_midnight, @tomorrow)
           expect(events).not_to include @started_and_ended_yesterday
         end
 
-        it 'should exclude events that start after the end of the range' do
-          events = Event.within_dates(@tomorrow, @tomorrow)
+        it 'excludes events that start after the end of the range' do
+          events = described_class.within_dates(@tomorrow, @tomorrow)
           expect(events).not_to include @started_today_and_no_end_time
         end
       end
@@ -462,7 +462,7 @@ module Calagator
           event2 = FactoryBot.create(:event, start_time: Time.zone.parse('2002-01-01'))
           event3 = FactoryBot.create(:event, start_time: Time.zone.parse('2001-01-01'))
 
-          events = Event.ordered_by_ui_field(nil)
+          events = described_class.ordered_by_ui_field(nil)
           expect(events).to eq([event3, event2, event1])
         end
 
@@ -471,7 +471,7 @@ module Calagator
           event2 = FactoryBot.create(:event, title: 'Be there')
           event3 = FactoryBot.create(:event, title: 'An event')
 
-          events = Event.ordered_by_ui_field('name')
+          events = described_class.ordered_by_ui_field('name')
           expect(events).to eq([event3, event2, event1])
         end
 
@@ -480,7 +480,7 @@ module Calagator
           event2 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'B venue'))
           event3 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'A venue'))
 
-          events = Event.ordered_by_ui_field('venue')
+          events = described_class.ordered_by_ui_field('venue')
           expect(events).to eq([event3, event2, event1])
         end
       end
@@ -493,74 +493,74 @@ module Calagator
         @events = [@non_duplicate_event, @duplicate_event]
       end
 
-      it 'should find all events that have not been marked as duplicate' do
-        non_duplicates = Event.non_duplicates
+      it 'finds all events that have not been marked as duplicate' do
+        non_duplicates = described_class.non_duplicates
         expect(non_duplicates).to include @non_duplicate_event
         expect(non_duplicates).not_to include @duplicate_event
       end
 
-      it 'should find all events that have been marked as duplicate' do
-        duplicates = Event.marked_duplicates
+      it 'finds all events that have been marked as duplicate' do
+        duplicates = described_class.marked_duplicates
         expect(duplicates).to include @duplicate_event
         expect(duplicates).not_to include @non_duplicate_event
       end
     end
 
     describe 'with finding duplicates (integration test)' do
+      subject do
+        FactoryBot.create(:event)
+      end
+
       before do
         # this event should always be omitted from the results
         past = FactoryBot.create(:event, start_time: 1.week.ago)
       end
 
-      subject do
-        FactoryBot.create(:event)
-      end
-
-      it 'should return future events when provided na' do
-        future = Event.create!(title: subject.title, start_time: 1.day.from_now)
-        events = Event.find_duplicates_by_type('na')
+      it 'returns future events when provided na' do
+        future = described_class.create!(title: subject.title, start_time: 1.day.from_now)
+        events = described_class.find_duplicates_by_type('na')
         expect(events).to eq([nil] => [subject, future])
       end
 
-      it 'should find duplicate title by title' do
-        clone = Event.create!(title: subject.title, start_time: subject.start_time)
-        events = Event.find_duplicates_by_type('title')
+      it 'finds duplicate title by title' do
+        clone = described_class.create!(title: subject.title, start_time: subject.start_time)
+        events = described_class.find_duplicates_by_type('title')
         expect(events).to eq([subject.title] => [subject, clone])
       end
 
-      it 'should find duplicate title by any' do
-        clone = Event.create!(title: subject.title, start_time: subject.start_time + 1.minute)
-        events = Event.find_duplicates_by_type('title')
+      it 'finds duplicate title by any' do
+        clone = described_class.create!(title: subject.title, start_time: subject.start_time + 1.minute)
+        events = described_class.find_duplicates_by_type('title')
         expect(events).to eq([subject.title] => [subject, clone])
       end
 
-      it 'should not find duplicate title by url' do
-        clone = Event.create!(title: subject.title, start_time: subject.start_time)
-        events = Event.find_duplicates_by_type('url')
+      it 'does not find duplicate title by url' do
+        clone = described_class.create!(title: subject.title, start_time: subject.start_time)
+        events = described_class.find_duplicates_by_type('url')
         expect(events).to be_empty
       end
 
-      it 'should find complete duplicates by all' do
-        clone = Event.create!(subject.attributes.merge(id: nil))
-        events = Event.find_duplicates_by_type('all')
+      it 'finds complete duplicates by all' do
+        clone = described_class.create!(subject.attributes.merge(id: nil))
+        events = described_class.find_duplicates_by_type('all')
         expect(events).to eq([nil] => [subject, clone])
       end
 
-      it 'should not find incomplete duplicates by all' do
-        clone = Event.create!(subject.attributes.merge(title: 'SpaceCube', start_time: subject.start_time, id: nil))
-        events = Event.find_duplicates_by_type('all')
+      it 'does not find incomplete duplicates by all' do
+        clone = described_class.create!(subject.attributes.merge(title: 'SpaceCube', start_time: subject.start_time, id: nil))
+        events = described_class.find_duplicates_by_type('all')
         expect(events).to be_empty
       end
 
-      it 'should find duplicate for matching multiple fields' do
-        clone = Event.create!(title: subject.title, start_time: subject.start_time)
-        events = Event.find_duplicates_by_type('title,start_time')
+      it 'finds duplicate for matching multiple fields' do
+        clone = described_class.create!(title: subject.title, start_time: subject.start_time)
+        events = described_class.find_duplicates_by_type('title,start_time')
         expect(events).to eq([subject.title, subject.start_time] => [subject, clone])
       end
 
-      it 'should not find duplicates for mismatching multiple fields' do
-        clone = Event.create!(title: 'SpaceCube', start_time: subject.start_time)
-        events = Event.find_duplicates_by_type('title,start_time')
+      it 'does not find duplicates for mismatching multiple fields' do
+        clone = described_class.create!(title: 'SpaceCube', start_time: subject.start_time)
+        events = described_class.find_duplicates_by_type('title,start_time')
         expect(events).to be_empty
       end
     end
@@ -571,17 +571,17 @@ module Calagator
         @venue = @event.venue
       end
 
-      it "should consolidate associations, merge tags, and update the venue's counter_cache" do
+      it "consolidates associations, merge tags, and update the venue's counter_cache" do
         @event.tag_list = %w[first second] # master event contains one duplicate tag, and one unique tag
 
-        clone = Event.create!(@event.attributes.merge(id: nil))
+        clone = described_class.create!(@event.attributes.merge(id: nil))
         clone.tag_list.replace %w[second third] # duplicate event also contains one duplicate tag, and one unique tag
         clone.save!
         clone.reload
         expect(clone).not_to be_duplicate
         expect(@venue.reload.events_count).to eq 2
 
-        Event.squash(@event, clone)
+        described_class.squash(@event, clone)
         expect(@event.tag_list.to_a.sort).to eq %w[first second third] # master now contains all three tags
         expect(clone.duplicate_of).to eq @event
         expect(@venue.reload.events_count).to eq 1
@@ -591,52 +591,52 @@ module Calagator
     describe 'when checking for squashing' do
       before do
         @today  = today
-        @master = Event.create!(title: 'Master',    start_time: @today)
-        @slave1 = Event.create!(title: '1st slave', start_time: @today, duplicate_of_id: @master.id)
-        @slave2 = Event.create!(title: '2nd slave', start_time: @today, duplicate_of_id: @slave1.id)
-        @orphan = Event.create!(title: 'orphan',    start_time: @today, duplicate_of_id: 999_999)
+        @master = described_class.create!(title: 'Master',    start_time: @today)
+        @slave1 = described_class.create!(title: '1st slave', start_time: @today, duplicate_of_id: @master.id)
+        @slave2 = described_class.create!(title: '2nd slave', start_time: @today, duplicate_of_id: @slave1.id)
+        @orphan = described_class.create!(title: 'orphan',    start_time: @today, duplicate_of_id: 999_999)
       end
 
-      it 'should recognize a master' do
+      it 'recognizes a master' do
         expect(@master).to be_a_master
       end
 
-      it 'should recognize a slave' do
+      it 'recognizes a slave' do
         expect(@slave1).to be_a_slave
       end
 
-      it 'should not think that a slave is a master' do
+      it 'does not think that a slave is a master' do
         expect(@slave2).not_to be_a_master
       end
 
-      it 'should not think that a master is a slave' do
+      it 'does not think that a master is a slave' do
         expect(@master).not_to be_a_slave
       end
 
-      it 'should return the progenitor of a child' do
+      it 'returns the progenitor of a child' do
         expect(@slave1.progenitor).to eq @master
       end
 
-      it 'should return the progenitor of a grandchild' do
+      it 'returns the progenitor of a grandchild' do
         expect(@slave2.progenitor).to eq @master
       end
 
-      it 'should return a master as its own progenitor' do
+      it 'returns a master as its own progenitor' do
         expect(@master.progenitor).to eq @master
       end
 
-      it 'should return a marked duplicate as progenitor if it is orphaned' do
+      it 'returns a marked duplicate as progenitor if it is orphaned' do
         expect(@orphan.progenitor).to eq @orphan
       end
     end
 
     describe 'when versioning' do
-      it 'should have versions' do
-        expect(Event.new.versions).to eq []
+      it 'has versions' do
+        expect(described_class.new.versions).to eq []
       end
 
-      it 'should create a new version after updating' do
-        event = Event.create!(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
+      it 'creates a new version after updating' do
+        event = described_class.create!(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
         expect(event.versions.count).to eq 1
 
         event.title = 'New Title'
@@ -655,11 +655,11 @@ module Calagator
         end
       end
 
-      it 'should produce parsable iCal output' do
+      it 'produces parsable iCal output' do
         expect { ical_roundtrip(FactoryBot.build(:event)) }.not_to raise_error
       end
 
-      it 'should represent an event without an end time as a 1-hour block' do
+      it 'represents an event without an end time as a 1-hour block' do
         event = FactoryBot.build(:event, start_time: now, end_time: nil)
         expect(event.end_time).to be_blank
 
@@ -667,7 +667,7 @@ module Calagator
         expect(rt.dtend - rt.dtstart).to eq 1.hour
       end
 
-      it 'should set the appropriate end time if one is given' do
+      it 'sets the appropriate end time if one is given' do
         event = FactoryBot.build(:event, start_time: now, end_time: now + 2.hours)
 
         rt = ical_roundtrip(event)
@@ -685,7 +685,7 @@ module Calagator
           url: :url,
           dtstart: :start_time,
           dtstamp: :created_at }.each do |ical_attribute, model_attribute|
-          it "should map the Event's #{model_attribute} attribute to '#{ical_attribute}' in the iCalendar output" do
+          it "maps the Event's #{model_attribute} attribute to '#{ical_attribute}' in the iCalendar output" do
             model_value = event.send(model_attribute)
             ical_value = ical.send(ical_attribute)
 
@@ -700,33 +700,33 @@ module Calagator
         end
       end
 
-      it 'should call the URL helper to generate a UID' do
+      it 'calls the URL helper to generate a UID' do
         event = FactoryBot.build(:event)
         expect(ical_roundtrip(event, url_helper: ->(_e) { "UID'D!" }).uid).to eq "UID'D!"
       end
 
-      it 'should strip HTML from the description' do
+      it 'strips HTML from the description' do
         event = FactoryBot.create(:event, description: '<blink>OMFG HTML IS TEH AWESOME</blink>')
         expect(ical_roundtrip(event).description).not_to include '<blink>'
       end
 
-      it 'should include tags in the description' do
+      it 'includes tags in the description' do
         event = FactoryBot.build(:event)
         event.tag_list = 'tags, folksonomy, categorization'
         expect(ical_roundtrip(event).description).to include event.tag_list.to_s
       end
 
-      it 'should leave URL blank if no URL is provided' do
+      it 'leaves URL blank if no URL is provided' do
         event = FactoryBot.build(:event, url: nil)
         expect(ical_roundtrip(event).url).to be_nil
       end
 
-      it 'should have Source URL if URL helper is given)' do
+      it 'has Source URL if URL helper is given)' do
         event = FactoryBot.build(:event)
         expect(ical_roundtrip(event, url_helper: ->(_e) { 'FAKE' }).description).to match /FAKE/
       end
 
-      it 'should create multi-day entries for multi-day events' do
+      it 'creates multi-day entries for multi-day events' do
         time = Time.zone.now
         event = FactoryBot.build(:event, start_time: time, end_time: time + 4.days)
         parsed_event = ical_roundtrip(event)
@@ -741,13 +741,13 @@ module Calagator
           RiCal.parse_string(Event::IcalRenderer.render([event])).first.events.first
         end
 
-        it 'should set an initial sequence on a new event' do
+        it 'sets an initial sequence on a new event' do
           event = FactoryBot.create(:event)
           ical = event_to_ical(event)
           expect(ical.sequence).to eq 1
         end
 
-        it 'should increment the sequence if it is updated' do
+        it 'increments the sequence if it is updated' do
           event = FactoryBot.create(:event)
           event.update_attribute(:title, 'Update 1')
           ical = event_to_ical(event)
@@ -767,15 +767,15 @@ module Calagator
           @data = Event::IcalRenderer.render(FactoryBot.build(:event))
         end
 
-        it 'should include the calendar name' do
+        it 'includes the calendar name' do
           expect(@data).to match /\sX-WR-CALNAME:#{Calagator.title}\s/
         end
 
-        it 'should include the method' do
+        it 'includes the method' do
           expect(@data).to match /\sMETHOD:PUBLISH\s/
         end
 
-        it 'should include the scale' do
+        it 'includes the scale' do
           expect(@data).to match /\sCALSCALE:Gregorian\s/i
         end
       end

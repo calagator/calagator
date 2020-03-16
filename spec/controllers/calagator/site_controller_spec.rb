@@ -20,13 +20,13 @@ module Calagator
     end
 
     describe '#index' do
-      it 'should render requests for HTML successfully' do
+      it 'renders requests for HTML successfully' do
         get :index
         expect(response).to be_success
         expect(response).to render_template :index
       end
 
-      it 'should redirect requests for non-HTML to events' do
+      it 'redirects requests for non-HTML to events' do
         get :index, format: 'json'
         expect(response).to redirect_to(events_path(format: 'json'))
       end

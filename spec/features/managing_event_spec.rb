@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-feature 'Event Editing', js: true do
-  background do
+describe 'Event Editing', js: true do
+  before do
     Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Future', start_time: Time.zone.now
     create :event, :with_multiple_tags, title: 'Tagged Event', start_time: Time.zone.now
@@ -13,7 +13,7 @@ feature 'Event Editing', js: true do
     Timecop.return
   end
 
-  scenario 'A user edits an existing event' do
+  it 'A user edits an existing event' do
     visit '/'
 
     within '#today' do
@@ -47,7 +47,7 @@ feature 'Event Editing', js: true do
     end
   end
 
-  scenario 'A user edits an event with more than one tag' do
+  it 'A user edits an event with more than one tag' do
     visit '/'
 
     within '#today' do
@@ -67,8 +67,8 @@ feature 'Event Editing', js: true do
   end
 end
 
-feature 'Event Cloning', js: true do
-  background do
+describe 'Event Cloning', js: true do
+  before do
     Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Event Part One', start_time: 4.days.from_now
   end
@@ -77,7 +77,7 @@ feature 'Event Cloning', js: true do
     Timecop.return
   end
 
-  scenario 'A user clones an existing event' do
+  it 'A user clones an existing event' do
     visit '/'
 
     within '#next_two_weeks' do
@@ -110,12 +110,12 @@ feature 'Event Cloning', js: true do
   end
 end
 
-feature 'Event Deletion', js: true do
-  background do
+describe 'Event Deletion', js: true do
+  before do
     create :event, title: 'Ruby and You', start_time: 1.day.from_now
   end
 
-  scenario 'A user deletes an event' do
+  it 'A user deletes an event' do
     visit '/'
 
     within '#tomorrow' do

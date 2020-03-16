@@ -2,10 +2,10 @@
 
 require 'rails_helper'
 
-feature 'Venue Creation' do
+describe 'Venue Creation' do
   let(:new_venue) { build(:venue) }
 
-  scenario 'User adds a new venue' do
+  it 'User adds a new venue' do
     visit '/'
     click_on 'Venues'
     click_on 'Add a venue'

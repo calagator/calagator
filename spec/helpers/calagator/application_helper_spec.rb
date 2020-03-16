@@ -5,17 +5,17 @@ require 'spec_helper'
 module Calagator
   describe ApplicationHelper, type: :helper do
     describe '#format_description' do
-      it 'should autolink' do
+      it 'autolinks' do
         expect(helper.format_description('foo http://mysite.com/~user bar')).to eq \
           '<p>foo <a href="http://mysite.com/~user">http://mysite.com/~user</a> bar</p>'
       end
 
-      it 'should process Markdown links' do
+      it 'processes Markdown links' do
         expect(helper.format_description('[ClojureScript](https://github.com/clojure/clojurescript), the Clojure to JS compiler')).to eq \
           '<p><a href="https://github.com/clojure/clojurescript">ClojureScript</a>, the Clojure to JS compiler</p>'
       end
 
-      it 'should process Markdown references' do
+      it 'processes Markdown references' do
         desc = <<-DESC.strip_heredoc
           [SocketStream][1], a phenomenally fast real-time web framework for Node.js
 

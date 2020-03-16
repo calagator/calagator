@@ -4,42 +4,42 @@ require 'spec_helper'
 
 module Calagator
   describe Venue, type: :model do
-    it 'should be valid' do
-      venue = Venue.new(title: 'My Event')
+    it 'is valid' do
+      venue = described_class.new(title: 'My Event')
       expect(venue).to be_valid
     end
 
-    it 'should add an http prefix to urls missing this before save' do
-      venue = Venue.new(title: 'My Event', url: 'google.com')
+    it 'adds an http prefix to urls missing this before save' do
+      venue = described_class.new(title: 'My Event', url: 'google.com')
       expect(venue).to be_valid
     end
 
     it 'validates blacklisted words' do
       BlacklistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
-      venue = Venue.new(title: 'Foo bar cialis')
+      venue = described_class.new(title: 'Foo bar cialis')
       expect(venue).not_to be_valid
     end
 
     describe 'latitude validation' do
       specify do
-        venue = Venue.new(latitude: -91)
+        venue = described_class.new(latitude: -91)
         expect(venue).to have(1).error_on(:latitude)
       end
 
       specify do
-        venue = Venue.new(latitude: -89)
+        venue = described_class.new(latitude: -89)
         expect(venue).to have(0).errors_on(:latitude)
       end
     end
 
     describe 'longitude validation' do
       specify do
-        venue = Venue.new(longitude: -181)
+        venue = described_class.new(longitude: -181)
         expect(venue).to have(1).error_on(:longitude)
       end
 
       specify do
-        venue = Venue.new(longitude: -179)
+        venue = described_class.new(longitude: -179)
         expect(venue).to have(0).errors_on(:longitude)
       end
     end
@@ -48,39 +48,40 @@ module Calagator
       let(:attributes) { { title: 'My Venue' } }
       let(:bad_data) { ' blargie ' }
       let(:expected_data) { bad_data.strip }
+
       %i[title description address street_address locality region postal_code country email telephone].each do |field|
-        it "should strip whitespace from #{field}" do
-          venue = Venue.new(attributes.merge(field => bad_data))
+        it "strips whitespace from #{field}" do
+          venue = described_class.new(attributes.merge(field => bad_data))
           venue.valid?
           expect(venue.send(field)).to eq(expected_data)
         end
       end
 
-      it 'should strip whitespace from url' do
-        venue = Venue.new(attributes.merge(url: bad_data))
+      it 'strips whitespace from url' do
+        venue = described_class.new(attributes.merge(url: bad_data))
         venue.valid?
         expect(venue.url).to eq("http://#{expected_data}")
       end
     end
 
     describe 'when finding exact duplicates' do
-      it 'should ignore attributes like created_at' do
-        venue1 = Venue.create!(title: 'this', description: 'desc', created_at: Time.now.in_time_zone)
-        venue2 = Venue.new(title: 'this', description: 'desc', created_at: Time.now.in_time_zone.yesterday)
+      it 'ignores attributes like created_at' do
+        venue1 = described_class.create!(title: 'this', description: 'desc', created_at: Time.now.in_time_zone)
+        venue2 = described_class.new(title: 'this', description: 'desc', created_at: Time.now.in_time_zone.yesterday)
 
         expect(venue2.find_exact_duplicates).to include(venue1)
       end
 
-      it 'should ignore source_id' do
-        venue1 = Venue.create!(title: 'this', description: 'desc', source_id: '1')
-        venue2 = Venue.new(title: 'this', description: 'desc', source_id: '2')
+      it 'ignores source_id' do
+        venue1 = described_class.create!(title: 'this', description: 'desc', source_id: '1')
+        venue2 = described_class.new(title: 'this', description: 'desc', source_id: '2')
 
         expect(venue2.find_exact_duplicates).to include(venue1)
       end
 
-      it 'should not match non-duplicates' do
-        Venue.create!(title: 'this', description: 'desc')
-        venue2 = Venue.new(title: 'that', description: 'desc')
+      it 'does not match non-duplicates' do
+        described_class.create!(title: 'this', description: 'desc')
+        venue2 = described_class.new(title: 'that', description: 'desc')
 
         expect(venue2.find_exact_duplicates).to be_blank
       end
@@ -91,95 +92,95 @@ module Calagator
         FactoryBot.create(:venue, title: 'Venue A')
       end
 
-      it 'should not match totally different records' do
+      it 'does not match totally different records' do
         FactoryBot.create(:venue)
-        expect(Venue.find_duplicates_by_type('title')).to be_empty
+        expect(described_class.find_duplicates_by_type('title')).to be_empty
       end
 
-      it 'should not match similar records when not searching by duplicated fields' do
+      it 'does not match similar records when not searching by duplicated fields' do
         FactoryBot.create :venue, title: subject.title
-        expect(Venue.find_duplicates_by_type('description')).to be_empty
+        expect(described_class.find_duplicates_by_type('description')).to be_empty
       end
 
-      it 'should match similar records when searching by duplicated fields' do
+      it 'matches similar records when searching by duplicated fields' do
         venue = FactoryBot.create(:venue, title: subject.title)
-        expect(Venue.find_duplicates_by_type('title')).to eq([subject.title] => [subject, venue])
+        expect(described_class.find_duplicates_by_type('title')).to eq([subject.title] => [subject, venue])
       end
 
-      it 'should match similar records when searching by :any' do
+      it 'matches similar records when searching by :any' do
         venue = FactoryBot.create(:venue, title: subject.title)
-        expect(Venue.find_duplicates_by_type('any')).to eq([nil] => [subject, venue])
+        expect(described_class.find_duplicates_by_type('any')).to eq([nil] => [subject, venue])
       end
 
-      it 'should not match similar records when searching by multiple fields where not all are duplicated' do
+      it 'does not match similar records when searching by multiple fields where not all are duplicated' do
         FactoryBot.create(:venue, title: subject.title)
-        expect(Venue.find_duplicates_by_type('title,description')).to be_empty
+        expect(described_class.find_duplicates_by_type('title,description')).to be_empty
       end
 
-      it 'should match similar records when searching by multiple fields where all are duplicated' do
+      it 'matches similar records when searching by multiple fields where all are duplicated' do
         venue = FactoryBot.create(:venue, title: subject.title, description: subject.description)
-        expect(Venue.find_duplicates_by_type('title,description')).to \
+        expect(described_class.find_duplicates_by_type('title,description')).to \
           eq([subject.title, subject.description] => [subject, venue])
       end
 
-      it 'should not match dissimilar records when searching by :all' do
+      it 'does not match dissimilar records when searching by :all' do
         FactoryBot.create(:venue)
-        expect(Venue.find_duplicates_by_type('all')).to be_empty
+        expect(described_class.find_duplicates_by_type('all')).to be_empty
       end
 
-      it 'should match similar records when searching by :all' do
+      it 'matches similar records when searching by :all' do
         attributes = subject.attributes.reject { |key| key == 'id' }
-        venue = Venue.create!(attributes)
-        expect(Venue.find_duplicates_by_type('all')).to eq([nil] => [subject, venue])
+        venue = described_class.create!(attributes)
+        expect(described_class.find_duplicates_by_type('all')).to eq([nil] => [subject, venue])
       end
 
-      it 'should match non duplicate venues when searching by na' do
+      it 'matches non duplicate venues when searching by na' do
         venue = FactoryBot.create(:venue, title: 'Venue B')
-        expect(Venue.find_duplicates_by_type('na')).to eq([nil] => [subject, venue])
+        expect(described_class.find_duplicates_by_type('na')).to eq([nil] => [subject, venue])
       end
     end
 
     describe 'when checking for squashing' do
       before do
-        @master = Venue.create!(title: 'Master')
-        @slave_first = Venue.create!(title: '1st slave', duplicate_of_id: @master.id)
-        @slave_second = Venue.create!(title: '2nd slave', duplicate_of_id: @slave_first.id)
+        @master = described_class.create!(title: 'Master')
+        @slave_first = described_class.create!(title: '1st slave', duplicate_of_id: @master.id)
+        @slave_second = described_class.create!(title: '2nd slave', duplicate_of_id: @slave_first.id)
       end
 
-      it 'should recognize a master' do
+      it 'recognizes a master' do
         expect(@master).to be_a_master
       end
 
-      it 'should recognize a slave' do
+      it 'recognizes a slave' do
         expect(@slave_first).to be_a_slave
       end
 
-      it 'should not think that a slave is a master' do
+      it 'does not think that a slave is a master' do
         expect(@slave_second).not_to be_a_master
       end
 
-      it 'should not think that a master is a slave' do
+      it 'does not think that a master is a slave' do
         expect(@master).not_to be_a_slave
       end
 
-      it 'should return the progenitor of a child' do
+      it 'returns the progenitor of a child' do
         expect(@slave_first.progenitor).to eq @master
       end
 
-      it 'should return the progenitor of a grandchild' do
+      it 'returns the progenitor of a grandchild' do
         expect(@slave_second.progenitor).to eq @master
       end
 
-      it 'should return a master as its own progenitor' do
+      it 'returns a master as its own progenitor' do
         expect(@master.progenitor).to eq @master
       end
     end
 
     describe 'when squashing duplicates' do
       before do
-        @master_venue    = Venue.create!(title: 'Master')
-        @submaster_venue = Venue.create!(title: 'Submaster')
-        @child_venue     = Venue.create!(title: 'Child', duplicate_of: @submaster_venue)
+        @master_venue    = described_class.create!(title: 'Master')
+        @submaster_venue = described_class.create!(title: 'Submaster')
+        @child_venue     = described_class.create!(title: 'Child', duplicate_of: @submaster_venue)
         @venues          = [@master_venue, @submaster_venue, @child_venue]
 
         @event_at_child_venue = Event.create!(title: 'Event at child venue', venue: @child_venue, start_time: Time.now.in_time_zone)
@@ -187,32 +188,32 @@ module Calagator
         @events = [@event_at_child_venue, @event_at_submaster_venue]
       end
 
-      it 'should squash a single duplicate' do
-        Venue.squash(@master_venue, @submaster_venue)
+      it 'squashes a single duplicate' do
+        described_class.squash(@master_venue, @submaster_venue)
 
         expect(@submaster_venue.duplicate_of).to eq @master_venue
-        expect(@submaster_venue.duplicate?).to be_truthy
+        expect(@submaster_venue).to be_duplicate
       end
 
-      it 'should squash multiple duplicates' do
-        Venue.squash(@master_venue, [@submaster_venue, @child_venue])
+      it 'squashes multiple duplicates' do
+        described_class.squash(@master_venue, [@submaster_venue, @child_venue])
 
         expect(@submaster_venue.duplicate_of).to eq @master_venue
         expect(@child_venue.duplicate_of).to eq @master_venue
       end
 
-      it 'should squash duplicates recursively' do
-        Venue.squash(@master_venue, @submaster_venue)
+      it 'squashes duplicates recursively' do
+        described_class.squash(@master_venue, @submaster_venue)
 
         expect(@submaster_venue.duplicate_of).to eq @master_venue
         @child_venue.reload # Needed because child was queried through DB, not object graph
         expect(@child_venue.duplicate_of).to eq @master_venue
       end
 
-      it 'should transfer events of duplicates' do
+      it 'transfers events of duplicates' do
         expect(@venues.map { |venue| venue.events.count }).to eq [0, 1, 1]
 
-        Venue.squash(@master_venue, @submaster_venue)
+        described_class.squash(@master_venue, @submaster_venue)
 
         expect(@venues.map { |venue| venue.events.count }).to eq [2, 0, 0]
 
@@ -233,11 +234,11 @@ module Calagator
                             "#{@geo_success.state} #{@geo_success.zip}"
     end
 
-    it 'should be valid even if not yet geocoded' do
-      expect(@venue.valid?).to be_truthy
+    it 'is valid even if not yet geocoded' do
+      expect(@venue).to be_valid
     end
 
-    it 'should report its location properly if it has one' do
+    it 'reports its location properly if it has one' do
       expect do
         @venue.latitude = 45.0
         @venue.longitude = -122.0
@@ -253,29 +254,29 @@ module Calagator
         Venue::Geocoder.perform_geocoding = original
       end
 
-      it 'should geocode automatically on save' do
+      it 'geocodes automatically on save' do
         expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
         @venue.save
       end
 
-      it "shouldn't geocode automatically unless there's an address" do
+      it "does not geocode automatically unless there's an address" do
         @venue.address = ''
         expect(Geokit::Geocoders::MultiGeocoder).not_to receive(:geocode)
         @venue.save
       end
 
-      it "shouldn't geocode automatically if already geocoded" do
+      it 'does not geocode automatically if already geocoded' do
         @venue.latitude = @venue.longitude = 0.0
         expect(Geokit::Geocoders::MultiGeocoder).not_to receive(:geocode)
         @venue.save
       end
 
-      it "shouldn't fail if the geocoder returns failure" do
+      it 'does not fail if the geocoder returns failure' do
         expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_failure)
         @venue.save
       end
 
-      it 'should fill in empty addressing fields' do
+      it 'fills in empty addressing fields' do
         expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
         @venue.save
         expect(@venue.street_address).to eq @geo_success.street_address
@@ -284,21 +285,21 @@ module Calagator
         expect(@venue.postal_code).to eq @geo_success.zip
       end
 
-      it 'should leave non-empty addressing fields alone' do
+      it 'leaves non-empty addressing fields alone' do
         @venue.locality = 'Cleveland'
         expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
         @venue.save
         expect(@venue.locality).to eq 'Cleveland'
       end
 
-      it 'should not overwrite present fields with empty values' do
+      it 'does not overwrite present fields with empty values' do
         @venue.country = 'US'
         expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
         @venue.save
         expect(@venue.country).to eq 'US'
       end
 
-      it 'should overwrite latitude and longitude values if forced' do
+      it 'overwrites latitude and longitude values if forced' do
         @venue.latitude = @venue.longitude = 1.0
         @venue.force_geocoding = '1'
         expect(Geokit::Geocoders::MultiGeocoder).to receive(:geocode).once.and_return(@geo_success)
@@ -314,7 +315,7 @@ module Calagator
       @venue = Venue.new(title: 'title')
     end
 
-    it "should use the street address fields if they're present" do
+    it "uses the street address fields if they're present" do
       @venue.attributes = {
         street_address: 'street_address',
         locality: 'locality',
@@ -326,17 +327,17 @@ module Calagator
       expect(@venue.geocode_address).to eq 'street_address, locality region postal_code country'
     end
 
-    it "should fall back to 'address' field if street address fields are blank" do
+    it "falls back to 'address' field if street address fields are blank" do
       @venue.attributes = { street_address: '', address: 'address' }
       expect(@venue.geocode_address).to eq 'address'
     end
 
     describe 'when versioning' do
-      it 'should have versions' do
+      it 'has versions' do
         expect(Venue.new.versions).to eq []
       end
 
-      it 'should create a new version after updating' do
+      it 'creates a new version after updating' do
         venue = FactoryBot.create :venue
         expect(venue.versions.count).to eq 1
 
@@ -346,7 +347,7 @@ module Calagator
         expect(venue.versions.count).to eq 2
       end
 
-      it 'should store old content in past versions' do
+      it 'stores old content in past versions' do
         venue = FactoryBot.create :venue
         original_title = venue.title
 
