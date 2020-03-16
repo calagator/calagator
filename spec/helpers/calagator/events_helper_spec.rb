@@ -17,31 +17,31 @@ module Calagator
     end
 
     describe '#events_sort_label' do
-      it 'should return nil without arguments' do
+      it 'returns nil without arguments' do
         expect(helper.events_sort_label(nil)).to be_nil
       end
 
-      it 'should return string for a string key' do
+      it 'returns string for a string key' do
         expect(helper.events_sort_label('score')).to eq(' by <strong>Relevance.</strong>')
       end
 
-      it 'should return string for a symbol key' do
+      it 'returns string for a symbol key' do
         expect(helper.events_sort_label(:score)).to eq(' by <strong>Relevance.</strong>')
       end
 
-      it 'should use the label Date when using a tag' do
+      it 'uses the label Date when using a tag' do
         assign :tag, ActsAsTaggableOn::Tag.new
         expect(helper.events_sort_label(nil)).to eq(' by <strong>Date.</strong>')
       end
     end
 
     describe '#today_tomorrow_or_weekday' do
-      it 'should display day of the week' do
+      it 'displays day of the week' do
         event = Event.new start_time: '2010-01-01'
         expect(helper.today_tomorrow_or_weekday(event)).to eq('Friday')
       end
 
-      it "should display tomorrow as 'Tomorrow'" do
+      it "displays tomorrow as 'Tomorrow'" do
         event = Event.new start_time: '2010-01-01', end_time: 1.day.from_now
         expect(helper.today_tomorrow_or_weekday(event)).to eq('Started Friday')
       end
@@ -52,19 +52,19 @@ module Calagator
         helper.google_events_subscription_link(*args)
       end
 
-      it 'should fail if given unknown options' do
+      it 'fails if given unknown options' do
         expect { method(omg: :kittens) }.to raise_error ArgumentError
       end
 
-      it 'should generate a default link' do
+      it 'generates a default link' do
         expect(method).to eq 'https://www.google.com/calendar/render?cid=webcal%3A%2F%2Ftest.host%2Fevents.ics'
       end
 
-      it 'should generate a search link' do
+      it 'generates a search link' do
         expect(method(query: 'my query')).to eq 'https://www.google.com/calendar/render?cid=webcal%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Fquery%3Dmy%2Bquery'
       end
 
-      it 'should generate a tag link' do
+      it 'generates a tag link' do
         expect(method(tag: 'mytag')).to eq 'https://www.google.com/calendar/render?cid=webcal%3A%2F%2Ftest.host%2Fevents%2Fsearch.ics%3Ftag%3Dmytag'
       end
     end
@@ -74,19 +74,19 @@ module Calagator
         helper.icalendar_feed_link(*args)
       end
 
-      it 'should fail if given unknown options' do
+      it 'fails if given unknown options' do
         expect { method(omg: :kittens) }.to raise_error ArgumentError
       end
 
-      it 'should generate a default link' do
+      it 'generates a default link' do
         expect(method).to eq 'webcal://test.host/events.ics'
       end
 
-      it 'should generate a search link' do
+      it 'generates a search link' do
         expect(method(query: 'my query')).to eq 'webcal://test.host/events/search.ics?query=my+query'
       end
 
-      it 'should generate a tag link' do
+      it 'generates a tag link' do
         expect(method(tag: 'mytag')).to eq 'webcal://test.host/events/search.ics?tag=mytag'
       end
     end
@@ -96,19 +96,19 @@ module Calagator
         helper.icalendar_export_link(*args)
       end
 
-      it 'should fail if given unknown options' do
+      it 'fails if given unknown options' do
         expect { method(omg: :kittens) }.to raise_error ArgumentError
       end
 
-      it 'should generate a default link' do
+      it 'generates a default link' do
         expect(method).to eq 'http://test.host/events.ics'
       end
 
-      it 'should generate a search link' do
+      it 'generates a search link' do
         expect(method(query: 'my query')).to eq 'http://test.host/events/search.ics?query=my+query'
       end
 
-      it 'should generate a tag link' do
+      it 'generates a tag link' do
         expect(method(tag: 'mytag')).to eq 'http://test.host/events/search.ics?tag=mytag'
       end
     end
@@ -118,19 +118,19 @@ module Calagator
         helper.atom_feed_link(*args)
       end
 
-      it 'should fail if given unknown options' do
+      it 'fails if given unknown options' do
         expect { method(omg: :kittens) }.to raise_error ArgumentError
       end
 
-      it 'should generate a default link' do
+      it 'generates a default link' do
         expect(method).to eq 'http://test.host/events.atom'
       end
 
-      it 'should generate a search link' do
+      it 'generates a search link' do
         expect(method(query: 'my query')).to eq 'http://test.host/events/search.atom?query=my+query'
       end
 
-      it 'should generate a tag link' do
+      it 'generates a tag link' do
         expect(method(tag: 'mytag')).to eq 'http://test.host/events/search.atom?tag=mytag'
       end
     end
@@ -156,15 +156,15 @@ module Calagator
     end
 
     describe 'sorting labels' do
-      it 'should display human-friendly label for a known value' do
+      it 'displays human-friendly label for a known value' do
         expect(helper.sorting_label_for('name')).to eq 'Event Name'
       end
 
-      it 'should display a default label' do
+      it 'displays a default label' do
         expect(helper.sorting_label_for(nil)).to eq 'Relevance'
       end
 
-      it 'should display a different default label when searching by tag' do
+      it 'displays a different default label when searching by tag' do
         expect(helper.sorting_label_for(nil, true)).to eq 'Date'
       end
     end

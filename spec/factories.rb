@@ -3,7 +3,7 @@
 require 'faker'
 
 FactoryBot.define do
-  factory :venue, class: Calagator::Venue do
+  factory :venue, class: 'Calagator::Venue' do
     sequence(:title) { |n| "Venue #{n}" }
     sequence(:description) { |n| "Description of Venue #{n}." }
     sequence(:address) { |n| "Address #{n}" }
@@ -29,7 +29,7 @@ FactoryBot.define do
     end
   end
 
-  factory :event, class: Calagator::Event do
+  factory :event, class: 'Calagator::Event' do
     sequence(:title) { |n| "Event #{n}" }
     sequence(:description) { |n| "Description of Event #{n}." }
     start_time { Time.zone.now.beginning_of_day }
@@ -62,7 +62,7 @@ FactoryBot.define do
     association :duplicate_of, factory: :event
   end
 
-  factory :source, class: Calagator::Source do
+  factory :source, class: 'Calagator::Source' do
     sequence(:title) { |n| "Source #{n}" }
     url { 'http://example.com' }
   end

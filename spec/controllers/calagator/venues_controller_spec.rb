@@ -31,7 +31,7 @@ module Calagator
         request.env['HTTP_AUTHORIZATION'] = credentials
       end
 
-      it 'should display an error message if given invalid arguments' do
+      it 'displays an error message if given invalid arguments' do
         get 'duplicates', type: 'omgwtfbbq'
 
         expect(response).to be_success
@@ -44,12 +44,12 @@ module Calagator
     end
 
     describe 'when creating venues' do
-      it 'should redirect to the newly created venue' do
+      it 'redirects to the newly created venue' do
         post :create, venue: FactoryBot.attributes_for(:venue)
         expect(response).to redirect_to(assigns(:venue))
       end
 
-      it 'should stop evil robots' do
+      it 'stops evil robots' do
         post :create, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
         expect(response).to render_template :new
       end
@@ -60,18 +60,18 @@ module Calagator
         @venue = FactoryBot.create(:venue)
       end
 
-      it 'should redirect to the updated venue' do
+      it 'redirects to the updated venue' do
         put :update, id: @venue.id, venue: FactoryBot.attributes_for(:venue)
         expect(response).to redirect_to(@venue)
       end
 
-      it 'should redirect to any associated event' do
+      it 'redirects to any associated event' do
         @event = FactoryBot.create(:event, venue: @venue)
         put :update, id: @venue.id, from_event: @event.id, venue: FactoryBot.attributes_for(:venue)
         expect(response).to redirect_to(@event)
       end
 
-      it 'should stop evil robots' do
+      it 'stops evil robots' do
         put :update, id: @venue.id, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
         expect(response).to render_template :edit
       end
@@ -111,18 +111,18 @@ module Calagator
         @venues = [FactoryBot.create(:venue), FactoryBot.create(:venue)]
       end
 
-      it 'should assign the search object to @search' do
+      it 'assigns the search object to @search' do
         get :index
         expect(assigns[:search]).to be_a Venue::Search
       end
 
-      it 'should assign search results to @venues' do
+      it 'assigns search results to @venues' do
         get :index
         expect(assigns[:venues]).to eq(@venues)
       end
 
       describe 'in JSON format' do
-        it 'should produce JSON' do
+        it 'produces JSON' do
           get :index, format: 'json'
 
           struct = ActiveSupport::JSON.decode(response.body)
@@ -144,7 +144,7 @@ module Calagator
             allow(Venue).to receive(:find).and_return(@venue)
           end
 
-          it 'should produce JSON' do
+          it 'produces JSON' do
             get :show, id: @venue.to_param, format: 'json'
 
             struct = ActiveSupport::JSON.decode(response.body)
@@ -169,15 +169,15 @@ module Calagator
             expect(response).to be_success
           end
 
-          it 'should have a venue' do
+          it 'has a venue' do
             expect(response.body).to have_selector('.location .fn', text: @venue.title)
           end
 
-          it 'should have a future event' do
+          it 'has a future event' do
             expect(response.body).to have_selector('#events #future_events .summary', text: @future_event.title)
           end
 
-          it 'should have a past event' do
+          it 'has a past event' do
             expect(response.body).to have_selector('#events #past_events .summary', text: @past_event.title)
           end
         end
@@ -192,19 +192,19 @@ module Calagator
           get :show, id: @venue.to_param, format: 'ics'
         end
 
-        it 'should have a calendar' do
+        it 'has a calendar' do
           expect(response.body).to match /BEGIN:VCALENDAR/
         end
 
-        it 'should have events' do
+        it 'has events' do
           expect(response.body).to match /BEGIN:VEVENT/
         end
 
-        it 'should render all future events' do
+        it 'renders all future events' do
           expect(response.body).to match /SUMMARY:#{@future_event.title}/
         end
 
-        it 'should render all past events' do
+        it 'renders all past events' do
           expect(response.body).to match /SUMMARY:#{@past_event.title}/
         end
       end
@@ -217,7 +217,7 @@ module Calagator
         end
 
         shared_examples_for 'destroying a Venue record without events' do
-          it 'should destroy the Venue record' do
+          it 'destroys the Venue record' do
             expect { Venue.find(@venue.id) }.to raise_error ActiveRecord::RecordNotFound
           end
         end
@@ -227,13 +227,13 @@ module Calagator
             delete :destroy, id: @venue.id
           end
 
-          it_should_behave_like 'destroying a Venue record without events'
+          it_behaves_like 'destroying a Venue record without events'
 
-          it 'should display a success message' do
+          it 'displays a success message' do
             expect(flash[:success]).to be_present
           end
 
-          it 'should redirect to the venues listing' do
+          it 'redirects to the venues listing' do
             expect(response).to redirect_to(venues_path)
           end
         end
@@ -245,9 +245,9 @@ module Calagator
             delete :destroy, id: @venue.id, format: 'xml'
           end
 
-          it_should_behave_like 'destroying a Venue record without events'
+          it_behaves_like 'destroying a Venue record without events'
 
-          it 'should return a success status' do
+          it 'returns a success status' do
             expect(response).to be_success
           end
         end
@@ -260,7 +260,7 @@ module Calagator
         end
 
         shared_examples_for 'destroying a Venue record with events' do
-          it 'should not destroy the Venue record' do
+          it 'does not destroy the Venue record' do
             expect(Venue.find(@venue.id)).to be_present
           end
         end
@@ -270,13 +270,13 @@ module Calagator
             delete :destroy, id: @venue.id
           end
 
-          it_should_behave_like 'destroying a Venue record with events'
+          it_behaves_like 'destroying a Venue record with events'
 
-          it 'should display a failure message' do
+          it 'displays a failure message' do
             expect(flash[:failure]).to be_present
           end
 
-          it 'should redirect to the venue page' do
+          it 'redirects to the venue page' do
             expect(response).to redirect_to(venue_path(@venue))
           end
         end
@@ -286,13 +286,13 @@ module Calagator
             delete :destroy, id: @venue.id, format: 'xml'
           end
 
-          it_should_behave_like 'destroying a Venue record with events'
+          it_behaves_like 'destroying a Venue record with events'
 
-          it 'should return unprocessable entity status' do
+          it 'returns unprocessable entity status' do
             expect(response.code.to_i).to eq 422
           end
 
-          it 'should describing the problem' do
+          it 'describings the problem' do
             expect(response.body).to match /cannot/i
           end
         end

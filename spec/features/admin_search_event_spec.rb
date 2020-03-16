@@ -2,8 +2,8 @@
 
 require 'rails_helper'
 
-feature 'Admin lock events search' do
-  background do
+describe 'Admin lock events search' do
+  before do
     create :venue, title: 'Empire State Building'
     create :event, title: 'Ruby Newbies', start_time: Time.zone.now
     create :event, title: 'Ruby Privateers', start_time: Time.zone.now, locked: true
@@ -13,16 +13,16 @@ feature 'Admin lock events search' do
     visit '/admin/events'
   end
 
-  scenario 'only shows query matches' do
+  it 'only shows query matches' do
     fill_in 'admin_search_field', with: 'Privateers'
 
     click_on 'Search'
 
-    expect(page).to_not have_content('Ruby Newbies')
+    expect(page).not_to have_content('Ruby Newbies')
     expect(page).to have_content('Ruby Privateers')
   end
 
-  scenario 'only shows query matches after lock/unlock' do
+  it 'only shows query matches after lock/unlock' do
     fill_in 'admin_search_field', with: 'Privateers'
 
     click_on 'Search'
@@ -30,6 +30,6 @@ feature 'Admin lock events search' do
 
     expect(page).to have_button('Lock')
     expect(page).to have_content('Ruby Privateers')
-    expect(page).to_not have_content('Ruby Newbies')
+    expect(page).not_to have_content('Ruby Newbies')
   end
 end

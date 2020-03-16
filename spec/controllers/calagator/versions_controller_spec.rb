@@ -7,19 +7,19 @@ module Calagator
     routes { Calagator::Engine.routes }
 
     describe 'without versions' do
-      it 'should raise RecordNotFound if not given an id' do
+      it 'raises RecordNotFound if not given an id' do
         expect do
           get :edit, id: ''
         end.to raise_error ActiveRecord::RecordNotFound
       end
 
-      it 'should raise RecordNotFound if given invalid id' do
+      it 'raises RecordNotFound if given invalid id' do
         expect do
           get :edit, id: '-1'
         end.to raise_error ActiveRecord::RecordNotFound
       end
 
-      it "should raise RecordNotFound if given id that doesn't exist" do
+      it "raises RecordNotFound if given id that doesn't exist" do
         expect do
           get :edit, id: '1234'
         end.to raise_error ActiveRecord::RecordNotFound
@@ -52,26 +52,26 @@ module Calagator
         assigns[:event].title
       end
 
-      it "should render the initial content for a 'create'" do
+      it "renders the initial content for a 'create'" do
         expect(title_for(:create)).to eq @create_title
       end
 
-      it "should render the updated content for an 'update'" do
+      it "renders the updated content for an 'update'" do
         expect(title_for(:update)).to eq @update_title
       end
 
-      it "should render the final content for a 'destroy'" do
+      it "renders the final content for a 'destroy'" do
         expect(title_for(:destroy)).to eq @final_title
       end
 
-      it 'should render html' do
+      it 'renders html' do
         version_id = @event.versions.first.id
         get :edit, id: version_id
         expect(response).to be_success
         expect(response).to render_template 'events/edit'
       end
 
-      it 'should render html via xhr' do
+      it 'renders html via xhr' do
         version_id = @event.versions.first.id
         xhr :get, :edit, id: version_id
         expect(response).to be_success

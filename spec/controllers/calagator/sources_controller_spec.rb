@@ -7,7 +7,7 @@ module Calagator
     routes { Calagator::Engine.routes }
 
     describe 'using import logic' do
-      before(:each) do
+      before do
         @venue = mock_model(Venue,
                             :source => nil,
                             :source= => true,
@@ -32,7 +32,7 @@ module Calagator
         allow(Source).to receive(:find_or_create_by).with(url: 'http://my.url/').and_return(@source)
       end
 
-      it 'should provide a way to create new sources' do
+      it 'provides a way to create new sources' do
         get :new
         expect(assigns(:source)).to be_a_kind_of Source
         expect(assigns(:source)).to be_a_new_record
@@ -41,13 +41,13 @@ module Calagator
       describe 'with render views' do
         render_views
 
-        it 'should save the source object when creating events' do
+        it 'saves the source object when creating events' do
           expect(@source).to receive(:save!)
           post :import, source: { url: @source.url }
           expect(flash[:success]).to match(/Imported/i)
         end
 
-        it 'should limit the number of created events to list in the flash' do
+        it 'limits the number of created events to list in the flash' do
           excess = 5
           events = (1..(5 + excess))\
                    .each_with_object([]) { |_i, result| result << @event }
@@ -57,12 +57,12 @@ module Calagator
         end
       end
 
-      it 'should assign newly-created events to the source' do
+      it 'assigns newly-created events to the source' do
         post :import, source: { url: @source.url }
         expect(@event).to be_persisted
       end
 
-      it 'should assign newly created venues to the source' do
+      it 'assigns newly created venues to the source' do
         post :import, source: { url: @source.url }
         expect(@venue).to be_persisted
       end
@@ -78,38 +78,38 @@ module Calagator
           post :import, source: { url: 'http://invalid.host' }
         end
 
-        it 'should fail when host responds with no events' do
+        it 'fails when host responds with no events' do
           expect(@source).to receive(:create_events!).and_return([])
           post :import, source: { url: 'http://invalid.host' }
           expect(flash[:failure]).to match(/Unable to find any upcoming events to import from this source/)
         end
 
-        it 'should fail when host responds with a 404' do
+        it 'fails when host responds with a 404' do
           assert_import_raises(Source::Parser::NotFound)
           expect(flash[:failure]).to match(/No events found at remote site/)
         end
 
-        it 'should fail when host responds with an error' do
+        it 'fails when host responds with an error' do
           assert_import_raises(OpenURI::HTTPError.new('omfg', 'bbq'))
           expect(flash[:failure]).to match(/Couldn't download events/)
         end
 
-        it 'should fail when host is not responding' do
+        it 'fails when host is not responding' do
           assert_import_raises(Errno::EHOSTUNREACH.new('omfg'))
           expect(flash[:failure]).to match(/Couldn't connect to remote site/)
         end
 
-        it 'should fail when host is not found' do
+        it 'fails when host is not found' do
           assert_import_raises(SocketError.new('omfg'))
           expect(flash[:failure]).to match(/Couldn't find IP address for remote site/)
         end
 
-        it 'should fail when host requires authentication' do
+        it 'fails when host requires authentication' do
           assert_import_raises(Source::Parser::HttpAuthenticationRequiredError.new('omfg'))
           expect(flash[:failure]).to match(/requires authentication/)
         end
 
-        it 'should fail when host throws something strange' do
+        it 'fails when host throws something strange' do
           assert_import_raises(TypeError)
           expect(flash[:failure]).to match(/Unknown error: TypeError/)
         end
@@ -117,7 +117,7 @@ module Calagator
     end
 
     describe 'handling GET /sources' do
-      before(:each) do
+      before do
         @source = mock_model(Source)
         allow(Source).to receive(:listing).and_return([@source])
       end
@@ -126,29 +126,29 @@ module Calagator
         get :index
       end
 
-      it 'should be successful' do
+      it 'is successful' do
         do_get
         expect(response).to be_success
       end
 
-      it 'should render index template' do
+      it 'renders index template' do
         do_get
         expect(response).to render_template :index
       end
 
-      it 'should find sources' do
+      it 'finds sources' do
         expect(Source).to receive(:listing).and_return([@source])
         do_get
       end
 
-      it 'should assign the found sources for the view' do
+      it 'assigns the found sources for the view' do
         do_get
         expect(assigns[:sources]).to eq [@source]
       end
     end
 
     describe 'handling GET /sources.xml' do
-      before(:each) do
+      before do
         @sources = double('Array of Sources', to_xml: 'XML')
         allow(Source).to receive(:find).and_return(@sources)
       end
@@ -158,24 +158,24 @@ module Calagator
         get :index
       end
 
-      it 'should be successful' do
+      it 'is successful' do
         do_get
         expect(response).to be_success
       end
 
-      it 'should find all sources' do
+      it 'finds all sources' do
         expect(Source).to receive(:listing).and_return(@sources)
         do_get
       end
 
-      it 'should render the found sources as xml' do
+      it 'renders the found sources as xml' do
         do_get
         expect(response.content_type).to eq 'application/xml'
       end
     end
 
     describe 'show' do
-      it 'should redirect when asked for unknown source' do
+      it 'redirects when asked for unknown source' do
         expect(Source).to receive(:find).and_raise(ActiveRecord::RecordNotFound.new)
         get :show, id: '1'
 
@@ -184,7 +184,7 @@ module Calagator
     end
 
     describe 'handling GET /sources/1' do
-      before(:each) do
+      before do
         @source = mock_model(Source)
         allow(Source).to receive(:find).and_return(@source)
       end
@@ -193,29 +193,29 @@ module Calagator
         get :show, id: '1'
       end
 
-      it 'should be successful' do
+      it 'is successful' do
         do_get
         expect(response).to be_success
       end
 
-      it 'should render show template' do
+      it 'renders show template' do
         do_get
         expect(response).to render_template :show
       end
 
-      it 'should find the source requested' do
+      it 'finds the source requested' do
         expect(Source).to receive(:find).with('1', include: %i[events venues]).and_return(@source)
         do_get
       end
 
-      it 'should assign the found source for the view' do
+      it 'assigns the found source for the view' do
         do_get
         expect(assigns[:source]).to eq @source
       end
     end
 
     describe 'handling GET /sources/1.xml' do
-      before(:each) do
+      before do
         @source = mock_model(Source, to_xml: 'XML')
         allow(Source).to receive(:find).and_return(@source)
       end
@@ -225,17 +225,17 @@ module Calagator
         get :show, id: '1'
       end
 
-      it 'should be successful' do
+      it 'is successful' do
         do_get
         expect(response).to be_success
       end
 
-      it 'should find the source requested' do
+      it 'finds the source requested' do
         expect(Source).to receive(:find).with('1', include: %i[events venues]).and_return(@source)
         do_get
       end
 
-      it 'should render the found source as xml' do
+      it 'renders the found source as xml' do
         expect(@source).to receive(:to_xml).and_return('XML')
         do_get
         expect(response.body).to eq 'XML'
@@ -243,7 +243,7 @@ module Calagator
     end
 
     describe 'handling GET /sources/new' do
-      before(:each) do
+      before do
         @source = mock_model(Source)
         allow(Source).to receive(:new).and_return(@source)
       end
@@ -252,34 +252,34 @@ module Calagator
         get :new
       end
 
-      it 'should be successful' do
+      it 'is successful' do
         do_get
         expect(response).to be_success
       end
 
-      it 'should render new template' do
+      it 'renders new template' do
         do_get
         expect(response).to render_template :new
       end
 
-      it 'should create an new source' do
+      it 'creates an new source' do
         expect(Source).to receive(:new).and_return(@source)
         do_get
       end
 
-      it 'should not save the new source' do
+      it 'does not save the new source' do
         expect(@source).not_to receive(:save)
         do_get
       end
 
-      it 'should assign the new source for the view' do
+      it 'assigns the new source for the view' do
         do_get
         expect(assigns[:source]).to eq @source
       end
     end
 
     describe 'handling GET /sources/1/edit' do
-      before(:each) do
+      before do
         @source = mock_model(Source)
         allow(Source).to receive(:find).and_return(@source)
       end
@@ -288,29 +288,29 @@ module Calagator
         get :edit, id: '1'
       end
 
-      it 'should be successful' do
+      it 'is successful' do
         do_get
         expect(response).to be_success
       end
 
-      it 'should render edit template' do
+      it 'renders edit template' do
         do_get
         expect(response).to render_template :edit
       end
 
-      it 'should find the source requested' do
+      it 'finds the source requested' do
         expect(Source).to receive(:find).and_return(@source)
         do_get
       end
 
-      it 'should assign the found Source for the view' do
+      it 'assigns the found Source for the view' do
         do_get
         expect(assigns[:source]).to eq @source
       end
     end
 
     describe 'handling POST /sources' do
-      before(:each) do
+      before do
         @source = mock_model(Source, to_param: '1')
         allow(Source).to receive(:new).and_return(@source)
       end
@@ -321,12 +321,12 @@ module Calagator
           post :create, source: {}
         end
 
-        it 'should create a new source' do
+        it 'creates a new source' do
           expect(Source).to receive(:new).and_return(@source)
           do_post
         end
 
-        it 'should redirect to the new source' do
+        it 'redirects to the new source' do
           do_post
           expect(response).to redirect_to(source_url('1'))
         end
@@ -339,7 +339,7 @@ module Calagator
           post :create, source: {}
         end
 
-        it "should re-render 'new'" do
+        it "re-renders 'new'" do
           do_post
           expect(response).to render_template :new
         end
@@ -347,7 +347,7 @@ module Calagator
     end
 
     describe 'handling PUT /sources/1' do
-      before(:each) do
+      before do
         @source = mock_model(Source, to_param: '1')
         allow(Source).to receive(:find).and_return(@source)
       end
@@ -358,22 +358,22 @@ module Calagator
           put :update, id: '1'
         end
 
-        it 'should find the source requested' do
+        it 'finds the source requested' do
           expect(Source).to receive(:find).with('1').and_return(@source)
           do_put
         end
 
-        it 'should update the found source' do
+        it 'updates the found source' do
           do_put
           expect(assigns(:source)).to eq @source
         end
 
-        it 'should assign the found source for the view' do
+        it 'assigns the found source for the view' do
           do_put
           expect(assigns(:source)).to eq @source
         end
 
-        it 'should redirect to the source' do
+        it 'redirects to the source' do
           do_put
           expect(response).to redirect_to(source_url('1'))
         end
@@ -385,7 +385,7 @@ module Calagator
           put :update, id: '1'
         end
 
-        it "should re-render 'edit'" do
+        it "re-renders 'edit'" do
           do_put
           expect(response).to render_template :edit
         end
@@ -393,7 +393,7 @@ module Calagator
     end
 
     describe 'handling DELETE /sources/1' do
-      before(:each) do
+      before do
         @source = mock_model(Source, destroy: true)
         allow(Source).to receive(:find).and_return(@source)
       end
@@ -402,17 +402,17 @@ module Calagator
         delete :destroy, id: '1'
       end
 
-      it 'should find the source requested' do
+      it 'finds the source requested' do
         expect(Source).to receive(:find).with('1').and_return(@source)
         do_delete
       end
 
-      it 'should call destroy on the found source' do
+      it 'calls destroy on the found source' do
         expect(@source).to receive(:destroy)
         do_delete
       end
 
-      it 'should redirect to the sources list' do
+      it 'redirects to the sources list' do
         do_delete
         expect(response).to redirect_to(sources_url)
       end

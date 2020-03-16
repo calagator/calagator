@@ -32,7 +32,7 @@ module Calagator
             expected = context_date ? expected_with_context : expected_without_context
             expected = expected.gsub(/\<[^\>]*\>/, '') if format != :hcal
             expected = expected.gsub('&ndash;', '-') if format == :text
-            it "should format #{label} in #{format} format as '#{expected}'" do
+            it "formats #{label} in #{format} format as '#{expected}'" do
               actual = helper.normalize_time(start_time, end_time, format: format, context: context_date)
               expect(actual).to eq expected
             end
@@ -42,13 +42,13 @@ module Calagator
     end
 
     describe 'with objects' do
-      it 'should format from objects that respond to just start_time' do
+      it 'formats from objects that respond to just start_time' do
         event = Event.new(start_time: Time.zone.parse('2008-04-01 13:30'))
         actual = helper.normalize_time(event, format: :text)
         expect(actual).to eq 'Tuesday, April 1, 2008 at 1:30pm'
       end
 
-      it 'should format from objects that respond to both start_time and end_time' do
+      it 'formats from objects that respond to both start_time and end_time' do
         event = Event.new(start_time: Time.zone.parse('2008-04-01 13:30'),
                           end_time: Time.zone.parse('2008-04-01 15:30'))
         actual = helper.normalize_time(event, format: :text)

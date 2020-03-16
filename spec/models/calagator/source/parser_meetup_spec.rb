@@ -9,12 +9,12 @@ module Calagator
         Calagator.meetup_api_key = 'foo'
       end
 
-      before(:each) do
+      before do
         meetup_url = 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/'
         api_url = 'https://api.meetup.com/2/event/ldhnqyplbnb?key=foo&sign=true&fields=topics'
 
         stub_request(:get, api_url).to_return(body: read_sample('meetup.json'), headers: { content_type: 'application/json' })
-        @events = Source::Parser::Meetup.to_events(url: meetup_url)
+        @events = described_class.to_events(url: meetup_url)
         @event = @events.first
       end
 
@@ -26,20 +26,20 @@ module Calagator
         expect(subject.url_pattern).to match 'https://www.meetup.com/pdxpython/events/ldhnqyplbnb/'
       end
 
-      it 'should find one event' do
+      it 'finds one event' do
         expect(@events.size).to eq 1
       end
 
-      it 'should set event details' do
+      it 'sets event details' do
         expect(@event.title).to eq 'eLearning Network - eLearning Network Meetup'
         expect(@event.start_time).to eq Time.zone.parse('Thu Aug 11 00:00:00 UTC 2011')
       end
 
-      it 'should tag Meetup events with automagic machine tags' do
+      it 'tags Meetup events with automagic machine tags' do
         expect(@event.tag_list).to eq ['meetup:event=ldhnqyplbnb', 'meetup:group=eLearningNetwork', 'ruby', 'python', 'javascript']
       end
 
-      it 'should populate a venue when structured data is provided' do
+      it 'populates a venue when structured data is provided' do
         expect(@event.venue).to be_a Venue
         expect(@event.venue.title).to eq 'Green Dragon Bistro and Brewpub'
         expect(@event.venue.street_address).to eq '928 SE 9th Ave'
@@ -52,23 +52,23 @@ module Calagator
         Calagator.meetup_api_key = nil
       end
 
-      before(:each) do
+      before do
         url = 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/ical'
         stub_request(:get, url).to_return(body: read_sample('meetup.ics'))
-        @events = Source::Parser::Meetup.to_events(url: url)
+        @events = described_class.to_events(url: url)
         @event = @events.first
       end
 
-      it 'should find one event' do
+      it 'finds one event' do
         expect(@events.size).to eq 1
       end
 
-      it 'should set event details' do
+      it 'sets event details' do
         expect(@event.title).to eq 'eLearning Network Meetup'
         expect(@event.start_time.to_date).to eq Date.parse('3011-08-11')
       end
 
-      it 'should populate a venue when structured data is provided' do
+      it 'populates a venue when structured data is provided' do
         expect(@event.venue).to be_a Venue
         expect(@event.venue.title).to eq 'Green Dragon Bistro and Brewpub'
       end

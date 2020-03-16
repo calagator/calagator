@@ -4,7 +4,7 @@ require 'spec_helper'
 
 module Calagator
   describe Source::Parser::Hcal, 'with hCalendar events', type: :model do
-    it 'should parse hcal' do
+    it 'parses hcal' do
       url = 'http://mysample.hcal/'
       stub_request(:get, url).to_return(body: read_sample('hcal_single.xml'))
       hcal_source = Source.new(title: 'Calendar event feed', url: url)
@@ -24,7 +24,7 @@ module Calagator
       end
     end
 
-    it 'should strip html from the venue title' do
+    it 'strips html from the venue title' do
       url = 'http://mysample.hcal/'
       stub_request(:get, url).to_return(body: read_sample('hcal_upcoming_v1.html'))
       hcal_source = Source.new(title: 'Calendar event feed', url: url)
@@ -34,7 +34,7 @@ module Calagator
       expect(events.first.venue.title).to eq 'Jive Software Office'
     end
 
-    it 'should parse a page with multiple events' do
+    it 'parses a page with multiple events' do
       url = 'http://mysample.hcal/'
       stub_request(:get, url).to_return(body: read_sample('hcal_multiple.xml'))
       hcal_source = Source.new(title: 'Calendar event feed', url: url)
@@ -50,11 +50,11 @@ module Calagator
   end
 
   describe Source::Parser::Hcal, 'with hCalendar to Venue parsing', type: :model do
-    it 'should extract an Venue from an hCalendar text' do
+    it 'extracts an Venue from an hCalendar text' do
       url = 'http://mysample.hcal/'
       stub_request(:get, url).to_return(body: read_sample('hcal_upcoming_v1.html'))
 
-      events = Source::Parser::Hcal.to_events(url: url)
+      events = described_class.to_events(url: url)
       event = events.first
       venue = event.venue
 

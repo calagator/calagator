@@ -9,8 +9,9 @@ check_name: "Rubocop"
 # Default: nil
 versions:
   - 'rubocop'
-  - 'rubocop-rails'
   - 'rubocop-performance'
+  - 'rubocop-rails'
+  - 'rubocop-rspec'
 
 # Description: Rubocop configuration file path relative to the workspace.
 # Valid options: A valid file path inside of the workspace.

@@ -2,14 +2,14 @@
 
 require 'rails_helper'
 
-feature 'Event Creation', js: true do
+describe 'Event Creation', js: true do
   before do
     create :venue, title: 'Empire State Building'
     create :venue, title: 'New Relic'
     create :venue, title: 'Urban Airship'
   end
 
-  scenario 'User adds an event at an existing venue' do
+  it 'User adds an event at an existing venue' do
     # visit '/'
     # click_on 'Add an event'
     visit '/events/new'
@@ -41,7 +41,7 @@ feature 'Event Creation', js: true do
     expect(page).to have_content "Tags\nbeginners, ruby"
   end
 
-  scenario 'User adds an event at a new venue' do
+  it 'User adds an event at a new venue' do
     visit '/'
     click_on 'Add an event'
 
@@ -95,7 +95,7 @@ feature 'Event Creation', js: true do
     expect(page).to have_content '123-444-5555'
   end
 
-  scenario 'User begins typing a venue name' do
+  it 'User begins typing a venue name' do
     visit '/events/new'
     find_field('Venue').native.send_keys 'urban'
 

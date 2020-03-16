@@ -8,74 +8,74 @@ module Calagator
       it 'returns everything when searching by empty string' do
         event1 = FactoryBot.create(:event)
         event2 = FactoryBot.create(:event)
-        expect(Event.search('')).to match_array([event1, event2])
+        expect(described_class.search('')).to match_array([event1, event2])
       end
 
       it 'searches event titles by substring' do
         event1 = FactoryBot.create(:event, title: 'wtfbbq')
         event2 = FactoryBot.create(:event, title: 'zomg!')
-        expect(Event.search('zomg')).to eq([event2])
+        expect(described_class.search('zomg')).to eq([event2])
       end
 
       it 'searches event descriptions by substring' do
         event1 = FactoryBot.create(:event, description: 'wtfbbq')
         event2 = FactoryBot.create(:event, description: 'zomg!')
-        expect(Event.search('zomg')).to eq([event2])
+        expect(described_class.search('zomg')).to eq([event2])
       end
 
       it 'searches event tags by exact match' do
         event1 = FactoryBot.create(:event, tag_list: %w[wtf bbq zomg])
         event2 = FactoryBot.create(:event, tag_list: %w[wtf bbq omg])
-        expect(Event.search('omg')).to eq([event2])
+        expect(described_class.search('omg')).to eq([event2])
       end
 
       it 'does not search multiple terms' do
         event1 = FactoryBot.create(:event, title: 'wtf')
         event2 = FactoryBot.create(:event, title: 'zomg!')
         event3 = FactoryBot.create(:event, title: 'bbq')
-        expect(Event.search('wtf zomg')).to match_array([])
+        expect(described_class.search('wtf zomg')).to match_array([])
       end
 
       it 'searches case-insensitively' do
         event1 = FactoryBot.create(:event, title: 'WTFBBQ')
         event2 = FactoryBot.create(:event, title: 'ZOMG!')
-        expect(Event.search('zomg')).to eq([event2])
+        expect(described_class.search('zomg')).to eq([event2])
       end
 
       it 'sorts by start time descending' do
         event2 = FactoryBot.create(:event, start_time: 1.day.ago)
         event1 = FactoryBot.create(:event, start_time: 1.day.from_now)
-        expect(Event.search('')).to eq([event1, event2])
+        expect(described_class.search('')).to eq([event1, event2])
       end
 
       it 'can sort by event title' do
         event2 = FactoryBot.create(:event, title: 'zomg')
         event1 = FactoryBot.create(:event, title: 'omg')
-        expect(Event.search('', order: 'name')).to eq([event1, event2])
+        expect(described_class.search('', order: 'name')).to eq([event1, event2])
       end
 
       it 'can sort by venue title' do
         event2 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'zomg'))
         event1 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'omg'))
-        expect(Event.search('', order: 'venue')).to eq([event1, event2])
+        expect(described_class.search('', order: 'venue')).to eq([event1, event2])
       end
 
       it 'can sort by start date' do
         event2 = FactoryBot.create(:event, start_time: 1.year.ago)
         event1 = FactoryBot.create(:event, start_time: 1.year.from_now)
-        expect(Event.search('', order: 'date')).to eq([event1, event2])
+        expect(described_class.search('', order: 'date')).to eq([event1, event2])
       end
 
       it 'can limit to current and upcoming events' do
         event1 = FactoryBot.create(:event, start_time: 1.year.ago, end_time: 1.year.ago + 1.hour)
         event2 = FactoryBot.create(:event, start_time: 1.hour.ago, end_time: 1.hour.from_now)
         event3 = FactoryBot.create(:event, start_time: 1.year.from_now, end_time: 1.year.from_now + 1.hour)
-        expect(Event.search('', skip_old: true)).to eq([event3, event2])
+        expect(described_class.search('', skip_old: true)).to eq([event3, event2])
       end
 
       it 'can limit number of events' do
-        2.times { FactoryBot.create(:event) }
-        expect(Event.search('', limit: 1).count).to eq(1)
+        FactoryBot.create_list(:event, 2)
+        expect(described_class.search('', limit: 1).count).to eq(1)
       end
 
       it 'limit applies to current and past queries separately' do
@@ -83,26 +83,26 @@ module Calagator
         event2 = FactoryBot.create(:event, title: 'omg', start_time: 1.year.ago)
         event3 = FactoryBot.create(:event, title: 'omg', start_time: 1.year.from_now)
         event4 = FactoryBot.create(:event, title: 'omg', start_time: 1.year.from_now)
-        expect(Event.search('omg', limit: 1).to_a.size).to eq(2)
+        expect(described_class.search('omg', limit: 1).to_a.size).to eq(2)
       end
 
       it 'ANDs terms together to narrow search results' do
         event1 = FactoryBot.create(:event, title: 'women who hack')
         event2 = FactoryBot.create(:event, title: 'women who bike')
         event3 = FactoryBot.create(:event, title: 'omg')
-        expect(Event.search('women who hack')).to eq([event1])
+        expect(described_class.search('women who hack')).to eq([event1])
       end
     end
 
     describe 'Sql' do
       # spec_helper defaults all tests to sql
 
-      it_should_behave_like '#search'
+      it_behaves_like '#search'
 
       it 'searches event urls by substring' do
         event1 = FactoryBot.create(:event, url: 'http://example.com/wtfbbq.html')
         event2 = FactoryBot.create(:event, url: 'http://example.com/zomg.html')
-        expect(Event.search('zomg')).to eq([event2])
+        expect(described_class.search('zomg')).to eq([event2])
       end
 
       it 'is using the sql search engine' do
@@ -110,7 +110,7 @@ module Calagator
       end
 
       it 'does not provide a score' do
-        expect(Event::SearchEngine.score?).to be_falsey
+        expect(Event::SearchEngine).not_to be_score
       end
     end
 
@@ -127,7 +127,7 @@ module Calagator
         if server_running
           Event::SearchEngine.use(:sunspot)
           Venue::SearchEngine.use(:sunspot)
-          Event.reindex
+          described_class.reindex
           Venue.reindex
           example.run
         else
@@ -135,14 +135,14 @@ module Calagator
         end
       end
 
-      it_should_behave_like '#search'
+      it_behaves_like '#search'
 
       it 'is using the sunspot search engine' do
         expect(Event::SearchEngine.kind).to eq(:sunspot)
       end
 
       it 'provides a score' do
-        expect(Event::SearchEngine.score?).to be_truthy
+        expect(Event::SearchEngine).to be_score
       end
     end
   end

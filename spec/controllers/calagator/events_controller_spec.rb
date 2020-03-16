@@ -11,7 +11,7 @@ module Calagator
       render_views
 
       describe 'as HTML' do
-        it 'should produce HTML' do
+        it 'produces HTML' do
           get :index, format: 'html'
 
           expect(response.body).to have_selector 'table.event_table'
@@ -26,7 +26,7 @@ module Calagator
             @struct = Hash.from_xml(response.body)['events']
           end
 
-          it 'should not have entries' do
+          it 'does not have entries' do
             expect(@struct).to be_blank
           end
         end
@@ -41,15 +41,15 @@ module Calagator
             @struct = Hash.from_xml(response.body)['events']
           end
 
-          it 'should return an array' do
+          it 'returns an array' do
             expect(@struct).to be_a_kind_of Array
           end
 
-          it 'should have entries' do
+          it 'has entries' do
             expect(@struct).to be_present
           end
 
-          it 'should include venue details' do
+          it 'includes venue details' do
             event = @struct.first
             venue = event['venue']
             venue_title = venue['title'] # Why XML? Why?
@@ -67,11 +67,11 @@ module Calagator
             @struct = ActiveSupport::JSON.decode(response.body)
           end
 
-          it 'should return an array' do
+          it 'returns an array' do
             expect(@struct).to be_a_kind_of Array
           end
 
-          it 'should not have entries' do
+          it 'does not have entries' do
             expect(@struct).to be_empty
           end
         end
@@ -86,17 +86,17 @@ module Calagator
             @struct = ActiveSupport::JSON.decode(response.body)
           end
 
-          it 'should return an array' do
+          it 'returns an array' do
             expect(@struct).to be_a_kind_of Array
           end
 
-          it 'should return an event' do
+          it 'returns an event' do
             event = @struct.first
             expect(event['id']).to eq @event.id
             expect(event['title']).to eq @event.title
           end
 
-          it "should return an event's venue" do
+          it "returns an event's venue" do
             event = @struct.first
             venue = event['venue']
 
@@ -113,11 +113,11 @@ module Calagator
             @struct = Hash.from_xml(response.body)
           end
 
-          it 'should be a feed' do
+          it 'is a feed' do
             expect(@struct['feed']['xmlns']).to be_present
           end
 
-          it 'should not have events' do
+          it 'does not have events' do
             expect(@struct['feed']['entry']).to be_blank
           end
         end
@@ -134,15 +134,15 @@ module Calagator
 
           let(:entries) { @struct['feed']['entry'] }
 
-          it 'should be a feed' do
+          it 'is a feed' do
             expect(@struct['feed']['xmlns']).to be_present
           end
 
-          it 'should have entries' do
+          it 'has entries' do
             expect(entries).to be_present
           end
 
-          it 'should have an event' do
+          it 'has an event' do
             entry = entries.first
             record = Event.find(entry['id'][/(\d+)$/, 1])
 
@@ -163,11 +163,11 @@ module Calagator
             get :index, format: 'ics'
           end
 
-          it 'should have a calendar' do
+          it 'has a calendar' do
             expect(response.body).to match /BEGIN:VCALENDAR/
           end
 
-          it 'should not have events' do
+          it 'does not have events' do
             expect(response.body).not_to match /BEGIN:VEVENT/
           end
         end
@@ -180,19 +180,19 @@ module Calagator
             get :index, format: 'ics'
           end
 
-          it 'should have a calendar' do
+          it 'has a calendar' do
             expect(response.body).to match /BEGIN:VCALENDAR/
           end
 
-          it 'should have events' do
+          it 'has events' do
             expect(response.body).to match /BEGIN:VEVENT/
           end
 
-          it 'should render all future events' do
+          it 'renders all future events' do
             expect(response.body).to match /SUMMARY:#{@current_event.title}/
           end
 
-          it 'should not render past events' do
+          it 'does not render past events' do
             expect(response.body).not_to match(/SUMMARY:#{@past_event.title}/)
           end
         end
@@ -229,7 +229,7 @@ module Calagator
           ]
         end
 
-        it 'should return matching events' do
+        it 'returns matching events' do
           get :index, date: { start: '2010-01-16', end: '2010-01-16' }
           expect(assigns[:events]).to eq within
         end
@@ -272,17 +272,17 @@ module Calagator
           ]
         end
 
-        it 'should return matching events before an end time' do
+        it 'returns matching events before an end time' do
           get :index, time: { start: '', end: '09:00 AM' }
           expect(assigns[:events]).to eq before
         end
 
-        it 'should return matching events within a time range' do
+        it 'returns matching events within a time range' do
           get :index, time: { start: '09:00 AM', end: '01:00 PM' }
           expect(assigns[:events]).to eq within
         end
 
-        it 'should return matching events after a start time' do
+        it 'returns matching events after a start time' do
           get :index, time: { start: '01:00 PM', end: '' }
           expect(assigns[:events]).to eq after
         end
@@ -290,7 +290,7 @@ module Calagator
     end
 
     describe '#show' do
-      it 'should show an event' do
+      it 'shows an event' do
         event = Event.new(start_time: now)
         expect(Event).to receive(:find).and_return(event)
 
@@ -298,7 +298,7 @@ module Calagator
         expect(response).to be_success
       end
 
-      it 'should redirect from a duplicate event to its master' do
+      it 'redirects from a duplicate event to its master' do
         master = FactoryBot.create(:event, id: 4321)
         event = Event.new(start_time: now, duplicate_of: master)
         expect(Event).to receive(:find).and_return(event)
@@ -307,7 +307,7 @@ module Calagator
         expect(response).to redirect_to(event_path(master))
       end
 
-      it 'should show an error when asked to display a non-existent event' do
+      it 'shows an error when asked to display a non-existent event' do
         expect(Event).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
 
         get 'show', id: 1234
@@ -334,7 +334,7 @@ module Calagator
       end
 
       describe '#new' do
-        it 'should display form for creating new event' do
+        it 'displays form for creating new event' do
           get 'new'
           expect(response).to be_success
           expect(response).to render_template :new
@@ -344,14 +344,14 @@ module Calagator
       describe '#create' do
         render_views
 
-        it 'should create a new event without a venue' do
+        it 'creates a new event without a venue' do
           @params[:event][:venue_id] = nil
           post :create, @params
           @event = Event.find_by(title: @params[:event][:title])
           expect(response).to redirect_to(@event)
         end
 
-        it 'should associate a venue based on a given venue id' do
+        it 'associates a venue based on a given venue id' do
           @venue.save!
           @params[:event][:venue_id] = @venue.id.to_s
           post :create, @params
@@ -360,7 +360,7 @@ module Calagator
           expect(response).to redirect_to(@event)
         end
 
-        it 'should associate a venue based on a given venue name' do
+        it 'associates a venue based on a given venue name' do
           @venue.save!
           @params[:venue_name] = @venue.title
           post :create, @params
@@ -369,7 +369,7 @@ module Calagator
           expect(response).to redirect_to(@event)
         end
 
-        it 'should associate a venue by id when both an id and a name are provided' do
+        it 'associates a venue by id when both an id and a name are provided' do
           @venue.save!
           @venue2 = FactoryBot.create(:venue)
           @params[:event][:venue_id] = @venue.id.to_s
@@ -380,7 +380,7 @@ module Calagator
           expect(response).to redirect_to(@event)
         end
 
-        it 'should create a new event and new venue, and redirect to venue edit form' do
+        it 'creates a new event and new venue, and redirect to venue edit form' do
           @params[:venue_name] = 'New Venue'
           post :create, @params
           @event = Event.find_by(title: @params[:event][:title])
@@ -389,18 +389,18 @@ module Calagator
           expect(response).to redirect_to(edit_venue_url(@venue, from_event: @event.id))
         end
 
-        it 'should catch errors and redisplay the new event form' do
+        it 'catches errors and redisplay the new event form' do
           post :create
           expect(response).to render_template :new
         end
 
-        it 'should stop evil robots' do
+        it 'stops evil robots' do
           post :create, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
           expect(response).to render_template :new
           expect(flash[:failure]).to match /evil robot/i
         end
 
-        it 'should not allow too many links in the description' do
+        it 'does not allow too many links in the description' do
           @params[:event][:description] = <<-DESC
           http://example.com
           https://example.com
@@ -412,7 +412,7 @@ module Calagator
           expect(flash[:failure]).to match /too many links/i
         end
 
-        it 'should accept HTTP-rich presentation descriptions without too many links' do
+        it 'accepts HTTP-rich presentation descriptions without too many links' do
           @params[:event][:description] = <<-DESC
           I hereby offer to give a presentation at the August ruby meeting about the faraday
           gem (https://github.com/lostisland/faraday) and how compares to or compliments other
@@ -427,14 +427,14 @@ module Calagator
           expect(flash[:failure]).to be_nil
         end
 
-        it 'should allow the user to preview the event' do
+        it 'allows the user to preview the event' do
           @params[:preview] = 'Preview'
           post :create, @params
           expect(response).to render_template :new
           expect(response.body).to have_selector '#event_preview'
         end
 
-        it 'should create an event for an existing venue' do
+        it 'creates an event for an existing venue' do
           venue = FactoryBot.create(:venue)
 
           post :create,
@@ -459,25 +459,25 @@ module Calagator
       end
 
       describe '#update' do
-        before(:each) do
+        before do
           @event = FactoryBot.create(:event, :with_venue, id: 42)
           @venue = @event.venue
           @params.merge!(id: 42)
         end
 
-        it 'should display form for editing event' do
+        it 'displays form for editing event' do
           get 'edit', id: 42
           expect(response).to be_success
           expect(response).to render_template :edit
         end
 
-        it 'should update an event without a venue' do
+        it 'updates an event without a venue' do
           @event.venue = nil
           put 'update', @params
           expect(response).to redirect_to(@event)
         end
 
-        it 'should associate a venue based on a given venue id' do
+        it 'associates a venue based on a given venue id' do
           @venue = FactoryBot.create(:venue)
           @params[:event][:venue_id] = @venue.id.to_s
           put 'update', @params
@@ -485,7 +485,7 @@ module Calagator
           expect(response).to redirect_to(@event)
         end
 
-        it 'should associate a venue based on a given venue name' do
+        it 'associates a venue based on a given venue name' do
           @venue = FactoryBot.create(:venue)
           @params[:venue_name] = @venue.title
           put 'update', @params
@@ -493,7 +493,7 @@ module Calagator
           expect(response).to redirect_to(@event)
         end
 
-        it 'should associate a venue by id when both an id and a name are provided' do
+        it 'associates a venue by id when both an id and a name are provided' do
           @venue = FactoryBot.create(:venue)
           @venue2 = FactoryBot.create(:venue)
           @params[:event][:venue_id] = @venue.id.to_s
@@ -503,27 +503,27 @@ module Calagator
           expect(response).to redirect_to(@event)
         end
 
-        it 'should update an event and create a new venue, and redirect to the venue edit form' do
+        it 'updates an event and create a new venue, and redirect to the venue edit form' do
           @params[:venue_name] = 'New Venue'
           put 'update', @params
           @venue = Venue.find_by(title: 'New Venue')
           expect(response).to redirect_to(edit_venue_url(@venue, from_event: @event.id))
         end
 
-        it 'should catch errors and redisplay the new event form' do
+        it 'catches errors and redisplay the new event form' do
           @params[:event][:title] = nil
           put 'update', @params
           expect(response).to render_template :edit
         end
 
-        it 'should stop evil robots' do
+        it 'stops evil robots' do
           @params[:trap_field] = "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
           put 'update', @params
           expect(response).to render_template :edit
           expect(flash[:failure]).to match /evil robot/i
         end
 
-        it 'should not allow too many links in the description' do
+        it 'does not allow too many links in the description' do
           @params[:event][:description] = <<-DESC
           http://example.com
           https://example.com
@@ -535,12 +535,12 @@ module Calagator
           expect(flash[:failure]).to match /too many links/i
         end
 
-        it 'should allow the user to preview the event' do
+        it 'allows the user to preview the event' do
           put 'update', @params.merge(preview: 'Preview')
           expect(response).to render_template :edit
         end
 
-        it 'should not allow a user to update a locked event' do
+        it 'does not allow a user to update a locked event' do
           @event.lock_editing!
           put 'update', @params
           expect(response).to be_redirect
@@ -557,25 +557,25 @@ module Calagator
           get 'clone', id: 1
         end
 
-        it 'should build an unsaved record' do
+        it 'builds an unsaved record' do
           record = assigns[:event]
           expect(record).to be_a_new_record
           expect(record.id).to be_nil
         end
 
-        it 'should build a cloned record similar to the existing record' do
+        it 'builds a cloned record similar to the existing record' do
           record = assigns[:event]
           %w[title description venue_id venue_details].each do |field|
             expect(record.attributes[field]).to eq @event.attributes[field]
           end
         end
 
-        it 'should display a new event form' do
+        it 'displays a new event form' do
           expect(response).to be_success
           expect(response).to render_template :new
         end
 
-        it 'should have notice with cloning instructions' do
+        it 'has notice with cloning instructions' do
           expect(flash[:success]).to match /clone/i
         end
       end
@@ -590,7 +590,7 @@ module Calagator
       describe '#duplicates' do
         render_views
 
-        it 'should find current duplicates and not past duplicates' do
+        it 'finds current duplicates and not past duplicates' do
           current_master = FactoryBot.create(:event, title: 'Current')
           current_duplicate = FactoryBot.create(:event, title: current_master.title)
 
@@ -609,7 +609,7 @@ module Calagator
           expect(assigns[:grouped].select { |keys, _values| keys.include?(past_master.title) }).to be_empty
         end
 
-        it 'should redirect duplicate events to their master' do
+        it 'redirects duplicate events to their master' do
           event_master = FactoryBot.create(:event)
           event_duplicate = FactoryBot.create(:event)
 
@@ -625,7 +625,7 @@ module Calagator
           expect(response).to redirect_to(event_url(event_master.id))
         end
 
-        it 'should display an error message if given invalid arguments' do
+        it 'displays an error message if given invalid arguments' do
           get 'duplicates', type: 'omgwtfbbq'
 
           expect(response).to be_success
@@ -651,15 +651,15 @@ module Calagator
             get :search, query: 'myquery', format: 'html'
           end
 
-          it 'should assign search result' do
+          it 'assigns search result' do
             expect(assigns[:search]).to be_a Event::Search
           end
 
-          it 'should assign matching events' do
+          it 'assigns matching events' do
             expect(assigns[:events]).to match_array([current_event, current_event_2, past_event])
           end
 
-          it 'should render matching events' do
+          it 'renders matching events' do
             have_selector 'table.event_table' do
               have_selector '.vevent a.summary', href: event_url(results[:past])
               have_selector '.vevent a.summary', href: event_url(results[:current])
@@ -667,15 +667,15 @@ module Calagator
           end
 
           describe 'sidebar' do
-            it 'should have iCalendar feed' do
+            it 'has iCalendar feed' do
               have_selector '.sidebar a', href: search_events_url(query: @query, format: 'ics', protocol: 'webcal')
             end
 
-            it 'should have Atom feed' do
+            it 'has Atom feed' do
               have_selector '.sidebar a', href: search_events_url(query: @query, format: 'atom')
             end
 
-            it 'should have Google subscription' do
+            it 'has Google subscription' do
               ics_url = search_events_url(query: @query, format: 'ics')
               google_url = "https://www.google.com/calendar/render?cid=#{ics_url}"
               have_selector '.sidebar a', href: google_url
@@ -684,14 +684,14 @@ module Calagator
         end
 
         describe 'in XML format' do
-          it 'should produce XML' do
+          it 'produces XML' do
             get :search, query: 'myquery', format: 'xml'
 
             hash = Hash.from_xml(response.body)
             expect(hash['events']).to be_a_kind_of Array
           end
 
-          it 'should include venue details' do
+          it 'includes venue details' do
             get :search, query: 'myquery', format: 'xml'
 
             hash = Hash.from_xml(response.body)
@@ -704,14 +704,14 @@ module Calagator
         end
 
         describe 'in JSON format' do
-          it 'should produce JSON' do
+          it 'produces JSON' do
             get :search, query: 'myquery', format: 'json'
 
             struct = ActiveSupport::JSON.decode(response.body)
             expect(struct).to be_a_kind_of Array
           end
 
-          it 'should include venue details' do
+          it 'includes venue details' do
             get :search, query: 'myquery', format: 'json'
 
             struct = ActiveSupport::JSON.decode(response.body)
@@ -722,7 +722,7 @@ module Calagator
         end
 
         describe 'in ATOM format' do
-          it 'should produce ATOM' do
+          it 'produces ATOM' do
             get :search, query: 'myquery', format: 'atom'
 
             hash = Hash.from_xml(response.body)
@@ -731,13 +731,13 @@ module Calagator
         end
 
         describe 'in ICS format' do
-          it 'should produce ICS' do
+          it 'produces ICS' do
             get :search, query: 'myquery', format: 'ics'
 
             expect(response.body).to match /BEGIN:VEVENT/
           end
 
-          it 'should produce events matching the query' do
+          it 'produces events matching the query' do
             get :search, query: 'myquery', format: 'ics'
             expect(response.body).to match /SUMMARY:#{current_event_2.title}/
             expect(response.body).to match /SUMMARY:#{past_event.title}/
@@ -761,7 +761,7 @@ module Calagator
     end
 
     describe '#destroy' do
-      it 'should destroy events' do
+      it 'destroys events' do
         event = FactoryBot.build(:event)
         expect(event).to receive(:destroy)
         expect(Event).to receive(:find).and_return(event)
@@ -770,7 +770,7 @@ module Calagator
         expect(response).to redirect_to(events_url)
       end
 
-      it 'should not allow a user to destroy a locked event' do
+      it 'does not allow a user to destroy a locked event' do
         event = FactoryBot.create(:event)
         event.lock_editing!
 
