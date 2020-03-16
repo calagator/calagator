@@ -81,9 +81,11 @@ jobs:
       - name: Prepare Database
         run: bundle exec rake app:db:create app:db:migrate app:db:seed
       - name: Start Solr
-        run: bundle exec rake app:sunspot:solr:start_with_waiting
+        run: |
+          RAILS_ENV=test bundle exec rake app:sunspot:solr:start_with_waiting
       - name: Run RSpec
-        run: bundle exec rake spec
+        run: |
+          bundle exec rake spec
       - uses: actions/upload-artifact@v1
         with:
           name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}
