@@ -65,7 +65,9 @@ module Calagator
 
       loop do
         return parent if parent.master?
-        raise DuplicateCheckingError, "Loop detected in duplicates chain at #{parent.class}##{parent.id}" if seen.include?(parent)
+        if seen.include?(parent)
+          raise DuplicateCheckingError, "Loop detected in duplicates chain at #{parent.class}##{parent.id}"
+        end
 
         seen << parent
         parent = parent.duplicate_of
@@ -101,13 +103,17 @@ module Calagator
 
       # Return set of attributes that should be ignored for duplicate checking
       def duplicate_checking_ignores_attributes(*args)
-        _duplicate_checking_ignores_attributes.merge(args.map(&:to_sym)) unless args.empty?
+        unless args.empty?
+          _duplicate_checking_ignores_attributes.merge(args.map(&:to_sym))
+        end
         DUPLICATE_CHECKING_IGNORES_ATTRIBUTES + _duplicate_checking_ignores_attributes
       end
 
       # Return set of associations that will be ignored during duplicate squashing
       def duplicate_squashing_ignores_associations(*args)
-        _duplicate_squashing_ignores_associations.merge(args.map(&:to_sym)) unless args.empty?
+        unless args.empty?
+          _duplicate_squashing_ignores_associations.merge(args.map(&:to_sym))
+        end
         _duplicate_squashing_ignores_associations
       end
 

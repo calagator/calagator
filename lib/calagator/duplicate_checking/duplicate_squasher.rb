@@ -10,8 +10,12 @@ module Calagator
       def valid?
         name = model_name.split('::').last
         self.failure = "A master #{name} must be selected." if master.blank?
-        self.failure = "At least one duplicate #{name} must be selected." if duplicates.empty?
-        self.failure = "The master #{name} could not be squashed into itself." if duplicates.include?(master)
+        if duplicates.empty?
+          self.failure = "At least one duplicate #{name} must be selected."
+        end
+        if duplicates.include?(master)
+          self.failure = "The master #{name} could not be squashed into itself."
+        end
         failure.blank?
       end
 
@@ -45,7 +49,9 @@ module Calagator
           # Transfer any has_many associations of this model to the master
           master.class.reflect_on_all_associations(:has_many).each do |association|
             next if association.name == :duplicates
-            next if master.class.duplicate_squashing_ignores_associations.include?(association.name)
+            if master.class.duplicate_squashing_ignores_associations.include?(association.name)
+              next
+            end
 
             # Handle tags - can't simply reassign, need to be unique, and they may have some of the same tags
             if association.name == :tag_taggings

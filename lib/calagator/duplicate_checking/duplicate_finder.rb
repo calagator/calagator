@@ -71,7 +71,9 @@ module Calagator
       end
 
       def query_from_fields
-        raise ArgumentError, "Unknown fields: #{fields.inspect}" if (Array(fields) - attributes).any?
+        if (Array(fields) - attributes).any?
+          raise ArgumentError, "Unknown fields: #{fields.inspect}"
+        end
 
         Array(fields).map do |attr|
           "#{full_attr(attr)} = b.#{attr}"

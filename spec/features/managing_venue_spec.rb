@@ -45,7 +45,9 @@ feature 'Venue Editing', js: true do
     expect(page).to have_content new_venue.description
     expect(page).to have_content 'Public WiFi'
     expect(page).to have_content 'Just pay the ticket price.'
-    expect(page).to have_content 'This venue is no longer open for business.' if new_venue.closed
+    if new_venue.closed
+      expect(page).to have_content 'This venue is no longer open for business.'
+    end
   end
 
   scenario 'A user edits a venue with more than one tag' do

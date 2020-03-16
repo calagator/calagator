@@ -86,7 +86,9 @@ module Calagator
       end
 
       def description_description
-        Loofah::Helpers.strip_tags(event.description) if event.description.present?
+        if event.description.present?
+          Loofah::Helpers.strip_tags(event.description)
+        end
       end
 
       def description_tags
@@ -102,7 +104,9 @@ module Calagator
       end
 
       def location
-        [event.venue.title, event.venue.full_address].compact.join(': ') if event.venue
+        if event.venue
+          [event.venue.title, event.venue.full_address].compact.join(': ')
+        end
       end
 
       def dtstart

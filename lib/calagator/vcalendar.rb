@@ -11,8 +11,10 @@ module Calagator
       RiCal.parse_string(raw_ical).map do |ri_cal_calendar|
         VCalendar.new(ri_cal_calendar)
       end
-    rescue Exception => exception
-      return false if /Invalid icalendar file/.match?(exception.message) # Invalid data, give up.
+    rescue Exception => e
+      if /Invalid icalendar file/.match?(e.message)
+        return false
+      end # Invalid data, give up.
 
       raise # Unknown error, reraise
     end

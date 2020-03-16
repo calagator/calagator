@@ -50,7 +50,9 @@ module Calagator
 
     def group_topics(data)
       topics = data['group']['topics']
-      topics.map { |t| t['name'].downcase }.join(', ').insert(0, ', ') unless topics.empty?
+      unless topics.empty?
+        topics.map { |t| t['name'].downcase }.join(', ').insert(0, ', ')
+      end
     end
 
     def to_venue(value)

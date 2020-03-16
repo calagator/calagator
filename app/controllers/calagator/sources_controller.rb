@@ -37,8 +37,8 @@ module Calagator
         format.html # show.html.erb
         format.xml  { render xml: @source }
       end
-    rescue ActiveRecord::RecordNotFound => error
-      flash[:failure] = error.to_s if params[:id] != 'import'
+    rescue ActiveRecord::RecordNotFound => e
+      flash[:failure] = e.to_s if params[:id] != 'import'
       redirect_to new_source_path
     end
 

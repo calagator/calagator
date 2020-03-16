@@ -61,7 +61,9 @@ class BlacklistValidator < ActiveModel::EachValidator
   end
 
   def get_blacklist_patterns_from(filename)
-    filename = Rails.root.join('config', filename) unless %r{[/\\]}.match?(filename)
+    unless %r{[/\\]}.match?(filename)
+      filename = Rails.root.join('config', filename)
+    end
     return unless File.exist?(filename)
 
     File.readlines(filename).map do |line|

@@ -56,7 +56,9 @@ module Calagator
       return unless url_template = machine_tag[predicate]
 
       url = format(url_template, value)
-      url = "#{site_root_url}defunct?url=https://web.archive.org/web/#{archive_date}/#{url}" if defunct?
+      if defunct?
+        url = "#{site_root_url}defunct?url=https://web.archive.org/web/#{archive_date}/#{url}"
+      end
       url
     end
 

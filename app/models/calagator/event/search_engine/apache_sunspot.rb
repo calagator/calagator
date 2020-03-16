@@ -40,7 +40,7 @@ module Calagator
             text(:venue_title) { venue.try(:title) }
             string(:venue_title) { venue.try(:title) }
 
-            boolean(:duplicate) { |event| event.duplicate? }
+            boolean(:duplicate, &:duplicate?)
           end
         end
 

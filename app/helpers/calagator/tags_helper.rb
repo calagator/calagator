@@ -27,7 +27,9 @@ module Calagator
 
       def css_class
         classes = ['p-category']
-        classes += ['external', machine_tag.namespace, machine_tag.predicate] if machine_tag.url
+        if machine_tag.url
+          classes += ['external', machine_tag.namespace, machine_tag.predicate]
+        end
         classes.join(' ')
       end
 

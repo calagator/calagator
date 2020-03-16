@@ -47,7 +47,9 @@ module Calagator
     # Normalize the URL.
     def url=(value)
       url = URI.parse(value.strip)
-      url.scheme = 'http' unless %w[http https ftp].include?(url.scheme) || url.scheme.nil?
+      unless %w[http https ftp].include?(url.scheme) || url.scheme.nil?
+        url.scheme = 'http'
+      end
       self[:url] = url.scheme.nil? ? 'http://' + value.strip : url.to_s
     rescue URI::InvalidURIError
       false

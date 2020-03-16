@@ -87,10 +87,8 @@ module Calagator
           postal_code: vvenue.postalcode,
           country: vvenue.country,
           latitude: vvenue.latitude,
-          longitude: vvenue.longitude
-        ) do |venue|
-          venue.geocode!
-        end
+          longitude: vvenue.longitude, &:geocode!
+        )
       end
 
       def from_fallback
