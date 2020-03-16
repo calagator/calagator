@@ -32,17 +32,17 @@ jobs:
           - 2.5.7
           - 2.6.5
           - 2.7.0
-        gemfile:
-          - gemfiles/rails_4_2.gemfile
+        rails:
+          - rails_4_2
         exclude:
-          - gemfile: gemfiles/rails_4_2.gemfile
+          - rails: rails_4_2
             ruby: 2.6.5
-          - gemfile: gemfiles/rails_4_2.gemfile
+          - rails: rails_4_2
             ruby: 2.7.0
 
     env:
       BUNDLER_VERSION: 1.17.3
-      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
+      BUNDLE_GEMFILE: gemfiles/${{ matrix.rails }}.gemfile
 
     steps:
       - uses: actions/checkout@v2
@@ -86,7 +86,7 @@ jobs:
         run: bundle exec rake spec
       - uses: actions/upload-artifact@v1
         with:
-          name: coverage
+          name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}
           path: coverage
       - name: Coveralls
         uses: coverallsapp/github-action@master
