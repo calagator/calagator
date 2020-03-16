@@ -131,7 +131,9 @@ module Calagator
       result = []
       result << "#{truncate(event.title, length: lengths[:title])} -"
       result << event.start_time.strftime('%I:%M%p %m.%d.%Y') # "04:00PM 08.01.2012"
-      result << "@ #{truncate(event.venue.title, length: lengths[:venue])}" if event.venue
+      if event.venue
+        result << "@ #{truncate(event.venue.title, length: lengths[:venue])}"
+      end
 
       result.join(' ')
     end

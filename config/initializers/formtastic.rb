@@ -95,7 +95,7 @@ if Formtastic::VERSION.to_f < 4.0
   Formtastic::FormBuilder.action_class_finder = Formtastic::ActionClassFinder
   Formtastic::FormBuilder.input_class_finder  = Formtastic::InputClassFinder
 else
-  warn 'FIXME: Manual setting of Formtastic::FormBuilder #action_class_finder ' +
-       'and #input_class_finder in config/initializers/formtastic.rb can be ' +
+  warn 'FIXME: Manual setting of Formtastic::FormBuilder #action_class_finder ' \
+       'and #input_class_finder in config/initializers/formtastic.rb can be ' \
        'removed.'
 end

@@ -15,7 +15,9 @@ cache_if(@perform_caching, Calagator::CacheObserver.daily_key_for('events_atom',
       @events.each do |event|
         feed.entry(event) do |entry|
           summary = normalize_time(event.start_time, event.end_time, format: :text).to_s
-          summary += " at #{event.venue.title}" if event.venue && event.venue.title.present?
+          if event.venue && event.venue.title.present?
+            summary += " at #{event.venue.title}"
+          end
 
           entry.title(event.title)
           entry.summary(summary)

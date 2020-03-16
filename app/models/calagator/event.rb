@@ -126,7 +126,9 @@ module Calagator
 
     def time_for(value)
       value = value.to_s if value.is_a?(Date)
-      value = Time.zone.parse(value) if value.is_a?(String) # this will throw ArgumentError if invalid
+      if value.is_a?(String)
+        value = Time.zone.parse(value)
+      end # this will throw ArgumentError if invalid
       value
     end
     private :time_for

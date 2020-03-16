@@ -94,7 +94,9 @@ module Calagator
       end
 
       attributes['country'] = attributes.delete('country_name')
-      attributes['postal_code'] = attributes['postal_code'].to_s if attributes['postal_code']
+      if attributes['postal_code']
+        attributes['postal_code'] = attributes['postal_code'].to_s
+      end
       venue.attributes = attributes
     end
 

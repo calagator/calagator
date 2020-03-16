@@ -26,7 +26,9 @@ module Calagator
 
     def to_events
       return unless data = to_events_api_helper(url) do |event_id|
-        raise Calagator::Source::Parser::HttpAuthenticationRequiredError if Calagator.facebook_access_token.blank?
+        if Calagator.facebook_access_token.blank?
+          raise Calagator::Source::Parser::HttpAuthenticationRequiredError
+        end
 
         [
           "https://graph.facebook.com/#{event_id}",
@@ -34,7 +36,9 @@ module Calagator
         ]
       end
 
-      raise Calagator::Source::Parser::HttpAuthenticationRequiredError if data['parsed_response'] === false
+      if data['parsed_response'] === false
+        raise Calagator::Source::Parser::HttpAuthenticationRequiredError
+      end
 
       event = Event.new(
         source: source,

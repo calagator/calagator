@@ -2,7 +2,8 @@
 
 module Calagator
   module TimeRangeHelper
-    extend self
+    extend self # rubocop:disable Style/ModuleFunction
+
     # Initialize with a single DateTime, a pair of DateTimes,
     # or an object that responds_to start_time and end_time, and two options
     # By default (unless :format => :text) include <abbr> tags for hCalendar,
