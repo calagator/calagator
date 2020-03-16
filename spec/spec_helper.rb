@@ -20,6 +20,10 @@ require 'selenium-webdriver'
 require 'timecop'
 require 'webmock'
 
+if Object.const_defined? "SimpleCov"
+  SimpleCov.command_name "rspec"
+end
+
 # Load support files
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
