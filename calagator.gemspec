@@ -60,7 +60,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-collection_matchers', '~> 1.1'
   s.add_development_dependency 'rspec-its', '~> 1.1'
   s.add_development_dependency 'rspec-rails', '~> 3.2'
-  s.add_development_dependency 'rubocop', '~> 0.67.2'
+  s.add_development_dependency 'rubocop', '~> 0.80.1'
   s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'simplecov', '~> 0.18'
   s.add_development_dependency 'simplecov-lcov', '~> 0.8'
