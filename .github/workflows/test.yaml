@@ -12,6 +12,15 @@ on:
       - 'master'
 
 jobs:
+  rubocop:
+    name: "Run Rubocop"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Rubocop Linter
+        uses: andrewmcodes/rubocop-linter-action@v3.1.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test:
     runs-on: ubuntu-latest
 
