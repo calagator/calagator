@@ -12,6 +12,10 @@ unless ENV['SKIP_COVERAGE'] || RUBY_ENGINE == 'rbx'
     enable_coverage :branch
     coverage_dir 'coverage'
 
+    add_filter %r{lib/generators}
+    add_filter %r{lib/tasks}
+    add_filter 'lib/calagator/version.rb'
+
     formatter SimpleCov::Formatter::MultiFormatter.new([
       SimpleCov::Formatter::HTMLFormatter,
       SimpleCov::Formatter::LcovFormatter
