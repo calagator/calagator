@@ -35,7 +35,7 @@ gem_group :development, :test do
   if spec
     spec_dependencies = spec.development_dependencies.select { |dep| required_dev_gems.include?(dep.name) }
     spec_dependencies.each do |dep|
-      gem dep.name, dep.requirement.to_s
+      gem(+dep.name, dep.requirement.to_s)
     end
   else
     required_dev_gems.each { |gem_name| gem gem_name }

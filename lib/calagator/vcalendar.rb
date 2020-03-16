@@ -5,8 +5,8 @@ require 'ri_cal'
 module Calagator
   class VCalendar < Struct.new(:ri_cal_calendar)
     def self.parse(raw_ical)
-      raw_ical.gsub! /\r\n/, "\n" # normalize line endings
-      raw_ical.gsub! /;TZID=GMT:(.*)/, ':\1Z' # normalize timezones
+      raw_ical = raw_ical.gsub(/\r\n/, "\n") # normalize line endings
+      raw_ical = raw_ical.gsub(/;TZID=GMT:(.*)/, ':\1Z') # normalize timezones
 
       RiCal.parse_string(raw_ical).map do |ri_cal_calendar|
         VCalendar.new(ri_cal_calendar)
@@ -113,7 +113,7 @@ module Calagator
       vcard = RiCal.parse_string(raw_ical_venue).first
 
       # Extract all properties into an array of "KEY;meta-qualifier:value" strings
-      vcard_lines = vcard.export_properties_to(StringIO.new(''))
+      vcard_lines = vcard.export_properties_to(StringIO.new(+''))
 
       hash_from_vcard_lines(vcard_lines)
     end
