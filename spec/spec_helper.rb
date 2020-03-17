@@ -8,7 +8,6 @@ end
 require 'simplecov'
 
 require 'rails_helper'
-require 'sass'
 require 'rspec-activemodel-mocks'
 require 'rspec/its'
 require 'rspec-rails'
