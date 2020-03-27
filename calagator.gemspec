@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   # When changing this Rails requirement, also update RAILS_REQUIREMENT in rails_template.rb
   s.add_dependency 'rails', '~> 4.2'
 
-  s.add_dependency 'acts-as-taggable-on', '~> 3.5'
+  s.add_dependency 'acts-as-taggable-on', '~> 5.0'
   s.add_dependency 'bluecloth', '~> 2.2'
   s.add_dependency 'font-awesome-rails', '~> 4.3'
   s.add_dependency 'formtastic', '~> 3.1'
