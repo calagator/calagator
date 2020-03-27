@@ -48,10 +48,10 @@ FactoryBot.define do
     description { Faker::Lorem.paragraph }
     start_time  do
       [
-        Faker::Time.between(2.years.ago, 2.years.from_now),
-        Faker::Time.backward(1, :all),
-        Faker::Time.forward(1, :all),
-        Faker::Time.forward(7, :all)
+        Faker::Time.between(from: 2.years.ago, to: 2.years.from_now),
+        Faker::Time.backward(days: 1),
+        Faker::Time.forward(days: 1),
+        Faker::Time.forward(days: 7)
       ].sample
     end
     created_at  { start_time - 1.day }
