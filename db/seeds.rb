@@ -31,7 +31,7 @@ FactoryBot.define do
     url             { Faker::Internet.url }
     closed          { [false, true].sample }
     wifi            { [true, false].sample }
-    access_notes    Faker::Lorem.paragraph
+    access_notes    { Faker::Lorem.paragraph }
 
     trait :with_events do
       after(:create) do |seed_venue|
