@@ -55,7 +55,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara', '~> 3.31'
   s.add_development_dependency 'database_cleaner', '~> 1.4'
   s.add_development_dependency 'factory_bot_rails', '~> 4.11.1'
-  s.add_development_dependency 'faker', '~> 1.4'
+  s.add_development_dependency 'faker', '~> 2.2'
   s.add_development_dependency 'gem-release', '~> 2.0'
   s.add_development_dependency 'puma', '~> 4.3.0'
   s.add_development_dependency 'rspec-activemodel-mocks', '~> 1.1.0'
