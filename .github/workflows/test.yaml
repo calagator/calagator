@@ -43,16 +43,16 @@ jobs:
           - postgresql
           - sqlite3
         ruby:
-          - 2.5.7
-          - 2.6.5
-          - 2.7.0
+          - 2.5.8
+          - 2.6.6
+          - 2.7.2
         rails:
           - rails_4_2
         exclude:
           - rails: rails_4_2
-            ruby: 2.6.5
+            ruby: 2.6.6
           - rails: rails_4_2
-            ruby: 2.7.0
+            ruby: 2.7.2
 
     env:
       BUNDLER_VERSION: 1.17.3
@@ -63,7 +63,7 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 8
-      - uses: actions/setup-ruby@v1
+      - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
       - uses: actions/cache@v1
