@@ -7,10 +7,9 @@ module Calagator
     middleware.use 'Rack::JSONP'
 
     config.assets.precompile += %w[
-      markers-soft.png
-      markers-shadow.png
-      markers-soft@2x.png
-      markers-shadow@2x.png
+      *.png
+      *.gif
+      calagator/errors.css
       leaflet.js
       leaflet_google_layer.js
       site-icon.png
