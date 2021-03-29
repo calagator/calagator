@@ -62,7 +62,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-collection_matchers', '~> 1.1'
   s.add_development_dependency 'rspec-its', '~> 1.1'
   s.add_development_dependency 'rspec-rails', '~> 3.2'
-  s.add_development_dependency 'rubocop', '~> 0.80.0'
+  s.add_development_dependency 'rubocop', '~> 1.12.0'
   s.add_development_dependency 'rubocop-performance', '~> 1.5.0'
   s.add_development_dependency 'rubocop-rails', '~> 2.5.2'
   s.add_development_dependency 'rubocop-rspec', '~> 1.38.0'
