@@ -36,8 +36,9 @@ require 'active_model/sequential_validator'
 # A model representing a calendar event.
 
 module Calagator
-  class Event < ActiveRecord::Base
+  class Event < ApplicationRecord
     self.table_name = 'events'
+    self.belongs_to_required_by_default = false
 
     has_paper_trail
     acts_as_taggable

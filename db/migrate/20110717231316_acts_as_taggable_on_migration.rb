@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ActsAsTaggableOnMigration < ActiveRecord::Migration
+class ActsAsTaggableOnMigration < ActiveRecord::Migration[4.2]
   def self.up
     # We already have a Tag model with a name
     # create_table :tags do |t|

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Venue < ActiveRecord::Base
+  class Venue < ApplicationRecord
     class Search < Struct.new(:tag, :query, :wifi, :all, :closed, :include_closed)
       def initialize(attributes = {})
         members.each do |key|

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Event < ActiveRecord::Base
+  class Event < ApplicationRecord
     class Search < Struct.new(:query, :tag, :order, :current)
       def initialize(attributes = {})
         members.each do |key|

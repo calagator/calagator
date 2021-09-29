@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Event < ActiveRecord::Base
+  class Event < ApplicationRecord
     class SearchEngine
       class Sql < Struct.new(:query, :opts)
         # Return an Array of non-duplicate Event instances matching the search +query+..
@@ -70,7 +70,7 @@ module Calagator
               .where(['LOWER(events.url) LIKE ?', like])
               .where(['LOWER(tags.name) = ?', keyword])
           end
-          @scope = @scope.where(query_conditions.where_values.join(' OR '))
+          @scope = @scope.where(query_conditions.join(' OR '))
           self
         end
 
@@ -94,12 +94,12 @@ module Calagator
         end
 
         def current
-          @scope = @scope.where('events.start_time >= ?', Date.yesterday.to_time)
+          @scope = @scope.where(['events.start_time >= ?', Date.yesterday.to_time])
           self
         end
 
         def past
-          @scope = @scope.where('events.start_time < ?', Date.yesterday.to_time)
+          @scope = @scope.where(['events.start_time < ?', Date.yesterday.to_time])
           self
         end
       end

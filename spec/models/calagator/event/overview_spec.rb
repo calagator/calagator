@@ -14,63 +14,63 @@ module Calagator
 
       describe '#today' do
         it 'includes events that started before today and end after today' do
-          event = FactoryBot.create(:event, start_time: @yesterday, end_time: @tomorrow)
+          event = create(:event, start_time: @yesterday, end_time: @tomorrow)
           expect(subject.today).to include event
         end
 
         it 'includes events that started earlier today' do
-          event = FactoryBot.create(:event, start_time: @today_midnight)
+          event = create(:event, start_time: @today_midnight)
           expect(subject.today).to include event
         end
 
         it 'does not include events that ended before today' do
-          event = FactoryBot.create(:event, start_time: @yesterday, end_time: @yesterday.end_of_day)
+          event = create(:event, start_time: @yesterday, end_time: @yesterday.end_of_day)
           expect(subject.today).not_to include event
         end
 
         it 'does not include events that start tomorrow' do
-          event = FactoryBot.create(:event, start_time: @tomorrow)
+          event = create(:event, start_time: @tomorrow)
           expect(subject.today).not_to include event
         end
 
         it 'does not include events that ended at midnight today' do
-          event = FactoryBot.create(:event, start_time: @yesterday, end_time: @today_midnight)
+          event = create(:event, start_time: @yesterday, end_time: @today_midnight)
           expect(subject.today).not_to include event
         end
       end
 
       describe '#tomorrow' do
         it 'includes events that start tomorrow' do
-          event = FactoryBot.create(:event, start_time: @tomorrow)
+          event = create(:event, start_time: @tomorrow)
           expect(subject.tomorrow).to include event
         end
 
         it 'does not include events that start after tomorrow' do
-          event = FactoryBot.create(:event, start_time: @day_after_tomorrow)
+          event = create(:event, start_time: @day_after_tomorrow)
           expect(subject.tomorrow).not_to include event
         end
       end
 
       describe '#later' do
         it 'includes events that start after tomorrow' do
-          event = FactoryBot.create(:event, start_time: @day_after_tomorrow)
+          event = create(:event, start_time: @day_after_tomorrow)
           expect(subject.later).to include event
         end
 
         it 'does not include events that start after two weeks' do
-          event = FactoryBot.create(:event, start_time: 2.weeks.from_now)
+          event = create(:event, start_time: 2.weeks.from_now)
           expect(subject.later).not_to include event
         end
       end
 
       describe '#more' do
         it 'provides an event if there are events past the future cutoff' do
-          event = FactoryBot.create(:event, start_time: 2.weeks.from_now)
+          event = create(:event, start_time: 2.weeks.from_now)
           expect(subject.more).to eq(event)
         end
 
         it 'is nil if there are no events past the future cutoff' do
-          event = FactoryBot.create(:event, start_time: 2.weeks.from_now - 1.day)
+          event = create(:event, start_time: 2.weeks.from_now - 1.day)
           expect(subject.more).to be_blank
         end
       end

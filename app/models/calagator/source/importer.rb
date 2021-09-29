@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Source < ActiveRecord::Base
+  class Source < ApplicationRecord
     class Importer < Struct.new(:source, :events)
       def initialize(params)
         self.source = Source.find_or_create_by(params)

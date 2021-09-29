@@ -8,7 +8,7 @@ source 'https://rubygems.org'
 gemspec
 
 # develop against latest rails
-gem 'rails', '4.2.11.1'
+gem 'rails', '~> 5.0'
 
 # turbolinks is used by the dummy application by default
 gem 'turbolinks'
@@ -17,6 +17,7 @@ gem 'recaptcha', require: 'recaptcha/rails'
 
 # can't declare platform specific development dependencies in the gemspec.
 gem 'byebug', platform: 'mri'
+gem 'paper_trail_manager', github: 'fusion94/paper_trail_manager', ref: 'b8630cd0e3318ad0929b80a701a18175402a4944'
 
 # Declare any dependencies that are still in development here instead of in
 # your gemspec. These might include edge Rails or gems from your path or

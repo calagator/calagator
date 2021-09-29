@@ -7,7 +7,7 @@
 # Example:
 #
 #   # Define your class
-#   class Thing < ActiveRecord::Base
+#   class Thing < ApplicationRecord
 #     # Load the mixin into your class
 #     include DuplicateChecking
 #

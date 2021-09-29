@@ -13,20 +13,20 @@ on:
   workflow_dispatch:
 
 jobs:
-  rubocop:
-    name: "Run Rubocop"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-ruby@v1
-      - name: Install Rubocop
-        run: gem install rubocop rubocop-performance rubocop-rails rubocop-rspec
-      - name: Rubocop
-        run: rubocop --fail-level warning
-      # - name: Rubocop Linter
-      #   uses: andrewmcodes/rubocop-linter-action@v3.1.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # rubocop:
+  #   name: "Run Rubocop"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@master
+  #     - uses: actions/setup-ruby@v1
+  #     - name: Install Rubocop
+  #       run: gem install rubocop rubocop-performance rubocop-rails rubocop-rspec
+  #     - name: Rubocop
+  #       run: rubocop --fail-level warning
+  #     # - name: Rubocop Linter
+  #     #   uses: andrewmcodes/rubocop-linter-action@v3.1.0
+  #     #   env:
+  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test:
     runs-on: ubuntu-latest
 

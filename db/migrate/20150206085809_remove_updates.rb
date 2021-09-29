@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RemoveUpdates < ActiveRecord::Migration
+class RemoveUpdates < ActiveRecord::Migration[4.2]
   def up
     drop_table :updates
   end

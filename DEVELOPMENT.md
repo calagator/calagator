@@ -19,9 +19,6 @@ Before you start, you will need to:
 
 1. Get the source code: From your command line, run `git clone https://github.com/calagator/calagator.git`, which will create a `calagator` directory with the source code. Change into this directory (`cd calagator`) and run the remaining commands from there.
 2. Install Bundler-managed gems, (the actual libraries that this application uses, like Ruby on Rails) by running `bundle install`. This may take a long time to complete.
-3. Generate a dummy host application. This is a new Rails application that includes Calagator from your current checkout of the code and is used for running tests:
-
-        bundle exec bin/calagator new spec/dummy --dummy
 
 4. Initialize your database by running:
 

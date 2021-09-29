@@ -33,8 +33,8 @@ module Calagator
 
         describe 'with events' do
           before do
-            FactoryBot.create(:event, :with_venue)
-            FactoryBot.create(:event, :with_venue)
+            create(:event, :with_venue)
+            create(:event, :with_venue)
 
             get :index, format: 'xml'
 
@@ -78,7 +78,7 @@ module Calagator
 
         describe 'with events' do
           before do
-            @event = FactoryBot.create(:event, :with_venue)
+            @event = create(:event, :with_venue)
             @venue = @event.venue
 
             get :index, format: 'json'
@@ -124,8 +124,8 @@ module Calagator
 
         describe 'with events' do
           before do
-            FactoryBot.create(:event, :with_venue)
-            FactoryBot.create(:event, :with_venue)
+            create(:event, :with_venue)
+            create(:event, :with_venue)
 
             get :index, format: 'atom'
 
@@ -174,8 +174,8 @@ module Calagator
 
         describe 'with events' do
           before do
-            @current_event = FactoryBot.create(:event, start_time: today + 1.hour)
-            @past_event = FactoryBot.create(:event, start_time: today - 1.hour)
+            @current_event = create(:event, start_time: today + 1.hour)
+            @past_event = create(:event, start_time: today - 1.hour)
 
             get :index, format: 'ics'
           end
@@ -299,7 +299,7 @@ module Calagator
       end
 
       it 'redirects from a duplicate event to its master' do
-        master = FactoryBot.create(:event, id: 4321)
+        master = create(:event, id: 4321)
         event = Event.new(start_time: now, duplicate_of: master)
         expect(Event).to receive(:find).and_return(event)
 
@@ -329,8 +329,8 @@ module Calagator
           'end_time' => '',
           'start_time' => ''
         }.with_indifferent_access
-        @venue = FactoryBot.build(:venue)
-        @event = FactoryBot.build(:event, venue: @venue)
+        @venue = build(:venue)
+        @event = build(:event, venue: @venue)
       end
 
       describe '#new' do
@@ -371,7 +371,7 @@ module Calagator
 
         it 'associates a venue by id when both an id and a name are provided' do
           @venue.save!
-          @venue2 = FactoryBot.create(:venue)
+          @venue2 = create(:venue)
           @params[:event][:venue_id] = @venue.id.to_s
           @params[:venue_name] = @venue2.title
           post :create, @params
@@ -435,7 +435,7 @@ module Calagator
         end
 
         it 'creates an event for an existing venue' do
-          venue = FactoryBot.create(:venue)
+          venue = create(:venue)
 
           post :create,
                start_time: now.strftime('%Y-%m-%d'),
@@ -460,7 +460,7 @@ module Calagator
 
       describe '#update' do
         before do
-          @event = FactoryBot.create(:event, :with_venue, id: 42)
+          @event = create(:event, :with_venue, id: 42)
           @venue = @event.venue
           @params.merge!(id: 42)
         end
@@ -478,7 +478,7 @@ module Calagator
         end
 
         it 'associates a venue based on a given venue id' do
-          @venue = FactoryBot.create(:venue)
+          @venue = create(:venue)
           @params[:event][:venue_id] = @venue.id.to_s
           put 'update', @params
           expect(@event.reload.venue).to eq(@venue)
@@ -486,7 +486,7 @@ module Calagator
         end
 
         it 'associates a venue based on a given venue name' do
-          @venue = FactoryBot.create(:venue)
+          @venue = create(:venue)
           @params[:venue_name] = @venue.title
           put 'update', @params
           expect(@event.reload.venue).to eq(@venue)
@@ -494,8 +494,8 @@ module Calagator
         end
 
         it 'associates a venue by id when both an id and a name are provided' do
-          @venue = FactoryBot.create(:venue)
-          @venue2 = FactoryBot.create(:venue)
+          @venue = create(:venue)
+          @venue2 = create(:venue)
           @params[:event][:venue_id] = @venue.id.to_s
           @params[:venue_name] = @venue2.title
           put 'update', @params
@@ -550,7 +550,7 @@ module Calagator
 
       describe '#clone' do
         before do
-          @event = FactoryBot.create(:event)
+          @event = create(:event)
 
           allow(Event).to receive(:find).and_return(@event)
 
@@ -591,11 +591,11 @@ module Calagator
         render_views
 
         it 'finds current duplicates and not past duplicates' do
-          current_master = FactoryBot.create(:event, title: 'Current')
-          current_duplicate = FactoryBot.create(:event, title: current_master.title)
+          current_master = create(:event, title: 'Current')
+          current_duplicate = create(:event, title: current_master.title)
 
-          past_master = FactoryBot.create(:event, title: 'Past', start_time: now - 2.days)
-          past_duplicate = FactoryBot.create(:event, title: past_master.title, start_time: now - 1.day)
+          past_master = create(:event, title: 'Past', start_time: now - 2.days)
+          past_duplicate = create(:event, title: past_master.title, start_time: now - 1.day)
 
           get 'duplicates', type: 'title'
 
@@ -610,8 +610,8 @@ module Calagator
         end
 
         it 'redirects duplicate events to their master' do
-          event_master = FactoryBot.create(:event)
-          event_duplicate = FactoryBot.create(:event)
+          event_master = create(:event)
+          event_duplicate = create(:event)
 
           get 'show', id: event_duplicate.id
           expect(response).not_to be_redirect
@@ -642,9 +642,9 @@ module Calagator
       describe 'when returning results' do
         render_views
 
-        let!(:current_event) { FactoryBot.create(:event, :with_venue, title: 'MyQuery') }
-        let!(:current_event_2) { FactoryBot.create(:event, :with_venue, description: 'WOW myquery!') }
-        let!(:past_event) { FactoryBot.create(:event, :with_venue, title: 'old myquery') }
+        let!(:current_event) { create(:event, :with_venue, title: 'MyQuery') }
+        let!(:current_event_2) { create(:event, :with_venue, description: 'WOW myquery!') }
+        let!(:past_event) { create(:event, :with_venue, title: 'old myquery') }
 
         describe 'in HTML format' do
           before do
@@ -762,7 +762,7 @@ module Calagator
 
     describe '#destroy' do
       it 'destroys events' do
-        event = FactoryBot.build(:event)
+        event = build(:event)
         expect(event).to receive(:destroy)
         expect(Event).to receive(:find).and_return(event)
 
@@ -771,7 +771,7 @@ module Calagator
       end
 
       it 'does not allow a user to destroy a locked event' do
-        event = FactoryBot.create(:event)
+        event = create(:event)
         event.lock_editing!
 
         delete 'destroy', id: event.id

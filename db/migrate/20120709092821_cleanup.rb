@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Cleanup < ActiveRecord::Migration
+class Cleanup < ActiveRecord::Migration[4.2]
   # Remove obsolete tables and columns that may have been left behind by other migrations.
   def self.up
     if ActiveRecord::Base.connection.columns('venues').map(&:name).include?('version')

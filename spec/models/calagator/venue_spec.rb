@@ -89,42 +89,42 @@ module Calagator
 
     describe 'when finding duplicates [integration test]' do
       subject! do
-        FactoryBot.create(:venue, title: 'Venue A')
+        create(:venue, title: 'Venue A')
       end
 
       it 'does not match totally different records' do
-        FactoryBot.create(:venue)
+        create(:venue)
         expect(described_class.find_duplicates_by_type('title')).to be_empty
       end
 
       it 'does not match similar records when not searching by duplicated fields' do
-        FactoryBot.create :venue, title: subject.title
+        create :venue, title: subject.title
         expect(described_class.find_duplicates_by_type('description')).to be_empty
       end
 
       it 'matches similar records when searching by duplicated fields' do
-        venue = FactoryBot.create(:venue, title: subject.title)
+        venue = create(:venue, title: subject.title)
         expect(described_class.find_duplicates_by_type('title')).to eq([subject.title] => [subject, venue])
       end
 
       it 'matches similar records when searching by :any' do
-        venue = FactoryBot.create(:venue, title: subject.title)
+        venue = create(:venue, title: subject.title)
         expect(described_class.find_duplicates_by_type('any')).to eq([nil] => [subject, venue])
       end
 
       it 'does not match similar records when searching by multiple fields where not all are duplicated' do
-        FactoryBot.create(:venue, title: subject.title)
+        create(:venue, title: subject.title)
         expect(described_class.find_duplicates_by_type('title,description')).to be_empty
       end
 
       it 'matches similar records when searching by multiple fields where all are duplicated' do
-        venue = FactoryBot.create(:venue, title: subject.title, description: subject.description)
+        venue = create(:venue, title: subject.title, description: subject.description)
         expect(described_class.find_duplicates_by_type('title,description')).to \
           eq([subject.title, subject.description] => [subject, venue])
       end
 
       it 'does not match dissimilar records when searching by :all' do
-        FactoryBot.create(:venue)
+        create(:venue)
         expect(described_class.find_duplicates_by_type('all')).to be_empty
       end
 
@@ -135,7 +135,7 @@ module Calagator
       end
 
       it 'matches non duplicate venues when searching by na' do
-        venue = FactoryBot.create(:venue, title: 'Venue B')
+        venue = create(:venue, title: 'Venue B')
         expect(described_class.find_duplicates_by_type('na')).to eq([nil] => [subject, venue])
       end
     end
@@ -338,7 +338,7 @@ module Calagator
       end
 
       it 'creates a new version after updating' do
-        venue = FactoryBot.create :venue
+        venue = create :venue
         expect(venue.versions.count).to eq 1
 
         venue.title += ' (change)'
@@ -348,7 +348,7 @@ module Calagator
       end
 
       it 'stores old content in past versions' do
-        venue = FactoryBot.create :venue
+        venue = create :venue
         original_title = venue.title
 
         venue.title += ' (change)'

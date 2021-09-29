@@ -10,8 +10,8 @@ module Calagator
     render_views
 
     context 'concerning duplicates' do
-      let!(:venue_master) { FactoryBot.create(:venue) }
-      let!(:venue_duplicate) { FactoryBot.create(:venue, duplicate_of: venue_master) }
+      let!(:venue_master) { create(:venue) }
+      let!(:venue_duplicate) { create(:venue, duplicate_of: venue_master) }
 
       it 'redirects duplicate venues to their master' do
         get 'show', id: venue_duplicate.id
@@ -45,7 +45,7 @@ module Calagator
 
     describe 'when creating venues' do
       it 'redirects to the newly created venue' do
-        post :create, venue: FactoryBot.attributes_for(:venue)
+        post :create, venue: attributes_for(:venue)
         expect(response).to redirect_to(assigns(:venue))
       end
 
@@ -57,17 +57,17 @@ module Calagator
 
     describe 'when updating venues' do
       before do
-        @venue = FactoryBot.create(:venue)
+        @venue = create(:venue)
       end
 
       it 'redirects to the updated venue' do
-        put :update, id: @venue.id, venue: FactoryBot.attributes_for(:venue)
+        put :update, id: @venue.id, venue: attributes_for(:venue)
         expect(response).to redirect_to(@venue)
       end
 
       it 'redirects to any associated event' do
-        @event = FactoryBot.create(:event, venue: @venue)
-        put :update, id: @venue.id, from_event: @event.id, venue: FactoryBot.attributes_for(:venue)
+        @event = create(:event, venue: @venue)
+        put :update, id: @venue.id, from_event: @event.id, venue: attributes_for(:venue)
         expect(response).to redirect_to(@event)
       end
 
@@ -87,7 +87,7 @@ module Calagator
 
     describe 'when rendering the edit venue page' do
       it 'passes the template the specified venue' do
-        @venue = FactoryBot.create(:venue)
+        @venue = create(:venue)
         get :edit, id: @venue.id
         expect(assigns[:venue]).to eq(@venue)
       end
@@ -95,9 +95,9 @@ module Calagator
 
     describe 'when rendering the map page' do
       before do
-        @open_venue = FactoryBot.create(:venue)
-        @closed_venue = FactoryBot.create(:venue, closed: true)
-        @duplicate_venue = FactoryBot.create(:venue, duplicate_of: @open_venue)
+        @open_venue = create(:venue)
+        @closed_venue = create(:venue, closed: true)
+        @duplicate_venue = create(:venue, duplicate_of: @open_venue)
       end
 
       it 'only shows open non-duplicate venues' do
@@ -108,7 +108,7 @@ module Calagator
 
     describe 'when rendering the venues index' do
       before do
-        @venues = [FactoryBot.create(:venue), FactoryBot.create(:venue)]
+        @venues = [create(:venue), create(:venue)]
       end
 
       it 'assigns the search object to @search' do
@@ -140,7 +140,7 @@ module Calagator
       describe 'in JSON format' do
         describe 'with events' do
           before do
-            @venue = FactoryBot.build(:venue, id: 123)
+            @venue = build(:venue, id: 123)
             allow(Venue).to receive(:find).and_return(@venue)
           end
 
@@ -159,9 +159,9 @@ module Calagator
       describe 'in HTML format' do
         describe 'venue with future and past events' do
           before do
-            @venue = FactoryBot.create(:venue)
-            @future_event = FactoryBot.create(:event, venue: @venue)
-            @past_event = FactoryBot.create(:event, venue: @venue,
+            @venue = create(:venue)
+            @future_event = create(:event, venue: @venue)
+            @past_event = create(:event, venue: @venue,
                                                     start_time: Time.now.in_time_zone - 1.week + 1.hour,
                                                     end_time: Time.now.in_time_zone - 1.week + 2.hours)
 
@@ -185,9 +185,9 @@ module Calagator
 
       describe 'as an iCalendar' do
         before do
-          @venue = FactoryBot.create(:venue)
-          @future_event = FactoryBot.create(:event, venue: @venue, start_time: today + 1.hour)
-          @past_event = FactoryBot.create(:event, venue: @venue, start_time: today - 1.hour)
+          @venue = create(:venue)
+          @future_event = create(:event, venue: @venue, start_time: today + 1.hour)
+          @past_event = create(:event, venue: @venue, start_time: today - 1.hour)
 
           get :show, id: @venue.to_param, format: 'ics'
         end
@@ -213,7 +213,7 @@ module Calagator
     describe 'DELETE' do
       describe 'when deleting a venue without events' do
         before do
-          @venue = FactoryBot.create(:venue)
+          @venue = create(:venue)
         end
 
         shared_examples_for 'destroying a Venue record without events' do
@@ -255,7 +255,7 @@ module Calagator
 
       describe 'when deleting a venue with events' do
         before do
-          @event = FactoryBot.create(:event, :with_venue)
+          @event = create(:event, :with_venue)
           @venue = @event.venue
         end
 

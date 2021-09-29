@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Venue < ActiveRecord::Base
+  class Venue < ApplicationRecord
     class SearchEngine
       class ApacheSunspot < Struct.new(:query, :opts)
         # Return an Array of non-duplicate Venue instances matching the search +query+..

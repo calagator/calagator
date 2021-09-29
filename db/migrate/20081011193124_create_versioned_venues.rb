@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateVersionedVenues < ActiveRecord::Migration
+class CreateVersionedVenues < ActiveRecord::Migration[4.2]
   # NOTE: This migration's contents have been commented-out because they relied
   # on the old +acts_as_versioned+ plugin that we've since replaced with the
   # +papertrail+ plugin.

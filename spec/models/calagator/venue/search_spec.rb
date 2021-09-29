@@ -6,9 +6,25 @@ module Calagator
   describe Venue::Search, type: :model do
     describe '#venues' do
       before do
-        @open_venue = FactoryBot.create(:venue, title: 'Open Town', description: 'baz', wifi: false, tag_list: %w[foo])
-        @closed_venue = FactoryBot.create(:venue, title: 'Closed Down', closed: true, wifi: false, tag_list: %w[bar])
-        @wifi_venue = FactoryBot.create(:venue, title: 'Internetful', wifi: true, tag_list: %w[foo bar])
+        @open_venue = build(:venue,
+                            title: 'Open Town',
+                            description: 'baz',
+                            wifi: false) do |venue|
+                              venue.tag_list.add(%w[foo])
+                              venue.save
+                            end
+        @closed_venue = build(:venue,
+                              title: 'Closed Down',
+                              closed: true,
+                              wifi: false) do |venue|
+                                venue.tag_list.add(%w[bar]); venue.save
+                              end
+        @wifi_venue = build(:venue,
+                            title: 'Internetful',
+                            wifi: true) do |venue|
+                              venue.tag_list.add(%w[foo bar])
+                              venue.save
+                            end
       end
 
       describe 'with no parameters' do

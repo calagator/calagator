@@ -2,9 +2,9 @@
 
 shared_examples '#squash_many_duplicates' do |model|
   before do
-    @master = FactoryBot.create(model, title: 'master')
-    @dup1 = FactoryBot.create(model, title: 'dup1')
-    @dup2 = FactoryBot.create(model, title: 'dup2')
+    @master = create(model, title: 'master')
+    @dup1 = create(model, title: 'dup1')
+    @dup2 = create(model, title: 'dup2')
   end
 
   context 'happy path' do

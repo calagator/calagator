@@ -38,7 +38,7 @@ require 'loofah/activerecord/xss_foliate'
 require 'validate_url'
 
 module Calagator
-  class Venue < ActiveRecord::Base
+  class Venue < ApplicationRecord
     self.table_name = 'venues'
 
     include StripWhitespace

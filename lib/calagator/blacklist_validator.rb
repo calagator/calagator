@@ -15,7 +15,7 @@
 #
 # And then you'd include the blacklisting feature into your Message class like:
 #
-#   class Message < ActiveRecord::Base
+#   class Message < ApplicationRecord
 #     validates :title, :content, blacklist: true
 #   end
 #

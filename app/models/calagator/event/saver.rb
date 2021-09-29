@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Event < ActiveRecord::Base
+  class Event < ApplicationRecord
     class Saver < Struct.new(:event, :params, :failure)
       def save
         event.attributes = params[:event] || {}

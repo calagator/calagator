@@ -48,7 +48,6 @@ vagrant/cookbooks/vagrant/recipes/local.rb
 .ruby-version
 .bundle/
 pkg/
-spec/dummy
 .sass-cache
 .DS_Store
 .idea/*

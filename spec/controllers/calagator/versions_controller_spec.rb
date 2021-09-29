@@ -32,7 +32,7 @@ module Calagator
         @update_title = 'myevent v2'
         @final_title = 'myevent v3'
 
-        @event = FactoryBot.create(:event, title: @create_title)
+        @event = create(:event, title: @create_title)
 
         @event.title = @update_title
         @event.save!
