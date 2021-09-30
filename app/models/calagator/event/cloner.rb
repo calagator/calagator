@@ -10,7 +10,7 @@ module Calagator
         new(event).clone
       end
 
-      ATTRIBUTES = %i[title description venue_id url tag_list venue_details].freeze
+      ATTRIBUTES = %i[title description venue_id url venue_details].freeze
 
       def clone
         clone = Event.new
@@ -21,6 +21,9 @@ module Calagator
           clone.start_time = clone_time_for_today(event.start_time)
         end
         clone.end_time = clone_time_for_today(event.end_time) if event.end_time
+        if event.tag_list
+          clone.tag_list.add(event.tag_list)
+        end
         clone
       end
 

@@ -16,11 +16,12 @@ module Calagator
         description: data['description'],
         url: data['event_url'],
         venue: to_venue(data['venue']),
-        tag_list: "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}#{group_topics(data)}",
         # Meetup sends us milliseconds since the epoch in UTC
         start_time: start_time,
         end_time: data['duration'] ? start_time + data['duration'] / 1000 : nil
       )
+      event.tag_list.add("meetup:event=#{data['event_id']}",
+        "meetup:group=#{data['group']['urlname']}", "#{group_topics(data)}", parse: true)
 
       [event_or_duplicate(event)]
     end
@@ -67,8 +68,8 @@ module Calagator
         postal_code: value['zip'],
         country: value['country'],
         telephone: value['phone'],
-        tag_list: "meetup:venue=#{value['id']}"
       )
+      venue.tag_list.add("meetup:venue=#{value['id']}")
       venue.geocode!
       venue_or_duplicate(venue)
     end

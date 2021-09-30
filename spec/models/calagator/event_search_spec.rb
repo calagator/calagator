@@ -25,10 +25,10 @@ module Calagator
 
       it 'searches event tags by exact match' do
         event1 = create(:event)
-        event1.tag_list = %w[wtf bbq zomg]
+        event1.tag_list.add(%w[wtf bbq zomg])
         event1.save
         event2 = create(:event)
-        event2.tag_list = %w[wtf bbq omg]
+        event2.tag_list.add(%w[wtf bbq omg])
         event2.save
 
         expect(described_class.search('omg')).to eq([event2])

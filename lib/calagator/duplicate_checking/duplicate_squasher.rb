@@ -64,7 +64,7 @@ module Calagator
 
         # custom behavior for tags, concatentate the two objects tag strings together
         def squash_tags
-          master.tag_list = master.tag_list + duplicate.tag_list
+          master.tag_list.add(master.tag_list, duplicate.tag_list)
           master.save_tags
         end
 

@@ -24,8 +24,8 @@ module Calagator
       end
 
       it 'searches venue tags by exact match' do
-        venue1 = create(:venue, tag_list: %w[wtf bbq zomg])
-        venue2 = create(:venue, tag_list: %w[wtf bbq omg])
+        venue1 = create(:venue) { |venue| venue.tag_list.add(%w[wtf bbq zomg]) }
+        venue2 = create(:venue) { |venue| venue.tag_list.add(%w[wtf bbq omg]) }
         expect(described_class.search('omg')).to eq([venue2])
       end
 

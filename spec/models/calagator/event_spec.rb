@@ -64,16 +64,16 @@ module Calagator
         expect(@event.tag_list).to eq []
       end
 
-      it 'justs cache tagging if it is a new record' do
+      it 'adds tags without saving if it is a new record' do
         expect(@event).not_to receive :save
         expect(@event).to be_new_record
-        @event.tag_list = @tags
+        @event.tag_list.add(@tags, parse: true)
         expect(@event.tag_list.to_s).to eq @tags
       end
 
       it 'uses tags with punctuation' do
         tags = ['.net', 'foo-bar']
-        @event.tag_list = tags
+        @event.tag_list.add(tags)
         @event.save
 
         @event.reload
@@ -82,7 +82,7 @@ module Calagator
 
       it 'does not interpret numeric tags as IDs' do
         tag = ['123']
-        @event.tag_list = tag
+        @event.tag_list.add(tag)
         @event.save
 
         @event.reload
@@ -90,7 +90,7 @@ module Calagator
       end
 
       it 'returns a collection of events for a given tag' do
-        @event.tag_list = @tags
+        @event.tag_list.add(@tags, parse: true)
         @event.save
         expect(described_class.tagged_with('tags')).to eq [@event]
       end

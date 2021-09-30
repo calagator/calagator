@@ -25,7 +25,7 @@ FactoryBot.define do
     end
 
     trait :with_multiple_tags do
-      after(:create) { |venue| venue.tag_list = 'tag1, tag2'; venue.save }
+      after(:create) { |venue| venue.tag_list.add('tag1, tag2', parse: true); venue.save }
     end
   end
 
@@ -43,7 +43,7 @@ FactoryBot.define do
     end
 
     trait :with_multiple_tags do
-      after(:create) { |event| event.tag_list = 'tag1, tag2'; event.save }
+      after(:create) { |event| event.add.tag_list('tag1, tag2', parse: true); event.save }
     end
 
     trait :with_source do
