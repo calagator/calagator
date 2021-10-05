@@ -43,7 +43,7 @@ module Calagator
 
         it 'saves the source object when creating events' do
           expect(@source).to receive(:save!)
-          post :import, source: { url: @source.url }
+          post :import, params: { source: { url: @source.url } }
           expect(flash[:success]).to match(/Imported/i)
         end
 
@@ -52,18 +52,18 @@ module Calagator
           events = (1..(5 + excess))\
                    .each_with_object([]) { |_i, result| result << @event }
           expect(@source).to receive(:to_events).and_return(events)
-          post :import, source: { url: @source.url }
+          post :import, params: { source: { url: @source.url } }
           expect(flash[:success]).to match(/And #{excess} other events/si)
         end
       end
 
       it 'assigns newly-created events to the source' do
-        post :import, source: { url: @source.url }
+          post :import, params: { source: { url: @source.url } }
         expect(@event).to be_persisted
       end
 
       it 'assigns newly created venues to the source' do
-        post :import, source: { url: @source.url }
+          post :import, params: { source: { url: @source.url } }
         expect(@venue).to be_persisted
       end
 
@@ -75,12 +75,12 @@ module Calagator
 
         def assert_import_raises(exception)
           expect(@source).to receive(:create_events!).and_raise(exception)
-          post :import, source: { url: 'http://invalid.host' }
+          post :import, params: { source: { url: 'http://invalid.host' } }
         end
 
         it 'fails when host responds with no events' do
           expect(@source).to receive(:create_events!).and_return([])
-          post :import, source: { url: 'http://invalid.host' }
+          post :import, params: { source: { url: 'http://invalid.host' } }
           expect(flash[:failure]).to match(/Unable to find any upcoming events to import from this source/)
         end
 
@@ -177,7 +177,7 @@ module Calagator
     describe 'show' do
       it 'redirects when asked for unknown source' do
         expect(Source).to receive(:find).and_raise(ActiveRecord::RecordNotFound.new)
-        get :show, id: '1'
+        get :show, params: { id: '1' }
 
         expect(response).to be_redirect
       end
@@ -190,7 +190,7 @@ module Calagator
       end
 
       def do_get
-        get :show, id: '1'
+        get :show, params: { id: '1' }
       end
 
       it 'is successful' do
@@ -222,7 +222,7 @@ module Calagator
 
       def do_get
         @request.env['HTTP_ACCEPT'] = 'application/xml'
-        get :show, id: '1'
+        get :show, params: { id: '1' }
       end
 
       it 'is successful' do
@@ -285,7 +285,7 @@ module Calagator
       end
 
       def do_get
-        get :edit, id: '1'
+        get :edit, params: { id: '1' }
       end
 
       it 'is successful' do
@@ -318,7 +318,7 @@ module Calagator
       describe 'with successful save' do
         def do_post
           expect(@source).to receive(:update).and_return(true)
-          post :create, source: {}
+          post :create, params: { source: {} }
         end
 
         it 'creates a new source' do
@@ -336,7 +336,7 @@ module Calagator
         def do_post
           expect(@source).to receive(:update).and_return(false)
           allow(@source).to receive_messages(new_record?: true)
-          post :create, source: {}
+          post :create, params: { source: {} }
         end
 
         it "re-renders 'new'" do
@@ -355,7 +355,7 @@ module Calagator
       describe 'with successful update' do
         def do_put
           expect(@source).to receive(:update).and_return(true)
-          put :update, id: '1'
+          put :update, params: { id: '1' }
         end
 
         it 'finds the source requested' do
@@ -382,7 +382,7 @@ module Calagator
       describe 'with failed update' do
         def do_put
           expect(@source).to receive(:update).and_return(false)
-          put :update, id: '1'
+          put :update, params: { id: '1' }
         end
 
         it "re-renders 'edit'" do
@@ -399,7 +399,7 @@ module Calagator
       end
 
       def do_delete
-        delete :destroy, id: '1'
+        delete :destroy, params: { id: '1' }
       end
 
       it 'finds the source requested' do

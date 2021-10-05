@@ -53,3 +53,4 @@ pkg/
 .idea/*
 spec/dummy/log/*
 spec/dummy/db/*.sqlite3
+spec/dummy/tmp/*

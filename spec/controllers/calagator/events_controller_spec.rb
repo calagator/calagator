@@ -230,7 +230,7 @@ module Calagator
         end
 
         it 'returns matching events' do
-          get :index, date: { start: '2010-01-16', end: '2010-01-16' }
+          get :index, params: { date: { start: '2010-01-16', end: '2010-01-16' } }
           expect(assigns[:events]).to eq within
         end
       end
@@ -273,17 +273,17 @@ module Calagator
         end
 
         it 'returns matching events before an end time' do
-          get :index, time: { start: '', end: '09:00 AM' }
+          get :index, params: { time: { start: '', end: '09:00 AM' } }
           expect(assigns[:events]).to eq before
         end
 
         it 'returns matching events within a time range' do
-          get :index, time: { start: '09:00 AM', end: '01:00 PM' }
+          get :index, params: { time: { start: '09:00 AM', end: '01:00 PM' } }
           expect(assigns[:events]).to eq within
         end
 
         it 'returns matching events after a start time' do
-          get :index, time: { start: '01:00 PM', end: '' }
+          get :index, params: { time: { start: '01:00 PM', end: '' } }
           expect(assigns[:events]).to eq after
         end
       end
@@ -294,7 +294,7 @@ module Calagator
         event = Event.new(start_time: now)
         expect(Event).to receive(:find).and_return(event)
 
-        get 'show', id: 1234
+        get 'show', params: { id: 1234 }
         expect(response).to be_success
       end
 
@@ -303,14 +303,14 @@ module Calagator
         event = Event.new(start_time: now, duplicate_of: master)
         expect(Event).to receive(:find).and_return(event)
 
-        get 'show', id: 1234
+        get 'show', params: { id: 1234 }
         expect(response).to redirect_to(event_path(master))
       end
 
       it 'shows an error when asked to display a non-existent event' do
         expect(Event).to receive(:find).and_raise(ActiveRecord::RecordNotFound)
 
-        get 'show', id: 1234
+        get 'show', params: { id: 1234 }
         expect(response).to redirect_to(events_path)
         expect(flash[:failure]).not_to be_blank
       end
@@ -395,7 +395,7 @@ module Calagator
         end
 
         it 'stops evil robots' do
-          post :create, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+          post :create, params: { trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!" }
           expect(response).to render_template :new
           expect(flash[:failure]).to match /evil robot/i
         end
@@ -437,14 +437,15 @@ module Calagator
         it 'creates an event for an existing venue' do
           venue = create(:venue)
 
-          post :create,
+          post :create, params: {
                start_time: now.strftime('%Y-%m-%d'),
                end_time: (now + 1.hour).strftime('%Y-%m-%d'),
                event: {
                  title: 'My Event',
                  tag_list: ',,foo,bar, baz,'
                },
-               venue_name: venue.title
+               venue_name: venue.title            
+          }
 
           expect(response).to be_redirect
 
@@ -466,7 +467,7 @@ module Calagator
         end
 
         it 'displays form for editing event' do
-          get 'edit', id: 42
+          get 'edit', params: { id: 42 }
           expect(response).to be_success
           expect(response).to render_template :edit
         end
@@ -554,7 +555,7 @@ module Calagator
 
           allow(Event).to receive(:find).and_return(@event)
 
-          get 'clone', id: 1
+          get 'clone', params: { id: 1 }
         end
 
         it 'builds an unsaved record' do
@@ -597,7 +598,7 @@ module Calagator
           past_master = create(:event, title: 'Past', start_time: now - 2.days)
           past_duplicate = create(:event, title: past_master.title, start_time: now - 1.day)
 
-          get 'duplicates', type: 'title'
+          get 'duplicates', params: { type: 'title' }
 
           # Current duplicates
           assigns[:grouped].select { |keys, _values| keys.include?(current_master.title) }.tap do |events|
@@ -613,20 +614,20 @@ module Calagator
           event_master = create(:event)
           event_duplicate = create(:event)
 
-          get 'show', id: event_duplicate.id
+          get 'show', params: { id: event_duplicate.id }
           expect(response).not_to be_redirect
           expect(assigns(:event).id).to eq event_duplicate.id
 
           event_duplicate.duplicate_of = event_master
           event_duplicate.save!
 
-          get 'show', id: event_duplicate.id
+          get 'show', params: { id: event_duplicate.id }
           expect(response).to be_redirect
           expect(response).to redirect_to(event_url(event_master.id))
         end
 
         it 'displays an error message if given invalid arguments' do
-          get 'duplicates', type: 'omgwtfbbq'
+          get 'duplicates', params: { type: 'omgwtfbbq' }
 
           expect(response).to be_success
           expect(response.body).to have_selector('.failure', text: 'omgwtfbbq')
@@ -648,7 +649,7 @@ module Calagator
 
         describe 'in HTML format' do
           before do
-            get :search, query: 'myquery', format: 'html'
+            get :search, params: { query: 'myquery' }, format: 'html'
           end
 
           it 'assigns search result' do
@@ -685,14 +686,14 @@ module Calagator
 
         describe 'in XML format' do
           it 'produces XML' do
-            get :search, query: 'myquery', format: 'xml'
+            get :search, params: { query: 'myquery' }, format: 'xml'
 
             hash = Hash.from_xml(response.body)
             expect(hash['events']).to be_a_kind_of Array
           end
 
           it 'includes venue details' do
-            get :search, query: 'myquery', format: 'xml'
+            get :search, params: { query: 'myquery' }, format: 'xml'
 
             hash = Hash.from_xml(response.body)
             event = hash['events'].first
@@ -705,14 +706,14 @@ module Calagator
 
         describe 'in JSON format' do
           it 'produces JSON' do
-            get :search, query: 'myquery', format: 'json'
+            get :search, params: { query: 'myquery' }, format: 'json'
 
             struct = ActiveSupport::JSON.decode(response.body)
             expect(struct).to be_a_kind_of Array
           end
 
           it 'includes venue details' do
-            get :search, query: 'myquery', format: 'json'
+            get :search, params: { query: 'myquery' }, format: 'json'
 
             struct = ActiveSupport::JSON.decode(response.body)
             event = struct.first
@@ -723,7 +724,7 @@ module Calagator
 
         describe 'in ATOM format' do
           it 'produces ATOM' do
-            get :search, query: 'myquery', format: 'atom'
+            get :search, params: { query: 'myquery' }, format: 'atom'
 
             hash = Hash.from_xml(response.body)
             expect(hash['feed']['entry']).to be_a_kind_of Array
@@ -732,13 +733,13 @@ module Calagator
 
         describe 'in ICS format' do
           it 'produces ICS' do
-            get :search, query: 'myquery', format: 'ics'
+            get :search, params: { query: 'myquery' }, format: 'ics'
 
             expect(response.body).to match /BEGIN:VEVENT/
           end
 
           it 'produces events matching the query' do
-            get :search, query: 'myquery', format: 'ics'
+            get :search, params: { query: 'myquery' }, format: 'ics'
             expect(response.body).to match /SUMMARY:#{current_event_2.title}/
             expect(response.body).to match /SUMMARY:#{past_event.title}/
           end
@@ -766,7 +767,7 @@ module Calagator
         expect(event).to receive(:destroy)
         expect(Event).to receive(:find).and_return(event)
 
-        delete 'destroy', id: 1234
+        delete 'destroy', params: { id: 1234 }
         expect(response).to redirect_to(events_url)
       end
 
@@ -774,7 +775,7 @@ module Calagator
         event = create(:event)
         event.lock_editing!
 
-        delete 'destroy', id: event.id
+        delete 'destroy', params: { id: event.id }
         expect(response).to be_redirect
         expect(flash[:failure]).to match /not permitted/i
       end

@@ -27,7 +27,7 @@ shared_examples '#squash_many_duplicates' do |model|
 
   context 'with no master' do
     it 'redirects with a failure message' do
-      post :squash_many_duplicates, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id
+      post :squash_many_duplicates, params: { duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id }
       expect(flash[:failure]).to eq("A master #{model} must be selected.")
       expect(response).to redirect_to("/#{model}s/duplicates")
     end
@@ -35,7 +35,7 @@ shared_examples '#squash_many_duplicates' do |model|
 
   context 'with no duplicates' do
     it 'redirects with a failure message' do
-      post :squash_many_duplicates, master_id: @master.id
+      post :squash_many_duplicates, params: { master_id: @master.id }
       expect(flash[:failure]).to eq("At least one duplicate #{model} must be selected.")
       expect(response).to redirect_to("/#{model}s/duplicates")
     end
@@ -43,7 +43,7 @@ shared_examples '#squash_many_duplicates' do |model|
 
   context 'with duplicates containing master' do
     it 'redirects with a failure message' do
-      post :squash_many_duplicates, master_id: @master.id, duplicate_id_1: @master.id
+      post :squash_many_duplicates, params: { master_id: @master.id, duplicate_id_1: @master.id }
       expect(flash[:failure]).to eq("The master #{model} could not be squashed into itself.")
       expect(response).to redirect_to("/#{model}s/duplicates")
     end
