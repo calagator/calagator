@@ -1,0 +1,118 @@
+@import url(https://fonts.googleapis.com/css?family=Sanchez);
+
+body {
+  background: #BEF598;
+  color: #445545;
+  text-align: center;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 18px;
+  margin: 2em 0;
+}
+h1, h2 { 
+  font-family: Sanchez;
+  line-height: 1.1;
+}
+h1 { 
+  font-size: 150%;
+}
+h2 { 
+  font-size: 120%;
+  color: #377B15;
+}
+a {
+  color: #fff;
+  background: #377B15;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: .5em;
+  padding: .5em;
+  font-weight: bold;
+}
+#alligator {
+  background: #fff;
+  border-radius: 50%;
+  border: 1px solid #9CD579;
+  position: relative;
+  width: 340px;
+  height: 340px;
+  margin: 2em auto 1.5em;
+}
+#alligator:before {
+   content: " ";
+   position: absolute;
+   top: 10px;
+   left: 10px;
+   right: 10px;
+   bottom: 10px;
+   border: 2px solid #7FAB4C;
+   border-radius: 50%;
+}
+#alligator img {
+  z-index: 10;
+  position: absolute;
+  top: 35px;
+  left: 30px;
+  width: 300px;
+}
+.guide {
+  border: 1px solid #9CD579;
+  padding: 2em;
+  background: #fff;
+}
+
+@-webkit-keyframes confused {
+  20% {
+    -webkit-transform: rotate3d(0, 0, 1, 2deg);
+    transform: rotate3d(0, 0, 1, 2deg);
+  }
+
+  60% {
+    -webkit-transform: rotate3d(0, 0, 1, -5deg);
+    transform: rotate3d(0, 0, 1, -5deg);
+  }
+
+  100% {
+    -webkit-transform: rotate3d(0, 0, 1, 0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+}
+
+@keyframes confused {
+  20% {
+  	-moz-transform: rotate3d(0, 0, 1, 2deg);
+    -webkit-transform: rotate3d(0, 0, 1, 2deg);
+    -ms-transform: rotate3d(0, 0, 1, 2deg);
+    transform: rotate3d(0, 0, 1, 2deg);
+  }
+
+  60% {
+  	-moz-transform: rotate3d(0, 0, 1, -5deg);
+    -webkit-transform: rotate3d(0, 0, 1, -5deg);
+    -ms-transform: rotate3d(0, 0, 1, -5deg);
+    transform: rotate3d(0, 0, 1, -5deg);
+  }
+
+  100% {
+  	-moz-transform: rotate3d(0, 0, 1, 0deg);
+    -webkit-transform: rotate3d(0, 0, 1, 0deg);
+    -ms-transform: rotate3d(0, 0, 1, 0deg);
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+}
+
+#alligator img {
+  -moz-transform-origin: top center;
+  -webkit-transform-origin: 100px 300px;
+  -ms-transform-origin: top center;
+  transform-origin: top center;
+  -moz-animation-name: confused;
+  -webkit-animation-name: confused;
+  animation-name: confused;
+  -moz-animation-duration: 6s;
+  -moz-animation-delay: 0s;
+  -moz-animation-iteration-count: infinite;
+  -webkit-animation-duration: 6s;
+  -webkit-animation-delay: 0s;
+  -webkit-animation-iteration-count: infinite;
+}
+
