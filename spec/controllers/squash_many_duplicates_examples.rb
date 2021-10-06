@@ -9,7 +9,7 @@ shared_examples '#squash_many_duplicates' do |model|
 
   context 'happy path' do
     before do
-      post :squash_many_duplicates, master_id: @master.id, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id
+      post :squash_many_duplicates, params: { master_id: @master.id, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id }
     end
 
     it 'squashes the duplicates into the master' do

@@ -29,7 +29,7 @@ module Calagator
         allow(@source).to receive(:to_events).and_return([@event])
 
         allow(Source).to receive(:new).and_return(@source)
-        allow(Source).to receive(:find_or_create_by).with(url: 'http://my.url/').and_return(@source)
+        allow(Source).to receive(:find_or_create_by).with(params: { url: 'http://my.url/' }).and_return(@source)
       end
 
       it 'provides a way to create new sources' do
