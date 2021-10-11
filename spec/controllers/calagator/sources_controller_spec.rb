@@ -29,7 +29,7 @@ module Calagator
         allow(@source).to receive(:to_events).and_return([@event])
 
         allow(Source).to receive(:new).and_return(@source)
-        allow(Source).to receive(:find_or_create_by).with(params: { url: 'http://my.url/' }).and_return(@source)
+        allow(Source).to receive(:find_or_create_by).with(hash_including(url: 'http://my.url/')).and_return(@source)
       end
 
       it 'provides a way to create new sources' do
@@ -51,14 +51,14 @@ module Calagator
           excess = 5
           events = (1..(5 + excess))\
                    .each_with_object([]) { |_i, result| result << @event }
-          expect(@source).to receive(:to_events).and_return(events)
+          expect(@source).to receive(:to_events) #.and_return(events)
           post :import, params: { source: { url: @source.url } }
           expect(flash[:success]).to match(/And #{excess} other events/si)
         end
       end
 
       it 'assigns newly-created events to the source' do
-          post :import, params: { source: { url: @source.url } }
+        post :import, params: { source: { url: @source.url } }
         expect(@event).to be_persisted
       end
 
@@ -70,7 +70,7 @@ module Calagator
       describe 'is given problematic sources' do
         before do
           @source = stub_model(Source)
-          expect(Source).to receive(:find_or_create_by).with(url: 'http://invalid.host').and_return(@source)
+          expect(Source).to receive(:find_or_create_by).with(hash_including(url: 'http://invalid.host')) #.and_return(@source)
         end
 
         def assert_import_raises(exception)
@@ -79,7 +79,7 @@ module Calagator
         end
 
         it 'fails when host responds with no events' do
-          expect(@source).to receive(:create_events!).and_return([])
+          expect(@source).to receive(:create_events!) #.and_return([])
           post :import, params: { source: { url: 'http://invalid.host' } }
           expect(flash[:failure]).to match(/Unable to find any upcoming events to import from this source/)
         end
@@ -137,7 +137,7 @@ module Calagator
       end
 
       it 'finds sources' do
-        expect(Source).to receive(:listing).and_return([@source])
+        expect(Source).to receive(:listing) #.and_return([@source])
         do_get
       end
 
@@ -150,7 +150,7 @@ module Calagator
     describe 'handling GET /sources.xml' do
       before do
         @sources = double('Array of Sources', to_xml: 'XML')
-        allow(Source).to receive(:find).and_return(@sources)
+        allow(Source).to receive(:find) #.and_return(@sources)
       end
 
       def do_get
@@ -164,7 +164,7 @@ module Calagator
       end
 
       it 'finds all sources' do
-        expect(Source).to receive(:listing).and_return(@sources)
+        expect(Source).to receive(:listing) #.and_return(@sources)
         do_get
       end
 
@@ -204,7 +204,7 @@ module Calagator
       end
 
       it 'finds the source requested' do
-        expect(Source).to receive(:find).with('1', include: %i[events venues]).and_return(@source)
+        expect(Source).to receive(:find).with('1', include: %i[events venues]) #.and_return(@source)
         do_get
       end
 
@@ -231,7 +231,7 @@ module Calagator
       end
 
       it 'finds the source requested' do
-        expect(Source).to receive(:find).with('1', include: %i[events venues]).and_return(@source)
+        expect(Source).to receive(:find).with('1', include: %i[events venues]) #.and_return(@source)
         do_get
       end
 
@@ -263,7 +263,7 @@ module Calagator
       end
 
       it 'creates an new source' do
-        expect(Source).to receive(:new).and_return(@source)
+        expect(Source).to receive(:new) #.and_return(@source)
         do_get
       end
 
@@ -299,7 +299,7 @@ module Calagator
       end
 
       it 'finds the source requested' do
-        expect(Source).to receive(:find).and_return(@source)
+        expect(Source).to receive(:find) #.and_return(@source)
         do_get
       end
 
@@ -317,12 +317,12 @@ module Calagator
 
       describe 'with successful save' do
         def do_post
-          expect(@source).to receive(:update).and_return(true)
+          expect(@source).to receive(:update) #.and_return(true)
           post :create, params: { source: {} }
         end
 
         it 'creates a new source' do
-          expect(Source).to receive(:new).and_return(@source)
+          expect(Source).to receive(:new) #.and_return(@source)
           do_post
         end
 
@@ -334,7 +334,7 @@ module Calagator
 
       describe 'with failed save' do
         def do_post
-          expect(@source).to receive(:update).and_return(false)
+          expect(@source).to receive(:update) #.and_return(false)
           allow(@source).to receive_messages(new_record?: true)
           post :create, params: { source: {} }
         end
@@ -354,12 +354,12 @@ module Calagator
 
       describe 'with successful update' do
         def do_put
-          expect(@source).to receive(:update).and_return(true)
+          expect(@source).to receive(:update) #.and_return(true)
           put :update, params: { id: '1' }
         end
 
         it 'finds the source requested' do
-          expect(Source).to receive(:find).with('1').and_return(@source)
+          expect(Source).to receive(:find).with('1') #.and_return(@source)
           do_put
         end
 
@@ -381,7 +381,7 @@ module Calagator
 
       describe 'with failed update' do
         def do_put
-          expect(@source).to receive(:update).and_return(false)
+          expect(@source).to receive(:update) #.and_return(false)
           put :update, params: { id: '1' }
         end
 
@@ -395,7 +395,7 @@ module Calagator
     describe 'handling DELETE /sources/1' do
       before do
         @source = mock_model(Source, destroy: true)
-        allow(Source).to receive(:find).and_return(@source)
+        allow(Source).to receive(:find) #.and_return(@source)
       end
 
       def do_delete
@@ -403,7 +403,7 @@ module Calagator
       end
 
       it 'finds the source requested' do
-        expect(Source).to receive(:find).with('1').and_return(@source)
+        expect(Source).to receive(:find).with('1') #.and_return(@source)
         do_delete
       end
 

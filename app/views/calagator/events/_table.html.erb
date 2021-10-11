@@ -17,7 +17,7 @@ rowspans = calculate_rowspans(events)
 <table class='event_table'>
   <thead>
     <tr>
-      <th class='date'>Sort By: <%= link_to "Date", url_for(params.merge(:order => 'date')) %></th>
+      <th class='date'>Sort By: <%= link_to "Date", url_for(params.to_unsafe_h.merge(:order => 'date')) %></th>
       <th class='event_summary'>
         <%= events_sort_link('name') -%>,
         <%= events_sort_link('venue') -%>

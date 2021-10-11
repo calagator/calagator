@@ -49,9 +49,9 @@ module Calagator
     # Return a link for sorting by +key+ (e.g., "name").
     def events_sort_link(key)
       if key.present?
-        link_to(sorting_label_for(key, @tag.present?), url_for(params.merge(order: key)))
+        link_to(sorting_label_for(key, @tag.present?), url_for(params.to_unsafe_h.merge(order: key)))
       else
-        link_to('Default', url_for(params.tap { |o| o.delete :order }))
+        link_to('Default', url_for(params.to_unsafe_h.tap { |o| o.delete :order }))
       end
     end
 
