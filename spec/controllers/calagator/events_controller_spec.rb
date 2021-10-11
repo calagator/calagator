@@ -537,7 +537,7 @@ module Calagator
         end
 
         it 'allows the user to preview the event' do
-          put 'update', @params.merge(preview: 'Preview')
+          put 'update', params: @params.merge(preview: 'Preview')
           expect(response).to render_template :edit
         end
 
