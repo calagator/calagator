@@ -73,7 +73,7 @@ module Calagator
 
       it 'renders html via xhr' do
         version_id = @event.versions.first.id
-        xhr :get, :edit, params: { id: version_id }
+        get :edit, params: { id: version_id }, xhr: true
         expect(response).to be_success
         expect(response).to render_template 'events/_form'
       end
