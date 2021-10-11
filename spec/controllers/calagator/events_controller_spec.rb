@@ -346,7 +346,7 @@ module Calagator
 
         it 'creates a new event without a venue' do
           @params[:event][:venue_id] = nil
-          post :create, @params
+          post :create, params: @params
           @event = Event.find_by(title: @params[:event][:title])
           expect(response).to redirect_to(@event)
         end
@@ -354,7 +354,7 @@ module Calagator
         it 'associates a venue based on a given venue id' do
           @venue.save!
           @params[:event][:venue_id] = @venue.id.to_s
-          post :create, @params
+          post :create, params: @params
           @event = Event.find_by(title: @params[:event][:title])
           expect(@event.venue).to eq(@venue)
           expect(response).to redirect_to(@event)
@@ -363,7 +363,7 @@ module Calagator
         it 'associates a venue based on a given venue name' do
           @venue.save!
           @params[:venue_name] = @venue.title
-          post :create, @params
+          post :create, params: @params
           @event = Event.find_by(title: @params[:event][:title])
           expect(@event.venue).to eq(@venue)
           expect(response).to redirect_to(@event)
@@ -374,7 +374,7 @@ module Calagator
           @venue2 = create(:venue)
           @params[:event][:venue_id] = @venue.id.to_s
           @params[:venue_name] = @venue2.title
-          post :create, @params
+          post :create, params: @params
           @event = Event.find_by(title: @params[:event][:title])
           expect(@event.venue).to eq(@venue)
           expect(response).to redirect_to(@event)
@@ -382,7 +382,7 @@ module Calagator
 
         it 'creates a new event and new venue, and redirect to venue edit form' do
           @params[:venue_name] = 'New Venue'
-          post :create, @params
+          post :create, params: @params
           @event = Event.find_by(title: @params[:event][:title])
           @venue = Venue.find_by(title: 'New Venue')
           expect(@event.venue).to eq(@venue)
@@ -407,7 +407,7 @@ module Calagator
           http://example.net
           https://example.net
           DESC
-          post :create, @params
+          post :create, params: @params
           expect(response).to render_template :new
           expect(flash[:failure]).to match /too many links/i
         end
@@ -423,13 +423,13 @@ module Calagator
           I wouldn't mind seeing a PDX.pm talk about HTTP::Tiny vs Net::HTTP::Tiny vs Net::HTTP
           vs HTTP::Client vs HTTP::Client::Parallel
           DESC
-          post :create, @params
+          post :create, params: @params
           expect(flash[:failure]).to be_nil
         end
 
         it 'allows the user to preview the event' do
           @params[:preview] = 'Preview'
-          post :create, @params
+          post :create, params: @params
           expect(response).to render_template :new
           expect(response.body).to have_selector '#event_preview'
         end
@@ -474,14 +474,14 @@ module Calagator
 
         it 'updates an event without a venue' do
           @event.venue = nil
-          put 'update', @params
+          put 'update', params: @params
           expect(response).to redirect_to(@event)
         end
 
         it 'associates a venue based on a given venue id' do
           @venue = create(:venue)
           @params[:event][:venue_id] = @venue.id.to_s
-          put 'update', @params
+          put 'update', params: @params
           expect(@event.reload.venue).to eq(@venue)
           expect(response).to redirect_to(@event)
         end
@@ -489,7 +489,7 @@ module Calagator
         it 'associates a venue based on a given venue name' do
           @venue = create(:venue)
           @params[:venue_name] = @venue.title
-          put 'update', @params
+          put 'update', params: @params
           expect(@event.reload.venue).to eq(@venue)
           expect(response).to redirect_to(@event)
         end
@@ -499,27 +499,27 @@ module Calagator
           @venue2 = create(:venue)
           @params[:event][:venue_id] = @venue.id.to_s
           @params[:venue_name] = @venue2.title
-          put 'update', @params
+          put 'update', params: @params
           expect(@event.reload.venue).to eq(@venue)
           expect(response).to redirect_to(@event)
         end
 
         it 'updates an event and create a new venue, and redirect to the venue edit form' do
           @params[:venue_name] = 'New Venue'
-          put 'update', @params
+          put 'update', params: @params
           @venue = Venue.find_by(title: 'New Venue')
           expect(response).to redirect_to(edit_venue_url(@venue, from_event: @event.id))
         end
 
         it 'catches errors and redisplay the new event form' do
           @params[:event][:title] = nil
-          put 'update', @params
+          put 'update', params: @params
           expect(response).to render_template :edit
         end
 
         it 'stops evil robots' do
           @params[:trap_field] = "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
-          put 'update', @params
+          put 'update', params: @params
           expect(response).to render_template :edit
           expect(flash[:failure]).to match /evil robot/i
         end
@@ -531,7 +531,7 @@ module Calagator
           http://example.net
           https://example.net
           DESC
-          put 'update', @params
+          put 'update', params: @params
           expect(response).to render_template :edit
           expect(flash[:failure]).to match /too many links/i
         end
@@ -543,7 +543,7 @@ module Calagator
 
         it 'does not allow a user to update a locked event' do
           @event.lock_editing!
-          put 'update', @params
+          put 'update', params: @params
           expect(response).to be_redirect
           expect(flash[:failure]).to match /not permitted/i
         end
