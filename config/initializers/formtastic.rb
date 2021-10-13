@@ -94,12 +94,3 @@ Formtastic::FormBuilder.required_string = proc { %{<abbr title="#{Formtastic::I1
 Formtastic::FormBuilder.use_required_attribute = true
 
 require 'formtastic/version'
-
-if Formtastic::VERSION.to_f < 4.0
-  Formtastic::FormBuilder.action_class_finder = Formtastic::ActionClassFinder
-  Formtastic::FormBuilder.input_class_finder  = Formtastic::InputClassFinder
-else
-  warn 'FIXME: Manual setting of Formtastic::FormBuilder #action_class_finder ' \
-       'and #input_class_finder in config/initializers/formtastic.rb can be ' \
-       'removed.'
-end
