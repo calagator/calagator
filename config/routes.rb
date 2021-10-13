@@ -44,14 +44,7 @@ Calagator::Engine.routes.draw do
   end
 
   resources :versions, only: [:edit]
-
-  # Rails 4.0 prevents referencing controllers outside of the Calagator namespace.
-  # Work around this by aliasing PaperTrailManager inside Calagator:
-  Calagator::PaperTrailManager ||= ::PaperTrailManager
-  resources :changes, controller: 'paper_trail_manager/changes'
-
-  # In Rails 4.1+, we could use a leading slash to the controller path:
-  # resources :changes, controller: '/paper_trail_manager/changes'
+  resources :changes, controller: '/paper_trail_manager/changes'
 
   get 'recent_changes' => redirect('/changes')
   get 'recent_changes.:format' => redirect('/changes.%{format}')
