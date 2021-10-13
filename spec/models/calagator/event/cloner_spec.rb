@@ -14,9 +14,8 @@ module Calagator
               id: 42,
               start_time: Time.zone.parse('2008-01-19 10:00:00'),
               end_time: Time.zone.parse('2008-01-19 17:00:00'),
-              venue_details: 'Details') do |event|
-                event.tag_list.add('foo, bar, baz', parse: true)
-              end
+              venue_details: 'Details',
+              tag_list: 'foo, bar, baz')
       end
 
       it { is_expected.to be_new_record }

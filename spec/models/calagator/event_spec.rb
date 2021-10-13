@@ -289,17 +289,9 @@ module Calagator
 
     describe '.search_tag' do
       before do
-        @c = build(:event, title: 'c', start_time: 3.minutes.ago)
-        @c.tag_list.add(%w[tag wtf])
-        @c.save
-
-        @b = build(:event, title: 'b', start_time: 2.minutes.ago)
-        @b.tag_list.add(%w[omg wtf])
-        @b.save
-
-        @a = build(:event, title: 'a', start_time: 1.minute.ago)
-        @a.tag_list.add(%w[tag omg])
-        @a.save
+        @c = build(:event, title: 'c', start_time: 3.minutes.ago, tag_list: %w[tag wtf])
+        @b = build(:event, title: 'b', start_time: 2.minutes.ago, tag_list: %w[omg wtf])
+        @a = build(:event, title: 'a', start_time: 1.minute.ago, tag_list: %w[tag omg])
       end
 
       it 'finds events with the given tag' do

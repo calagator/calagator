@@ -198,8 +198,7 @@ module Calagator
       end
 
       it 'uses an existing venue when importing an event with a matching machine tag that describes a venue' do
-        venue = Venue.create!(title: 'Custom Urban Airship')
-        venue.tag_list.add('meetup:venue=774133')
+        venue = Venue.create!(title: 'Custom Urban Airship', tag_list: 'meetup:venue=774133')
 
         meetup_url = 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/'
         api_url = 'https://api.meetup.com/2/event/ldhnqyplbnb?key=foo&sign=true&fields=topics'

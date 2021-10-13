@@ -44,7 +44,7 @@ module Calagator
     include StripWhitespace
 
     has_paper_trail
-    acts_as_taggable
+    acts_as_taggable_on :tags
 
     xss_foliate sanitize: %i[description access_notes]
     include DecodeHtmlEntitiesHack

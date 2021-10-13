@@ -41,7 +41,7 @@ module Calagator
     self.belongs_to_required_by_default = false
 
     has_paper_trail
-    acts_as_taggable
+    acts_as_taggable_on :tags
 
     xss_foliate strip: %i[title description venue_details]
 
