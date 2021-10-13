@@ -63,7 +63,7 @@ module Calagator
 
     # Duplicates
     include DuplicateChecking
-    duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
+    duplicate_checking_ignores_attributes    :source_id, :version, :venue_id, :tag_list
     duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
     duplicate_finding_scope -> { future.order(:id) }
     after_squashing_duplicates ->(master) { master.venue.try(:update_events_count!) }

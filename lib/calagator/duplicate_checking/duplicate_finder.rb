@@ -83,7 +83,7 @@ module Calagator
       def attributes
         # TODO: make :all pay attention to ignore fields
         model.new.attribute_names.map(&:to_sym).reject do |attr|
-          %i[id created_at updated_at duplicate_of_id version].include?(attr)
+          %i[id created_at updated_at duplicate_of_id version tag_list].include?(attr)
         end
       end
 
