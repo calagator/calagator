@@ -6,17 +6,17 @@ module Calagator
   describe Venue::Search, type: :model do
     describe '#venues' do
       before do
-        @open_venue = build(:venue,
+        @open_venue = create(:venue,
                             title: 'Open Town',
                             description: 'baz',
                             wifi: false,
                             tag_list: %w[foo])
-        @closed_venue = build(:venue,
+        @closed_venue = create(:venue,
                               title: 'Closed Down',
                               closed: true,
                               wifi: false,
                               tag_list: %w[bar])
-        @wifi_venue = build(:venue,
+        @wifi_venue = create(:venue,
                             title: 'Internetful',
                             wifi: true,
                             tag_list: %w[foo bar])
