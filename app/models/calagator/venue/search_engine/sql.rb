@@ -38,7 +38,7 @@ module Calagator
         end
 
         def order
-          @scope = @scope.order('LOWER(venues.title) ASC')
+          @scope = @scope.order(Arel.sql('LOWER(venues.title) ASC'))
           self
         end
 

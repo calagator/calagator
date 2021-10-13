@@ -40,7 +40,7 @@ module Calagator
                 .non_duplicates
                 .in_business
                 .where(['LOWER(title) LIKE ?', "%#{params[:term]}%".downcase])
-                .order('LOWER(title)')
+                .order(Arel.sql('LOWER(title)'))
 
       render json: @venues
     end

@@ -77,7 +77,7 @@ module Calagator
                   else
                     'events.start_time DESC'
           end
-          @scope = @scope.order(order)
+          @scope = @scope.order(Arel.sql(order))
           self
         end
 

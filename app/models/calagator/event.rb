@@ -92,9 +92,9 @@ module Calagator
     scope :ordered_by_ui_field, lambda { |ui_field|
       scope = case ui_field
               when 'name'
-                order('lower(events.title)')
+                order(Arel.sql('lower(events.title)'))
               when 'venue'
-                includes(:venue).order('lower(venues.title)').references(:venues)
+                includes(:venue).order(Arel.sql('lower(venues.title)')).references(:venues)
               else
                 all
       end
