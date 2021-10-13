@@ -128,7 +128,7 @@ module Calagator
 
       it 'is successful' do
         do_get
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'renders index template' do
@@ -160,7 +160,7 @@ module Calagator
 
       it 'is successful' do
         do_get
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'finds all sources' do
@@ -195,7 +195,7 @@ module Calagator
 
       it 'is successful' do
         do_get
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'renders show template' do
@@ -227,7 +227,7 @@ module Calagator
 
       it 'is successful' do
         do_get
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'finds the source requested' do
@@ -254,7 +254,7 @@ module Calagator
 
       it 'is successful' do
         do_get
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'renders new template' do
@@ -290,7 +290,7 @@ module Calagator
 
       it 'is successful' do
         do_get
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'renders edit template' do

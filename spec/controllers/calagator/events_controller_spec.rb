@@ -295,7 +295,7 @@ module Calagator
         expect(Event).to receive(:find).and_return(event)
 
         get 'show', params: { id: 1234 }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'redirects from a duplicate event to its master' do
@@ -336,7 +336,7 @@ module Calagator
       describe '#new' do
         it 'displays form for creating new event' do
           get 'new'
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template :new
         end
       end
@@ -468,7 +468,7 @@ module Calagator
 
         it 'displays form for editing event' do
           get 'edit', params: { id: 42 }
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template :edit
         end
 
@@ -572,7 +572,7 @@ module Calagator
         end
 
         it 'displays a new event form' do
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response).to render_template :new
         end
 
@@ -629,7 +629,7 @@ module Calagator
         it 'displays an error message if given invalid arguments' do
           get 'duplicates', params: { type: 'omgwtfbbq' }
 
-          expect(response).to be_success
+          expect(response).to be_successful
           expect(response.body).to have_selector('.failure', text: 'omgwtfbbq')
         end
       end

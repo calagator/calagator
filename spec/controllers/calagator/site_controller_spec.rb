@@ -22,7 +22,7 @@ module Calagator
     describe '#index' do
       it 'renders requests for HTML successfully' do
         get :index
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response).to render_template :index
       end
 
@@ -35,7 +35,7 @@ module Calagator
     describe 'about' do
       it 'renders an html document' do
         get :about
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response).to render_template :about
       end
     end
@@ -43,7 +43,7 @@ module Calagator
     describe 'opensearch' do
       it 'renders an xml document' do
         get :opensearch, format: 'xml'
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response).to render_template :opensearch
       end
     end
@@ -51,7 +51,7 @@ module Calagator
     describe 'defunct' do
       it 'renders an html document' do
         get :defunct
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response).to render_template :defunct
       end
     end

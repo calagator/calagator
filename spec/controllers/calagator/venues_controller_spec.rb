@@ -34,7 +34,7 @@ module Calagator
       it 'displays an error message if given invalid arguments' do
         get 'duplicates', params: { type: 'omgwtfbbq' }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.body).to have_selector('.failure', text: 'omgwtfbbq')
       end
 
@@ -166,7 +166,7 @@ module Calagator
                                                     end_time: Time.now.in_time_zone - 1.week + 2.hours)
 
             get :show, params: { id: @venue.to_param }, format: 'html'
-            expect(response).to be_success
+            expect(response).to be_successful
           end
 
           it 'has a venue' do
@@ -248,7 +248,7 @@ module Calagator
           it_behaves_like 'destroying a Venue record without events'
 
           it 'returns a success status' do
-            expect(response).to be_success
+            expect(response).to be_successful
           end
         end
       end
