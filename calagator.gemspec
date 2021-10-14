@@ -57,6 +57,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'faker', '~> 2.2 '
   s.add_development_dependency 'gem-release', '~> 2.0'
   s.add_development_dependency 'puma', '~> 4.3.0'
+  s.add_development_dependency 'rails-controller-testing', '~> 1.0'
   s.add_development_dependency 'rspec-activemodel-mocks', '~> 1.1.0'
   s.add_development_dependency 'rspec-collection_matchers', '~> 1.1'
   s.add_development_dependency 'rspec-its', '~> 1.1'
