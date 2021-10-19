@@ -47,10 +47,13 @@ describe 'Event Creation', js: true do
 
     fill_in 'Event Name', with: 'Ruby Zoo'
     fill_in 'Venue', with: 'Portland Zoo'
-    fill_in 'start_date', with: '2014-05-15'
+
+    fill_in 'start_date', with: '2023-05-15'
     fill_in 'start_time', with: '04:00 PM'
+
+    fill_in 'end_date', with: '2023-05-15'
     fill_in 'end_time', with: '09:00 PM'
-    fill_in 'end_date', with: '2014-05-15'
+
     fill_in 'Website', with: 'www.rubyzoo.com'
     fill_in 'Description', with: 'An ruby event at the zoo'
     fill_in 'Venue details', with: 'Next to the gorillas'
@@ -79,7 +82,7 @@ describe 'Event Creation', js: true do
     expect(page).to have_content 'Venue was successfully saved'
     expect(page).to have_content 'Ruby Zoo'
     expect(page).to have_content 'Zoo of Portland'
-    expect(page).to have_content 'Thursday, May 15, 2014 from 4–9pm'
+    expect(page).to have_content 'Monday, May 15, 2023 from 4–9pm'
     expect(page).to have_content "Zoo of Portland\n4001 SW Canyon Rd\nPortland, OR 97221 (map)"
     expect(page).to have_content 'Next to the gorillas'
     expect(page).to have_content "Website\nhttp://www.rubyzoo.com"
