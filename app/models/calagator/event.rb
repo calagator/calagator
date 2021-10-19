@@ -30,6 +30,7 @@ require 'paper_trail'
 require 'loofah-activerecord'
 require 'loofah/activerecord/xss_foliate'
 require 'active_model/sequential_validator'
+require 'active_model/serializers/xml'
 
 # == Event
 #
@@ -46,6 +47,7 @@ module Calagator
     xss_foliate strip: %i[title description venue_details]
 
     include DecodeHtmlEntitiesHack
+    include ActiveModel::Serializers::Xml
 
     # Associations
     belongs_to :venue, counter_cache: true

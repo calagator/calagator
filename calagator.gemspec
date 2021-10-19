@@ -25,6 +25,7 @@ Gem::Specification.new do |s|
   # When changing this Rails requirement, also update RAILS_REQUIREMENT in rails_template.rb
   s.add_dependency 'rails', '~> 5.0'
 
+  s.add_dependency 'activemodel-serializers-xml', '~> 1.0'
   s.add_dependency 'acts-as-taggable-on', '~> 8.1'
   s.add_dependency 'bluecloth', '~> 2.2'
   s.add_dependency 'font-awesome-rails', '~> 4.7.0'

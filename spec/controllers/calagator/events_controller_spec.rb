@@ -41,8 +41,9 @@ module Calagator
             @struct = Hash.from_xml(response.body)['events']
           end
 
-          it 'returns an array' do
+          it 'returns an array of two items' do
             expect(@struct).to be_a_kind_of Array
+            expect(@struct.count).to eq(2)
           end
 
           it 'has entries' do

@@ -36,6 +36,7 @@ require 'paper_trail'
 require 'loofah-activerecord'
 require 'loofah/activerecord/xss_foliate'
 require 'validate_url'
+require 'active_model/serializers/xml'
 
 module Calagator
   class Venue < ApplicationRecord
@@ -48,6 +49,7 @@ module Calagator
 
     xss_foliate sanitize: %i[description access_notes]
     include DecodeHtmlEntitiesHack
+    include ActiveModel::Serializers::Xml
 
     # Associations
     has_many :events, -> { non_duplicates }, dependent: :nullify
