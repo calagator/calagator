@@ -151,7 +151,7 @@ module Calagator
     describe 'handling GET /sources.xml' do
       before do
         @sources = double('Array of Sources', to_xml: 'XML')
-        allow(Source).to receive(:find).and_return(@sources)
+        allow(Source).to receive(:listing).and_return(@sources)
       end
 
       def do_get
