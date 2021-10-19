@@ -24,3 +24,5 @@ gem 'paper_trail_manager', github: 'fusion94/paper_trail_manager', ref: 'b8630cd
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 gem 'launchy'
+
+gem 'rails-controller-testing', group: 'test'
