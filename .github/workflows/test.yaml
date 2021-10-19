@@ -100,7 +100,6 @@ jobs:
           RAILS_ENV=test bundle exec rake app:sunspot:solr:start_with_waiting
       - name: Run RSpec
         run: |
-          bundle show
           bundle exec rake spec
       - uses: actions/upload-artifact@v1
         with:
