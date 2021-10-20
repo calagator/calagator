@@ -10,6 +10,10 @@ Conventions used in this document:
 
 List of Calagator releases and changes, with the latest at the top:
 
+### v1.2.0 (unreleased)
+
+  * [!] Upgrade to Rails 5. Other base requirements changes: Ruby >= 2.5.0
+
 ### v1.1.0
 
 Enhancements:
