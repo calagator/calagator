@@ -33,10 +33,14 @@ module Calagator
         expect(event.locked).to eq(false)
       end
 
-      it "can't be deleted if it's locked" do
+      it "can only be deleted when unlocked" do
         event = described_class.create(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
+
         event.lock_editing!
         expect(event.destroy).to eq(false)
+
+        event.unlock_editing!
+        expect(event.destroy).to be_truthy
       end
     end
 

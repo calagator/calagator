@@ -61,7 +61,7 @@ module Calagator
               format: { with: %r{\Ahttps?://(\w+:?\w*@)?(\S+)(:[0-9]+)?(/|/([\w#!:.?+=&%@!\-/]))?\Z},
                         allow_blank: true }
 
-    before_destroy { !locked } # prevent locked events from being destroyed
+    before_destroy :check_if_locked_before_destroy # prevent locked events from being destroyed
 
     # Duplicates
     include DuplicateChecking
@@ -144,6 +144,12 @@ module Calagator
 
     def unlock_editing!
       update_attribute(:locked, false)
+    end
+
+    def check_if_locked_before_destroy
+      return if !locked
+      errors.add :base, "Event must be unlocked before destroying"
+      throw(:abort)
     end
 
     #---[ Searching ]-------------------------------------------------------
