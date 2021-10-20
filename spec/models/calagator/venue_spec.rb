@@ -331,31 +331,34 @@ module Calagator
       @venue.attributes = { street_address: '', address: 'address' }
       expect(@venue.geocode_address).to eq 'address'
     end
+  end
 
-    describe 'when versioning' do
-      it 'has versions' do
-        expect(Venue.new.versions).to eq []
-      end
+  describe 'when versioning' do
+    it 'has versions' do
+      expect(Venue.new.versions).to eq []
+    end
 
-      it 'creates a new version after updating' do
-        venue = create :venue
-        expect(venue.versions.count).to eq 1
+    it 'creates a new version after updating' do
+      venue = create :venue
+      expect(venue.versions.count).to eq 1
 
-        venue.title += ' (change)'
+      venue.title += ' (change)'
 
-        venue.save!
-        expect(venue.versions.count).to eq 2
-      end
+      venue.save!
+      expect(venue.versions.count).to eq 2
+    end
 
-      it 'stores old content in past versions' do
-        venue = create :venue
-        original_title = venue.title
+    it 'stores prior content in each version' do
+      venue = create :venue, title: "Original Venue"
+      original_title = venue.title
 
-        venue.title += ' (change)'
+      new_title = venue.title += ' (change)'
+      venue.title = new_title
+      venue.save!
 
-        venue.save!
-        expect(venue.versions.last.reify.title).to eq original_title
-      end
+      expect(venue.title).to eq new_title # Updated title
+      expect(venue.versions.first.reify.title).to eq original_title # Venue title before update
+      expect(venue.versions.last.reify).to eq nil # Before state on creation is nil
     end
   end
 end
