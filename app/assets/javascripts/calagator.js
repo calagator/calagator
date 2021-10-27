@@ -1,4 +1,5 @@
 //= require jquery
+//= require jquery_ujs
 //= require jquery-ui/effect
 //= require calagator/forms
 //= require calagator/mapping
