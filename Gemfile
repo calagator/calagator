@@ -10,7 +10,7 @@ gemspec
 # develop against latest rails
 gem 'rails', '~> 5.0'
 
-# turbolinks is used by the dummy application by default
+# turbolinks is used by the test application by default
 gem 'turbolinks'
 
 gem 'recaptcha', require: 'recaptcha/rails'

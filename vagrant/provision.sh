@@ -60,9 +60,9 @@ gem install bundler rake
 # Bundle install
 su ${VAGRANT_USER} -l -c 'bundle check || bundle --local || bundle'
 
-# Create dummy app
-if [ ! -e "${APPDIR}/spec/dummy/" ] ; then
-  su ${VAGRANT_USER} -l -c 'bin/calagator new spec/dummy --dummy'
+# Create test app
+if [ ! -e "${APPDIR}/spec/test_app/" ] ; then
+  su ${VAGRANT_USER} -l -c 'bin/calagator new spec/test_app --test_app'
   su ${VAGRANT_USER} -l -c 'rake app:db:migrate app:db:setup'
 fi
 

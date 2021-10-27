@@ -4,7 +4,7 @@ module Calagator
   class InstallGenerator < Rails::Generators::Base
     source_root File.expand_path('templates', __dir__)
 
-    class_option :dummy, type: :boolean, default: false
+    class_option :test_app, type: :boolean, default: false
 
     def install
       add_route
@@ -14,7 +14,7 @@ module Calagator
       add_assets
       add_seeds
       run 'rm -f public/index.html'
-      unless options[:dummy]
+      unless options[:test_app]
         rake 'calagator:install:migrations'
         rake 'db:migrate'
         rake 'db:test:prepare'

@@ -7,7 +7,7 @@ require "rails/all"
 Bundler.require(*Rails.groups)
 require "calagator"
 
-module Dummy
+module TestApp
   class Application < Rails::Application
     config.load_defaults Rails::VERSION::STRING.to_f
 

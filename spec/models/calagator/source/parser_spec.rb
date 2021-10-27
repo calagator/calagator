@@ -173,11 +173,11 @@ module Calagator
       end
 
       it 'uses an existing venue when importing an event whose venue matches a squashed duplicate' do
-        dummy_source = Source.create!(title: 'Dummy', url: 'http://IcalEventWithSquashedVenue.com/')
-        master_venue = Venue.create!(title: 'Master')
+        new_source = Source.create!(title: 'Squashed?!', url: 'http://IcalEventWithSquashedVenue.com/')
+        primary_venue = Venue.create!(title: 'Prime')
         squashed_venue = Venue.create!(
           title: 'Squashed Duplicate Venue',
-          duplicate_of_id: master_venue.id
+          duplicate_of_id: primary_venue.id
         )
 
         cal_content = %(
@@ -194,7 +194,7 @@ module Calagator
         source = Source.new(title: 'Event with squashed venue', url: url)
 
         event = source.to_events.first
-        expect(event.venue.title).to eq 'Master'
+        expect(event.venue.title).to eq 'Prime'
       end
 
       it 'uses an existing venue when importing an event with a matching machine tag that describes a venue' do
