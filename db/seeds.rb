@@ -9,7 +9,7 @@ rescue LoadError
   exit 1
 end
 
-define do
+FactoryBot.define do
   factory :seed_venue, class: Calagator::Venue do
     title           { Faker::Company.name }
     description     { Faker::Lorem.paragraph }
@@ -67,7 +67,7 @@ define do
 end
 
 puts 'Seeding database with sample data...'
-create_list(:seed_venue, 25, :with_events)
-create_list(:seed_venue, 25)
-create_list(:seed_event, 25, :with_venue)
-create_list(:seed_event, 25)
+FactoryBot.create_list(:seed_venue, 25, :with_events)
+FactoryBot.create_list(:seed_venue, 25)
+FactoryBot.create_list(:seed_event, 25, :with_venue)
+FactoryBot.create_list(:seed_event, 25)
