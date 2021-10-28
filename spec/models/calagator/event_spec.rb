@@ -15,8 +15,8 @@ module Calagator
         expect(event).to be_valid
       end
 
-      it 'validates blacklisted words' do
-        BlacklistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
+      it 'validates denylisted words' do
+        DenylistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
         event = described_class.new(title: 'Foo bar cialis', start_time: Time.zone.parse('2008.04.12'), url: 'google.com')
         expect(event).not_to be_valid
       end

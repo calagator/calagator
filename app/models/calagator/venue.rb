@@ -64,7 +64,7 @@ module Calagator
     validates :url, url: { allow_blank: true }
     validates :latitude, inclusion: { in: -90..90, allow_nil: true }
     validates :longitude, inclusion: { in: -180..180, allow_nil: true }
-    validates :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone, blacklist: true
+    validates :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone, denylist: true
 
     # Duplicates
     include DuplicateChecking

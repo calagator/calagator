@@ -44,7 +44,7 @@ module Calagator
                  :mapping_provider,
                  :mapping_tiles,
                  :venues_map_options,
-                 :blacklist_patterns
+                 :denylist_patterns
 
   self.title = 'Calagator'
   self.tagline = 'A Tech Calendar'
@@ -56,7 +56,7 @@ module Calagator
   self.mapping_provider = 'stamen'
   self.mapping_tiles = 'terrain'
   self.venues_map_options = {}
-  self.blacklist_patterns = [
+  self.denylist_patterns = [
     /\b(online|overseas).+(drugstore|pharmacy)\b/,
     /\bcialis\b/
   ]

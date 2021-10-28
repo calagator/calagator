@@ -92,7 +92,7 @@ Calagator.setup do |config|
   }
 
   # Patterns for detecting spam events and venues
-  config.blacklist_patterns = [
+  config.denylist_patterns = [
     /\b(online|overseas).+(drugstore|pharmacy)\b/,
     /\bcialis\b/
   ]

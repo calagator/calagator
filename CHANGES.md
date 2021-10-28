@@ -10,9 +10,10 @@ Conventions used in this document:
 
 List of Calagator releases and changes, with the latest at the top:
 
-### v1.2.0 (unreleased)
+### v2.0.0 (unreleased)
 
   * [!] Upgrade to Rails 5. Other base requirements changes: Ruby >= 2.5.0
+  * [!] Remove inappropriate terminology such as master, slave, and blacklist. Existing `blacklist.txt` files will need to be renamed to `denylist.txt` when upgrading a Rails app that uses earlier versions of this gem.
 
 ### v1.1.0
 

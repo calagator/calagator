@@ -21,7 +21,7 @@
 #  venue_details   :text
 #
 
-require 'calagator/blacklist_validator'
+require 'calagator/denylist_validator'
 require 'calagator/duplicate_checking'
 require 'calagator/decode_html_entities_hack'
 require 'calagator/strip_whitespace'
@@ -54,7 +54,7 @@ module Calagator
     belongs_to :source
 
     # Validations
-    validates :title, :description, :url, blacklist: true
+    validates :title, :description, :url, denylist: true
     validates :start_time, :end_time, sequential: true
     validates :title, :start_time, presence: true
     validates :url,
