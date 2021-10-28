@@ -106,7 +106,7 @@ jobs:
           name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}
           path: coverage
       - name: Coveralls
-        uses: coverallsapp/github-action@main
+        uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./coverage/lcov.info
