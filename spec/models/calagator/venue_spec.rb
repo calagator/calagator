@@ -142,83 +142,83 @@ module Calagator
 
     describe 'when checking for squashing' do
       before do
-        @master = described_class.create!(title: 'Master')
-        @slave_first = described_class.create!(title: '1st slave', duplicate_of_id: @master.id)
-        @slave_second = described_class.create!(title: '2nd slave', duplicate_of_id: @slave_first.id)
+        @primary = described_class.create!(title: 'primary')
+        @duplicate_first = described_class.create!(title: '1st duplicate', duplicate_of_id: @primary.id)
+        @duplicate_second = described_class.create!(title: '2nd duplicate', duplicate_of_id: @duplicate_first.id)
       end
 
-      it 'recognizes a master' do
-        expect(@master).to be_a_master
+      it 'recognizes a primary' do
+        expect(@primary).to be_a_primary
       end
 
-      it 'recognizes a slave' do
-        expect(@slave_first).to be_a_slave
+      it 'recognizes a duplicate' do
+        expect(@duplicate_first).to be_a_duplicate
       end
 
-      it 'does not think that a slave is a master' do
-        expect(@slave_second).not_to be_a_master
+      it 'does not think that a duplicate is a primary' do
+        expect(@duplicate_second).not_to be_a_primary
       end
 
-      it 'does not think that a master is a slave' do
-        expect(@master).not_to be_a_slave
+      it 'does not think that a primary is a duplicate' do
+        expect(@primary).not_to be_a_duplicate
       end
 
-      it 'returns the progenitor of a child' do
-        expect(@slave_first.progenitor).to eq @master
+      it 'returns the originator of a child' do
+        expect(@duplicate_first.originator).to eq @primary
       end
 
-      it 'returns the progenitor of a grandchild' do
-        expect(@slave_second.progenitor).to eq @master
+      it 'returns the originator of a grandchild' do
+        expect(@duplicate_second.originator).to eq @primary
       end
 
-      it 'returns a master as its own progenitor' do
-        expect(@master.progenitor).to eq @master
+      it 'returns a primary as its own originator' do
+        expect(@primary.originator).to eq @primary
       end
     end
 
     describe 'when squashing duplicates' do
       before do
-        @master_venue    = described_class.create!(title: 'Master')
-        @submaster_venue = described_class.create!(title: 'Submaster')
-        @child_venue     = described_class.create!(title: 'Child', duplicate_of: @submaster_venue)
-        @venues          = [@master_venue, @submaster_venue, @child_venue]
+        @primary_venue    = described_class.create!(title: 'primary')
+        @subprimary_venue = described_class.create!(title: 'Subprimary')
+        @child_venue     = described_class.create!(title: 'Child', duplicate_of: @subprimary_venue)
+        @venues          = [@primary_venue, @subprimary_venue, @child_venue]
 
         @event_at_child_venue = Event.create!(title: 'Event at child venue', venue: @child_venue, start_time: Time.now.in_time_zone)
-        @event_at_submaster_venue = Event.create!(title: 'Event at submaster venue', venue: @submaster_venue, start_time: Time.now.in_time_zone)
-        @events = [@event_at_child_venue, @event_at_submaster_venue]
+        @event_at_subprimary_venue = Event.create!(title: 'Event at subprimary venue', venue: @subprimary_venue, start_time: Time.now.in_time_zone)
+        @events = [@event_at_child_venue, @event_at_subprimary_venue]
       end
 
       it 'squashes a single duplicate' do
-        described_class.squash(@master_venue, @submaster_venue)
+        described_class.squash(@primary_venue, @subprimary_venue)
 
-        expect(@submaster_venue.duplicate_of).to eq @master_venue
-        expect(@submaster_venue).to be_duplicate
+        expect(@subprimary_venue.duplicate_of).to eq @primary_venue
+        expect(@subprimary_venue).to be_duplicate
       end
 
       it 'squashes multiple duplicates' do
-        described_class.squash(@master_venue, [@submaster_venue, @child_venue])
+        described_class.squash(@primary_venue, [@subprimary_venue, @child_venue])
 
-        expect(@submaster_venue.duplicate_of).to eq @master_venue
-        expect(@child_venue.duplicate_of).to eq @master_venue
+        expect(@subprimary_venue.duplicate_of).to eq @primary_venue
+        expect(@child_venue.duplicate_of).to eq @primary_venue
       end
 
       it 'squashes duplicates recursively' do
-        described_class.squash(@master_venue, @submaster_venue)
+        described_class.squash(@primary_venue, @subprimary_venue)
 
-        expect(@submaster_venue.duplicate_of).to eq @master_venue
+        expect(@subprimary_venue.duplicate_of).to eq @primary_venue
         @child_venue.reload # Needed because child was queried through DB, not object graph
-        expect(@child_venue.duplicate_of).to eq @master_venue
+        expect(@child_venue.duplicate_of).to eq @primary_venue
       end
 
       it 'transfers events of duplicates' do
         expect(@venues.map { |venue| venue.events.count }).to eq [0, 1, 1]
 
-        described_class.squash(@master_venue, @submaster_venue)
+        described_class.squash(@primary_venue, @subprimary_venue)
 
         expect(@venues.map { |venue| venue.events.count }).to eq [2, 0, 0]
 
         events = @venues.flat_map(&:events).each(&:reload)
-        expect(events.map(&:venue)).to all(eq @master_venue)
+        expect(events.map(&:venue)).to all(eq @primary_venue)
       end
     end
   end

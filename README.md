@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/calagator/calagator.svg?branch=master)](http://travis-ci.org/calagator/calagator)
+[![Build Status](https://travis-ci.org/calagator/calagator.svg?branch=main)](http://travis-ci.org/calagator/calagator)
 [![Coverage Status](https://coveralls.io/repos/calagator/calagator/badge.svg)](https://coveralls.io/r/calagator/calagator)
 
 Calagator
@@ -27,31 +27,31 @@ By releasing this code under a liberal MIT open source license, we hope to empow
 Installing
 ----------
 
-Read the [INSTALL.md](http://github.com/calagator/calagator/blob/master/INSTALL.md) file for details on installing the software.
+Read the [INSTALL.md](http://github.com/calagator/calagator/blob/main/INSTALL.md) file for details on installing the software.
 
 
 Contributing
 ------------
 
-Bug fixes and features are welcomed. Please fork the source code and submit a pull request: <http://github.com/calagator/calagator/tree/master>
+Bug fixes and features are welcomed. Please fork the source code and submit a pull request: <http://github.com/calagator/calagator/tree/main>
 
-When you make a pull request, make sure to add your name to the list of contributors in [CONTRIBUTORS.md](http://github.com/calagator/calagator/blob/master/CONTRIBUTORS.md).
+When you make a pull request, make sure to add your name to the list of contributors in [CONTRIBUTORS.md](http://github.com/calagator/calagator/blob/main/CONTRIBUTORS.md).
 
 All Calagator contributors are expected to read and follow our [code of conduct](https://github.com/calagator/calagator/wiki/Code-of-Conduct).
 
 Contributors
 ------------
 
-This free, open source software was made possible by a group of volunteers that put many hours of hard work into it. See the [CONTRIBUTORS.md](http://github.com/calagator/calagator/blob/master/CONTRIBUTORS.md) file for details.
+This free, open source software was made possible by a group of volunteers that put many hours of hard work into it. See the [CONTRIBUTORS.md](http://github.com/calagator/calagator/blob/main/CONTRIBUTORS.md) file for details.
 
 
 License
 -------
 
-This program is provided under an MIT open source license, read the [MIT-LICENSE.txt](http://github.com/calagator/calagator/blob/master/MIT-LICENSE.txt) file for details.
+This program is provided under an MIT open source license, read the [MIT-LICENSE.txt](http://github.com/calagator/calagator/blob/main/MIT-LICENSE.txt) file for details.
 
 
 Copyright
 ---------
 
-Copyright (c) 2007-2018 Calagator
+Copyright (c) 2007-2021 Calagator

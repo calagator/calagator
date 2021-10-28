@@ -10,18 +10,18 @@ module Calagator
     render_views
 
     context 'concerning duplicates' do
-      let!(:venue_master) { create(:venue) }
-      let!(:venue_duplicate) { create(:venue, duplicate_of: venue_master) }
+      let!(:venue_primary) { create(:venue) }
+      let!(:venue_duplicate) { create(:venue, duplicate_of: venue_primary) }
 
-      it 'redirects duplicate venues to their master' do
+      it 'redirects duplicate venues to their primary' do
         get 'show', params: { id: venue_duplicate.id }
-        expect(response).to redirect_to(venue_url(venue_master.id))
+        expect(response).to redirect_to(venue_url(venue_primary.id))
       end
 
       it "doesn't redirect non-duplicates" do
-        get 'show', params: { id: venue_master.id }
+        get 'show', params: { id: venue_primary.id }
         expect(response).not_to be_redirect
-        expect(assigns(:venue).id).to eq venue_master.id
+        expect(assigns(:venue).id).to eq venue_primary.id
       end
     end
 

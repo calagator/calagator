@@ -299,13 +299,13 @@ module Calagator
         expect(response).to be_successful
       end
 
-      it 'redirects from a duplicate event to its master' do
-        master = create(:event, id: 4321)
-        event = Event.new(start_time: now, duplicate_of: master)
+      it 'redirects from a duplicate event to its primary' do
+        primary = create(:event, id: 4321)
+        event = Event.new(start_time: now, duplicate_of: primary)
         expect(Event).to receive(:find).and_return(event)
 
         get 'show', params: { id: 1234 }
-        expect(response).to redirect_to(event_path(master))
+        expect(response).to redirect_to(event_path(primary))
       end
 
       it 'shows an error when asked to display a non-existent event' do
@@ -593,38 +593,38 @@ module Calagator
         render_views
 
         it 'finds current duplicates and not past duplicates' do
-          current_master = create(:event, title: 'Current')
-          current_duplicate = create(:event, title: current_master.title)
+          current_primary = create(:event, title: 'Current')
+          current_duplicate = create(:event, title: current_primary.title)
 
-          past_master = create(:event, title: 'Past', start_time: now - 2.days)
-          past_duplicate = create(:event, title: past_master.title, start_time: now - 1.day)
+          past_primary = create(:event, title: 'Past', start_time: now - 2.days)
+          past_duplicate = create(:event, title: past_primary.title, start_time: now - 1.day)
 
           get 'duplicates', params: { type: 'title' }
 
           # Current duplicates
-          assigns[:grouped].select { |keys, _values| keys.include?(current_master.title) }.tap do |events|
+          assigns[:grouped].select { |keys, _values| keys.include?(current_primary.title) }.tap do |events|
             expect(events).not_to be_empty
             expect(events.first.last.size).to eq 2
           end
 
           # Past duplicates
-          expect(assigns[:grouped].select { |keys, _values| keys.include?(past_master.title) }).to be_empty
+          expect(assigns[:grouped].select { |keys, _values| keys.include?(past_primary.title) }).to be_empty
         end
 
-        it 'redirects duplicate events to their master' do
-          event_master = create(:event)
+        it 'redirects duplicate events to their primary' do
+          event_primary = create(:event)
           event_duplicate = create(:event)
 
           get 'show', params: { id: event_duplicate.id }
           expect(response).not_to be_redirect
           expect(assigns(:event).id).to eq event_duplicate.id
 
-          event_duplicate.duplicate_of = event_master
+          event_duplicate.duplicate_of = event_primary
           event_duplicate.save!
 
           get 'show', params: { id: event_duplicate.id }
           expect(response).to be_redirect
-          expect(response).to redirect_to(event_url(event_master.id))
+          expect(response).to redirect_to(event_url(event_primary.id))
         end
 
         it 'displays an error message if given invalid arguments' do

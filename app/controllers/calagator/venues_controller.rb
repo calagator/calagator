@@ -57,7 +57,7 @@ module Calagator
 
     class Show < SimpleDelegator
       def call
-        show_all_if_not_found || redirect_to_progenitor || render_venue
+        show_all_if_not_found || redirect_to_originator || render_venue
       end
 
       private
@@ -68,8 +68,8 @@ module Calagator
         redirect_to venues_path, flash: { failure: e.to_s }
       end
 
-      def redirect_to_progenitor
-        redirect_to venue.progenitor if venue.duplicate?
+      def redirect_to_originator
+        redirect_to venue.originator if venue.duplicate?
       end
 
       def render_venue

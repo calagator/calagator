@@ -576,7 +576,7 @@ module Calagator
       end
 
       it "consolidates associations, merge tags, and update the venue's counter_cache" do
-        @event.tag_list.add(%w[first second]) # master event contains one duplicate tag, and one unique tag
+        @event.tag_list.add(%w[first second]) # primary event contains one duplicate tag, and one unique tag
 
         clone = described_class.create!(@event.attributes.merge(id: nil))
         clone.tag_list.replace %w[second third] # duplicate event also contains one duplicate tag, and one unique tag
@@ -586,7 +586,7 @@ module Calagator
         expect(@venue.reload.events_count).to eq 2
 
         described_class.squash(@event, clone)
-        expect(@event.tag_list.to_a.sort).to eq %w[first second third] # master now contains all three tags
+        expect(@event.tag_list.to_a.sort).to eq %w[first second third] # primary now contains all three tags
         expect(clone.duplicate_of).to eq @event
         expect(@venue.reload.events_count).to eq 1
       end
@@ -595,42 +595,42 @@ module Calagator
     describe 'when checking for squashing' do
       before do
         @today  = today
-        @master = described_class.create!(title: 'Master',    start_time: @today)
-        @slave1 = described_class.create!(title: '1st slave', start_time: @today, duplicate_of_id: @master.id)
-        @slave2 = described_class.create!(title: '2nd slave', start_time: @today, duplicate_of_id: @slave1.id)
+        @primary = described_class.create!(title: 'primary',    start_time: @today)
+        @duplicate1 = described_class.create!(title: '1st duplicate', start_time: @today, duplicate_of_id: @primary.id)
+        @duplicate2 = described_class.create!(title: '2nd duplicate', start_time: @today, duplicate_of_id: @duplicate1.id)
         @orphan = described_class.create!(title: 'orphan',    start_time: @today, duplicate_of_id: 999_999)
       end
 
-      it 'recognizes a master' do
-        expect(@master).to be_a_master
+      it 'recognizes a primary' do
+        expect(@primary).to be_a_primary
       end
 
-      it 'recognizes a slave' do
-        expect(@slave1).to be_a_slave
+      it 'recognizes a duplicate' do
+        expect(@duplicate1).to be_a_duplicate
       end
 
-      it 'does not think that a slave is a master' do
-        expect(@slave2).not_to be_a_master
+      it 'does not think that a duplicate is a primary' do
+        expect(@duplicate2).not_to be_a_primary
       end
 
-      it 'does not think that a master is a slave' do
-        expect(@master).not_to be_a_slave
+      it 'does not think that a primary is a duplicate' do
+        expect(@primary).not_to be_a_duplicate
       end
 
-      it 'returns the progenitor of a child' do
-        expect(@slave1.progenitor).to eq @master
+      it 'returns the originator of a duplicate' do
+        expect(@duplicate1.originator).to eq @primary
       end
 
-      it 'returns the progenitor of a grandchild' do
-        expect(@slave2.progenitor).to eq @master
+      it 'returns the originator of a secondary duplicate' do
+        expect(@duplicate2.originator).to eq @primary
       end
 
-      it 'returns a master as its own progenitor' do
-        expect(@master.progenitor).to eq @master
+      it 'returns a primary as its own originator' do
+        expect(@primary.originator).to eq @primary
       end
 
-      it 'returns a marked duplicate as progenitor if it is orphaned' do
-        expect(@orphan.progenitor).to eq @orphan
+      it 'returns a marked duplicate as originator if it is orphaned' do
+        expect(@orphan.originator).to eq @orphan
       end
     end
 

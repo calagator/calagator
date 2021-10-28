@@ -8,7 +8,7 @@ Calagator requires Ruby >= 2.4.0, and a host application built on Rails 4 or new
 
 ## Running a site based on Calagator
 
-If you're looking to build your own community calendar using Calagator, follow these instructions. If you're aiming to contribute code to Calagator itself, see the instructions in [DEVELOPMENT.md](https://github.com/calagator/calagator/blob/master/DEVELOPMENT.md).
+If you're looking to build your own community calendar using Calagator, follow these instructions. If you're aiming to contribute code to Calagator itself, see the instructions in [DEVELOPMENT.md](https://github.com/calagator/calagator/blob/main/DEVELOPMENT.md).
 
 ### Getting Started
 

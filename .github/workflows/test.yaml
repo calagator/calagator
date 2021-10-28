@@ -9,7 +9,7 @@ on:
        - ready_for_review
   push:
     branches:
-      - 'master'
+      - 'main'
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
   #   name: "Run Rubocop"
   #   runs-on: ubuntu-latest
   #   steps:
-  #     - uses: actions/checkout@master
+  #     - uses: actions/checkout@main
   #     - uses: actions/setup-ruby@v1
   #     - name: Install Rubocop
   #       run: gem install rubocop rubocop-performance rubocop-rails rubocop-rspec
@@ -106,7 +106,7 @@ jobs:
           name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}
           path: coverage
       - name: Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./coverage/lcov.info
