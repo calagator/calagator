@@ -12,6 +12,8 @@ If you're looking to build your own community calendar using Calagator, follow t
 
 ### Getting Started
 
+**At the moment, calagator is only compatible with Rails 5. Since the current major version is Rails 6, this means the generator will not be able to create new apps that are compatible. You can still add calagator to an existing Rails 5 app, but otherwise you should wait until we've finished all the upgrades.**
+
 First, install the `calagator` gem:
 
     gem install calagator
