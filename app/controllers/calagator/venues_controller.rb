@@ -99,7 +99,7 @@ module Calagator
 
     # POST /venues, # PUT /venues/1
     def create
-      CreateOrUpdate.new(self).call(recaptcha_verified?(venue))
+      CreateOrUpdate.new(self).call(recaptcha_verified?('save_venue'))
     end
     alias update create
 
