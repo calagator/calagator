@@ -106,9 +106,9 @@ module Calagator
     class CreateOrUpdate < SimpleDelegator
       def call(verified)
         if verified
-          block_spammers || (save && render_success) || render_failure
+          block_spammers || (save && render_success) || render_failure(verified)
         else
-          render_failure
+          render_failure(verified)
         end
         end
 
@@ -118,7 +118,7 @@ module Calagator
         return if params[:trap_field].blank?
 
         flash[:failure] = "<h3>Evil Robot</h3> We didn't save this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
-        render_failure
+        render_failure(false)
       end
 
       def save
@@ -132,8 +132,9 @@ module Calagator
         end
       end
 
-      def render_failure
+      def render_failure(verified)
         flash[:failure] = '<h3>Please fix any errors and try again</h3>'
+        @redo_recaptcha = true unless verified
         respond_to do |format|
           format.html { render action: venue.new_record? ? 'new' : 'edit' }
           format.xml  { render xml: venue.errors, status: :unprocessable_entity }

@@ -63,9 +63,15 @@
   <% end %>
   <%= f.actions do %>
     <% if recaptcha_enabled? -%>
-      <div style="margin: 0 0 20px 0;">
-          <%= recaptcha_v3(action: 'save_event') %>
+      <% if @redo_recaptcha -%>
+      <div style="margin: 0 0 20px 0; border: 1px solid red;">
+        <%= recaptcha_tags %>
       </div>
+      <% else -%>
+      <div style="margin: 0 0 20px 0;">
+        <%= recaptcha_v3(action: 'save_event') %>
+      </div>
+      <% end -%>
     <% end -%>
     <%= f.action :submit, :label => "Preview", :button_html => {:name => 'preview'} %>
     <%= f.action :submit %>
