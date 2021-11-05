@@ -380,7 +380,7 @@ Rails/ReflectionClassName:
 
 # Offense count: 6
 # Configuration parameters: denylist, Whitelist.
-# denylist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
+# Blacklist: decrement!, decrement_counter, increment!, increment_counter, toggle!, touch, update_all, update_attribute, update_column, update_columns, update_counters
 Rails/SkipsModelValidations:
   Exclude:
     - 'app/models/calagator/event.rb'
