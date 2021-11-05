@@ -55,10 +55,9 @@ module Calagator
     end
 
     def create_or_update
-      recaptcha_result = recaptcha_verified?(@event, 'save_event')
       saver = Event::Saver.new(@event, params.permit!)
       respond_to do |format|
-        if recaptcha_result && saver.save
+        if recaptcha_verified?(@event) && saver.save
           format.html do
             flash[:success] = 'Event was successfully saved.'
             if saver.has_new_venue?
@@ -72,7 +71,6 @@ module Calagator
         else
           format.html do
             flash[:failure] = saver.failure
-            @redo_recaptcha = true unless recaptcha_result
             render action: @event.new_record? ? 'new' : 'edit'
           end
           format.xml { render xml: @event.errors, status: :unprocessable_entity }

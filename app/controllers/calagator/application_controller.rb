@@ -87,8 +87,8 @@ module Calagator
       help.escape_once(*args)
     end
 
-    def recaptcha_verified?(model, action)
-      return verify_recaptcha(model: model, action: action) if recaptcha_enabled?
+    def recaptcha_verified?(model)
+      return verify_recaptcha(model: model) if recaptcha_enabled?
 
       true
     end
