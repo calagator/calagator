@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'pathname'
 
-RAILS_REQUIREMENT = '~> 5.0'
+RAILS_REQUIREMENT = '~> 5.2'
 
 def assert_minimum_rails_version
   requirement = Gem::Requirement.new(RAILS_REQUIREMENT)
