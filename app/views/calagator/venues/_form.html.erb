@@ -55,15 +55,9 @@
 
   <%= f.actions do %>
     <% if recaptcha_enabled? -%>
-      <% if @redo_recaptcha -%>
-      <div style="margin: 0 0 20px 0; border: 1px solid red;">
+      <div style="margin: 0 0 20px 0;">
         <%= recaptcha_tags %>
       </div>
-      <% else -%>
-      <div style="margin: 0 0 20px 0;">
-        <%= recaptcha_v3(action: 'save_event') %>
-      </div>
-      <% end -%>
     <% end -%>
     <%= f.action :submit %>
   <% end -%>
