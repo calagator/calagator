@@ -51,6 +51,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'validate_url'
   s.add_dependency 'will_paginate', '~> 3.0'
 
+  s.add_development_dependency 'annotate', '~> 3.1.1'
   s.add_development_dependency 'appraisal', '~> 2.4'
   s.add_development_dependency 'capybara', '~> 3.31'
   s.add_development_dependency 'database_cleaner', '~> 1.4'

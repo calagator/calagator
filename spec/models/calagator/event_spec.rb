@@ -1,5 +1,24 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: events
+#
+#  id              :integer          not null, primary key
+#  description     :text
+#  end_time        :datetime
+#  locked          :boolean          default(FALSE)
+#  rrule           :string
+#  start_time      :datetime
+#  title           :string
+#  url             :string
+#  venue_details   :text
+#  created_at      :datetime
+#  updated_at      :datetime
+#  duplicate_of_id :integer
+#  source_id       :integer
+#  venue_id        :integer
+#
 require 'spec_helper'
 
 module Calagator

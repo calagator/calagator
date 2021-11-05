@@ -1,24 +1,23 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20110604174521
 #
 # Table name: events
 #
-#  id              :integer         not null, primary key
-#  title           :string(255)
+#  id              :integer          not null, primary key
 #  description     :text
+#  end_time        :datetime
+#  locked          :boolean          default(FALSE)
+#  rrule           :string
 #  start_time      :datetime
-#  url             :string(255)
+#  title           :string
+#  url             :string
+#  venue_details   :text
 #  created_at      :datetime
 #  updated_at      :datetime
-#  venue_id        :integer
-#  source_id       :integer
 #  duplicate_of_id :integer
-#  end_time        :datetime
-#  version         :integer
-#  rrule           :string(255)
-#  venue_details   :text
+#  source_id       :integer
+#  venue_id        :integer
 #
 
 require 'calagator/denylist_validator'

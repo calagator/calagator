@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: sources
+#
+#  id          :integer          not null, primary key
+#  imported_at :datetime
+#  title       :string
+#  url         :string
+#  created_at  :datetime
+#  updated_at  :datetime
+#
 require 'spec_helper'
 
 module Calagator

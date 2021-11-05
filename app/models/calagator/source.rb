@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20110604174521
 #
 # Table name: sources
 #
-#  id          :integer         not null, primary key
-#  title       :string(255)
-#  url         :string(255)
+#  id          :integer          not null, primary key
 #  imported_at :datetime
+#  title       :string
+#  url         :string
 #  created_at  :datetime
 #  updated_at  :datetime
 #

@@ -1,33 +1,31 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20110604174521
 #
 # Table name: venues
 #
-#  id              :integer         not null, primary key
-#  title           :string(255)
+#  id              :integer          not null, primary key
+#  access_notes    :text
+#  address         :string
+#  closed          :boolean          default(FALSE)
+#  country         :string
 #  description     :text
-#  address         :string(255)
-#  url             :string(255)
+#  email           :string
+#  events_count    :integer
+#  latitude        :decimal(7, 4)
+#  locality        :string
+#  longitude       :decimal(7, 4)
+#  postal_code     :string
+#  region          :string
+#  street_address  :string
+#  telephone       :string
+#  title           :string
+#  url             :string
+#  wifi            :boolean          default(FALSE)
 #  created_at      :datetime
 #  updated_at      :datetime
-#  street_address  :string(255)
-#  locality        :string(255)
-#  region          :string(255)
-#  postal_code     :string(255)
-#  country         :string(255)
-#  latitude        :decimal(, )
-#  longitude       :decimal(, )
-#  email           :string(255)
-#  telephone       :string(255)
-#  source_id       :integer
 #  duplicate_of_id :integer
-#  version         :integer
-#  closed          :boolean
-#  wifi            :boolean
-#  access_notes    :text
-#  events_count    :integer
+#  source_id       :integer
 #
 require 'calagator/decode_html_entities_hack'
 require 'calagator/strip_whitespace'

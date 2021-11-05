@@ -1,5 +1,32 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: venues
+#
+#  id              :integer          not null, primary key
+#  access_notes    :text
+#  address         :string
+#  closed          :boolean          default(FALSE)
+#  country         :string
+#  description     :text
+#  email           :string
+#  events_count    :integer
+#  latitude        :decimal(7, 4)
+#  locality        :string
+#  longitude       :decimal(7, 4)
+#  postal_code     :string
+#  region          :string
+#  street_address  :string
+#  telephone       :string
+#  title           :string
+#  url             :string
+#  wifi            :boolean          default(FALSE)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  duplicate_of_id :integer
+#  source_id       :integer
+#
 require 'spec_helper'
 
 module Calagator
