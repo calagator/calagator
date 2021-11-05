@@ -4,13 +4,15 @@ Calagator is distributed as a [Rails engine](http://guides.rubyonrails.org/engin
 
 ## Requirements
 
-Calagator requires Ruby >= 2.4.0, and a host application built on Rails 4 or newer.
+Calagator requires Ruby >= 2.5.0, and a host application built on Rails 5 or newer.
 
 ## Running a site based on Calagator
 
-If you're looking to build your own community calendar using Calagator, follow these instructions. If you're aiming to contribute code to Calagator itself, see the instructions in [DEVELOPMENT.md](https://github.com/calagator/calagator/blob/master/DEVELOPMENT.md).
+If you're looking to build your own community calendar using Calagator, follow these instructions. If you're aiming to contribute code to Calagator itself, see the instructions in [DEVELOPMENT.md](https://github.com/calagator/calagator/blob/main/DEVELOPMENT.md).
 
 ### Getting Started
+
+**At the moment, calagator is only compatible with Rails 5, which is not the current major version release. You can still add calagator to an existing Rails 5 app, but the generator may not work as expected until we upgrade to Rails 6.**
 
 First, install the `calagator` gem:
 
@@ -63,15 +65,15 @@ This is the default search engine which uses SQL queries. This option requires n
 
 This optional search engine uses the Sunspot gem. This option requires additional setup, dependencies, and service. It provides relevance-based sorting. It does not provide substring matches.
 
-To use Sunspot, you will need to [install Java 1.6.x](http://www.java.com/getjava), a programming language used to run the search service.
+To use Sunspot, you will need to have installed the [JDK](https://www.oracle.com/java/technologies/downloads/) (Java Development Kit). On MacOS we've used the [Eclipse Temurin Java Development Kit](https://formulae.brew.sh/cask/temurin) via [Homebrew](https://brew.sh).
 
 You can start the Solr search service for local development with:
 
-    bundle exec rake sunspot:solr:start
+    bundle exec rake app:sunspot:solr:start
 
 You will then need to initially populate your records by running:
 
-    bundle exec rake sunspot:reindex:calagator
+    bundle exec rake app:sunspot:reindex:calagator
 
 You can stop the Solr search service with:
 
@@ -79,7 +81,7 @@ You can stop the Solr search service with:
 
 Calagator has tests that verify functionality against Solr automatically, if the tests find the service running; you'll see pending tests if Solr isn't found. To start a test instance of Solr, do:
 
-    bundle exec rake RAILS_ENV=test sunspot:solr:start
+    bundle exec rake RAILS_ENV=test app:sunspot:solr:start
 
 You should set up a firewall to protect the ports utilized by the Solr search service. These ports are described in the [config/sunspot.yml](config/sunspot.yml) file.
 

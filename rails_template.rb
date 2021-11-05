@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'pathname'
 
-RAILS_REQUIREMENT = '~> 4.2'
+RAILS_REQUIREMENT = '~> 5.2'
 
 def assert_minimum_rails_version
   requirement = Gem::Requirement.new(RAILS_REQUIREMENT)
@@ -16,7 +16,7 @@ end
 
 assert_minimum_rails_version
 
-generating_dummy = ARGV.include? '--dummy'
+generating_test_app = ARGV.include? '--test_app'
 calagator_checkout = Pathname.new(File.expand_path(__dir__))
 relative_calagator_path = calagator_checkout.relative_path_from(Pathname.new(destination_root))
 
@@ -42,7 +42,7 @@ gem_group :development, :test do
   end
 end
 
-gem 'calagator', (generating_dummy && { path: relative_calagator_path.to_s })
+gem 'calagator', (generating_test_app && { path: relative_calagator_path.to_s })
 run 'bundle install'
 rake 'db:create'
 inside('app/assets') do
@@ -54,5 +54,5 @@ inside('app/assets') do
     MANIFEST
   end
 end
-generate 'calagator:install', (generating_dummy && '--dummy')
+generate 'calagator:install', (generating_test_app && '--test_app')
 generate 'sunspot_rails:install'

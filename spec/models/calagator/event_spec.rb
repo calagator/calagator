@@ -1,5 +1,24 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: events
+#
+#  id              :integer          not null, primary key
+#  description     :text
+#  end_time        :datetime
+#  locked          :boolean          default(FALSE)
+#  rrule           :string
+#  start_time      :datetime
+#  title           :string
+#  url             :string
+#  venue_details   :text
+#  created_at      :datetime
+#  updated_at      :datetime
+#  duplicate_of_id :integer
+#  source_id       :integer
+#  venue_id        :integer
+#
 require 'spec_helper'
 
 module Calagator
@@ -15,8 +34,8 @@ module Calagator
         expect(event).to be_valid
       end
 
-      it 'validates blacklisted words' do
-        BlacklistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
+      it 'validates denylisted words' do
+        DenylistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
         event = described_class.new(title: 'Foo bar cialis', start_time: Time.zone.parse('2008.04.12'), url: 'google.com')
         expect(event).not_to be_valid
       end
@@ -33,24 +52,28 @@ module Calagator
         expect(event.locked).to eq(false)
       end
 
-      it "can't be deleted if it's locked" do
+      it "can only be deleted when unlocked" do
         event = described_class.create(title: 'Event title', start_time: Time.zone.parse('2008.04.12'))
+
         event.lock_editing!
         expect(event.destroy).to eq(false)
+
+        event.unlock_editing!
+        expect(event.destroy).to be_truthy
       end
     end
 
     describe 'when checking time status' do
       it 'is old if event ended before today' do
-        expect(FactoryBot.build(:event, start_time: 2.days.ago, end_time: 1.day.ago)).to be_old
+        expect(build(:event, start_time: 2.days.ago, end_time: 1.day.ago)).to be_old
       end
 
       it 'is current if event is happening today' do
-        expect(FactoryBot.build(:event, start_time: 1.hour.from_now)).to be_current
+        expect(build(:event, start_time: 1.hour.from_now)).to be_current
       end
 
       it 'is ongoing if it began before today but ends today or later' do
-        expect(FactoryBot.build(:event, start_time: 1.day.ago, end_time: 1.day.from_now)).to be_ongoing
+        expect(build(:event, start_time: 1.day.ago, end_time: 1.day.from_now)).to be_ongoing
       end
     end
 
@@ -64,16 +87,16 @@ module Calagator
         expect(@event.tag_list).to eq []
       end
 
-      it 'justs cache tagging if it is a new record' do
+      it 'adds tags without saving if it is a new record' do
         expect(@event).not_to receive :save
         expect(@event).to be_new_record
-        @event.tag_list = @tags
+        @event.tag_list.add(@tags, parse: true)
         expect(@event.tag_list.to_s).to eq @tags
       end
 
       it 'uses tags with punctuation' do
         tags = ['.net', 'foo-bar']
-        @event.tag_list = tags.join(', ')
+        @event.tag_list.add(tags)
         @event.save
 
         @event.reload
@@ -81,8 +104,8 @@ module Calagator
       end
 
       it 'does not interpret numeric tags as IDs' do
-        tag = '123'
-        @event.tag_list = tag
+        tag = ['123']
+        @event.tag_list.add(tag)
         @event.save
 
         @event.reload
@@ -90,7 +113,7 @@ module Calagator
       end
 
       it 'returns a collection of events for a given tag' do
-        @event.tag_list = @tags
+        @event.tag_list.add(@tags, parse: true)
         @event.save
         expect(described_class.tagged_with('tags')).to eq [@event]
       end
@@ -289,9 +312,9 @@ module Calagator
 
     describe '.search_tag' do
       before do
-        @c = FactoryBot.create(:event, title: 'c', tag_list: %w[tag wtf], start_time: 3.minutes.ago)
-        @b = FactoryBot.create(:event, title: 'b', tag_list: %w[omg wtf], start_time: 2.minutes.ago)
-        @a = FactoryBot.create(:event, title: 'a', tag_list: %w[tag omg], start_time: 1.minute.ago)
+        @c = create(:event, title: 'c', start_time: 3.minutes.ago, tag_list: %w[tag wtf])
+        @b = create(:event, title: 'b', start_time: 2.minutes.ago, tag_list: %w[omg wtf])
+        @a = create(:event, title: 'a', start_time: 1.minute.ago, tag_list: %w[tag omg])
       end
 
       it 'finds events with the given tag' do
@@ -458,27 +481,27 @@ module Calagator
     describe 'when ordering' do
       describe 'with .ordered_by_ui_field' do
         it 'defaults to order by start time' do
-          event1 = FactoryBot.create(:event, start_time: Time.zone.parse('2003-01-01'))
-          event2 = FactoryBot.create(:event, start_time: Time.zone.parse('2002-01-01'))
-          event3 = FactoryBot.create(:event, start_time: Time.zone.parse('2001-01-01'))
+          event1 = create(:event, start_time: Time.zone.parse('2003-01-01'))
+          event2 = create(:event, start_time: Time.zone.parse('2002-01-01'))
+          event3 = create(:event, start_time: Time.zone.parse('2001-01-01'))
 
           events = described_class.ordered_by_ui_field(nil)
           expect(events).to eq([event3, event2, event1])
         end
 
         it 'can order by event name' do
-          event1 = FactoryBot.create(:event, title: 'CU there')
-          event2 = FactoryBot.create(:event, title: 'Be there')
-          event3 = FactoryBot.create(:event, title: 'An event')
+          event1 = create(:event, title: 'CU there')
+          event2 = create(:event, title: 'Be there')
+          event3 = create(:event, title: 'An event')
 
           events = described_class.ordered_by_ui_field('name')
           expect(events).to eq([event3, event2, event1])
         end
 
         it 'can order by venue name' do
-          event1 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'C venue'))
-          event2 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'B venue'))
-          event3 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'A venue'))
+          event1 = create(:event, venue: create(:venue, title: 'C venue'))
+          event2 = create(:event, venue: create(:venue, title: 'B venue'))
+          event3 = create(:event, venue: create(:venue, title: 'A venue'))
 
           events = described_class.ordered_by_ui_field('venue')
           expect(events).to eq([event3, event2, event1])
@@ -488,8 +511,8 @@ module Calagator
 
     describe 'with finding duplicates' do
       before do
-        @non_duplicate_event = FactoryBot.create(:event)
-        @duplicate_event = FactoryBot.create(:duplicate_event)
+        @non_duplicate_event = create(:event)
+        @duplicate_event = create(:duplicate_event)
         @events = [@non_duplicate_event, @duplicate_event]
       end
 
@@ -508,12 +531,12 @@ module Calagator
 
     describe 'with finding duplicates (integration test)' do
       subject do
-        FactoryBot.create(:event)
+        create(:event)
       end
 
       before do
         # this event should always be omitted from the results
-        past = FactoryBot.create(:event, start_time: 1.week.ago)
+        past = create(:event, start_time: 1.week.ago)
       end
 
       it 'returns future events when provided na' do
@@ -567,12 +590,12 @@ module Calagator
 
     describe 'when squashing duplicates (integration test)' do
       before do
-        @event = FactoryBot.create(:event, :with_venue)
+        @event = create(:event, :with_venue)
         @venue = @event.venue
       end
 
       it "consolidates associations, merge tags, and update the venue's counter_cache" do
-        @event.tag_list = %w[first second] # master event contains one duplicate tag, and one unique tag
+        @event.tag_list.add(%w[first second]) # primary event contains one duplicate tag, and one unique tag
 
         clone = described_class.create!(@event.attributes.merge(id: nil))
         clone.tag_list.replace %w[second third] # duplicate event also contains one duplicate tag, and one unique tag
@@ -582,7 +605,7 @@ module Calagator
         expect(@venue.reload.events_count).to eq 2
 
         described_class.squash(@event, clone)
-        expect(@event.tag_list.to_a.sort).to eq %w[first second third] # master now contains all three tags
+        expect(@event.tag_list.to_a.sort).to eq %w[first second third] # primary now contains all three tags
         expect(clone.duplicate_of).to eq @event
         expect(@venue.reload.events_count).to eq 1
       end
@@ -591,42 +614,42 @@ module Calagator
     describe 'when checking for squashing' do
       before do
         @today  = today
-        @master = described_class.create!(title: 'Master',    start_time: @today)
-        @slave1 = described_class.create!(title: '1st slave', start_time: @today, duplicate_of_id: @master.id)
-        @slave2 = described_class.create!(title: '2nd slave', start_time: @today, duplicate_of_id: @slave1.id)
+        @primary = described_class.create!(title: 'primary',    start_time: @today)
+        @duplicate1 = described_class.create!(title: '1st duplicate', start_time: @today, duplicate_of_id: @primary.id)
+        @duplicate2 = described_class.create!(title: '2nd duplicate', start_time: @today, duplicate_of_id: @duplicate1.id)
         @orphan = described_class.create!(title: 'orphan',    start_time: @today, duplicate_of_id: 999_999)
       end
 
-      it 'recognizes a master' do
-        expect(@master).to be_a_master
+      it 'recognizes a primary' do
+        expect(@primary).to be_a_primary
       end
 
-      it 'recognizes a slave' do
-        expect(@slave1).to be_a_slave
+      it 'recognizes a duplicate' do
+        expect(@duplicate1).to be_a_duplicate
       end
 
-      it 'does not think that a slave is a master' do
-        expect(@slave2).not_to be_a_master
+      it 'does not think that a duplicate is a primary' do
+        expect(@duplicate2).not_to be_a_primary
       end
 
-      it 'does not think that a master is a slave' do
-        expect(@master).not_to be_a_slave
+      it 'does not think that a primary is a duplicate' do
+        expect(@primary).not_to be_a_duplicate
       end
 
-      it 'returns the progenitor of a child' do
-        expect(@slave1.progenitor).to eq @master
+      it 'returns the originator of a duplicate' do
+        expect(@duplicate1.originator).to eq @primary
       end
 
-      it 'returns the progenitor of a grandchild' do
-        expect(@slave2.progenitor).to eq @master
+      it 'returns the originator of a secondary duplicate' do
+        expect(@duplicate2.originator).to eq @primary
       end
 
-      it 'returns a master as its own progenitor' do
-        expect(@master.progenitor).to eq @master
+      it 'returns a primary as its own originator' do
+        expect(@primary.originator).to eq @primary
       end
 
-      it 'returns a marked duplicate as progenitor if it is orphaned' do
-        expect(@orphan.progenitor).to eq @orphan
+      it 'returns a marked duplicate as originator if it is orphaned' do
+        expect(@orphan.originator).to eq @orphan
       end
     end
 
@@ -656,11 +679,11 @@ module Calagator
       end
 
       it 'produces parsable iCal output' do
-        expect { ical_roundtrip(FactoryBot.build(:event)) }.not_to raise_error
+        expect { ical_roundtrip(build(:event)) }.not_to raise_error
       end
 
       it 'represents an event without an end time as a 1-hour block' do
-        event = FactoryBot.build(:event, start_time: now, end_time: nil)
+        event = build(:event, start_time: now, end_time: nil)
         expect(event.end_time).to be_blank
 
         rt = ical_roundtrip(event)
@@ -668,14 +691,14 @@ module Calagator
       end
 
       it 'sets the appropriate end time if one is given' do
-        event = FactoryBot.build(:event, start_time: now, end_time: now + 2.hours)
+        event = build(:event, start_time: now, end_time: now + 2.hours)
 
         rt = ical_roundtrip(event)
         expect(rt.dtend - rt.dtstart).to eq 2.hours
       end
 
       describe "when comparing Event's attributes to its iCalendar output" do
-        let(:event) { FactoryBot.build(:event, id: 123, created_at: now) }
+        let(:event) { build(:event, id: 123, created_at: now) }
         let(:ical) { ical_roundtrip(event) }
 
         { summary: :title,
@@ -701,34 +724,34 @@ module Calagator
       end
 
       it 'calls the URL helper to generate a UID' do
-        event = FactoryBot.build(:event)
+        event = build(:event)
         expect(ical_roundtrip(event, url_helper: ->(_e) { "UID'D!" }).uid).to eq "UID'D!"
       end
 
       it 'strips HTML from the description' do
-        event = FactoryBot.create(:event, description: '<blink>OMFG HTML IS TEH AWESOME</blink>')
+        event = create(:event, description: '<blink>OMFG HTML IS TEH AWESOME</blink>')
         expect(ical_roundtrip(event).description).not_to include '<blink>'
       end
 
       it 'includes tags in the description' do
-        event = FactoryBot.build(:event)
-        event.tag_list = 'tags, folksonomy, categorization'
+        event = build(:event)
+        event.tag_list.add('tags, folksonomy, categorization', parse: true)
         expect(ical_roundtrip(event).description).to include event.tag_list.to_s
       end
 
       it 'leaves URL blank if no URL is provided' do
-        event = FactoryBot.build(:event, url: nil)
+        event = build(:event, url: nil)
         expect(ical_roundtrip(event).url).to be_nil
       end
 
       it 'has Source URL if URL helper is given)' do
-        event = FactoryBot.build(:event)
+        event = build(:event)
         expect(ical_roundtrip(event, url_helper: ->(_e) { 'FAKE' }).description).to match /FAKE/
       end
 
       it 'creates multi-day entries for multi-day events' do
         time = Time.zone.now
-        event = FactoryBot.build(:event, start_time: time, end_time: time + 4.days)
+        event = build(:event, start_time: time, end_time: time + 4.days)
         parsed_event = ical_roundtrip(event)
 
         start_time = Date.current
@@ -742,13 +765,13 @@ module Calagator
         end
 
         it 'sets an initial sequence on a new event' do
-          event = FactoryBot.create(:event)
+          event = create(:event)
           ical = event_to_ical(event)
           expect(ical.sequence).to eq 1
         end
 
         it 'increments the sequence if it is updated' do
-          event = FactoryBot.create(:event)
+          event = create(:event)
           event.update_attribute(:title, 'Update 1')
           ical = event_to_ical(event)
           expect(ical.sequence).to eq 2
@@ -756,7 +779,7 @@ module Calagator
 
         # it "should offset the squence based the global Calagator.icalendar_sequence_offset" do
         # Calagator.should_receive(:icalendar_sequence_offset).and_return(41)
-        # event = FactoryBot.build(:event)
+        # event = build(:event)
         # ical = event_to_ical(event)
         # ical.sequence.should eq 42
         # end
@@ -764,7 +787,7 @@ module Calagator
 
       describe '- the headers' do
         before do
-          @data = Event::IcalRenderer.render(FactoryBot.build(:event))
+          @data = Event::IcalRenderer.render(build(:event))
         end
 
         it 'includes the calendar name' do

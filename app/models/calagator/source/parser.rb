@@ -69,7 +69,7 @@ module Calagator
     def event_or_duplicate(event)
       duplicates = event.find_exact_duplicates
       if duplicates.present?
-        duplicates.first.progenitor
+        duplicates.first.originator
       else
         event
       end
@@ -78,7 +78,7 @@ module Calagator
     def venue_or_duplicate(venue)
       duplicates = venue.find_exact_duplicates
       if duplicates.present?
-        duplicates.first.progenitor
+        duplicates.first.originator
       else
         venue_machine_tag_name = venue.tag_list.find do |tag_name|
           MachineTag.new(tag_name).venue?
@@ -86,7 +86,7 @@ module Calagator
         matched_venue = Venue.tagged_with(venue_machine_tag_name).first
 
         if matched_venue.present?
-          matched_venue.progenitor
+          matched_venue.originator
         else
           venue
         end

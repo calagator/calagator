@@ -1,5 +1,32 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: venues
+#
+#  id              :integer          not null, primary key
+#  access_notes    :text
+#  address         :string
+#  closed          :boolean          default(FALSE)
+#  country         :string
+#  description     :text
+#  email           :string
+#  events_count    :integer
+#  latitude        :decimal(7, 4)
+#  locality        :string
+#  longitude       :decimal(7, 4)
+#  postal_code     :string
+#  region          :string
+#  street_address  :string
+#  telephone       :string
+#  title           :string
+#  url             :string
+#  wifi            :boolean          default(FALSE)
+#  created_at      :datetime
+#  updated_at      :datetime
+#  duplicate_of_id :integer
+#  source_id       :integer
+#
 require 'spec_helper'
 
 module Calagator
@@ -14,8 +41,8 @@ module Calagator
       expect(venue).to be_valid
     end
 
-    it 'validates blacklisted words' do
-      BlacklistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
+    it 'validates denylisted words' do
+      DenylistValidator.any_instance.stub(patterns: [/\bcialis\b/, /\bviagra\b/])
       venue = described_class.new(title: 'Foo bar cialis')
       expect(venue).not_to be_valid
     end
@@ -89,42 +116,42 @@ module Calagator
 
     describe 'when finding duplicates [integration test]' do
       subject! do
-        FactoryBot.create(:venue, title: 'Venue A')
+        create(:venue, title: 'Venue A')
       end
 
       it 'does not match totally different records' do
-        FactoryBot.create(:venue)
+        create(:venue)
         expect(described_class.find_duplicates_by_type('title')).to be_empty
       end
 
       it 'does not match similar records when not searching by duplicated fields' do
-        FactoryBot.create :venue, title: subject.title
+        create :venue, title: subject.title
         expect(described_class.find_duplicates_by_type('description')).to be_empty
       end
 
       it 'matches similar records when searching by duplicated fields' do
-        venue = FactoryBot.create(:venue, title: subject.title)
+        venue = create(:venue, title: subject.title)
         expect(described_class.find_duplicates_by_type('title')).to eq([subject.title] => [subject, venue])
       end
 
       it 'matches similar records when searching by :any' do
-        venue = FactoryBot.create(:venue, title: subject.title)
+        venue = create(:venue, title: subject.title)
         expect(described_class.find_duplicates_by_type('any')).to eq([nil] => [subject, venue])
       end
 
       it 'does not match similar records when searching by multiple fields where not all are duplicated' do
-        FactoryBot.create(:venue, title: subject.title)
+        create(:venue, title: subject.title)
         expect(described_class.find_duplicates_by_type('title,description')).to be_empty
       end
 
       it 'matches similar records when searching by multiple fields where all are duplicated' do
-        venue = FactoryBot.create(:venue, title: subject.title, description: subject.description)
+        venue = create(:venue, title: subject.title, description: subject.description)
         expect(described_class.find_duplicates_by_type('title,description')).to \
           eq([subject.title, subject.description] => [subject, venue])
       end
 
       it 'does not match dissimilar records when searching by :all' do
-        FactoryBot.create(:venue)
+        create(:venue)
         expect(described_class.find_duplicates_by_type('all')).to be_empty
       end
 
@@ -135,90 +162,90 @@ module Calagator
       end
 
       it 'matches non duplicate venues when searching by na' do
-        venue = FactoryBot.create(:venue, title: 'Venue B')
+        venue = create(:venue, title: 'Venue B')
         expect(described_class.find_duplicates_by_type('na')).to eq([nil] => [subject, venue])
       end
     end
 
     describe 'when checking for squashing' do
       before do
-        @master = described_class.create!(title: 'Master')
-        @slave_first = described_class.create!(title: '1st slave', duplicate_of_id: @master.id)
-        @slave_second = described_class.create!(title: '2nd slave', duplicate_of_id: @slave_first.id)
+        @primary = described_class.create!(title: 'primary')
+        @duplicate_first = described_class.create!(title: '1st duplicate', duplicate_of_id: @primary.id)
+        @duplicate_second = described_class.create!(title: '2nd duplicate', duplicate_of_id: @duplicate_first.id)
       end
 
-      it 'recognizes a master' do
-        expect(@master).to be_a_master
+      it 'recognizes a primary' do
+        expect(@primary).to be_a_primary
       end
 
-      it 'recognizes a slave' do
-        expect(@slave_first).to be_a_slave
+      it 'recognizes a duplicate' do
+        expect(@duplicate_first).to be_a_duplicate
       end
 
-      it 'does not think that a slave is a master' do
-        expect(@slave_second).not_to be_a_master
+      it 'does not think that a duplicate is a primary' do
+        expect(@duplicate_second).not_to be_a_primary
       end
 
-      it 'does not think that a master is a slave' do
-        expect(@master).not_to be_a_slave
+      it 'does not think that a primary is a duplicate' do
+        expect(@primary).not_to be_a_duplicate
       end
 
-      it 'returns the progenitor of a child' do
-        expect(@slave_first.progenitor).to eq @master
+      it 'returns the originator of a child' do
+        expect(@duplicate_first.originator).to eq @primary
       end
 
-      it 'returns the progenitor of a grandchild' do
-        expect(@slave_second.progenitor).to eq @master
+      it 'returns the originator of a grandchild' do
+        expect(@duplicate_second.originator).to eq @primary
       end
 
-      it 'returns a master as its own progenitor' do
-        expect(@master.progenitor).to eq @master
+      it 'returns a primary as its own originator' do
+        expect(@primary.originator).to eq @primary
       end
     end
 
     describe 'when squashing duplicates' do
       before do
-        @master_venue    = described_class.create!(title: 'Master')
-        @submaster_venue = described_class.create!(title: 'Submaster')
-        @child_venue     = described_class.create!(title: 'Child', duplicate_of: @submaster_venue)
-        @venues          = [@master_venue, @submaster_venue, @child_venue]
+        @primary_venue    = described_class.create!(title: 'primary')
+        @subprimary_venue = described_class.create!(title: 'Subprimary')
+        @child_venue     = described_class.create!(title: 'Child', duplicate_of: @subprimary_venue)
+        @venues          = [@primary_venue, @subprimary_venue, @child_venue]
 
         @event_at_child_venue = Event.create!(title: 'Event at child venue', venue: @child_venue, start_time: Time.now.in_time_zone)
-        @event_at_submaster_venue = Event.create!(title: 'Event at submaster venue', venue: @submaster_venue, start_time: Time.now.in_time_zone)
-        @events = [@event_at_child_venue, @event_at_submaster_venue]
+        @event_at_subprimary_venue = Event.create!(title: 'Event at subprimary venue', venue: @subprimary_venue, start_time: Time.now.in_time_zone)
+        @events = [@event_at_child_venue, @event_at_subprimary_venue]
       end
 
       it 'squashes a single duplicate' do
-        described_class.squash(@master_venue, @submaster_venue)
+        described_class.squash(@primary_venue, @subprimary_venue)
 
-        expect(@submaster_venue.duplicate_of).to eq @master_venue
-        expect(@submaster_venue).to be_duplicate
+        expect(@subprimary_venue.duplicate_of).to eq @primary_venue
+        expect(@subprimary_venue).to be_duplicate
       end
 
       it 'squashes multiple duplicates' do
-        described_class.squash(@master_venue, [@submaster_venue, @child_venue])
+        described_class.squash(@primary_venue, [@subprimary_venue, @child_venue])
 
-        expect(@submaster_venue.duplicate_of).to eq @master_venue
-        expect(@child_venue.duplicate_of).to eq @master_venue
+        expect(@subprimary_venue.duplicate_of).to eq @primary_venue
+        expect(@child_venue.duplicate_of).to eq @primary_venue
       end
 
       it 'squashes duplicates recursively' do
-        described_class.squash(@master_venue, @submaster_venue)
+        described_class.squash(@primary_venue, @subprimary_venue)
 
-        expect(@submaster_venue.duplicate_of).to eq @master_venue
+        expect(@subprimary_venue.duplicate_of).to eq @primary_venue
         @child_venue.reload # Needed because child was queried through DB, not object graph
-        expect(@child_venue.duplicate_of).to eq @master_venue
+        expect(@child_venue.duplicate_of).to eq @primary_venue
       end
 
       it 'transfers events of duplicates' do
         expect(@venues.map { |venue| venue.events.count }).to eq [0, 1, 1]
 
-        described_class.squash(@master_venue, @submaster_venue)
+        described_class.squash(@primary_venue, @subprimary_venue)
 
         expect(@venues.map { |venue| venue.events.count }).to eq [2, 0, 0]
 
         events = @venues.flat_map(&:events).each(&:reload)
-        expect(events.map(&:venue)).to all(eq @master_venue)
+        expect(events.map(&:venue)).to all(eq @primary_venue)
       end
     end
   end
@@ -331,31 +358,34 @@ module Calagator
       @venue.attributes = { street_address: '', address: 'address' }
       expect(@venue.geocode_address).to eq 'address'
     end
+  end
 
-    describe 'when versioning' do
-      it 'has versions' do
-        expect(Venue.new.versions).to eq []
-      end
+  describe 'when versioning' do
+    it 'has versions' do
+      expect(Venue.new.versions).to eq []
+    end
 
-      it 'creates a new version after updating' do
-        venue = FactoryBot.create :venue
-        expect(venue.versions.count).to eq 1
+    it 'creates a new version after updating' do
+      venue = create :venue
+      expect(venue.versions.count).to eq 1
 
-        venue.title += ' (change)'
+      venue.title += ' (change)'
 
-        venue.save!
-        expect(venue.versions.count).to eq 2
-      end
+      venue.save!
+      expect(venue.versions.count).to eq 2
+    end
 
-      it 'stores old content in past versions' do
-        venue = FactoryBot.create :venue
-        original_title = venue.title
+    it 'stores prior content in each version' do
+      venue = create :venue, title: "Original Venue"
+      original_title = venue.title
 
-        venue.title += ' (change)'
+      new_title = venue.title += ' (change)'
+      venue.title = new_title
+      venue.save!
 
-        venue.save!
-        expect(venue.versions.last.reify.title).to eq original_title
-      end
+      expect(venue.title).to eq new_title # Updated title
+      expect(venue.versions.first.reify.title).to eq original_title # Venue title before update
+      expect(venue.versions.last.reify).to eq nil # Before state on creation is nil
     end
   end
 end

@@ -34,7 +34,7 @@ Use Vagrant by issuing the commands below. The `local%` and `virtual%` in the co
 
 Now following [DEVELOPMENT.md](DEVELOPMENT.md):
 
-    virtual% bundle exec bin/calagator new spec/dummy --dummy
+    virtual% bundle exec bin/calagator new spec/test_app --test_app
     virtual% bundle exec rake app:db:migrate app:db:test:prepare
 
 Optional seeding of database with data:
@@ -47,7 +47,7 @@ Run the test suite:
 
 Run the server bound to 0.0.0.0 so the host OS can reach it:
 
-    virtual% bundle exec spec/dummy/bin/rails server -b 0.0.0.0
+    virtual% bundle exec bin/rails server -b 0.0.0.0
 
 You can reach the calagator app from the host OS at http://localhost:8000/ .
 

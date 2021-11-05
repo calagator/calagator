@@ -9,19 +9,19 @@ module Calagator
     describe 'without versions' do
       it 'raises RecordNotFound if not given an id' do
         expect do
-          get :edit, id: ''
+          get :edit, params: { id: '' }
         end.to raise_error ActiveRecord::RecordNotFound
       end
 
       it 'raises RecordNotFound if given invalid id' do
         expect do
-          get :edit, id: '-1'
+          get :edit, params: { id: '-1' }
         end.to raise_error ActiveRecord::RecordNotFound
       end
 
       it "raises RecordNotFound if given id that doesn't exist" do
         expect do
-          get :edit, id: '1234'
+          get :edit, params: { id: '1234' }
         end.to raise_error ActiveRecord::RecordNotFound
       end
     end
@@ -32,7 +32,7 @@ module Calagator
         @update_title = 'myevent v2'
         @final_title = 'myevent v3'
 
-        @event = FactoryBot.create(:event, title: @create_title)
+        @event = create(:event, title: @create_title)
 
         @event.title = @update_title
         @event.save!
@@ -47,7 +47,7 @@ module Calagator
       def title_for(event)
         version_id = @event.versions.where(event: event).pluck(:id).first
 
-        get :edit, id: version_id
+        get :edit, params: { id: version_id }
 
         assigns[:event].title
       end
@@ -66,15 +66,15 @@ module Calagator
 
       it 'renders html' do
         version_id = @event.versions.first.id
-        get :edit, id: version_id
-        expect(response).to be_success
+        get :edit, params: { id: version_id }
+        expect(response).to be_successful
         expect(response).to render_template 'events/edit'
       end
 
       it 'renders html via xhr' do
         version_id = @event.versions.first.id
-        xhr :get, :edit, id: version_id
-        expect(response).to be_success
+        get :edit, params: { id: version_id }, xhr: true
+        expect(response).to be_successful
         expect(response).to render_template 'events/_form'
       end
     end

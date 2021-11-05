@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Event < ActiveRecord::Base
+  class Event < ApplicationRecord
     class SearchEngine
       class Sql < Struct.new(:query, :opts)
         # Return an Array of non-duplicate Event instances matching the search +query+..
@@ -61,16 +61,10 @@ module Calagator
         end
 
         def keywords
-          query_conditions = @scope.where('LOWER(events.title) LIKE ?', "%#{query.downcase}%")
-                                   .where('LOWER(events.description) LIKE ?', "%#{query.downcase}%")
-
-          query_conditions = query.split.inject(query_conditions) do |query_conditions, keyword|
-            like = "%#{keyword.downcase}%"
-            query_conditions
-              .where(['LOWER(events.url) LIKE ?', like])
-              .where(['LOWER(tags.name) = ?', keyword])
-          end
-          @scope = @scope.where(query_conditions.where_values.join(' OR '))
+          @scope = @scope.where('LOWER(events.title) LIKE ?', "%#{query.downcase}%")
+                         .or(@scope.where('LOWER(events.description) LIKE ?', "%#{query.downcase}%"))
+                         .or(@scope.where(['LOWER(events.url) LIKE ?', "%#{query.downcase}%"]))
+                         .or(@scope.where(['LOWER(tags.name) = ?', query]))
           self
         end
 
@@ -83,7 +77,7 @@ module Calagator
                   else
                     'events.start_time DESC'
           end
-          @scope = @scope.order(order)
+          @scope = @scope.order(Arel.sql(order))
           self
         end
 

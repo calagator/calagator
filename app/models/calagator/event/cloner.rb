@@ -4,13 +4,13 @@
 # the start_time and end_time adjusted so that their date is set to today and
 # their time-of-day is set to the original record's time-of-day.
 module Calagator
-  class Event < ActiveRecord::Base
+  class Event < ApplicationRecord
     class Cloner < Struct.new(:event)
       def self.clone(event)
         new(event).clone
       end
 
-      ATTRIBUTES = %i[title description venue_id url tag_list venue_details].freeze
+      ATTRIBUTES = %i[title description venue_id url venue_details].freeze
 
       def clone
         clone = Event.new
@@ -21,6 +21,9 @@ module Calagator
           clone.start_time = clone_time_for_today(event.start_time)
         end
         clone.end_time = clone_time_for_today(event.end_time) if event.end_time
+        if event.tag_list
+          clone.tag_list.add(event.tag_list)
+        end
         clone
       end
 

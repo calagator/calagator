@@ -41,6 +41,7 @@ public/stylesheets/record_select
 public/themes/
 solr/data/*
 solr/pids/*
+spec/test_app/solr/*
 tags
 tmp/*
 vagrant/cookbooks/vagrant/recipes/local.rb
@@ -48,7 +49,9 @@ vagrant/cookbooks/vagrant/recipes/local.rb
 .ruby-version
 .bundle/
 pkg/
-spec/dummy
 .sass-cache
 .DS_Store
 .idea/*
+spec/test_app/log/*
+spec/test_app/db/*.sqlite3
+spec/test_app/tmp/*

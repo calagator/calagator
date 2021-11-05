@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateSources < ActiveRecord::Migration
+class CreateSources < ActiveRecord::Migration[4.2]
   def self.up
     create_table :sources do |t|
       t.string :title

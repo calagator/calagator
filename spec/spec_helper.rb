@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-unless File.exist?('spec/dummy')
-  puts 'Missing dummy app in spec/dummy! Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one.'
+unless File.exist?('spec/test_app')
+  puts 'Missing testing app in spec/test_app !' # FIXME: 'Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one.'
   exit 1
 end
 

@@ -2,18 +2,18 @@
 
 shared_examples '#squash_many_duplicates' do |model|
   before do
-    @master = FactoryBot.create(model, title: 'master')
-    @dup1 = FactoryBot.create(model, title: 'dup1')
-    @dup2 = FactoryBot.create(model, title: 'dup2')
+    @primary = create(model, title: 'primary')
+    @dup1 = create(model, title: 'dup1')
+    @dup2 = create(model, title: 'dup2')
   end
 
   context 'happy path' do
     before do
-      post :squash_many_duplicates, master_id: @master.id, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id
+      post :squash_many_duplicates, params: { primary_id: @primary.id, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id }
     end
 
-    it 'squashes the duplicates into the master' do
-      expect(@master.duplicate_ids).to match_array([@dup1.id, @dup2.id])
+    it 'squashes the duplicates into the primary' do
+      expect(@primary.duplicate_ids).to match_array([@dup1.id, @dup2.id])
     end
 
     it 'redirects to duplicates page for more duplicate squashing' do
@@ -21,30 +21,30 @@ shared_examples '#squash_many_duplicates' do |model|
     end
 
     it 'sets the flash success message' do
-      expect(flash[:success]).to eq(%(Squashed duplicate #{model}s ["dup1", "dup2"] into master #{@master.id}.))
+      expect(flash[:success]).to eq(%(Squashed duplicate #{model}s ["dup1", "dup2"] into primary #{@primary.id}.))
     end
   end
 
-  context 'with no master' do
+  context 'with no primary' do
     it 'redirects with a failure message' do
-      post :squash_many_duplicates, duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id
-      expect(flash[:failure]).to eq("A master #{model} must be selected.")
+      post :squash_many_duplicates, params: { duplicate_id_1: @dup1.id, duplicate_id_2: @dup2.id }
+      expect(flash[:failure]).to eq("A primary #{model} must be selected.")
       expect(response).to redirect_to("/#{model}s/duplicates")
     end
   end
 
   context 'with no duplicates' do
     it 'redirects with a failure message' do
-      post :squash_many_duplicates, master_id: @master.id
+      post :squash_many_duplicates, params: { primary_id: @primary.id }
       expect(flash[:failure]).to eq("At least one duplicate #{model} must be selected.")
       expect(response).to redirect_to("/#{model}s/duplicates")
     end
   end
 
-  context 'with duplicates containing master' do
+  context 'with duplicates containing primary' do
     it 'redirects with a failure message' do
-      post :squash_many_duplicates, master_id: @master.id, duplicate_id_1: @master.id
-      expect(flash[:failure]).to eq("The master #{model} could not be squashed into itself.")
+      post :squash_many_duplicates, params: { primary_id: @primary.id, duplicate_id_1: @primary.id }
+      expect(flash[:failure]).to eq("The primary #{model} could not be squashed into itself.")
       expect(response).to redirect_to("/#{model}s/duplicates")
     end
   end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Venue < ActiveRecord::Base
+  class Venue < ApplicationRecord
     class SearchEngine
       class Sql < Struct.new(:query, :opts)
         def self.search(*args)
@@ -26,15 +26,9 @@ module Calagator
         end
 
         def keywords
-          query_conditions = @scope
-                             .where(['LOWER(title) LIKE ?', "%#{query.downcase}%"])
-                             .where(['LOWER(description) LIKE ?', "%#{query.downcase}%"])
-
-          query_conditions = query.split.inject(query_conditions) do |query_conditions, keyword|
-            query_conditions.where(['LOWER(tags.name) = ?', keyword])
-          end
-
-          @scope = @scope.where(query_conditions.where_values.join(' OR '))
+          @scope = @scope.where(['LOWER(title) LIKE ?', "%#{query.downcase}%"])
+                         .or(@scope.where(['LOWER(description) LIKE ?', "%#{query.downcase}%"]))
+                         .or(@scope.where(['LOWER(tags.name) = ?', query]))
           self
         end
 
@@ -44,7 +38,7 @@ module Calagator
         end
 
         def order
-          @scope = @scope.order('LOWER(venues.title) ASC')
+          @scope = @scope.order(Arel.sql('LOWER(venues.title) ASC'))
           self
         end
 

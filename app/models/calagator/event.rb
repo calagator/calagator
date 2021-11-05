@@ -1,27 +1,26 @@
 # frozen_string_literal: true
 
 # == Schema Information
-# Schema version: 20110604174521
 #
 # Table name: events
 #
-#  id              :integer         not null, primary key
-#  title           :string(255)
+#  id              :integer          not null, primary key
 #  description     :text
+#  end_time        :datetime
+#  locked          :boolean          default(FALSE)
+#  rrule           :string
 #  start_time      :datetime
-#  url             :string(255)
+#  title           :string
+#  url             :string
+#  venue_details   :text
 #  created_at      :datetime
 #  updated_at      :datetime
-#  venue_id        :integer
-#  source_id       :integer
 #  duplicate_of_id :integer
-#  end_time        :datetime
-#  version         :integer
-#  rrule           :string(255)
-#  venue_details   :text
+#  source_id       :integer
+#  venue_id        :integer
 #
 
-require 'calagator/blacklist_validator'
+require 'calagator/denylist_validator'
 require 'calagator/duplicate_checking'
 require 'calagator/decode_html_entities_hack'
 require 'calagator/strip_whitespace'
@@ -30,42 +29,45 @@ require 'paper_trail'
 require 'loofah-activerecord'
 require 'loofah/activerecord/xss_foliate'
 require 'active_model/sequential_validator'
+require 'active_model/serializers/xml'
 
 # == Event
 #
 # A model representing a calendar event.
 
 module Calagator
-  class Event < ActiveRecord::Base
+  class Event < ApplicationRecord
     self.table_name = 'events'
+    self.belongs_to_required_by_default = false
 
     has_paper_trail
-    acts_as_taggable
+    acts_as_taggable_on :tags
 
     xss_foliate strip: %i[title description venue_details]
 
     include DecodeHtmlEntitiesHack
+    include ActiveModel::Serializers::Xml
 
     # Associations
     belongs_to :venue, counter_cache: true
     belongs_to :source
 
     # Validations
-    validates :title, :description, :url, blacklist: true
+    validates :title, :description, :url, denylist: true
     validates :start_time, :end_time, sequential: true
     validates :title, :start_time, presence: true
     validates :url,
               format: { with: %r{\Ahttps?://(\w+:?\w*@)?(\S+)(:[0-9]+)?(/|/([\w#!:.?+=&%@!\-/]))?\Z},
                         allow_blank: true }
 
-    before_destroy { !locked } # prevent locked events from being destroyed
+    before_destroy :check_if_locked_before_destroy # prevent locked events from being destroyed
 
     # Duplicates
     include DuplicateChecking
-    duplicate_checking_ignores_attributes    :source_id, :version, :venue_id
+    duplicate_checking_ignores_attributes    :source_id, :version, :venue_id, :tag_list
     duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
     duplicate_finding_scope -> { future.order(:id) }
-    after_squashing_duplicates ->(master) { master.venue.try(:update_events_count!) }
+    after_squashing_duplicates ->(primary) { primary.venue.try(:update_events_count!) }
 
     # Named scopes
     scope :after_date, lambda { |date|
@@ -91,9 +93,9 @@ module Calagator
     scope :ordered_by_ui_field, lambda { |ui_field|
       scope = case ui_field
               when 'name'
-                order('lower(events.title)')
+                order(Arel.sql('lower(events.title)'))
               when 'venue'
-                includes(:venue).order('lower(venues.title)').references(:venues)
+                includes(:venue).order(Arel.sql('lower(venues.title)')).references(:venues)
               else
                 all
       end
@@ -141,6 +143,12 @@ module Calagator
 
     def unlock_editing!
       update_attribute(:locked, false)
+    end
+
+    def check_if_locked_before_destroy
+      return if !locked
+      errors.add :base, "Event must be unlocked before destroying"
+      throw(:abort)
     end
 
     #---[ Searching ]-------------------------------------------------------

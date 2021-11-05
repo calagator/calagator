@@ -8,7 +8,7 @@ inherit_from: .rubocop_todo.yml
 AllCops:
   TargetRubyVersion: 2.5
   Exclude:
-    - 'spec/dummy/**/*'
+    - 'spec/test_app/**/*'
 
 Rails:
   Enabled: true

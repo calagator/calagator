@@ -10,18 +10,18 @@ module Calagator
     render_views
 
     context 'concerning duplicates' do
-      let!(:venue_master) { FactoryBot.create(:venue) }
-      let!(:venue_duplicate) { FactoryBot.create(:venue, duplicate_of: venue_master) }
+      let!(:venue_primary) { create(:venue) }
+      let!(:venue_duplicate) { create(:venue, duplicate_of: venue_primary) }
 
-      it 'redirects duplicate venues to their master' do
-        get 'show', id: venue_duplicate.id
-        expect(response).to redirect_to(venue_url(venue_master.id))
+      it 'redirects duplicate venues to their primary' do
+        get 'show', params: { id: venue_duplicate.id }
+        expect(response).to redirect_to(venue_url(venue_primary.id))
       end
 
       it "doesn't redirect non-duplicates" do
-        get 'show', id: venue_master.id
+        get 'show', params: { id: venue_primary.id }
         expect(response).not_to be_redirect
-        expect(assigns(:venue).id).to eq venue_master.id
+        expect(assigns(:venue).id).to eq venue_primary.id
       end
     end
 
@@ -32,9 +32,9 @@ module Calagator
       end
 
       it 'displays an error message if given invalid arguments' do
-        get 'duplicates', type: 'omgwtfbbq'
+        get 'duplicates', params: { type: 'omgwtfbbq' }
 
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response.body).to have_selector('.failure', text: 'omgwtfbbq')
       end
 
@@ -45,34 +45,34 @@ module Calagator
 
     describe 'when creating venues' do
       it 'redirects to the newly created venue' do
-        post :create, venue: FactoryBot.attributes_for(:venue)
+        post :create, params: { venue: attributes_for(:venue) }
         expect(response).to redirect_to(assigns(:venue))
       end
 
       it 'stops evil robots' do
-        post :create, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+        post :create, params: { trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!" }
         expect(response).to render_template :new
       end
     end
 
     describe 'when updating venues' do
       before do
-        @venue = FactoryBot.create(:venue)
+        @venue = create(:venue)
       end
 
       it 'redirects to the updated venue' do
-        put :update, id: @venue.id, venue: FactoryBot.attributes_for(:venue)
+        put :update, params: { id: @venue.id, venue: attributes_for(:venue) }
         expect(response).to redirect_to(@venue)
       end
 
       it 'redirects to any associated event' do
-        @event = FactoryBot.create(:event, venue: @venue)
-        put :update, id: @venue.id, from_event: @event.id, venue: FactoryBot.attributes_for(:venue)
+        @event = create(:event, venue: @venue)
+        put :update, params: { id: @venue.id, from_event: @event.id, venue: attributes_for(:venue) }
         expect(response).to redirect_to(@event)
       end
 
       it 'stops evil robots' do
-        put :update, id: @venue.id, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+        put :update, params: { id: @venue.id, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!" }
         expect(response).to render_template :edit
       end
     end
@@ -87,17 +87,17 @@ module Calagator
 
     describe 'when rendering the edit venue page' do
       it 'passes the template the specified venue' do
-        @venue = FactoryBot.create(:venue)
-        get :edit, id: @venue.id
+        @venue = create(:venue)
+        get :edit, params: { id: @venue.id }
         expect(assigns[:venue]).to eq(@venue)
       end
     end
 
     describe 'when rendering the map page' do
       before do
-        @open_venue = FactoryBot.create(:venue)
-        @closed_venue = FactoryBot.create(:venue, closed: true)
-        @duplicate_venue = FactoryBot.create(:venue, duplicate_of: @open_venue)
+        @open_venue = create(:venue)
+        @closed_venue = create(:venue, closed: true)
+        @duplicate_venue = create(:venue, duplicate_of: @open_venue)
       end
 
       it 'only shows open non-duplicate venues' do
@@ -108,7 +108,7 @@ module Calagator
 
     describe 'when rendering the venues index' do
       before do
-        @venues = [FactoryBot.create(:venue), FactoryBot.create(:venue)]
+        @venues = [create(:venue), create(:venue)]
       end
 
       it 'assigns the search object to @search' do
@@ -133,19 +133,19 @@ module Calagator
 
     describe 'when showing venues' do
       it "redirects to all venues if venue doesn't exist" do
-        get :show, id: 'garbage'
+        get :show, params: { id: 'garbage' }
         expect(response).to redirect_to('/venues')
       end
 
       describe 'in JSON format' do
         describe 'with events' do
           before do
-            @venue = FactoryBot.build(:venue, id: 123)
+            @venue = build(:venue, id: 123)
             allow(Venue).to receive(:find).and_return(@venue)
           end
 
           it 'produces JSON' do
-            get :show, id: @venue.to_param, format: 'json'
+            get :show, params: { id: @venue.to_param }, format: 'json'
 
             struct = ActiveSupport::JSON.decode(response.body)
             expect(struct).to be_a_kind_of Hash
@@ -159,14 +159,14 @@ module Calagator
       describe 'in HTML format' do
         describe 'venue with future and past events' do
           before do
-            @venue = FactoryBot.create(:venue)
-            @future_event = FactoryBot.create(:event, venue: @venue)
-            @past_event = FactoryBot.create(:event, venue: @venue,
+            @venue = create(:venue)
+            @future_event = create(:event, venue: @venue)
+            @past_event = create(:event, venue: @venue,
                                                     start_time: Time.now.in_time_zone - 1.week + 1.hour,
                                                     end_time: Time.now.in_time_zone - 1.week + 2.hours)
 
-            get :show, id: @venue.to_param, format: 'html'
-            expect(response).to be_success
+            get :show, params: { id: @venue.to_param }, format: 'html'
+            expect(response).to be_successful
           end
 
           it 'has a venue' do
@@ -185,11 +185,11 @@ module Calagator
 
       describe 'as an iCalendar' do
         before do
-          @venue = FactoryBot.create(:venue)
-          @future_event = FactoryBot.create(:event, venue: @venue, start_time: today + 1.hour)
-          @past_event = FactoryBot.create(:event, venue: @venue, start_time: today - 1.hour)
+          @venue = create(:venue)
+          @future_event = create(:event, venue: @venue, start_time: today + 1.hour)
+          @past_event = create(:event, venue: @venue, start_time: today - 1.hour)
 
-          get :show, id: @venue.to_param, format: 'ics'
+          get :show, params: { id: @venue.to_param }, format: 'ics'
         end
 
         it 'has a calendar' do
@@ -213,7 +213,7 @@ module Calagator
     describe 'DELETE' do
       describe 'when deleting a venue without events' do
         before do
-          @venue = FactoryBot.create(:venue)
+          @venue = create(:venue)
         end
 
         shared_examples_for 'destroying a Venue record without events' do
@@ -224,7 +224,7 @@ module Calagator
 
         describe 'and rendering HTML' do
           before do
-            delete :destroy, id: @venue.id
+            delete :destroy, params: { id: @venue.id }
           end
 
           it_behaves_like 'destroying a Venue record without events'
@@ -242,20 +242,20 @@ module Calagator
           render_views
 
           before do
-            delete :destroy, id: @venue.id, format: 'xml'
+            delete :destroy, params: { id: @venue.id }, format: 'xml'
           end
 
           it_behaves_like 'destroying a Venue record without events'
 
           it 'returns a success status' do
-            expect(response).to be_success
+            expect(response).to be_successful
           end
         end
       end
 
       describe 'when deleting a venue with events' do
         before do
-          @event = FactoryBot.create(:event, :with_venue)
+          @event = create(:event, :with_venue)
           @venue = @event.venue
         end
 
@@ -267,7 +267,7 @@ module Calagator
 
         describe 'and rendering HTML' do
           before do
-            delete :destroy, id: @venue.id
+            delete :destroy, params: { id: @venue.id }
           end
 
           it_behaves_like 'destroying a Venue record with events'
@@ -283,7 +283,7 @@ module Calagator
 
         describe 'and rendering XML' do
           before do
-            delete :destroy, id: @venue.id, format: 'xml'
+            delete :destroy, params: { id: @venue.id }, format: 'xml'
           end
 
           it_behaves_like 'destroying a Venue record with events'

@@ -45,12 +45,13 @@ module Calagator
         title: data['name'],
         description: data['description'],
         url: url,
-        tag_list: "facebook:event=#{data['id']}",
         venue: to_venue(data),
 
         # Facebook is sending floating times, treat them as local
         start_time: data['start_time'] && Time.zone.parse(data['start_time']),
-        end_time: data['end_time'] && Time.zone.parse(data['end_time'])
+        end_time: data['end_time'] && Time.zone.parse(data['end_time']),
+
+        tag_list: "facebook:event=#{data['id']}"
       )
 
       [event_or_duplicate(event)]

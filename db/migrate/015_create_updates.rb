@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CreateUpdates < ActiveRecord::Migration
+class CreateUpdates < ActiveRecord::Migration[4.2]
   def self.up
     create_table :updates do |t|
       t.integer 'source_id'

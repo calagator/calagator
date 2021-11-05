@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
-appraise 'rails-4-2' do
-  gem 'rails', '4.2.11.1'
+appraise 'rails-5-2' do
+  gem 'rails', '5.2.6'
   gem 'turbolinks'
 
-  gem 'mysql2', '~> 0.5.2'
+  gem 'mysql2', '~> 0.5.3'
   gem 'pg', '~> 0.18.1'
+  gem 'rails-controller-testing', group: 'test'
 end

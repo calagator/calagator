@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Venue < ActiveRecord::Base
+  class Venue < ApplicationRecord
     class Geocoder < Struct.new(:venue)
       cattr_accessor(:perform_geocoding) { true }
 

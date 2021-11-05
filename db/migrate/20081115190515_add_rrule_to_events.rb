@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AddRruleToEvents < ActiveRecord::Migration
+class AddRruleToEvents < ActiveRecord::Migration[4.2]
   # NOTE: Some of this migration's contents have been commented-out because
   # they used tables created for the old +acts_as_versioned+ plugin that has
   # since replaced with the +papertrail+ plugin.

@@ -14,11 +14,11 @@ module Calagator
 
       # POST /#{model_class}/squash_multiple_duplicates
       def squash_many_duplicates
-        master = model_class.find_by(id: params[:master_id])
+        primary = model_class.find_by(id: params[:primary_id])
         duplicate_ids = params.keys.grep(/^duplicate_id_\d+$/) { |t| params[t].to_i }
         duplicates = model_class.where(id: duplicate_ids)
 
-        squasher = model_class.squash(master, duplicates)
+        squasher = model_class.squash(primary, duplicates)
         if squasher.success
           flash[:success] = squasher.success
         else

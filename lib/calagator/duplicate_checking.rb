@@ -7,7 +7,7 @@
 # Example:
 #
 #   # Define your class
-#   class Thing < ActiveRecord::Base
+#   class Thing < ApplicationRecord
 #     # Load the mixin into your class
 #     include DuplicateChecking
 #
@@ -52,19 +52,18 @@ module Calagator
       duplicate_of.present?
     end
     alias marked_as_duplicate? duplicate?
-    alias slave? duplicate?
 
-    def master?
-      !slave?
+    def primary?
+      !duplicate?
     end
 
-    # Return the ultimate master for a record, which may be the record itself.
-    def progenitor
+    # Return the ultimate primary for a record, which may be the record itself.
+    def originator
       parent = self
       seen = Set.new
 
       loop do
-        return parent if parent.master?
+        return parent if parent.primary?
         if seen.include?(parent)
           raise DuplicateCheckingError, "Loop detected in duplicates chain at #{parent.class}##{parent.id}"
         end
@@ -91,7 +90,7 @@ module Calagator
           cattr_accessor(:_duplicate_checking_ignores_attributes) { Set.new }
           cattr_accessor(:_duplicate_squashing_ignores_associations) { Set.new }
           cattr_accessor(:_duplicate_finding_scope) { -> { all } }
-          cattr_accessor(:_after_squashing_duplicates) { ->(master) {} }
+          cattr_accessor(:_after_squashing_duplicates) { ->(primary) {} }
 
           belongs_to :duplicate_of, class_name: name, foreign_key: DUPLICATE_MARK_COLUMN
           has_many   :duplicates,   class_name: name, foreign_key: DUPLICATE_MARK_COLUMN
@@ -138,10 +137,10 @@ module Calagator
       #
       # Options:
       # :duplicates => ActiveRecord instance(s) to mark as duplicates
-      # :master => ActiveRecord instance to use as master
-      def squash(master, duplicates)
-        DuplicateSquasher.new(master, duplicates, name.downcase).squash.tap do |squasher|
-          after_squashing_duplicates.call(master) unless squasher.failure
+      # :primary => ActiveRecord instance to use as the primary record
+      def squash(primary, duplicates)
+        DuplicateSquasher.new(primary, duplicates, name.downcase).squash.tap do |squasher|
+          after_squashing_duplicates.call(primary) unless squasher.failure
         end
       end
     end

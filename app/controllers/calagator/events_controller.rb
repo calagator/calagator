@@ -25,7 +25,7 @@ module Calagator
     # GET /events/1.xml
     def show
       @event = Event.find(params[:id])
-      return redirect_to(@event.progenitor) if @event.duplicate?
+      return redirect_to(@event.originator) if @event.duplicate?
 
       render_event @event
     rescue ActiveRecord::RecordNotFound => e

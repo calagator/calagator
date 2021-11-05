@@ -1,10 +1,11 @@
 # frozen_string_literal: true
+require 'rack/contrib/jsonp'
 
 module Calagator
   class Engine < ::Rails::Engine
     isolate_namespace Calagator
 
-    middleware.use 'Rack::JSONP'
+    config.middleware.use Rack::JSONP
 
     config.assets.precompile += %w[
       *.png

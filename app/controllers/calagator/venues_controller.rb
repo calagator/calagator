@@ -40,7 +40,7 @@ module Calagator
                 .non_duplicates
                 .in_business
                 .where(['LOWER(title) LIKE ?', "%#{params[:term]}%".downcase])
-                .order('LOWER(title)')
+                .order(Arel.sql('LOWER(title)'))
 
       render json: @venues
     end
@@ -57,7 +57,7 @@ module Calagator
 
     class Show < SimpleDelegator
       def call
-        show_all_if_not_found || redirect_to_progenitor || render_venue
+        show_all_if_not_found || redirect_to_originator || render_venue
       end
 
       private
@@ -68,8 +68,8 @@ module Calagator
         redirect_to venues_path, flash: { failure: e.to_s }
       end
 
-      def redirect_to_progenitor
-        redirect_to venue.progenitor if venue.duplicate?
+      def redirect_to_originator
+        redirect_to venue.originator if venue.duplicate?
       end
 
       def render_venue
@@ -104,13 +104,13 @@ module Calagator
     alias update create
 
     class CreateOrUpdate < SimpleDelegator
-      def call(verified)
-        if verified
+      def call(recaptcha_result)
+        if recaptcha_result
           block_spammers || (save && render_success) || render_failure
         else
           render_failure
         end
-        end
+      end
 
       private
 

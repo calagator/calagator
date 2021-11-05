@@ -9,24 +9,24 @@ on:
        - ready_for_review
   push:
     branches:
-      - 'master'
+      - 'main'
   workflow_dispatch:
 
 jobs:
-  rubocop:
-    name: "Run Rubocop"
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@master
-      - uses: actions/setup-ruby@v1
-      - name: Install Rubocop
-        run: gem install rubocop rubocop-performance rubocop-rails rubocop-rspec
-      - name: Rubocop
-        run: rubocop --fail-level warning
-      # - name: Rubocop Linter
-      #   uses: andrewmcodes/rubocop-linter-action@v3.1.0
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  # rubocop:
+  #   name: "Run Rubocop"
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@main
+  #     - uses: actions/setup-ruby@v1
+  #     - name: Install Rubocop
+  #       run: gem install rubocop rubocop-performance rubocop-rails rubocop-rspec
+  #     - name: Rubocop
+  #       run: rubocop --fail-level warning
+  #     # - name: Rubocop Linter
+  #     #   uses: andrewmcodes/rubocop-linter-action@v3.1.0
+  #     #   env:
+  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test:
     runs-on: ubuntu-latest
 
@@ -44,16 +44,16 @@ jobs:
           - postgresql
           - sqlite3
         ruby:
-          - 2.5.8
+          - 2.5.9
           - 2.6.6
           - 2.7.2
         rails:
-          - rails_4_2
-        exclude:
-          - rails: rails_4_2
-            ruby: 2.6.6
-          - rails: rails_4_2
-            ruby: 2.7.2
+          - rails_5_2
+        # exclude:
+        #   - rails: rails_4_2
+        #     ruby: 2.6.6
+        #   - rails: rails_4_2
+        #     ruby: 2.7.2
 
     env:
       BUNDLER_VERSION: 1.17.3
@@ -82,16 +82,16 @@ jobs:
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
-      - name: Generate host app for testing
-        run: bundle _1.17.3_ exec bin/calagator new spec/dummy --dummy --database=${{ matrix.db }} --postgres-username=postgres
+      # - name: Generate host app for testing
+      #   run: bundle _1.17.3_ exec bin/calagator new spec/dummy --dummy --database=${{ matrix.db }} --postgres-username=postgres
       - name: Set Postgres Username + Host
         if: matrix.db == 'postgresql'
         run: |
-          sed -e $'s/adapter: postgresql/adapter: postgresql\\\n  username: postgres\\\n  host: localhost/' -i -- spec/dummy/config/database.yml
+          sed -e $'s/adapter: postgresql/adapter: postgresql\\\n  username: postgres\\\n  host: localhost/' -i -- spec/test_app/config/database.yml
       - name: Setup MySQL
         if: matrix.db == 'mysql'
         run: |
-          sed -e 's/password:.*/password: root/' -i -- spec/dummy/config/database.yml
+          sed -e 's/password:.*/password: root/' -i -- spec/test_app/config/database.yml
           sudo systemctl start mysql.service
       - name: Prepare Database
         run: bundle exec rake app:db:create app:db:migrate app:db:seed

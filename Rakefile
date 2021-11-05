@@ -1,14 +1,9 @@
 #!/usr/bin/env rake
 # frozen_string_literal: true
 
-unless File.exist?('spec/dummy')
-  puts 'Missing dummy app in spec/dummy! Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one.'
-  exit 1
-end
-
 require 'bundler/setup'
 
-APP_RAKEFILE = File.expand_path('spec/dummy/Rakefile', __dir__)
+APP_RAKEFILE = File.expand_path('spec/test_app/Rakefile', __dir__)
 load 'rails/tasks/engine.rake'
 
 Bundler::GemHelper.install_tasks

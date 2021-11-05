@@ -9,7 +9,7 @@ module Calagator
 
     # Render something to help benchmark stack without the views
     def hello
-      render text: 'hello'
+      render plain: 'hello'
     end
 
     def index

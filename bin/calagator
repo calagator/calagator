@@ -11,8 +11,8 @@ USAGE = <<~END
   calagator new: generates a new Rails app and install Calagator into it
 
     Options:
-      --dummy   # Generates an app suitable for use in spec/dummy for Calagator
-                # development and testing
+      --test_app   # Generates an app suitable for use in spec/test_app for Calagator
+                   # development and testing
 
       In the case of `calagator new`, all other options will be passed along
       to `rails new`; see `rails new --help` for supported options.

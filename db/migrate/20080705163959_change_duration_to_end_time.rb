@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ChangeDurationToEndTime < ActiveRecord::Migration
+class ChangeDurationToEndTime < ActiveRecord::Migration[4.2]
   def self.up
     add_column :events, :end_time, :datetime
     remove_column :events, :duration

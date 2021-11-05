@@ -95,21 +95,21 @@ module Calagator
       let(:end_time) { '05:00 pm' }
 
       let!(:before) do
-        FactoryBot.create(:event,
+        create(:event,
                           title: 'before',
                           start_time: Time.zone.parse('10:00'),
                           end_time: Time.zone.parse('14:00'))
       end
 
       let!(:after) do
-        FactoryBot.create(:event,
+        create(:event,
                           title: 'after',
                           start_time: Time.zone.parse('14:00'),
                           end_time: Time.zone.parse('18:00'))
       end
 
       let!(:within) do
-        FactoryBot.create(:event,
+        create(:event,
                           title: 'within',
                           start_time: Time.zone.parse('13:00'),
                           end_time: Time.zone.parse('14:00'))
@@ -148,27 +148,27 @@ module Calagator
 
     describe 'when ordering' do
       it 'defaults to order by start time' do
-        event1 = FactoryBot.create(:event, start_time: Time.zone.parse('3003-01-01'))
-        event2 = FactoryBot.create(:event, start_time: Time.zone.parse('3002-01-01'))
-        event3 = FactoryBot.create(:event, start_time: Time.zone.parse('3001-01-01'))
+        event1 = create(:event, start_time: Time.zone.parse('3003-01-01'))
+        event2 = create(:event, start_time: Time.zone.parse('3002-01-01'))
+        event3 = create(:event, start_time: Time.zone.parse('3001-01-01'))
 
         browse = described_class.new
         expect(browse.events).to eq([event3, event2, event1])
       end
 
       it 'can order by event name' do
-        event1 = FactoryBot.create(:event, title: 'CU there')
-        event2 = FactoryBot.create(:event, title: 'Be there')
-        event3 = FactoryBot.create(:event, title: 'An event')
+        event1 = create(:event, title: 'CU there')
+        event2 = create(:event, title: 'Be there')
+        event3 = create(:event, title: 'An event')
 
         browse = described_class.new(order: 'name')
         expect(browse.events).to eq([event3, event2, event1])
       end
 
       it 'can order by venue name' do
-        event1 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'C venue'))
-        event2 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'B venue'))
-        event3 = FactoryBot.create(:event, venue: FactoryBot.create(:venue, title: 'A venue'))
+        event1 = create(:event, venue: create(:venue, title: 'C venue'))
+        event2 = create(:event, venue: create(:venue, title: 'B venue'))
+        event3 = create(:event, venue: create(:venue, title: 'A venue'))
 
         browse = described_class.new(order: 'venue')
         expect(browse.events).to eq([event3, event2, event1])

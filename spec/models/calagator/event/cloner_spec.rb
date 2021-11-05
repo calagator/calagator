@@ -10,12 +10,12 @@ module Calagator
       end
 
       let :original do
-        FactoryBot.build(:event,
-                         id: 42,
-                         start_time: Time.zone.parse('2008-01-19 10:00:00'),
-                         end_time: Time.zone.parse('2008-01-19 17:00:00'),
-                         tag_list: 'foo, bar, baz',
-                         venue_details: 'Details')
+        build(:event,
+              id: 42,
+              start_time: Time.zone.parse('2008-01-19 10:00:00'),
+              end_time: Time.zone.parse('2008-01-19 17:00:00'),
+              venue_details: 'Details',
+              tag_list: 'foo, bar, baz')
       end
 
       it { is_expected.to be_new_record }

@@ -16,10 +16,12 @@ module Calagator
         description: data['description'],
         url: data['event_url'],
         venue: to_venue(data['venue']),
-        tag_list: "meetup:event=#{data['event_id']}, meetup:group=#{data['group']['urlname']}#{group_topics(data)}",
         # Meetup sends us milliseconds since the epoch in UTC
         start_time: start_time,
-        end_time: data['duration'] ? start_time + data['duration'] / 1000 : nil
+        end_time: data['duration'] ? start_time + data['duration'] / 1000 : nil,
+
+        tag_list: ["meetup:event=#{data['event_id']}",
+        "meetup:group=#{data['group']['urlname']}", "#{group_topics(data)}"]
       )
 
       [event_or_duplicate(event)]
