@@ -55,10 +55,10 @@ module Calagator
     end
 
     def create_or_update
+      recaptcha_result = recaptcha_verified?(@event, 'save_event')
       saver = Event::Saver.new(@event, params.permit!)
-      recaptcha_result = recaptcha_verified?('save_event')
       respond_to do |format|
-        if recaptcha_result && saver.save
+        if saver.save
           format.html do
             flash[:success] = 'Event was successfully saved.'
             if saver.has_new_venue?

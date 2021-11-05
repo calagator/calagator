@@ -99,18 +99,19 @@ module Calagator
 
     # POST /venues, # PUT /venues/1
     def create
-      CreateOrUpdate.new(self).call(recaptcha_verified?('save_venue'))
+      CreateOrUpdate.new(self).call(recaptcha_verified?(venue, 'save_venue'))
     end
     alias update create
 
     class CreateOrUpdate < SimpleDelegator
-      def call(verified)
-        if verified
-          block_spammers || (save && render_success) || render_failure(verified)
+      def call(recaptcha_result)
+        if recaptcha_result
+          block_spammers || (save && render_success) || render_failure
         else
-          render_failure(verified)
+          @redo_recaptcha = true
+          render_failure
         end
-        end
+      end
 
       private
 
@@ -118,7 +119,7 @@ module Calagator
         return if params[:trap_field].blank?
 
         flash[:failure] = "<h3>Evil Robot</h3> We didn't save this venue because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
-        render_failure(false)
+        render_failure
       end
 
       def save
@@ -132,9 +133,8 @@ module Calagator
         end
       end
 
-      def render_failure(verified)
+      def render_failure
         flash[:failure] = '<h3>Please fix any errors and try again</h3>'
-        @redo_recaptcha = true unless verified
         respond_to do |format|
           format.html { render action: venue.new_record? ? 'new' : 'edit' }
           format.xml  { render xml: venue.errors, status: :unprocessable_entity }
