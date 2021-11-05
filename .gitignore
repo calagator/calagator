@@ -41,6 +41,7 @@ public/stylesheets/record_select
 public/themes/
 solr/data/*
 solr/pids/*
+spec/test_app/solr/*
 tags
 tmp/*
 vagrant/cookbooks/vagrant/recipes/local.rb
