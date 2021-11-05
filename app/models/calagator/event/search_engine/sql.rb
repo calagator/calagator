@@ -88,12 +88,12 @@ module Calagator
         end
 
         def current
-          @scope = @scope.where(['events.start_time >= ?', Date.yesterday.to_time])
+          @scope = @scope.where('events.start_time >= ?', Date.yesterday.to_time)
           self
         end
 
         def past
-          @scope = @scope.where(['events.start_time < ?', Date.yesterday.to_time])
+          @scope = @scope.where('events.start_time < ?', Date.yesterday.to_time)
           self
         end
       end
