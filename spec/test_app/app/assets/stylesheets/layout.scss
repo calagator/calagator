@@ -1,5 +1,3 @@
-@import "variables";
-
 /* @group Global Layout
 ----------------------------------------*/
 
@@ -24,8 +22,6 @@ body {
   font-size: 70%;
   clear: both;
 }
-
-@import url(https://fonts.googleapis.com/css?family=Sanchez);
 
 #global_header #project_title {
   font-family: Sanchez;
