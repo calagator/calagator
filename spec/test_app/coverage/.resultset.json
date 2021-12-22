@@ -1,7 +1,7 @@
 {
   "RSpec": {
     "coverage": {
-      "/Users/aeschright/code/calagator/spec/dummy/app/models/application_record.rb": {
+      "/Users/aeschright/code/calagator/spec/test_app/app/models/application_record.rb": {
         "lines": [
           1,
           1,
@@ -10,7 +10,7 @@
         "branches": {
         }
       },
-      "/Users/aeschright/code/calagator/spec/dummy/app/mailers/application_mailer.rb": {
+      "/Users/aeschright/code/calagator/spec/test_app/app/mailers/application_mailer.rb": {
         "lines": [
           0,
           0,
@@ -20,7 +20,7 @@
         "branches": {
         }
       },
-      "/Users/aeschright/code/calagator/spec/dummy/app/jobs/application_job.rb": {
+      "/Users/aeschright/code/calagator/spec/test_app/app/jobs/application_job.rb": {
         "lines": [
           0,
           null,
@@ -33,7 +33,7 @@
         "branches": {
         }
       },
-      "/Users/aeschright/code/calagator/spec/dummy/app/controllers/application_controller.rb": {
+      "/Users/aeschright/code/calagator/spec/test_app/app/controllers/application_controller.rb": {
         "lines": [
           0,
           0
@@ -41,7 +41,7 @@
         "branches": {
         }
       },
-      "/Users/aeschright/code/calagator/spec/dummy/app/helpers/application_helper.rb": {
+      "/Users/aeschright/code/calagator/spec/test_app/app/helpers/application_helper.rb": {
         "lines": [
           0,
           0
@@ -49,7 +49,7 @@
         "branches": {
         }
       },
-      "/Users/aeschright/code/calagator/spec/dummy/app/channels/application_cable/connection.rb": {
+      "/Users/aeschright/code/calagator/spec/test_app/app/channels/application_cable/connection.rb": {
         "lines": [
           0,
           0,
@@ -59,7 +59,7 @@
         "branches": {
         }
       },
-      "/Users/aeschright/code/calagator/spec/dummy/app/channels/application_cable/channel.rb": {
+      "/Users/aeschright/code/calagator/spec/test_app/app/channels/application_cable/channel.rb": {
         "lines": [
           0,
           0,
@@ -70,6 +70,6 @@
         }
       }
     },
-    "timestamp": 1635363423
+    "timestamp": 1639609088
   }
 }
