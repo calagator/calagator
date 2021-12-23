@@ -10,10 +10,6 @@ module Calagator
       end
     end
 
-    before do
-      Calagator.meetup_api_key = 'foo'
-    end
-
     describe 'when reading content' do
       it 'reads from a normal URL' do
         stub_request(:get, 'http://a.real/~url').to_return(body: '42')
@@ -42,7 +38,6 @@ module Calagator
       it 'has site-specific parsers first, then generics' do
         expect(described_class.parsers.to_a).to eq [
           Source::Parser::Facebook,
-          Source::Parser::Meetup,
           Source::Parser::Hcal,
           Source::Parser::Ical
         ]
@@ -197,7 +192,8 @@ module Calagator
         expect(event.venue.title).to eq 'Prime'
       end
 
-      it 'uses an existing venue when importing an event with a matching machine tag that describes a venue' do
+      # We're no longer able to use the Meetup API, and none of the remaining importers have data with venue IDs
+      xit 'uses an existing venue when importing an event with a matching machine tag that describes a venue' do
         venue = Venue.create!(title: 'Custom Urban Airship', tag_list: 'meetup:venue=774133')
 
         meetup_url = 'http://www.meetup.com/pdxpython/events/ldhnqyplbnb/'
@@ -212,9 +208,8 @@ module Calagator
       end
 
       describe 'choosing parsers by matching URLs' do
-        { 'Calagator::Source::Parser::Facebook' => 'http://facebook.com/event.php?eid=247619485255249',
-          'Calagator::Source::Parser::Meetup' => 'http://www.meetup.com/pdxweb/events/23287271/' }.each do |parser_name, url|
-          it "onlies invoke the #{parser_name} parser when given #{url}" do
+        { 'Calagator::Source::Parser::Facebook' => 'http://facebook.com/event.php?eid=247619485255249' }.each do |parser_name, url|
+          it "only invokes the #{parser_name} parser when given #{url}" do
             parser = parser_name.constantize
             expect_any_instance_of(parser).to receive(:to_events).and_return([Event.new])
             described_class.parsers.reject { |p| p == parser }.each do |other_parser|

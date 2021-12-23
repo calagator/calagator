@@ -18,10 +18,6 @@ Calagator.setup do |config|
   # config.admin_username = 'admin'
   # config.admin_password = ENV['CALAGATOR_ADMIN_PASSWORD']
 
-  # API key for Meetup.com, get your own from: http://www.meetup.com/meetup_api/key/
-  # This is sensitive information and should not be stored in version control.
-  config.meetup_api_key = ENV['MEETUP_API_KEY']
-
   # Access token for Facebook:
   # 1. Create a new app for your site at https://developers.facebook.com/apps
   # 2. Visit https://developers.facebook.com/tools/access_token/ to find the "App Token"
