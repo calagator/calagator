@@ -31,7 +31,7 @@
 
     <%= f.input :tag_list, :input_html => { :value => venue.tag_list.to_s }, :required => false,
                 :label => 'Tags',
-                :hint => "(Tags are comma-separated keywords that make it easier to find your event and boost its position in searches. You can also use a tag like <code>meetup:event=ABCD</code> to associate this with a particular <a href='https:// meetup.com/'>Meetup</a> event, or a tag like <code>epdx:group=1234</code> to associate the event with a particular <a href='http://epdx.org/'>ePDX</a> group)".html_safe %>
+                :hint => "(Tags are comma-separated keywords that make it easier to find your event and boost its position in searches.)".html_safe %>
 
     <% unless venue.new_record? %>
       <%= f.input :force_geocoding,

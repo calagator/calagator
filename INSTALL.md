@@ -47,11 +47,9 @@ It's important to make sure your time zone is properly configured in `config/app
 
 ### API Keys
 
-Calagator uses a number of API keys to communicate with external services.
+Calagator uses API keys to communicate with certain external services.
 
 * Google Maps: To use Google's geocoder, and to use Google to display maps, you must get an API key.  See `config/initializers/01_calagator.rb` and `config/initializers/02_geokit.rb` for details.
-
-* Meetup.com: To import events from Meetup.com, you need an API key. See `config/initializers/01_calagator.rb` for details.
 
 ### Search engine
 
