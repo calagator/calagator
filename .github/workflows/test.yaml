@@ -75,8 +75,6 @@ jobs:
             ${{ runner.os }}-${{ matrix.ruby }}-gems-
       - name: Install System Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install libpq-dev postgresql-client libmysqlclient-dev mysql-client sqlite3 libsqlite3-dev
           gem install bundler -v $BUNDLER_VERSION
       - name: bundle install
         run: |
