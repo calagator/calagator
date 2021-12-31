@@ -45,8 +45,8 @@ jobs:
           - sqlite3
         ruby:
           - 2.5.9
-          - 2.6.6
-          - 2.7.2
+          - 2.6.9
+          - 2.7.5
         rails:
           - rails_5_2
         # exclude:
