@@ -30,7 +30,7 @@ module Calagator
     end
     private_class_method :matched_parsers
 
-    cattr_accessor(:parsers) { SortedSet.new }
+    cattr_accessor(:parsers) { Set.new }
 
     def self.inherited(subclass)
       parsers << subclass
