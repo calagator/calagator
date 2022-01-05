@@ -35,7 +35,6 @@ module Calagator
                  :administrator_email,
                  :admin_username,
                  :admin_password,
-                 :facebook_access_token,
                  :search_engine,
                  :icalendar_sequence_offset,
                  :mapping_marker_color,

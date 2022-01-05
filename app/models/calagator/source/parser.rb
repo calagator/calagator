@@ -115,6 +115,5 @@ module Calagator
 end
 
 require 'calagator/source/parser/not_found'
-require 'calagator/source/parser/facebook'
 require 'calagator/source/parser/ical'
 require 'calagator/source/parser/hcal'

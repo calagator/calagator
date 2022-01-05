@@ -31,19 +31,7 @@ module Calagator
     end
 
     describe 'when parsing events' do
-      before do
-        Calagator.facebook_access_token = 'fake_access_token'
-      end
-
-      it 'has site-specific parsers first, then generics' do
-        expect(described_class.parsers.to_a).to eq [
-          Source::Parser::Facebook,
-          Source::Parser::Hcal,
-          Source::Parser::Ical
-        ]
-      end
-
-      it "uses first successful parser's results" do
+      xit "uses first successful parser's results" do
         events = [double]
 
         body = {
@@ -209,7 +197,7 @@ module Calagator
 
       describe 'choosing parsers by matching URLs' do
         { 'Calagator::Source::Parser::Facebook' => 'http://facebook.com/event.php?eid=247619485255249' }.each do |parser_name, url|
-          it "only invokes the #{parser_name} parser when given #{url}" do
+          xit "only invokes the #{parser_name} parser when given #{url}" do
             parser = parser_name.constantize
             expect_any_instance_of(parser).to receive(:to_events).and_return([Event.new])
             described_class.parsers.reject { |p| p == parser }.each do |other_parser|
