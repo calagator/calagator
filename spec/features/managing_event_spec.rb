@@ -42,7 +42,7 @@ describe 'Event Editing', js: true do
     expect(page).to have_content "Tags\nbeginners, ruby"
 
     click_on 'Calagator'
-    within '#tomorrow' do
+    within '#whats_happening' do
       expect(page).to have_content 'Ruby ABCs'
     end
   end
