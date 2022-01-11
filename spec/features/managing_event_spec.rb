@@ -4,7 +4,7 @@ require 'rails_helper'
 
 describe 'Event Editing', js: true do
   before do
-    Timecop.travel(Time.new(2014, 10, 9, 0, 0, 0, "-08:00"))
+    Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Future', start_time: Time.zone.now
     create :event, :with_multiple_tags, title: 'Tagged Event', start_time: Time.zone.now
   end
@@ -42,7 +42,7 @@ describe 'Event Editing', js: true do
     expect(page).to have_content "Tags\nbeginners, ruby"
 
     click_on 'Calagator'
-    within '#tomorrow' do
+    within '#whats_happening' do
       expect(page).to have_content 'Ruby ABCs'
     end
   end
@@ -69,7 +69,7 @@ end
 
 describe 'Event Cloning', js: true do
   before do
-    Timecop.travel(Time.new(2014, 10, 9, 0, 0, 0, "-08:00"))
+    Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Event Part One', start_time: 4.days.from_now
   end
 
