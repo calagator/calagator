@@ -14,10 +14,14 @@ List of Calagator releases and changes, with the latest at the top:
 
   * [!] Upgrade to Rails 5 with minimum Ruby version 2.5.
   * [!] Remove inappropriate terminology such as master, slave, and blacklist. Existing `blacklist.txt` files will need to be renamed to `denylist.txt` when upgrading a Rails app that uses earlier versions of this gem.
+  * [!] Meetup and Facebook integration is no longer supported due to changes to these services' APIs. Their API keys should be removed from your configuration.
   * Upgrade development dependencies.
   * Move CI testing to GitHub Actions.
   * Upgrade additional dependencies for security updates.
   * Improve accessibility by making required fields clearer to screen reader users.
+  * Remove Meetup parser (#681)
+  * Remove use of SortedSet in Source::Parser (#682)
+  * Remove Facebook parser (#683)
 
 ### v1.1.0
 
