@@ -4,7 +4,7 @@
 # the start_time and end_time adjusted so that their date is set to today and
 # their time-of-day is set to the original record's time-of-day.
 module Calagator
-  class Event < ApplicationRecord
+  class Event < Calagator::ApplicationRecord
     class Cloner < Struct.new(:event)
       def self.clone(event)
         new(event).clone

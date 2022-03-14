@@ -36,7 +36,7 @@ require 'active_model/serializers/xml'
 # A model representing a calendar event.
 
 module Calagator
-  class Event < ApplicationRecord
+  class Event < Calagator::ApplicationRecord
     self.table_name = 'events'
     self.belongs_to_required_by_default = false
 

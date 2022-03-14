@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Event < ApplicationRecord
+  class Event < Calagator::ApplicationRecord
     class Overview
       def today
         Event.non_duplicates.within_dates(today_date, tomorrow_date)

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Venue < ApplicationRecord
+  class Venue < Calagator::ApplicationRecord
     class SearchEngine
       cattr_accessor(:kind) { :sql }
 

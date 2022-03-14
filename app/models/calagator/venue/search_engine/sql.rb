@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Venue < ApplicationRecord
+  class Venue < Calagator::ApplicationRecord
     class SearchEngine
       class Sql < Struct.new(:query, :opts)
         def self.search(*args)

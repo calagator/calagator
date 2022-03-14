@@ -15,7 +15,7 @@
 #
 # And then you'd include the denylisting feature into your Message class like:
 #
-#   class Message < ApplicationRecord
+#   class Message < Calagator::ApplicationRecord
 #     validates :title, :content, denylist: true
 #   end
 #
