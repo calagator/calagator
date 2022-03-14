@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Event < ApplicationRecord
+  class Event < Calagator::ApplicationRecord
     class SearchEngine
       class ApacheSunspot < Struct.new(:query, :opts)
         # Return an Array of non-duplicate Event instances matching the search +query+..

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Calagator
-  class Event < ApplicationRecord
+  class Event < Calagator::ApplicationRecord
     class Browse < Struct.new(:order, :date, :time)
       def initialize(attributes = {})
         members.each do |key|

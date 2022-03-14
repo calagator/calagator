@@ -15,7 +15,7 @@
 require 'loofah/helpers'
 
 module Calagator
-  class Event < ApplicationRecord
+  class Event < Calagator::ApplicationRecord
     class IcalRenderer
       def self.render(events, opts = {})
         output = render_icalendar(events, opts)

@@ -37,7 +37,7 @@ require 'validate_url'
 require 'active_model/serializers/xml'
 
 module Calagator
-  class Venue < ApplicationRecord
+  class Venue < Calagator::ApplicationRecord
     self.table_name = 'venues'
 
     include StripWhitespace

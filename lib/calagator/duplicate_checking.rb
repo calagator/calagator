@@ -7,7 +7,7 @@
 # Example:
 #
 #   # Define your class
-#   class Thing < ApplicationRecord
+#   class Thing < Calagator::ApplicationRecord
 #     # Load the mixin into your class
 #     include DuplicateChecking
 #

@@ -21,7 +21,7 @@ require 'loofah-activerecord'
 require 'loofah/activerecord/xss_foliate'
 
 module Calagator
-  class Source < ApplicationRecord
+  class Source < Calagator::ApplicationRecord
     self.table_name = 'sources'
 
     validate :assert_url
