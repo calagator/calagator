@@ -16,14 +16,14 @@ Gem::Specification.new do |s|
   s.description = 'Calagator is an open source community calendaring platform'
   s.license     = 'MIT'
 
-  s.required_ruby_version = ['>= 2.5.0']
+  s.required_ruby_version = ['>= 2.6.0']
 
   s.files = Dir['{app,config,lib,vendor}/**/*'] + Dir['db/**/*.rb'] + ['MIT-LICENSE.txt', 'Rakefile', 'README.md', 'rails_template.rb']
   s.test_files = Dir['spec/**/*']
   s.executables << 'calagator'
 
   # When changing this Rails requirement, also update RAILS_REQUIREMENT in rails_template.rb
-  s.add_dependency 'rails', '~> 5.2'
+  s.add_dependency 'rails', '~> 6.0'
 
   s.add_dependency 'activemodel-serializers-xml', '~> 1.0'
   s.add_dependency 'acts-as-taggable-on', '~> 8.1'
