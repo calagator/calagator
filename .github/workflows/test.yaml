@@ -44,7 +44,6 @@ jobs:
           - postgresql
           - sqlite3
         ruby:
-          - 2.5.9
           - 2.6.10
           - 2.7.6
         rails:
