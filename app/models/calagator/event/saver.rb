@@ -38,7 +38,7 @@ module Calagator
       end
 
       def evil_robot?
-        if params[:trap_field].present?
+        if params[:trap_field].present? || params[:community_phrase] != ENV["community_phrase"]
           self.failure = "<h3>Evil Robot</h3> We didn't save this event because we think you're an evil robot. If you're really not an evil robot, look at the form instructions more carefully. If this doesn't work please file a bug report and let us know."
         end
       end

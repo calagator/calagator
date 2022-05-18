@@ -67,5 +67,17 @@ module Calagator
         it { is_expected.to be_truthy }
       end
     end
+
+    describe '#community_phrase_enabled?' do
+      it 'expects a false response' do
+        ENV['community_phrase'] = nil
+        expect(controller.send(:community_phrase_enabled?)).to(eq(false))
+      end
+      
+      it 'expects a true response' do
+        ENV['community_phrase'] = 'test'
+        expect(controller.send(:community_phrase_enabled?)).to(eq(true))
+      end
+    end
   end
 end

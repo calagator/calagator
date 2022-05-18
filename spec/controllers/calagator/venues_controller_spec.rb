@@ -53,6 +53,12 @@ module Calagator
         post :create, params: { trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!" }
         expect(response).to render_template :new
       end
+
+      it 'stops non community members' do
+        ENV["community_phrase"] = "test"
+        post :create, params: { community_phrase: "ball" }
+        expect(response).to render_template :new
+      end
     end
 
     describe 'when updating venues' do
@@ -73,6 +79,12 @@ module Calagator
 
       it 'stops evil robots' do
         put :update, params: { id: @venue.id, trap_field: "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!" }
+        expect(response).to render_template :edit
+      end
+
+      it 'stops non community members' do
+        ENV["community_phrase"] = "test"
+        put :update, params: { id: @venue.id, community_phrase: "ball" }
         expect(response).to render_template :edit
       end
     end

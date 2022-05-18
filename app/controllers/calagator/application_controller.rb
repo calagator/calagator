@@ -16,6 +16,7 @@ module Calagator
 
     helper :all # include all helpers, all the time
     helper_method :recaptcha_enabled?
+    helper_method :community_phrase_enabled?
 
     # See ActionController::RequestForgeryProtection for details
     # Uncomment the :secret if you're not using the cookie session store
@@ -24,6 +25,10 @@ module Calagator
 
     def recaptcha_enabled?
       Recaptcha.configuration.site_key.present?
+    end
+
+    def community_phrase_enabled?
+      !ENV["community_phrase"].to_s.empty?
     end
 
     protected
@@ -88,6 +93,12 @@ module Calagator
     end
 
     def recaptcha_verified?(model)
+      return verify_recaptcha(model: model) if recaptcha_enabled?
+
+      true
+    end
+
+    def community_phrase_verified?(model)
       return verify_recaptcha(model: model) if recaptcha_enabled?
 
       true

@@ -401,6 +401,13 @@ module Calagator
           expect(flash[:failure]).to match /evil robot/i
         end
 
+        it 'stops evil robots' do
+          ENV["community_phrase"] = "test"
+          post :create, params: { community_phrase: "boop" }
+          expect(response).to render_template :new
+          expect(flash[:failure]).to match /evil robot/i
+        end
+
         it 'does not allow too many links in the description' do
           @params[:event][:description] = <<-DESC
           http://example.com
@@ -520,6 +527,14 @@ module Calagator
 
         it 'stops evil robots' do
           @params[:trap_field] = "I AM AN EVIL ROBOT, I EAT OLD PEOPLE'S MEDICINE FOR FOOD!"
+          put 'update', params: @params
+          expect(response).to render_template :edit
+          expect(flash[:failure]).to match /evil robot/i
+        end
+
+        it 'stops non community members' do
+          ENV["community_phrase"] = "test"
+          @params[:community_phrase] = "ball"
           put 'update', params: @params
           expect(response).to render_template :edit
           expect(flash[:failure]).to match /evil robot/i

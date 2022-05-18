@@ -32,6 +32,14 @@ module Calagator
         expect(saver.failure).to include "you're an evil robot"
       end
 
+      it 'fails to save an event made by someone lacking community phrase' do
+        ENV["community_phrase"] = "test"
+        params[:community_phrase] = "It's a trap!"
+        saver = described_class.new(event, params)
+        saver.save
+        expect(saver.failure).to include "you're an evil robot"
+      end
+
       it 'does not save an event being previewed' do
         params[:preview] = 'Preview'
         saver = described_class.new(event, params)

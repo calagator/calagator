@@ -59,6 +59,12 @@
         <%= recaptcha_tags %>
       </div>
     <% end -%>
+    <% if community_phrase_enabled? -%>
+      <div style="margin: 0 0 20px 0;">
+        <%= label 'community', 'phrase', "To protect Calagator against spam events, we've instituted a community passphrase. Please enter that passphrase here, or get in touch with a member of this community to get this code." %>
+        <%= text_field_tag 'community_phrase', params[:community_phrase] %>
+      </div>
+    <% end -%>
     <%= f.action :submit %>
   <% end -%>
 <% end %>
