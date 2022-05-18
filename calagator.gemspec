@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.description = 'Calagator is an open source community calendaring platform'
   s.license     = 'MIT'
 
-  s.required_ruby_version = ['>= 2.6.0']
+  s.required_ruby_version = ['>= 2.6.10']
 
   s.files = Dir['{app,config,lib,vendor}/**/*'] + Dir['db/**/*.rb'] + ['MIT-LICENSE.txt', 'Rakefile', 'README.md', 'rails_template.rb']
   s.test_files = Dir['spec/**/*']
@@ -62,11 +62,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-activemodel-mocks', '~> 1.1.0'
   s.add_development_dependency 'rspec-collection_matchers', '~> 1.1'
   s.add_development_dependency 'rspec-its', '~> 1.1'
-  s.add_development_dependency 'rspec-rails', '~> 4.1.0'
-  # s.add_development_dependency 'rubocop', '~> 0.80.0'
-  # s.add_development_dependency 'rubocop-performance', '~> 1.5.0'
-  # s.add_development_dependency 'rubocop-rails', '~> 2.5.2'
-  # s.add_development_dependency 'rubocop-rspec', '~> 1.38.0'
+  s.add_development_dependency 'rspec-rails', '~> 5.1.2'
   s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'simplecov', '~> 0.18'
   s.add_development_dependency 'simplecov-lcov', '~> 0.8'
