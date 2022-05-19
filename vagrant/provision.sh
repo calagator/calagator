@@ -3,7 +3,7 @@
 APPDIR="/vagrant"
 VAGRANT_USER="vagrant"
 PGSQL_VERSION=9.3
-RUBY_VERSION=2.1
+RUBY_VERSION=2.6
 
 # Fix locale so that Postgres creates databases in UTF-8
 if [ "${LANG}" != "en_US.UTF-8" ] ; then

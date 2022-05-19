@@ -12,6 +12,7 @@ List of Calagator releases and changes, with the latest at the top:
 
 ### v2.0.0 (unreleased)
 
+  * [!] Upgrade to minimum Ruby version 2.6.
   * [!] Upgrade to Rails 5 with minimum Ruby version 2.5.
   * [!] Remove inappropriate terminology such as master, slave, and blacklist. Existing `blacklist.txt` files will need to be renamed to `denylist.txt` when upgrading a Rails app that uses earlier versions of this gem.
   * [!] Meetup and Facebook integration is no longer supported due to changes to these services' APIs. Their API keys should be removed from your configuration.
