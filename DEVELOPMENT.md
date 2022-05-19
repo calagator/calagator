@@ -12,6 +12,7 @@ Before you start, you will need to:
     * [Git Immersion](http://gitimmersion.com/)
     * [Think Like a Git](http://think-like-a-git.net/)
 
+* [Install Docker]()
 * [Install Ruby](http://www.ruby-lang.org/), a programming language. You can use MRI Ruby 2.0+, or Rubinius 2.0+. Your operating system may already have it installed or offer it as a pre-built package. You can check by typing `ruby -v` in your shell or console.
 * [Install SQLite3](http://www.sqlite.org/), a database engine. Your operating system may already have it installed or offer it as a pre-built package. You can check by typing `sqlite3 -version` in your shell or console.
 
@@ -44,3 +45,19 @@ Before you start, you will need to:
     If you're running calagator in a Vagrantbox, add `-b 0.0.0.0` to the bundle exec command to handle requests from the host OS:
 
     `bundle exec bin/rails server -b 0.0.0.0`
+
+## Getting Started (Docker edition)
+
+1. Get the source code: From your command line, run `git clone https://github.com/calagator/calagator.git`, which will create a `calagator` directory with the source code. Change into this directory (`cd calagator`) and run the remaining commands from there.
+
+2. Build the docker image
+
+        docker compose build
+
+3. Install Bundler-managed gems, (the actual libraries that this application uses, like Ruby on Rails) by running
+
+        docker compose run --rm web bundle install
+
+4. Initialize your database by running:
+
+        docker compose run --rm web bundle exec rake app:db:migrate app:db:test:prepare
