@@ -97,11 +97,5 @@ module Calagator
 
       true
     end
-
-    def community_phrase_verified?(model)
-      return verify_recaptcha(model: model) if recaptcha_enabled?
-
-      true
-    end
   end
 end
