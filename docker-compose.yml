@@ -1,0 +1,12 @@
+services:
+  web:
+    build: .
+    command: bash -c "rm -f tmp/pids/server.pid && bin/rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/usr/src/app
+      - bundle:/usr/local/bundle
+    ports:
+      - "3000:3000"
+
+volumes:
+  bundle:
