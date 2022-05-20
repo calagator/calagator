@@ -62,7 +62,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec-activemodel-mocks', '~> 1.1.0'
   s.add_development_dependency 'rspec-collection_matchers', '~> 1.1'
   s.add_development_dependency 'rspec-its', '~> 1.1'
-  s.add_development_dependency 'rspec-rails', '~> 4.1.0'
+  s.add_development_dependency 'rspec-rails', '~> 5.1.2'
   # s.add_development_dependency 'rubocop', '~> 0.80.0'
   # s.add_development_dependency 'rubocop-performance', '~> 1.5.0'
   # s.add_development_dependency 'rubocop-rails', '~> 2.5.2'
