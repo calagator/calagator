@@ -38,7 +38,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'loofah', '~> 2.0'
   s.add_dependency 'loofah-activerecord', '>= 1.2', '< 3.0'
   s.add_dependency 'lucene_query', '0.1'
-  s.add_dependency 'microformats', '>= 4.0.7', '< 4.3.0'
+  s.add_dependency 'microformats', '>= 4.0.7', '< 4.5.0'
   s.add_dependency 'nokogiri'
   s.add_dependency 'rack-contrib', '~> 2.3'
   s.add_dependency 'rails-observers'
