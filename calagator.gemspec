@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'rails', '~> 5.2'
 
   s.add_dependency 'activemodel-serializers-xml', '~> 1.0'
-  s.add_dependency 'acts-as-taggable-on', '~> 8.1'
+  s.add_dependency 'acts-as-taggable-on', '>= 8.1', '< 10.0'
   s.add_dependency 'annotate', '>= 3.1.1', '< 3.3.0'
   s.add_dependency 'bluecloth', '~> 2.2'
   s.add_dependency 'font-awesome-rails', '~> 4.7'
