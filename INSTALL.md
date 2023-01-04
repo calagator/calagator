@@ -22,6 +22,15 @@ You can then use the `calagator` command to generate a new Rails application wit
 
     calagator new my_great_calendar
     cd my_great_calendar
+    
+Once that's installed you'll just need to mount the engine where you'd like in your application. Update your config/routes.rb file in your newly generated Rails app and add a mount line for the engine wherever you'd like:
+
+    mount Calagator::Engine => '/events'
+    
+After you've mounted the engine go ahead and copy over the migration files and run migrations:
+
+    rake calagator:install:migrations
+    rails db:migrate
 
 You should now be able to start your calendar in development mode with:
 
