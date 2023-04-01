@@ -8,7 +8,7 @@ source 'https://rubygems.org'
 gemspec
 
 # develop against latest rails
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 6.0'
 
 # turbolinks is used by the test application by default
 gem 'turbolinks'
