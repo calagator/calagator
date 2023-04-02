@@ -171,7 +171,7 @@ module Calagator
 
       it 'renders the found sources as xml' do
         do_get
-        expect(response.content_type).to eq 'application/xml'
+        expect(response.content_type).to eq 'application/xml; charset=utf-8'
       end
     end
 

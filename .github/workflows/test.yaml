@@ -45,28 +45,25 @@ jobs:
           - sqlite3
         ruby:
           - 2.6.10
-          - 2.7.6
+          - 2.7.8
         rails:
+          - rails_6_0
           - rails_5_2
-        # exclude:
-        #   - rails: rails_4_2
-        #     ruby: 2.6.6
-        #   - rails: rails_4_2
-        #     ruby: 2.7.2
 
     env:
       BUNDLER_VERSION: 1.17.3
       BUNDLE_GEMFILE: gemfiles/${{ matrix.rails }}.gemfile
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           java-version: 8
+          distribution: 'temurin'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-      - uses: actions/cache@v1
+      - uses: actions/cache@v3
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-${{ matrix.ruby}}-gems-${{ hashFiles('**/calagator.gemspec') }}
