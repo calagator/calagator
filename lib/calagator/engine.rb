@@ -19,6 +19,8 @@ module Calagator
       leaflet
     ]
 
+    config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time]
+
     config.after_initialize do
       Calagator.configure_search_engine
     end
