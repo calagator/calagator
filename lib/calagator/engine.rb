@@ -19,7 +19,9 @@ module Calagator
       leaflet
     ]
 
-    config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time]
+    if config.active_record.respond_to?(:yaml_column_permitted_classes)
+      config.active_record.yaml_column_permitted_classes = [Symbol, Date, Time]
+    end
 
     config.after_initialize do
       Calagator.configure_search_engine
