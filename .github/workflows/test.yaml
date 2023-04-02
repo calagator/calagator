@@ -47,7 +47,6 @@ jobs:
           - 2.6.10
           - 2.7.8
         rails:
-          - rails_6_1
           - rails_6_0
           - rails_5_2
 
