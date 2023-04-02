@@ -422,7 +422,6 @@ Style/ClassAndModuleChildren:
     - 'app/models/calagator/source/parser/meetup.rb'
     - 'app/models/calagator/source/parser/not_found.rb'
     - 'spec/support/assert_dom_equal.rb'
-    - 'spec/support/rails_4_2_ruby_2_6.rb'
 
 # Offense count: 2
 Style/CommentedKeyword:
