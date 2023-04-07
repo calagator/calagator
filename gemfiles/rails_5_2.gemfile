@@ -10,6 +10,6 @@ gem "paper_trail_manager", git: "https://github.com/fusion94/paper_trail_manager
 gem "launchy"
 gem "rails-controller-testing", group: "test"
 gem "mysql2", "~> 0.5.3"
-gem "pg", "~> 0.18.1"
+gem "pg", "~> 0.19"
 
 gemspec path: "../"
