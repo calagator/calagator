@@ -29,6 +29,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'acts-as-taggable-on', '>= 8.1', '< 10.0'
   s.add_dependency 'annotate', '>= 3.1.1', '< 3.3.0'
   s.add_dependency 'bluecloth', '~> 2.2'
+  s.add_dependency 'bootsnap', '~> 1.16'
   s.add_dependency 'font-awesome-rails', '~> 4.7'
   s.add_dependency 'formtastic', '~> 4.0'
   s.add_dependency 'geokit', '>= 1.9', '< 1.14'
