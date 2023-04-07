@@ -28,7 +28,7 @@ end
 
 # FactoryBot and Faker are required for Calagator's db:seed task
 spec = Gem::Specification.load(File.expand_path('calagator.gemspec', __dir__))
-spec ||= Gem::Specification.find_by(name: 'calagator')
+spec ||= Gem::Specification.find_by_name('calagator')
 required_dev_gems = %w[factory_bot_rails faker]
 
 gem_group :development, :test do
