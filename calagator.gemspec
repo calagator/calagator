@@ -56,6 +56,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'will_paginate', '~> 3.0'
   s.add_dependency 'pg', '~> 0.19.0'
   s.add_dependency 'sqlite3', '~> 1.5.4'
+  s.add_dependency 'listen', '~> 3.1.5'
 
   s.add_development_dependency 'appraisal', '~> 2.4'
   s.add_development_dependency 'capybara', '~> 3.31'
