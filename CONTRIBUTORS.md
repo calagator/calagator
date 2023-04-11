@@ -60,6 +60,7 @@ These people have contributed to Calagator's design and implementation:
   * Pam Selle
   * Patrick McSweeny
   * Reid Beels
+  * Richie Khoo
   * Ryan McCarthy
   * Ryan Williams
   * Sam Keen
