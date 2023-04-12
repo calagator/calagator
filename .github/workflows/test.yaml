@@ -47,7 +47,7 @@ jobs:
           - 2.6.10
           - 2.7.8
         rails:
-          - rails_5_2
+          - rails_6_0
         # exclude:
         #   - rails: rails_4_2
         #     ruby: 2.6.6
