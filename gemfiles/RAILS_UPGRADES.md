@@ -30,9 +30,20 @@ gem install calagator
 - Specs all passing
 - Resolve any deprecation warnings that show in the specs or rails logs
 
-## Update the gem
+## Update the Rails version in all the places
 
-Update rails version in Gemfile, gemspec and rails_template
+Update rails version in: 
+
+* Gemfile    # this: gem 'rails', '<here>'
+* gemspec    # this: s.add_dependency 'rails', '~> <here>'
+* rails_template
+
+And the testing files:
+
+* Appraisal   # this: appraise '<here>' in format 'rails_x_x'
+* test.yaml   # here: test >  strategy > rails <here> in format 'rails_x_x'
+
+
 bundle update rails # then resolve any issues
 bundle install # then resolve any issues
 
