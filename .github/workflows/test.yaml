@@ -41,7 +41,7 @@ jobs:
         #     ruby: 2.7.2
 
     env:
-      BUNDLER_VERSION: 2.3.27
+      BUNDLER_VERSION: 2.4.12
       BUNDLE_GEMFILE: gemfiles/${{ matrix.rails }}.gemfile
 
     steps:
