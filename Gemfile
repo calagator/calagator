@@ -25,5 +25,4 @@ gem 'byebug', '~> 11.1.3', platform: 'mri'
 gem 'launchy', '~> 2.5.2'
 
 gem 'rails-controller-testing', '~> 1.0.5', group: 'test'
-
-gem "net-http"
+# gem "net-http", '~> 0.3.2'
