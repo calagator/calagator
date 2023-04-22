@@ -10,8 +10,20 @@ Conventions used in this document:
 
 List of Calagator releases and changes, with the latest at the top:
 
-### v2.0.0 (unreleased)
-
+### v2.0.0 [Unreleased]
+  * Rails 5.2 running cleanly on Ruby 2.6
+  * Calagator returned to a working state with passing specs and CI build.
+  * This cleanup release resolves a range of project maintenance issues:
+   - All specs passing
+   - CI builds passing on Github
+   - Appraisal specs passing
+   - Migration errors resolved
+   - Deprecation warnings resolved
+   - Gem builds locally (see DEVELOPMENT.md)
+  * DEVELOPMENT.md improvements
+   - New section: 'Checking your app works'
+   - New section: 'Building the calagator gem locally'
+### v1.2.0
   * [!] Upgrade to minimum Ruby version 2.6.
   * [!] Upgrade to Rails 5 with minimum Ruby version 2.5.
   * [!] Remove inappropriate terminology such as master, slave, and blacklist. Existing `blacklist.txt` files will need to be renamed to `denylist.txt` when upgrading a Rails app that uses earlier versions of this gem.
@@ -20,10 +32,12 @@ List of Calagator releases and changes, with the latest at the top:
   * Move CI testing to GitHub Actions.
   * Upgrade additional dependencies for security updates.
   * Improve accessibility by making required fields clearer to screen reader users.
-  * Remove Meetup parser (#681)
   * Remove use of SortedSet in Source::Parser (#682)
-  * Remove Facebook parser (#683)
+#### Breaking changes
+  Support for meetup and Facebook API's removed as those API's are now no longer free to use.
 
+  * Remove Meetup parser (#681)
+  * Remove Facebook parser (#683)
 ### v1.1.0
 
 Enhancements:

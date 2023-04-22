@@ -5,6 +5,6 @@ appraise 'rails-5-2' do
   gem 'turbolinks'
 
   gem 'mysql2', '~> 0.5.3'
-  gem 'pg', '~> 0.18.1'
+  gem 'pg', '~> 0.19'
   gem 'rails-controller-testing', group: 'test'
 end
