@@ -9,20 +9,19 @@ Conventions used in this document:
 ## Change Log
 
 List of Calagator releases and changes, with the latest at the top:
-
-### v2.0.0 [Unreleased]
+### v2.0.0 - 2023-04-23
   * Rails 5.2 running cleanly on Ruby 2.6
   * Calagator returned to a working state with passing specs and CI build.
   * This cleanup release resolves a range of project maintenance issues:
-   - All specs passing
-   - CI builds passing on Github
-   - Appraisal specs passing
-   - Migration errors resolved
-   - Deprecation warnings resolved
-   - Gem builds locally (see DEVELOPMENT.md)
+    - All specs passing
+    - CI builds passing on Github
+    - Appraisal specs passing
+    - Migration errors resolved
+    - Deprecation warnings resolved
+    - Gem builds locally (see DEVELOPMENT.md)
   * DEVELOPMENT.md improvements
-   - New section: 'Checking your app works'
-   - New section: 'Building the calagator gem locally'
+    - New section: 'Checking your app works'
+    - New section: 'Building the calagator gem locally'
 ### v1.2.0
   * [!] Upgrade to minimum Ruby version 2.6.
   * [!] Upgrade to Rails 5 with minimum Ruby version 2.5.
