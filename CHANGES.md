@@ -9,8 +9,7 @@ Conventions used in this document:
 ## Change Log
 
 List of Calagator releases and changes, with the latest at the top:
-
-### v2.0.0 [Unreleased]
+### v2.0.0 - 2023-04-23
   * Rails 5.2 running cleanly on Ruby 2.6
   * Calagator returned to a working state with passing specs and CI build.
   * This cleanup release resolves a range of project maintenance issues:
