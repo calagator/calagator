@@ -1,36 +1,36 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 module Calagator
   describe VersionsController, type: :controller do
     routes { Calagator::Engine.routes }
 
-    describe 'without versions' do
-      it 'raises RecordNotFound if not given an id' do
+    describe "without versions" do
+      it "raises RecordNotFound if not given an id" do
         expect do
-          get :edit, params: { id: '' }
+          get :edit, params: {id: ""}
         end.to raise_error ActiveRecord::RecordNotFound
       end
 
-      it 'raises RecordNotFound if given invalid id' do
+      it "raises RecordNotFound if given invalid id" do
         expect do
-          get :edit, params: { id: '-1' }
+          get :edit, params: {id: "-1"}
         end.to raise_error ActiveRecord::RecordNotFound
       end
 
       it "raises RecordNotFound if given id that doesn't exist" do
         expect do
-          get :edit, params: { id: '1234' }
+          get :edit, params: {id: "1234"}
         end.to raise_error ActiveRecord::RecordNotFound
       end
     end
 
-    describe 'with versions' do
+    describe "with versions" do
       before do
-        @create_title = 'myevent'
-        @update_title = 'myevent v2'
-        @final_title = 'myevent v3'
+        @create_title = "myevent"
+        @update_title = "myevent v2"
+        @final_title = "myevent v3"
 
         @event = create(:event, title: @create_title)
 
@@ -47,7 +47,7 @@ module Calagator
       def title_for(event)
         version_id = @event.versions.where(event: event).pluck(:id).first
 
-        get :edit, params: { id: version_id }
+        get :edit, params: {id: version_id}
 
         assigns[:event].title
       end
@@ -64,18 +64,18 @@ module Calagator
         expect(title_for(:destroy)).to eq @final_title
       end
 
-      it 'renders html' do
+      it "renders html" do
         version_id = @event.versions.first.id
-        get :edit, params: { id: version_id }
+        get :edit, params: {id: version_id}
         expect(response).to be_successful
-        expect(response).to render_template 'events/edit'
+        expect(response).to render_template "events/edit"
       end
 
-      it 'renders html via xhr' do
+      it "renders html via xhr" do
         version_id = @event.versions.first.id
-        get :edit, params: { id: version_id }, xhr: true
+        get :edit, params: {id: version_id}, xhr: true
         expect(response).to be_successful
-        expect(response).to render_template 'events/_form'
+        expect(response).to render_template "events/_form"
       end
     end
   end

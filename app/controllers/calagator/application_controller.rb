@@ -49,10 +49,10 @@ module Calagator
     # and their values are either "active" or nil.
     def link_class
       @_link_class_cache ||= {
-        events: ((controller_name == 'events' ||
-                      controller_name == 'sources' ||
-                      controller_name == 'site') && 'active'),
-        venues: (controller_name == 'venues' && 'active')
+        events: ((controller_name == "events" ||
+                      controller_name == "sources" ||
+                      controller_name == "site") && "active"),
+        venues: (controller_name == "venues" && "active")
       }
     end
     helper_method :link_class
@@ -64,10 +64,10 @@ module Calagator
     def append_flash(kind, message)
       kind = kind.to_sym
       flash[kind] = if leaf = flash[kind]
-                      "#{leaf} #{message}"
-                    else
-                      message.to_s
-                    end
+        "#{leaf} #{message}"
+      else
+        message.to_s
+      end
     end
 
     # Make it possible to use helpers in controllers

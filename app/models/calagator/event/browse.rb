@@ -14,19 +14,19 @@ module Calagator
       end
 
       def start_date
-        date_for(:start).strftime('%Y-%m-%d')
+        date_for(:start).strftime("%Y-%m-%d")
       end
 
       def end_date
-        date_for(:end).strftime('%Y-%m-%d')
+        date_for(:end).strftime("%Y-%m-%d")
       end
 
       def start_time
-        time_for(:start)&.strftime('%I:%M %p')
+        time_for(:start)&.strftime("%I:%M %p")
       end
 
       def end_time
-        time_for(:end)&.strftime('%I:%M %p')
+        time_for(:end)&.strftime("%I:%M %p")
       end
 
       def errors
@@ -50,9 +50,9 @@ module Calagator
 
       def filter_by_date
         @scope = if date
-                   scope.within_dates(date_for(:start), date_for(:end))
-                 else
-                   scope.future
+          scope.within_dates(date_for(:start), date_for(:end))
+        else
+          scope.future
         end
         self
       end
@@ -66,7 +66,7 @@ module Calagator
       private
 
       def default_date_for(kind)
-        kind == :start ? Time.zone.today : Time.zone.today + 3.months
+        (kind == :start) ? Time.zone.today : Time.zone.today + 3.months
       end
 
       def date_for(kind)
@@ -80,7 +80,7 @@ module Calagator
 
       def time_for(kind)
         Time.zone.parse(time[kind])
-      rescue StandardError
+      rescue
         nil
       end
 

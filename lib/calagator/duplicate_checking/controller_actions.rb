@@ -5,7 +5,7 @@ module Calagator
     module ControllerActions
       # GET /#{model_class}/duplicates
       def duplicates
-        @type = params[:type] || 'na'
+        @type = params[:type] || "na"
         @grouped = model_class.find_duplicates_by_type(@type)
       rescue ArgumentError => e
         @grouped = {}
@@ -24,7 +24,7 @@ module Calagator
         else
           flash[:failure] = squasher.failure
         end
-        redirect_to action: 'duplicates', type: params[:type]
+        redirect_to action: "duplicates", type: params[:type]
       end
 
       private

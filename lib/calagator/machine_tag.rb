@@ -33,7 +33,7 @@ module Calagator
     cattr_accessor(:urls) { {} }
     cattr_accessor(:venue_predicates) { [] }
     cattr_accessor(:defunct_namespaces) { [] }
-    cattr_accessor(:site_root_url) { 'http://example.com/' }
+    cattr_accessor(:site_root_url) { "http://example.com/" }
 
     def venue?
       venue_predicates.include? predicate
@@ -76,7 +76,7 @@ module Calagator
     end
 
     def archive_date
-      (venue_date || event_date).strftime('%Y%m%d')
+      (venue_date || event_date).strftime("%Y%m%d")
     end
 
     def venue_date

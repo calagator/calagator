@@ -5,7 +5,7 @@ module Calagator
     def tag_links_for(model)
       model.tags.sort_by(&:name).map do |tag|
         TagLink.new(model.class.table_name, tag, self).render
-      end.join(', ').html_safe
+      end.join(", ").html_safe
     end
 
     class TagLink < Struct.new(:class_name, :tag, :context)
@@ -18,7 +18,7 @@ module Calagator
       def text
         icon = TagIcon.new(tag.name, context)
         i = icon.exists? ? icon.image_tag : nil
-        [i, context.escape_once(tag.name)].compact.join(' ').html_safe
+        [i, context.escape_once(tag.name)].compact.join(" ").html_safe
       end
 
       def url
@@ -26,11 +26,11 @@ module Calagator
       end
 
       def css_class
-        classes = ['p-category']
+        classes = ["p-category"]
         if machine_tag.url
-          classes += ['external', machine_tag.namespace, machine_tag.predicate]
+          classes += ["external", machine_tag.namespace, machine_tag.predicate]
         end
-        classes.join(' ')
+        classes.join(" ")
       end
 
       def machine_tag
@@ -42,7 +42,7 @@ module Calagator
       event.tag_list.map do |tag_name|
         icon = TagIcon.new(tag_name, self)
         link_to(icon.image_tag, tag_events_path(tag_name)) if icon.exists?
-      end.join(' ').html_safe
+      end.join(" ").html_safe
     end
 
     class TagIcon < Struct.new(:name, :context)

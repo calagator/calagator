@@ -7,7 +7,7 @@ module Calagator
         members.each do |key|
           send "#{key}=", attributes[key]
         end
-        self.order ||= 'date'
+        self.order ||= "date"
         validate!
       end
 
@@ -23,8 +23,8 @@ module Calagator
       #   }
       def grouped_events
         grouped = events.group_by(&:current?)
-        grouped = { current: grouped[true] || [], past: grouped[false] || [] }
-        grouped[:current].reverse! if order.to_s == 'date'
+        grouped = {current: grouped[true] || [], past: grouped[false] || []}
+        grouped[:current].reverse! if order.to_s == "date"
         grouped[:past] = [] if current
         grouped
       end
@@ -50,7 +50,7 @@ module Calagator
           Event.search(query, order: order, skip_old: current)
         end
       rescue ActiveRecord::StatementInvalid => e
-        @failure_message = 'There was an error completing your search.'
+        @failure_message = "There was an error completing your search."
         @hard_failure = true
         []
       end
@@ -60,12 +60,12 @@ module Calagator
           @failure_message = "Unknown ordering option #{order.inspect}, sorting by date instead."
         end
 
-        if tag.present? && order == 'score'
-          @failure_message = 'You cannot sort tags by score'
+        if tag.present? && order == "score"
+          @failure_message = "You cannot sort tags by score"
         end
 
         if [query, tag].all?(&:blank?)
-          @failure_message = 'You must enter a search query'
+          @failure_message = "You must enter a search query"
           @hard_failure = true
         end
 

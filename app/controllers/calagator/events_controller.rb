@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'recaptcha/rails'
-require 'calagator/duplicate_checking'
-require 'calagator/duplicate_checking/controller_actions'
+require "recaptcha/rails"
+require "calagator/duplicate_checking"
+require "calagator/duplicate_checking/controller_actions"
 
 module Calagator
   class EventsController < Calagator::ApplicationController
@@ -29,7 +29,7 @@ module Calagator
 
       render_event @event
     rescue ActiveRecord::RecordNotFound => e
-      redirect_to events_path, flash: { failure: e.to_s }
+      redirect_to events_path, flash: {failure: e.to_s}
     end
 
     # GET /events/new
@@ -39,7 +39,8 @@ module Calagator
     end
 
     # GET /events/1/edit
-    def edit; end
+    def edit
+    end
 
     # POST /events
     # POST /events.xml
@@ -59,7 +60,7 @@ module Calagator
       respond_to do |format|
         if recaptcha_verified?(@event) && saver.save
           format.html do
-            flash[:success] = 'Event was successfully saved.'
+            flash[:success] = "Event was successfully saved."
             if saver.has_new_venue?
               flash[:success] += " Please tell us more about where it's being held."
               redirect_to edit_venue_url(@event.venue, from_event: @event.id)
@@ -67,11 +68,11 @@ module Calagator
               redirect_to @event
             end
           end
-          format.xml  { render xml: @event, status: :created, location: @event }
+          format.xml { render xml: @event, status: :created, location: @event }
         else
           format.html do
             flash[:failure] = saver.failure
-            render action: @event.new_record? ? 'new' : 'edit'
+            render action: @event.new_record? ? "new" : "edit"
           end
           format.xml { render xml: @event.errors, status: :unprocessable_entity }
         end
@@ -84,8 +85,8 @@ module Calagator
       @event.destroy
 
       respond_to do |format|
-        format.html { redirect_to(events_url, flash: { success: "\"#{@event.title}\" has been deleted" }) }
-        format.xml  { head :ok }
+        format.html { redirect_to(events_url, flash: {success: "\"#{@event.title}\" has been deleted"}) }
+        format.xml { head :ok }
       end
     end
 
@@ -104,8 +105,8 @@ module Calagator
 
     def clone
       @event = Event::Cloner.clone(Event.find(params[:id]))
-      flash[:success] = 'This is a new event cloned from an existing one. Please update the fields, like the time and description.'
-      render 'new'
+      flash[:success] = "This is a new event cloned from an existing one. Please update the fields, like the time and description."
+      render "new"
     end
 
     private
@@ -113,9 +114,9 @@ module Calagator
     def render_event(event)
       respond_to do |format|
         format.html # show.html.erb
-        format.xml  { render xml: event.to_xml(root: 'events', include: :venue) }
+        format.xml { render xml: event.to_xml(root: "events", include: :venue) }
         format.json { render json: event.to_json(include: :venue) }
-        format.ics  { render ics: [event] }
+        format.ics { render ics: [event] }
       end
     end
 
@@ -124,9 +125,9 @@ module Calagator
       respond_to do |format|
         format.html # *.html.erb
         format.kml  # *.kml.erb
-        format.ics  { render ics: events || Event.future.non_duplicates }
-        format.atom { render template: 'calagator/events/index' }
-        format.xml  { render xml: events.to_xml(root: 'events', include: :venue) }
+        format.ics { render ics: events || Event.future.non_duplicates }
+        format.atom { render template: "calagator/events/index" }
+        format.xml { render xml: events.to_xml(root: "events", include: :venue) }
         format.json { render json: events.to_json(include: :venue) }
       end
     end
@@ -134,7 +135,7 @@ module Calagator
     def find_and_redirect_if_locked
       @event = Event.find(params[:id])
       if @event.locked?
-        flash[:failure] = 'You are not permitted to modify this event.'
+        flash[:failure] = "You are not permitted to modify this event."
         redirect_to root_path
       end
     end
