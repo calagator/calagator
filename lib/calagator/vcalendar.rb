@@ -87,7 +87,7 @@ module Calagator
       super
     end
 
-    def respond_to?(method, include_private = false)
+    def respond_to_missing?(method, include_private = false)
       vcard_hash_key = method.to_s.upcase
       vcard_hash.key?(vcard_hash_key) || super
     end
