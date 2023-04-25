@@ -3,7 +3,6 @@
 desc "Update counter caches"
 task update_counter_caches: :environment do
   # Update the Venue#events_count
-  total = Calagator::Venue.count
   Calagator::Venue.all.each do |venue|
     cached = venue.events_count
     actual = venue.events.count
