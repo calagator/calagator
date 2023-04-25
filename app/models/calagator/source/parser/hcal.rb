@@ -40,7 +40,7 @@ module Calagator
     def decoded_field(hcal, hcal_field)
       return unless (raw_field = hcal.send(hcal_field))
 
-      decoded_field = case hcal_field
+      case hcal_field
       when :start, :end
         Time.parse(raw_field).in_time_zone
       when :location

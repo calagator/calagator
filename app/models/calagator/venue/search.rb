@@ -39,7 +39,7 @@ module Calagator
         else
           base.business.wifi_status.search.scope
         end
-      rescue ActiveRecord::StatementInvalid => e
+      rescue ActiveRecord::StatementInvalid
         @failure_message = "There was an error completing your search."
         @hard_failure = true
         []

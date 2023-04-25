@@ -70,7 +70,7 @@ module Calagator
         end
 
         it "is nil if there are no events past the future cutoff" do
-          event = create(:event, start_time: 2.weeks.from_now - 1.day)
+          create(:event, start_time: 2.weeks.from_now - 1.day)
           expect(subject.more).to be_blank
         end
       end

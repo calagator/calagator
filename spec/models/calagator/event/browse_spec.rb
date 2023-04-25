@@ -68,7 +68,8 @@ module Calagator
             end_time: Time.zone.parse("2010-01-17 00:00"))
         ]
 
-        non_matching = [
+        # non_matching
+        [
           Event.create!(
             title: "nonmatchingbefore",
             start_time: Time.zone.parse("2010-01-15 23:00"),

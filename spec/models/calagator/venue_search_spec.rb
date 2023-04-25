@@ -42,13 +42,13 @@ module Calagator
       end
 
       it "can limit to venues with wifi" do
-        venue1 = create(:venue, wifi: false)
+        create(:venue, wifi: false)
         venue2 = create(:venue, wifi: true)
         expect(described_class.search("", wifi: true)).to eq([venue2])
       end
 
       it "excludes closed venues" do
-        venue1 = create(:venue, closed: true)
+        create(:venue, closed: true)
         venue2 = create(:venue, closed: false)
         expect(described_class.search("")).to eq([venue2])
       end
@@ -65,14 +65,14 @@ module Calagator
       end
 
       it "does not search multiple terms" do
-        venue2 = create(:venue, title: "zomg")
-        venue1 = create(:venue, title: "omg")
+        create(:venue, title: "zomg")
+        create(:venue, title: "omg")
         expect(described_class.search("zomg omg")).to eq([])
       end
 
       it "ANDs terms together to narrow search results" do
         venue2 = create(:venue, title: "zomg omg")
-        venue1 = create(:venue, title: "zomg cats")
+        create(:venue, title: "zomg cats")
         expect(described_class.search("zomg omg")).to eq([venue2])
       end
     end
