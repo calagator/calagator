@@ -12,25 +12,25 @@ module Calagator
       end
 
       it "searches venue titles by substring" do
-        venue1 = create(:venue, title: "wtfbbq")
+        create(:venue, title: "wtfbbq")
         venue2 = create(:venue, title: "zomg!")
         expect(described_class.search("zomg")).to eq([venue2])
       end
 
       it "searches venue descriptions by substring" do
-        venue1 = create(:venue, description: "wtfbbq")
+        create(:venue, description: "wtfbbq")
         venue2 = create(:venue, description: "zomg!")
         expect(described_class.search("zomg")).to eq([venue2])
       end
 
       it "searches venue tags by exact match" do
-        venue1 = create(:venue, tag_list: %w[wtf bbq zomg])
+        create(:venue, tag_list: %w[wtf bbq zomg])
         venue2 = create(:venue, tag_list: %w[wtf bbq omg])
         expect(described_class.search("omg")).to eq([venue2])
       end
 
       it "searches case-insensitively" do
-        venue1 = create(:venue, title: "WTFBBQ")
+        create(:venue, title: "WTFBBQ")
         venue2 = create(:venue, title: "ZOMG!")
         expect(described_class.search("zomg")).to eq([venue2])
       end

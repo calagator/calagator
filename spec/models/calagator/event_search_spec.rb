@@ -12,33 +12,33 @@ module Calagator
       end
 
       it "searches event titles by substring" do
-        event1 = create(:event, title: "wtfbbq")
+        create(:event, title: "wtfbbq")
         event2 = create(:event, title: "zomg!")
         expect(described_class.search("zomg")).to eq([event2])
       end
 
       it "searches event descriptions by substring" do
-        event1 = create(:event, description: "wtfbbq")
+        create(:event, description: "wtfbbq")
         event2 = create(:event, description: "zomg!")
         expect(described_class.search("zomg")).to eq([event2])
       end
 
       it "searches event tags by exact match" do
-        event1 = create(:event, tag_list: %w[wtf bbq zomg])
+        create(:event, tag_list: %w[wtf bbq zomg])
         event2 = create(:event, tag_list: %w[wtf bbq omg])
 
         expect(described_class.search("omg")).to eq([event2])
       end
 
       it "does not search multiple terms" do
-        event1 = create(:event, title: "wtf")
-        event2 = create(:event, title: "zomg!")
-        event3 = create(:event, title: "bbq")
+        create(:event, title: "wtf")
+        create(:event, title: "zomg!")
+        create(:event, title: "bbq")
         expect(described_class.search("wtf zomg")).to match_array([])
       end
 
       it "searches case-insensitively" do
-        event1 = create(:event, title: "WTFBBQ")
+        create(:event, title: "WTFBBQ")
         event2 = create(:event, title: "ZOMG!")
         expect(described_class.search("zomg")).to eq([event2])
       end
@@ -68,7 +68,7 @@ module Calagator
       end
 
       it "can limit to current and upcoming events" do
-        event1 = create(:event, start_time: 1.year.ago, end_time: 1.year.ago + 1.hour)
+        create(:event, start_time: 1.year.ago, end_time: 1.year.ago + 1.hour)
         event2 = create(:event, start_time: 1.hour.ago, end_time: 1.hour.from_now)
         event3 = create(:event, start_time: 1.year.from_now, end_time: 1.year.from_now + 1.hour)
         expect(described_class.search("", skip_old: true)).to eq([event3, event2])
@@ -80,17 +80,17 @@ module Calagator
       end
 
       it "limit applies to current and past queries separately" do
-        event1 = create(:event, title: "omg", start_time: 1.year.ago)
-        event2 = create(:event, title: "omg", start_time: 1.year.ago)
-        event3 = create(:event, title: "omg", start_time: 1.year.from_now)
-        event4 = create(:event, title: "omg", start_time: 1.year.from_now)
+        create(:event, title: "omg", start_time: 1.year.ago)
+        create(:event, title: "omg", start_time: 1.year.ago)
+        create(:event, title: "omg", start_time: 1.year.from_now)
+        create(:event, title: "omg", start_time: 1.year.from_now)
         expect(described_class.search("omg", limit: 1).to_a.size).to eq(2)
       end
 
       it "ANDs terms together to narrow search results" do
         event1 = create(:event, title: "women who hack")
-        event2 = create(:event, title: "women who bike")
-        event3 = create(:event, title: "omg")
+        create(:event, title: "women who bike")
+        create(:event, title: "omg")
         expect(described_class.search("women who hack")).to eq([event1])
       end
     end
@@ -101,7 +101,7 @@ module Calagator
       it_behaves_like "#search"
 
       it "searches event urls by substring" do
-        event1 = create(:event, url: "http://example.com/wtfbbq.html")
+        create(:event, url: "http://example.com/wtfbbq.html")
         event2 = create(:event, url: "http://example.com/zomg.html")
         expect(described_class.search("zomg")).to eq([event2])
       end

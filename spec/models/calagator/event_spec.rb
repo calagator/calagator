@@ -536,7 +536,7 @@ module Calagator
 
       before do
         # this event should always be omitted from the results
-        past = create(:event, start_time: 1.week.ago)
+        create(:event, start_time: 1.week.ago)
       end
 
       it "returns future events when provided na" do
@@ -558,7 +558,7 @@ module Calagator
       end
 
       it "does not find duplicate title by url" do
-        clone = described_class.create!(title: subject.title, start_time: subject.start_time)
+        described_class.create!(title: subject.title, start_time: subject.start_time)
         events = described_class.find_duplicates_by_type("url")
         expect(events).to be_empty
       end
@@ -570,7 +570,7 @@ module Calagator
       end
 
       it "does not find incomplete duplicates by all" do
-        clone = described_class.create!(subject.attributes.merge(title: "SpaceCube", start_time: subject.start_time, id: nil))
+        described_class.create!(subject.attributes.merge(title: "SpaceCube", start_time: subject.start_time, id: nil)) # clone
         events = described_class.find_duplicates_by_type("all")
         expect(events).to be_empty
       end

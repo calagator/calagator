@@ -594,10 +594,10 @@ module Calagator
 
         it "finds current duplicates and not past duplicates" do
           current_primary = create(:event, title: "Current")
-          current_duplicate = create(:event, title: current_primary.title)
+          create(:event, title: current_primary.title) # current_duplicate
 
           past_primary = create(:event, title: "Past", start_time: now - 2.days)
-          past_duplicate = create(:event, title: past_primary.title, start_time: now - 1.day)
+          create(:event, title: past_primary.title, start_time: now - 1.day) # past_duplicate
 
           get "duplicates", params: {type: "title"}
 
