@@ -3,21 +3,21 @@
 module Calagator
   module MappingHelper
     def map_provider
-      Calagator.mapping_provider || 'stamen'
+      Calagator.mapping_provider || "stamen"
     end
 
     def leaflet_js
-      Rails.env.production? ? ['https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js'] : ['leaflet']
+      Rails.env.production? ? ["https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"] : ["leaflet"]
     end
 
     def map_provider_dependencies
       {
-        'stamen' => ['http://maps.stamen.com/js/tile.stamen.js?v1.2.3'],
-        'mapbox' => ['https://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.standalone.js'],
-        'esri' => ['https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js'],
-        'google' => [
+        "stamen" => ["http://maps.stamen.com/js/tile.stamen.js?v1.2.3"],
+        "mapbox" => ["https://api.tiles.mapbox.com/mapbox.js/v1.3.1/mapbox.standalone.js"],
+        "esri" => ["https://cdn-geoweb.s3.amazonaws.com/esri-leaflet/0.0.1-beta.5/esri-leaflet.js"],
+        "google" => [
           "https://maps.googleapis.com/maps/api/js?key=#{Calagator.mapping_google_maps_api_key}&sensor=false",
-          'leaflet_google_layer'
+          "leaflet_google_layer"
         ]
       }[map_provider] || []
     end
@@ -55,11 +55,11 @@ module Calagator
       end
 
       def map_div
-        context.content_tag(:div, '', id: div_id)
+        context.content_tag(:div, "", id: div_id)
       end
 
       def div_id
-        options[:id] || 'map'
+        options[:id] || "map"
       end
 
       def zoom
@@ -97,17 +97,17 @@ module Calagator
 
       def layer_constructor
         constructor_map = {
-          'stamen' => 'L.StamenTileLayer',
-          'mapbox' => 'L.mapbox.tileLayer',
-          'esri' => 'L.esri.basemapLayer',
-          'google' => 'L.Google',
-          'leaflet' => 'L.tileLayer'
+          "stamen" => "L.StamenTileLayer",
+          "mapbox" => "L.mapbox.tileLayer",
+          "esri" => "L.esri.basemapLayer",
+          "google" => "L.Google",
+          "leaflet" => "L.tileLayer"
         }
         constructor_map[context.map_provider]
       end
 
       def map_tiles
-        Calagator.mapping_tiles || 'terrain'
+        Calagator.mapping_tiles || "terrain"
       end
     end
   end

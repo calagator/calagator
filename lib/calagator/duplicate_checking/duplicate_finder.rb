@@ -50,22 +50,22 @@ module Calagator
       def query_from_all
         attributes.map do |attr|
           "((#{full_attr(attr)} = b.#{attr}) OR (#{full_attr(attr)} IS NULL AND b.#{attr} IS NULL))"
-        end.join(' AND ')
+        end.join(" AND ")
       end
 
       def query_from_any
         attributes.map do |attr|
           "(#{full_attr(attr)} = b.#{attr} AND (#{is_truthy_subquery(attr)}))"
-        end.join(' OR ')
+        end.join(" OR ")
       end
 
       def is_truthy_subquery(attr)
         column = model.columns.find { |column| column.name.to_sym == attr }
         query = case column.type
-                when :integer, :decimal
-                  "#{full_attr(attr)} != 0 AND "
-                when :string, :text
-                  "#{full_attr(attr)} != '' AND "
+        when :integer, :decimal
+          "#{full_attr(attr)} != 0 AND "
+        when :string, :text
+          "#{full_attr(attr)} != '' AND "
         end
         "#{query}#{full_attr(attr)} IS NOT NULL"
       end
@@ -77,7 +77,7 @@ module Calagator
 
         Array(fields).map do |attr|
           "#{full_attr(attr)} = b.#{attr}"
-        end.join(' AND ')
+        end.join(" AND ")
       end
 
       def attributes

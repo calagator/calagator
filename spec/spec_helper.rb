@@ -1,28 +1,28 @@
 # frozen_string_literal: true
 
-unless File.exist?('spec/test_app')
-  puts 'Missing testing app in spec/test_app !' # FIXME: 'Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one.'
+unless File.exist?("spec/test_app")
+  puts "Missing testing app in spec/test_app !" # FIXME: 'Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one.'
   exit 1
 end
 
-require 'simplecov'
+require "simplecov"
 
-require 'rails_helper'
-require 'rspec-activemodel-mocks'
-require 'rspec/its'
-require 'rspec-rails'
-require 'rspec/collection_matchers'
-require 'factory_bot_rails'
-require 'capybara'
-require 'capybara/rspec'
-require 'database_cleaner'
-require 'webdrivers/chromedriver'
-require 'selenium-webdriver'
-require 'timecop'
-require 'webmock'
+require "rails_helper"
+require "rspec-activemodel-mocks"
+require "rspec/its"
+require "rspec-rails"
+require "rspec/collection_matchers"
+require "factory_bot_rails"
+require "capybara"
+require "capybara/rspec"
+require "database_cleaner"
+require "webdrivers/chromedriver"
+require "selenium-webdriver"
+require "timecop"
+require "webmock"
 
-if Object.const_defined? 'SimpleCov'
-  SimpleCov.command_name 'rspec'
+if Object.const_defined? :SimpleCov
+  SimpleCov.command_name "rspec"
 end
 
 # Load support files
@@ -88,7 +88,7 @@ RSpec.configure do |config|
     # Use the documentation formatter for detailed output,
     # unless a formatter has already been configured
     # (e.g. via a command-line flag).
-    config.default_formatter = 'doc'
+    config.default_formatter = "doc"
   end
 
   # Print the 10 slowest examples and example groups at the

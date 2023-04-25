@@ -5,19 +5,19 @@ module Calagator
     include TimeRangeHelper # provides normalize_time
 
     def today_tomorrow_or_weekday(event)
-      output = event.start_time.strftime('%A')
+      output = event.start_time.strftime("%A")
       output = "Started #{output}" if event.ongoing?
       output
     end
 
     # Cast date to_date unless date is undefined
     def format_event_date(date)
-      date ? date.to_date : ''
+      date ? date.to_date : ""
     end
 
     # Cast date to time unless date is undefined
     def format_event_time(date)
-      date ? date.strftime('%I:%M %p') : ''
+      date ? date.strftime("%I:%M %p") : ""
     end
 
     # calculate rowspans for an array of events
@@ -51,7 +51,7 @@ module Calagator
       if key.present?
         link_to(sorting_label_for(key, @tag.present?), url_for(params.to_unsafe_h.merge(order: key)))
       else
-        link_to('Default', url_for(params.to_unsafe_h.tap { |o| o.delete :order }))
+        link_to("Default", url_for(params.to_unsafe_h.tap { |o| o.delete :order }))
       end
     end
 
@@ -90,13 +90,13 @@ module Calagator
         events_url(common)
     end
 
-    GOOGLE_EVENT_SUBSCRIBE_BASE = 'https://www.google.com/calendar/render?cid='
+    GOOGLE_EVENT_SUBSCRIBE_BASE = "https://www.google.com/calendar/render?cid="
 
     # Returns a Google Calendar subscription URL.
     #
     # @see #_events_feed_linker for details on parameters and exceptions.
     def google_events_subscription_link(filter = {})
-      link = _events_feed_linker(filter, protocol: 'webcal', format: 'ics')
+      link = _events_feed_linker(filter, protocol: "webcal", format: "ics")
       "#{GOOGLE_EVENT_SUBSCRIBE_BASE}#{CGI.escape(link)}"
     end
 
@@ -104,21 +104,21 @@ module Calagator
     #
     # @see #_events_feed_linker for details on parameters and exceptions.
     def icalendar_feed_link(filter = {})
-      _events_feed_linker(filter, protocol: 'webcal', format: 'ics')
+      _events_feed_linker(filter, protocol: "webcal", format: "ics")
     end
 
     # Returns an iCalendar export URL.
     #
     # @see #_events_feed_linker for details on parameters and exceptions.
     def icalendar_export_link(filter = {})
-      _events_feed_linker(filter, format: 'ics')
+      _events_feed_linker(filter, format: "ics")
     end
 
     # Returns an ATOM subscription URL.
     #
     # @see #_events_feed_linker for details on parameters and exceptions.
     def atom_feed_link(filter = {})
-      _events_feed_linker(filter, format: 'atom')
+      _events_feed_linker(filter, format: "atom")
     end
 
     #--[ Sharing buttons ]-----------------------------------------
@@ -130,12 +130,12 @@ module Calagator
 
       result = []
       result << "#{truncate(event.title, length: lengths[:title])} -"
-      result << event.start_time.strftime('%I:%M%p %m.%d.%Y') # "04:00PM 08.01.2012"
+      result << event.start_time.strftime("%I:%M%p %m.%d.%Y") # "04:00PM 08.01.2012"
       if event.venue
         result << "@ #{truncate(event.venue.title, length: lengths[:venue])}"
       end
 
-      result.join(' ')
+      result.join(" ")
     end
 
     # Will increase the maximum length of either the event title or venue
@@ -143,10 +143,10 @@ module Calagator
 
     def tweet_text_sizer(event)
       title_length = event.title.length
-      venue_length = (event.venue.try(:title) || '').length
+      venue_length = (event.venue.try(:title) || "").length
       title_length = tweet_length(title_length, venue_length)
       venue_length = tweet_length(venue_length, title_length)
-      { title: title_length, venue: title_length }
+      {title: title_length, venue: title_length}
     end
     private :tweet_text_sizer
 
@@ -172,18 +172,18 @@ module Calagator
       if sorting_key.present? && SORTING_LABELS.key?(sorting_key)
         SORTING_LABELS[sorting_key]
       elsif is_searching_by_tag
-        SORTING_LABELS['date']
+        SORTING_LABELS["date"]
       else
-        SORTING_LABELS['score']
+        SORTING_LABELS["score"]
       end
     end
 
     # Labels displayed for sorting options:
     SORTING_LABELS = {
-      'name' => 'Event Name',
-      'venue' => 'Location',
-      'score' => 'Relevance',
-      'date' => 'Date'
+      "name" => "Event Name",
+      "venue" => "Location",
+      "score" => "Relevance",
+      "date" => "Date"
     }.freeze
     private_constant :SORTING_LABELS
   end

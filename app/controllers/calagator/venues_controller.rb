@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'calagator/duplicate_checking/controller_actions'
+require "calagator/duplicate_checking/controller_actions"
 
 module Calagator
   class VenuesController < Calagator::ApplicationController
@@ -27,9 +27,9 @@ module Calagator
       respond_to do |format|
         format.html # index.html.erb
         format.kml  # index.kml.erb
-        format.xml  { render xml:  venues }
+        format.xml { render xml: venues }
         format.json { render json: venues }
-        format.js   { render json: venues }
+        format.js { render json: venues }
       end
     end
     private :render_venues
@@ -37,10 +37,10 @@ module Calagator
     # GET /autocomplete via AJAX
     def autocomplete
       @venues = Venue
-                .non_duplicates
-                .in_business
-                .where(['LOWER(title) LIKE ?', "%#{params[:term]}%".downcase])
-                .order(Arel.sql('LOWER(title)'))
+        .non_duplicates
+        .in_business
+        .where(["LOWER(title) LIKE ?", "%#{params[:term]}%".downcase])
+        .order(Arel.sql("LOWER(title)"))
 
       render json: @venues
     end
@@ -65,7 +65,7 @@ module Calagator
       def show_all_if_not_found
         return if venue
       rescue ActiveRecord::RecordNotFound => e
-        redirect_to venues_path, flash: { failure: e.to_s }
+        redirect_to venues_path, flash: {failure: e.to_s}
       end
 
       def redirect_to_originator
@@ -75,9 +75,9 @@ module Calagator
       def render_venue
         respond_to do |format|
           format.html
-          format.xml  { render xml: venue }
+          format.xml { render xml: venue }
           format.json { render json: venue }
-          format.ics  { render ics: venue_events }
+          format.ics { render ics: venue_events }
         end
       end
 
@@ -89,7 +89,7 @@ module Calagator
     # GET /venues/new
     def new
       venue
-      render layout: params[:layout] != 'false'
+      render layout: params[:layout] != "false"
     end
 
     # GET /venues/1/edit
@@ -101,7 +101,7 @@ module Calagator
     def create
       CreateOrUpdate.new(self).call(recaptcha_verified?(venue))
     end
-    alias update create
+    alias_method :update, :create
 
     class CreateOrUpdate < SimpleDelegator
       def call(recaptcha_result)
@@ -127,16 +127,16 @@ module Calagator
 
       def render_success
         respond_to do |format|
-          format.html { redirect_to from_event || venue, flash: { success: 'Venue was successfully saved.' } }
-          format.xml  { render xml: venue, status: :created, location: venue }
+          format.html { redirect_to from_event || venue, flash: {success: "Venue was successfully saved."} }
+          format.xml { render xml: venue, status: :created, location: venue }
         end
       end
 
       def render_failure
-        flash[:failure] = '<h3>Please fix any errors and try again</h3>'
+        flash[:failure] = "<h3>Please fix any errors and try again</h3>"
         respond_to do |format|
-          format.html { render action: venue.new_record? ? 'new' : 'edit' }
-          format.xml  { render xml: venue.errors, status: :unprocessable_entity }
+          format.html { render action: venue.new_record? ? "new" : "edit" }
+          format.xml { render xml: venue.errors, status: :unprocessable_entity }
         end
       end
 
@@ -160,18 +160,18 @@ module Calagator
       def prevent_destruction_of_venue_with_events
         return if venue.events.none?
 
-        message = 'Cannot destroy venue that has associated events, you must reassociate all its events first.'
+        message = "Cannot destroy venue that has associated events, you must reassociate all its events first."
         respond_to do |format|
-          format.html { redirect_to venue, flash: { failure: message } }
-          format.xml  { render xml: message, status: :unprocessable_entity }
+          format.html { redirect_to venue, flash: {failure: message} }
+          format.xml { render xml: message, status: :unprocessable_entity }
         end
       end
 
       def destroy
         venue.destroy
         respond_to do |format|
-          format.html { redirect_to venues_path, flash: { success: %("#{venue.title}" has been deleted) } }
-          format.xml  { head :ok }
+          format.html { redirect_to venues_path, flash: {success: %("#{venue.title}" has been deleted)} }
+          format.xml { head :ok }
         end
       end
     end

@@ -14,7 +14,7 @@ module Calagator
 
         events.present?
       rescue Source::Parser::NotFound
-        add_error 'No events found at remote site. Is the event identifier in the URL correct?'
+        add_error "No events found at remote site. Is the event identifier in the URL correct?"
       rescue Source::Parser::HttpAuthenticationRequiredError
         add_error "Couldn't import events, remote site requires authentication."
       rescue OpenURI::HTTPError
@@ -31,7 +31,7 @@ module Calagator
         if events.nil?
           "Unable to import: #{source.errors.full_messages.to_sentence}"
         else
-          'Unable to find any upcoming events to import from this source'
+          "Unable to find any upcoming events to import from this source"
         end
       end
 

@@ -16,13 +16,13 @@ module Calagator
       private
 
       def url
-        'https://www.google.com/calendar/event?action=TEMPLATE&trp=true&'
+        "https://www.google.com/calendar/event?action=TEMPLATE&trp=true&"
       end
 
       def query
         fields.collect do |field|
           send(field).to_query(field)
-        end.compact.join('&')
+        end.compact.join("&")
       end
 
       def fields
@@ -34,7 +34,7 @@ module Calagator
       end
 
       def dates
-        google_time_format = '%Y%m%dT%H%M%SZ'
+        google_time_format = "%Y%m%dT%H%M%SZ"
         end_time = event.end_time || event.start_time
         "#{event.start_time.utc.strftime(google_time_format)}/#{end_time.utc.strftime(google_time_format)}"
       end
@@ -48,7 +48,7 @@ module Calagator
       end
 
       def sprop
-        "website:#{event.url.sub(%r{^http.?://}, '')}" if event.url.present?
+        "website:#{event.url.sub(%r{^http.?://}, "")}" if event.url.present?
       end
 
       def details
@@ -56,7 +56,7 @@ module Calagator
       end
 
       def truncate(string)
-        omission = '...[truncated]'
+        omission = "...[truncated]"
         length = 1024 - omission.length
         context.truncate(string, length: length, omission: omission)
       end

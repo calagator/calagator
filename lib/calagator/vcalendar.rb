@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'ri_cal'
+require "ri_cal"
 
 module Calagator
   class VCalendar < Struct.new(:ri_cal_calendar)
@@ -71,7 +71,7 @@ module Calagator
     private
 
     def venue_uid
-      ri_cal_event.location_property.try(:params).try(:[], 'VVENUE')
+      ri_cal_event.location_property.try(:params).try(:[], "VVENUE")
     end
   end
 
@@ -105,7 +105,7 @@ module Calagator
     def geo_latlng
       return [] unless geo
 
-      geo.split(/;/).map(&:to_f)
+      geo.split(";").map(&:to_f)
     end
 
     def vcard_hash
@@ -113,7 +113,7 @@ module Calagator
       vcard = RiCal.parse_string(raw_ical_venue).first
 
       # Extract all properties into an array of "KEY;meta-qualifier:value" strings
-      vcard_lines = vcard.export_properties_to(StringIO.new(+''))
+      vcard_lines = vcard.export_properties_to(StringIO.new(+""))
 
       hash_from_vcard_lines(vcard_lines)
     end

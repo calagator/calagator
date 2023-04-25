@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 # Non-database model derived from: http://railscasts.com/episodes/219-active-model
 module Calagator
@@ -25,7 +25,7 @@ module Calagator
     end
 
     def attributes
-      { kitten: kitten }
+      {kitten: kitten}
     end
   end
 
@@ -35,8 +35,8 @@ module Calagator
   end
 
   describe DecodeHtmlEntitiesHack, type: :model do
-    let(:encoded_string) { 'cute &amp; furry' }
-    let(:decoded_string) { 'cute & furry' }
+    let(:encoded_string) { "cute &amp; furry" }
+    let(:decoded_string) { "cute & furry" }
 
     it "does not modify attributes in models that don't include it" do
       record = ModelWithoutDecodeHack.new(kitten: encoded_string)
@@ -44,7 +44,7 @@ module Calagator
       expect(record.kitten).to eq encoded_string
     end
 
-    it 'modifies attributes in models that include it' do
+    it "modifies attributes in models that include it" do
       record = ModelWithDecodeHack.new(kitten: encoded_string)
       expect(record).to be_valid
       expect(record.kitten).to eq decoded_string

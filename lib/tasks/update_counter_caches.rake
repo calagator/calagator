@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-desc 'Update counter caches'
+desc "Update counter caches"
 task update_counter_caches: :environment do
   # Update the Venue#events_count
   total = Calagator::Venue.count

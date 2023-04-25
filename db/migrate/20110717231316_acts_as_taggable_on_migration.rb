@@ -44,7 +44,7 @@ class ActsAsTaggableOnMigration < ActiveRecord::Migration[4.2]
     remove_column :taggings, :context
     remove_column :taggings, :created_at
 
-    add_index 'taggings', %w[tag_id taggable_id taggable_type], name: 'index_taggings_on_tag_id_and_taggable_id_and_taggable_type', unique: true
+    add_index "taggings", %w[tag_id taggable_id taggable_type], name: "index_taggings_on_tag_id_and_taggable_id_and_taggable_type", unique: true
 
     # drop_table :taggings
     # drop_table :tags

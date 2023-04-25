@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'net/http'
-require 'net/https'
-require 'open-uri'
+require "net/http"
+require "net/https"
+require "open-uri"
 
 # == Source::Parser
 #
@@ -93,7 +93,7 @@ module Calagator
       end
     end
 
-    def to_events_api_helper(url, error_key = 'error')
+    def to_events_api_helper(url, error_key = "error")
       # Extract +event_id+ from :url using +url_pattern+.
       event_id = url[self.class.url_pattern, 1]
       return false unless event_id # Give up unless we find the identifier.
@@ -102,18 +102,18 @@ module Calagator
       url, params = *yield(event_id)
 
       # Get data from the API.
-      data = RestClient.get(url, params: params, accept: 'json').to_str
+      data = RestClient.get(url, params: params, accept: "json").to_str
       data = JSON.parse(data)
 
       # Stop if API tells us there's an error.
       raise Source::Parser::NotFound, error if error = data[error_key]
 
-      data['event_id'] = event_id
+      data["event_id"] = event_id
       data
     end
   end
 end
 
-require 'calagator/source/parser/not_found'
-require 'calagator/source/parser/ical'
-require 'calagator/source/parser/hcal'
+require "calagator/source/parser/not_found"
+require "calagator/source/parser/ical"
+require "calagator/source/parser/hcal"
