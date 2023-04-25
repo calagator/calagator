@@ -146,7 +146,7 @@ module Calagator
       venue_length = (event.venue.try(:title) || "").length
       title_length = tweet_length(title_length, venue_length)
       venue_length = tweet_length(venue_length, title_length)
-      {title: title_length, venue: title_length}
+      {title: title_length, venue: venue_length}
     end
     private :tweet_text_sizer
 
