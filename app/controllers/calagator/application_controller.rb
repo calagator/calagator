@@ -41,6 +41,7 @@ module Calagator
         )
       )
     end
+    private_class_method :require_admin
 
     #---[ Helpers ]---------------------------------------------------------
 
