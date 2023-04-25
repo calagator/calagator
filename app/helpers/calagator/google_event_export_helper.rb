@@ -41,7 +41,7 @@ module Calagator
 
       def location
         location = event.venue.try(:title)
-        if address = event.venue.try(:geocode_address)
+        if (address = event.venue.try(:geocode_address))
           location += ", #{address}" if address.present?
         end
         location

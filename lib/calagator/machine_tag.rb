@@ -52,8 +52,8 @@ module Calagator
     end
 
     def url
-      return unless machine_tag = urls[namespace]
-      return unless url_template = machine_tag[predicate]
+      return unless (machine_tag = urls[namespace])
+      return unless (url_template = machine_tag[predicate])
 
       url = format(url_template, value)
       if defunct?
