@@ -69,18 +69,17 @@ module Calagator
         ]
 
         # non_matching
-        [
-          Event.create!(
-            title: "nonmatchingbefore",
-            start_time: Time.zone.parse("2010-01-15 23:00"),
-            end_time: Time.zone.parse("2010-01-15 23:59")
-          ),
-          Event.create!(
-            title: "nonmatchingafter",
-            start_time: Time.zone.parse("2010-01-17 00:01"),
-            end_time: Time.zone.parse("2010-01-17 01:00")
-          )
-        ]
+
+        Event.create!(
+          title: "nonmatchingbefore",
+          start_time: Time.zone.parse("2010-01-15 23:00"),
+          end_time: Time.zone.parse("2010-01-15 23:59")
+        )
+        Event.create!(
+          title: "nonmatchingafter",
+          start_time: Time.zone.parse("2010-01-17 00:01"),
+          end_time: Time.zone.parse("2010-01-17 01:00")
+        )
 
         # When
         browse = described_class.new(date: {start: "2010-01-16", end: "2010-01-16"})
