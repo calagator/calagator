@@ -49,7 +49,7 @@ module Calagator
         else
           Event.search(query, order: order, skip_old: current)
         end
-      rescue ActiveRecord::StatementInvalid => e
+      rescue ActiveRecord::StatementInvalid
         @failure_message = "There was an error completing your search."
         @hard_failure = true
         []

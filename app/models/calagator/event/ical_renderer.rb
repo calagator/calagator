@@ -20,7 +20,7 @@ module Calagator
       def self.render(events, opts = {})
         output = render_icalendar(events, opts)
         output = add_name(output)
-        output = normalize_line_endings(output)
+        normalize_line_endings(output)
       end
 
       def self.render_icalendar(events, opts)

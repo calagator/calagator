@@ -94,7 +94,7 @@ module Calagator
         end
 
         it "an event with a orphaned exact duplicate should should remove duplicate marking" do
-          orphan = Event.create!(title: "orphan", start_time: Time.parse("July 14 2008").in_time_zone, duplicate_of_id: 7_142_008)
+          Event.create!(title: "orphan", start_time: Time.parse("July 14 2008").in_time_zone, duplicate_of_id: 7_142_008)
           cal_content = %(
         <div class="vevent">
         <abbr class="summary" title="orphan"></abbr>
@@ -156,7 +156,7 @@ module Calagator
       end
 
       it "uses an existing venue when importing an event whose venue matches a squashed duplicate" do
-        new_source = Source.create!(title: "Squashed?!", url: "http://IcalEventWithSquashedVenue.com/")
+        Source.create!(title: "Squashed?!", url: "http://IcalEventWithSquashedVenue.com/")
         primary_venue = Venue.create!(title: "Prime")
         squashed_venue = Venue.create!(
           title: "Squashed Duplicate Venue",
