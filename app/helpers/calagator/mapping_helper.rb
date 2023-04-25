@@ -76,7 +76,7 @@ module Calagator
 
       def markers
         Array(locatable_items).map do |locatable_item|
-          next unless location = locatable_item.location
+          next unless (location = locatable_item.location)
 
           {
             latitude: location[0],

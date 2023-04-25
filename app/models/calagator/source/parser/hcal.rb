@@ -25,7 +25,7 @@ module Calagator
         event.source = source
         EVENT_TO_HCALENDAR_FIELD_MAP.each do |field, hcal_field|
           next unless hcal.respond_to?(hcal_field)
-          next unless value = decoded_field(hcal, hcal_field)
+          next unless (value = decoded_field(hcal, hcal_field))
 
           event.send "#{field}=", value
         end
@@ -38,7 +38,7 @@ module Calagator
     private
 
     def decoded_field(hcal, hcal_field)
-      return unless raw_field = hcal.send(hcal_field)
+      return unless (raw_field = hcal.send(hcal_field))
 
       decoded_field = case hcal_field
       when :start, :end
