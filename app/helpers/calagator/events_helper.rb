@@ -41,7 +41,7 @@ module Calagator
     end
 
     def google_maps_url(address)
-      "https://maps.google.com/maps?q=#{URI.encode(address)}"
+      "https://maps.google.com/maps?q=#{URI.encode_www_form_component(address)}"
     end
 
     #---[ Event sorting ]----------------------------------------------------
