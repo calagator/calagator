@@ -41,9 +41,6 @@ FactoryBot.define do
   end
 
   factory :seed_event, class: Calagator::Event do
-    from = 2.years.ago
-    to = 2.years.from_now
-
     title { Faker::Lorem.sentence }
     description { Faker::Lorem.paragraph }
     start_time do

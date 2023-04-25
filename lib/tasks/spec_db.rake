@@ -6,8 +6,6 @@ namespace :spec do
 
     desc "Run specs against all databases"
     task :all do
-      failed = false
-
       databases.each do |database|
         test_against database
       end
