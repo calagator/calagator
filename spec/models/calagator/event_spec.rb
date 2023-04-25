@@ -582,7 +582,7 @@ module Calagator
       end
 
       it "does not find duplicates for mismatching multiple fields" do
-        clone = described_class.create!(title: "SpaceCube", start_time: subject.start_time)
+        described_class.create!(title: "SpaceCube", start_time: subject.start_time)
         events = described_class.find_duplicates_by_type("title,start_time")
         expect(events).to be_empty
       end

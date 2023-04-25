@@ -32,7 +32,7 @@ module Calagator
 
     describe "when parsing events" do
       xit "uses first successful parser's results" do
-        events = [double]
+        # events = [double]
 
         body = {
           name: "event",
@@ -158,7 +158,8 @@ module Calagator
       it "uses an existing venue when importing an event whose venue matches a squashed duplicate" do
         Source.create!(title: "Squashed?!", url: "http://IcalEventWithSquashedVenue.com/")
         primary_venue = Venue.create!(title: "Prime")
-        squashed_venue = Venue.create!(
+        # squashed_venue
+        Venue.create!(
           title: "Squashed Duplicate Venue",
           duplicate_of_id: primary_venue.id
         )
