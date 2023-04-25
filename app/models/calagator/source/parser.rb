@@ -106,8 +106,7 @@ module Calagator
       data = JSON.parse(data)
 
       # Stop if API tells us there's an error.
-      raise Source::Parser::NotFound, error if (error = data[error_key])
-
+      raise Source::Parser::NotFound, error if data[error_key]
       data["event_id"] = event_id
       data
     end
