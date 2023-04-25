@@ -63,7 +63,7 @@ module Calagator
     # +kind+ (e.g. :failure).
     def append_flash(kind, message)
       kind = kind.to_sym
-      flash[kind] = if(leaf = flash[kind])
+      flash[kind] = if (leaf = flash[kind])
         "#{leaf} #{message}"
       else
         message.to_s
