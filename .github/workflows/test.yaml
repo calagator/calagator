@@ -70,6 +70,8 @@ jobs:
       #   run: bundle _1.17.3_ exec bin/calagator new spec/dummy --dummy --database=${{ matrix.db }} --postgres-username=postgres
       - name: StandardRB Action
         uses: andrewmcodes/standardrb-action@v0.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set Postgres Username + Host
         if: matrix.db == 'postgresql'
         run: |
