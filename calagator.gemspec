@@ -47,7 +47,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails_autolink", "~> 1.1"
   s.add_dependency "recaptcha", "~> 5.8"
   s.add_dependency "rest-client", "~> 2.0"
-  s.add_dependency "ri_cal", "~> 0.8.8"
+  s.add_dependency "demingfactor-ri_cal", "~> 0.9.0"
   s.add_dependency "sassc-rails", "~> 2.1"
   s.add_dependency "sunspot_rails", "~> 2.1"
   s.add_dependency "utf8-cleaner", ">= 0.0.6", "< 1.1.0"
