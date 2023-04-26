@@ -46,8 +46,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      - name: StandardRB Action
-        uses: andrewmcodes/standardrb-action@v0.0.2
       - uses: actions/setup-java@v3
         with:
           java-version: 8
@@ -70,6 +68,8 @@ jobs:
           bundle install --jobs 4 --retry 3
       # - name: Generate host app for testing
       #   run: bundle _1.17.3_ exec bin/calagator new spec/dummy --dummy --database=${{ matrix.db }} --postgres-username=postgres
+      - name: StandardRB Action
+        uses: andrewmcodes/standardrb-action@v0.0.2
       - name: Set Postgres Username + Host
         if: matrix.db == 'postgresql'
         run: |
