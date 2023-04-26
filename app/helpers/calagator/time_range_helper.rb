@@ -2,7 +2,7 @@
 
 module Calagator
   module TimeRangeHelper
-    extend self # rubocop:disable Style/ModuleFunction
+    extend self
 
     # Initialize with a single DateTime, a pair of DateTimes,
     # or an object that responds_to start_time and end_time, and two options
