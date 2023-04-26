@@ -49,6 +49,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rest-client", "~> 2.0"
   s.add_dependency "demingfactor-ri_cal", "~> 0.9.0"
   s.add_dependency "sassc-rails", "~> 2.1"
+  s.add_dependency "standard", "~> 1.28.0"
   s.add_dependency "sunspot_rails", "~> 2.1"
   s.add_dependency "utf8-cleaner", ">= 0.0.6", "< 1.1.0"
   s.add_dependency "validate_url", "~> 1.0.15"
