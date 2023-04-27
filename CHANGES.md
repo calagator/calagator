@@ -1,4 +1,9 @@
-# Changes
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Conventions used in this document:
 
@@ -6,13 +11,11 @@ Conventions used in this document:
   * [SETTING] - Changed setting structure, see the `themes/README.txt` file for details.
   * [MIGRATION] - Change schema, run `bundle exec rake db:migrate` to apply.
 
-## Change Log
-
 List of Calagator releases and changes, with the latest at the top:
-### v2.0.1 [Unreleased]
+## [2.0.1] Unreleased
   * Implements 'standardrb' for community peace (All linting issues RESOLVED)
   * Removes rubocop in favor of standardrb.
-### v2.0.0 - 2023-04-23
+## [2.0.0] - 2023-04-23
   * Rails 5.2 running cleanly on Ruby 2.6
   * Calagator returned to a working state with passing specs and CI build.
   * This cleanup release resolves a range of project maintenance issues:
@@ -25,7 +28,7 @@ List of Calagator releases and changes, with the latest at the top:
   * DEVELOPMENT.md improvements
     - New section: 'Checking your app works'
     - New section: 'Building the calagator gem locally'
-### v1.2.0
+## [1.2.0]
   * [!] Upgrade to minimum Ruby version 2.6.
   * [!] Upgrade to Rails 5 with minimum Ruby version 2.5.
   * [!] Remove inappropriate terminology such as master, slave, and blacklist. Existing `blacklist.txt` files will need to be renamed to `denylist.txt` when upgrading a Rails app that uses earlier versions of this gem.
@@ -40,7 +43,7 @@ List of Calagator releases and changes, with the latest at the top:
 
   * Remove Meetup parser (#681)
   * Remove Facebook parser (#683)
-### v1.1.0
+### [1.1.0] - 2019-12-01
 
 Enhancements:
 
@@ -51,7 +54,7 @@ Bug fixes:
 
     * Fix tag icons (#586)
 
-### v1.0.0
+## [1.0.0] - 2019-04-27
     * [!] This release completely changes the way in which Calagator is distributed, moving from a standalone Rails app to a [Rails engine](http://guides.rubyonrails.org/engines.html). Instead of deploying Calagator instance from a modified version of this code, Calagator is now included as a gem within a new Rails app. Please review the updated installation instructions in INSTALL.md.
     * If you are upgrading a site based on an earlier version of Calagator, please [drop us a line](http://groups.google.com/group/calagator-development/). We've recently upgraded [calagator.org](http://calagator.org) and can help to point you in the right direction.
     * [THEME] The theme system has been removed, favoring the [view overriding](http://guides.rubyonrails.org/engines.html#overriding-views) functionality provided by Rails engines.
@@ -61,7 +64,7 @@ This works much the same way as the previous theme system, allowing any Calagato
     * [DEPENDENCY] Upgraded to Rails 4.2.11.1.
     * Numerous additional dependency upgrades and bugfixes.
 
-### Pre-1.0
+## [Pre-1.0] - 2015-10-08
 
 Prior to version 1.0, Calagator was distributed as a standalone Rails app instead of an engine. Some additional labels are relevant in these changes that are not used above.
 
