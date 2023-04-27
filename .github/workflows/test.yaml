@@ -89,7 +89,7 @@ jobs:
       - name: Run RSpec
         run: bundle exec rake spec
       - name: Run Standardrb
-        run: bundle exec standardrb
+        run: echo "ignore:\n - 'gemfiles/**/*'" > .standard.yml && bundle exec standardrb && rm .standard.yml
       - uses: actions/upload-artifact@v1
         with:
           name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}
