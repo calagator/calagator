@@ -68,10 +68,10 @@ jobs:
           bundle install --jobs 4 --retry 3
       # - name: Generate host app for testing
       #   run: bundle _1.17.3_ exec bin/calagator new spec/dummy --dummy --database=${{ matrix.db }} --postgres-username=postgres
-      # - name: StandardRB Action
-      #   uses: andrewmcodes/standardrb-action@v0.0.2
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: StandardRB Action
+        uses: andrewmcodes/standardrb-action@v0.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set Postgres Username + Host
         if: matrix.db == 'postgresql'
         run: |
@@ -88,8 +88,6 @@ jobs:
           RAILS_ENV=test bundle exec rake app:sunspot:solr:start_with_waiting
       - name: Run RSpec
         run: bundle exec rake spec
-      - name: Run Standardrb
-        run: echo "ignore:\n - 'gemfiles/**/*'" > .standard.yml && bundle exec standardrb && rm .standard.yml
       - uses: actions/upload-artifact@v1
         with:
           name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}
