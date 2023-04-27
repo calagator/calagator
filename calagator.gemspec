@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.executables << "calagator"
 
   # When changing this Rails requirement, also update RAILS_REQUIREMENT in rails_template.rb
-  s.add_dependency 'rails', '~> 6.0.6.1'
+  s.add_dependency "rails", "~> 6.0.6.1"
   s.add_dependency "activemodel-serializers-xml", "~> 1.0"
   s.add_dependency "acts-as-taggable-on", ">= 8.1", "< 10.0"
   s.add_dependency "annotate", ">= 3.1.1", "< 3.3.0"
