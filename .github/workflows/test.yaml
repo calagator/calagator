@@ -86,10 +86,10 @@ jobs:
       - name: Start Solr
         run: |
           RAILS_ENV=test bundle exec rake app:sunspot:solr:start_with_waiting
-      - name: Run RSpec & StandardRb
-      - run: | 
-          bundle exec rake spec
-          bundle exec standardrb
+      - name: Run RSpec
+        run: bundle exec rake spec
+      - name: Run Standardrb
+        run: bundle exec standardrb
       - uses: actions/upload-artifact@v1
         with:
           name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}
