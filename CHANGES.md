@@ -9,6 +9,9 @@ Conventions used in this document:
 ## Change Log
 
 List of Calagator releases and changes, with the latest at the top:
+### v2.0.1 [Unreleased]
+  * Implements 'standardrb' for community peace (All linting issues RESOLVED)
+  * Removes rubocop in favor of standardrb.
 ### v2.0.0 - 2023-04-23
   * Rails 5.2 running cleanly on Ruby 2.6
   * Calagator returned to a working state with passing specs and CI build.

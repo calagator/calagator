@@ -3,7 +3,7 @@
 # Edit this file to configure Geokit, which Calagator uses to geocode venues.
 # Geocoding lets us find the latitude/longitude of an entered address.
 
-require 'geokit'
+require "geokit"
 
 # This is the order in which the geocoders are called in a failover scenario
 # If you only want to use a single geocoder, put a single symbol in the array.

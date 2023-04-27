@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'timeout'
+require "timeout"
 
 class WaitForSolr < Struct.new(:port, :timeout)
   def self.on(port, timeout, &block)
-    new(port, timeout).wait &block
+    new(port, timeout).wait(&block)
   end
 
   def self.running_on?(port)

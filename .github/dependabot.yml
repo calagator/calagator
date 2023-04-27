@@ -13,13 +13,6 @@ updates:
   - dependency-name: sqlite3
     versions:
     - ">= 1.4.a, < 1.5"
-  - dependency-name: rubocop
-    versions:
-    - 1.10.0
-    - 1.11.0
-    - 1.12.0
-    - 1.8.1
-    - 1.9.1
   - dependency-name: timecop
     versions:
     - 0.9.2

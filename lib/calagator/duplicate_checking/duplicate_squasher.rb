@@ -8,7 +8,7 @@ module Calagator
       end
 
       def valid?
-        name = model_name.split('::').last
+        name = model_name.split("::").last
         self.failure = "A primary #{name} must be selected." if primary.blank?
         if duplicates.empty?
           self.failure = "At least one duplicate #{name} must be selected."
@@ -24,7 +24,7 @@ module Calagator
           duplicates.each do |duplicate|
             SingleSquasher.new(primary, duplicate, model_name).squash
           end
-          name = model_name.split('::').last
+          name = model_name.split("::").last
           self.success = "Squashed duplicate #{name.pluralize} #{duplicates.map(&:title).sort} into primary #{primary.id}."
         end
         self

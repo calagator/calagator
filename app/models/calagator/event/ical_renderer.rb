@@ -12,7 +12,7 @@
 # Example:
 #   ics1 = Event::IcalRenderer.render(myevent)
 #   ics2 = Event::IcalRenderer.render(myevents, url_helper: -> (event) { event_url(event) })
-require 'loofah/helpers'
+require "loofah/helpers"
 
 module Calagator
   class Event < Calagator::ApplicationRecord
@@ -20,12 +20,12 @@ module Calagator
       def self.render(events, opts = {})
         output = render_icalendar(events, opts)
         output = add_name(output)
-        output = normalize_line_endings(output)
+        normalize_line_endings(output)
       end
 
       def self.render_icalendar(events, opts)
         RiCal.Calendar do |calendar|
-          calendar.prodid = '-//Calagator//EN'
+          calendar.prodid = "-//Calagator//EN"
 
           Array(events).each do |event|
             calendar.event do |entry|
@@ -64,7 +64,7 @@ module Calagator
       end
 
       def summary
-        event.title || 'Untitled Event'
+        event.title || "Untitled Event"
       end
 
       def description
@@ -105,7 +105,7 @@ module Calagator
 
       def location
         if event.venue
-          [event.venue.title, event.venue.full_address].compact.join(': ')
+          [event.venue.title, event.venue.full_address].compact.join(": ")
         end
       end
 

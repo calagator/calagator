@@ -20,16 +20,16 @@
 #  venue_id        :integer
 #
 
-require 'calagator/denylist_validator'
-require 'calagator/duplicate_checking'
-require 'calagator/decode_html_entities_hack'
-require 'calagator/strip_whitespace'
-require 'calagator/url_prefixer'
-require 'paper_trail'
-require 'loofah-activerecord'
-require 'loofah/activerecord/xss_foliate'
-require 'active_model/sequential_validator'
-require 'active_model/serializers/xml'
+require "calagator/denylist_validator"
+require "calagator/duplicate_checking"
+require "calagator/decode_html_entities_hack"
+require "calagator/strip_whitespace"
+require "calagator/url_prefixer"
+require "paper_trail"
+require "loofah-activerecord"
+require "loofah/activerecord/xss_foliate"
+require "active_model/sequential_validator"
+require "active_model/serializers/xml"
 
 # == Event
 #
@@ -37,7 +37,7 @@ require 'active_model/serializers/xml'
 
 module Calagator
   class Event < Calagator::ApplicationRecord
-    self.table_name = 'events'
+    self.table_name = "events"
     self.belongs_to_required_by_default = false
 
     has_paper_trail
@@ -57,30 +57,30 @@ module Calagator
     validates :start_time, :end_time, sequential: true
     validates :title, :start_time, presence: true
     validates :url,
-              format: { with: %r{\Ahttps?://(\w+:?\w*@)?(\S+)(:[0-9]+)?(/|/([\w#!:.?+=&%@!\-/]))?\Z},
-                        allow_blank: true }
+      format: {with: %r{\Ahttps?://(\w+:?\w*@)?(\S+)(:[0-9]+)?(/|/([\w#!:.?+=&%@\-/]))?\Z},
+               allow_blank: true}
 
     before_destroy :check_if_locked_before_destroy # prevent locked events from being destroyed
 
     # Duplicates
     include DuplicateChecking
-    duplicate_checking_ignores_attributes    :source_id, :version, :venue_id, :tag_list
+    duplicate_checking_ignores_attributes :source_id, :version, :venue_id, :tag_list
     duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
     duplicate_finding_scope -> { future.order(:id) }
     after_squashing_duplicates ->(primary) { primary.venue.try(:update_events_count!) }
 
     # Named scopes
     scope :after_date, lambda { |date|
-      where(['start_time >= ?', date]).order(:start_time)
+      where(["start_time >= ?", date]).order(:start_time)
     }
     scope :on_or_after_date, lambda { |date|
       time = date.beginning_of_day
-      where('(events.start_time >= :time) OR (events.end_time IS NOT NULL AND events.end_time > :time)',
-            time: time).order(:start_time)
+      where("(events.start_time >= :time) OR (events.end_time IS NOT NULL AND events.end_time > :time)",
+        time: time).order(:start_time)
     }
     scope :before_date, lambda { |date|
       time = date.beginning_of_day
-      where('start_time < :time', time: time).order(start_time: :desc)
+      where("start_time < :time", time: time).order(start_time: :desc)
     }
     scope :future, -> { on_or_after_date(Time.zone.today) }
     scope :past, -> { before_date(Time.zone.today) }
@@ -92,14 +92,14 @@ module Calagator
     # Expand the simple sort order names from the URL into more intelligent SQL order strings
     scope :ordered_by_ui_field, lambda { |ui_field|
       scope = case ui_field
-              when 'name'
-                order(Arel.sql('lower(events.title)'))
-              when 'venue'
-                includes(:venue).order(Arel.sql('lower(venues.title)')).references(:venues)
-              else
-                all
+      when "name"
+        order(Arel.sql("lower(events.title)"))
+      when "venue"
+        includes(:venue).order(Arel.sql("lower(venues.title)")).references(:venues)
+      else
+        all
       end
-      scope.order('start_time')
+      scope.order("start_time")
     }
 
     #---[ Overrides ]-------------------------------------------------------
@@ -113,7 +113,7 @@ module Calagator
     def start_time=(value)
       super time_for(value)
     rescue ArgumentError
-      errors.add :start_time, 'is invalid'
+      errors.add :start_time, "is invalid"
       super nil
     end
 
@@ -122,7 +122,7 @@ module Calagator
     def end_time=(value)
       super time_for(value)
     rescue ArgumentError
-      errors.add :end_time, 'is invalid'
+      errors.add :end_time, "is invalid"
       super nil
     end
 

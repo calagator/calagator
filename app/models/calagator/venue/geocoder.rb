@@ -45,16 +45,16 @@ module Calagator
       def should_geocode?
         [
           perform_geocoding,
-          (venue.location.blank? || venue.force_geocoding == '1'),
+          (venue.location.blank? || venue.force_geocoding == "1"),
           venue.geocode_address.present?,
           venue.duplicate_of.blank?
         ].all?
       end
 
       def log
-        venue_id = venue.new_record? ? 'new record' : "record #{venue.id}"
-        status = geo.success ? 'was successful' : 'failed'
-        message = "Venue#add_geocoding for #{venue} #{status}, response was: #{geo.inspect}"
+        venue_id = venue.new_record? ? "new record" : "record #{venue.id}"
+        status = geo.success ? "was successful" : "failed"
+        message = "Venue#add_geocoding for #{venue_id} #{status}, response was: #{geo.inspect}"
         Rails.logger.info message
       end
     end
