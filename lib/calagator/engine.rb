@@ -1,5 +1,6 @@
 # frozen_string_literal: true
-require 'rack/contrib/jsonp'
+
+require "rack/contrib/jsonp"
 
 module Calagator
   class Engine < ::Rails::Engine

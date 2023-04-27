@@ -14,11 +14,11 @@ module Calagator
       end
 
       def most_active_venues
-        base.business.wifi_status.scope.order('events_count DESC').limit(10)
+        base.business.wifi_status.scope.order("events_count DESC").limit(10)
       end
 
       def newest_venues
-        base.business.wifi_status.scope.order('created_at DESC').limit(10)
+        base.business.wifi_status.scope.order("created_at DESC").limit(10)
       end
 
       def results?
@@ -39,8 +39,8 @@ module Calagator
         else
           base.business.wifi_status.search.scope
         end
-      rescue ActiveRecord::StatementInvalid => e
-        @failure_message = 'There was an error completing your search.'
+      rescue ActiveRecord::StatementInvalid
+        @failure_message = "There was an error completing your search."
         @hard_failure = true
         []
       end

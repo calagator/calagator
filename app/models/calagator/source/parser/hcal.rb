@@ -4,7 +4,7 @@
 #
 # Reads hCalendar events.
 
-require 'microformats'
+require "microformats"
 
 module Calagator
   class Source::Parser::Hcal < Source::Parser
@@ -25,7 +25,7 @@ module Calagator
         event.source = source
         EVENT_TO_HCALENDAR_FIELD_MAP.each do |field, hcal_field|
           next unless hcal.respond_to?(hcal_field)
-          next unless value = decoded_field(hcal, hcal_field)
+          next unless (value = decoded_field(hcal, hcal_field))
 
           event.send "#{field}=", value
         end
@@ -38,15 +38,15 @@ module Calagator
     private
 
     def decoded_field(hcal, hcal_field)
-      return unless raw_field = hcal.send(hcal_field)
+      return unless (raw_field = hcal.send(hcal_field))
 
-      decoded_field = case hcal_field
-                      when :start, :end
-                        Time.parse(raw_field).in_time_zone
-                      when :location
-                        to_venue(raw_field)
-                      else
-                        raw_field
+      case hcal_field
+      when :start, :end
+        Time.parse(raw_field).in_time_zone
+      when :location
+        to_venue(raw_field)
+      else
+        raw_field
       end
     end
 
@@ -93,15 +93,15 @@ module Calagator
         attributes[field] = raw.adr.send(field) if raw.adr.respond_to?(field)
       end
 
-      attributes['country'] = attributes.delete('country_name')
-      if attributes['postal_code']
-        attributes['postal_code'] = attributes['postal_code'].to_s
+      attributes["country"] = attributes.delete("country_name")
+      if attributes["postal_code"]
+        attributes["postal_code"] = attributes["postal_code"].to_s
       end
       venue.attributes = attributes
     end
 
     def hcals
-      Microformats.parse(url).items.select { |item| item.type == 'h-event' }
+      Microformats.parse(url).items.select { |item| item.type == "h-event" }
     end
   end
 end

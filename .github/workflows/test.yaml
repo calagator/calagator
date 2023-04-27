@@ -13,20 +13,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  # rubocop:
-  #   name: "Run Rubocop"
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@main
-  #     - uses: actions/setup-ruby@v1
-  #     - name: Install Rubocop
-  #       run: gem install rubocop rubocop-performance rubocop-rails rubocop-rspec
-  #     - name: Rubocop
-  #       run: rubocop --fail-level warning
-  #     # - name: Rubocop Linter
-  #     #   uses: andrewmcodes/rubocop-linter-action@v3.1.0
-  #     #   env:
-  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test:
     runs-on: ubuntu-latest
 
@@ -82,6 +68,10 @@ jobs:
           bundle install --jobs 4 --retry 3
       # - name: Generate host app for testing
       #   run: bundle _1.17.3_ exec bin/calagator new spec/dummy --dummy --database=${{ matrix.db }} --postgres-username=postgres
+      - name: StandardRB Action
+        uses: andrewmcodes/standardrb-action@v0.0.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Set Postgres Username + Host
         if: matrix.db == 'postgresql'
         run: |
@@ -97,8 +87,7 @@ jobs:
         run: |
           RAILS_ENV=test bundle exec rake app:sunspot:solr:start_with_waiting
       - name: Run RSpec
-        run: |
-          bundle exec rake spec
+        run: bundle exec rake spec
       - uses: actions/upload-artifact@v1
         with:
           name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}
