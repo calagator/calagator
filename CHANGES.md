@@ -8,8 +8,12 @@ Conventions used in this document:
 
 ## Change Log
 
+
 List of Calagator releases and changes, with the latest at the top:
-### v2.0.1 [Unreleased]
+
+### v2.1.1 
+  * Fixes 'calagator' cli. Fixes a deploy step missed in 2.1.0.
+### v2.1.0 - 2023-04-27
   * Implements 'standardrb' for community peace (All linting issues RESOLVED)
   * Removes rubocop in favor of standardrb.
 ### v2.0.0 - 2023-04-23
