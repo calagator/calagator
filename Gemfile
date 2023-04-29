@@ -25,3 +25,11 @@ gem "byebug", "~> 11.1.3", platform: "mri"
 gem "launchy", "~> 2.5.2"
 
 gem "rails-controller-testing", "~> 1.0.5", group: "test"
+# gem "net-http", "~> 0.3.2"
+# Removing 'net-http' resolved the uri dependancy issue but the warnings errors it was added to resolve have returned.
+# TODO: Re-enable net-http go back to resolving the uri issue.
+
+gem "net-http"
+gem "net-smtp"
+gem "net-imap"
+gem "uri", "0.10.0.2"
