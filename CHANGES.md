@@ -15,6 +15,9 @@ Conventions used in this document:
 
 
 List of Calagator releases and changes, with the latest at the top:
+### [3.0.0]
+  * Upgrade to Rails 6.0
+  * Refined changelog format to align with keepachangelog.com/en/1.0.0
 
 ### [2.1.1] - 2023-04-30
   * Fixes 'calagator' cli. Fixes a deploy step missed in 2.1.0.
