@@ -33,7 +33,7 @@ jobs:
           - 2.6.10
           - 2.7.8
         rails:
-          - rails_5_2
+          - rails_6_0
         # exclude:
         #   - rails: rails_4_2
         #     ruby: 2.6.6
@@ -41,7 +41,7 @@ jobs:
         #     ruby: 2.7.2
 
     env:
-      BUNDLER_VERSION: 1.17.3
+      BUNDLER_VERSION: 2.4.12
       BUNDLE_GEMFILE: gemfiles/${{ matrix.rails }}.gemfile
 
     steps:

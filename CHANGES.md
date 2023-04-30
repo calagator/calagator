@@ -11,8 +11,14 @@ Conventions used in this document:
   * [SETTING] - Changed setting structure, see the `themes/README.txt` file for details.
   * [MIGRATION] - Change schema, run `bundle exec rake db:migrate` to apply.
 
+## Change Log
+
+
 List of Calagator releases and changes, with the latest at the top:
-## [2.0.1] Unreleased
+
+### [2.1.1] - 2023-04-30
+  * Fixes 'calagator' cli. Fixes a deploy step missed in 2.1.0.
+### [2.1.0] - 2023-04-27
   * Implements 'standardrb' for community peace (All linting issues RESOLVED)
   * Removes rubocop in favor of standardrb.
 ## [2.0.0] - 2023-04-23
