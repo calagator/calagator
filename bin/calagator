@@ -17,10 +17,6 @@ USAGE = <<~END
       In the case of `calagator new`, all other options will be passed along
       to `rails new`; see `rails new --help` for supported options.
 
-      To generate an app using a specific Rails version, e.g. for 4.2.1:
-
-        calagator _4.2.1_ new my_great_calendar
-
   calagator install: install Calagator into an existing Rails application
 
       Options:
@@ -33,7 +29,7 @@ command = ARGV.shift
 
 case command
 when /_\d+\.\d+\.\d+_/, 'new'
-  system "rails #{command} #{ARGV.join(' ')} -m #{TEMPLATE_PATH} --skip-bundle"
+  system "rails #{command} #{ARGV.join(' ')} -m #{TEMPLATE_PATH} --skip-bundle --skip-javascript" # Skip Webpack on Rails 6 as we're on our way to Rails 7.
 when 'install'
   system "bundle exec rake rails:template LOCATION=#{TEMPLATE_PATH}"
 else
