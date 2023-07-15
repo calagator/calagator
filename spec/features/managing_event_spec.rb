@@ -7,6 +7,15 @@ describe 'Event Editing', js: true do
     Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Future', start_time: Time.zone.now
     create :event, :with_multiple_tags, title: 'Tagged Event', start_time: Time.zone.now
+    stub_request(:post, %r{https?://gpturk\.cognitivesurpl\.us/.*}).
+      with(
+        headers: {
+      	  'Accept'=>'*/*',
+      	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      	  'Content-Type'=>'application/json',
+      	  'Host'=>'gpturk.cognitivesurpl.us',
+        }).
+      to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
   end
 
   after do
@@ -71,6 +80,15 @@ describe 'Event Cloning', js: true do
   before do
     Timecop.travel('2014-10-09')
     create :event, title: 'Ruby Event Part One', start_time: 4.days.from_now
+    stub_request(:post, %r{https?://gpturk\.cognitivesurpl\.us/.*}).
+      with(
+        headers: {
+      	  'Accept'=>'*/*',
+      	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      	  'Content-Type'=>'application/json',
+      	  'Host'=>'gpturk.cognitivesurpl.us',
+        }).
+      to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
   end
 
   after do

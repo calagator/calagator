@@ -16,6 +16,7 @@ module Calagator
 
     helper :all # include all helpers, all the time
     helper_method :recaptcha_enabled?
+    helper_method :spam_detector_enabled?
 
     # See ActionController::RequestForgeryProtection for details
     # Uncomment the :secret if you're not using the cookie session store
@@ -27,6 +28,10 @@ module Calagator
     end
 
     protected
+
+    def spam_detector_enabled?
+      !ENV["GPTURK_SPAM_MODEL_ID"].to_s.empty?
+    end
 
     def json_request?
       request.format.json?

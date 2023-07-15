@@ -5,6 +5,17 @@ require './spec/controllers/squash_many_duplicates_examples'
 
 module Calagator
   describe EventsController, type: :controller do
+    before do
+      stub_request(:post, %r{https?://gpturk\.cognitivesurpl\.us/.*}).
+        with(
+          headers: {
+        	  'Accept'=>'*/*',
+        	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        	  'Content-Type'=>'application/json',
+        	  'Host'=>'gpturk.cognitivesurpl.us',
+          }).
+        to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
+    end
     routes { Calagator::Engine.routes }
 
     describe '#index' do
@@ -401,6 +412,21 @@ module Calagator
           expect(flash[:failure]).to match /evil robot/i
         end
 
+        it 'stops spammers' do
+          stub_request(:post, %r{https?://gpturk\.cognitivesurpl\.us/.*}).
+            with(
+              headers: {
+            	  'Accept'=>'*/*',
+            	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            	  'Content-Type'=>'application/json',
+            	  'Host'=>'gpturk.cognitivesurpl.us',
+              }).
+            to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
+          post :create, params: @params
+          expect(response).to render_template :new
+          expect(flash[:failure]).to match /spammy event/i
+        end
+
         it 'does not allow too many links in the description' do
           @params[:event][:description] = <<-DESC
           http://example.com
@@ -524,6 +550,22 @@ module Calagator
           expect(response).to render_template :edit
           expect(flash[:failure]).to match /evil robot/i
         end
+
+        it 'stops spammers' do
+          stub_request(:post, %r{https?://gpturk\.cognitivesurpl\.us/.*}).
+            with(
+              headers: {
+            	  'Accept'=>'*/*',
+            	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+            	  'Content-Type'=>'application/json',
+            	  'Host'=>'gpturk.cognitivesurpl.us',
+              }).
+            to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
+          put 'update', params: @params
+          expect(response).to render_template :edit
+          expect(flash[:failure]).to match /spammy event/i
+        end
+        
 
         it 'does not allow too many links in the description' do
           @params[:event][:description] = <<-DESC
