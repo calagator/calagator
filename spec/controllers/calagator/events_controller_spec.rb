@@ -14,7 +14,7 @@ module Calagator
         	  'Content-Type'=>'application/json',
         	  'Host'=>'gpturk.cognitivesurpl.us',
           }).
-        to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
+        to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
     end
     routes { Calagator::Engine.routes }
 
@@ -421,7 +421,7 @@ module Calagator
             	  'Content-Type'=>'application/json',
             	  'Host'=>'gpturk.cognitivesurpl.us',
               }).
-            to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
+            to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
           post :create, params: @params
           expect(response).to render_template :new
           expect(flash[:failure]).to match /spammy event/i
@@ -560,7 +560,7 @@ module Calagator
             	  'Content-Type'=>'application/json',
             	  'Host'=>'gpturk.cognitivesurpl.us',
               }).
-            to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
+            to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
           put 'update', params: @params
           expect(response).to render_template :edit
           expect(flash[:failure]).to match /spammy event/i
