@@ -13,7 +13,7 @@ module Calagator
         	  'Content-Type'=>'application/json',
         	  'Host'=>'gpturk.cognitivesurpl.us',
           }).
-        to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
+        to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
     end
     let(:event) { build :event }
     let(:imported_event) { create :event, :with_source }
@@ -52,7 +52,7 @@ module Calagator
           	  'Content-Type'=>'application/json',
           	  'Host'=>'gpturk.cognitivesurpl.us',
             }).
-          to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
+          to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
         saver = described_class.new(event, params)
         saver.save
         expect(saver.failure).to include "spammy event"
