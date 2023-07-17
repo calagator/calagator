@@ -15,7 +15,7 @@ describe 'Event Creation', js: true do
       	  'Content-Type'=>'application/json',
       	  'Host'=>'gpturk.cognitivesurpl.us',
         }).
-      to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
+      to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
   end
 
   it 'User adds an event at an existing venue' do
