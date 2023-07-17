@@ -15,7 +15,7 @@ describe 'Event Editing', js: true do
       	  'Content-Type'=>'application/json',
       	  'Host'=>'gpturk.cognitivesurpl.us',
         }).
-      to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
+      to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
   end
 
   after do
@@ -88,7 +88,7 @@ describe 'Event Cloning', js: true do
       	  'Content-Type'=>'application/json',
       	  'Host'=>'gpturk.cognitivesurpl.us',
         }).
-      to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
+      to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
   end
 
   after do
