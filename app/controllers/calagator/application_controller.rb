@@ -30,7 +30,7 @@ module Calagator
     protected
 
     def spam_detector_enabled?
-      !ENV["GPTURK_SPAM_MODEL_ID"].to_s.empty?
+      ENV["GPTURK_SPAM_MODEL_ID"].present?
     end
 
     def json_request?
@@ -94,6 +94,12 @@ module Calagator
 
     def recaptcha_verified?(model)
       return verify_recaptcha(model: model) if recaptcha_enabled?
+
+      true
+    end
+
+    def antispam_verified?(model)
+      return GpturkService.is_this_spam?(model.text_dump) if spam_detector_enabled?
 
       true
     end

@@ -37,12 +37,8 @@ module Calagator
         evil_robot? || too_many_links? || ml_flags_as_spam?
       end
 
-      def get_spam_label
-        GpturkService.get_spam_label("#{params.dig(:event, :title)} #{params.dig(:event, :description)} #{params[:start_date]} at #{params[:start_time]}")
-      end
-
       def ml_flags_as_spam?
-        if get_spam_label != 1
+        if GpturkService.is_this_spam?("#{params.dig(:event, :title)} #{params.dig(:event, :description)} #{params[:start_date]} at #{params[:start_time]}")
           self.failure = "<h3>Spammer</h3> We didn't save this event because we think this looks like a spammy event. If this isn't spam and is a legitimate event, please file a bug report and let us know."
         end
       end

@@ -14,7 +14,7 @@ gem 'rails', '~> 5.2'
 gem 'turbolinks'
 
 gem 'recaptcha', require: 'recaptcha/rails'
-gem 'rest-client'
+
 # can't declare platform specific development dependencies in the gemspec.
 gem 'byebug', platform: 'mri'
 gem 'paper_trail_manager', git: 'https://github.com/fusion94/paper_trail_manager.git', ref: 'b8630cd0e3318ad0929b80a701a18175402a4944'
