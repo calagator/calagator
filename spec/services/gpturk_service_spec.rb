@@ -14,15 +14,15 @@ describe GpturkService do
     stub_request(:post, /gpturk.cognitivesurpl.us/)
   end
 
-  describe '#is_this_spam?' do
+  describe '#is_spam?' do
     it 'returns true if label is 0' do
       allow(GpturkService).to receive(:get_spam_label).and_return(0)
-      expect(GpturkService.is_this_spam?('some text')).to be true
+      expect(GpturkService.is_spam?('some text')).to be true
     end
 
     it 'returns false if label is not 0' do
       allow(GpturkService).to receive(:get_spam_label).and_return(1)
-      expect(GpturkService.is_this_spam?('some text')).to be false
+      expect(GpturkService.is_spam?('some text')).to be false
     end
   end
 

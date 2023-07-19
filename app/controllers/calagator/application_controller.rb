@@ -99,7 +99,7 @@ module Calagator
     end
 
     def antispam_verified?(model)
-      return GpturkService.is_this_spam?(model.text_dump) if spam_detector_enabled?
+      return GpturkService.is_spam?(model.text_dump) if spam_detector_enabled?
 
       true
     end
