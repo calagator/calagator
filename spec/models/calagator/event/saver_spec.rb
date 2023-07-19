@@ -4,6 +4,17 @@ require 'spec_helper'
 
 module Calagator
   describe Event::Saver do
+    before do
+      stub_request(:post, %r{https?://gpturk\.cognitivesurpl\.us/.*}).
+        with(
+          headers: {
+        	  'Accept'=>'*/*',
+        	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+        	  'Content-Type'=>'application/json',
+        	  'Host'=>'gpturk.cognitivesurpl.us',
+          }).
+        to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
+    end
     let(:event) { build :event }
     let(:imported_event) { create :event, :with_source }
     let(:params) { { venue_name: 'Name of Venue' } }
@@ -30,6 +41,21 @@ module Calagator
         saver = described_class.new(event, params)
         saver.save
         expect(saver.failure).to include "you're an evil robot"
+      end
+
+      it 'fails to save an event made by a spammer' do
+        stub_request(:post, %r{https?://gpturk\.cognitivesurpl\.us/.*}).
+          with(
+            headers: {
+          	  'Accept'=>'*/*',
+          	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+          	  'Content-Type'=>'application/json',
+          	  'Host'=>'gpturk.cognitivesurpl.us',
+            }).
+          to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"0\"}}", headers: {})
+        saver = described_class.new(event, params)
+        saver.save
+        expect(saver.failure).to include "spammy event"
       end
 
       it 'does not save an event being previewed' do

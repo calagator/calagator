@@ -7,6 +7,15 @@ describe 'Event Creation', js: true do
     create :venue, title: 'Empire State Building'
     create :venue, title: 'New Relic'
     create :venue, title: 'Urban Airship'
+    stub_request(:post, %r{https?://gpturk\.cognitivesurpl\.us/.*}).
+      with(
+        headers: {
+      	  'Accept'=>'*/*',
+      	  'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3',
+      	  'Content-Type'=>'application/json',
+      	  'Host'=>'gpturk.cognitivesurpl.us',
+        }).
+      to_return(status: 200, body: "{\"label\":{\"parsed_label\":\"1\"}}", headers: {})
   end
 
   it 'User adds an event at an existing venue' do
