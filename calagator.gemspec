@@ -60,7 +60,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "appraisal", "~> 2.4"
   s.add_development_dependency "capybara", "~> 3.31"
   s.add_development_dependency "database_cleaner", "~> 2.0"
-  s.add_development_dependency "factory_bot_rails", "~> 6.2"
+  s.add_development_dependency "factory_bot_rails", "~> 5.2"
   s.add_development_dependency "faker", "~> 2.2"
   s.add_development_dependency "gem-release", "~> 2.0"
   s.add_development_dependency "puma", "~> 6.0.0"
