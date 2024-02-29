@@ -57,27 +57,23 @@ Gem::Specification.new do |s|
   s.add_dependency "sqlite3", "~> 1.5.4"
   s.add_dependency "listen", "~> 3.1.5"
 
-  s.add_development_dependency 'appraisal', '~> 2.4'
-  s.add_development_dependency 'capybara', '~> 3.31'
-  s.add_development_dependency 'database_cleaner', '~> 2.0'
-  s.add_development_dependency 'factory_bot_rails', '~> 6.2'
-  s.add_development_dependency 'faker', '~> 2.2'
-  s.add_development_dependency 'gem-release', '~> 2.0'
-  s.add_development_dependency 'puma', '~> 6.0.0'
-  s.add_development_dependency 'rspec-activemodel-mocks', '~> 1.1.0'
-  s.add_development_dependency 'rspec-collection_matchers', '~> 1.1'
-  s.add_development_dependency 'rspec-its', '~> 1.1'
-  s.add_development_dependency 'rspec-rails', '~> 5.1.2'
-  # s.add_development_dependency 'rubocop', '~> 0.80.0'
-  # s.add_development_dependency 'rubocop-performance', '~> 1.5.0'
-  # s.add_development_dependency 'rubocop-rails', '~> 2.5.2'
-  # s.add_development_dependency 'rubocop-rspec', '~> 1.38.0'
-  s.add_development_dependency 'selenium-webdriver', '~> 4.1.0'
-  s.add_development_dependency 'simplecov', '~> 0.18'
-  s.add_development_dependency 'simplecov-lcov', '~> 0.8'
-  s.add_development_dependency 'sunspot_solr', '~> 2.1'
-  s.add_development_dependency 'timecop', '~> 0.9.5'
-  s.add_development_dependency 'uglifier', '~> 4.2.0'
-  s.add_development_dependency 'webdrivers', '~> 5.2.0'
-  s.add_development_dependency 'webmock', '~> 3.5'
+  s.add_development_dependency "appraisal", "~> 2.4"
+  s.add_development_dependency "capybara", "~> 3.31"
+  s.add_development_dependency "database_cleaner", "~> 2.0"
+  s.add_development_dependency "factory_bot_rails", "~> 5.2"
+  s.add_development_dependency "faker", "~> 2.2"
+  s.add_development_dependency "gem-release", "~> 2.0"
+  s.add_development_dependency "puma", "~> 6.0.0"
+  s.add_development_dependency "rspec-activemodel-mocks", "~> 1.1.0"
+  s.add_development_dependency "rspec-collection_matchers", "~> 1.1"
+  s.add_development_dependency "rspec-its", "~> 1.1"
+  s.add_development_dependency "rspec-rails", "~> 5.1.2"
+  s.add_development_dependency "selenium-webdriver", "~> 4.1.0"
+  s.add_development_dependency "simplecov", "~> 0.18"
+  s.add_development_dependency "simplecov-lcov", "~> 0.8"
+  s.add_development_dependency "sunspot_solr", "~> 2.1"
+  s.add_development_dependency "timecop", "~> 0.9.5"
+  s.add_development_dependency "uglifier", "~> 4.2.0"
+  s.add_development_dependency "webdrivers", "~> 5.2.0"
+  s.add_development_dependency "webmock", "~> 3.5"
 end
