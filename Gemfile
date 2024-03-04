@@ -29,7 +29,7 @@ gem "rails-controller-testing", "~> 1.0.5", group: "test"
 # Removing 'net-http' resolved the uri dependancy issue but the warnings errors it was added to resolve have returned.
 # TODO: Re-enable net-http go back to resolving the uri issue.
 
-gem "net-http"
-gem "net-smtp"
-gem "net-imap"
-gem "uri", "0.10.0.2"
+# gem "net-http"
+# gem "net-smtp"
+# gem "net-imap"
+# gem "uri", "0.10.0.2"

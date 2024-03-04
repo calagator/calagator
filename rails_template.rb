@@ -42,17 +42,16 @@ gem_group :development, :test do
   end
 end
 
-gem 'calagator', (generating_test_app && { path: relative_calagator_path.to_s })
-run 'bundle install'
-rake 'db:create'
-inside('app/assets') do
-  create_file('config/manifest.js') do
+require_relative './lib/calagator/version'
+gem "calagator", Calagator::VERSION, (generating_test_app ? {path: relative_calagator_path.to_s} : {})
+run "bundle install"
+rails_command "db:create"
+inside("app/assets") do
+  append_to_file("config/manifest.js") do
     <<-MANIFEST.strip_heredoc
       //= link application.js
       //= link application.css
-      //= link calagator/manifest.js
     MANIFEST
   end
 end
-generate 'calagator:install', (generating_test_app && '--test_app')
-generate 'sunspot_rails:install'
+generate "calagator:install", "--test-app #{generating_test_app}"
