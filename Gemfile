@@ -11,6 +11,7 @@ gemspec
 
 # develop against latest rails
 gem "rails", "~> 6.1"
+gem "webrick"
 
 # turbolinks is used by the test application by default
 # gem 'turbolinks', '~> 5.2.1'
