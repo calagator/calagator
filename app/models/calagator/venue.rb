@@ -51,7 +51,7 @@ module Calagator
 
     # Associations
     has_many :events, -> { non_duplicates }, dependent: :nullify
-    belongs_to :source
+    belongs_to :source, optional: true
 
     # Triggers
     strip_whitespace! :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone

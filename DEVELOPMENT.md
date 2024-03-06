@@ -64,7 +64,7 @@ To test and develop the gem locally you need to build it locally.
 
 To test your own gem you'll want to give it a local version, generally dont commit this version.
 
-Update version number in /lib/calendar/version.rb
+Update version number in /lib/calagator/version.rb
 
 ### 2. Build the gemspec and locally install the gem
 

@@ -15,9 +15,9 @@ module Calagator
       add_seeds
       run "rm -f public/index.html"
       unless options[:test_app]
-        rake "calagator:install:migrations"
-        rake "db:migrate"
-        rake "db:test:prepare"
+        rails_command "calagator:install:migrations"
+        rails_command "db:migrate"
+        rails_command "db:test:prepare"
       end
     end
 
@@ -34,11 +34,16 @@ module Calagator
     end
 
     def add_javascripts
-      append_file "app/assets/javascripts/application.js", "//= require calagator"
+      create_file "app/assets/javascripts/application.js", "//= require calagator"
     end
 
     def add_stylesheets
-      append_file "app/assets/stylesheets/application.css", "//= require calagator"
+      insert_into_file "app/assets/stylesheets/application.css", before: "*/" do
+        <<-STR.strip_heredoc
+
+          //= require calagator
+        STR
+      end
     end
 
     def add_assets

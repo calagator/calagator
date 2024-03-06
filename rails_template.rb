@@ -2,15 +2,14 @@
 
 require "rubygems"
 require "pathname"
-
-RAILS_REQUIREMENT = "~> 6.0.6.1"
+require_relative './lib/calagator/version'
 
 def assert_minimum_rails_version
-  requirement = Gem::Requirement.new(RAILS_REQUIREMENT)
+  requirement = Gem::Requirement.new(Calagator::RAILS_VERSION)
   rails_version = Gem::Version.new(Rails::VERSION::STRING)
   return if requirement.satisfied_by?(rails_version)
 
-  puts "Calagator requires Rails #{RAILS_REQUIREMENT}. You are using #{rails_version}."
+  puts "Calagator requires Rails #{Calagator::RAILS_VERSION}. You are using #{rails_version}."
   exit 1
 end
 
@@ -42,17 +41,15 @@ gem_group :development, :test do
   end
 end
 
-gem "calagator", (generating_test_app && {path: relative_calagator_path.to_s})
+gem "calagator", Calagator::VERSION, (generating_test_app ? {path: relative_calagator_path.to_s} : {})
 run "bundle install"
-rake "db:create"
+rails_command "db:create"
 inside("app/assets") do
-  create_file("config/manifest.js") do
+  append_to_file("config/manifest.js") do
     <<-MANIFEST.strip_heredoc
       //= link application.js
       //= link application.css
-      //= link calagator/manifest.js
     MANIFEST
   end
 end
-generate "calagator:install", (generating_test_app && "--test_app")
-generate "sunspot_rails:install"
+generate "calagator:install", "--test-app #{generating_test_app}"

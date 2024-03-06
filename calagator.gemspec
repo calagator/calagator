@@ -21,8 +21,8 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,lib,vendor}/**/*"] + Dir["db/**/*.rb"] + ["MIT-LICENSE.txt", "Rakefile", "README.md", "rails_template.rb"]
   s.executables << "calagator"
 
-  # When changing this Rails requirement, also update RAILS_REQUIREMENT in rails_template.rb
-  s.add_dependency "rails", "~> 6.0.6.1"
+  # To change this Rails requirement, update RAILS_VERSION in lib/calagator/version.rb
+  s.add_dependency "rails", Calagator::RAILS_VERSION
   s.add_dependency "activemodel-serializers-xml", "~> 1.0"
   s.add_dependency "acts-as-taggable-on", ">= 8.1", "< 10.0"
   s.add_dependency "annotate", ">= 3.1.1", "< 3.3.0"
@@ -39,14 +39,14 @@ Gem::Specification.new do |s|
   s.add_dependency "lucene_query", "0.1"
   s.add_dependency "microformats", ">= 4.0.7", "< 4.5.0"
   s.add_dependency "nokogiri", "~> 1.13.10"
-  s.add_dependency "paper_trail", "~> 10.3.1"
-  s.add_dependency "paper_trail_manager_rails_5", "~> 0.7.2"
+  s.add_dependency "paper_trail", "~> 11.1"
+  s.add_dependency "demingfactor-paper_trail_manager", "~> 0.7.3"
   s.add_dependency "rack-contrib", "~> 2.3"
   s.add_dependency "rails-observers", "~> 0.1.5"
   s.add_dependency "rails_autolink", "~> 1.1"
   s.add_dependency "recaptcha", "~> 5.8"
   s.add_dependency "rest-client", "~> 2.0"
-  s.add_dependency "demingfactor-ri_cal", "~> 0.9.0"
+  s.add_dependency "demingfactor-ri_cal", "~> 0.10.0"
   s.add_dependency "sassc-rails", "~> 2.1"
   s.add_dependency "standard", "~> 1.28.0"
   s.add_dependency "sunspot_rails", "~> 2.1"
@@ -55,12 +55,12 @@ Gem::Specification.new do |s|
   s.add_dependency "will_paginate", "~> 3.0"
   s.add_dependency "pg", "~> 0.19.0"
   s.add_dependency "sqlite3", "~> 1.5.4"
-  s.add_dependency "listen", "~> 3.1.5"
+  # s.add_dependency "listen", "~> 3.1.5"
 
   s.add_development_dependency "appraisal", "~> 2.4"
   s.add_development_dependency "capybara", "~> 3.31"
   s.add_development_dependency "database_cleaner", "~> 2.0"
-  s.add_development_dependency "factory_bot_rails", "~> 6.2"
+  s.add_development_dependency "factory_bot_rails", "~> 5.2"
   s.add_development_dependency "faker", "~> 2.2"
   s.add_development_dependency "gem-release", "~> 2.0"
   s.add_development_dependency "puma", "~> 6.0.0"
