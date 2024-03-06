@@ -3,8 +3,8 @@
 # This file is designed to just appraise the current Rails version
 # Update this file when you change the RAILS depedancy.
 
-appraise "rails-6-0" do
-  gem "rails", "6.0.6.1"
+appraise "rails-6-1" do
+  gem "rails", "6.1"
   gem "turbolinks"
 
   gem "mysql2", "~> 0.5.3"

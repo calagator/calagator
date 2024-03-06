@@ -2,15 +2,14 @@
 
 require "rubygems"
 require "pathname"
-
-RAILS_REQUIREMENT = "~> 6.0.6.1"
+require_relative './lib/calagator/version'
 
 def assert_minimum_rails_version
-  requirement = Gem::Requirement.new(RAILS_REQUIREMENT)
+  requirement = Gem::Requirement.new(Calagator::RAILS_VERSION)
   rails_version = Gem::Version.new(Rails::VERSION::STRING)
   return if requirement.satisfied_by?(rails_version)
 
-  puts "Calagator requires Rails #{RAILS_REQUIREMENT}. You are using #{rails_version}."
+  puts "Calagator requires Rails #{Calagator::RAILS_VERSION}. You are using #{rails_version}."
   exit 1
 end
 
@@ -42,7 +41,6 @@ gem_group :development, :test do
   end
 end
 
-require_relative './lib/calagator/version'
 gem "calagator", Calagator::VERSION, (generating_test_app ? {path: relative_calagator_path.to_s} : {})
 run "bundle install"
 rails_command "db:create"
