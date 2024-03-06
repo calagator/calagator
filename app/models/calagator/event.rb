@@ -49,8 +49,8 @@ module Calagator
     include ActiveModel::Serializers::Xml
 
     # Associations
-    belongs_to :venue, counter_cache: true
-    belongs_to :source
+    belongs_to :venue, counter_cache: true, optional: true
+    belongs_to :source, optional: true
 
     # Validations
     validates :title, :description, :url, denylist: true

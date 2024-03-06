@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative "calagator/version"
+
 source "https://rubygems.org"
 
 # Declare your gem's dependencies in calagator.gemspec.
@@ -8,7 +10,7 @@ source "https://rubygems.org"
 gemspec
 
 # develop against latest rails
-gem "rails", "~> 6.0.6.1"
+gem "rails", "~> 6.1"
 
 # turbolinks is used by the test application by default
 # gem 'turbolinks', '~> 5.2.1'

@@ -92,7 +92,7 @@ module Calagator
           cattr_accessor(:_duplicate_finding_scope) { -> { all } }
           cattr_accessor(:_after_squashing_duplicates) { ->(primary) {} }
 
-          belongs_to :duplicate_of, class_name: name, foreign_key: DUPLICATE_MARK_COLUMN
+          belongs_to :duplicate_of, class_name: name, foreign_key: DUPLICATE_MARK_COLUMN, optional: true
           has_many :duplicates, class_name: name, foreign_key: DUPLICATE_MARK_COLUMN
 
           scope :marked_duplicates, -> { where("#{table_name}.#{DUPLICATE_MARK_COLUMN} IS NOT NULL") }
