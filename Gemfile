@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative "calagator/version"
+require_relative "./lib/calagator/version"
 
 source "https://rubygems.org"
 
