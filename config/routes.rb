@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 Calagator::Engine.routes.draw do
+  # Not sure why, but routes is getting loaded twice. This ignores the second load.
+  return unless Calagator::Engine.routes.empty?
+
+  root "site#index"
+
   get "omfg" => "site#omfg"
   get "hello" => "site#hello"
 
@@ -52,7 +57,6 @@ Calagator::Engine.routes.draw do
   get "css/:name" => "site#style"
   get "css/:name.:format" => "site#style"
 
-  get "/" => "site#index", :as => :root
   get "/index" => "site#index"
   get "/index.:format" => "site#index"
 end
