@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "rack/contrib/jsonp"
+require 'sprockets/railtie'
 
 module Calagator
   class Engine < ::Rails::Engine

@@ -2,5 +2,5 @@
 
 module Calagator
   VERSION = "3.0.0"
-  RAILS_VERSION = "~> 6.1"
+  RAILS_VERSION = "~> 7.0"
 end
