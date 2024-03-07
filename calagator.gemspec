@@ -23,6 +23,7 @@ Gem::Specification.new do |s|
 
   # To change this Rails requirement, update RAILS_VERSION in lib/calagator/version.rb
   s.add_dependency "rails", Calagator::RAILS_VERSION
+  s.add_dependency "sprockets-rails"
   s.add_dependency "activemodel-serializers-xml", "~> 1.0"
   s.add_dependency "acts-as-taggable-on", ">= 8.1", "< 10.0"
   s.add_dependency "annotate", ">= 3.1.1", "< 3.3.0"
@@ -39,8 +40,7 @@ Gem::Specification.new do |s|
   s.add_dependency "lucene_query", "0.1"
   s.add_dependency "microformats", ">= 4.0.7", "< 4.5.0"
   s.add_dependency "nokogiri", "~> 1.13.10"
-  s.add_dependency "paper_trail", "~> 11.1"
-  s.add_dependency "demingfactor-paper_trail_manager", "~> 0.7.3"
+  s.add_dependency "paper_trail", "~> 15.1"
   s.add_dependency "rack-contrib", "~> 2.3"
   s.add_dependency "rails-observers", "~> 0.1.5"
   s.add_dependency "rails_autolink", "~> 1.1"
