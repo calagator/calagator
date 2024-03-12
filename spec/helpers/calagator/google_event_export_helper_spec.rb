@@ -5,7 +5,7 @@ require "spec_helper"
 module Calagator
   describe GoogleEventExportHelper, type: :helper do
     describe "google_event_export_link" do
-      let(:params) { Rack::Utils.parse_query(@export) }
+      let(:params) { CGI::parse(@export).transform_values { |v| v[0] } }
 
       def escape(string)
         Regexp.escape(CGI.escape(string))
