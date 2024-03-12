@@ -8,6 +8,7 @@ module Calagator
 
     def install
       add_route
+      add_yaml_config
       add_initializers
       add_javascripts
       add_stylesheets
@@ -25,6 +26,13 @@ module Calagator
 
     def add_route
       inject_into_file "config/routes.rb", "\s\smount Calagator::Engine => '/'\n", after: "routes.draw do\n"
+    end
+
+    # PaperTrail needs Time and BigDecimal as supported YAML classes
+    def add_yaml_config
+      inject_into_file "config/application.rb",
+        "\s\s\s\sconfig.active_record.yaml_column_permitted_classes = [Time, BigDecimal]",
+        after: /config.load_defaults.+\n/
     end
 
     def add_initializers
