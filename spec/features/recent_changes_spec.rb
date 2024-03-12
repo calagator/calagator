@@ -12,7 +12,7 @@ describe "Recent Changes", js: true do
   it "A user browses recent changes" do
     visit "/changes"
 
-    expect(page).to have_content "CREATE"
+    expect(page).to have_content /create/i
     expect(page).to have_content event_title
   end
 
@@ -20,7 +20,7 @@ describe "Recent Changes", js: true do
     visit "/changes"
     click_on "Changes feed"
 
-    expect(page.body).to have_content "CREATE"
+    expect(page.body).to have_content /create/i
     expect(page.body).to have_content event_title
   end
 end

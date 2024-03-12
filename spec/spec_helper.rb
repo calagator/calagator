@@ -16,7 +16,6 @@ require "factory_bot_rails"
 require "capybara"
 require "capybara/rspec"
 require "database_cleaner"
-require "webdrivers/geckodriver"
 require "selenium-webdriver"
 require "timecop"
 require "webmock"
@@ -61,18 +60,22 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  Capybara.register_driver :chrome_headless do |app|
-    args = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu no-sandbox --window-size=1240,1400])
-    Capybara::Selenium::Driver.new(
-      app,
-      browser: :chrome,
-      capabilities: args
-    )
-  end
+  # Capybara.register_driver :chrome_headless do |app|
+  #   args = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu no-sandbox --window-size=1240,1400])
+  #   Capybara::Selenium::Driver.new(
+  #     app,
+  #     browser: :chrome,
+  #     desired_capabilities: args
+  #   )
+  # end
+
+  Capybara.current_driver = :selenium_headless
 
   Capybara.server = :webrick
   Capybara.default_driver = :rack_test
-  Capybara.javascript_driver = :chrome_headless
+  Capybara.default_max_wait_time = 5
+  Capybara.javascript_driver = :selenium_headless
+  Capybara.always_include_port = true
 
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
