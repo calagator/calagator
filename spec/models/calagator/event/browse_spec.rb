@@ -48,7 +48,7 @@ module Calagator
           end
 
           it "uses the value if valid" do
-            expected = Date.yesterday.to_s("%Y-%m-%d")
+            expected = Date.yesterday.strftime("%Y-%m-%d")
             browse = described_class.new(date: {date_kind => expected})
             expect(browse.send(date_field)).to eq expected
           end
