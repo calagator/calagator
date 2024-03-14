@@ -10,6 +10,7 @@ USAGE = <<~END
   Usage:
     calagator new APP_PATH [options]
     calagator install
+    calagator --version, -v
 
   calagator new: generates a new Rails app and install Calagator into it
 
@@ -24,6 +25,10 @@ USAGE = <<~END
 
       Options:
         none
+  
+  calagator --version, -v:
+
+    Prints version info
 END
 
 TEMPLATE_PATH = File.expand_path('../rails_template.rb', __dir__)
@@ -35,6 +40,8 @@ when /_\d+\.\d+\.\d+_/, 'new'
   system "rails #{command} #{ARGV.join(' ')} -m #{TEMPLATE_PATH} --skip-bundle --skip-javascript" # Skip Webpack on Rails 6 as we're on our way to Rails 7.
 when 'install'
   system "bundle exec rake rails:template LOCATION=#{TEMPLATE_PATH}"
+when '--version', '-v'
+  puts "Calagator v#{Calagator::VERSION}"
 else
   puts USAGE
 end
