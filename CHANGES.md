@@ -12,11 +12,18 @@ Conventions used in this document:
   * [MIGRATION] - Change schema, run `bundle exec rake db:migrate` to apply.
 
 ## Change Log
-
-
 List of Calagator releases and changes, with the latest at the top:
-### [3.0.0]
-  * Upgrade to Rails 6.0
+
+### [4.0.0] - 2024-03-14
+  * Upgrade to Rails 7.0
+  * Recommended Ruby version is now 3.2
+  * Paper Trail Manager is no longer a dependency
+    - It has been integrated in to Calagator itself.
+    - This has been done to reduce the overhead of maintaining a separate gem.
+
+### [3.0.0] - 2024-03-06
+  * Upgrade to Rails 6.1
+  * Recommended Ruby version is now 3.0
   * Refined changelog format to align with keepachangelog.com/en/1.0.0
 
 ### [2.1.1] - 2023-04-30
