@@ -14,6 +14,11 @@ Conventions used in this document:
 ## Change Log
 List of Calagator releases and changes, with the latest at the top:
 
+### [4.1.0] - 2024-03-14
+  * Upgrade to Rails 7.1
+  * Recommended Ruby version is now 3.3
+  * Calagator cli now supports `--version` (or `-v`) to print version info.
+
 ### [4.0.0] - 2024-03-14
   * Upgrade to Rails 7.0
   * Recommended Ruby version is now 3.2
