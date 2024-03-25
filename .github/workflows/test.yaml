@@ -67,6 +67,8 @@ jobs:
           bundle install --jobs 4 --retry 3
       # - name: Generate host app for testing
       #   run: bundle _1.17.3_ exec bin/calagator new spec/dummy --dummy --database=${{ matrix.db }} --postgres-username=postgres
+      - name: Standardrb Check
+        run: bundle exec standardrb
       - name: Set Postgres Username + Host
         if: matrix.db == 'postgresql'
         run: |
