@@ -33,7 +33,7 @@ module Calagator
     end
 
     def self.require_admin(options = {})
-     return false unless Calagator.admin_username && Calagator.admin_password
+      return false unless Calagator.admin_username && Calagator.admin_password
       http_basic_authenticate_with(
         **options.reverse_merge(
           name: Calagator.admin_username,

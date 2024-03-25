@@ -9,7 +9,7 @@ class ThemeReader
     rails_root = begin
       Rails.root
     rescue
-      File.dirname(File.dirname(__FILE__))
+      File.dirname(__FILE__, 2)
     end
     theme_txt = "#{rails_root}/config/theme.txt"
     if ENV["THEME"]
