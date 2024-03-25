@@ -11,7 +11,6 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema.define(version: 2020_03_27_040656) do
-
   create_table "events", force: :cascade do |t|
     t.string "title"
     t.text "description"
@@ -93,5 +92,4 @@ ActiveRecord::Schema.define(version: 2020_03_27_040656) do
     t.datetime "created_at"
     t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
-
 end

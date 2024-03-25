@@ -15,11 +15,11 @@ class PaperTrailManager
     # List changes
     def index
       unless change_index_allowed?
-        flash[:error] = 'You do not have permission to list changes.'
+        flash[:error] = "You do not have permission to list changes."
         return(redirect_to root_url)
       end
 
-      @versions = PaperTrail::Version.order('created_at DESC, id DESC')
+      @versions = PaperTrail::Version.order("created_at DESC, id DESC")
       @versions = @versions.where(item_type: params[:type]) if params[:type]
       @versions = @versions.where(item_id: params[:id]) if params[:id]
 
@@ -31,10 +31,10 @@ class PaperTrailManager
       @per_page = nil if @per_page.zero?
 
       @versions = if defined?(WillPaginate)
-                    @versions.paginate(page: @page, per_page: @per_page)
-                  else
-                    @versions.page(@page).per(@per_page)
-                  end
+        @versions.paginate(page: @page, per_page: @per_page)
+      else
+        @versions.page(@page).per(@per_page)
+      end
 
       respond_to do |format|
         format.html # index.html.erb
@@ -48,12 +48,12 @@ class PaperTrailManager
       begin
         @version = PaperTrail::Version.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        flash[:error] = 'No such version.'
+        flash[:error] = "No such version."
         return(redirect_to action: :index)
       end
 
       unless change_show_allowed?(@version)
-        flash[:error] = 'You do not have permission to show that change.'
+        flash[:error] = "You do not have permission to show that change."
         return(redirect_to action: :index)
       end
 
@@ -68,16 +68,16 @@ class PaperTrailManager
       begin
         @version = PaperTrail::Version.find(params[:id])
       rescue ActiveRecord::RecordNotFound
-        flash[:error] = 'No such version.'
+        flash[:error] = "No such version."
         return(redirect_to(changes_path))
       end
 
       unless change_revert_allowed?(@version)
-        flash[:error] = 'You do not have permission to revert this change.'
+        flash[:error] = "You do not have permission to revert this change."
         return(redirect_to changes_path)
       end
 
-      if @version.event == 'create'
+      if @version.event == "create"
         @record = @version.item_type.constantize.find(@version.item_id)
         @result = @record.destroy
       else
@@ -86,11 +86,11 @@ class PaperTrailManager
       end
 
       if @result
-        if @version.event == 'create'
-          flash[:notice] = 'Rolled back newly-created record by destroying it.'
+        if @version.event == "create"
+          flash[:notice] = "Rolled back newly-created record by destroying it."
           redirect_to changes_path
         else
-          flash[:notice] = 'Rolled back changes to this record.'
+          flash[:notice] = "Rolled back changes to this record."
           redirect_to change_item_url(@version)
         end
       else
@@ -103,7 +103,7 @@ class PaperTrailManager
 
     # Return the URL for the item represented by the +version+, e.g. a Company record instance referenced by a version.
     def change_item_url(version)
-      version_type = version.item_type.underscore.split('/').last
+      version_type = version.item_type.underscore.split("/").last
       send("#{version_type}_url", version.item_id)
     rescue NoMethodError
       nil

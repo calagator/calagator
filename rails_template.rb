@@ -2,7 +2,7 @@
 
 require "rubygems"
 require "pathname"
-require_relative './lib/calagator/version'
+require_relative "./lib/calagator/version"
 
 def assert_minimum_rails_version
   requirement = Gem::Requirement.new(Calagator::RAILS_VERSION)
@@ -15,19 +15,19 @@ end
 
 assert_minimum_rails_version
 
-generating_test_app = ARGV.include? '--test_app'
+generating_test_app = ARGV.include? "--test_app"
 calagator_checkout = Pathname.new(File.expand_path(__dir__))
 relative_calagator_path = calagator_checkout.relative_path_from(Pathname.new(destination_root))
 
-if options[:database] == 'postgresql' && ARGV.any? { |arg| arg =~ /--postgres-username=(\w+)/ }
-  inside('config') do
+if options[:database] == "postgresql" && ARGV.any? { |arg| arg =~ /--postgres-username=(\w+)/ }
+  inside("config") do
     run "sed -e 's/username: .*/username: #{Regexp.last_match(1)}/' -i -- database.yml"
   end
 end
 
 # FactoryBot and Faker are required for Calagator's db:seed task
-spec = Gem::Specification.load(File.expand_path('calagator.gemspec', __dir__))
-spec ||= Gem::Specification.find_by_name('calagator')
+spec = Gem::Specification.load(File.expand_path("calagator.gemspec", __dir__))
+spec ||= Gem::Specification.find_by_name("calagator")
 required_dev_gems = %w[factory_bot_rails faker]
 
 gem_group :development, :test do

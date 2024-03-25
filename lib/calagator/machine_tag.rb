@@ -65,7 +65,7 @@ module Calagator
     private
 
     # Regular expression for parsing machine tags
-    MACHINE_TAG_PATTERN = /(?<namespace>[^:]+):(?<predicate>[^=]+)=(?<value>.+)/.freeze
+    MACHINE_TAG_PATTERN = /(?<namespace>[^:]+):(?<predicate>[^=]+)=(?<value>.+)/
 
     def matches
       name.match(MACHINE_TAG_PATTERN) || {}

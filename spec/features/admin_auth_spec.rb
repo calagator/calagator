@@ -9,11 +9,9 @@ describe "Administrative suite is hidden behind an http basic auth wall" do
     "/venues/duplicates"
   ].each do |path|
     it "Users are not permitted in #{path}" do
-      begin
-        visit path
-      rescue Selenium::WebDriver::Error::UnexpectedAlertOpenError
-        expect(page).to have_content('Access denied')
-      end
+      visit path
+    rescue Selenium::WebDriver::Error::UnexpectedAlertOpenError
+      expect(page).to have_content("Access denied")
     end
 
     it "Authenticated users are permitted in #{path}" do

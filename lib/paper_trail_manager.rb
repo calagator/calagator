@@ -1,33 +1,33 @@
 # frozen_string_literal: true
 
-require 'rails'
-require 'paper_trail'
+require "rails"
+require "paper_trail"
 
 begin
-  require 'will_paginate'
+  require "will_paginate"
 rescue LoadError
   begin
-    require 'kaminari'
+    require "kaminari"
   rescue LoadError
-    raise LoadError, 'will_paginate or kaminari must be in Gemfile or load_path'
+    raise LoadError, "will_paginate or kaminari must be in Gemfile or load_path"
   end
 end
 
 class PaperTrailManager < Rails::Engine
-  initializer 'paper_trail_manager.pagination' do
+  initializer "paper_trail_manager.pagination" do
     ::ActionView::Base.send(:alias_method, :paginate, :will_paginate) if defined?(WillPaginate)
   end
 
   @@whodunnit_name_method = :name
   cattr_accessor :whodunnit_class, :whodunnit_name_method, :route_helpers,
-                 :layout, :base_controller, :user_path_method, :item_name_method
+    :layout, :base_controller, :user_path_method, :item_name_method
 
-  self.base_controller = 'ApplicationController'
+  self.base_controller = "ApplicationController"
   self.user_path_method = :user_path
 
-  (Pathname(__FILE__).dirname + '..').tap do |base|
-    paths['app/controller'] = base + 'app/controllers'
-    paths['app/view'] = base + 'app/views'
+  (Pathname(__FILE__).dirname + "..").tap do |base|
+    paths["app/controller"] = base + "app/controllers"
+    paths["app/view"] = base + "app/views"
   end
 
   cattr_accessor :allow_index_block, :allow_show_block, :allow_revert_block

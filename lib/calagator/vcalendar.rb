@@ -4,7 +4,7 @@ require "ri_cal"
 
 module Calagator
   class VCalendar < Struct.new(:ri_cal_calendar)
-    VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m.freeze
+    VENUE_CONTENT_RE = /^BEGIN:VVENUE$.*?^END:VVENUE$/m
     def self.parse(raw_ical)
       raw_ical = raw_ical.gsub(/\r\n/, "\n") # normalize line endings
       raw_ical = raw_ical.gsub(/;TZID=GMT:(.*)/, ':\1Z') # normalize timezones
@@ -34,7 +34,7 @@ module Calagator
   end
 
   class VEvent < Struct.new(:ri_cal_event, :vvenues)
-    VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/.freeze
+    VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/
     def old?
       cutoff = Time.now.in_time_zone.yesterday
       (ri_cal_event.dtend || ri_cal_event.dtstart).to_time < cutoff
@@ -76,7 +76,7 @@ module Calagator
   end
 
   class VVenue < Struct.new(:raw_ical_venue)
-    VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/.freeze
+    VCARD_LINES_RE = /^(?<key>[^;]+?)(?<qualifier>;[^:]*?)?:(?<value>.*)$/
     def uid
       raw_ical_venue.match(/^UID:(?<uid>.+)$/)[:uid]
     end
