@@ -80,9 +80,10 @@ jobs:
           sudo systemctl start mysql.service
       - name: Prepare Database
         run: bundle exec rake app:db:create app:db:migrate app:db:seed
-      - name: Start Solr
-        run: |
-          RAILS_ENV=test bundle exec rake app:sunspot:solr:start_with_waiting
+      # Solr gem needs to make a new release. Consider either removing support, or making a release for ourselves.
+      # - name: Start Solr
+      #   run: |
+      #     RAILS_ENV=test bundle exec rake app:sunspot:solr:start_with_waiting
       - name: Run RSpec
         run: bundle exec rake spec
       - uses: actions/upload-artifact@v1
