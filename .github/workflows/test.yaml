@@ -30,10 +30,9 @@ jobs:
           - postgresql
           - sqlite3
         ruby:
-          - 2.6.10
-          - 2.7.8
+          - 3.3.0
         rails:
-          - rails_6_0
+          - rails_7_1
         # exclude:
         #   - rails: rails_4_2
         #     ruby: 2.6.6
@@ -41,7 +40,7 @@ jobs:
         #     ruby: 2.7.2
 
     env:
-      BUNDLER_VERSION: 2.4.12
+      BUNDLER_VERSION: 2.5.6
       BUNDLE_GEMFILE: gemfiles/${{ matrix.rails }}.gemfile
 
     steps:
