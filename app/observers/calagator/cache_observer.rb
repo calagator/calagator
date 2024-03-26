@@ -13,24 +13,24 @@ module Calagator
     # primarily by the #cache_if calls in views. The optional +request+ object
     # provides a HTTP_HOST so that caching can be done for a particular hostname.
     def self.daily_key_for(name, _request = nil)
-      "#{name}@#{Time.zone.now.strftime('%Y%m%d')}"
+      "#{name}@#{Time.zone.now.strftime("%Y%m%d")}"
     end
 
     # Expires all cached data.
     def self.expire_all
-      Rails.logger.info 'CacheObserver::expire_all: invoked'
+      Rails.logger.info "CacheObserver::expire_all: invoked"
       Rails.cache.clear
     end
 
     #---[ Triggers ]--------------------------------------------------------
 
     def after_save(_record)
-      Rails.logger.info 'CacheObserver#after_save: invoked'
+      Rails.logger.info "CacheObserver#after_save: invoked"
       self.class.expire_all
     end
 
     def after_destroy(_record)
-      Rails.logger.info 'CacheObserver#after_destroy: invoked'
+      Rails.logger.info "CacheObserver#after_destroy: invoked"
       self.class.expire_all
     end
   end

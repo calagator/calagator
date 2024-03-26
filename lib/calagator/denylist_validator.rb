@@ -37,7 +37,7 @@
 #   * config/denylist-local.txt
 
 class DenylistValidator < ActiveModel::EachValidator
-  DENYLIST_DEFAULT_MESSAGE = 'contains denylisted content'
+  DENYLIST_DEFAULT_MESSAGE = "contains denylisted content"
 
   def validate_each(record, attribute, value)
     if value.present? && patterns.any? { |pattern| value.match(pattern) }
@@ -55,14 +55,14 @@ class DenylistValidator < ActiveModel::EachValidator
     @patterns ||= options.fetch(:patterns) do
       [
         Calagator.denylist_patterns,
-        get_denylist_patterns_from(options.fetch(:denylist, 'denylist.txt'))
+        get_denylist_patterns_from(options.fetch(:denylist, "denylist.txt"))
       ].flatten.compact
     end
   end
 
   def get_denylist_patterns_from(filename)
     unless %r{[/\\]}.match?(filename)
-      filename = Rails.root.join('config', filename)
+      filename = Rails.root.join("config", filename)
     end
     return unless File.exist?(filename)
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'formtastic'
+require "formtastic"
 # --------------------------------------------------------------------------------------------------
 # Please note: If you're subclassing Formtastic::FormBuilder, Formtastic uses
 # class_attribute for these configuration attributes instead of the deprecated
@@ -31,7 +31,7 @@ Formtastic::FormBuilder.all_fields_required_by_default = false
 # '<abbr title="required">*</abbr>'. In other words, if you configure formtastic.required
 # in your locale, it will replace the abbr title properly. But if you don't want to use
 # abbr tag, you can simply give a string as below
-Formtastic::FormBuilder.required_string = proc { %{<abbr title="#{Formtastic::I18n.t(:required)}" aria-hidden="true">*</abbr>}.html_safe }
+Formtastic::FormBuilder.required_string = proc { %(<abbr title="#{Formtastic::I18n.t(:required)}" aria-hidden="true">*</abbr>).html_safe }
 
 # Set the string that will be appended to the labels/fieldsets which are optional
 # Defaults to an empty string ("") and also accepts procs (see required_string above)
@@ -93,4 +93,4 @@ Formtastic::FormBuilder.required_string = proc { %{<abbr title="#{Formtastic::I1
 # and `<textarea>` tags by setting this to true (defaults to false).
 Formtastic::FormBuilder.use_required_attribute = true
 
-require 'formtastic/version'
+require "formtastic/version"

@@ -21,7 +21,7 @@ module Calagator
       private_class_method
 
       def self.search_engine
-        kind == :sunspot ? ApacheSunspot : Sql
+        (kind == :sunspot) ? ApacheSunspot : Sql
       end
     end
   end

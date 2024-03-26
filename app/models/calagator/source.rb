@@ -15,21 +15,21 @@
 # == Source
 #
 # A model that represents a source of events data, such as feeds for hCal, iCal, etc.
-require 'calagator/decode_html_entities_hack'
-require 'paper_trail'
-require 'loofah-activerecord'
-require 'loofah/activerecord/xss_foliate'
+require "calagator/decode_html_entities_hack"
+require "paper_trail"
+require "loofah-activerecord"
+require "loofah/activerecord/xss_foliate"
 
 module Calagator
   class Source < Calagator::ApplicationRecord
-    self.table_name = 'sources'
+    self.table_name = "sources"
 
     validate :assert_url
 
-    has_many :events,  dependent: :destroy
-    has_many :venues,  dependent: :destroy
+    has_many :events, dependent: :destroy
+    has_many :venues, dependent: :destroy
 
-    scope :listing, -> { order('created_at DESC') }
+    scope :listing, -> { order("created_at DESC") }
 
     has_paper_trail
 
@@ -47,9 +47,9 @@ module Calagator
     def url=(value)
       url = URI.parse(value.strip)
       unless %w[http https ftp].include?(url.scheme) || url.scheme.nil?
-        url.scheme = 'http'
+        url.scheme = "http"
       end
-      self[:url] = url.scheme.nil? ? 'http://' + value.strip : url.to_s
+      self[:url] = url.scheme.nil? ? "http://" + value.strip : url.to_s
     rescue URI::InvalidURIError
       false
     end
@@ -73,7 +73,7 @@ module Calagator
     def assert_url
       URI.parse(url)
     rescue URI::InvalidURIError
-      errors.add :url, 'has invalid format'
+      errors.add :url, "has invalid format"
       false
     end
   end

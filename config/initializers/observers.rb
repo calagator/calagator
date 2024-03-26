@@ -1,3 +1,5 @@
 # frozen_string_literal: true
 
-ApplicationRecord.observers << Calagator::CacheObserver
+Rails.configuration.after_initialize do
+  ApplicationRecord.observers << Calagator::CacheObserver
+end

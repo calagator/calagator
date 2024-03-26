@@ -34,8 +34,8 @@
 #   # Find duplicate of a record
 #   foo3.find_exact_duplicates # => [foo1, foo2]
 #   bar.find_exact_duplicates  # => nil
-require 'calagator/duplicate_checking/duplicate_finder'
-require 'calagator/duplicate_checking/duplicate_squasher'
+require "calagator/duplicate_checking/duplicate_finder"
+require "calagator/duplicate_checking/duplicate_squasher"
 
 module Calagator
   module DuplicateChecking
@@ -51,7 +51,7 @@ module Calagator
     def duplicate?
       duplicate_of.present?
     end
-    alias marked_as_duplicate? duplicate?
+    alias_method :marked_as_duplicate?, :duplicate?
 
     def primary?
       !duplicate?
@@ -92,8 +92,8 @@ module Calagator
           cattr_accessor(:_duplicate_finding_scope) { -> { all } }
           cattr_accessor(:_after_squashing_duplicates) { ->(primary) {} }
 
-          belongs_to :duplicate_of, class_name: name, foreign_key: DUPLICATE_MARK_COLUMN
-          has_many   :duplicates,   class_name: name, foreign_key: DUPLICATE_MARK_COLUMN
+          belongs_to :duplicate_of, class_name: name, foreign_key: DUPLICATE_MARK_COLUMN, optional: true
+          has_many :duplicates, class_name: name, foreign_key: DUPLICATE_MARK_COLUMN
 
           scope :marked_duplicates, -> { where("#{table_name}.#{DUPLICATE_MARK_COLUMN} IS NOT NULL") }
           scope :non_duplicates, -> { where("#{table_name}.#{DUPLICATE_MARK_COLUMN} IS NULL") }
@@ -128,8 +128,8 @@ module Calagator
 
       # Return Hash of duplicate events grouped by the +type+.
       def find_duplicates_by_type(type)
-        DuplicateFinder.new(self, type.split(',')).find do |scope|
-          scope.instance_exec &duplicate_finding_scope
+        DuplicateFinder.new(self, type.split(",")).find do |scope|
+          scope.instance_exec(&duplicate_finding_scope)
         end
       end
 

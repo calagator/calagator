@@ -1,0 +1,5 @@
+# DONT USE THIS FILE. FIX THE RAISED ERROR.
+# This file is here to fix the CI build which creates '/gemfiles' and
+# then tries to then run standardrb on all the gems.
+ignore:
+- 'gemfiles/**/*'

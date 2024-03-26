@@ -50,7 +50,7 @@ module Calagator
         def search
           Venue.solr_search do
             keywords query
-            order_by *order
+            order_by(*order)
             with :duplicate_for_solr, false
             with :wifi, true if wifi
             with :closed, false unless include_closed

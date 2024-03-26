@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'faker'
+require "faker"
 
 FactoryBot.define do
-  factory :venue, class: 'Calagator::Venue' do
+  factory :venue, class: "Calagator::Venue" do
     sequence(:title) { |n| "Venue #{n}" }
     sequence(:description) { |n| "Description of Venue #{n}." }
     sequence(:address) { |n| "Address #{n}" }
@@ -19,17 +19,20 @@ FactoryBot.define do
     sequence(:url) { |n| "http://#{n}.com" }
     closed { false }
     wifi { true }
-    access_notes { 'Access permitted.' }
+    access_notes { "Access permitted." }
     after(:create) do
       Sunspot.commit if Calagator::Venue::SearchEngine.kind == :sunspot
     end
 
     trait :with_multiple_tags do
-      after(:create) { |venue| venue.tag_list.add('tag1, tag2', parse: true); venue.save }
+      after(:create) { |venue|
+        venue.tag_list.add("tag1, tag2", parse: true)
+        venue.save
+      }
     end
   end
 
-  factory :event, class: 'Calagator::Event' do
+  factory :event, class: "Calagator::Event" do
     sequence(:title) { |n| "Event #{n}" }
     sequence(:description) { |n| "Description of Event #{n}." }
     start_time { Time.zone.now.beginning_of_day }
@@ -43,7 +46,10 @@ FactoryBot.define do
     end
 
     trait :with_multiple_tags do
-      after(:create) { |event| event.tag_list.add('tag1, tag2', parse: true); event.save }
+      after(:create) { |event|
+        event.tag_list.add("tag1, tag2", parse: true)
+        event.save
+      }
     end
 
     trait :with_source do
@@ -62,8 +68,8 @@ FactoryBot.define do
     association :duplicate_of, factory: :event
   end
 
-  factory :source, class: 'Calagator::Source' do
+  factory :source, class: "Calagator::Source" do
     sequence(:title) { |n| "Source #{n}" }
-    url { 'http://example.com' }
+    url { "http://example.com" }
   end
 end

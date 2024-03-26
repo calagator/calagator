@@ -1,28 +1,27 @@
 # frozen_string_literal: true
 
-unless File.exist?('spec/test_app')
-  puts 'Missing testing app in spec/test_app !' # FIXME: 'Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one.'
+unless File.exist?("spec/test_app")
+  puts "Missing testing app in spec/test_app !" # FIXME: 'Run `bundle exec bin/calagator new spec/dummy --dummy` to generate one.'
   exit 1
 end
 
-require 'simplecov'
+require "simplecov"
 
-require 'rails_helper'
-require 'rspec-activemodel-mocks'
-require 'rspec/its'
-require 'rspec-rails'
-require 'rspec/collection_matchers'
-require 'factory_bot_rails'
-require 'capybara'
-require 'capybara/rspec'
-require 'database_cleaner'
-require 'webdrivers/chromedriver'
-require 'selenium-webdriver'
-require 'timecop'
-require 'webmock'
+require "rails_helper"
+require "rspec-activemodel-mocks"
+require "rspec/its"
+require "rspec-rails"
+require "rspec/collection_matchers"
+require "factory_bot_rails"
+require "capybara"
+require "capybara/rspec"
+require "database_cleaner"
+require "selenium-webdriver"
+require "timecop"
+require "webmock"
 
-if Object.const_defined? 'SimpleCov'
-  SimpleCov.command_name 'rspec'
+if Object.const_defined? :SimpleCov
+  SimpleCov.command_name "rspec"
 end
 
 # Load support files
@@ -61,18 +60,22 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  Capybara.register_driver :chrome_headless do |app|
-    args = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu no-sandbox --window-size=1240,1400])
-    Capybara::Selenium::Driver.new(
-      app,
-      browser: :chrome,
-      options: args
-    )
-  end
+  # Capybara.register_driver :chrome_headless do |app|
+  #   args = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu no-sandbox --window-size=1240,1400])
+  #   Capybara::Selenium::Driver.new(
+  #     app,
+  #     browser: :chrome,
+  #     desired_capabilities: args
+  #   )
+  # end
+
+  Capybara.current_driver = :selenium_headless
 
   Capybara.server = :webrick
   Capybara.default_driver = :rack_test
-  Capybara.javascript_driver = :chrome_headless
+  Capybara.default_max_wait_time = 5
+  Capybara.javascript_driver = :selenium_headless
+  Capybara.always_include_port = true
 
   # These two settings work together to allow you to limit a spec run
   # to individual examples or groups you care about by tagging them with
@@ -88,7 +91,7 @@ RSpec.configure do |config|
     # Use the documentation formatter for detailed output,
     # unless a formatter has already been configured
     # (e.g. via a command-line flag).
-    config.default_formatter = 'doc'
+    config.default_formatter = "doc"
   end
 
   # Print the 10 slowest examples and example groups at the

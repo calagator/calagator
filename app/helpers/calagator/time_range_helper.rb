@@ -2,7 +2,7 @@
 
 module Calagator
   module TimeRangeHelper
-    extend self # rubocop:disable Style/ModuleFunction
+    extend self
 
     # Initialize with a single DateTime, a pair of DateTimes,
     # or an object that responds_to start_time and end_time, and two options
@@ -34,16 +34,16 @@ module Calagator
 
       def start_text
         part = TimePart.new(start_time, context_date, from_prefix: same_day?, no_meridian: same_meridian?)
-        part.to_s(format, 'start')
+        part.to_s(format, "start")
       end
 
       def conjunction
         return unless range?
 
         if same_day?
-          format == :text ? '-' : '&ndash;'
+          (format == :text) ? "-" : "&ndash;"
         else
-          ' through '
+          " through "
         end
       end
 
@@ -51,7 +51,7 @@ module Calagator
         return unless range?
 
         part = TimePart.new(end_time, context_date, time_only: same_day?)
-        part.to_s(format, 'end')
+        part.to_s(format, "end")
       end
 
       def range?
@@ -63,7 +63,7 @@ module Calagator
       end
 
       def same_meridian?
-        same_day? && start_time.strftime('%p') == end_time.strftime('%p')
+        same_day? && start_time.strftime("%p") == end_time.strftime("%p")
       end
     end
 
@@ -88,19 +88,19 @@ module Calagator
 
       def get_parts
         parts = {
-          wday: time.strftime('%A'),
-          month: time.strftime('%B'),
+          wday: time.strftime("%A"),
+          month: time.strftime("%B"),
           day: time.day,
           year: time.year,
-          at: 'at',
-          hour: time.strftime('%l').strip,
-          min: time.strftime(':%M'),
-          suffix: time.strftime('%P')
+          at: "at",
+          hour: time.strftime("%l").strip,
+          min: time.strftime(":%M"),
+          suffix: time.strftime("%P")
         }
         if time.min == 0
           parts.delete(:min)
-          return parts.merge(hour: 'midnight', suffix: nil) if time.hour == 0
-          return parts.merge(hour: 'noon', suffix: nil) if time.hour == 12
+          return parts.merge(hour: "midnight", suffix: nil) if time.hour == 0
+          return parts.merge(hour: "noon", suffix: nil) if time.hour == 12
         end
         parts
       end
@@ -125,22 +125,22 @@ module Calagator
       end
 
       def set_at_to_from
-        parts[:at] = 'from' if parts.key?(:at)
+        parts[:at] = "from" if parts.key?(:at)
       end
     end
 
     class TimePartRenderer < Struct.new(:part, :format, :which)
       PREFIXES = {
-        :hour => ' ',
-        [nil, :hour] => '',
-        :year => ', ',
-        :end_hour => ' ',
-        :end_year => ', ',
-        :at => ' '
+        :hour => " ",
+        [nil, :hour] => "",
+        :year => ", ",
+        :end_hour => " ",
+        :end_year => ", ",
+        :at => " "
       }.freeze
       SUFFIXES = {
-        month: ' ',
-        wday: ', '
+        month: " ",
+        wday: ", "
       }.freeze
 
       def to_s
@@ -154,7 +154,7 @@ module Calagator
       private
 
       def text
-        part.parts.reduce('') do |string, (key, value)|
+        part.parts.reduce("") do |string, (key, value)|
           prefix = (PREFIXES[[@last_key, key]] || PREFIXES[key])
           suffix = SUFFIXES[key]
           @last_key = key
@@ -164,7 +164,7 @@ module Calagator
 
       def wrap_in_hcal(string, which)
         css_class = "dt#{which} dt-#{which}"
-        formatted_time = part.time.strftime('%Y-%m-%dT%H:%M:%S')
+        formatted_time = part.time.strftime("%Y-%m-%dT%H:%M:%S")
         %(<time class="#{css_class}" title="#{formatted_time}" datetime="#{formatted_time}">#{string}</time>)
       end
     end

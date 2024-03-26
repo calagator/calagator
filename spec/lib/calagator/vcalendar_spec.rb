@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
-require 'calagator/vcalendar'
+require "spec_helper"
+require "calagator/vcalendar"
 
 module Calagator
-  describe VVenue, 'when parsing VVENUE', type: :model do
+  describe VVenue, "when parsing VVENUE", type: :model do
     subject do
       described_class.new(<<-ICAL.strip_heredoc)
       BEGIN:VVENUE
@@ -27,39 +27,39 @@ module Calagator
       ICAL
     end
 
-    it 'has the address as-is' do
-      expect(subject.address).to eq '700 Southwest Fifth Avenue Suite #1035'
+    it "has the address as-is" do
+      expect(subject.address).to eq "700 Southwest Fifth Avenue Suite #1035"
     end
 
-    it 'has the locality as is' do
-      expect(subject.city).to eq 'Portland'
+    it "has the locality as is" do
+      expect(subject.city).to eq "Portland"
     end
 
-    it 'finds a property set by its key' do
-      expect(subject.name).to eq 'Apple Store Pioneer Place'
+    it "finds a property set by its key" do
+      expect(subject.name).to eq "Apple Store Pioneer Place"
     end
 
     it "finds a property set by its key and meta-qualifier by its key when one wasn't specified" do
-      expect(subject.url).to eq 'http://eventful.com/V0-001-001423875-1'
+      expect(subject.url).to eq "http://eventful.com/V0-001-001423875-1"
     end
 
     it "finds a property set by its key and multiple meta-qualifiers by its key when one wasn't specified" do
-      expect(subject.country).to eq 'United States'
+      expect(subject.country).to eq "United States"
     end
 
     it "finds a property set by its key and meta-qualifier with odd characters by its key when one wasn't specified" do
-      expect(subject.region).to eq 'Oregon'
+      expect(subject.region).to eq "Oregon"
     end
 
-    it 'responds to fields that it has' do
+    it "responds to fields that it has" do
       expect(subject).to respond_to(:address)
     end
 
-    it 'does not respond to fields that it does not have' do
+    it "does not respond to fields that it does not have" do
       expect(subject).not_to respond_to(:omg)
     end
 
-    it 'raises an exception if field is not there' do
+    it "raises an exception if field is not there" do
       expect { subject.omg }.to raise_exception(NoMethodError)
     end
   end

@@ -70,7 +70,7 @@ module Calagator
         def search(current)
           Event.solr_search do
             keywords query
-            order_by *order
+            order_by(*order)
             order_by :start_time, :desc
             with :duplicate, false
             data_accessor_for(Event).include = [:venue]

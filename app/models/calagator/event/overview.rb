@@ -20,7 +20,7 @@ module Calagator
       end
 
       def tags
-        @tags ||= Event.tag_counts_on(:tags, limit: 100, conditions: 'tags_count >= 10').sort_by(&:name)
+        @tags ||= Event.tag_counts_on(:tags, limit: 100, conditions: "tags_count >= 10").sort_by(&:name)
       end
 
       private

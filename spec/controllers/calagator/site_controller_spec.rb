@@ -1,55 +1,55 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 module Calagator
   describe SiteController, type: :controller do
     routes { Calagator::Engine.routes }
 
-    describe '#omfg' do
-      it 'raises an error' do
-        expect { get :omfg }.to raise_exception(ArgumentError, 'OMFG')
+    describe "#omfg" do
+      it "raises an error" do
+        expect { get :omfg }.to raise_exception(ArgumentError, "OMFG")
       end
     end
 
-    describe '#hello' do
+    describe "#hello" do
       it "renders 'hello' in plain text" do
         get :hello
-        expect(response.body).to eq('hello')
+        expect(response.body).to eq("hello")
       end
     end
 
-    describe '#index' do
-      it 'renders requests for HTML successfully' do
+    describe "#index" do
+      it "renders requests for HTML successfully" do
         get :index
         expect(response).to be_successful
         expect(response).to render_template :index
       end
 
-      it 'redirects requests for non-HTML to events' do
-        get :index, format: 'json'
-        expect(response).to redirect_to(events_path(format: 'json'))
+      it "redirects requests for non-HTML to events" do
+        get :index, format: "json"
+        expect(response).to redirect_to(events_path(format: "json"))
       end
     end
 
-    describe 'about' do
-      it 'renders an html document' do
+    describe "about" do
+      it "renders an html document" do
         get :about
         expect(response).to be_successful
         expect(response).to render_template :about
       end
     end
 
-    describe 'opensearch' do
-      it 'renders an xml document' do
-        get :opensearch, format: 'xml'
+    describe "opensearch" do
+      it "renders an xml document" do
+        get :opensearch, format: "xml"
         expect(response).to be_successful
         expect(response).to render_template :opensearch
       end
     end
 
-    describe 'defunct' do
-      it 'renders an html document' do
+    describe "defunct" do
+      it "renders an html document" do
         get :defunct
         expect(response).to be_successful
         expect(response).to render_template :defunct

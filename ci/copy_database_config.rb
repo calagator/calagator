@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require 'fileutils'
+require "fileutils"
 
-which_config = "ci/database.#{ENV['DB'] || 'sqlite'}.yml"
+which_config = "ci/database.#{ENV["DB"] || "sqlite"}.yml"
 
 puts "Copying database configuration for CI: #{which_config}"
-FileUtils.cp which_config, 'spec/test_app/config/database.yml'
+FileUtils.cp which_config, "spec/test_app/config/database.yml"

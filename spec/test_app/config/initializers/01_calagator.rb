@@ -2,17 +2,17 @@
 
 Calagator.setup do |config|
   # Site name
-  config.title = 'Calagator'
+  config.title = "Calagator"
 
   # Site tagline
-  config.tagline = 'A Tech Calendar'
+  config.tagline = "A Tech Calendar"
 
   # Site URL with trailing slash
-  config.url = 'http://my-calagator.org/'
+  config.url = "http://my-calagator.org/"
 
   # Email address of administrator that will get exception notifications
   # and requests for assistance from users:
-  config.administrator_email = 'your@email.addr'
+  config.administrator_email = "your@email.addr"
 
   # Optional username and password to use when accessing /admin pages
   # config.admin_username = 'admin'
@@ -32,21 +32,21 @@ Calagator.setup do |config|
   # Stamen's terrain tiles will be used by default.
   # Map marker color
   # Values: red, darkred, orange, green, darkgreen, blue, purple, darkpuple, cadetblue
-  config.mapping_marker_color = 'green'
+  config.mapping_marker_color = "green"
 
   # A Google Maps API key is required to use Google's geocoding service
   # as well as to display maps using their API.
   # Get one at: https://developers.google.com/maps/documentation/javascript/tutorial#api_key
   #
   # This is sensitive information and should not be stored in version control.
-  config.mapping_google_maps_api_key = ENV['GOOGLE_MAPS_API_KEY']
+  config.mapping_google_maps_api_key = ENV["GOOGLE_MAPS_API_KEY"]
 
   # The tile provider to use when rendering maps with Leaflet.
   # One of: leaflet, stamen, mapbox, google
-  config.mapping_provider = 'stamen'
+  config.mapping_provider = "stamen"
 
   # The tiles to use for the map, see the docs for individual Leaflet plugins.
-  config.mapping_tiles = 'terrain'
+  config.mapping_tiles = "terrain"
 
   # Other mapping examples:
   #

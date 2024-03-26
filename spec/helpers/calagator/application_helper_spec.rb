@@ -1,21 +1,21 @@
 # frozen_string_literal: true
 
-require 'spec_helper'
+require "spec_helper"
 
 module Calagator
   describe ApplicationHelper, type: :helper do
-    describe '#format_description' do
-      it 'autolinks' do
-        expect(helper.format_description('foo http://mysite.com/~user bar')).to eq \
+    describe "#format_description" do
+      it "autolinks" do
+        expect(helper.format_description("foo http://mysite.com/~user bar")).to eq \
           '<p>foo <a href="http://mysite.com/~user">http://mysite.com/~user</a> bar</p>'
       end
 
-      it 'processes Markdown links' do
-        expect(helper.format_description('[ClojureScript](https://github.com/clojure/clojurescript), the Clojure to JS compiler')).to eq \
+      it "processes Markdown links" do
+        expect(helper.format_description("[ClojureScript](https://github.com/clojure/clojurescript), the Clojure to JS compiler")).to eq \
           '<p><a href="https://github.com/clojure/clojurescript">ClojureScript</a>, the Clojure to JS compiler</p>'
       end
 
-      it 'processes Markdown references' do
+      it "processes Markdown references" do
         desc = <<-DESC.strip_heredoc
           [SocketStream][1], a phenomenally fast real-time web framework for Node.js
 
@@ -26,16 +26,16 @@ module Calagator
       end
     end
 
-    describe '#source_code_version' do
-      it 'returns the gem version' do
+    describe "#source_code_version" do
+      it "returns the gem version" do
         expect(helper.source_code_version).to eq(Calagator::VERSION)
       end
     end
 
-    describe '#datestamp' do
+    describe "#datestamp" do
       it "constructs a sentence describing the item's history" do
-        event = create(:event, created_at: '2010-01-01', updated_at: '2010-01-02')
-        event.create_source! title: 'google', url: 'http://google.com'
+        event = create(:event, created_at: "2010-01-01", updated_at: "2010-01-02")
+        event.create_source! title: "google", url: "http://google.com"
         allow(event.source).to receive_messages id: 1
         expect(helper.datestamp(event)).to eq(
           %(This item was imported from <a href="/sources/1">google</a> <br />) +

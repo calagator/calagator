@@ -1,3 +1,3 @@
 Rails.application.routes.draw do
-  mount Calagator::Engine => '/'
+  mount Calagator::Engine => "/"
 end

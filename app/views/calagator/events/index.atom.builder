@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-cache_if(@perform_caching, Calagator::CacheObserver.daily_key_for('events_atom', request)) do
-  atom_feed('xmlns:georss'.to_sym => 'http://www.georss.org/georss') do |feed|
+cache_if(@perform_caching, Calagator::CacheObserver.daily_key_for("events_atom", request)) do
+  atom_feed("xmlns:georss": "http://www.georss.org/georss") do |feed|
     page_title = if @search
-                   @search.tag ? "Events tagged with: #{@search.tag}" : "Search Results for: #{@search.query}"
-                 else
-                   'Events'
+      @search.tag ? "Events tagged with: #{@search.tag}" : "Search Results for: #{@search.query}"
+    else
+      "Events"
     end
     feed.title("#{Calagator.title}: #{page_title}")
 
@@ -22,10 +22,10 @@ cache_if(@perform_caching, Calagator::CacheObserver.daily_key_for('events_atom',
           entry.title(event.title)
           entry.summary(summary)
           entry.url(event_url(event))
-          entry.link(rel: 'enclosure', type: 'text/calendar', href: event_url(event, format: 'ics'))
+          entry.link(rel: "enclosure", type: "text/calendar", href: event_url(event, format: "ics"))
           entry.start_time(event.start_time.xmlschema)
           entry.end_time(event.end_time.xmlschema) if event.end_time
-          entry.content(render(partial: 'feed_item', locals: { event: event }, formats: [:html]), type: 'html')
+          entry.content(render(partial: "feed_item", locals: {event: event}, formats: [:html]), type: "html")
           if event.venue&.latitude && event.venue&.longitude
             entry.georss :point, "#{event.venue.latitude} #{event.venue.longitude}"
           end

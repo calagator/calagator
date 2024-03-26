@@ -44,3 +44,45 @@ Before you start, you will need to:
     If you're running calagator in a Vagrantbox, add `-b 0.0.0.0` to the bundle exec command to handle requests from the host OS:
 
     `bundle exec bin/rails server -b 0.0.0.0`
+
+## Running the tests
+
+#### Run the main test suite
+
+    `bundle exec rake spec`
+
+#### Run appraisal test suite
+
+    `bundle exec appraisal install && bundle exec appraisal rake spec`
+
+## Building the calagator gem locally
+
+By default the project relies on the released version of the calagator gem on rubygems.org.
+To test and develop the gem locally you need to build it locally. 
+
+### 1. Update the gem version (for local testing)
+
+To test your own gem you'll want to give it a local version, generally dont commit this version.
+
+Update version number in /lib/calagator/version.rb
+
+### 2. Build the gemspec and locally install the gem
+
+    `gem build calagator.gemspec && gem install calagator`
+
+### 3. Go to another folder to test the gem
+
+You'll need to come out of your project folder.
+I made a folder called 'ruby_2_6' for this to test against ruby 2.6 projects for example.
+
+   `bundle exec calendar new yourappname`
+
+This process tests the gem works, that the new app gems build and that migrations work and more.
+If any errors come up, fix these are repeat from step 1.
+### 4. Activley test the gem built app
+
+Go in the new directory.
+
+    `bin/rails serve`
+
+Do a quick test by making a new event that is on tomorrow, save it and then check it's on the homepage.

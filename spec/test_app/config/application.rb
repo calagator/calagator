@@ -10,6 +10,7 @@ require "calagator"
 module TestApp
   class Application < Rails::Application
     config.load_defaults Rails::VERSION::STRING.to_f
+    config.active_record.yaml_column_permitted_classes = [Symbol, Time, BigDecimal]
 
     # Configuration for the application, engines, and railties goes here.
     #

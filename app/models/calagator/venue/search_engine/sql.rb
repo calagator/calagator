@@ -19,16 +19,16 @@ module Calagator
         def base
           column_names = Venue.column_names.map { |name| "venues.#{name}" }
           @scope = Venue.all
-                        .group(column_names)
-                        .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type LIKE '%Venue'")
-                        .joins('LEFT OUTER JOIN tags ON tags.id = taggings.tag_id')
+            .group(column_names)
+            .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = venues.id AND taggings.taggable_type LIKE '%Venue'")
+            .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
           self
         end
 
         def keywords
-          @scope = @scope.where(['LOWER(title) LIKE ?', "%#{query.downcase}%"])
-                         .or(@scope.where(['LOWER(description) LIKE ?', "%#{query.downcase}%"]))
-                         .or(@scope.where(['LOWER(tags.name) = ?', query]))
+          @scope = @scope.where(["LOWER(title) LIKE ?", "%#{query.downcase}%"])
+            .or(@scope.where(["LOWER(description) LIKE ?", "%#{query.downcase}%"]))
+            .or(@scope.where(["LOWER(tags.name) = ?", query]))
           self
         end
 
@@ -38,7 +38,7 @@ module Calagator
         end
 
         def order
-          @scope = @scope.order(Arel.sql('LOWER(venues.title) ASC'))
+          @scope = @scope.order(Arel.sql("LOWER(venues.title) ASC"))
           self
         end
 

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'calagator/vcalendar'
+require "calagator/vcalendar"
 
 # == Source::Parser::Ical
 #
@@ -18,7 +18,7 @@ module Calagator
 
     # Override Source::Parser.read_url to handle "webcal" scheme addresses.
     def self.read_url(url)
-      url = url.gsub(/^webcal:/, 'http:')
+      url = url.gsub(/^webcal:/, "http:")
       super
     end
 

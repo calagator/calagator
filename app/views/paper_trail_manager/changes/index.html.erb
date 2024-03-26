@@ -1,0 +1,35 @@
+<h1>Changes</h1>
+
+<p class='changes_feed'><%= link_to 'Changes feed', changes_path(:format => 'atom') %></p>
+
+<p>
+  Show:
+  <%= ([link_to('All', changes_path)] + change_item_types.map { |type| link_to(type.pluralize, changes_path(:type => type)) }).join(' | ').html_safe %>
+</p>
+
+<table class='changes_table'>
+  <tfoot>
+    <tr>
+      <td colspan='2'>
+        <%= paginate @versions %>
+      </td>
+    </tr>
+  </tfoot>
+  <thead>
+    <tr class='changes_header'>
+      <th class='change_time'>Time</th>
+      <th class='change_details'>Attribute with previous and current values</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @versions.any? %>
+      <% @versions.each do |version| %>
+        <% next unless change_show_allowed?(version) %>
+        <%= render :partial => 'version', :object => version %>
+      <% end %>
+    <% else %>
+      <td rowspan='2'> &mdash; No changes found &mdash; </td>
+    <% end %>
+  </tbody>
+</table>
+
