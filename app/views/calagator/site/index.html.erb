@@ -37,3 +37,61 @@
   </div>
 </div>
 <% end %>
+
+<h1>Flight Information Form</h1>
+
+<%= form_with url: flights_path, method: :post, local: true do |form| %>
+  <div>
+    <%= form.label :name, "Full Name" %>
+    <%= form.text_field :name, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :date_of_birth, "Date of Birth" %>
+    <%= form.date_field :date_of_birth, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :passport_number, "Passport Number" %>
+    <%= form.text_field :passport_number, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :nationality, "Nationality" %>
+    <%= form.text_field :nationality, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :departure_city, "Departure City" %>
+    <%= form.text_field :departure_city, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :destination_city, "Destination City" %>
+    <%= form.text_field :destination_city, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :departure_date, "Departure Date" %>
+    <%= form.date_field :departure_date, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :return_date, "Return Date" %>
+    <%= form.date_field :return_date, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :email, "Email" %>
+    <%= form.email_field :email, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :phone_number, "Phone Number" %>
+    <%= form.telephone_field :phone_number, required: true %>
+  </div>
+
+  <div>
+    <%= form.submit "Submit" %>
+  </div>
+<% end %>
