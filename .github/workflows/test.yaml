@@ -59,14 +59,15 @@ jobs:
       BUNDLE_GEMFILE: gemfiles/${{ matrix.rails }}.gemfile
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v1
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
-          java-version: 8
+          distribution: temurin
+          java-version: '8'
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-      - uses: actions/cache@v1
+      - uses: actions/cache@v4
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-${{ matrix.ruby}}-gems-${{ hashFiles('**/calagator.gemspec') }}
@@ -98,12 +99,12 @@ jobs:
       - name: Run RSpec
         run: |
           bundle exec rake spec
-      - uses: actions/upload-artifact@v1
+      - uses: actions/upload-artifact@v4
         with:
           name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}
           path: coverage
       - name: Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: ./coverage/lcov.info
