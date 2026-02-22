@@ -31,7 +31,7 @@ module Calagator
     # PaperTrail needs Time and BigDecimal as supported YAML classes
     def add_yaml_config
       inject_into_file "config/application.rb",
-        "\s\s\s\sconfig.active_record.yaml_column_permitted_classes = [Time, BigDecimal]",
+        "\s\s\s\sconfig.active_record.yaml_column_permitted_classes = [Symbol, Time, BigDecimal]",
         after: /config.load_defaults.+\n/
     end
 
