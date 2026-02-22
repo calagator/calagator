@@ -13,7 +13,7 @@ module Calagator
           format.xml { render xml: @importer.source, events: @importer.events }
         else
           format.html { redirect_to new_source_path(url: @importer.source.url), flash: {failure: @importer.failure_message} }
-          format.xml { render xml: @importer.source.errors, status: :unprocessable_entity }
+          format.xml { render xml: @importer.source.errors, status: :unprocessable_content }
         end
       end
     end
@@ -74,7 +74,7 @@ module Calagator
           format.xml { render xml: @source, status: :created, location: @source }
         else
           format.html { render action: @source.new_record? ? "new" : "edit" }
-          format.xml { render xml: @source.errors, status: :unprocessable_entity }
+          format.xml { render xml: @source.errors, status: :unprocessable_content }
         end
       end
     end

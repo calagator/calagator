@@ -74,7 +74,7 @@ module Calagator
             flash[:failure] = saver.failure
             render action: @event.new_record? ? "new" : "edit"
           end
-          format.xml { render xml: @event.errors, status: :unprocessable_entity }
+          format.xml { render xml: @event.errors, status: :unprocessable_content }
         end
       end
     end

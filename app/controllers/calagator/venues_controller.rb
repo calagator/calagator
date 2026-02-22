@@ -136,7 +136,7 @@ module Calagator
         flash[:failure] = "<h3>Please fix any errors and try again</h3>"
         respond_to do |format|
           format.html { render action: venue.new_record? ? "new" : "edit" }
-          format.xml { render xml: venue.errors, status: :unprocessable_entity }
+          format.xml { render xml: venue.errors, status: :unprocessable_content }
         end
       end
 
@@ -163,7 +163,7 @@ module Calagator
         message = "Cannot destroy venue that has associated events, you must reassociate all its events first."
         respond_to do |format|
           format.html { redirect_to venue, flash: {failure: message} }
-          format.xml { render xml: message, status: :unprocessable_entity }
+          format.xml { render xml: message, status: :unprocessable_content }
         end
       end
 
