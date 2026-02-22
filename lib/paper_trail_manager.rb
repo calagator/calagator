@@ -56,7 +56,7 @@ class PaperTrailManager < Rails::Engine
   end
 
   def self.allow_show?(controller, version)
-    allow_index_block.call controller, version
+    allow_show_block.call controller, version
   end
 
   # Describe when to allow reverts. Call this with a block that accepts
