@@ -30,21 +30,6 @@ module Calagator
       end
     end
 
-    describe "when parsing events" do
-      xit "uses first successful parser's results" do
-        # events = [double]
-
-        body = {
-          name: "event",
-          start_time: "2010-01-01 12:00:00 UTC",
-          end_time: "2010-01-01 13:00:00 UTC"
-        }.to_json
-        stub_request(:get, "https://graph.facebook.com/omg?access_token=fake_access_token").to_return(body: body, headers: {content_type: "application/json"})
-
-        expect(described_class.to_events(url: "http://www.facebook.com/events/omg")).to have(1).event
-      end
-    end
-
     describe "checking duplicates when importing" do
       describe "with two identical events" do
         before do
@@ -179,36 +164,6 @@ module Calagator
 
         event = source.to_events.first
         expect(event.venue.title).to eq "Prime"
-      end
-
-      # We're no longer able to use the Meetup API, and none of the remaining importers have data with venue IDs
-      xit "uses an existing venue when importing an event with a matching machine tag that describes a venue" do
-        venue = Venue.create!(title: "Custom Urban Airship", tag_list: "meetup:venue=774133")
-
-        meetup_url = "http://www.meetup.com/pdxpython/events/ldhnqyplbnb/"
-        api_url = "https://api.meetup.com/2/event/ldhnqyplbnb?key=foo&sign=true&fields=topics"
-
-        stub_request(:get, api_url).to_return(body: read_sample("meetup.json"), headers: {content_type: "application/json"})
-
-        source = Source.new(title: "Event with duplicate machine-tagged venue", url: meetup_url)
-        event = source.to_events.first
-
-        expect(event.venue).to eq venue
-      end
-
-      describe "choosing parsers by matching URLs" do
-        {"Calagator::Source::Parser::Facebook" => "http://facebook.com/event.php?eid=247619485255249"}.each do |parser_name, url|
-          xit "only invokes the #{parser_name} parser when given #{url}" do
-            parser = parser_name.constantize
-            expect_any_instance_of(parser).to receive(:to_events).and_return([Event.new])
-            described_class.parsers.reject { |p| p == parser }.each do |other_parser|
-              expect_any_instance_of(other_parser).not_to receive :to_events
-            end
-
-            stub_request(:get, url)
-            Source.new(title: parser_name, url: url).to_events
-          end
-        end
       end
     end
 
