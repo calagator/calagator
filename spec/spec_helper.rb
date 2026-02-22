@@ -60,21 +60,17 @@ RSpec.configure do |config|
     DatabaseCleaner.clean
   end
 
-  # Capybara.register_driver :chrome_headless do |app|
-  #   args = Selenium::WebDriver::Chrome::Options.new(args: %w[headless disable-gpu no-sandbox --window-size=1240,1400])
-  #   Capybara::Selenium::Driver.new(
-  #     app,
-  #     browser: :chrome,
-  #     desired_capabilities: args
-  #   )
-  # end
-
-  Capybara.current_driver = :selenium_headless
+  Capybara.register_driver :selenium_chrome_headless do |app|
+    options = Selenium::WebDriver::Chrome::Options.new(
+      args: %w[headless disable-gpu no-sandbox window-size=1400,1400]
+    )
+    Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  end
 
   Capybara.server = :webrick
   Capybara.default_driver = :rack_test
   Capybara.default_max_wait_time = 5
-  Capybara.javascript_driver = :selenium_headless
+  Capybara.javascript_driver = :selenium_chrome_headless
   Capybara.always_include_port = true
 
   # These two settings work together to allow you to limit a spec run

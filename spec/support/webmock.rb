@@ -5,8 +5,7 @@ require "webmock/rspec"
 RSpec.configure do |config|
   config.before(:suite) do
     WebMock.disable_net_connect!(
-      allow_localhost: true, # poltergeist and solr need to connect to localhost
-      allow: "github.com" # webdrivers needs to download geckodriver
+      allow_localhost: true # solr needs to connect to localhost
     )
   end
 end
