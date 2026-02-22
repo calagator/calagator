@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.description = "Calagator is an open source community calendaring platform"
   s.license = "MIT"
 
-  s.required_ruby_version = [">= 3.1.0"]
+  s.required_ruby_version = [">= 3.2.0"]
 
   s.files = Dir["{app,config,lib,vendor}/**/*"] + Dir["db/**/*.rb"] + ["MIT-LICENSE.txt", "Rakefile", "README.md", "rails_template.rb"]
   s.executables << "calagator"
@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency "rails", Calagator::RAILS_VERSION
   s.add_dependency "sprockets-rails", "~> 3.4"
   s.add_dependency "activemodel-serializers-xml", "~> 1.0"
-  s.add_dependency "acts-as-taggable-on", "~> 10.0"
+  s.add_dependency "acts-as-taggable-on", "~> 12.0"
   s.add_dependency "redcarpet", "~> 3.6"
   s.add_dependency "font-awesome-rails", "~> 4.7"
   s.add_dependency "formtastic", "~> 5.0"
@@ -38,7 +38,7 @@ Gem::Specification.new do |s|
   s.add_dependency "lucene_query", "0.1"
   s.add_dependency "microformats", "~> 4.5"
   s.add_dependency "nokogiri", ">= 1.14"
-  s.add_dependency "paper_trail", "~> 15.1"
+  s.add_dependency "paper_trail", "~> 16.0"
   s.add_dependency "rack-contrib", "~> 2.3"
   s.add_dependency "rails_autolink", "~> 1.1"
   s.add_dependency "recaptcha", "~> 5.8"
