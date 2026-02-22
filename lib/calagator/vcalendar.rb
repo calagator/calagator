@@ -13,7 +13,7 @@ module Calagator
         VCalendar.new(ri_cal_calendar)
       end
     rescue => e
-      if /InvalidIcalendarFileError/.match?(e.message)
+      if e.message.include?("InvalidIcalendarFileError") || e.message.include?("Invalid icalendar file")
         return false
       end # Invalid data, give up.
 
