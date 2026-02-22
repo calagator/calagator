@@ -10,7 +10,7 @@ source "https://rubygems.org"
 gemspec
 
 # develop against latest rails
-gem "rails", Calagator::RAILS_VERSION
+gem "rails", *Array(Calagator::RAILS_VERSION)
 gem "webrick"
 
 # turbolinks is used by the test application by default

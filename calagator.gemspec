@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.executables << "calagator"
 
   # To change this Rails requirement, update RAILS_VERSION in lib/calagator/version.rb
-  s.add_dependency "rails", Calagator::RAILS_VERSION
+  s.add_dependency "rails", *Array(Calagator::RAILS_VERSION)
   s.add_dependency "sprockets-rails", "~> 3.4"
   s.add_dependency "activemodel-serializers-xml", "~> 1.0"
   s.add_dependency "acts-as-taggable-on", "~> 12.0"
