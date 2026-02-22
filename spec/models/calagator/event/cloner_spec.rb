@@ -23,17 +23,17 @@ module Calagator
 
       describe "#start_time" do
         it "equals todays date with the same time" do
-          subject.start_time.to_date.should == Date.today &&
-            subject.start_time.hour.should == original.start_time.hour &&
-            subject.start_time.min.should == original.start_time.min
+          expect(subject.start_time.to_date).to eq(Date.today)
+          expect(subject.start_time.hour).to eq(original.start_time.hour)
+          expect(subject.start_time.min).to eq(original.start_time.min)
         end
       end
 
       describe "#end_time" do
         it "equals todays date with the same time" do
-          subject.end_time.to_date.should == Date.today &&
-            subject.end_time.hour.should == original.end_time.hour &&
-            subject.end_time.min.should == original.end_time.min
+          expect(subject.end_time.to_date).to eq(Date.today)
+          expect(subject.end_time.hour).to eq(original.end_time.hour)
+          expect(subject.end_time.min).to eq(original.end_time.min)
         end
       end
 
