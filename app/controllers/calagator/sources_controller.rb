@@ -5,7 +5,7 @@ module Calagator
     # POST /import
     # POST /import.xml
     def import
-      @importer = Source::Importer.new(params.permit![:source])
+      @importer = Source::Importer.new(source_params)
       respond_to do |format|
         if @importer.import
           redirect_target = @importer.events.one? ? @importer.events.first : events_path
@@ -69,7 +69,7 @@ module Calagator
 
     def create_or_update
       respond_to do |format|
-        if @source.update(params.permit![:source])
+        if @source.update(source_params)
           format.html { redirect_to @source, notice: "Source was successfully saved." }
           format.xml { render xml: @source, status: :created, location: @source }
         else
@@ -90,6 +90,12 @@ module Calagator
         format.html { redirect_to sources_url }
         format.xml { head :ok }
       end
+    end
+
+    private
+
+    def source_params
+      params.fetch(:source, {}).permit(:url, :title)
     end
   end
 end

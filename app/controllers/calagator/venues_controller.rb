@@ -14,7 +14,7 @@ module Calagator
 
     # GET /venues
     def index
-      @search = Venue::Search.new(params.permit!)
+      @search = Venue::Search.new(venue_search_params)
       @venues = @search.venues
 
       flash[:failure] = @search.failure_message
@@ -122,7 +122,7 @@ module Calagator
       end
 
       def save
-        venue.update params.permit![:venue].to_h
+        venue.update(venue_params)
       end
 
       def render_success
@@ -174,6 +174,19 @@ module Calagator
           format.xml { head :ok }
         end
       end
+    end
+
+    def venue_params
+      params.require(:venue).permit(:title, :address, :street_address, :locality,
+        :region, :postal_code, :country, :latitude, :longitude, :url, :email,
+        :telephone, :wifi, :description, :access_notes, :closed, :tag_list,
+        :force_geocoding)
+    end
+
+    private
+
+    def venue_search_params
+      params.permit(:tag, :query, :wifi, :all, :closed, :include_closed)
     end
   end
 end

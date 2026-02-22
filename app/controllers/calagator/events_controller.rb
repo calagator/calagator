@@ -15,7 +15,7 @@ module Calagator
     # GET /events
     # GET /events.xml
     def index
-      @browse = Event::Browse.new(params)
+      @browse = Event::Browse.new(event_browse_params)
       @events = @browse.events
       @browse.errors.each { |error| append_flash :failure, error }
       render_events @events
@@ -35,7 +35,7 @@ module Calagator
     # GET /events/new
     # GET /events/new.xml
     def new
-      @event = Event.new(params.permit![:event])
+      @event = Event.new(event_params)
     end
 
     # GET /events/1/edit
@@ -56,7 +56,7 @@ module Calagator
     end
 
     def create_or_update
-      saver = Event::Saver.new(@event, params.permit!)
+      saver = Event::Saver.new(@event, event_saver_params)
       respond_to do |format|
         if recaptcha_verified?(@event) && saver.save
           format.html do
@@ -92,7 +92,7 @@ module Calagator
 
     # GET /events/search
     def search
-      @search = Event::Search.new(params)
+      @search = Event::Search.new(event_search_params)
 
       # setting @events so that we can reuse the index atom builder
       @events = @search.events
@@ -130,6 +130,24 @@ module Calagator
         format.xml { render xml: events.to_xml(root: "events", include: :venue) }
         format.json { render json: events.to_json(include: :venue) }
       end
+    end
+
+    def event_params
+      params.fetch(:event, {}).permit(:title, :description, :url, :venue_details, :venue_id, :tag_list)
+    end
+
+    def event_saver_params
+      params.permit(:start_date, :start_time, :end_date, :end_time,
+        :venue_name, :trap_field, :preview,
+        event: [:title, :description, :url, :venue_details, :venue_id, :tag_list])
+    end
+
+    def event_browse_params
+      params.permit(:order, date: [:start, :end], time: [:start, :end])
+    end
+
+    def event_search_params
+      params.permit(:query, :tag, :order, :current)
     end
 
     def find_and_redirect_if_locked
