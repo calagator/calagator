@@ -11,14 +11,8 @@ describe "search for events", js: true do
   end
 
   it "User searches for an event by name" do
-    visit "/events/search?query=Ruby"
-
-    # We're using send_keys here instead of fill_in in order to trigger the
-    # correct events for JavaScript autocompletion.
-    #
-    # https://github.com/calagator/calagator/pull/448#issuecomment-129621567
-    # This no longer works, unsure why
-    # find_field("search_field").native.send_keys "Ruby\n"
+    visit "/"
+    find("#search_field").send_keys("Ruby", :return)
 
     within("#current") do
       expect(page).to have_content "Viewing 1 current event"
