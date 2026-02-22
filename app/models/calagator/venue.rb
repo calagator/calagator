@@ -46,6 +46,8 @@ module Calagator
     acts_as_taggable_on :tags
 
     xss_foliate sanitize: %i[description access_notes]
+
+    include ExpiresCache
     include DecodeHtmlEntitiesHack
     include ActiveModel::Serializers::Xml
 

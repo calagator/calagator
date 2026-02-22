@@ -45,6 +45,7 @@ module Calagator
 
     xss_foliate strip: %i[title description venue_details]
 
+    include ExpiresCache
     include DecodeHtmlEntitiesHack
     include ActiveModel::Serializers::Xml
 

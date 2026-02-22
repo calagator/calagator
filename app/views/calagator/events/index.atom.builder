@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-cache_if(@perform_caching, Calagator::CacheObserver.daily_key_for("events_atom", request)) do
+cache_if(@perform_caching, Calagator::CacheKey.daily_key_for("events_atom", request)) do
   atom_feed("xmlns:georss": "http://www.georss.org/georss") do |feed|
     page_title = if @search
       @search.tag ? "Events tagged with: #{@search.tag}" : "Search Results for: #{@search.query}"

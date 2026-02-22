@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "calagator/cache_key"
 require "calagator/engine"
 require "calagator/version"
 
