@@ -2,23 +2,23 @@
 
 require "rails_helper"
 
-describe "Administrative suite is hidden behind an http basic auth wall" do
+describe "Administrative suite is hidden behind an http basic auth wall", type: :request do
   [
     "/admin",
     "/events/duplicates",
     "/venues/duplicates"
   ].each do |path|
-    it "Users are not permitted in #{path}" do
-      visit path
-    rescue Selenium::WebDriver::Error::UnexpectedAlertOpenError
-      expect(page).to have_content("Access denied")
+    it "unauthenticated users are denied access to #{path}" do
+      get path
+      expect(response).to have_http_status(:unauthorized)
     end
 
-    it "Authenticated users are permitted in #{path}" do
-      skip # Skipped until auth re-work
-      page.driver.browser.basic_authorize Calagator.admin_username, Calagator.admin_password
-      visit path
-      expect([200, 304]).to include page.status_code
+    it "authenticated users are permitted in #{path}" do
+      credentials = ActionController::HttpAuthentication::Basic.encode_credentials(
+        Calagator.admin_username, Calagator.admin_password
+      )
+      get path, headers: {"HTTP_AUTHORIZATION" => credentials}
+      expect(response).to have_http_status(:success)
     end
   end
 end

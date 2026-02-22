@@ -2,15 +2,16 @@
 
 require "rails_helper"
 
-# Disabled pending a way to both set up the full event page size so that the editing sidebar is accessible
-# and also that will handle basic auth
-xfeature "Event locking" do
+feature "Event locking" do
   background do
     create :venue, title: "Empire State Building"
     create :event, title: "Ruby Newbies", start_time: Time.zone.now
     create :event, title: "Ruby Privateers", start_time: Time.zone.now, locked: true
 
-    page.driver.browser.basic_authorize Calagator.admin_username, Calagator.admin_password
+    credentials = ActionController::HttpAuthentication::Basic.encode_credentials(
+      Calagator.admin_username, Calagator.admin_password
+    )
+    page.driver.header("Authorization", credentials)
 
     visit "/admin"
     click_on "Lock events"
@@ -25,8 +26,10 @@ xfeature "Event locking" do
     click_on "Ruby Newbies"
 
     expect(page).to have_content("This event is currently locked and cannot be edited.")
-    expect(page).not_to have_selector("a", text: "edit")
-    expect(page).not_to have_selector("a", text: "delete")
+    within "#edit_link" do
+      expect(page).not_to have_selector("a", text: "edit")
+      expect(page).not_to have_selector("a", text: "delete")
+    end
   end
 
   scenario "Admin unlocks a locked event" do
@@ -38,7 +41,9 @@ xfeature "Event locking" do
     click_on "Ruby Privateers"
 
     expect(page).not_to have_content("This event is currently locked and cannot be edited.")
-    expect(page).to have_selector("a", text: "edit")
-    expect(page).to have_selector("a", text: "delete")
+    within "#edit_link" do
+      expect(page).to have_selector("a", text: "edit")
+      expect(page).to have_selector("a", text: "delete")
+    end
   end
 end

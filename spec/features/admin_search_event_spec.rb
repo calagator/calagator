@@ -2,14 +2,16 @@
 
 require "rails_helper"
 
-# Skip test until authentication system is re-worked
-xfeature "Admin lock events search" do
+feature "Admin lock events search" do
   before do
     create :venue, title: "Empire State Building"
     create :event, title: "Ruby Newbies", start_time: Time.zone.now
     create :event, title: "Ruby Privateers", start_time: Time.zone.now, locked: true
 
-    page.driver.browser.basic_authorize Calagator.admin_username, Calagator.admin_password
+    credentials = ActionController::HttpAuthentication::Basic.encode_credentials(
+      Calagator.admin_username, Calagator.admin_password
+    )
+    page.driver.header("Authorization", credentials)
 
     visit "/admin/events"
   end
