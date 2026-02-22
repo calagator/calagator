@@ -30,6 +30,12 @@ class PaperTrailManager < Rails::Engine
     paths["app/view"] = base + "app/views"
   end
 
+  # PaperTrailManager shares Calagator's root directory, so Rails
+  # auto-detects Calagator's config/routes.rb as belonging to this
+  # engine too, causing routes to be drawn twice. Override with an
+  # empty array since Calagator's routes already define /changes.
+  paths["config/routes.rb"] = []
+
   cattr_accessor :allow_index_block, :allow_show_block, :allow_revert_block
 
   block = proc { true }

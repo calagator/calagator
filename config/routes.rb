@@ -1,9 +1,6 @@
 # frozen_string_literal: true
 
 Calagator::Engine.routes.draw do
-  # Not sure why, but routes is getting loaded twice. This ignores the second load.
-  return unless Calagator::Engine.routes.empty?
-
   root "site#index"
 
   get "omfg" => "site#omfg"
