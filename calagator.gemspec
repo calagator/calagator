@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency "sprockets-rails", "~> 3.4"
   s.add_dependency "activemodel-serializers-xml", "~> 1.0"
   s.add_dependency "acts-as-taggable-on", "~> 10.0"
-  s.add_dependency "bluecloth", "~> 2.2"
+  s.add_dependency "redcarpet", "~> 3.6"
   s.add_dependency "font-awesome-rails", "~> 4.7"
   s.add_dependency "formtastic", "~> 5.0"
   s.add_dependency "geokit", ">= 1.9", "< 1.14"
@@ -40,7 +40,6 @@ Gem::Specification.new do |s|
   s.add_dependency "nokogiri", ">= 1.14"
   s.add_dependency "paper_trail", "~> 15.1"
   s.add_dependency "rack-contrib", "~> 2.3"
-  s.add_dependency "rails-observers", "~> 0.1.5"
   s.add_dependency "rails_autolink", "~> 1.1"
   s.add_dependency "recaptcha", "~> 5.8"
   s.add_dependency "rest-client", "~> 2.0"
@@ -50,8 +49,6 @@ Gem::Specification.new do |s|
   s.add_dependency "utf8-cleaner", ">= 0.0.6", "< 1.1.0"
   s.add_dependency "validate_url", "~> 1.0"
   s.add_dependency "will_paginate", "~> 3.0"
-  # Fix deprecation warning with Zeitwerk
-  s.add_dependency "observer", "~> 0.1"
 
   s.add_development_dependency "annotate", ">= 3.1.1", "< 3.3.0"
   s.add_development_dependency "appraisal", "~> 2.4"

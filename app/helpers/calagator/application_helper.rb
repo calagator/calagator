@@ -11,7 +11,7 @@ module Calagator
     end
 
     def markdown(text)
-      BlueCloth.new(text, relaxed: true).to_html
+      Redcarpet::Markdown.new(Redcarpet::Render::HTML, tables: true).render(text).strip
     end
 
     # Return a HTML string with the BR tags converted to XHTML compliant markup.
