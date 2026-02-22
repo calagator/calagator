@@ -4,8 +4,7 @@
 # file, see the `VAGRANT.md` file for instructions.
 overrides = "#{__FILE__}.local"
 
-# This previously relied on eval but that's not safe. Raise an issue if this not working.
-system(File.read(overrides)) if File.exist?(overrides)
+eval File.read(overrides) if File.exist?(overrides) # rubocop:disable Security/Eval
 
 Vagrant.configure(2) do |config|
   # The most common configuration options are documented and commented below.
