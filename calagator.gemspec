@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_dependency "loofah-activerecord", ">= 1.2", "< 3.0"
   s.add_dependency "lucene_query", "0.1"
   s.add_dependency "microformats", "~> 4.5"
-  s.add_dependency "nokogiri", "~> 1.14"
+  s.add_dependency "nokogiri", ">= 1.14"
   s.add_dependency "paper_trail", "~> 15.1"
   s.add_dependency "rack-contrib", "~> 2.3"
   s.add_dependency "rails-observers", "~> 0.1.5"
@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
   s.add_dependency "sassc-rails", "~> 2.1"
   s.add_dependency "sunspot_rails", "~> 2.1"
   s.add_dependency "utf8-cleaner", ">= 0.0.6", "< 1.1.0"
-  s.add_dependency "validate_url", "~> 1.0.15"
+  s.add_dependency "validate_url", "~> 1.0"
   s.add_dependency "will_paginate", "~> 3.0"
   # Fix deprecation warning with Zeitwerk
   s.add_dependency "observer", "~> 0.1"
