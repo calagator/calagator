@@ -28,10 +28,10 @@ module Calagator
       inject_into_file "config/routes.rb", "\s\smount Calagator::Engine => '/'\n", after: "routes.draw do\n"
     end
 
-    # PaperTrail needs Time and BigDecimal as supported YAML classes
+    # PaperTrail needs Time, TimeWithZone, TimeZone, and BigDecimal as supported YAML classes
     def add_yaml_config
       inject_into_file "config/application.rb",
-        "\s\s\s\sconfig.active_record.yaml_column_permitted_classes = [Symbol, Time, BigDecimal]",
+        "\s\s\s\sconfig.active_record.yaml_column_permitted_classes = [Symbol, Time, ActiveSupport::TimeWithZone, ActiveSupport::TimeZone, BigDecimal]",
         after: /config.load_defaults.+\n/
     end
 
