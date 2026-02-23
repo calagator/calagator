@@ -10,7 +10,12 @@ describe "Venue Editing", js: true do
 
   it "A user edits an existing venue" do
     visit "/"
-    click_on venue.title
+    click_on "Venues"
+
+    within "#newest" do
+      click_on venue.title
+    end
+
     click_on "edit"
 
     venue_name = find_field("Venue Name").value
