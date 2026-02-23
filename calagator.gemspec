@@ -48,7 +48,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'ri_cal', '~> 0.8.8'
   s.add_dependency 'sassc-rails', '~> 2.1'
   s.add_dependency 'sunspot_rails', '~> 2.1'
-  s.add_dependency 'utf8-cleaner', '>= 0.0.6', '< 1.1.0'
+  s.add_dependency 'utf8-cleaner', '>= 0.0.6', '< 2.1.0'
   s.add_dependency 'validate_url'
   s.add_dependency 'will_paginate', '~> 3.0'
 
