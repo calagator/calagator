@@ -3,3 +3,4 @@
 # then tries to then run standardrb on all the gems.
 ignore:
 - 'gemfiles/**/*'
+- 'spec/test_app/db/schema.rb'
