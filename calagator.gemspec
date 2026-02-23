@@ -50,7 +50,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'sunspot_rails', '~> 2.1'
   s.add_dependency 'utf8-cleaner', '>= 0.0.6', '< 1.1.0'
   s.add_dependency 'validate_url'
-  s.add_dependency 'will_paginate', '~> 3.0'
+  s.add_dependency 'will_paginate', '>= 3', '< 5'
 
   s.add_development_dependency 'appraisal', '~> 2.4'
   s.add_development_dependency 'capybara', '~> 3.31'
