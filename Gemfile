@@ -25,5 +25,5 @@ gem 'paper_trail_manager', git: 'https://github.com/fusion94/paper_trail_manager
 # your gem to rubygems.org.
 gem 'launchy'
 
-gem 'factory_bot', '< 6.4.5' # 6.4.5+ requires Ruby >= 2.7 and we still run 2.6 in CI. Can unpin when we stop doing that.
+gem 'factory_bot', '< 6.5.1' # 6.4.5+ requires Ruby >= 2.7 and we still run 2.6 in CI. Can unpin when we stop doing that.
 gem 'rails-controller-testing', group: 'test'
