@@ -62,8 +62,10 @@ RSpec.configure do |config|
 
   Capybara.register_driver :selenium_chrome_headless do |app|
     options = Selenium::WebDriver::Chrome::Options.new(
-      args: %w[headless disable-gpu no-sandbox window-size=1400,1400]
+      args: %w[headless=new disable-gpu no-sandbox window-size=1400,1400]
     )
+    # Block external network requests so tests don't depend on CDN availability.
+    options.add_argument("host-resolver-rules=MAP * ^NOTFOUND , EXCLUDE localhost , EXCLUDE 127.0.0.1")
     Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
   end
 

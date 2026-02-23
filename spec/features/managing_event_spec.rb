@@ -122,7 +122,7 @@ describe "Event Deletion", js: true do
       click_on "Ruby and You"
     end
 
-    accept_alert do
+    accept_confirm do
       click_on "delete"
     end
 
