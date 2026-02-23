@@ -102,6 +102,9 @@ module Calagator
       scope.order('start_time')
     }
 
+    def text_dump
+      "#{self.title} #{self.description} #{self.start_time} #{self.end_time}"
+    end
     #---[ Overrides ]-------------------------------------------------------
 
     def url=(value)
