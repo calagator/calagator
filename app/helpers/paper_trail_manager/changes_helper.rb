@@ -59,7 +59,7 @@ class PaperTrailManager
     end
 
     def change_item_types
-      ActiveRecord::Base.subclasses.select do |klass|
+      ActiveRecord::Base.descendants.select do |klass|
         klass.include?(PaperTrail::Model::InstanceMethods)
       end.map(&:to_s)
     end
