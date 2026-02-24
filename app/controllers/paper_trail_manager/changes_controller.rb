@@ -49,12 +49,12 @@ class PaperTrailManager
         @version = PaperTrail::Version.find(params[:id])
       rescue ActiveRecord::RecordNotFound
         flash[:error] = "No such version."
-        return(redirect_to action: :index)
+        return(redirect_to changes_path)
       end
 
       unless change_show_allowed?(@version)
         flash[:error] = "You do not have permission to show that change."
-        return(redirect_to action: :index)
+        return(redirect_to changes_path)
       end
 
       respond_to do |format|
