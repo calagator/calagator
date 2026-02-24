@@ -41,6 +41,7 @@ gem_group :development, :test do
   end
 end
 
+gem "sprockets-rails", "~> 3.4"
 gem "calagator", Calagator::VERSION, (generating_test_app ? {path: relative_calagator_path.to_s} : {})
 run "bundle install"
 rails_command "db:create"
