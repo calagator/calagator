@@ -33,14 +33,15 @@ module Calagator
     end
 
     def self.require_admin(options = {})
+      return false unless Calagator.admin_username && Calagator.admin_password
       http_basic_authenticate_with(
-        options.reverse_merge(
+        **options.reverse_merge(
           name: Calagator.admin_username,
-          password: Calagator.admin_password,
-          if: proc { Calagator.admin_username && Calagator.admin_password }
+          password: Calagator.admin_password
         )
       )
     end
+    private_class_method :require_admin
 
     #---[ Helpers ]---------------------------------------------------------
 
@@ -49,10 +50,10 @@ module Calagator
     # and their values are either "active" or nil.
     def link_class
       @_link_class_cache ||= {
-        events: ((controller_name == 'events' ||
-                      controller_name == 'sources' ||
-                      controller_name == 'site') && 'active'),
-        venues: (controller_name == 'venues' && 'active')
+        events: ((controller_name == "events" ||
+                      controller_name == "sources" ||
+                      controller_name == "site") && "active"),
+        venues: (controller_name == "venues" && "active")
       }
     end
     helper_method :link_class
@@ -63,11 +64,11 @@ module Calagator
     # +kind+ (e.g. :failure).
     def append_flash(kind, message)
       kind = kind.to_sym
-      flash[kind] = if leaf = flash[kind]
-                      "#{leaf} #{message}"
-                    else
-                      message.to_s
-                    end
+      flash[kind] = if (leaf = flash[kind])
+        "#{leaf} #{message}"
+      else
+        message.to_s
+      end
     end
 
     # Make it possible to use helpers in controllers

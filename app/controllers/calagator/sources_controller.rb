@@ -5,15 +5,15 @@ module Calagator
     # POST /import
     # POST /import.xml
     def import
-      @importer = Source::Importer.new(params.permit![:source])
+      @importer = Source::Importer.new(source_params)
       respond_to do |format|
         if @importer.import
           redirect_target = @importer.events.one? ? @importer.events.first : events_path
-          format.html { redirect_to redirect_target, flash: { success: render_to_string(layout: false) } }
-          format.xml  { render xml: @importer.source, events: @importer.events }
+          format.html { redirect_to redirect_target, flash: {success: render_to_string(layout: false)} }
+          format.xml { render xml: @importer.source, events: @importer.events }
         else
-          format.html { redirect_to new_source_path(url: @importer.source.url), flash: { failure: @importer.failure_message } }
-          format.xml  { render xml: @importer.source.errors, status: :unprocessable_entity }
+          format.html { redirect_to new_source_path(url: @importer.source.url), flash: {failure: @importer.failure_message} }
+          format.xml { render xml: @importer.source.errors, status: :unprocessable_content }
         end
       end
     end
@@ -25,7 +25,7 @@ module Calagator
 
       respond_to do |format|
         format.html { @sources = @sources.paginate(page: params[:page], per_page: params[:per_page]) }
-        format.xml  { render xml: @sources }
+        format.xml { render xml: @sources }
       end
     end
 
@@ -35,10 +35,10 @@ module Calagator
       @source = Source.find(params[:id], include: %i[events venues])
       respond_to do |format|
         format.html # show.html.erb
-        format.xml  { render xml: @source }
+        format.xml { render xml: @source }
       end
     rescue ActiveRecord::RecordNotFound => e
-      flash[:failure] = e.to_s if params[:id] != 'import'
+      flash[:failure] = e.to_s if params[:id] != "import"
       redirect_to new_source_path
     end
 
@@ -69,12 +69,12 @@ module Calagator
 
     def create_or_update
       respond_to do |format|
-        if @source.update(params.permit![:source])
-          format.html { redirect_to @source, notice: 'Source was successfully saved.' }
-          format.xml  { render xml: @source, status: :created, location: @source }
+        if @source.update(source_params)
+          format.html { redirect_to @source, notice: "Source was successfully saved." }
+          format.xml { render xml: @source, status: :created, location: @source }
         else
-          format.html { render action: @source.new_record? ? 'new' : 'edit' }
-          format.xml  { render xml: @source.errors, status: :unprocessable_entity }
+          format.html { render action: @source.new_record? ? "new" : "edit" }
+          format.xml { render xml: @source.errors, status: :unprocessable_content }
         end
       end
     end
@@ -88,8 +88,14 @@ module Calagator
 
       respond_to do |format|
         format.html { redirect_to sources_url }
-        format.xml  { head :ok }
+        format.xml { head :ok }
       end
+    end
+
+    private
+
+    def source_params
+      params.fetch(:source, {}).permit(:url, :title)
     end
   end
 end

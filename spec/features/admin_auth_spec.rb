@@ -1,23 +1,24 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-describe 'Administrative suite is hidden behind an http basic auth wall' do
+describe "Administrative suite is hidden behind an http basic auth wall", type: :request do
   [
-    '/admin',
-    '/events/duplicates',
-    '/venues/duplicates'
+    "/admin",
+    "/events/duplicates",
+    "/venues/duplicates"
   ].each do |path|
-    it "Users are not permitted in #{path}" do
-      page.driver.browser.basic_authorize 'nope', 'nada'
-      visit path
-      expect(page.status_code).to eq 401
+    it "unauthenticated users are denied access to #{path}" do
+      get path
+      expect(response).to have_http_status(:unauthorized)
     end
 
-    it "Authenticated users are permitted in #{path}" do
-      page.driver.browser.basic_authorize Calagator.admin_username, Calagator.admin_password
-      visit path
-      expect([200, 304]).to include page.status_code
+    it "authenticated users are permitted in #{path}" do
+      credentials = ActionController::HttpAuthentication::Basic.encode_credentials(
+        Calagator.admin_username, Calagator.admin_password
+      )
+      get path, headers: {"HTTP_AUTHORIZATION" => credentials}
+      expect(response).to have_http_status(:success)
     end
   end
 end

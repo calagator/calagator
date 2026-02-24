@@ -1,12 +1,20 @@
 # frozen_string_literal: true
 
-appraise 'rails-5-2' do
-  gem 'rails', '5.2.6'
-  gem 'turbolinks'
+# This file is designed to just appraise the current Rails version
+# Update this file when you change the RAILS depedancy.
 
-  gem 'factory_bot', '< 6.4.5' # 6.4.5+ requires Ruby >= 2.7
-  gem 'ffi', '< 1.17'
-  gem 'mysql2', '~> 0.5.3'
-  gem 'pg', '~> 1.3.0'
-  gem 'rails-controller-testing', group: 'test'
+appraise "rails-7-1" do
+  gem "rails", "~> 7.1.0"
+
+  gem "mysql2", "~> 0.5.6"
+  gem "pg", "~> 1.5"
+  gem "rails-controller-testing", group: "test"
+end
+
+appraise "rails-7-2" do
+  gem "rails", "~> 7.2.0"
+
+  gem "mysql2", "~> 0.5.6"
+  gem "pg", "~> 1.5"
+  gem "rails-controller-testing", group: "test"
 end

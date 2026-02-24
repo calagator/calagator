@@ -13,20 +13,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  # rubocop:
-  #   name: "Run Rubocop"
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@main
-  #     - uses: actions/setup-ruby@v1
-  #     - name: Install Rubocop
-  #       run: gem install rubocop rubocop-performance rubocop-rails rubocop-rspec
-  #     - name: Rubocop
-  #       run: rubocop --fail-level warning
-  #     # - name: Rubocop Linter
-  #     #   uses: andrewmcodes/rubocop-linter-action@v3.1.0
-  #     #   env:
-  #     #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   test:
     runs-on: ubuntu-latest
 
@@ -44,18 +30,15 @@ jobs:
           - postgresql
           - sqlite3
         ruby:
-          - 2.6.10
-          - 2.7.8
+          - '3.2'
+          - '3.3'
+          - '3.4'
         rails:
-          - rails_5_2
-        # exclude:
-        #   - rails: rails_4_2
-        #     ruby: 2.6.6
-        #   - rails: rails_4_2
-        #     ruby: 2.7.2
+          - rails_7_1
+          - rails_7_2
 
     env:
-      BUNDLER_VERSION: 2.3.27
+      BUNDLER_VERSION: 2.5.6
       BUNDLE_GEMFILE: gemfiles/${{ matrix.rails }}.gemfile
 
     steps:
@@ -80,8 +63,8 @@ jobs:
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
-      # - name: Generate host app for testing
-      #   run: bundle _1.17.3_ exec bin/calagator new spec/dummy --dummy --database=${{ matrix.db }} --postgres-username=postgres
+      - name: Standardrb Check
+        run: bundle exec standardrb
       - name: Set Postgres Username + Host
         if: matrix.db == 'postgresql'
         run: |
@@ -97,8 +80,7 @@ jobs:
         run: |
           RAILS_ENV=test bundle exec rake app:sunspot:solr:start_with_waiting
       - name: Run RSpec
-        run: |
-          bundle exec rake spec
+        run: bundle exec rake spec
       - uses: actions/upload-artifact@v4
         with:
           name: coverage-${{ matrix.db }}-${{ matrix.ruby }}-${{ matrix.rails }}

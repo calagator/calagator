@@ -1,44 +1,49 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+require "rails_helper"
 
-# Disabled pending a way to both set up the full event page size so that the editing sidebar is accessible
-# and also that will handle basic auth
-xfeature 'Event locking' do
+feature "Event locking" do
   background do
-    create :venue, title: 'Empire State Building'
-    create :event, title: 'Ruby Newbies', start_time: Time.zone.now
-    create :event, title: 'Ruby Privateers', start_time: Time.zone.now, locked: true
+    create :venue, title: "Empire State Building"
+    create :event, title: "Ruby Newbies", start_time: Time.zone.now
+    create :event, title: "Ruby Privateers", start_time: Time.zone.now, locked: true
 
-    page.driver.browser.basic_authorize Calagator.admin_username, Calagator.admin_password
+    credentials = ActionController::HttpAuthentication::Basic.encode_credentials(
+      Calagator.admin_username, Calagator.admin_password
+    )
+    page.driver.header("Authorization", credentials)
 
-    visit '/admin'
-    click_on 'Lock events'
+    visit "/admin"
+    click_on "Lock events"
   end
 
-  scenario 'Admin locks an event to prevent it from being modified' do
-    within 'tr', text: 'Ruby Newbies' do
-      click_on 'Lock'
+  scenario "Admin locks an event to prevent it from being modified" do
+    within "tr", text: "Ruby Newbies" do
+      click_on "Lock"
     end
 
-    expect(page).to have_content('Locked event Ruby Newbies')
-    click_on 'Ruby Newbies'
+    expect(page).to have_content("Locked event Ruby Newbies")
+    click_on "Ruby Newbies"
 
-    expect(page).to have_content('This event is currently locked and cannot be edited.')
-    expect(page).not_to have_selector('a', text: 'edit')
-    expect(page).not_to have_selector('a', text: 'delete')
+    expect(page).to have_content("This event is currently locked and cannot be edited.")
+    within "#edit_link" do
+      expect(page).not_to have_selector("a", text: "edit")
+      expect(page).not_to have_selector("a", text: "delete")
+    end
   end
 
-  scenario 'Admin unlocks a locked event' do
-    within 'tr', text: 'Ruby Privateers' do
-      click_on 'Unlock'
+  scenario "Admin unlocks a locked event" do
+    within "tr", text: "Ruby Privateers" do
+      click_on "Unlock"
     end
 
-    expect(page).to have_content('Unlocked event Ruby Privateers')
-    click_on 'Ruby Privateers'
+    expect(page).to have_content("Unlocked event Ruby Privateers")
+    click_on "Ruby Privateers"
 
-    expect(page).not_to have_content('This event is currently locked and cannot be edited.')
-    expect(page).to have_selector('a', text: 'edit')
-    expect(page).to have_selector('a', text: 'delete')
+    expect(page).not_to have_content("This event is currently locked and cannot be edited.")
+    within "#edit_link" do
+      expect(page).to have_selector("a", text: "edit")
+      expect(page).to have_selector("a", text: "delete")
+    end
   end
 end

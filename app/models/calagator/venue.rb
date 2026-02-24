@@ -27,18 +27,18 @@
 #  duplicate_of_id :integer
 #  source_id       :integer
 #
-require 'calagator/decode_html_entities_hack'
-require 'calagator/strip_whitespace'
-require 'calagator/url_prefixer'
-require 'paper_trail'
-require 'loofah-activerecord'
-require 'loofah/activerecord/xss_foliate'
-require 'validate_url'
-require 'active_model/serializers/xml'
+require "calagator/decode_html_entities_hack"
+require "calagator/strip_whitespace"
+require "calagator/url_prefixer"
+require "paper_trail"
+require "loofah-activerecord"
+require "loofah/activerecord/xss_foliate"
+require "validate_url"
+require "active_model/serializers/xml"
 
 module Calagator
   class Venue < Calagator::ApplicationRecord
-    self.table_name = 'venues'
+    self.table_name = "venues"
 
     include StripWhitespace
 
@@ -46,12 +46,14 @@ module Calagator
     acts_as_taggable_on :tags
 
     xss_foliate sanitize: %i[description access_notes]
+
+    include ExpiresCache
     include DecodeHtmlEntitiesHack
     include ActiveModel::Serializers::Xml
 
     # Associations
     has_many :events, -> { non_duplicates }, dependent: :nullify
-    belongs_to :source
+    belongs_to :source, optional: true
 
     # Triggers
     strip_whitespace! :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone
@@ -59,22 +61,22 @@ module Calagator
 
     # Validations
     validates :title, presence: true
-    validates :url, url: { allow_blank: true }
-    validates :latitude, inclusion: { in: -90..90, allow_nil: true }
-    validates :longitude, inclusion: { in: -180..180, allow_nil: true }
+    validates :url, url: {allow_blank: true}
+    validates :latitude, inclusion: {in: -90..90, allow_nil: true}
+    validates :longitude, inclusion: {in: -180..180, allow_nil: true}
     validates :title, :description, :address, :url, :street_address, :locality, :region, :postal_code, :country, :email, :telephone, denylist: true
 
     # Duplicates
     include DuplicateChecking
-    duplicate_checking_ignores_attributes    :source_id, :version, :closed, :wifi, :access_notes, :tag_list
+    duplicate_checking_ignores_attributes :source_id, :version, :closed, :wifi, :access_notes, :tag_list
     duplicate_squashing_ignores_associations :tags, :base_tags, :taggings
     duplicate_finding_scope -> { non_duplicates.order(:title, :id) }
 
     # Named scopes
-    scope :primaries,          -> { non_duplicates.includes(:source, :events, :tags, :taggings) }
+    scope :primaries, -> { non_duplicates.includes(:source, :events, :tags, :taggings) }
     scope :with_public_wifi, -> { where(wifi: true) }
-    scope :in_business,      -> { where(closed: false) }
-    scope :out_of_business,  -> { where(closed: true) }
+    scope :in_business, -> { where(closed: false) }
+    scope :out_of_business, -> { where(closed: true) }
 
     def self.search(query, opts = {})
       SearchEngine.search(query, opts)
@@ -87,7 +89,7 @@ module Calagator
     # Display a single line address.
     def full_address
       full_address = "#{street_address}, #{locality} #{region} #{postal_code} #{country}"
-      full_address.strip != ',' && full_address
+      full_address.strip != "," && full_address
     end
 
     # Get an address we can use for geocoding

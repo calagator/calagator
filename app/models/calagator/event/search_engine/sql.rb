@@ -50,32 +50,32 @@ module Calagator
 
         def base
           column_names = Event.column_names.map { |name| "events.#{name}" }
-          column_names << 'venues.id'
+          column_names << "venues.id"
           @scope = Event.all
-                        .group(column_names)
-                        .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type LIKE '%Event'")
-                        .joins('LEFT OUTER JOIN tags ON tags.id = taggings.tag_id')
-                        .includes(:venue)
-                        .references(:venues, :tags)
+            .group(column_names)
+            .joins("LEFT OUTER JOIN taggings on taggings.taggable_id = events.id AND taggings.taggable_type LIKE '%Event'")
+            .joins("LEFT OUTER JOIN tags ON tags.id = taggings.tag_id")
+            .includes(:venue)
+            .references(:venues, :tags)
           self
         end
 
         def keywords
-          @scope = @scope.where('LOWER(events.title) LIKE ?', "%#{query.downcase}%")
-                         .or(@scope.where('LOWER(events.description) LIKE ?', "%#{query.downcase}%"))
-                         .or(@scope.where(['LOWER(events.url) LIKE ?', "%#{query.downcase}%"]))
-                         .or(@scope.where(['LOWER(tags.name) = ?', query]))
+          @scope = @scope.where("LOWER(events.title) LIKE ?", "%#{query.downcase}%")
+            .or(@scope.where("LOWER(events.description) LIKE ?", "%#{query.downcase}%"))
+            .or(@scope.where(["LOWER(events.url) LIKE ?", "%#{query.downcase}%"]))
+            .or(@scope.where(["LOWER(tags.name) = ?", query]))
           self
         end
 
         def order
           order = case opts[:order].try(:to_sym)
-                  when :name, :title
-                    'LOWER(events.title) ASC'
-                  when :location, :venue
-                    'LOWER(venues.title) ASC'
-                  else
-                    'events.start_time DESC'
+          when :name, :title
+            "LOWER(events.title) ASC"
+          when :location, :venue
+            "LOWER(venues.title) ASC"
+          else
+            "events.start_time DESC"
           end
           @scope = @scope.order(Arel.sql(order))
           self
@@ -88,12 +88,12 @@ module Calagator
         end
 
         def current
-          @scope = @scope.where('events.start_time >= ?', Date.yesterday.to_time)
+          @scope = @scope.where("events.start_time >= ?", Date.yesterday.to_time)
           self
         end
 
         def past
-          @scope = @scope.where('events.start_time < ?', Date.yesterday.to_time)
+          @scope = @scope.where("events.start_time < ?", Date.yesterday.to_time)
           self
         end
       end
